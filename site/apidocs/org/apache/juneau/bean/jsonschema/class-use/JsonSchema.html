@@ -110,21 +110,44 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property appender:  <property>anyOf</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDefinition(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;definition)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDef(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDef</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;def)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property appender:  <property>definitions</property>.</div>
+<div class="block">Bean property appender:  <property>$defs</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependency(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDependency</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;dependency)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDefinition(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;definition)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property appender:  <property>dependencies</property>.</div>
+<div class="block">Bean property appender:  <property>definitions</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addEnum(java.lang.String...)" class="member-name-link">addEnum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;_enum)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependency(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDependency</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;dependency)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property appender:  <property>dependencies</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependentRequired(java.lang.String,java.util.List)" class="member-name-link">addDependentRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;required)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property appender:  <property>dependentRequired</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependentSchema(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDependentSchema</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;schema)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property appender:  <property>dependentSchemas</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addEnum(java.lang.Object...)" class="member-name-link">addEnum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;_enum)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property appender:  <property>enum</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addExamples(java.lang.Object...)" class="member-name-link">addExamples</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;examples)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property appender:  <property>examples</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addItems(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addItems</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;items)</code></div>
@@ -142,60 +165,90 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property appender:  <property>patternProperties</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addProperties(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addProperties</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;properties)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addPrefixItems(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addPrefixItems</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;prefixItems)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property appender:  <property>prefixItems</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addProperties(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addProperties</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;properties)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property appender:  <property>properties</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addRequired(java.lang.String...)" class="member-name-link">addRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;required)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Bean property appender:  <property>required</property>.</div>
-</div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addRequired(java.util.List)" class="member-name-link">addRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;required)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addRequired(java.lang.String...)" class="member-name-link">addRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;required)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Bean property appender:  <property>required</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addRequired(org.apache.juneau.bean.jsonschema.JsonSchemaProperty...)" class="member-name-link">addRequired</a><wbr>(<a href="../JsonSchemaProperty.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaProperty</a>...&nbsp;properties)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addRequired(java.util.List)" class="member-name-link">addRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;required)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Bean property appender:  <property>required</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addTypes(org.apache.juneau.bean.jsonschema.JsonType...)" class="member-name-link">addTypes</a><wbr>(<a href="../JsonType.html" title="enum class in org.apache.juneau.bean.jsonschema">JsonType</a>...&nbsp;types)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addRequired(org.apache.juneau.bean.jsonschema.JsonSchemaProperty...)" class="member-name-link">addRequired</a><wbr>(<a href="../JsonSchemaProperty.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaProperty</a>...&nbsp;properties)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property appender:  <property>required</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addTypes(org.apache.juneau.bean.jsonschema.JsonType...)" class="member-name-link">addTypes</a><wbr>(<a href="../JsonType.html" title="enum class in org.apache.juneau.bean.jsonschema">JsonType</a>...&nbsp;types)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property appender:  <property>type</property>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchemaMap.</span><code><a href="../JsonSchemaMap.html#get(java.lang.Object)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchemaMap.</span><code><a href="../JsonSchemaMap.html#get(java.lang.Object)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Return the <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> object at the specified URI.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getAdditionalPropertiesAsSchema()" class="member-name-link">getAdditionalPropertiesAsSchema</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getAdditionalPropertiesAsSchema()" class="member-name-link">getAdditionalPropertiesAsSchema</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property getter:  <property>additionalProperties</property>.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getElse()" class="member-name-link">getElse</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property getter:  <property>else</property>.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getItemsAsSchema()" class="member-name-link">getItemsAsSchema</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getIf()" class="member-name-link">getIf</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Bean property getter:  <property>if</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getItemsAsSchema()" class="member-name-link">getItemsAsSchema</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property getter:  <property>items</property>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getNot()" class="member-name-link">getNot</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getNot()" class="member-name-link">getNot</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property getter:  <property>not</property>.</div>
 </div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getProperty(java.lang.String)" class="member-name-link">getProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the property with the specified name.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getProperty(java.lang.String)" class="member-name-link">getProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getProperty(java.lang.String,boolean)" class="member-name-link">getProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ boolean&nbsp;resolve)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns the property with the specified name.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getProperty(java.lang.String,boolean)" class="member-name-link">getProperty</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- boolean&nbsp;resolve)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getThen()" class="member-name-link">getThen</a>()</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Returns the property with the specified name.</div>
+<div class="block">Bean property getter:  <property>then</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getUnevaluatedItems()" class="member-name-link">getUnevaluatedItems</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property getter:  <property>unevaluatedItems</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getUnevaluatedProperties()" class="member-name-link">getUnevaluatedProperties</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property getter:  <property>unevaluatedProperties</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonSchemaMap.</span><code><a href="../JsonSchemaMap.html#load(java.net.URI)" class="member-name-link">load</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri)</code></div>
@@ -228,9 +281,29 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>anyOf</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDefinitions(java.util.Map)" class="member-name-link">setDefinitions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;definitions)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setConst(java.lang.Object)" class="member-name-link">setConst</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;_const)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>const</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setContentEncoding(java.lang.String)" class="member-name-link">setContentEncoding</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentEncoding)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>contentEncoding</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setContentMediaType(java.lang.String)" class="member-name-link">setContentMediaType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentMediaType)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>contentMediaType</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDefinitions(java.util.Map)" class="member-name-link">setDefinitions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;definitions)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>definitions</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDefs(java.util.Map)" class="member-name-link">setDefs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;defs)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>$defs</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDependencies(java.util.Map)" class="member-name-link">setDependencies</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;dependencies)</code></div>
@@ -238,29 +311,61 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>dependencies</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDependentRequired(java.util.Map)" class="member-name-link">setDependentRequired</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;&nbsp;dependentRequired)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>dependentRequired</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDependentSchemas(java.util.Map)" class="member-name-link">setDependentSchemas</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;dependentSchemas)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>dependentSchemas</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDescription(java.lang.String)" class="member-name-link">setDescription</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;description)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>description</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setEnum(java.util.List)" class="member-name-link">setEnum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;_enum)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setElse(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setElse</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;_else)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property setter:  <property>enum</property>.</div>
+<div class="block">Bean property setter:  <property>else</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setExclusiveMaximum(java.lang.Boolean)" class="member-name-link">setExclusiveMaximum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;exclusiveMaximum)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setEnum(java.util.List)" class="member-name-link">setEnum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;_enum)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>enum</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setExamples(java.util.List)" class="member-name-link">setExamples</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;examples)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>examples</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setExclusiveMaximum(java.lang.Number)" class="member-name-link">setExclusiveMaximum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;exclusiveMaximum)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>exclusiveMaximum</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setExclusiveMinimum(java.lang.Boolean)" class="member-name-link">setExclusiveMinimum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;exclusiveMinimum)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setExclusiveMinimum(java.lang.Number)" class="member-name-link">setExclusiveMinimum</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;exclusiveMinimum)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>exclusiveMinimum</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setId(java.lang.Object)" class="member-name-link">setId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;id)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>id</property>.</div>
+<div class="block"><span class="deprecated-label">Deprecated.</span>
+<div class="deprecation-comment">Use <a href="../JsonSchema.html#setIdUri(java.lang.Object)"><code>setIdUri(Object)</code></a> instead.</div>
+</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setIdUri(java.lang.Object)" class="member-name-link">setIdUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;idUri)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>$id</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setIf(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setIf</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;_if)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>if</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setItems(java.lang.Object)" class="member-name-link">setItems</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;items)</code></div>
@@ -338,9 +443,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>patternProperties</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setProperties(java.util.Map)" class="member-name-link">setProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;properties)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setPrefixItems(org.apache.juneau.bean.jsonschema.JsonSchemaArray)" class="member-name-link">setPrefixItems</a><wbr>(<a href="../JsonSchemaArray.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaArray</a>&nbsp;prefixItems)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>prefixItems</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setProperties(java.util.Map)" class="member-name-link">setProperties</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;properties)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property setter:  <property>properties</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setReadOnly(java.lang.Boolean)" class="member-name-link">setReadOnly</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;readOnly)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>readOnly</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setRef(java.lang.Object)" class="member-name-link">setRef</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;ref)</code></div>
@@ -364,19 +479,39 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>$schema</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setTitle(java.lang.String)" class="member-name-link">setTitle</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setThen(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setThen</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;_then)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property setter:  <property>title</property>.</div>
+<div class="block">Bean property setter:  <property>then</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setType(java.lang.Object)" class="member-name-link">setType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;type)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setTitle(java.lang.String)" class="member-name-link">setTitle</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Bean property setter:  <property>type</property>.</div>
+<div class="block">Bean property setter:  <property>title</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setUniqueItems(java.lang.Boolean)" class="member-name-link">setUniqueItems</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;uniqueItems)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setType(java.lang.Object)" class="member-name-link">setType</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;type)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>type</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setUnevaluatedItems(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setUnevaluatedItems</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;unevaluatedItems)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>unevaluatedItems</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setUnevaluatedProperties(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setUnevaluatedProperties</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;unevaluatedProperties)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>unevaluatedProperties</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setUniqueItems(java.lang.Boolean)" class="member-name-link">setUniqueItems</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;uniqueItems)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>uniqueItems</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setWriteOnly(java.lang.Boolean)" class="member-name-link">setWriteOnly</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;writeOnly)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>writeOnly</property>.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.bean.jsonschema</a> that return types with arguments of type <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></span></div>
@@ -405,9 +540,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property getter:  <property>definitions</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getDependencies()" class="member-name-link">getDependencies</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getDefs()" class="member-name-link">getDefs</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">Bean property getter:  <property>$defs</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getDependencies()" class="member-name-link">getDependencies</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property getter:  <property>dependencies</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getDependentSchemas()" class="member-name-link">getDependentSchemas</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property getter:  <property>dependentSchemas</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#getOneOf()" class="member-name-link">getOneOf</a>()</code></div>
@@ -456,16 +601,28 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property appender:  <property>anyOf</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDefinition(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;definition)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDef(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDef</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;def)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Bean property appender:  <property>definitions</property>.</div>
+<div class="block">Bean property appender:  <property>$defs</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependency(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDependency</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;dependency)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDefinition(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDefinition</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;definition)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Bean property appender:  <property>definitions</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependency(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDependency</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;dependency)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean property appender:  <property>dependencies</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addDependentSchema(java.lang.String,org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">addDependentSchema</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;schema)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property appender:  <property>dependentSchemas</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addItems(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addItems</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;items)</code></div>
@@ -478,19 +635,49 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property appender:  <property>oneOf</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addProperties(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addProperties</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;properties)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addPrefixItems(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addPrefixItems</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;prefixItems)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property appender:  <property>prefixItems</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#addProperties(org.apache.juneau.bean.jsonschema.JsonSchema...)" class="member-name-link">addProperties</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>...&nbsp;properties)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property appender:  <property>properties</property>.</div>
 </div>
-<div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setMaster(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setMaster</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;master)</code></div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setElse(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setElse</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;_else)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>else</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setIf(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setIf</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;_if)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>if</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setMaster(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setMaster</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;master)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the master schema for this schema and all child schema objects.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setNot(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setNot</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;not)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setNot(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setNot</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;not)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>not</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setThen(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setThen</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;_then)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>then</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setUnevaluatedItems(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setUnevaluatedItems</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;unevaluatedItems)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean property setter:  <property>unevaluatedItems</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setUnevaluatedProperties(org.apache.juneau.bean.jsonschema.JsonSchema)" class="member-name-link">setUnevaluatedProperties</a><wbr>(<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&nbsp;unevaluatedProperties)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>unevaluatedProperties</property>.</div>
 </div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.bean.jsonschema</a> with type arguments of type <a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></span></div>
@@ -514,9 +701,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property setter:  <property>definitions</property>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDependencies(java.util.Map)" class="member-name-link">setDependencies</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;dependencies)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDefs(java.util.Map)" class="member-name-link">setDefs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;defs)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>$defs</property>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDependencies(java.util.Map)" class="member-name-link">setDependencies</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;dependencies)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Bean property setter:  <property>dependencies</property>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setDependentSchemas(java.util.Map)" class="member-name-link">setDependentSchemas</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;dependentSchemas)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Bean property setter:  <property>dependentSchemas</property>.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">JsonSchema.</span><code><a href="../JsonSchema.html#setOneOf(java.util.List)" class="member-name-link">setOneOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&gt;&nbsp;oneOf)</code></div>
