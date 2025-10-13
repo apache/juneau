@@ -112,8 +112,14 @@ public class SchemaAnnotation {
 			.appendIf(ne, "discriminator", a.discriminator())
 			.appendIf(ne, "description", joinnl(a.description(), a.d()))
 			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			// Handle exclusiveMaximum with Draft 2020-12 fallback
+			.appendIf(ne, "exclusiveMaximum", 
+				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() : 
+				(a.exclusiveMaximum() || a.emax()) ? "true" : null)
+			// Handle exclusiveMinimum with Draft 2020-12 fallback
+			.appendIf(ne, "exclusiveMinimum", 
+				ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() : 
+				(a.exclusiveMinimum() || a.emin()) ? "true" : null)
 			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
 			.appendFirst(ne, "format", a.format(), a.f())
 			.appendIf(ne, "ignore", a.ignore() ? "true" : null)
@@ -136,6 +142,23 @@ public class SchemaAnnotation {
 			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
 			.appendIf(ne, "xml", joinnl(a.xml()))
 			.appendIf(ne, "$ref", a.$ref())
+			// JSON Schema Draft 2020-12 properties
+			.appendIf(ne, "const", joinnl(a._const()))
+			.appendIf(nec, "examples", a.examples().length == 0 ? null : Arrays.asList(a.examples()))
+			.appendIf(ne, "$comment", joinnl(a.$comment()))
+			.appendIf(nf, "deprecated", a.deprecatedProperty())
+			.appendIf(ne, "contentMediaType", a.contentMediaType())
+			.appendIf(ne, "contentEncoding", a.contentEncoding())
+			.appendIf(ne, "prefixItems", joinnl(a.prefixItems()))
+			.appendIf(ne, "unevaluatedItems", joinnl(a.unevaluatedItems()))
+			.appendIf(ne, "unevaluatedProperties", joinnl(a.unevaluatedProperties()))
+			.appendIf(ne, "dependentSchemas", joinnl(a.dependentSchemas()))
+			.appendIf(ne, "dependentRequired", joinnl(a.dependentRequired()))
+			.appendIf(ne, "if", joinnl(a._if()))
+			.appendIf(ne, "then", joinnl(a._then()))
+			.appendIf(ne, "else", joinnl(a._else()))
+			.appendIf(ne, "$defs", joinnl(a.$defs()))
+			.appendIf(ne, "$id", a.$id())
 		;
 	}
 
@@ -188,6 +211,10 @@ public class SchemaAnnotation {
 		long maxi=-1, maxItems=-1, maxl=-1, maxLength=-1, maxp=-1, maxProperties=-1, mini=-1, minItems=-1, minl=-1, minLength=-1, minp=-1, minProperties=-1;
 		String $ref="", cf="", collectionFormat="", discriminator="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", title="", type="";
 		String[] _default={}, _enum={}, additionalProperties={}, allOf={}, d={}, description={}, df={}, e={}, properties={}, value={}, xml={};
+		// JSON Schema Draft 2020-12 properties
+		boolean deprecatedProperty;
+		String $id="", contentMediaType="", contentEncoding="", exclusiveMaximumValue="", exclusiveMinimumValue="";
+		String[] _const={}, examples={}, $comment={}, prefixItems={}, unevaluatedItems={}, unevaluatedProperties={}, dependentSchemas={}, dependentRequired={}, _if={}, _then={}, _else={}, $defs={};
 
 		/**
 		 * Constructor.
@@ -810,6 +837,208 @@ public class SchemaAnnotation {
 			return this;
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------
+		// JSON Schema Draft 2020-12 property setters
+		// -----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * Sets the {@link Schema#_const} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _const(String...value) {
+			this._const = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#examples} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder examples(String...value) {
+			this.examples = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#$comment} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder $comment(String...value) {
+			this.$comment = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#deprecatedProperty} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder deprecatedProperty(boolean value) {
+			this.deprecatedProperty = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#exclusiveMaximumValue} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder exclusiveMaximumValue(String value) {
+			this.exclusiveMaximumValue = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#exclusiveMinimumValue} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder exclusiveMinimumValue(String value) {
+			this.exclusiveMinimumValue = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#contentMediaType} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder contentMediaType(String value) {
+			this.contentMediaType = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#contentEncoding} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder contentEncoding(String value) {
+			this.contentEncoding = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#prefixItems} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder prefixItems(String...value) {
+			this.prefixItems = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#unevaluatedItems} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder unevaluatedItems(String...value) {
+			this.unevaluatedItems = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#unevaluatedProperties} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder unevaluatedProperties(String...value) {
+			this.unevaluatedProperties = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#dependentSchemas} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dependentSchemas(String...value) {
+			this.dependentSchemas = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#dependentRequired} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dependentRequired(String...value) {
+			this.dependentRequired = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#_if} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _if(String...value) {
+			this._if = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#_then} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _then(String...value) {
+			this._then = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#_else} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _else(String...value) {
+			this._else = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#$defs} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder $defs(String...value) {
+			this.$defs = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#$id} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder $id(String value) {
+			this.$id = value;
+			return this;
+		}
+
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -824,6 +1053,10 @@ public class SchemaAnnotation {
 		private final long maxLength, maxl, minLength, minl, maxItems, maxi, minItems, mini, maxProperties, maxp, minProperties, minp;
 		private final String $ref, format, f, title, multipleOf, mo, maximum, max, minimum, min, pattern, p, type, t, collectionFormat, cf, discriminator;
 		private final String[] d, _default, df, _enum, e, allOf, properties, additionalProperties, xml;
+		// JSON Schema Draft 2020-12 fields
+		private final boolean deprecatedProperty;
+		private final String $id, contentMediaType, contentEncoding, exclusiveMaximumValue, exclusiveMinimumValue;
+		private final String[] _const, examples, $comment, prefixItems, unevaluatedItems, unevaluatedProperties, dependentSchemas, dependentRequired, _if, _then, _else, $defs;
 
 		Impl(Builder b) {
 			super(b);
@@ -882,6 +1115,25 @@ public class SchemaAnnotation {
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
 			this.xml = copyOf(b.xml);
+			// JSON Schema Draft 2020-12 fields
+			this.deprecatedProperty = b.deprecatedProperty;
+			this.$id = b.$id;
+			this.contentMediaType = b.contentMediaType;
+			this.contentEncoding = b.contentEncoding;
+			this.exclusiveMaximumValue = b.exclusiveMaximumValue;
+			this.exclusiveMinimumValue = b.exclusiveMinimumValue;
+			this._const = copyOf(b._const);
+			this.examples = copyOf(b.examples);
+			this.$comment = copyOf(b.$comment);
+			this.prefixItems = copyOf(b.prefixItems);
+			this.unevaluatedItems = copyOf(b.unevaluatedItems);
+			this.unevaluatedProperties = copyOf(b.unevaluatedProperties);
+			this.dependentSchemas = copyOf(b.dependentSchemas);
+			this.dependentRequired = copyOf(b.dependentRequired);
+			this._if = copyOf(b._if);
+			this._then = copyOf(b._then);
+			this._else = copyOf(b._else);
+			this.$defs = copyOf(b.$defs);
 			postConstruct();
 		}
 
@@ -1158,6 +1410,100 @@ public class SchemaAnnotation {
 		@Override /* Schema */
 		public String[] xml() {
 			return xml;
+		}
+
+		// -----------------------------------------------------------------------------------------------------------------
+		// JSON Schema Draft 2020-12 property getters
+		// -----------------------------------------------------------------------------------------------------------------
+
+		@Override /* Schema */
+		public String[] _const() {
+			return _const;
+		}
+
+		@Override /* Schema */
+		public String[] examples() {
+			return examples;
+		}
+
+		@Override /* Schema */
+		public String[] $comment() {
+			return $comment;
+		}
+
+		@Override /* Schema */
+		public boolean deprecatedProperty() {
+			return deprecatedProperty;
+		}
+
+		@Override /* Schema */
+		public String exclusiveMaximumValue() {
+			return exclusiveMaximumValue;
+		}
+
+		@Override /* Schema */
+		public String exclusiveMinimumValue() {
+			return exclusiveMinimumValue;
+		}
+
+		@Override /* Schema */
+		public String contentMediaType() {
+			return contentMediaType;
+		}
+
+		@Override /* Schema */
+		public String contentEncoding() {
+			return contentEncoding;
+		}
+
+		@Override /* Schema */
+		public String[] prefixItems() {
+			return prefixItems;
+		}
+
+		@Override /* Schema */
+		public String[] unevaluatedItems() {
+			return unevaluatedItems;
+		}
+
+		@Override /* Schema */
+		public String[] unevaluatedProperties() {
+			return unevaluatedProperties;
+		}
+
+		@Override /* Schema */
+		public String[] dependentSchemas() {
+			return dependentSchemas;
+		}
+
+		@Override /* Schema */
+		public String[] dependentRequired() {
+			return dependentRequired;
+		}
+
+		@Override /* Schema */
+		public String[] _if() {
+			return _if;
+		}
+
+		@Override /* Schema */
+		public String[] _then() {
+			return _then;
+		}
+
+		@Override /* Schema */
+		public String[] _else() {
+			return _else;
+		}
+
+		@Override /* Schema */
+		public String[] $defs() {
+			return $defs;
+		}
+
+		@Override /* Schema */
+		public String $id() {
+			return $id;
 		}
 	}
 

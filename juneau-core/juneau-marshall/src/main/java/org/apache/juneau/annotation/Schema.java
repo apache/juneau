@@ -28,13 +28,20 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 
 /**
- * Swagger schema annotation.
+ * Swagger/OpenAPI/JSON Schema annotation.
  *
  * <p>
  * The Schema Object allows the definition of input and output data types.
  * These types can be objects, but also primitives and arrays.
- * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
- * On top of this subset, there are extensions provided by this specification to allow for more complete documentation.
+ * This annotation is based on the JSON Schema Specification and supports multiple versions:
+ * <ul>
+ * 	<li><b>JSON Schema Draft 04</b> - Core properties (via Swagger 2.0/OpenAPI 3.0)
+ * 	<li><b>JSON Schema Draft 2020-12</b> - Extended properties and updated semantics
+ * </ul>
+ *
+ * <p>
+ * For backward compatibility, all Swagger 2.0 and OpenAPI 3.0 properties are supported.
+ * New Draft 2020-12 properties are opt-in and can be used alongside existing properties.
  *
  * <p>
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
@@ -66,10 +73,23 @@ import org.apache.juneau.oapi.*;
  * 		)
  * 	)
  * </p>
+ * <p class='bjava'>
+ * 	<jc>// Using Draft 2020-12 properties</jc>
+ * 	<ja>@Schema</ja>(
+ * 		type=<js>"number"</js>,
+ * 		exclusiveMaximumValue=<js>"100"</js>,  <jc>// Draft 2020-12 numeric format</jc>
+ * 		examples={<js>"50"</js>, <js>"75"</js>, <js>"99"</js>},  <jc>// Draft 2020-12 property</jc>
+ * 		deprecatedProperty=<jk>true</jk>  <jc>// Draft 2020-12 property</jc>
+ * 	)
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
- * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>
+ * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger 2.0 Schema Object</a>
+ * 	<li class='extlink'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.3#schema-object">OpenAPI 3.0 Schema Object</a>
+ * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html">JSON Schema Draft 2020-12 Core</a>
+ * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema Draft 2020-12 Validation</a>
 
  * </ul>
  */
@@ -384,6 +404,13 @@ public @interface Schema {
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 * <br>If <jk>true</jk>, must be accompanied with <c>maximum</c>.
 	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		<b>Deprecated in JSON Schema Draft 2020-12:</b> This boolean format is from Swagger 2.0/OpenAPI 3.0 and JSON Schema Draft 04.
+	 * 		Consider using {@link #exclusiveMaximumValue()} for Draft 2020-12 compliance, which uses a numeric value instead.
+	 * 		For backward compatibility, if {@link #exclusiveMaximumValue()} is set, it takes precedence over this property.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -395,7 +422,9 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * @return The annotation value.
+	 * @deprecated Use {@link #exclusiveMaximumValue()} for JSON Schema Draft 2020-12 compliance.
 	 */
+	@Deprecated
 	boolean exclusiveMaximum() default false;
 
 	/**
@@ -413,6 +442,13 @@ public @interface Schema {
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 * <br>If <jk>true</jk>, must be accompanied with <c>minimum</c>.
 	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		<b>Deprecated in JSON Schema Draft 2020-12:</b> This boolean format is from Swagger 2.0/OpenAPI 3.0 and JSON Schema Draft 04.
+	 * 		Consider using {@link #exclusiveMinimumValue()} for Draft 2020-12 compliance, which uses a numeric value instead.
+	 * 		For backward compatibility, if {@link #exclusiveMinimumValue()} is set, it takes precedence over this property.
+	 * </ul>
+	 *
 	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
@@ -424,7 +460,9 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * @return The annotation value.
+	 * @deprecated Use {@link #exclusiveMinimumValue()} for JSON Schema Draft 2020-12 compliance.
 	 */
+	@Deprecated
 	boolean exclusiveMinimum() default false;
 
 	/**
@@ -1239,4 +1277,537 @@ public @interface Schema {
 	 * @return The annotation value.
 	 */
 	String[] xml() default {};
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// JSON Schema Draft 2020-12 properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * <mk>const</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The value of this keyword MAY be of any type, including null.
+	 * An instance validates successfully against this keyword if its value is equal to the value of this keyword.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A constant string value</jc>
+	 * 	<ja>@Schema</ja>(_const=<js>"fixed-value"</js>)
+	 * 	<jk>public</jk> String getStatus() {...}
+	 * </p>
+	 * <p class='bjava'>
+	 * 	<jc>// A constant numeric value</jc>
+	 * 	<ja>@Schema</ja>(_const=<js>"42"</js>)
+	 * 	<jk>public int</jk> getMagicNumber() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.3">JSON Schema Validation § 6.1.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] _const() default {};
+
+	/**
+	 * <mk>examples</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The value of this keyword MUST be an array.
+	 * There are no restrictions on the values within the array.
+	 * When multiple examples are applicable, an array of examples can be used.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Multiple examples of valid values</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"string"</js>,
+	 * 		examples={<js>"red"</js>, <js>"green"</js>, <js>"blue"</js>}
+	 * 	)
+	 * 	<jk>public</jk> String getColor() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.9.5">JSON Schema Validation § 9.5</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] examples() default {};
+
+	/**
+	 * <mk>$comment</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * This keyword reserves a location for comments from schema authors to readers or maintainers of the schema.
+	 * The value of this keyword MUST be a string.
+	 * Implementations MUST NOT present this string to end users.
+	 * Tools for editing schemas SHOULD support displaying and editing this keyword.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"string"</js>,
+	 * 		$comment=<js>"This field is deprecated but maintained for backward compatibility"</js>
+	 * 	)
+	 * 	<jk>public</jk> String getLegacyField() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.3">JSON Schema Core § 8.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] $comment() default {};
+
+	/**
+	 * <mk>deprecated</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The value of this keyword MUST be a boolean.
+	 * When true, applications SHOULD refrain from usage of the declared property.
+	 * It may mean the property is going to be removed in the future.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Schema</ja>(deprecated=<jk>true</jk>)
+	 * 	<ja>@Deprecated</ja>
+	 * 	<jk>public</jk> String getOldMethod() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.9.3">JSON Schema Validation § 9.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	boolean deprecatedProperty() default false;
+
+	/**
+	 * <mk>exclusiveMaximum</mk> field of the JSON Schema (Draft 2020-12 numeric value).
+	 *
+	 * <p>
+	 * The value of this keyword MUST be a number.
+	 * The instance is valid if it is strictly less than (not equal to) the value specified by this keyword.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that replaces the boolean {@link #exclusiveMaximum()}.
+	 * For backward compatibility, both properties are supported.
+	 * If this property is specified, it takes precedence over the boolean version.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A number that must be strictly less than 100</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"number"</js>,
+	 * 		exclusiveMaximumValue=<js>"100"</js>
+	 * 	)
+	 * 	<jk>public</jk> Double getPercentage() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.3">JSON Schema Validation § 6.2.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String exclusiveMaximumValue() default "";
+
+	/**
+	 * <mk>exclusiveMinimum</mk> field of the JSON Schema (Draft 2020-12 numeric value).
+	 *
+	 * <p>
+	 * The value of this keyword MUST be a number.
+	 * The instance is valid if it is strictly greater than (not equal to) the value specified by this keyword.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that replaces the boolean {@link #exclusiveMinimum()}.
+	 * For backward compatibility, both properties are supported.
+	 * If this property is specified, it takes precedence over the boolean version.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A number that must be strictly greater than 0</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"number"</js>,
+	 * 		exclusiveMinimumValue=<js>"0"</js>
+	 * 	)
+	 * 	<jk>public</jk> Double getPositiveNumber() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing validation.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing validation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.5">JSON Schema Validation § 6.2.5</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String exclusiveMinimumValue() default "";
+
+	/**
+	 * <mk>contentMediaType</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * If the instance is a string, this property defines the MIME type of the contents of the string.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A string containing JSON data</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"string"</js>,
+	 * 		contentMediaType=<js>"application/json"</js>
+	 * 	)
+	 * 	<jk>public</jk> String getJsonData() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.8.3">JSON Schema Validation § 8.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String contentMediaType() default "";
+
+	/**
+	 * <mk>contentEncoding</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * If the instance is a string, this property defines the encoding used to store the contents.
+	 * Common values: "base64", "quoted-printable", "7bit", "8bit", "binary"
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A base64-encoded binary string</jc>
+	 * 	<ja>@Schema</ja>(
+	 * 		type=<js>"string"</js>,
+	 * 		contentEncoding=<js>"base64"</js>,
+	 * 		contentMediaType=<js>"image/png"</js>
+	 * 	)
+	 * 	<jk>public</jk> String getImageData() {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.8.3">JSON Schema Validation § 8.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String contentEncoding() default "";
+
+	/**
+	 * <mk>prefixItems</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The value of "prefixItems" MUST be a non-empty array of valid JSON Schemas.
+	 * Validation succeeds if each element of the instance validates against the schema at the same position, if any.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that provides tuple validation for arrays.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.3.1.1">JSON Schema Core § 10.3.1.1</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] prefixItems() default {};
+
+	/**
+	 * <mk>unevaluatedItems</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The value of "unevaluatedItems" MUST be a valid JSON Schema.
+	 * This schema applies to array items that were not evaluated by "items", "prefixItems", "contains", etc.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.11.3">JSON Schema Core § 11.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] unevaluatedItems() default {};
+
+	/**
+	 * <mk>unevaluatedProperties</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The value of "unevaluatedProperties" MUST be a valid JSON Schema.
+	 * This schema applies to object properties that were not evaluated by "properties", "patternProperties", etc.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.11.3">JSON Schema Core § 11.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] unevaluatedProperties() default {};
+
+	/**
+	 * <mk>dependentSchemas</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * This keyword specifies subschemas that are evaluated if the instance is an object and contains a certain property.
+	 * The value of this keyword MUST be an object where each value is a valid JSON Schema.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.4">JSON Schema Core § 10.2.2.4</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] dependentSchemas() default {};
+
+	/**
+	 * <mk>dependentRequired</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * This keyword specifies properties that are required if a specific other property is present.
+	 * The value of this keyword MUST be an object where each value is an array of strings.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.5.4">JSON Schema Validation § 6.5.4</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] dependentRequired() default {};
+
+	/**
+	 * <mk>if</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * This keyword's value MUST be a valid JSON Schema.
+	 * This validation outcome of this keyword's subschema has no direct effect on the overall validation result.
+	 * Rather, it controls which of the "then" or "else" keywords are evaluated.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that provides conditional schema validation.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.3">JSON Schema Core § 10.2.2.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] _if() default {};
+
+	/**
+	 * <mk>then</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * This keyword's value MUST be a valid JSON Schema.
+	 * When "if" is present, and the instance successfully validates against its subschema,
+	 * then validation succeeds against this keyword if the instance also successfully validates against this keyword's subschema.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that provides conditional schema validation.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.3">JSON Schema Core § 10.2.2.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] _then() default {};
+
+	/**
+	 * <mk>else</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * This keyword's value MUST be a valid JSON Schema.
+	 * When "if" is present, and the instance fails to validate against its subschema,
+	 * then validation succeeds against this keyword if the instance successfully validates against this keyword's subschema.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that provides conditional schema validation.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.3">JSON Schema Core § 10.2.2.3</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] _else() default {};
+
+	/**
+	 * <mk>$defs</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The "$defs" keyword reserves a location for schema authors to inline re-usable JSON Schemas into a more general schema.
+	 * The value of this keyword MUST be an object. Each value of this object MUST be a valid JSON Schema.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property that replaces the older "definitions" keyword.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
+	 * 		<br>Multiple lines are concatenated with newlines.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.2.4">JSON Schema Core § 8.2.4</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] $defs() default {};
+
+	/**
+	 * <mk>$id</mk> field of the JSON Schema.
+	 *
+	 * <p>
+	 * The "$id" keyword defines a URI for the schema, and the base URI that other URI references within the schema are resolved against.
+	 *
+	 * <p>
+	 * This is a JSON Schema Draft 2020-12 property.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Schema</ja>(
+	 * 		$id=<js>"https://example.com/schemas/person.json"</js>,
+	 * 		type=<js>"object"</js>
+	 * 	)
+	 * 	<jk>public class</jk> Person {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.2.1">JSON Schema Core § 8.2.1</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String $id() default "";
 }

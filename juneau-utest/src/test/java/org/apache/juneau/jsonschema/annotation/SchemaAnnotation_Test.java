@@ -321,4 +321,154 @@ class SchemaAnnotation_Test extends TestBase {
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// JSON Schema Draft 2020-12 properties
+	//------------------------------------------------------------------------------------------------------------------
+
+	Schema draft2020_1 = SchemaAnnotation.create()
+		._const("constantValue")
+		.examples("example1", "example2")
+		.$comment("This is a schema comment")
+		.deprecatedProperty(true)
+		.exclusiveMaximumValue("100")
+		.exclusiveMinimumValue("0")
+		.contentMediaType("application/json")
+		.contentEncoding("base64")
+		.prefixItems("string", "number")
+		.unevaluatedItems("false")
+		.unevaluatedProperties("false")
+		.dependentSchemas("prop1:{type:'string'}")
+		.dependentRequired("prop1:prop2,prop3")
+		._if("properties:{foo:{const:'bar'}}")
+		._then("required:['baz']")
+		._else("required:['qux']")
+		.$defs("MyDef:{type:'string'}")
+		.$id("https://example.com/schemas/my-schema")
+		.build();
+
+	Schema draft2020_2 = SchemaAnnotation.create()
+		._const("constantValue")
+		.examples("example1", "example2")
+		.$comment("This is a schema comment")
+		.deprecatedProperty(true)
+		.exclusiveMaximumValue("100")
+		.exclusiveMinimumValue("0")
+		.contentMediaType("application/json")
+		.contentEncoding("base64")
+		.prefixItems("string", "number")
+		.unevaluatedItems("false")
+		.unevaluatedProperties("false")
+		.dependentSchemas("prop1:{type:'string'}")
+		.dependentRequired("prop1:prop2,prop3")
+		._if("properties:{foo:{const:'bar'}}")
+		._then("required:['baz']")
+		._else("required:['qux']")
+		.$defs("MyDef:{type:'string'}")
+		.$id("https://example.com/schemas/my-schema")
+		.build();
+
+	@Test void e01_draft2020_basic() {
+		assertBean(draft2020_1,
+			"$comment,$defs,$id,_const,_else,_if,_then,contentEncoding,contentMediaType,dependentRequired,dependentSchemas,deprecatedProperty,examples,exclusiveMaximumValue,exclusiveMinimumValue,prefixItems,unevaluatedItems,unevaluatedProperties",
+			"[This is a schema comment],[MyDef:{type:'string'}],https://example.com/schemas/my-schema,[constantValue],[required:['qux']],[properties:{foo:{const:'bar'}}],[required:['baz']],base64,application/json,[prop1:prop2,prop3],[prop1:{type:'string'}],true,[example1,example2],100,0,[string,number],[false],[false]");
+	}
+
+	@Test void e02_draft2020_testEquivalency() {
+		assertEquals(draft2020_2, draft2020_1);
+		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
+		assertEquals(draft2020_1.hashCode(), draft2020_2.hashCode());
+	}
+
+	@Test void e03_draft2020_testEquivalencyInPropertyStores() {
+		var bc1 = BeanContext.create().annotations(draft2020_1).build();
+		var bc2 = BeanContext.create().annotations(draft2020_2).build();
+		assertSame(bc1, bc2);
+	}
+
+	@Schema(
+		_const="constantValue",
+		examples={"example1", "example2"},
+		$comment="This is a schema comment",
+		deprecatedProperty=true,
+		exclusiveMaximumValue="100",
+		exclusiveMinimumValue="0",
+		contentMediaType="application/json",
+		contentEncoding="base64",
+		prefixItems={"string", "number"},
+		unevaluatedItems="false",
+		unevaluatedProperties="false",
+		dependentSchemas="prop1:{type:'string'}",
+		dependentRequired="prop1:prop2,prop3",
+		_if="properties:{foo:{const:'bar'}}",
+		_then="required:['baz']",
+		_else="required:['qux']",
+		$defs="MyDef:{type:'string'}",
+		$id="https://example.com/schemas/my-schema"
+	)
+	public static class E1 {}
+	Schema e1 = E1.class.getAnnotationsByType(Schema.class)[0];
+
+	@Schema(
+		_const="constantValue",
+		examples={"example1", "example2"},
+		$comment="This is a schema comment",
+		deprecatedProperty=true,
+		exclusiveMaximumValue="100",
+		exclusiveMinimumValue="0",
+		contentMediaType="application/json",
+		contentEncoding="base64",
+		prefixItems={"string", "number"},
+		unevaluatedItems="false",
+		unevaluatedProperties="false",
+		dependentSchemas="prop1:{type:'string'}",
+		dependentRequired="prop1:prop2,prop3",
+		_if="properties:{foo:{const:'bar'}}",
+		_then="required:['baz']",
+		_else="required:['qux']",
+		$defs="MyDef:{type:'string'}",
+		$id="https://example.com/schemas/my-schema"
+	)
+	public static class E2 {}
+	Schema e2 = E2.class.getAnnotationsByType(Schema.class)[0];
+
+	@Test void e04_draft2020_comparisonWithDeclarativeAnnotations() {
+		assertEqualsAll(draft2020_1, e1, e2);
+		assertNotEqualsAny(draft2020_1.hashCode(), 0, -1);
+		assertEqualsAll(draft2020_1.hashCode(), e1.hashCode(), e2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Backward compatibility: exclusiveMaximum/exclusiveMinimum fallback
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_backwardCompatibility_exclusiveMaxMin() {
+		// Test that old boolean exclusiveMaximum/exclusiveMinimum still work
+		Schema oldStyle = SchemaAnnotation.create()
+			.exclusiveMaximum(true)
+			.exclusiveMinimum(true)
+			.maximum("100")
+			.minimum("0")
+			.build();
+		
+		assertBean(oldStyle, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
+		
+		// Test that new numeric style takes precedence
+		Schema newStyle = SchemaAnnotation.create()
+			.exclusiveMaximumValue("100")
+			.exclusiveMinimumValue("0")
+			.build();
+		
+		assertBean(newStyle, "exclusiveMaximumValue,exclusiveMinimumValue", "100,0");
+		
+		// Test that new style takes precedence when both are set
+		Schema mixed = SchemaAnnotation.create()
+			.exclusiveMaximum(false)
+			.exclusiveMinimum(false)
+			.exclusiveMaximumValue("100")
+			.exclusiveMinimumValue("0")
+			.build();
+		
+		assertBean(mixed, "exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue", "false,false,100,0");
+	}
 }

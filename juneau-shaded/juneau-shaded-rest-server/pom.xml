@@ -28,7 +28,7 @@
 	<artifactId>juneau-shaded-rest-server</artifactId>
 	<name>Apache Juneau REST Server (Shaded)</name>
 	<description>
-		Shaded JAR containing juneau-core modules plus juneau-rest-common, juneau-rest-server, juneau-rest-server-rdf, and juneau-rest-mock.
+		Shaded JAR containing juneau-core modules plus juneau-rest-common, juneau-rest-server, and juneau-rest-mock.
 		This artifact provides everything needed for REST server development with Juneau.
 	</description>
 
@@ -49,11 +49,6 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-rdf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

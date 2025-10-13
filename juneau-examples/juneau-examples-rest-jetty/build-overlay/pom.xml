@@ -60,7 +60,7 @@
 		<!-- Optional RDF support -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall-rdf</artifactId>
+			<artifactId>juneau-marshall</artifactId>
 			<version>\${juneau.version}</version>
 		</dependency>
 

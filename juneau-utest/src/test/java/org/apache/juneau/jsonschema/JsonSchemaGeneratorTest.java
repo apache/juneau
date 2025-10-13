@@ -1307,4 +1307,232 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertContains("$ref", r(x.getSchema(new B())));
 	}
 
+	//====================================================================================================
+	// JSON Schema Draft 2020-12 properties
+	//====================================================================================================
+
+	@Test void draft2020_const() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(ConstBean.class);
+		assertBean(schema, "const", "MY_CONSTANT");
+	}
+
+	@Schema(type="string", _const="MY_CONSTANT")
+	public static class ConstBean {
+		public String value;
+	}
+
+	@Test void draft2020_examples() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(ExamplesBean.class);
+		assertBean(schema, "examples", "[example1,example2,example3]");
+	}
+
+	@Schema(type="string", examples={"example1", "example2", "example3"})
+	public static class ExamplesBean {
+		public String value;
+	}
+
+	@Test void draft2020_deprecated() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(DeprecatedBean.class);
+		assertBean(schema, "deprecated", "true");
+	}
+
+	@Schema(type="string", deprecatedProperty=true)
+	public static class DeprecatedBean {
+		public String value;
+	}
+
+	@Test void draft2020_comment() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(CommentBean.class);
+		assertBean(schema, "$comment", "This is a comment for developers");
+	}
+
+	@Schema(type="string", $comment="This is a comment for developers")
+	public static class CommentBean {
+		public String value;
+	}
+
+	@Test void draft2020_exclusiveMaxMinNumeric() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(ExclusiveNumericBean.class);
+		assertBean(schema, "exclusiveMaximum,exclusiveMinimum", "100,0");
+	}
+
+	@Schema(type="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0")
+	public static class ExclusiveNumericBean {
+		public int value;
+	}
+
+	@Test void draft2020_contentMediaType() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(ContentMediaTypeBean.class);
+		assertBean(schema, "contentMediaType", "application/json");
+	}
+
+	@Schema(type="string", contentMediaType="application/json")
+	public static class ContentMediaTypeBean {
+		public String jsonData;
+	}
+
+	@Test void draft2020_contentEncoding() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(ContentEncodingBean.class);
+		assertBean(schema, "contentEncoding", "base64");
+	}
+
+	@Schema(type="string", contentEncoding="base64")
+	public static class ContentEncodingBean {
+		public String encodedData;
+	}
+
+	@Test void draft2020_$id() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(IdBean.class);
+		assertBean(schema, "$id", "https://example.com/schemas/my-schema");
+	}
+
+	@Schema(type="object", $id="https://example.com/schemas/my-schema")
+	public static class IdBean {
+		public String value;
+	}
+
+	@Test void draft2020_$defs() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(DefsBean.class);
+		assertBean(schema, "$defs", "MyDef:{type:'string'}");
+	}
+
+	@Schema(type="object", $defs="MyDef:{type:'string'}")
+	public static class DefsBean {
+		public String value;
+	}
+
+	@Test void draft2020_prefixItems() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(PrefixItemsBean.class);
+		// prefixItems is stored as newline-separated string, just verify it exists
+		assertContains("string", schema.get("prefixItems").toString());
+	}
+
+	@Schema(type="array", prefixItems={"string", "number"})
+	public static class PrefixItemsBean {
+		public Object[] tuple;
+	}
+
+	@Test void draft2020_unevaluatedItems() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(UnevaluatedItemsBean.class);
+		assertBean(schema, "unevaluatedItems", "false");
+	}
+
+	@Schema(type="array", unevaluatedItems="false")
+	public static class UnevaluatedItemsBean {
+		public Object[] items;
+	}
+
+	@Test void draft2020_unevaluatedProperties() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(UnevaluatedPropertiesBean.class);
+		assertBean(schema, "unevaluatedProperties", "false");
+	}
+
+	@Schema(type="object", unevaluatedProperties="false")
+	public static class UnevaluatedPropertiesBean {
+		public String prop1;
+	}
+
+	@Test void draft2020_dependentSchemas() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(DependentSchemasBean.class);
+		assertBean(schema, "dependentSchemas", "prop1:{type:'string'}");
+	}
+
+	@Schema(type="object", dependentSchemas="prop1:{type:'string'}")
+	public static class DependentSchemasBean {
+		public String prop1;
+		public String prop2;
+	}
+
+	@Test void draft2020_dependentRequired() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(DependentRequiredBean.class);
+		assertBean(schema, "dependentRequired", "prop1:prop2,prop3");
+	}
+
+	@Schema(type="object", dependentRequired="prop1:prop2,prop3")
+	public static class DependentRequiredBean {
+		public String prop1;
+		public String prop2;
+		public String prop3;
+	}
+
+	@Test void draft2020_conditionals() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(ConditionalBean.class);
+		assertBean(schema, "if,then,else", "properties:{foo:{const:'bar'}},required:['baz'],required:['qux']");
+	}
+
+	@Schema(type="object", 
+		_if="properties:{foo:{const:'bar'}}", 
+		_then="required:['baz']", 
+		_else="required:['qux']")
+	public static class ConditionalBean {
+		public String foo;
+		public String baz;
+		public String qux;
+	}
+
+	@Test void draft2020_combinedProperties() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(CombinedPropertiesBean.class);
+		assertBean(schema, "$comment,$id,const,deprecated,examples,exclusiveMaximum,exclusiveMinimum", 
+			"A comprehensive example,https://example.com/combined,FIXED,true,[ex1,ex2],100,0");
+	}
+
+	@Schema(type="integer",
+		$id="https://example.com/combined",
+		_const="FIXED",
+		examples={"ex1", "ex2"},
+		$comment="A comprehensive example",
+		deprecatedProperty=true,
+		exclusiveMaximumValue="100",
+		exclusiveMinimumValue="0")
+	public static class CombinedPropertiesBean {
+		public int value;
+	}
+
+	//====================================================================================================
+	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
+	//====================================================================================================
+
+	@Test void backwardCompatibility_exclusiveMaxMin_boolean() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		var schema = s.getSchema(OldStyleExclusiveBean.class);
+		assertBean(schema, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
+	}
+
+	@Schema(type="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
+	public static class OldStyleExclusiveBean {
+		public int value;
+	}
+
+	@Test void backwardCompatibility_newStyleTakesPrecedence() throws Exception {
+		var s = JsonSchemaGenerator.DEFAULT.getSession();
+		// New numeric style should take precedence in asMap() when both are set
+		var schema = s.getSchema(MixedStyleExclusiveBean.class);
+		assertBean(schema, "exclusiveMaximum,exclusiveMinimum", "100,0");
+	}
+
+	@Schema(type="integer", 
+		exclusiveMaximumValue="100", 
+		exclusiveMinimumValue="0",
+		exclusiveMaximum=false,  // This should be ignored in favor of numeric values
+		exclusiveMinimum=false)
+	public static class MixedStyleExclusiveBean {
+		public int value;
+	}
+
 }

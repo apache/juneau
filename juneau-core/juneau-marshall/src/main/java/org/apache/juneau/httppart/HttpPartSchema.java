@@ -654,6 +654,11 @@ public class HttpPartSchema {
 		boolean noValidate;
 		Class<? extends HttpPartParser> parser;
 		Class<? extends HttpPartSerializer> serializer;
+		// JSON Schema Draft 2020-12 properties
+		String _const;
+		String[] examples;
+		Boolean deprecated;
+		Number exclusiveMaximumValue, exclusiveMinimumValue;
 
 		/**
 		 * Instantiates a new {@link HttpPartSchema} object based on the configuration of this builder.
@@ -847,8 +852,23 @@ public class HttpPartSchema {
 			additionalProperties(HttpPartSchema.toJsonMap(a.additionalProperties()));
 			allowEmptyValue(a.allowEmptyValue() || a.aev());
 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
-			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
-			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
+
+			// Handle exclusiveMaximum with fallback from Draft 2020-12 to Draft 04
+			String exMaxVal = a.exclusiveMaximumValue();
+			if (isNotEmpty(exMaxVal)) {
+				exclusiveMaximumValue(toNumber(exMaxVal));
+			} else if (a.exclusiveMaximum() || a.emax()) {
+				exclusiveMaximum(true);
+			}
+
+			// Handle exclusiveMinimum with fallback from Draft 2020-12 to Draft 04
+			String exMinVal = a.exclusiveMinimumValue();
+			if (isNotEmpty(exMinVal)) {
+				exclusiveMinimumValue(toNumber(exMinVal));
+			} else if (a.exclusiveMinimum() || a.emin()) {
+				exclusiveMinimum(true);
+			}
+
 			format(firstNonEmpty(a.format(), a.f()));
 			items(a.items());
 			maximum(toNumber(a.maximum(), a.max()));
@@ -866,6 +886,12 @@ public class HttpPartSchema {
 			skipIfEmpty(a.skipIfEmpty() || a.sie());
 			type(firstNonEmpty(a.type(), a.t()));
 			uniqueItems(a.uniqueItems() || a.ui());
+
+			// JSON Schema Draft 2020-12 properties
+			_const(joinnlOrNull(a._const()));
+			examples(a.examples());
+			deprecated(a.deprecatedProperty());
+
 			return this;
 		}
 
@@ -3145,6 +3171,102 @@ public class HttpPartSchema {
 			return this;
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------
+		// JSON Schema Draft 2020-12 property setters
+		// -----------------------------------------------------------------------------------------------------------------
+
+		/**
+		 * <mk>const</mk> field (JSON Schema Draft 2020-12).
+		 *
+		 * <p>
+		 * Defines a constant value for this schema.
+		 * The instance must be equal to this value to validate.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _const(String value) {
+			this._const = value;
+			return this;
+		}
+
+		/**
+		 * <mk>examples</mk> field (JSON Schema Draft 2020-12).
+		 *
+		 * <p>
+		 * An array of example values.
+		 * This is used for documentation purposes only and does not affect validation.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 */
+		public Builder examples(String... value) {
+			this.examples = value;
+			return this;
+		}
+
+		/**
+		 * <mk>deprecated</mk> field (JSON Schema Draft 2020-12).
+		 *
+		 * <p>
+		 * Indicates that applications should refrain from usage of this property.
+		 * This is used for documentation purposes only and does not affect validation.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 */
+		public Builder deprecated(Boolean value) {
+			deprecated = resolve(value, deprecated);
+			return this;
+		}
+
+		/**
+		 * <mk>exclusiveMaximum</mk> field with numeric value (JSON Schema Draft 2020-12).
+		 *
+		 * <p>
+		 * Defines the exclusive maximum value for numeric types.
+		 * The instance is valid if it is strictly less than (not equal to) this value.
+		 *
+		 * <p>
+		 * This is the Draft 2020-12 version that uses a numeric value instead of a boolean flag.
+		 * If this is set, it takes precedence over the boolean {@link #exclusiveMaximum(Boolean)} property.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 */
+		public Builder exclusiveMaximumValue(Number value) {
+			this.exclusiveMaximumValue = value;
+			return this;
+		}
+
+		/**
+		 * <mk>exclusiveMinimum</mk> field with numeric value (JSON Schema Draft 2020-12).
+		 *
+		 * <p>
+		 * Defines the exclusive minimum value for numeric types.
+		 * The instance is valid if it is strictly greater than (not equal to) this value.
+		 *
+		 * <p>
+		 * This is the Draft 2020-12 version that uses a numeric value instead of a boolean flag.
+		 * If this is set, it takes precedence over the boolean {@link #exclusiveMinimum(Boolean)} property.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 */
+		public Builder exclusiveMinimumValue(Number value) {
+			this.exclusiveMinimumValue = value;
+			return this;
+		}
+
+		// -----------------------------------------------------------------------------------------------------------------
+		// Other
+		// -----------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Disables Swagger schema usage validation checking.
 		 *
@@ -3227,6 +3349,11 @@ public class HttpPartSchema {
 	final Class<? extends HttpPartParser> parser;
 	final Class<? extends HttpPartSerializer> serializer;
 	final ClassMeta<?> parsedType;
+	// JSON Schema Draft 2020-12 fields
+	final String _const;
+	final String[] examples;
+	final boolean deprecated;
+	final Number exclusiveMaximumValue, exclusiveMinimumValue;
 
 	HttpPartSchema(Builder b) {
 		this.name = b.name;
@@ -3256,6 +3383,12 @@ public class HttpPartSchema {
 		this.minProperties = b.minProperties;
 		this.parser = b.parser;
 		this.serializer = b.serializer;
+		// JSON Schema Draft 2020-12 fields
+		this._const = b._const;
+		this.examples = b.examples;
+		this.deprecated = resolve(b.deprecated);
+		this.exclusiveMaximumValue = b.exclusiveMaximumValue;
+		this.exclusiveMinimumValue = b.exclusiveMinimumValue;
 
 		// Calculate parse type
 		Class<?> parsedType = Object.class;
@@ -3766,6 +3899,8 @@ public class HttpPartSchema {
 		if (in != null) {
 			if (! isValidAllowEmpty(in))
 				throw new SchemaValidationException("Empty value not allowed.");
+			if (! isValidConst(in))
+				throw new SchemaValidationException("Value does not match constant.  Must be: {0}", _const);
 			if (! isValidPattern(in))
 				throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
 			if (! isValidEnum(in))
@@ -3889,6 +4024,20 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidMinimum(Number x) {
+		// Check Draft 2020-12 exclusiveMinimumValue first (takes precedence)
+		if (exclusiveMinimumValue != null) {
+			if (x instanceof Integer || x instanceof AtomicInteger)
+				return x.intValue() > exclusiveMinimumValue.intValue();
+			if (x instanceof Short || x instanceof Byte)
+				return x.shortValue() > exclusiveMinimumValue.shortValue();
+			if (x instanceof Long || x instanceof AtomicLong || x instanceof BigInteger)
+				return x.longValue() > exclusiveMinimumValue.longValue();
+			if (x instanceof Float)
+				return x.floatValue() > exclusiveMinimumValue.floatValue();
+			if (x instanceof Double || x instanceof BigDecimal)
+				return x.doubleValue() > exclusiveMinimumValue.doubleValue();
+		}
+		// Fall back to Draft 04 boolean exclusiveMinimum with minimum
 		if (x instanceof Integer || x instanceof AtomicInteger)
 			return minimum == null || x.intValue() > minimum.intValue() || (x.intValue() == minimum.intValue() && (! exclusiveMinimum));
 		if (x instanceof Short || x instanceof Byte)
@@ -3903,6 +4052,20 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidMaximum(Number x) {
+		// Check Draft 2020-12 exclusiveMaximumValue first (takes precedence)
+		if (exclusiveMaximumValue != null) {
+			if (x instanceof Integer || x instanceof AtomicInteger)
+				return x.intValue() < exclusiveMaximumValue.intValue();
+			if (x instanceof Short || x instanceof Byte)
+				return x.shortValue() < exclusiveMaximumValue.shortValue();
+			if (x instanceof Long || x instanceof AtomicLong || x instanceof BigInteger)
+				return x.longValue() < exclusiveMaximumValue.longValue();
+			if (x instanceof Float)
+				return x.floatValue() < exclusiveMaximumValue.floatValue();
+			if (x instanceof Double || x instanceof BigDecimal)
+				return x.doubleValue() < exclusiveMaximumValue.doubleValue();
+		}
+		// Fall back to Draft 04 boolean exclusiveMaximum with maximum
 		if (x instanceof Integer || x instanceof AtomicInteger)
 			return maximum == null || x.intValue() < maximum.intValue() || (x.intValue() == maximum.intValue() && (! exclusiveMaximum));
 		if (x instanceof Short || x instanceof Byte)
@@ -3932,6 +4095,10 @@ public class HttpPartSchema {
 
 	private boolean isValidAllowEmpty(String x) {
 		return allowEmptyValue || Utils.isNotEmpty(x);
+	}
+
+	private boolean isValidConst(String x) {
+		return _const == null || _const.equals(x);
 	}
 
 	private boolean isValidPattern(String x) {

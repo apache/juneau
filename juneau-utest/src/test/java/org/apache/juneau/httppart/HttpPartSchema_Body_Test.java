@@ -805,4 +805,146 @@ class HttpPartSchema_Body_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT));
 		assertThrowsWithMessage(SchemaValidationException.class, "Maximum number of items exceeded.", ()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// JSON Schema Draft 2020-12 validation tests
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Content
+	@Schema(_const="CONSTANT_VALUE")
+	public static class D01a {}
+
+	@Test void d01a_const_valid() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D01a.class).build();
+		s.validateInput("CONSTANT_VALUE");
+		s.validateInput(null);  // null is allowed when not required
+	}
+
+	@Test void d01a_const_invalid() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D01a.class).build();
+		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match constant.  Must be: CONSTANT_VALUE", ()->s.validateInput("OTHER_VALUE"));
+	}
+
+	@Content
+	@Schema(_const="CONSTANT_VALUE", required=true)
+	public static class D01b {}
+
+	@Test void d01b_const_required() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D01b.class).build();
+		s.validateInput("CONSTANT_VALUE");
+		assertThrowsWithMessage(SchemaValidationException.class, "No value specified.", ()->s.validateInput(null));
+	}
+
+	@Content
+	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0")
+	public static class D02a {}
+
+	@Test void d02a_exclusiveNumericBounds() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D02a.class).build();
+		s.validateOutput(1, BeanContext.DEFAULT);
+		s.validateOutput(50, BeanContext.DEFAULT);
+		s.validateOutput(99, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+	}
+
+	@Content
+	@Schema(t="number", exclusiveMaximumValue="10.5", exclusiveMinimumValue="0.5")
+	public static class D02b {}
+
+	@Test void d02b_exclusiveNumericBounds_doubles() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D02b.class).build();
+		s.validateOutput(0.6, BeanContext.DEFAULT);
+		s.validateOutput(5.0, BeanContext.DEFAULT);
+		s.validateOutput(10.4, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0.5, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(10.5, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0.4, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(10.6, BeanContext.DEFAULT));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Content
+	@Schema(t="integer", exclusiveMaximum=true, exclusiveMinimum=true, maximum="100", minimum="0")
+	public static class D03a {}
+
+	@Test void d03a_exclusiveBooleanBounds() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D03a.class).build();
+		s.validateOutput(1, BeanContext.DEFAULT);
+		s.validateOutput(50, BeanContext.DEFAULT);
+		s.validateOutput(99, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		// With boolean flags, 0 and 100 are excluded
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+	}
+
+	@Content
+	@Schema(t="integer", exclusiveMaximum=false, exclusiveMinimum=false, maximum="100", minimum="0")
+	public static class D03b {}
+
+	@Test void d03b_inclusiveBounds() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D03b.class).build();
+		// With boolean flags set to false, 0 and 100 are included
+		s.validateOutput(0, BeanContext.DEFAULT);
+		s.validateOutput(1, BeanContext.DEFAULT);
+		s.validateOutput(50, BeanContext.DEFAULT);
+		s.validateOutput(99, BeanContext.DEFAULT);
+		s.validateOutput(100, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(-1, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(101, BeanContext.DEFAULT));
+	}
+
+	@Content
+	@Schema(t="integer", exclusiveMaximumValue="100", exclusiveMinimumValue="0", exclusiveMaximum=false, exclusiveMinimum=false)
+	public static class D03c {}
+
+	@Test void d03c_newStyleTakesPrecedence() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D03c.class).build();
+		// New numeric style should take precedence over old boolean flags
+		s.validateOutput(1, BeanContext.DEFAULT);
+		s.validateOutput(50, BeanContext.DEFAULT);
+		s.validateOutput(99, BeanContext.DEFAULT);
+		s.validateOutput(null, BeanContext.DEFAULT);
+		assertThrowsWithMessage(SchemaValidationException.class, "Minimum value not met.", ()->s.validateOutput(0, BeanContext.DEFAULT));
+		assertThrowsWithMessage(SchemaValidationException.class, "Maximum value exceeded.", ()->s.validateOutput(100, BeanContext.DEFAULT));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Deprecated property (no validation, just ensures it's settable)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Content
+	@Schema(deprecatedProperty=true)
+	public static class D04a {}
+
+	@Test void d04a_deprecated() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D04a.class).build();
+		// deprecated is just a flag, doesn't affect validation
+		assertBean(s, "deprecated", "true");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Examples (no validation, documentation only)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Content
+	@Schema(examples={"example1", "example2", "example3"})
+	public static class D05a {}
+
+	@Test void d05a_examples() throws Exception {
+		var s = HttpPartSchema.create().applyAll(Content.class, D05a.class).build();
+		// examples are documentation only, doesn't affect validation
+		assertBean(s, "examples", "[example1,example2,example3]");
+	}
 }
