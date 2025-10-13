@@ -57,6 +57,7 @@
 		<module>juneau-bean</module>
 		<module>juneau-shaded</module>
 		<module>juneau-distrib</module>
+		<module>juneau-docs</module>
 	</modules>
 
 	<distributionManagement>
@@ -107,7 +108,7 @@
 						<exclude>**/*.svg</exclude>
 						<exclude>**/*.nojekyll</exclude>
 						<exclude>/juneau-docs/static/site/**</exclude>
-						<exclude>/juneau-docs/static/javadocs/**</exclude>
+						<exclude>**/javadocs/**</exclude>
 
 						<!-- Eclipse metadata files -->
 						<exclude>**/.settings/**</exclude>

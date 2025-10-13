@@ -1681,13 +1681,38 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: '19. juneau-all',
+      label: '19. juneau-shaded',
       collapsed: true,
       items: [
         {
           type: 'doc',
-          id: 'topics/19.01.00.JuneauAllBasics',
-          label: '19.1. juneau-all Basics',
+          id: 'topics/19.01.00.JuneauShadedOverview',
+          label: '19.1. Juneau Shaded Overview',
+        },
+        {
+          type: 'doc',
+          id: 'topics/19.02.00.JuneauShadedCore',
+          label: '19.2. juneau-shaded-core',
+        },
+        {
+          type: 'doc',
+          id: 'topics/19.03.00.JuneauShadedRestClient',
+          label: '19.3. juneau-shaded-rest-client',
+        },
+        {
+          type: 'doc',
+          id: 'topics/19.04.00.JuneauShadedRestServer',
+          label: '19.4. juneau-shaded-rest-server',
+        },
+        {
+          type: 'doc',
+          id: 'topics/19.05.00.JuneauShadedRestServerSpringboot',
+          label: '19.5. juneau-shaded-rest-server-springboot',
+        },
+        {
+          type: 'doc',
+          id: 'topics/19.06.00.JuneauShadedAll',
+          label: '19.6. juneau-shaded-all',
         },
       ],
     },
