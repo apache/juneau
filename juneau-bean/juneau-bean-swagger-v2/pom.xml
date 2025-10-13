@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-bean-swagger-v2</artifactId>
-	<name>juneau/bean/swagger-v2</name>
+	<name>Apache Juneau Swagger 2.0 Beans</name>
 	<description>Apache Juneau Serializable Beans - Swagger v2</description>
 	<packaging>bundle</packaging>
 

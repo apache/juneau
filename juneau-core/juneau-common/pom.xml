@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-common</artifactId>
-	<name>juneau/core/common</name>
+	<name>Apache Juneau Common</name>
 	<description>Apache Juneau Core Common APIs</description>
 	<packaging>bundle</packaging>
 

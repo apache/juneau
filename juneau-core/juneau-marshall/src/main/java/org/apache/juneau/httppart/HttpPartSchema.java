@@ -53,6 +53,26 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Schema objects are created via builders instantiated through the {@link #create()} method.
  *
+ * <h5 class='section'>Jakarta Bean Validation Support:</h5>
+ * <p>
+ * As of 9.2.0, this class supports Jakarta Bean Validation constraint annotations (e.g., <c>@NotNull</c>, <c>@Size</c>, <c>@Min</c>, <c>@Max</c>).
+ * When these annotations are encountered during schema building, they are automatically mapped to corresponding OpenAPI schema properties:
+ * <ul>
+ * 	<li><c>@NotNull</c> → <c>required(true)</c>
+ * 	<li><c>@Size(min=x, max=y)</c> → <c>minLength/maxLength</c> and <c>minItems/maxItems</c>
+ * 	<li><c>@Min(value)</c> → <c>minimum(value)</c>
+ * 	<li><c>@Max(value)</c> → <c>maximum(value)</c>
+ * 	<li><c>@Pattern(regexp)</c> → <c>pattern(regexp)</c>
+ * 	<li><c>@Email</c> → <c>format("email")</c>
+ * 	<li><c>@Positive/@PositiveOrZero/@Negative/@NegativeOrZero</c> → Corresponding min/max constraints
+ * 	<li><c>@NotEmpty</c> → <c>required(true) + minLength(1)/minItems(1)</c>
+ * 	<li><c>@NotBlank</c> → <c>required(true) + minLength(1) + pattern</c>
+ * 	<li><c>@DecimalMin/@DecimalMax</c> → <c>minimum/maximum</c> with optional <c>exclusiveMinimum/exclusiveMaximum</c>
+ * </ul>
+ * <p>
+ * This integration uses pure reflection and does not require <c>jakarta.validation-api</c> as a dependency.
+ * The annotations are detected and processed automatically when present.
+ *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
@@ -736,6 +756,8 @@ public class HttpPartSchema {
 				apply((HasFormData)a);
 			else if (a instanceof Schema)
 				apply((Schema)a);
+			else if (a.annotationType().getName().startsWith("jakarta.validation.constraints."))
+				applyJakartaValidation(a);
 			else
 				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", className(a));
 			return this;
@@ -851,6 +873,7 @@ public class HttpPartSchema {
 			uniqueItems(a.uniqueItems() || a.ui());			return this;
 		}
 
+		@SuppressWarnings("deprecation")
 		Builder apply(Schema a) {
 			_default(joinnlOrNull(a._default(), a.df()));
 			_enum(toSet(a._enum(), a.e()));
@@ -940,6 +963,146 @@ public class HttpPartSchema {
 				apply(m.getMap("schema", null));
 			}
 			return this;
+		}
+
+		/**
+		 * Apply Jakarta Bean Validation constraints to this schema.
+		 *
+		 * <p>
+		 * This method uses pure reflection to read constraint annotations, so no jakarta.validation-api
+		 * dependency is required. The constraints are mapped to OpenAPI schema properties where applicable.
+		 *
+		 * <p>
+		 * Supported constraints:
+		 * <ul>
+		 * 	<li><c>@NotNull</c> → <c>required(true)</c>
+		 * 	<li><c>@Size</c> → <c>minLength/maxLength</c> or <c>minItems/maxItems</c>
+		 * 	<li><c>@Min</c> → <c>minimum</c>
+		 * 	<li><c>@Max</c> → <c>maximum</c>
+		 * 	<li><c>@DecimalMin</c> → <c>minimum + exclusiveMinimum</c>
+		 * 	<li><c>@DecimalMax</c> → <c>maximum + exclusiveMaximum</c>
+		 * 	<li><c>@Pattern</c> → <c>pattern</c>
+		 * 	<li><c>@Email</c> → <c>format("email")</c>
+		 * 	<li><c>@Positive</c> → <c>minimum(0) + exclusiveMinimum(true)</c>
+		 * 	<li><c>@PositiveOrZero</c> → <c>minimum(0)</c>
+		 * 	<li><c>@Negative</c> → <c>maximum(0) + exclusiveMaximum(true)</c>
+		 * 	<li><c>@NegativeOrZero</c> → <c>maximum(0)</c>
+		 * 	<li><c>@NotEmpty</c> → <c>required(true) + minLength(1)/minItems(1)</c>
+		 * 	<li><c>@NotBlank</c> → <c>required(true) + minLength(1) + pattern</c>
+		 * </ul>
+		 *
+		 * @param a The Jakarta Validation constraint annotation.
+		 * @return This object.
+		 * @since 9.2.0
+		 */
+		Builder applyJakartaValidation(Annotation a) {
+			String simpleName = a.annotationType().getSimpleName();
+
+			try {
+				switch (simpleName) {
+					case "NotNull":
+						required(true);
+						break;
+					case "Size":
+						Integer min = getAnnotationValue(a, "min", Integer.class);
+						Integer max = getAnnotationValue(a, "max", Integer.class);
+						if (min != null && min > 0) {
+							minLength(min.longValue());
+							minItems(min.longValue());
+						}
+						if (max != null && max < Integer.MAX_VALUE) {
+							maxLength(max.longValue());
+							maxItems(max.longValue());
+						}
+						break;
+					case "Min":
+						Long minValue = getAnnotationValue(a, "value", Long.class);
+						if (minValue != null)
+							minimum(minValue);
+						break;
+					case "Max":
+						Long maxValue = getAnnotationValue(a, "value", Long.class);
+						if (maxValue != null)
+							maximum(maxValue);
+						break;
+					case "Pattern":
+						String regexp = getAnnotationValue(a, "regexp", String.class);
+						if (regexp != null)
+							pattern(regexp);
+						break;
+					case "Email":
+						format("email");
+						break;
+					case "Positive":
+						minimum(0);
+						exclusiveMinimum(true);
+						break;
+					case "PositiveOrZero":
+						minimum(0);
+						break;
+					case "Negative":
+						maximum(0);
+						exclusiveMaximum(true);
+						break;
+					case "NegativeOrZero":
+						maximum(0);
+						break;
+					case "NotEmpty":
+						required(true);
+						minLength(1L);
+						minItems(1L);
+						break;
+					case "NotBlank":
+						required(true);
+						minLength(1L);
+						pattern(".*\\S.*"); // Contains at least one non-whitespace character
+						break;
+					case "DecimalMin":
+						String minVal = getAnnotationValue(a, "value", String.class);
+						Boolean minInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
+						if (minVal != null) {
+							minimum(toNumber(minVal));
+							if (Boolean.FALSE.equals(minInclusive))
+								exclusiveMinimum(true);
+						}
+						break;
+					case "DecimalMax":
+						String maxVal = getAnnotationValue(a, "value", String.class);
+						Boolean maxInclusive = getAnnotationValue(a, "inclusive", Boolean.class);
+						if (maxVal != null) {
+							maximum(toNumber(maxVal));
+							if (Boolean.FALSE.equals(maxInclusive))
+								exclusiveMaximum(true);
+						}
+						break;
+					// Silently ignore other validation annotations we don't support yet
+				}
+			} catch (Exception e) {
+				// If reflection fails, just skip this annotation - it's optional
+			}
+			return this;
+		}
+
+		/**
+		 * Helper method to safely get annotation attribute values via reflection.
+		 *
+		 * <p>
+		 * This allows reading Jakarta Validation annotations without requiring them on the classpath.
+		 *
+		 * @param <T> The expected return type.
+		 * @param a The annotation to read from.
+		 * @param attributeName The attribute name to read.
+		 * @param type The expected type of the attribute value.
+		 * @return The attribute value, or <jk>null</jk> if not found or not of the expected type.
+		 */
+		private <T> T getAnnotationValue(Annotation a, String attributeName, Class<T> type) {
+			try {
+				Method m = a.annotationType().getDeclaredMethod(attributeName);
+				Object value = m.invoke(a);
+				return type.isInstance(value) ? type.cast(value) : null;
+			} catch (Exception e) {
+				return null;
+			}
 		}
 
 		/**
@@ -3914,6 +4077,8 @@ public class HttpPartSchema {
 				throw new SchemaValidationException("Maximum length of value exceeded.");
 			if (! isValidMinLength(in))
 				throw new SchemaValidationException("Minimum length of value not met.");
+			if (! isValidFormat(in))
+				throw new SchemaValidationException("Value does not match expected format: {0}", format);
 		}
 		return in;
 	}
@@ -4003,9 +4168,22 @@ public class HttpPartSchema {
 				}
 				break;
 			}
+			case STRING: {
+				if (cm.isCharSequence()) {
+					String s = o.toString();
+					if (! isValidMinLength(s))
+						throw new SchemaValidationException("Minimum length of value not met.");
+					if (! isValidMaxLength(s))
+						throw new SchemaValidationException("Maximum length of value exceeded.");
+					if (! isValidPattern(s))
+						throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
+					if (! isValidFormat(s))
+						throw new SchemaValidationException("Value does not match expected format: {0}", format);
+				}
+				break;
+			}
 			case BOOLEAN:
 			case FILE:
-			case STRING:
 			case NO_TYPE:
 				break;
 		}
@@ -4121,6 +4299,205 @@ public class HttpPartSchema {
 	private boolean isValidMaxLength(String x) {
 		return maxLength == null || x.length() <= maxLength;
 	}
+
+	private boolean isValidFormat(String x) {
+		if (format == null || format == HttpPartFormat.NO_FORMAT)
+			return true;
+
+		// Skip validation for literal "null" string
+		if ("null".equals(x))
+			return true;
+
+		try {
+			switch (format) {
+				case EMAIL:
+					return isValidEmail(x);
+				case IDN_EMAIL:
+					return isValidIdnEmail(x);
+				case HOSTNAME:
+					return isValidHostname(x);
+				case IDN_HOSTNAME:
+					return isValidIdnHostname(x);
+				case IPV4:
+					return isValidIpv4(x);
+				case IPV6:
+					return isValidIpv6(x);
+				case URI:
+					return isValidUri(x);
+				case URI_REFERENCE:
+					return isValidUriReference(x);
+				case IRI:
+					return isValidIri(x);
+				case IRI_REFERENCE:
+					return isValidIriReference(x);
+				case UUID:
+					return isValidUuid(x);
+				case URI_TEMPLATE:
+					return isValidUriTemplate(x);
+				case JSON_POINTER:
+					return isValidJsonPointer(x);
+				case RELATIVE_JSON_POINTER:
+					return isValidRelativeJsonPointer(x);
+				case REGEX:
+					return isValidRegex(x);
+				case DATE:
+					return isValidDate(x);
+				case DATE_TIME:
+					return isValidDateTime(x);
+				case DATE_TIME_ZONE:
+					return isValidDateTimeZone(x);
+				case TIME:
+					return isValidTime(x);
+				case DURATION:
+					return isValidDuration(x);
+			case BYTE:
+			case BINARY:
+			case BINARY_SPACED:
+				return true; // These are transformation formats, not validation formats
+				case PASSWORD:
+					return true; // Password format is just a UI hint
+				case INT32:
+				case INT64:
+				case FLOAT:
+				case DOUBLE:
+					return true; // Numeric formats are validated during parsing
+				case UON:
+					return true; // UON format is validated during parsing
+				default:
+					return true;
+			}
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean isValidEmail(String x) {
+		// RFC 5321 simplified email validation
+		return x.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+	}
+
+	private boolean isValidIdnEmail(String x) {
+		// RFC 6531 - allows international characters
+		return x.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+	}
+
+	private boolean isValidHostname(String x) {
+		// RFC 1123 hostname validation
+		return x.matches("^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)*[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?$");
+	}
+
+	private boolean isValidIdnHostname(String x) {
+		// RFC 5890 - allows international characters
+		return x.matches("^[^\\s]+$");
+	}
+
+	private boolean isValidIpv4(String x) {
+		// RFC 2673 IPv4 validation
+		String[] parts = x.split("\\.");
+		if (parts.length != 4)
+			return false;
+		for (String part : parts) {
+			try {
+				int val = Integer.parseInt(part);
+				if (val < 0 || val > 255)
+					return false;
+			} catch (NumberFormatException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean isValidIpv6(String x) {
+		// RFC 4291 IPv6 validation (simplified)
+		return x.matches("^([0-9a-fA-F]{0,4}:){7}[0-9a-fA-F]{0,4}$|^::([0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,7}:$");
+	}
+
+	private boolean isValidUri(String x) {
+		// RFC 3986 URI validation
+		try {
+			new java.net.URI(x);
+			return x.matches("^[a-zA-Z][a-zA-Z0-9+.-]*:.*");
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean isValidUriReference(String x) {
+		// RFC 3986 URI reference (can be relative)
+		try {
+			new java.net.URI(x);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean isValidIri(String x) {
+		// RFC 3987 IRI validation (allows international characters)
+		return x.matches("^[a-zA-Z][a-zA-Z0-9+.-]*:.+");
+	}
+
+	private boolean isValidIriReference(String x) {
+		// RFC 3987 IRI reference (allows international characters)
+		return x.length() > 0;
+	}
+
+	private boolean isValidUuid(String x) {
+		// RFC 4122 UUID validation
+		return x.matches("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+	}
+
+	private boolean isValidUriTemplate(String x) {
+		// RFC 6570 URI Template validation (simplified)
+		return x.matches("^[^\\s]*$");
+	}
+
+	private boolean isValidJsonPointer(String x) {
+		// RFC 6901 JSON Pointer validation
+		return x.isEmpty() || x.matches("^(/[^/]*)*$");
+	}
+
+	private boolean isValidRelativeJsonPointer(String x) {
+		// Relative JSON Pointer validation
+		return x.matches("^(0|[1-9][0-9]*)(#|(/[^/]*)*)$");
+	}
+
+	private boolean isValidRegex(String x) {
+		// ECMA-262 regex validation
+		try {
+			java.util.regex.Pattern.compile(x);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	private boolean isValidDate(String x) {
+		// RFC 3339 full-date: YYYY-MM-DD (relaxed to allow various date formats)
+		return x.matches("^\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}.*");
+	}
+
+	private boolean isValidDateTime(String x) {
+		// RFC 3339 date-time (relaxed to allow various datetime formats)
+		return x.matches("^\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}[T\\s]\\d{1,2}:\\d{1,2}.*");
+	}
+
+	private boolean isValidDateTimeZone(String x) {
+		// RFC 3339 date-time with time zone
+		return x.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?[+-]\\d{2}:\\d{2}$");
+	}
+
+	private boolean isValidTime(String x) {
+		// RFC 3339 time
+		return x.matches("^\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?$");
+	}
+
+	private boolean isValidDuration(String x) {
+		// RFC 3339 Appendix A duration (ISO 8601)
+		return x.matches("^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$");
+	}
+
 
 	private boolean isValidMinItems(Object x) {
 		return minItems == null || Array.getLength(x) >= minItems;

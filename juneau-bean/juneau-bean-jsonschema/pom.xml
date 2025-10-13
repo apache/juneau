@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-bean-jsonschema</artifactId>
-	<name>juneau/bean/jsonschema</name>
+	<name>Apache Juneau JSON Schema Beans</name>
 	<description>Apache Juneau Serializable Beans - JSON Schema</description>
 	<packaging>bundle</packaging>
 

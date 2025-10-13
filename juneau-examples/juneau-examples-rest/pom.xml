@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-examples-rest</artifactId>
-	<name>juneau/examples/rest</name>
+	<name>Apache Juneau REST Examples</name>
 	<description>Apache Juneau REST Examples</description>
 	<packaging>bundle</packaging>
 

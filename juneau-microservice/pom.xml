@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-microservice</artifactId>
 	<packaging>pom</packaging>
-	<name>juneau/microservice</name>
+	<name>Apache Juneau Microservices</name>
 	<description>Apache Juneau Microservice APIs</description>
 
 	<modules>

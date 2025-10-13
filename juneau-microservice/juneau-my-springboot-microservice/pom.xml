@@ -34,7 +34,7 @@
 	</parent>
 
 	<artifactId>juneau-my-springboot-microservice</artifactId>
-	<name>juneau/microservice/my-springboot-microservice</name>
+	<name>Apache Juneau My Spring Boot Microservice</name>
 	<description>Apache Juneau Spring Boot Microservice Template</description>
 
 	<properties>

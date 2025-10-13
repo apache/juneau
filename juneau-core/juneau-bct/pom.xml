@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-bct</artifactId>
-	<name>juneau/core/bct</name>
+	<name>Apache Juneau Bean-Centric Testing</name>
 	<description>Apache Juneau Bean-Centric Testing API</description>
 	<packaging>bundle</packaging>
 

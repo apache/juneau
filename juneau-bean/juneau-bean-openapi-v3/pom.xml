@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-bean-openapi-v3</artifactId>
-	<name>juneau/bean/openapi-v3</name>
+	<name>Apache Juneau OpenAPI 3.0 Beans</name>
 	<description>Apache Juneau Serializable Beans - OpenAPI v3</description>
 	<packaging>bundle</packaging>
 

@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-examples-rest-springboot</artifactId>
-	<name>juneau/examples/examples-rest-springboot</name>
+	<name>Apache Juneau REST Spring Boot Examples</name>
 	<description>Apache Juneau REST Examples using Spring Boot</description>
 
 	<properties>

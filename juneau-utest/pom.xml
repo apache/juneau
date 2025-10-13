@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-utest</artifactId>
-	<name>juneau/utest</name>
+	<name>Apache Juneau Unit Tests</name>
 	<description>Apache Juneau Core API Unit Tests</description>
 	<packaging>bundle</packaging>
 
@@ -95,6 +95,12 @@
 			<groupId>org.opentest4j</groupId>
 			<artifactId>opentest4j</artifactId>
 			<version>1.3.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

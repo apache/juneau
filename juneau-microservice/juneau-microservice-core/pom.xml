@@ -28,7 +28,7 @@
 	<artifactId>juneau-microservice-core</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>juneau/microservice/microservice-core</name>
+	<name>Apache Juneau Microservice Core</name>
 	<description>Apache Juneau Microservice Core API</description>
 
 	<properties>

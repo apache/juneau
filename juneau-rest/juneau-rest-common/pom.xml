@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-rest-common</artifactId>
-	<name>juneau/rest/rest-common</name>
+	<name>Apache Juneau REST Common</name>
 	<description>Apache Juneau REST Common API</description>
 	<packaging>bundle</packaging>
 

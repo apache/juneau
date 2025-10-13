@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-bean-common</artifactId>
-	<name>juneau/bean/common</name>
+	<name>Apache Juneau Common Beans</name>
 	<description>Apache Juneau Serializable Beans - Common Beans</description>
 	<packaging>bundle</packaging>
 

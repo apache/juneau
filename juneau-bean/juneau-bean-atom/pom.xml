@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-bean-atom</artifactId>
-	<name>juneau/bean/atom</name>
+	<name>Apache Juneau Atom Beans</name>
 	<description>Apache Juneau Serializable Beans - ATOM</description>
 	<packaging>bundle</packaging>
 

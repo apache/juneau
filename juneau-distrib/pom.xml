@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-distrib</artifactId>
 	<packaging>pom</packaging>
-	<name>juneau/distrib</name>
+	<name>Apache Juneau Distribution</name>
 	<description>Apache Juneau Distribution</description>
 
 	<build>

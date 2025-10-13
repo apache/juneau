@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-rest-server-springboot</artifactId>
 	<packaging>bundle</packaging>
-	<name>juneau/rest/rest-server-springboot</name>
+	<name>Apache Juneau REST Server Spring Boot</name>
 	<description>Apache Juneau REST Server Spring Boot Integration</description>
 
 	<properties>

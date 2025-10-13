@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-assertions</artifactId>
-	<name>juneau/core/assertions</name>
+	<name>Apache Juneau Assertions</name>
 	<description>Apache Juneau Assertions API</description>
 	<packaging>bundle</packaging>
 

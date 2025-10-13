@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-rest-server-rdf</artifactId>
-	<name>juneau/rest/rest-server-rdf</name>
+	<name>Apache Juneau REST Server RDF</name>
 	<description>Apache Juneau REST Servlet RDF support</description>
 	<packaging>bundle</packaging>
 

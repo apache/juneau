@@ -1054,6 +1054,11 @@ const sidebars: SidebarsConfig = {
               id: 'topics/09.05.07.HttpPartApis',
               label: '9.5.7. HTTP Part APIs',
             },
+            {
+              type: 'doc',
+              id: 'topics/09.05.08.HttpPartValidation',
+              label: '9.5.8. HTTP Part Validation',
+            },
           ],
         },
         {

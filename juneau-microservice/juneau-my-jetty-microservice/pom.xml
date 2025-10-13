@@ -34,7 +34,7 @@
 	</parent>
 
 	<artifactId>juneau-my-jetty-microservice</artifactId>
-	<name>juneau/microservice/my-jetty-microservice</name>
+	<name>Apache Juneau My Jetty Microservice</name>
 	<description>Apache Juneau Jetty Microservice Template</description>
 
 	<properties>

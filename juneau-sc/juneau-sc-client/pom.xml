@@ -20,7 +20,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>juneau-sc-client</artifactId>
-	<name>juneau/sc/sc-client</name>
+	<name>Apache Juneau Server Config Client</name>
 	<description>Apache Juneau Server Config Client API</description>
 
 	<parent>

@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-examples-core</artifactId>
-	<name>juneau/examples/examples-core</name>
+	<name>Apache Juneau Core Examples</name>
 	<description>Apache Juneau Core Examples</description>
 	<packaging>bundle</packaging>
 

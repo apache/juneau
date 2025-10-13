@@ -26,7 +26,7 @@
 	</parent>
 
 	<artifactId>juneau-rest</artifactId>
-	<name>juneau/rest</name>
+	<name>Apache Juneau REST</name>
 	<description>Apache Juneau REST APIs</description>
 	<packaging>pom</packaging>
 

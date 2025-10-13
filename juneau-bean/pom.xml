@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-bean</artifactId>
 	<packaging>pom</packaging>
-	<name>juneau/bean</name>
+	<name>Apache Juneau Beans</name>
 	<description>Apache Juneau Serializable Beans</description>
 
 	<modules>
