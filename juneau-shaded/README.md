@@ -18,7 +18,6 @@ This module contains shaded (uber) JAR artifacts that bundle multiple Juneau mod
 - juneau-bct (Bean-Centric Testing)
 - juneau-config
 - juneau-marshall
-- juneau-marshall-rdf
 
 **Maven Usage**:
 ```xml
