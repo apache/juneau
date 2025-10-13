@@ -38,15 +38,15 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<em class="jxr_comment">// @Beanp(name) on method not in @Bean(properties)</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">// Shouldn't be found in keySet()/entrySet() but should be found in containsKey()/get()</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Test <strong class="jxr_keyword">void</strong> beanPropertyMethodNotInBeanProperties() {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">var</strong> bc = BeanContext.DEFAULT;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">var</strong> bm = bc.newBeanMap(A1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertTrue(bm.containsKey(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		bm.put(<span class="jxr_string">"f2"</span>, -2);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertFalse(bm.containsKey(<span class="jxr_string">"f2"</span>));  <em class="jxr_comment">// JUNEAU-248: Now consistent with keySet()</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));      <em class="jxr_comment">// But get() still works</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		bm.put(<span class="jxr_string">"f2"</span>, -2);                    <em class="jxr_comment">// And put() still works</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(-2, bm.get(<span class="jxr_string">"f2"</span>));
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertFalse(bm.keySet().contains(<span class="jxr_string">"f2"</span>));
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains(<span class="jxr_string">"f2"</span>));
@@ -65,9 +65,9 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> bc = BeanContext.create().applyAnnotations(B1Config.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> bm = bc.newBeanMap(B1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertTrue(bm.containsKey(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		bm.put(<span class="jxr_string">"f2"</span>, -2);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertFalse(bm.containsKey(<span class="jxr_string">"f2"</span>));  <em class="jxr_comment">// JUNEAU-248: Now consistent with keySet()</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));      <em class="jxr_comment">// But get() still works</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		bm.put(<span class="jxr_string">"f2"</span>, -2);                    <em class="jxr_comment">// And put() still works</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertEquals(-2, bm.get(<span class="jxr_string">"f2"</span>));
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertFalse(bm.keySet().contains(<span class="jxr_string">"f2"</span>));
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains(<span class="jxr_string">"f2"</span>));
@@ -89,50 +89,51 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_comment">// @Beanp(name) on field not in @Bean(properties)</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> beanPropertyFieldNotInBeanProperties() {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> bc = BeanContext.DEFAULT;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> bm = bc.newBeanMap(A2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertTrue(bm.containsKey(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		bm.put(<span class="jxr_string">"f2"</span>, -2);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(-2, bm.get(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertFalse(bm.keySet().contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Bean(p=<span class="jxr_string">"f1"</span>)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A2 {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		@Beanp(<span class="jxr_string">"f2"</span>)
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2 = -1;
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> bc = BeanContext.create().applyAnnotations(B2Config.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> bm = bc.newBeanMap(B2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertTrue(bm.containsKey(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		bm.put(<span class="jxr_string">"f2"</span>, -2);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertEquals(-2, bm.get(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertFalse(bm.keySet().contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Bean(on=<span class="jxr_string">"Dummy"</span>,p=<span class="jxr_string">"dummy"</span>)
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Bean(on=<span class="jxr_string">"B2"</span>, p=<span class="jxr_string">"f1"</span>)
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Beanp(on=<span class="jxr_string">"Dummy"</span>, value=<span class="jxr_string">"dummy"</span>)
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Beanp(on=<span class="jxr_string">"B2.f2"</span>, value=<span class="jxr_string">"f2"</span>)
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B2Config {}
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B2 {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2 = -1;
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_comment">// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> beanPropertyFieldNotInBeanProperties() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> bc = BeanContext.DEFAULT;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> bm = bc.newBeanMap(A2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertFalse(bm.containsKey(<span class="jxr_string">"f2"</span>));  <em class="jxr_comment">// JUNEAU-248: Now consistent with keySet()</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));      <em class="jxr_comment">// But get() still works</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		bm.put(<span class="jxr_string">"f2"</span>, -2);                    <em class="jxr_comment">// And put() still works</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(-2, bm.get(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertFalse(bm.keySet().contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Bean(p=<span class="jxr_string">"f1"</span>)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> A2 {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		@Beanp(<span class="jxr_string">"f2"</span>)
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2 = -1;
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> beanPropertyFieldNotInBeanConfig() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> bc = BeanContext.create().applyAnnotations(B2Config.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> bm = bc.newBeanMap(B2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertFalse(bm.containsKey(<span class="jxr_string">"f2"</span>));  <em class="jxr_comment">// JUNEAU-248: Now consistent with keySet()</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(-1, bm.get(<span class="jxr_string">"f2"</span>));      <em class="jxr_comment">// But get() still works</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		bm.put(<span class="jxr_string">"f2"</span>, -2);                    <em class="jxr_comment">// And put() still works</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertEquals(-2, bm.get(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertFalse(bm.keySet().contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Bean(on=<span class="jxr_string">"Dummy"</span>,p=<span class="jxr_string">"dummy"</span>)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	@Bean(on=<span class="jxr_string">"B2"</span>, p=<span class="jxr_string">"f1"</span>)
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Beanp(on=<span class="jxr_string">"Dummy"</span>, value=<span class="jxr_string">"dummy"</span>)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Beanp(on=<span class="jxr_string">"B2.f2"</span>, value=<span class="jxr_string">"f2"</span>)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B2Config {}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B2 {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f2 = -1;
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
