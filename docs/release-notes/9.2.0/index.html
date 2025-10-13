@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Release 9.2.0 | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/release-notes/9.2.0"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Release 9.2.0 | Apache Juneau"><meta data-rh="true" name="description" content="Date: TBD"><meta data-rh="true" property="og:description" content="Date: TBD"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/release-notes/9.2.0"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.c21a577c.css">
-<script src="/assets/js/runtime~main.a79547bd.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f7ad4cf0.js" defer="defer"></script>
 <script src="/assets/js/main.cd4d957b.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -16,16 +16,260 @@
 <div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>Release Status</div><div class="admonitionContent_BuS1"><p>This release is currently in progress.
 Features and release date are subject to change.</p></div></div>
 <p>Juneau 9.2.0 is a minor release focused on enhancements and bug fixes.</p>
-<p>More details will be provided as development progresses.</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="planned-features">Planned Features<a href="#planned-features" class="hash-link" aria-label="Direct link to Planned Features" title="Direct link to Planned Features">​</a></h4>
+<p>Major changes include:</p>
 <ul>
-<li>Additional improvements and bug fixes</li>
-<li>Enhanced performance optimizations</li>
-<li>Documentation updates</li>
+<li>JSON Schema beans upgraded to Draft 2020-12 specification with backward compatibility for Draft 04</li>
+<li>Comprehensive enhancements to HTML5 beans with improved javadocs and <code>HtmlBuilder</code> integration</li>
+<li>Standardized license headers across all Java files</li>
+<li>Enhanced test coverage for OpenAPI 3.0 and Swagger 2.0 beans</li>
+<li>Removed <code>final</code> modifiers from many classes to improve testability with Mockito and other mocking frameworks</li>
+<li>Improved <code>RestRequest</code> and <code>RestResponse</code> to work cleanly with try-with-resources blocks</li>
+<li><strong>New Module</strong>: Introduced <code>juneau-bct</code> (Bean-Centric Testing) with fluent APIs for comprehensive bean testing</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-dto">juneau-dto<a href="#juneau-dto" class="hash-link" aria-label="Direct link to juneau-dto" title="Direct link to juneau-dto">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-bean-jsonschema">juneau-bean-jsonschema<a href="#juneau-bean-jsonschema" class="hash-link" aria-label="Direct link to juneau-bean-jsonschema" title="Direct link to juneau-bean-jsonschema">​</a></h4>
+<ul>
+<li>
+<p><strong>JSON Schema Draft 2020-12 Compliance</strong>: The <code>JsonSchema</code> bean has been upgraded to support JSON Schema Draft 2020-12 while maintaining backward compatibility with Draft 04.</p>
+<p>New properties added:</p>
+<ul>
+<li><code>$id</code> (replaces <code>id</code>)</li>
+<li><code>$defs</code> (replaces <code>definitions</code>)</li>
+<li><code>const</code> - Single constant value validation</li>
+<li><code>examples</code> - Array of example values</li>
+<li><code>if</code>, <code>then</code>, <code>else</code> - Conditional schema validation</li>
+<li><code>readOnly</code>, <code>writeOnly</code> - Property access control</li>
+<li><code>contentMediaType</code>, <code>contentEncoding</code> - String content metadata</li>
+<li><code>prefixItems</code> - Array prefix validation</li>
+<li><code>unevaluatedItems</code>, <code>unevaluatedProperties</code> - Unevaluated content handling</li>
+<li><code>dependentSchemas</code>, <code>dependentRequired</code> - Property dependencies</li>
+</ul>
+<p>Modified properties:</p>
+<ul>
+<li><code>exclusiveMaximum</code> / <code>exclusiveMinimum</code> - Now support numeric values (Draft 2020-12) in addition to boolean (Draft 04)</li>
+<li><code>enum</code> - Changed to <code>List&lt;Object&gt;</code> to support any type</li>
+</ul>
+</li>
+<li>
+<p><strong>Improved Maintainability</strong>: Removed explicit <code>@Bean(properties)</code> annotation in favor of automatic alphabetical property discovery with <code>JsonSerializer.DEFAULT_SORTED</code>.</p>
+</li>
+<li>
+<p><strong>Enhanced Documentation</strong>:</p>
+<ul>
+<li>Updated package-info with comprehensive usage examples</li>
+<li>Added migration guide from Draft 04 to Draft 2020-12</li>
+<li>Merged <code>package2.html</code> content into <code>package-info.java</code> for consolidated documentation</li>
+</ul>
+</li>
+<li>
+<p><strong>Bug Fixes</strong>:</p>
+<ul>
+<li>Added <code>@BeanIgnore</code> to internal setters (<code>setName</code>, <code>setSchemaMap</code>) to prevent serialization issues in HTML round-trip tests</li>
+<li>Fixed fallback logic for deprecated properties to prevent double serialization</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-bean-openapi3">juneau-bean-openapi3<a href="#juneau-bean-openapi3" class="hash-link" aria-label="Direct link to juneau-bean-openapi3" title="Direct link to juneau-bean-openapi3">​</a></h4>
+<ul>
+<li>
+<p><strong>Enhanced Test Coverage</strong>: Achieved near 100% instruction coverage for all OpenAPI 3.0 beans</p>
+<ul>
+<li>Added comprehensive tests for <code>MediaType</code>, <code>Link</code>, <code>Example</code>, <code>RequestBody</code>, <code>Header</code>, <code>Encoding</code>, <code>SecurityScheme</code>, <code>OAuthFlows</code>, <code>OAuthFlow</code>, <code>ServerVariable</code>, <code>Discriminator</code>, <code>Xml</code>, <code>ExternalDocumentation</code></li>
+<li>Added validation tests for required fields and strict mode behavior</li>
+<li>Added reference resolution tests (<code>resolveRefs()</code>) for all applicable beans</li>
+</ul>
+</li>
+<li>
+<p><strong>Collection Method Consistency</strong>: Ensured all collection properties have the standard 4-method pattern:</p>
+<ul>
+<li><code>setX(X...)</code> - varargs setter</li>
+<li><code>setX(Collection&lt;X&gt;)</code> - Collection setter</li>
+<li><code>addX(X...)</code> - varargs adder</li>
+<li><code>addX(Collection&lt;X&gt;)</code> - Collection adder</li>
+</ul>
+</li>
+<li>
+<p><strong>Bug Fixes</strong>:</p>
+<ul>
+<li>Fixed <code>OpenApi.resolveRefs()</code> to properly handle <code>servers</code> array references</li>
+<li>Added null-safety checks in various <code>resolveRefs()</code> implementations</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-bean-swagger">juneau-bean-swagger<a href="#juneau-bean-swagger" class="hash-link" aria-label="Direct link to juneau-bean-swagger" title="Direct link to juneau-bean-swagger">​</a></h4>
+<ul>
+<li>
+<p><strong>Enhanced Test Coverage</strong>: Achieved near 100% instruction coverage for all Swagger 2.0 beans</p>
+<ul>
+<li>Added comprehensive tests for <code>ParameterInfo</code>, <code>HeaderInfo</code>, <code>Tag</code>, <code>SecurityScheme</code>, <code>Xml</code>, <code>ExternalDocumentation</code></li>
+<li>Added validation tests for required fields and strict mode behavior</li>
+<li>Added reference resolution tests for all applicable beans</li>
+</ul>
+</li>
+<li>
+<p><strong>Collection Method Consistency</strong>: Standardized collection property methods across all beans</p>
+</li>
+<li>
+<p><strong>Bug Fixes</strong>:</p>
+<ul>
+<li>Fixed <code>Swagger.resolveRefs()</code> to properly resolve references in nested structures</li>
+<li>Added null-safety checks in path and definition resolution</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-bean-html5">juneau-bean-html5<a href="#juneau-bean-html5" class="hash-link" aria-label="Direct link to juneau-bean-html5" title="Direct link to juneau-bean-html5">​</a></h4>
+<ul>
+<li>
+<p><strong>Comprehensive Javadoc Enhancements</strong>: Updated javadocs for all 95 HTML5 bean classes with:</p>
+<ul>
+<li>Detailed descriptions of each HTML element&#x27;s purpose and usage</li>
+<li>Complete attribute documentation with enumerated values and constraints</li>
+<li>Multiple practical usage examples</li>
+<li>Links to W3C HTML5 specification for each element</li>
+</ul>
+</li>
+<li>
+<p><strong>HtmlBuilder Integration</strong>: Added <code>HtmlBuilder</code> creator method documentation using javatree format:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token comment">/**</span><br></span><span class="token-line"><span class="token comment"> * &lt;p&gt;</span><br></span><span class="token-line"><span class="token comment"> * The following convenience methods are provided for constructing instances of this bean:</span><br></span><span class="token-line"><span class="token comment"> * &lt;ul class=&#x27;javatree&#x27;&gt;</span><br></span><span class="token-line"><span class="token comment"> *   &lt;li class=&#x27;jc&#x27;&gt;{@link HtmlBuilder}</span><br></span><span class="token-line"><span class="token comment"> *   &lt;ul class=&#x27;javatree&#x27;&gt;</span><br></span><span class="token-line"><span class="token comment"> *     &lt;li class=&#x27;jm&#x27;&gt;{@link HtmlBuilder#a() a()}</span><br></span><span class="token-line"><span class="token comment"> *     &lt;li class=&#x27;jm&#x27;&gt;{@link HtmlBuilder#a(Object, Object...) a(Object, Object...)}</span><br></span><span class="token-line"><span class="token comment"> *   &lt;/ul&gt;</span><br></span><span class="token-line"><span class="token comment"> * &lt;/ul&gt;</span><br></span><span class="token-line"><span class="token comment"> * &lt;/p&gt;</span><br></span><span class="token-line"><span class="token comment"> */</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Example Refactoring</strong>: Replaced constructor-based examples with <code>HtmlBuilder</code> methods where applicable (examples with children defined)</p>
+</li>
+<li>
+<p><strong>Documentation Consistency</strong>: Standardized formatting and structure across all HTML5 bean classes</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-core">juneau-core<a href="#juneau-core" class="hash-link" aria-label="Direct link to juneau-core" title="Direct link to juneau-core">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="license-header-standardization">License Header Standardization<a href="#license-header-standardization" class="hash-link" aria-label="Direct link to License Header Standardization" title="Direct link to License Header Standardization">​</a></h4>
+<ul>
+<li><strong>Java Files</strong>: Replaced non-standard comment-based license headers with the standard Apache License block comment format across all Java files</li>
+<li><strong>Properties Files</strong>: Updated license headers in <code>.properties</code> files to use the standard format</li>
+<li><strong>XML Files</strong>: Standardized XML license headers with proper comment syntax</li>
+<li><strong>Package Statement Fixes</strong>: Corrected package statements that were in unusual positions after license header changes</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="mockito-compatibility">Mockito Compatibility<a href="#mockito-compatibility" class="hash-link" aria-label="Direct link to Mockito Compatibility" title="Direct link to Mockito Compatibility">​</a></h4>
+<ul>
+<li><strong>Removed <code>final</code> Modifiers</strong>: Removed <code>final</code> modifiers from many classes across the framework to improve testability with Mockito and other mocking frameworks that require non-final classes. This change makes it significantly easier to write unit tests for code that uses Juneau APIs.</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-marshall">juneau-marshall<a href="#juneau-marshall" class="hash-link" aria-label="Direct link to juneau-marshall" title="Direct link to juneau-marshall">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="xml-serialization">XML Serialization<a href="#xml-serialization" class="hash-link" aria-label="Direct link to XML Serialization" title="Direct link to XML Serialization">​</a></h4>
+<ul>
+<li>
+<p><strong>Text Node Delimiter</strong>: Added <code>textNodeDelimiter</code> property to <code>XmlSerializer</code> and <code>HtmlSerializer</code> to control spacing between consecutive text nodes.</p>
+<p>Example usage:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token class-name">XmlSerializer</span><span class="token plain"> serializer </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">XmlSerializer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">textNodeDelimiter</span><span class="token punctuation">(</span><span class="token string">&quot; &quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+<p>With this setting, serializing:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">Audio</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">children</span><span class="token punctuation">(</span><span class="token string">&quot;a&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;b&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">Strong</span><span class="token punctuation">(</span><span class="token string">&quot;c&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+<p>Produces: <code>&lt;audio&gt;a b&lt;strong&gt;c&lt;/strong&gt;&lt;/audio&gt;</code><br>
+<!-- -->Instead of: <code>&lt;audio&gt;ab&lt;strong&gt;c&lt;/strong&gt;&lt;/audio&gt;</code></p>
+<p>This improves readability of HTML5 bean output by adding proper spacing between text elements.</p>
+</li>
+<li>
+<p><strong>Disable JSON Type Tags</strong>: Added <code>disableJsonTags()</code> method to <code>XmlSerializer</code> and <code>HtmlSerializer</code> to disable JSON type identifier tags in XML output.</p>
+<p>Example usage:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token class-name">XmlSerializer</span><span class="token plain"> serializer </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">XmlSerializer</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">disableJsonTags</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+<p>When enabled, JSON type tags (e.g. <code>&lt;string&gt;</code>) and attributes will not be added to the output. This produces cleaner XML but may affect parsing accuracy as type information is lost.</p>
+<p><strong>Note</strong>: Disabling JSON tags can cause different data to be parsed (e.g., strings instead of numbers) since type information is not preserved in the XML.</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-bct-new-module">juneau-bct (NEW MODULE)<a href="#juneau-bct-new-module" class="hash-link" aria-label="Direct link to juneau-bct (NEW MODULE)" title="Direct link to juneau-bct (NEW MODULE)">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="bean-centric-testing-framework">Bean-Centric Testing Framework<a href="#bean-centric-testing-framework" class="hash-link" aria-label="Direct link to Bean-Centric Testing Framework" title="Direct link to Bean-Centric Testing Framework">​</a></h4>
+<p>A new testing module that provides fluent, powerful APIs for testing Java beans with minimal boilerplate code.</p>
+<p><strong>Key Features</strong>:</p>
+<ul>
+<li>
+<p><strong>Fluent Assertion API</strong>: Chain multiple assertions with readable, natural language syntax</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token function">assertBean</span><span class="token punctuation">(</span><span class="token plain">myBean</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">property</span><span class="token punctuation">(</span><span class="token string">&quot;name&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;John&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">property</span><span class="token punctuation">(</span><span class="token string">&quot;age&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isType</span><span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">property</span><span class="token punctuation">(</span><span class="token string">&quot;email&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">matches</span><span class="token punctuation">(</span><span class="token string">&quot;.*@example\\.com&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Deep Property Path Navigation</strong>: Test nested bean properties with dot notation and collection indexing</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token function">assertBean</span><span class="token punctuation">(</span><span class="token plain">swagger</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;paths.&#x27;/users&#x27;.get.summary&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;Get all users&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;definitions.User.properties.id.type&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;integer&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Serialization Testing</strong>: Round-trip testing for JSON, XML, HTML, and other formats</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token function">assertBean</span><span class="token punctuation">(</span><span class="token plain">bean</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;{name:&#x27;John&#x27;,age:25}&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">asXml</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span><span class="token string">&quot;&lt;name&gt;John&lt;/name&gt;&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Collection Assertions</strong>: Simplified testing of arrays, lists, and maps</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token function">assertBean</span><span class="token punctuation">(</span><span class="token plain">swagger</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">property</span><span class="token punctuation">(</span><span class="token string">&quot;tags&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">asCollection</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">property</span><span class="token punctuation">(</span><span class="token string">&quot;tags[0].name&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;users&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Exception Testing</strong>: Clean assertions for exception testing</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token function">assertThrown</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token operator">-&gt;</span><span class="token plain"> bean</span><span class="token punctuation">.</span><span class="token function">setRequired</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">isType</span><span class="token punctuation">(</span><span class="token class-name">IllegalArgumentException</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span><span class="token string">&quot;cannot be null&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Test Utilities</strong>: Helper methods for common testing patterns</p>
+<ul>
+<li><code>assertMap()</code> - Map-specific assertions</li>
+<li><code>assertList()</code> - List-specific assertions</li>
+<li><code>assertString()</code> - String pattern matching and validation</li>
+<li><code>assertObject()</code> - Generic object assertions</li>
+</ul>
+</li>
+</ul>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li>Reduces test code verbosity by up to 70%</li>
+<li>Improves test readability and maintainability</li>
+<li>Provides consistent testing patterns across the codebase</li>
+<li>Supports all Juneau serialization formats</li>
+<li>Works seamlessly with JUnit 5</li>
+</ul>
+<p><strong>Example Usage</strong>:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token annotation punctuation">@Test</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">void</span><span class="token plain"> </span><span class="token function">testSwaggerDocument</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token punctuation">{</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">Swagger</span><span class="token plain"> swagger </span><span class="token operator">=</span><span class="token plain"> </span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">Swagger</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">        </span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">Info</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">title</span><span class="token punctuation">(</span><span class="token string">&quot;My API&quot;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token string">&quot;1.0&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">        </span><span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">&quot;/users&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">PathItem</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">            </span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">Operation</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">                </span><span class="token punctuation">.</span><span class="token function">summary</span><span class="token punctuation">(</span><span class="token string">&quot;Get users&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">                </span><span class="token punctuation">.</span><span class="token function">response</span><span class="token punctuation">(</span><span class="token string">&quot;200&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">Response</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">description</span><span class="token punctuation">(</span><span class="token string">&quot;Success&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token function">assertBean</span><span class="token punctuation">(</span><span class="token plain">swagger</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">        </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;info.title&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;My API&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">        </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;info.version&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;1.0&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">        </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;paths.&#x27;/users&#x27;.get.summary&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;Get users&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">        </span><span class="token punctuation">.</span><span class="token function">asJson</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">is</span><span class="token punctuation">(</span><span class="token string">&quot;paths.&#x27;/users&#x27;.get.responses.&#x27;200&#x27;.description&quot;</span><span class="token punctuation">,</span><span class="token plain"> </span><span class="token string">&quot;Success&quot;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">}</span><br></span></code></pre></div></div>
+<p>See the module documentation for complete API reference and examples.</p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="juneau-rest-client">juneau-rest-client<a href="#juneau-rest-client" class="hash-link" aria-label="Direct link to juneau-rest-client" title="Direct link to juneau-rest-client">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="restrequest-and-restresponse">RestRequest and RestResponse<a href="#restrequest-and-restresponse" class="hash-link" aria-label="Direct link to RestRequest and RestResponse" title="Direct link to RestRequest and RestResponse">​</a></h4>
+<ul>
+<li>
+<p><strong>Try-With-Resources Support</strong>: Enhanced <code>RestRequest</code> and <code>RestResponse</code> to work cleanly with try-with-resources blocks:</p>
+<ul>
+<li><code>RestRequest</code> now implements <code>AutoCloseable</code> and automatically closes <code>RestResponse</code> if a response has been created</li>
+<li><code>close()</code> methods no longer throw checked exceptions (following AutoCloseable best practices)</li>
+<li>Unchecked exceptions are thrown for critical failures</li>
+<li>Checked exceptions (including <code>RestCallException</code>) are logged but not thrown, preventing exceptions from being masked in try-with-resources</li>
+</ul>
+<p>Example usage:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token class-name">RestClient</span><span class="token plain"> client </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">RestClient</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">try</span><span class="token plain"> </span><span class="token punctuation">(</span><span class="token class-name">RestRequest</span><span class="token plain"> req </span><span class="token operator">=</span><span class="token plain"> client</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">&quot;/api/users&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token punctuation">{</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">String</span><span class="token plain"> response </span><span class="token operator">=</span><span class="token plain"> req</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getContent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">asString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">}</span><span class="token plain"> </span><span class="token comment">// Automatic cleanup with proper exception handling</span><br></span></code></pre></div></div>
+</li>
+<li>
+<p><strong>Improved Error Handling</strong>: Added comprehensive logging for exceptions caught during cleanup to aid debugging while maintaining AutoCloseable compliance and preventing exception masking in try-catch blocks</p>
+</li>
+</ul>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="documentation">Documentation<a href="#documentation" class="hash-link" aria-label="Direct link to Documentation" title="Direct link to Documentation">​</a></h3>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="historical-javadocs">Historical Javadocs<a href="#historical-javadocs" class="hash-link" aria-label="Direct link to Historical Javadocs" title="Direct link to Historical Javadocs">​</a></h4>
+<ul>
+<li>
+<p><strong>Javadocs Archive</strong>: Set up versioned javadocs hosting at <code>/javadocs/</code> with:</p>
+<ul>
+<li>Landing page with cards for all historical versions (7.1.0 through 9.1.0)</li>
+<li>&quot;Current (Development)&quot; link pointing to <code>/site/apidocs/</code> for latest Maven-generated docs</li>
+<li>Helper scripts for adding new versions (<code>add-javadocs.sh</code>)</li>
+<li>Comprehensive documentation for maintainers (<code>README.md</code>, <code>JAVADOCS_SETUP.md</code>)</li>
+</ul>
+</li>
+<li>
+<p><strong>Git LFS Considerations</strong>: Documented Git LFS limitations with Apache GitBox and alternative deployment strategies</p>
+</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="known-issues">Known Issues<a href="#known-issues" class="hash-link" aria-label="Direct link to Known Issues" title="Direct link to Known Issues">​</a></h4>
 <p>None at this time.</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="migration-notes">Migration Notes<a href="#migration-notes" class="hash-link" aria-label="Direct link to Migration Notes" title="Direct link to Migration Notes">​</a></h4>
-<p>Migration notes will be provided upon release.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/apache/juneau/tree/master/juneau-docs/docs/release-notes/9.2.0.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Documentation</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/about">About</a></li><li class="footer__item"><a class="footer__link-item" href="/downloads">Downloads</a></li><li class="footer__item"><a class="footer__link-item" href="/site/apidocs/index.html">Javadocs</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/apache/juneau" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://github.com/apache/juneau/wiki" target="_blank" rel="noopener noreferrer" class="footer__link-item">Wiki<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question" target="_blank" rel="noopener noreferrer" class="footer__link-item">Mailing List<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Apache</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://www.apache.org/foundation" target="_blank" rel="noopener noreferrer" class="footer__link-item">Apache Foundation<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="http://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer" class="footer__link-item">License<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="http://www.apache.org/security" target="_blank" rel="noopener noreferrer" class="footer__link-item">Security<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 The Apache Software Foundation. Licensed under the Apache License, Version 2.0. Apache, Apache Juneau, and the Apache feather logo are trademarks of The Apache Software Foundation.</div></div></div></footer></div>
+<ul>
+<li>
+<p><strong>JsonSchema</strong>: Code using <code>JsonSchema</code> beans will continue to work without changes. For Draft 2020-12 features:</p>
+<ul>
+<li>Use <code>$id</code> instead of <code>id</code> for new schemas</li>
+<li>Use <code>$defs</code> instead of <code>definitions</code> for new schemas</li>
+<li>Use <code>exclusiveMaximumValue</code>/<code>exclusiveMinimumValue</code> for numeric exclusive bounds (old boolean style still supported)</li>
+</ul>
+</li>
+<li>
+<p><strong>RestClient</strong>: If you have custom implementations that override <code>close()</code> methods, ensure they don&#x27;t throw checked exceptions to comply with AutoCloseable contract.</p>
+</li>
+<li>
+<p><strong>License Headers</strong>: If you have custom tooling that depends on the old license header format, update it to recognize the new standard Apache License block comment format.</p>
+</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/apache/juneau/tree/master/juneau-docs/docs/release-notes/9.2.0.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#juneau-dto" class="table-of-contents__link toc-highlight">juneau-dto</a></li><li><a href="#juneau-core" class="table-of-contents__link toc-highlight">juneau-core</a></li><li><a href="#juneau-marshall" class="table-of-contents__link toc-highlight">juneau-marshall</a></li><li><a href="#juneau-bct-new-module" class="table-of-contents__link toc-highlight">juneau-bct (NEW MODULE)</a></li><li><a href="#juneau-rest-client" class="table-of-contents__link toc-highlight">juneau-rest-client</a></li><li><a href="#documentation" class="table-of-contents__link toc-highlight">Documentation</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Documentation</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/about">About</a></li><li class="footer__item"><a class="footer__link-item" href="/downloads">Downloads</a></li><li class="footer__item"><a class="footer__link-item" href="/site/apidocs/index.html">Javadocs</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/apache/juneau" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://github.com/apache/juneau/wiki" target="_blank" rel="noopener noreferrer" class="footer__link-item">Wiki<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question" target="_blank" rel="noopener noreferrer" class="footer__link-item">Mailing List<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Apache</div><ul class="footer__items clean-list"><li class="footer__item"><a href="http://www.apache.org/foundation" target="_blank" rel="noopener noreferrer" class="footer__link-item">Apache Foundation<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="http://www.apache.org/licenses/" target="_blank" rel="noopener noreferrer" class="footer__link-item">License<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="http://www.apache.org/security" target="_blank" rel="noopener noreferrer" class="footer__link-item">Security<svg width="13.5" height="13.5" aria-hidden="true" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 The Apache Software Foundation. Licensed under the Apache License, Version 2.0. Apache, Apache Juneau, and the Apache feather logo are trademarks of The Apache Software Foundation.</div></div></div></footer></div>
 </body>
 </html>
