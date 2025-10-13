@@ -30,15 +30,15 @@ class BeanMapErrors_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on method not in @Bean(properties)
-	// Shouldn't be found in keySet()/entrySet() but should be found in containsKey()/get()
+	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyMethodNotInBeanProperties() {
 		var bc = BeanContext.DEFAULT;
 
 		var bm = bc.newBeanMap(A1.class);
-		assertTrue(bm.containsKey("f2"));
-		assertEquals(-1, bm.get("f2"));
-		bm.put("f2", -2);
+		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
+		assertEquals(-1, bm.get("f2"));      // But get() still works
+		bm.put("f2", -2);                    // And put() still works
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
@@ -57,9 +57,9 @@ class BeanMapErrors_Test extends TestBase {
 		var bc = BeanContext.create().applyAnnotations(B1Config.class).build();
 
 		var bm = bc.newBeanMap(B1.class);
-		assertTrue(bm.containsKey("f2"));
-		assertEquals(-1, bm.get("f2"));
-		bm.put("f2", -2);
+		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
+		assertEquals(-1, bm.get("f2"));      // But get() still works
+		bm.put("f2", -2);                    // And put() still works
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
@@ -81,14 +81,15 @@ class BeanMapErrors_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// @Beanp(name) on field not in @Bean(properties)
+	// JUNEAU-248: Shouldn't be found in keySet()/entrySet()/containsKey() but should be accessible via get()/put()
 	//-----------------------------------------------------------------------------------------------------------------
 	@Test void beanPropertyFieldNotInBeanProperties() {
 		var bc = BeanContext.DEFAULT;
 
 		var bm = bc.newBeanMap(A2.class);
-		assertTrue(bm.containsKey("f2"));
-		assertEquals(-1, bm.get("f2"));
-		bm.put("f2", -2);
+		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
+		assertEquals(-1, bm.get("f2"));      // But get() still works
+		bm.put("f2", -2);                    // And put() still works
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));
@@ -102,13 +103,13 @@ class BeanMapErrors_Test extends TestBase {
 		public int f2 = -1;
 	}
 
-	@Test void beanPropertyFieldNotInBeanProperties_usingBeanConfig() {
+	@Test void beanPropertyFieldNotInBeanConfig() {
 		var bc = BeanContext.create().applyAnnotations(B2Config.class).build();
 
 		var bm = bc.newBeanMap(B2.class);
-		assertTrue(bm.containsKey("f2"));
-		assertEquals(-1, bm.get("f2"));
-		bm.put("f2", -2);
+		assertFalse(bm.containsKey("f2"));  // JUNEAU-248: Now consistent with keySet()
+		assertEquals(-1, bm.get("f2"));      // But get() still works
+		bm.put("f2", -2);                    // And put() still works
 		assertEquals(-2, bm.get("f2"));
 		assertFalse(bm.keySet().contains("f2"));
 		assertFalse(bm.entrySet().stream().map(Entry::getKey).toList().contains("f2"));

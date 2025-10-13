@@ -1575,10 +1575,16 @@ public class StringUtils {
 						var key = s.substring(x+1, i);
 						key = (hasInternalVar ? replaceVars(key, m) : key);
 						hasInternalVar = false;
-						if (! m.containsKey(key))
+						// JUNEAU-248: Check if key exists in map by attempting to get it
+						// For regular maps: use containsKey() OR get() != null check
+						// For BeanMaps: get() returns non-null for accessible properties (including hidden ones)
+						var val = m.get(key);
+						// Check if key actually exists: either containsKey is true, or val is non-null
+						// This handles both regular maps and BeanMaps correctly
+						var keyExists = m.containsKey(key) || val != null;
+						if (! keyExists)
 							out.append('{').append(key).append('}');
 						else {
-							var val = m.get(key);
 							if (val == null)
 								val = "";
 							var v = val.toString();

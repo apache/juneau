@@ -261,9 +261,18 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 	@Override /* Map */
 	public boolean containsKey(Object property) {
-		if (getPropertyMeta(emptyIfNull(property)) != null)
+		// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties
+		String key = emptyIfNull(property);
+		if (meta.properties.containsKey(key) && ! "*".equals(key))
 			return true;
-		return super.containsKey(property);
+		if (meta.dynaProperty != null) {
+			try {
+				return meta.dynaProperty.getDynaMap(bean).containsKey(key);
+			} catch (Exception e) {
+				throw new BeanRuntimeException(e);
+			}
+		}
+		return false;
 	}
 
 	/**
