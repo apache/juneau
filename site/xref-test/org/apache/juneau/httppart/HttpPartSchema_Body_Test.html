@@ -813,7 +813,149 @@
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4,5"</span>), BeanContext.DEFAULT));
 <a class="jxr_linenumber" name="L806" href="#L806">806</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum number of items exceeded."</span>, ()-&gt;s.getItems().getItems().getItems().getItems().validateOutput(split(<span class="jxr_string">"1,2,3,4,5,6"</span>), BeanContext.DEFAULT));
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 	}
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> }
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	<em class="jxr_comment">// JSON Schema Draft 2020-12 validation tests</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	@Content
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 	@Schema(_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"CONSTANT_VALUE"</span>)
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D01a {}
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	@Test <strong class="jxr_keyword">void</strong> d01a_<strong class="jxr_keyword">const</strong>_valid() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D01a.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		s.validateInput(<span class="jxr_string">"CONSTANT_VALUE"</span>);
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		s.validateInput(<strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// null is allowed when not required</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 	}
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 	@Test <strong class="jxr_keyword">void</strong> d01a_<strong class="jxr_keyword">const</strong>_invalid() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D01a.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Value does not match constant.  Must be: CONSTANT_VALUE"</span>, ()-&gt;s.validateInput(<span class="jxr_string">"OTHER_VALUE"</span>));
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 	}
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 	@Content
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 	@Schema(_<strong class="jxr_keyword">const</strong>=<span class="jxr_string">"CONSTANT_VALUE"</span>, required=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D01b {}
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 	@Test <strong class="jxr_keyword">void</strong> d01b_<strong class="jxr_keyword">const</strong>_required() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D01b.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 		s.validateInput(<span class="jxr_string">"CONSTANT_VALUE"</span>);
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"No value specified."</span>, ()-&gt;s.validateInput(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	}
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	@Content
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 	@Schema(t=<span class="jxr_string">"integer"</span>, exclusiveMaximumValue=<span class="jxr_string">"100"</span>, exclusiveMinimumValue=<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D02a {}
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 	@Test <strong class="jxr_keyword">void</strong> d02a_exclusiveNumericBounds() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D02a.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 		s.validateOutput(1, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		s.validateOutput(50, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 		s.validateOutput(99, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 		s.validateOutput(<strong class="jxr_keyword">null</strong>, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(0, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(100, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(-1, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(101, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 	}
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 	@Content
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	@Schema(t=<span class="jxr_string">"number"</span>, exclusiveMaximumValue=<span class="jxr_string">"10.5"</span>, exclusiveMinimumValue=<span class="jxr_string">"0.5"</span>)
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D02b {}
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	@Test <strong class="jxr_keyword">void</strong> d02b_exclusiveNumericBounds_doubles() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D02b.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		s.validateOutput(0.6, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		s.validateOutput(5.0, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		s.validateOutput(10.4, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		s.validateOutput(<strong class="jxr_keyword">null</strong>, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(0.5, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(10.5, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(0.4, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(10.6, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 	}
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 	<em class="jxr_comment">// Backward compatibility: Old boolean exclusiveMaximum/exclusiveMinimum</em>
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 	@Content
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 	@Schema(t=<span class="jxr_string">"integer"</span>, exclusiveMaximum=<strong class="jxr_keyword">true</strong>, exclusiveMinimum=<strong class="jxr_keyword">true</strong>, maximum=<span class="jxr_string">"100"</span>, minimum=<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D03a {}
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 	@Test <strong class="jxr_keyword">void</strong> d03a_exclusiveBooleanBounds() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D03a.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		s.validateOutput(1, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 		s.validateOutput(50, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 		s.validateOutput(99, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 		s.validateOutput(<strong class="jxr_keyword">null</strong>, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		<em class="jxr_comment">// With boolean flags, 0 and 100 are excluded</em>
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(0, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(100, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(-1, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(101, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	}
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 	@Content
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	@Schema(t=<span class="jxr_string">"integer"</span>, exclusiveMaximum=false, exclusiveMinimum=false, maximum=<span class="jxr_string">"100"</span>, minimum=<span class="jxr_string">"0"</span>)
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D03b {}
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	@Test <strong class="jxr_keyword">void</strong> d03b_inclusiveBounds() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D03b.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 		<em class="jxr_comment">// With boolean flags set to false, 0 and 100 are included</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		s.validateOutput(0, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		s.validateOutput(1, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		s.validateOutput(50, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		s.validateOutput(99, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		s.validateOutput(100, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		s.validateOutput(<strong class="jxr_keyword">null</strong>, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(-1, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(101, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	}
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	@Content
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 	@Schema(t=<span class="jxr_string">"integer"</span>, exclusiveMaximumValue=<span class="jxr_string">"100"</span>, exclusiveMinimumValue=<span class="jxr_string">"0"</span>, exclusiveMaximum=false, exclusiveMinimum=false)
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D03c {}
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 	@Test <strong class="jxr_keyword">void</strong> d03c_newStyleTakesPrecedence() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D03c.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<em class="jxr_comment">// New numeric style should take precedence over old boolean flags</em>
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		s.validateOutput(1, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		s.validateOutput(50, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		s.validateOutput(99, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		s.validateOutput(<strong class="jxr_keyword">null</strong>, BeanContext.DEFAULT);
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Minimum value not met."</span>, ()-&gt;s.validateOutput(0, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		assertThrowsWithMessage(SchemaValidationException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Maximum value exceeded."</span>, ()-&gt;s.validateOutput(100, BeanContext.DEFAULT));
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	}
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 	<em class="jxr_comment">// Deprecated property (no validation, just ensures it's settable)</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 	@Content
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	@Schema(deprecatedProperty=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D04a {}
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 	@Test <strong class="jxr_keyword">void</strong> d04a_deprecated() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D04a.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<em class="jxr_comment">// deprecated is just a flag, doesn't affect validation</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		assertBean(s, <span class="jxr_string">"deprecated"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 	}
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 	<em class="jxr_comment">// Examples (no validation, documentation only)</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 	@Content
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	@Schema(examples={<span class="jxr_string">"example1"</span>, <span class="jxr_string">"example2"</span>, <span class="jxr_string">"example3"</span>})
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D05a {}
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 	@Test <strong class="jxr_keyword">void</strong> d05a_examples() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		<strong class="jxr_keyword">var</strong> s = HttpPartSchema.create().applyAll(Content.<strong class="jxr_keyword">class</strong>, D05a.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<em class="jxr_comment">// examples are documentation only, doesn't affect validation</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		assertBean(s, <span class="jxr_string">"examples"</span>, <span class="jxr_string">"[example1,example2,example3]"</span>);
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 	}
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

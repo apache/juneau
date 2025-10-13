@@ -46,8 +46,9 @@
     <li><a href="juneau-examples/index.html">juneau/examples</a></li>
     <li><a href="juneau-utest/index.html">juneau/utest</a></li>
     <li><a href="juneau-bean/index.html">juneau/bean</a></li>
-    <li><a href="juneau-all/index.html">juneau/all</a></li>
+    <li><a href="juneau-shaded/index.html">Apache Juneau Shaded Artifacts</a></li>
     <li><a href="juneau-distrib/index.html">juneau/distrib</a></li>
+    <li><a href="juneau-docs/index.html">Apache Juneau Documentation</a></li>
    <li class="nav-header">Project Documentation</li>
     <li><a href="project-info.html"><span class="icon-chevron-down"></span>Project Information</a>
      <ul class="nav nav-list">
@@ -106,11 +107,18 @@
 <td><a href="./juneau-bean/index.html">juneau/bean</a></td>
 <td>Apache Juneau Serializable Beans</td></tr>
 <tr class="a">
-<td><a href="./juneau-all/index.html">juneau/all</a></td>
-<td>Apache Juneau UberJar</td></tr>
+<td><a href="./juneau-shaded/index.html">Apache Juneau Shaded Artifacts</a></td>
+<td>Parent module for shaded (uber) JAR artifacts that bundle multiple Juneau modules together.
+		These artifacts are useful for build systems like Bazel that require explicit dependencies,
+		or for simplified dependency management in projects that need multiple Juneau modules.</td></tr>
 <tr class="b">
 <td><a href="./juneau-distrib/index.html">juneau/distrib</a></td>
-<td>Apache Juneau Distribution</td></tr></table></section>
+<td>Apache Juneau Distribution</td></tr>
+<tr class="a">
+<td><a href="./juneau-docs/index.html">Apache Juneau Documentation</a></td>
+<td>Docusaurus-based documentation for Apache Juneau.
+		This module does not produce any Maven artifacts - it only serves
+		to make the documentation folder importable into IDEs like Eclipse.</td></tr></table></section>
         </main>
       </div>
     </div>
