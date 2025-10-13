@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Release 9.2.0 | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/release-notes/9.2.0"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Release 9.2.0 | Apache Juneau"><meta data-rh="true" name="description" content="Date: TBD"><meta data-rh="true" property="og:description" content="Date: TBD"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/release-notes/9.2.0"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.c21a577c.css">
-<script src="/assets/js/runtime~main.cd70d169.js" defer="defer"></script>
-<script src="/assets/js/main.9e2eb10d.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.e11ab696.js" defer="defer"></script>
+<script src="/assets/js/main.c9b090f0.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -20,6 +20,8 @@ Features and release date are subject to change.</p></div></div>
 <ul>
 <li><strong>New Module</strong>: Introduced <code>juneau-shaded</code> with five shaded (uber) JAR artifacts for simplified dependency management, especially useful for Bazel</li>
 <li><strong>@Schema Annotation</strong> upgraded to JSON Schema Draft 2020-12 with 18 new properties, while maintaining full backward compatibility with Draft 04</li>
+<li><strong>HttpPartFormat Enhancement</strong>: Added 18 new format types (email, hostname, UUID, URI, IPv4/IPv6, etc.) with comprehensive validation</li>
+<li><strong>Jakarta Bean Validation Integration</strong>: Automatic detection and processing of Jakarta Validation constraints (<code>@NotNull</code>, <code>@Email</code>, <code>@Size</code>, etc.) with zero dependencies</li>
 <li><strong>Remote Proxy Default Values</strong>: Added <code>def</code> attribute to all HTTP part annotations (<code>@Header</code>, <code>@Query</code>, <code>@FormData</code>, <code>@Path</code>, <code>@Content</code>) for specifying method-level default values</li>
 <li>JSON Schema beans upgraded to Draft 2020-12 specification with backward compatibility for Draft 04</li>
 <li>Comprehensive enhancements to HTML5 beans with improved javadocs and <code>HtmlBuilder</code> integration</li>
@@ -209,6 +211,109 @@ Features and release date are subject to change.</p></div></div>
 <li>Backward compatibility scenarios</li>
 <li>Precedence rules (new vs old style)</li>
 </ul>
+</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="httppartformat---json-schemaopenapi-format-types">HttpPartFormat - JSON Schema/OpenAPI Format Types<a href="#httppartformat---json-schemaopenapi-format-types" class="hash-link" aria-label="Direct link to HttpPartFormat - JSON Schema/OpenAPI Format Types" title="Direct link to HttpPartFormat - JSON Schema/OpenAPI Format Types">​</a></h4>
+<ul>
+<li>
+<p><strong>Complete Format Coverage</strong>: Added 18 new format types to the <code>HttpPartFormat</code> enum to align with JSON Schema Draft 2020-12 and OpenAPI 3.x specifications:</p>
+<p><strong>Email Formats</strong>:</p>
+<ul>
+<li><code>EMAIL</code> - Email address (RFC 5321)</li>
+<li><code>IDN_EMAIL</code> - Internationalized email address (RFC 6531)</li>
+</ul>
+<p><strong>Hostname Formats</strong>:</p>
+<ul>
+<li><code>HOSTNAME</code> - Internet host name (RFC 1123)</li>
+<li><code>IDN_HOSTNAME</code> - Internationalized host name (RFC 5890)</li>
+</ul>
+<p><strong>IP Address Formats</strong>:</p>
+<ul>
+<li><code>IPV4</code> - IPv4 address (RFC 2673)</li>
+<li><code>IPV6</code> - IPv6 address (RFC 4291)</li>
+</ul>
+<p><strong>URI/IRI Formats</strong>:</p>
+<ul>
+<li><code>URI</code> - Universal Resource Identifier (RFC 3986)</li>
+<li><code>URI_REFERENCE</code> - URI Reference (RFC 3986)</li>
+<li><code>IRI</code> - Internationalized Resource Identifier (RFC 3987)</li>
+<li><code>IRI_REFERENCE</code> - IRI Reference (RFC 3987)</li>
+</ul>
+<p><strong>Other Formats</strong>:</p>
+<ul>
+<li><code>UUID</code> - Universally Unique Identifier (RFC 4122)</li>
+<li><code>URI_TEMPLATE</code> - URI Template (RFC 6570)</li>
+<li><code>JSON_POINTER</code> - JSON Pointer (RFC 6901)</li>
+<li><code>RELATIVE_JSON_POINTER</code> - Relative JSON Pointer</li>
+<li><code>REGEX</code> - Regular expression (ECMA-262)</li>
+<li><code>DURATION</code> - Duration (RFC 3339 Appendix A / ISO 8601)</li>
+<li><code>TIME</code> - Time (RFC 3339)</li>
+<li><code>DATE_TIME_ZONE</code> - Date and time with time zone (RFC 3339)</li>
+</ul>
+</li>
+<li>
+<p><strong>Comprehensive Format Validation</strong>: Added automatic validation for all format types in <code>HttpPartSchema</code>:</p>
+<ul>
+<li><strong>Email Validation</strong>: Validates email format according to RFC 5321 (basic) and RFC 6531 (internationalized)</li>
+<li><strong>Hostname Validation</strong>: Validates hostnames per RFC 1123, supporting both ASCII and internationalized domain names</li>
+<li><strong>IP Address Validation</strong>: Full validation for both IPv4 (dotted decimal) and IPv6 (colon-separated hex) formats</li>
+<li><strong>URI/IRI Validation</strong>: Validates URIs and IRIs, including relative references, using Java&#x27;s <code>java.net.URI</code> parser</li>
+<li><strong>UUID Validation</strong>: Standard UUID format validation (8-4-4-4-12 hex digits)</li>
+<li><strong>Date/Time Validation</strong>: RFC 3339 compliant validation with relaxed patterns to accommodate various serialization formats</li>
+<li><strong>Regular Expression Validation</strong>: Validates regex patterns can be compiled</li>
+<li><strong>Duration Validation</strong>: ISO 8601 duration format validation (e.g., <code>P3Y6M4DT12H30M5S</code>)</li>
+</ul>
+<p><strong>Smart Validation Logic</strong>:</p>
+<ul>
+<li>Skips validation for literal <code>&quot;null&quot;</code> strings (used in serialization)</li>
+<li>Treats transformation formats (<code>BYTE</code>, <code>BINARY</code>, <code>BINARY_SPACED</code>) as hints, not validation constraints</li>
+<li>Uses relaxed patterns for dates/times to accommodate various serialization formats</li>
+<li>Gracefully handles edge cases and malformed inputs</li>
+</ul>
+<p><strong>Example Usage</strong>:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token plain">name</span><span class="token operator">=</span><span class="token string">&quot;email&quot;</span><span class="token punctuation">,</span><span class="token plain"> schema</span><span class="token operator">=</span><span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span><span class="token plain">format</span><span class="token operator">=</span><span class="token string">&quot;email&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> email</span><span class="token punctuation">;</span><span class="token plain">  </span><span class="token comment">// Validated as email format</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token plain">name</span><span class="token operator">=</span><span class="token string">&quot;website&quot;</span><span class="token punctuation">,</span><span class="token plain"> schema</span><span class="token operator">=</span><span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span><span class="token plain">format</span><span class="token operator">=</span><span class="token string">&quot;uri&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> website</span><span class="token punctuation">;</span><span class="token plain">  </span><span class="token comment">// Validated as URI</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token annotation punctuation">@Query</span><span class="token punctuation">(</span><span class="token plain">name</span><span class="token operator">=</span><span class="token string">&quot;id&quot;</span><span class="token punctuation">,</span><span class="token plain"> schema</span><span class="token operator">=</span><span class="token annotation punctuation">@Schema</span><span class="token punctuation">(</span><span class="token plain">format</span><span class="token operator">=</span><span class="token string">&quot;uuid&quot;</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> id</span><span class="token punctuation">;</span><span class="token plain">  </span><span class="token comment">// Validated as UUID</span><br></span></code></pre></div></div>
+<p><strong>Validation Points</strong>:</p>
+<ul>
+<li>Format validation occurs in both <code>validateInput()</code> (for incoming string values) and <code>validateOutput()</code> (for serialized objects)</li>
+<li>Validation failures throw <code>SchemaValidationException</code> with detailed error messages</li>
+<li>Format validation integrates seamlessly with existing pattern, min/max length, and other validations</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="jakarta-bean-validation-integration">Jakarta Bean Validation Integration<a href="#jakarta-bean-validation-integration" class="hash-link" aria-label="Direct link to Jakarta Bean Validation Integration" title="Direct link to Jakarta Bean Validation Integration">​</a></h4>
+<ul>
+<li>
+<p><strong>Reflective Jakarta Validation Support</strong>: <code>HttpPartSchema</code> now automatically detects and processes Jakarta Bean Validation constraints without requiring a direct dependency on <code>jakarta.validation-api</code>:</p>
+<p><strong>Supported Constraints</strong>:</p>
+<ul>
+<li><code>@NotNull</code> → <code>required(true)</code></li>
+<li><code>@Size(min=X, max=Y)</code> → <code>minLength(X), maxLength(X), minItems(X), maxItems(Y)</code></li>
+<li><code>@Min(value)</code> → <code>minimum(value)</code></li>
+<li><code>@Max(value)</code> → <code>maximum(value)</code></li>
+<li><code>@Pattern(regexp)</code> → <code>pattern(regexp)</code></li>
+<li><code>@Email</code> → <code>format(EMAIL)</code> with automatic email validation</li>
+<li><code>@Positive</code> → <code>minimum(0) + exclusiveMinimum(true)</code></li>
+<li><code>@PositiveOrZero</code> → <code>minimum(0)</code></li>
+<li><code>@Negative</code> → <code>maximum(0) + exclusiveMaximum(true)</code></li>
+<li><code>@NegativeOrZero</code> → <code>maximum(0)</code></li>
+<li><code>@NotEmpty</code> → <code>required(true) + minLength(1) + minItems(1)</code></li>
+<li><code>@NotBlank</code> → <code>required(true) + minLength(1) + pattern(&quot;.*\\S.*&quot;)</code></li>
+<li><code>@DecimalMin(value, inclusive)</code> → <code>minimum(value)</code> with optional <code>exclusiveMinimum</code></li>
+<li><code>@DecimalMax(value, inclusive)</code> → <code>maximum(value)</code> with optional <code>exclusiveMaximum</code></li>
+</ul>
+<p><strong>Example Usage</strong>:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token keyword">import</span><span class="token plain"> </span><span class="token import namespace">jakarta</span><span class="token import namespace punctuation">.</span><span class="token import namespace">validation</span><span class="token import namespace punctuation">.</span><span class="token import namespace">constraints</span><span class="token import namespace punctuation">.</span><span class="token import operator">*</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token keyword">class</span><span class="token plain"> </span><span class="token class-name">UserInput</span><span class="token plain"> </span><span class="token punctuation">{</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@NotNull</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Email</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Size</span><span class="token punctuation">(</span><span class="token plain">max</span><span class="token operator">=</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token keyword">private</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> email</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@NotBlank</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Size</span><span class="token punctuation">(</span><span class="token plain">min</span><span class="token operator">=</span><span class="token number">8</span><span class="token punctuation">,</span><span class="token plain"> max</span><span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Pattern</span><span class="token punctuation">(</span><span class="token plain">regexp</span><span class="token operator">=</span><span class="token string">&quot;^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token keyword">private</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> password</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Positive</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@Max</span><span class="token punctuation">(</span><span class="token number">150</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token keyword">private</span><span class="token plain"> </span><span class="token class-name">Integer</span><span class="token plain"> age</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@DecimalMin</span><span class="token punctuation">(</span><span class="token plain">value</span><span class="token operator">=</span><span class="token string">&quot;0.0&quot;</span><span class="token punctuation">,</span><span class="token plain"> inclusive</span><span class="token operator">=</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@DecimalMax</span><span class="token punctuation">(</span><span class="token plain">value</span><span class="token operator">=</span><span class="token string">&quot;999.99&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token keyword">private</span><span class="token plain"> </span><span class="token class-name">BigDecimal</span><span class="token plain"> price</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">}</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token comment">// HttpPartSchema automatically detects these constraints and applies them</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token class-name">HttpPartSchema</span><span class="token plain"> schema </span><span class="token operator">=</span><span class="token plain"> </span><span class="token class-name">HttpPartSchema</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token plain">field</span><span class="token punctuation">.</span><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">NotNull</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token plain">field</span><span class="token punctuation">.</span><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Email</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span><span class="token plain">field</span><span class="token punctuation">.</span><span class="token function">getAnnotation</span><span class="token punctuation">(</span><span class="token class-name">Size</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token comment">// Validation now includes email format, required, and length checks</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">schema</span><span class="token punctuation">.</span><span class="token function">validateInput</span><span class="token punctuation">(</span><span class="token plain">value</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br></span></code></pre></div></div>
+<p><strong>Implementation Details</strong>:</p>
+<ul>
+<li>Uses pure reflection to detect annotations starting with <code>jakarta.validation.constraints.</code></li>
+<li>No compile-time or runtime dependency on Jakarta Validation API in production code</li>
+<li>Gracefully ignores unknown or unsupported constraint annotations</li>
+<li>Maps Jakarta Validation semantics to OpenAPI/JSON Schema equivalents</li>
+<li>Test module includes <code>jakarta.validation-api</code> as a test dependency for comprehensive testing</li>
+</ul>
+</li>
+<li>
+<p><strong>Enhanced OpenAPI Compatibility</strong>: Jakarta Validation constraints are now seamlessly translated to OpenAPI schema properties, enabling automatic documentation generation and client-side validation in tools like Swagger UI.</p>
 </li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="xml-serialization">XML Serialization<a href="#xml-serialization" class="hash-link" aria-label="Direct link to XML Serialization" title="Direct link to XML Serialization">​</a></h4>

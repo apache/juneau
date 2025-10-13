@@ -94,40 +94,166 @@
 <span class="source-line-no">081</span><span id="line-81">   UON,</span>
 <span class="source-line-no">082</span><span id="line-82"></span>
 <span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * Not specified.</span>
-<span class="source-line-no">085</span><span id="line-85">    */</span>
-<span class="source-line-no">086</span><span id="line-86">   NO_FORMAT;</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   /**</span>
-<span class="source-line-no">089</span><span id="line-89">    * Create from lowercase dashed name.</span>
-<span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * @param value The enum name.</span>
-<span class="source-line-no">092</span><span id="line-92">    * @return The enum.</span>
-<span class="source-line-no">093</span><span id="line-93">    */</span>
-<span class="source-line-no">094</span><span id="line-94">   public static HttpPartFormat fromString(String value) {</span>
-<span class="source-line-no">095</span><span id="line-95">      value = value.toUpperCase().replace('-','_');</span>
-<span class="source-line-no">096</span><span id="line-96">      return valueOf(value);</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /**</span>
-<span class="source-line-no">100</span><span id="line-100">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param list The list of formats to check against.</span>
-<span class="source-line-no">103</span><span id="line-103">    * @return &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
-<span class="source-line-no">104</span><span id="line-104">    */</span>
-<span class="source-line-no">105</span><span id="line-105">   public boolean isOneOf(HttpPartFormat...list) {</span>
-<span class="source-line-no">106</span><span id="line-106">      for (HttpPartFormat ff : list)</span>
-<span class="source-line-no">107</span><span id="line-107">         if (this == ff)</span>
-<span class="source-line-no">108</span><span id="line-108">            return true;</span>
-<span class="source-line-no">109</span><span id="line-109">      return false;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
-<span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   @Override /* Object */</span>
-<span class="source-line-no">113</span><span id="line-113">   public String toString() {</span>
-<span class="source-line-no">114</span><span id="line-114">      String s = name().toLowerCase().replace('_','-');</span>
-<span class="source-line-no">115</span><span id="line-115">      return s;</span>
-<span class="source-line-no">116</span><span id="line-116">   }</span>
-<span class="source-line-no">117</span><span id="line-117">}</span>
+<span class="source-line-no">084</span><span id="line-84">    * Email address (RFC 5321).</span>
+<span class="source-line-no">085</span><span id="line-85">    * </span>
+<span class="source-line-no">086</span><span id="line-86">    * @since 9.2.0</span>
+<span class="source-line-no">087</span><span id="line-87">    */</span>
+<span class="source-line-no">088</span><span id="line-88">   EMAIL,</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Internationalized email address (RFC 6531).</span>
+<span class="source-line-no">092</span><span id="line-92">    * </span>
+<span class="source-line-no">093</span><span id="line-93">    * @since 9.2.0</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   IDN_EMAIL,</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   /**</span>
+<span class="source-line-no">098</span><span id="line-98">    * Internet host name (RFC 1123).</span>
+<span class="source-line-no">099</span><span id="line-99">    * </span>
+<span class="source-line-no">100</span><span id="line-100">    * @since 9.2.0</span>
+<span class="source-line-no">101</span><span id="line-101">    */</span>
+<span class="source-line-no">102</span><span id="line-102">   HOSTNAME,</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /**</span>
+<span class="source-line-no">105</span><span id="line-105">    * Internationalized host name (RFC 5890).</span>
+<span class="source-line-no">106</span><span id="line-106">    * </span>
+<span class="source-line-no">107</span><span id="line-107">    * @since 9.2.0</span>
+<span class="source-line-no">108</span><span id="line-108">    */</span>
+<span class="source-line-no">109</span><span id="line-109">   IDN_HOSTNAME,</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   /**</span>
+<span class="source-line-no">112</span><span id="line-112">    * IPv4 address (RFC 2673).</span>
+<span class="source-line-no">113</span><span id="line-113">    * </span>
+<span class="source-line-no">114</span><span id="line-114">    * @since 9.2.0</span>
+<span class="source-line-no">115</span><span id="line-115">    */</span>
+<span class="source-line-no">116</span><span id="line-116">   IPV4,</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   /**</span>
+<span class="source-line-no">119</span><span id="line-119">    * IPv6 address (RFC 4291).</span>
+<span class="source-line-no">120</span><span id="line-120">    * </span>
+<span class="source-line-no">121</span><span id="line-121">    * @since 9.2.0</span>
+<span class="source-line-no">122</span><span id="line-122">    */</span>
+<span class="source-line-no">123</span><span id="line-123">   IPV6,</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Universal Resource Identifier (RFC 3986).</span>
+<span class="source-line-no">127</span><span id="line-127">    * </span>
+<span class="source-line-no">128</span><span id="line-128">    * @since 9.2.0</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   URI,</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /**</span>
+<span class="source-line-no">133</span><span id="line-133">    * URI Reference (RFC 3986).</span>
+<span class="source-line-no">134</span><span id="line-134">    * </span>
+<span class="source-line-no">135</span><span id="line-135">    * @since 9.2.0</span>
+<span class="source-line-no">136</span><span id="line-136">    */</span>
+<span class="source-line-no">137</span><span id="line-137">   URI_REFERENCE,</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   /**</span>
+<span class="source-line-no">140</span><span id="line-140">    * Internationalized Resource Identifier (RFC 3987).</span>
+<span class="source-line-no">141</span><span id="line-141">    * </span>
+<span class="source-line-no">142</span><span id="line-142">    * @since 9.2.0</span>
+<span class="source-line-no">143</span><span id="line-143">    */</span>
+<span class="source-line-no">144</span><span id="line-144">   IRI,</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">   /**</span>
+<span class="source-line-no">147</span><span id="line-147">    * IRI Reference (RFC 3987).</span>
+<span class="source-line-no">148</span><span id="line-148">    * </span>
+<span class="source-line-no">149</span><span id="line-149">    * @since 9.2.0</span>
+<span class="source-line-no">150</span><span id="line-150">    */</span>
+<span class="source-line-no">151</span><span id="line-151">   IRI_REFERENCE,</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /**</span>
+<span class="source-line-no">154</span><span id="line-154">    * Universally Unique Identifier (RFC 4122).</span>
+<span class="source-line-no">155</span><span id="line-155">    * </span>
+<span class="source-line-no">156</span><span id="line-156">    * @since 9.2.0</span>
+<span class="source-line-no">157</span><span id="line-157">    */</span>
+<span class="source-line-no">158</span><span id="line-158">   UUID,</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   /**</span>
+<span class="source-line-no">161</span><span id="line-161">    * URI Template (RFC 6570).</span>
+<span class="source-line-no">162</span><span id="line-162">    * </span>
+<span class="source-line-no">163</span><span id="line-163">    * @since 9.2.0</span>
+<span class="source-line-no">164</span><span id="line-164">    */</span>
+<span class="source-line-no">165</span><span id="line-165">   URI_TEMPLATE,</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">   /**</span>
+<span class="source-line-no">168</span><span id="line-168">    * JSON Pointer (RFC 6901).</span>
+<span class="source-line-no">169</span><span id="line-169">    * </span>
+<span class="source-line-no">170</span><span id="line-170">    * @since 9.2.0</span>
+<span class="source-line-no">171</span><span id="line-171">    */</span>
+<span class="source-line-no">172</span><span id="line-172">   JSON_POINTER,</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">   /**</span>
+<span class="source-line-no">175</span><span id="line-175">    * Relative JSON Pointer.</span>
+<span class="source-line-no">176</span><span id="line-176">    * </span>
+<span class="source-line-no">177</span><span id="line-177">    * @since 9.2.0</span>
+<span class="source-line-no">178</span><span id="line-178">    */</span>
+<span class="source-line-no">179</span><span id="line-179">   RELATIVE_JSON_POINTER,</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * Regular expression (ECMA-262).</span>
+<span class="source-line-no">183</span><span id="line-183">    * </span>
+<span class="source-line-no">184</span><span id="line-184">    * @since 9.2.0</span>
+<span class="source-line-no">185</span><span id="line-185">    */</span>
+<span class="source-line-no">186</span><span id="line-186">   REGEX,</span>
+<span class="source-line-no">187</span><span id="line-187"></span>
+<span class="source-line-no">188</span><span id="line-188">   /**</span>
+<span class="source-line-no">189</span><span id="line-189">    * Duration (RFC 3339 Appendix A).</span>
+<span class="source-line-no">190</span><span id="line-190">    * </span>
+<span class="source-line-no">191</span><span id="line-191">    * @since 9.2.0</span>
+<span class="source-line-no">192</span><span id="line-192">    */</span>
+<span class="source-line-no">193</span><span id="line-193">   DURATION,</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   /**</span>
+<span class="source-line-no">196</span><span id="line-196">    * Time (RFC 3339).</span>
+<span class="source-line-no">197</span><span id="line-197">    * </span>
+<span class="source-line-no">198</span><span id="line-198">    * @since 9.2.0</span>
+<span class="source-line-no">199</span><span id="line-199">    */</span>
+<span class="source-line-no">200</span><span id="line-200">   TIME,</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   /**</span>
+<span class="source-line-no">203</span><span id="line-203">    * Date and time with time zone (RFC 3339).</span>
+<span class="source-line-no">204</span><span id="line-204">    * </span>
+<span class="source-line-no">205</span><span id="line-205">    * @since 9.2.0</span>
+<span class="source-line-no">206</span><span id="line-206">    */</span>
+<span class="source-line-no">207</span><span id="line-207">   DATE_TIME_ZONE,</span>
+<span class="source-line-no">208</span><span id="line-208"></span>
+<span class="source-line-no">209</span><span id="line-209">   /**</span>
+<span class="source-line-no">210</span><span id="line-210">    * Not specified.</span>
+<span class="source-line-no">211</span><span id="line-211">    */</span>
+<span class="source-line-no">212</span><span id="line-212">   NO_FORMAT;</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">   /**</span>
+<span class="source-line-no">215</span><span id="line-215">    * Create from lowercase dashed name.</span>
+<span class="source-line-no">216</span><span id="line-216">    *</span>
+<span class="source-line-no">217</span><span id="line-217">    * @param value The enum name.</span>
+<span class="source-line-no">218</span><span id="line-218">    * @return The enum.</span>
+<span class="source-line-no">219</span><span id="line-219">    */</span>
+<span class="source-line-no">220</span><span id="line-220">   public static HttpPartFormat fromString(String value) {</span>
+<span class="source-line-no">221</span><span id="line-221">      value = value.toUpperCase().replace('-','_');</span>
+<span class="source-line-no">222</span><span id="line-222">      return valueOf(value);</span>
+<span class="source-line-no">223</span><span id="line-223">   }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   /**</span>
+<span class="source-line-no">226</span><span id="line-226">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
+<span class="source-line-no">227</span><span id="line-227">    *</span>
+<span class="source-line-no">228</span><span id="line-228">    * @param list The list of formats to check against.</span>
+<span class="source-line-no">229</span><span id="line-229">    * @return &lt;jk&gt;true&lt;/jk&gt; if this format is in the provided list.</span>
+<span class="source-line-no">230</span><span id="line-230">    */</span>
+<span class="source-line-no">231</span><span id="line-231">   public boolean isOneOf(HttpPartFormat...list) {</span>
+<span class="source-line-no">232</span><span id="line-232">      for (HttpPartFormat ff : list)</span>
+<span class="source-line-no">233</span><span id="line-233">         if (this == ff)</span>
+<span class="source-line-no">234</span><span id="line-234">            return true;</span>
+<span class="source-line-no">235</span><span id="line-235">      return false;</span>
+<span class="source-line-no">236</span><span id="line-236">   }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">   @Override /* Object */</span>
+<span class="source-line-no">239</span><span id="line-239">   public String toString() {</span>
+<span class="source-line-no">240</span><span id="line-240">      String s = name().toLowerCase().replace('_','-');</span>
+<span class="source-line-no">241</span><span id="line-241">      return s;</span>
+<span class="source-line-no">242</span><span id="line-242">   }</span>
+<span class="source-line-no">243</span><span id="line-243">}</span>
 
 
 
