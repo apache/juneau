@@ -744,6 +744,7 @@ public class HttpPartSchema {
 		Builder apply(Content a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
+			_default(a.def());
 			return this;
 		}
 
@@ -751,6 +752,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
+			_default(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -760,6 +762,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
+			_default(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -769,6 +772,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
+			_default(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 			return this;
@@ -778,6 +782,7 @@ public class HttpPartSchema {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			name(firstNonEmpty(a.name(), a.value()));
+			_default(a.def());
 			parser(a.parser());
 			serializer(a.serializer());
 
@@ -2000,7 +2005,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder _default(String value) {
-			if (value != null)
+			if (isNotEmpty(value))
 				this._default = value;
 			return this;
 		}

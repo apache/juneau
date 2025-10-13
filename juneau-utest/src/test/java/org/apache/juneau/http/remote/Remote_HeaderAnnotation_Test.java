@@ -139,9 +139,9 @@ class Remote_HeaderAnnotation_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", ()->x.getX1(""));
 		assertEquals("{x:'foo'}",x.getX2(null));
 		assertEquals("{x:''}",x.getX2(""));
-		assertEquals("{x:''}",x.getX3(null));
+		assertEquals("{}",x.getX3(null));  // Empty string default is not applied (changed in 9.2.0)
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", ()->x.getX3(""));
-		assertEquals("{x:''}",x.getX4(null));
+		assertEquals("{}",x.getX4(null));  // Empty string default is not applied (changed in 9.2.0)
 		assertEquals("{x:''}",x.getX4(""));
 	}
 

@@ -7216,18 +7216,84 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					String httpMethod = rom.getHttpMethod();
 					RestRequest rc = request(httpMethod, uri, hasContent(httpMethod));
 
-					rc.serializer(serializer);
+						rc.serializer(serializer);
 					rc.parser(parser);
 
 					rm.getHeaders().forEach(x -> rc.header(x));
-					rom.forEachPathArg(a -> rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer)));
-					rom.forEachQueryArg(a -> rc.queryArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
-					rom.forEachFormDataArg(a -> rc.formDataArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
-					rom.forEachHeaderArg(a -> rc.headerArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
 
+					// Apply method-level defaults if parameter values are not provided (9.2.0)
+					rom.forEachPathArg(a -> {
+						Object val = args[a.getIndex()];
+						if (val == null) {
+							// Check parameter-level default first (9.2.0)
+							String def = a.getSchema().getDefault();
+							// Fall back to method-level default if parameter-level not set
+							if (def == null)
+								def = rom.getPathDefault(a.getName());
+							if (def != null)
+								val = def;
+						}
+						rc.pathArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer));
+					});
+					rom.forEachQueryArg(a -> {
+						Object val = args[a.getIndex()];
+						if (val == null) {
+							// Check parameter-level default first (9.2.0)
+							String def = a.getSchema().getDefault();
+							// Fall back to method-level default if parameter-level not set
+							if (def == null)
+								def = rom.getQueryDefault(a.getName());
+							if (def != null)
+								val = def;
+						}
+						rc.queryArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+					});
+					rom.forEachFormDataArg(a -> {
+						Object val = args[a.getIndex()];
+						if (val == null) {
+							// Check parameter-level default first (9.2.0)
+							String def = a.getSchema().getDefault();
+							// Fall back to method-level default if parameter-level not set
+							if (def == null)
+								def = rom.getFormDataDefault(a.getName());
+							if (def != null)
+								val = def;
+						}
+						rc.formDataArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+					});
+					rom.forEachHeaderArg(a -> {
+						Object val = args[a.getIndex()];
+						if (val == null) {
+							// Check parameter-level default first (9.2.0)
+							String def = a.getSchema().getDefault();
+							// Fall back to method-level default if parameter-level not set
+							if (def == null)
+								def = rom.getHeaderDefault(a.getName());
+							if (def != null)
+								val = def;
+						}
+						rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+					});
+	
 					RemoteOperationArg ba = rom.getContentArg();
-					if (ba != null)
-						rc.content(args[ba.getIndex()], ba.getSchema());
+					if (ba != null) {
+						Object val = args[ba.getIndex()];
+						if (val == null) {
+							// Check parameter-level default first (9.2.0)
+							String def = ba.getSchema().getDefault();
+							// Fall back to method-level default if parameter-level not set
+							if (def == null)
+								def = rom.getContentDefault();
+							if (def != null)
+								val = def;
+						}
+						rc.content(val, ba.getSchema());
+					} else {
+						// Apply Content default if no parameter is present
+						String contentDef = rom.getContentDefault();
+						if (contentDef != null)
+							rc.content(contentDef);
+					}
 
 					rom.forEachRequestArg(rmba -> {
 							RequestBeanMeta rbm = rmba.getMeta();

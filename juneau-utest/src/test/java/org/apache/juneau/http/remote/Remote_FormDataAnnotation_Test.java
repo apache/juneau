@@ -165,9 +165,9 @@ class Remote_FormDataAnnotation_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", ()->x.postX1(""));
 		assertEquals("{x:'foo'}",x.postX2(null));
 		assertEquals("{x:''}",x.postX2(""));
-		assertEquals("{x:''}",x.postX3(null));
+		assertEquals("{}",x.postX3(null));  // Empty string default is not applied (changed in 9.2.0)
 		assertThrowsWithMessage(Exception.class, "Empty value not allowed.", ()->x.postX3(""));
-		assertEquals("{x:''}",x.postX4(null));
+		assertEquals("{}",x.postX4(null));  // Empty string default is not applied (changed in 9.2.0)
 		assertEquals("{x:''}",x.postX4(""));
 	}
 

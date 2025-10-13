@@ -94,6 +94,8 @@ public class ContentAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder<Builder> {
 
+		String def = "";
+		String[] description = {};
 		Schema schema = SchemaAnnotation.DEFAULT;
 
 		/**
@@ -110,6 +112,28 @@ public class ContentAnnotation {
 		 */
 		public Content build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the {@link Content#def} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder def(String value) {
+			this.def = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Content#description} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			this.description = value;
+			return this;
 		}
 
 		/**
@@ -131,15 +155,29 @@ public class ContentAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Content {
 
+		private final String def;
+		private final String[] description;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
+			this.def = b.def;
+			this.description = b.description;
 			this.schema = b.schema;
 			postConstruct();
 		}
 
-		@Override /* Body */
+		@Override /* Content */
+		public String def() {
+			return def;
+		}
+
+		@Override /* Content */
+		public String[] description() {
+			return description;
+		}
+
+		@Override /* Content */
 		public Schema schema() {
 			return schema;
 		}

@@ -54,6 +54,10 @@ public class RemoteOperationMeta {
 	private final RemoteOperationArg contentArg;
 	private final RemoteOperationReturn methodReturn;
 	private final Class<?>[] exceptions;
+	
+	// Method-level annotations with defaults (9.2.0)
+	private final Map<String,String> pathDefaults, queryDefaults, headerDefaults, formDataDefaults;
+	private final String contentDefault;
 
 	/**
 	 * Constructor.
@@ -74,6 +78,11 @@ public class RemoteOperationMeta {
 		this.contentArg = b.bodyArg;
 		this.methodReturn = b.methodReturn;
 		this.exceptions = m.getExceptionTypes();
+		this.pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
+		this.queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
+		this.headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
+		this.formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
+		this.contentDefault = b.contentDefault;
 	}
 
 	private static class Builder {
@@ -87,6 +96,12 @@ public class RemoteOperationMeta {
 			requestArgs = new LinkedList<>();
 		RemoteOperationArg bodyArg;
 		RemoteOperationReturn methodReturn;
+		Map<String,String> 
+			pathDefaults = new LinkedHashMap<>(),
+			queryDefaults = new LinkedHashMap<>(),
+			headerDefaults = new LinkedHashMap<>(),
+			formDataDefaults = new LinkedHashMap<>();
+		String contentDefault = null;
 
 		Builder(String parentPath, Method m, String defaultMethod) {
 
@@ -155,6 +170,117 @@ public class RemoteOperationMeta {
 				RequestBeanMeta rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
 				if (rmba != null) {
 					requestArgs.add(new RemoteOperationBeanArg(x.getIndex(), rmba));
+				}
+			});
+
+			// Process method-level annotations for defaults (9.2.0)
+			// Note: We need to handle both individual annotations and repeated annotation arrays
+			processHeaderDefaults(mi, headerDefaults);
+			processQueryDefaults(mi, queryDefaults);
+			processFormDataDefaults(mi, formDataDefaults);
+			processPathDefaults(mi, pathDefaults);
+			processContentDefaults(mi);
+		}
+
+		// Helper methods to process method-level annotations with defaults (9.2.0)
+		// These handle both individual annotations and repeated annotation arrays
+
+		private void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// Check for individual @Header annotations
+			mi.getAnnotationList().forEach(Header.class, null, x -> {
+				Header h = x.inner();
+				String name = firstNonEmpty(h.name(), h.value());
+				String def = h.def();
+				if (isNotEmpty(name) && isNotEmpty(def)) {
+					defaults.put(name, def);
+				}
+			});
+			// Check for @Header.Array (repeated annotations)
+			mi.getAnnotationList().forEach(HeaderAnnotation.Array.class, null, x -> {
+				for (Header h : x.inner().value()) {
+					String name = firstNonEmpty(h.name(), h.value());
+					String def = h.def();
+					if (isNotEmpty(name) && isNotEmpty(def)) {
+						defaults.put(name, def);
+					}
+				}
+			});
+		}
+
+		private void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
+			mi.getAnnotationList().forEach(Query.class, null, x -> {
+				Query q = x.inner();
+				String name = firstNonEmpty(q.name(), q.value());
+				String def = q.def();
+				if (isNotEmpty(name) && isNotEmpty(def)) {
+					defaults.put(name, def);
+				}
+			});
+			mi.getAnnotationList().forEach(QueryAnnotation.Array.class, null, x -> {
+				for (Query q : x.inner().value()) {
+					String name = firstNonEmpty(q.name(), q.value());
+					String def = q.def();
+					if (isNotEmpty(name) && isNotEmpty(def)) {
+						defaults.put(name, def);
+					}
+				}
+			});
+		}
+
+		private void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
+			mi.getAnnotationList().forEach(FormData.class, null, x -> {
+				FormData fd = x.inner();
+				String name = firstNonEmpty(fd.name(), fd.value());
+				String def = fd.def();
+				if (isNotEmpty(name) && isNotEmpty(def)) {
+					defaults.put(name, def);
+				}
+			});
+			mi.getAnnotationList().forEach(FormDataAnnotation.Array.class, null, x -> {
+				for (FormData fd : x.inner().value()) {
+					String name = firstNonEmpty(fd.name(), fd.value());
+					String def = fd.def();
+					if (isNotEmpty(name) && isNotEmpty(def)) {
+						defaults.put(name, def);
+					}
+				}
+			});
+		}
+
+		private void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
+			mi.getAnnotationList().forEach(Path.class, null, x -> {
+				Path p = x.inner();
+				String name = firstNonEmpty(p.name(), p.value());
+				String def = p.def();
+				if (isNotEmpty(name) && isNotEmpty(def)) {
+					defaults.put(name, def);
+				}
+			});
+			mi.getAnnotationList().forEach(PathAnnotation.Array.class, null, x -> {
+				for (Path p : x.inner().value()) {
+					String name = firstNonEmpty(p.name(), p.value());
+					String def = p.def();
+					if (isNotEmpty(name) && isNotEmpty(def)) {
+						defaults.put(name, def);
+					}
+				}
+			});
+		}
+
+		private void processContentDefaults(MethodInfo mi) {
+			mi.getAnnotationList().forEach(Content.class, null, x -> {
+				Content c = x.inner();
+				String def = c.def();
+				if (isNotEmpty(def)) {
+					contentDefault = def;
+				}
+			});
+			mi.getAnnotationList().forEach(ContentAnnotation.Array.class, null, x -> {
+				for (Content c : x.inner().value()) {
+					String def = c.def();
+					if (isNotEmpty(def)) {
+						contentDefault = def;
+					}
 				}
 			});
 		}
@@ -266,5 +392,59 @@ public class RemoteOperationMeta {
 		for (Class<?> e : exceptions)
 			action.accept(e);
 		return this;
+	}
+
+	/**
+	 * Returns the default value for a {@link Header @Header} annotation on the method.
+	 *
+	 * @param name The header name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getHeaderDefault(String name) {
+		return headerDefaults.get(name);
+	}
+
+	/**
+	 * Returns the default value for a {@link Query @Query} annotation on the method.
+	 *
+	 * @param name The query parameter name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getQueryDefault(String name) {
+		return queryDefaults.get(name);
+	}
+
+	/**
+	 * Returns the default value for a {@link FormData @FormData} annotation on the method.
+	 *
+	 * @param name The form data parameter name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getFormDataDefault(String name) {
+		return formDataDefaults.get(name);
+	}
+
+	/**
+	 * Returns the default value for a {@link Path @Path} annotation on the method.
+	 *
+	 * @param name The path parameter name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getPathDefault(String name) {
+		return pathDefaults.get(name);
+	}
+
+	/**
+	 * Returns the default value for a {@link Content @Content} annotation on the method.
+	 *
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getContentDefault() {
+		return contentDefault;
 	}
 }

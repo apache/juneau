@@ -110,6 +110,19 @@ import org.apache.juneau.json.*;
 @ContextApply(ContentAnnotation.Applier.class)
 public @interface Content {
 
+	/**
+	 * Default value for this parameter.
+	 *
+	 * <p>
+	 * This value is only used when annotation is applied to a method (not a parameter).
+	 * When applied to a remote interface method, it specifies the default content to use
+	 * if not overridden by the client.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String def() default "";
+
     /**
      * Optional description for the exposed API.
      *
