@@ -21,95 +21,94 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau</artifactId>
+		<artifactId>juneau-shaded</artifactId>
 		<version>9.2.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-all</artifactId>
-	<name>juneau/all</name>
-	<description>Apache Juneau UberJar</description>
-	<packaging>jar</packaging>
+	<artifactId>juneau-shaded-all</artifactId>
+	<name>Apache Juneau All (Shaded)</name>
+	<description>
+		Shaded JAR containing all Juneau modules (excluding unit tests, examples, and distribution artifacts).
+		Includes: juneau-core, juneau-bean, juneau-rest-client, juneau-rest-server, juneau-rest-server-springboot, and juneau-microservice.
+		This artifact provides the complete Juneau framework in a single JAR for maximum convenience.
+	</description>
 
 	<dependencies>
+		<!-- Use shaded rest-server-springboot which includes core and server -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall</artifactId>
+			<artifactId>juneau-shaded-rest-server-springboot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		
+		<!-- Also include rest-client separately (not part of server chain) -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- Bean modules -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-mock</artifactId>
+			<artifactId>juneau-bean-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-atom</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-html5</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-jsonschema</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-openapi-v3</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bean-swagger-v2</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- Microservice modules -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>jakarta.servlet</groupId>
-			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.1.0</version>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-
-			<!-- Creates our juneau-all jar file that's a combo of our 4 modules. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<configuration>
-					<createDependencyReducedPom>false</createDependencyReducedPom>
-					<artifactSet>
-						<includes>
-							<include>org.apache.juneau:juneau-common</include>
-							<include>org.apache.juneau:juneau-marshall</include>
-							<include>org.apache.juneau:juneau-svl</include>
-							<include>org.apache.juneau:juneau-config</include>
-							<include>org.apache.juneau:juneau-bean-atom</include>
-							<include>org.apache.juneau:juneau-bean-common</include>
-							<include>org.apache.juneau:juneau-bean-html5</include>
-							<include>org.apache.juneau:juneau-bean-jsonschema</include>
-							<include>org.apache.juneau:juneau-bean-openapi-v3</include>
-							<include>org.apache.juneau:juneau-bean-swagger-v2</include>
-							<include>org.apache.juneau:juneau-rest-server</include>
-							<include>org.apache.juneau:juneau-rest-client</include>
-							<include>org.apache.juneau:juneau-rest-mock</include>
-							<include>org.apache.juneau:juneau-microservice-core</include>
-							<include>org.apache.httpcomponents:httpcore</include>
-						</includes>
-					</artifactSet>
+					<transformers combine.children="append">
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+							<manifestEntries>
+								<Automatic-Module-Name>org.apache.juneau.all</Automatic-Module-Name>
+							</manifestEntries>
+						</transformer>
+					</transformers>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>source-jar</id>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createSourcesJar>true</createSourcesJar>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
 </project>
+

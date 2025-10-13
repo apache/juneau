@@ -55,7 +55,7 @@
 		<module>juneau-examples</module>
 		<module>juneau-utest</module>
 		<module>juneau-bean</module>
-		<module>juneau-all</module>
+		<module>juneau-shaded</module>
 		<module>juneau-distrib</module>
 	</modules>
 

@@ -11,7 +11,12 @@
 ### What's Included
 
 #### Binaries
-- **`juneau-all.jar`** - Everything (except RDF, JAX/RS, and Microservice)
+- **`/shaded`** - Shaded (uber) JARs for simplified dependency management
+  - `juneau-shaded-core.jar` - Core marshalling and configuration (2.1 MB)
+  - `juneau-shaded-rest-client.jar` - Core + REST client functionality (3.8 MB)
+  - `juneau-shaded-rest-server.jar` - Core + REST server functionality (3.8 MB)
+  - `juneau-shaded-rest-server-springboot.jar` - REST server + Spring Boot integration (3.8 MB)
+  - `juneau-shaded-all.jar` - Complete framework in one JAR (4.0 MB)
 - **`/lib`** - Individual Jars
   - `juneau-marshall.jar` - Marshalling
   - `juneau-marshall-rdf.jar` - Marshalling RDF extension (requires Apache Jena 2.7.1+)
@@ -61,7 +66,7 @@
 </dependency>
 
 <!-- ...where the artifactId is typically... -->
-<artifactId>juneau-all</artifactId>
+<artifactId>juneau-shaded-all</artifactId>
 
 <!-- ...but can also be any of the following... -->
 <artifactId>juneau-marshall</artifactId>

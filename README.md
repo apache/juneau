@@ -68,7 +68,7 @@ Apache Juneau™ excels in the following scenarios:
 ```xml
 <dependency>
     <groupId>org.apache.juneau</groupId>
-    <artifactId>juneau-all</artifactId>
+    <artifactId>juneau-shaded-all</artifactId>
     <version>9.1.0</version>
 </dependency>
 ```
@@ -292,7 +292,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 * **juneau-examples-rest-jetty** - Jetty microservice examples.
 * **juneau-examples-rest-springboot** - Spring Boot examples.
 * **juneau-petstore** - Complete REST application example.
-* **juneau-all** - Convenience dependency combining all core Juneau modules. 
+* **juneau-shaded** - Shaded (uber) JARs combining multiple Juneau modules for simplified dependency management, especially useful for Bazel builds. 
 
 Questions via email to dev@juneau.apache.org are always welcome.
 

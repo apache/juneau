@@ -9,6 +9,9 @@ derby.log
 # Temporary cursor assistant scripts
 cursor-*
 
+# Maven Shade Plugin generated files
+**/dependency-reduced-pom.xml
+
 # Note: Maven site generation creates target/site/ (already ignored by **/target/ above)
 /juneau.code-workspace
 /create-mvn-site.log

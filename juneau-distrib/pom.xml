@@ -45,21 +45,37 @@
 						<configuration>
 							<artifactItems>
 
-								<!-- juneau-all -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-all</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-all</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
+						<!-- Shaded artifacts -->
+						<artifactItem>
+							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+							<groupId>org.apache.juneau</groupId>
+							<artifactId>juneau-shaded-core</artifactId>
+							<version>${project.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+							<groupId>org.apache.juneau</groupId>
+							<artifactId>juneau-shaded-rest-client</artifactId>
+							<version>${project.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+							<groupId>org.apache.juneau</groupId>
+							<artifactId>juneau-shaded-rest-server</artifactId>
+							<version>${project.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+							<groupId>org.apache.juneau</groupId>
+							<artifactId>juneau-shaded-rest-server-springboot</artifactId>
+							<version>${project.version}</version>
+						</artifactItem>
+						<artifactItem>
+							<outputDirectory>${project.build.directory}/bin/shaded</outputDirectory>
+							<groupId>org.apache.juneau</groupId>
+							<artifactId>juneau-shaded-all</artifactId>
+							<version>${project.version}</version>
+						</artifactItem>
 
 								<!-- juneau-marshall -->
 								<artifactItem>
