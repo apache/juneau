@@ -164,24 +164,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Optional Element</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second even-row-color"><code><a href="#description()" class="member-name-link">description</a></code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#def()" class="member-name-link">def</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Optional description for the exposed API.</div>
+<div class="block">Default value for this parameter.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#on()" class="member-name-link">on</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#description()" class="member-name-link">description</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Dynamically apply this annotation to the specified classes.</div>
+<div class="block">Optional description for the exposed API.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</code></div>
-<div class="col-second even-row-color"><code><a href="#onClass()" class="member-name-link">onClass</a></code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#on()" class="member-name-link">on</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Dynamically apply this annotation to the specified classes.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#schema()" class="member-name-link">schema</a></code></div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#onClass()" class="member-name-link">onClass</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Dynamically apply this annotation to the specified classes.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a></code></div>
+<div class="col-second even-row-color"><code><a href="#schema()" class="member-name-link">schema</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.</div>
 </div>
 </div>
@@ -197,9 +202,31 @@ loadScripts(document, 'script');</script>
 <h2>Element Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="def()">
+<h3>def</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-124">def</a></span></div>
+<div class="block">Default value for this parameter.
+
+ <p>
+ This value is only used when annotation is applied to a method (not a parameter).
+ When applied to a remote interface method, it specifies the default content to use
+ if not overridden by the client.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+<dt>Since:</dt>
+<dd>9.2.0</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-119">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-132">description</a></span></div>
 <div class="block">Optional description for the exposed API.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -216,7 +243,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="on()">
 <h3>on</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-130">on</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-143">on</a></span></div>
 <div class="block">Dynamically apply this annotation to the specified classes.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -235,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onClass()">
 <h3>onClass</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-144">onClass</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-157">onClass</a></span></div>
 <div class="block">Dynamically apply this annotation to the specified classes.
 
  <p>
@@ -257,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schema()">
 <h3>schema</h3>
-<div class="member-signature"><span class="return-type"><a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-173">schema</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/Content.html#line-186">schema</a></span></div>
 <div class="block"><mk>schema</mk> field of the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>.
 
  <p>

@@ -134,6 +134,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Instantiates a new <a href="Content.html" title="annotation interface in org.apache.juneau.http.annotation"><code>@Content</code></a> object initialized with this builder.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#def(java.lang.String)" class="member-name-link">def</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the <a href="Content.html#def()"><code>Content.def()</code></a> property on this annotation.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#description(java.lang.String...)" class="member-name-link">description</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the <a href="Content.html#description()"><code>Content.description()</code></a> property on this annotation.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schema(org.apache.juneau.annotation.Schema)" class="member-name-link">schema</a><wbr>(<a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the <a href="Content.html#schema()"><code>Content.schema()</code></a> property on this annotation.</div>
@@ -152,7 +162,7 @@ loadScripts(document, 'script');</script>
 <code><a href="../../annotation/TargetedAnnotationBuilder.html#on(java.lang.String...)">on</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.annotation.AnnotationBuilder">Methods inherited from class&nbsp;org.apache.juneau.annotation.<a href="../../annotation/AnnotationBuilder.html" title="class in org.apache.juneau.annotation">AnnotationBuilder</a></h3>
-<code><a href="../../annotation/AnnotationBuilder.html#asThis()">asThis</a>, <a href="../../annotation/AnnotationBuilder.html#description(java.lang.String...)">description</a></code></div>
+<code><a href="../../annotation/AnnotationBuilder.html#asThis()">asThis</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -170,7 +180,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-102">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-104">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -185,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Content.html" title="annotation interface in org.apache.juneau.http.annotation">Content</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-111">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Content.html" title="annotation interface in org.apache.juneau.http.annotation">Content</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-113">build</a></span>()</div>
 <div class="block">Instantiates a new <a href="Content.html" title="annotation interface in org.apache.juneau.http.annotation"><code>@Content</code></a> object initialized with this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -194,9 +204,37 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="def(java.lang.String)">
+<h3>def</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-123">def</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Sets the <a href="Content.html#def()"><code>Content.def()</code></a> property on this annotation.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="description(java.lang.String...)">
+<h3>description</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-134">description</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="block">Sets the <a href="Content.html#description()"><code>Content.description()</code></a> property on this annotation.</div>
+<dl class="notes">
+<dt>Overrides:</dt>
+<dd><code><a href="../../annotation/AnnotationBuilder.html#description(java.lang.String...)">description</a></code>&nbsp;in class&nbsp;<code><a href="../../annotation/AnnotationBuilder.html" title="class in org.apache.juneau.annotation">AnnotationBuilder</a>&lt;<a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this property.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="schema(org.apache.juneau.annotation.Schema)">
 <h3>schema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-121">schema</a></span><wbr><span class="parameters">(<a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ContentAnnotation.Builder.html" title="class in org.apache.juneau.http.annotation">ContentAnnotation.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/annotation/ContentAnnotation.Builder.html#line-145">schema</a></span><wbr><span class="parameters">(<a href="../../annotation/Schema.html" title="annotation interface in org.apache.juneau.annotation">Schema</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="Content.html#schema()"><code>Content.schema()</code></a> property on this annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
