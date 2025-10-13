@@ -1026,3 +1026,45 @@ public Builder textNodeDelimiter(String value) {
 - ❌ Not passing the setting to the session if it's needed during serialization
 
 This document serves as the definitive guide for unit testing in the Apache Juneau project, ensuring consistency, maintainability, and comprehensive test coverage.
+
+---
+
+## Release Notes Guidelines
+
+### Location
+When asked to "add to the release notes", this refers to the current release file located at:
+- `/juneau-docs/docs/release-notes/<VERSION>.md`
+- **Current version**: `9.2.0`
+- **Current file**: `/juneau-docs/docs/release-notes/9.2.0.md`
+
+### Structure
+Release notes are organized into two main sections:
+
+1. **Top-level major changes** - High-level overview at the beginning of the file listing significant changes
+2. **Per-module updates** - Detailed changes organized by module (similar to 9.0.0.md structure):
+   - `juneau-marshall`
+   - `juneau-rest-common`
+   - `juneau-rest-server`
+   - `juneau-rest-client`
+   - `juneau-dto`
+   - `juneau-microservice`
+   - `juneau-examples`
+   - Other modules as applicable
+
+### Format
+Each section should include:
+- New features
+- Bug fixes
+- Breaking changes
+- Deprecations
+- Performance improvements
+- Documentation updates
+- API changes
+
+### Process
+1. Read the current release notes file (9.2.0.md) to understand the existing structure
+2. Determine if the change is a major change (top-level) or module-specific
+3. Add new entries under the appropriate section and module
+4. Use clear, concise descriptions with code examples where helpful
+5. Include issue/PR references where applicable
+6. Maintain consistent formatting with existing entries (see 9.0.0.md for reference)
