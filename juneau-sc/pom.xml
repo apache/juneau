@@ -35,4 +35,17 @@
 		<module>juneau-sc-client</module>
 	</modules>
 
+	<build>
+		<plugins>
+			<!-- Skip Javadoc generation for parent POM (no source files) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
