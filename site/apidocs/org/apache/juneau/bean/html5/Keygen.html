@@ -96,24 +96,24 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Basic keygen with RSA key type</jc>
    Keygen <jv>keygen1</jv> = <jsm>keygen</jsm>()
       .name(<js>"userkey"</js>)
       .keytype(<js>"RSA"</js>);
- 
+
    <jc>// Keygen with challenge string</jc>
    Keygen <jv>keygen2</jv> = <jsm>keygen</jsm>()
       .name(<js>"certkey"</js>)
       .keytype(<js>"RSA"</js>)
       .challenge(<js>"server-challenge-string"</js>);
- 
+
    <jc>// Keygen with form association</jc>
    Keygen <jv>keygen3</jv> = <jsm>keygen</jsm>()
       .name(<js>"formkey"</js>)
       .keytype(<js>"DSA"</js>)
       .form(<js>"myform"</js>);
- 
+
    <jc>// Keygen with disabled state</jc>
    Keygen <jv>keygen4</jv> = <jsm>keygen</jsm>()
       .name(<js>"disabledkey"</js>)

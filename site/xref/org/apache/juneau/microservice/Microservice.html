@@ -1148,95 +1148,94 @@
 <a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 		System.exit(2);
 <a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 	}
 <a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 
-<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 
-<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 	<em class="jxr_comment">// Other methods</em>
-<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 
-<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> <em class="jxr_javadoccomment">	 * Returns the console commands associated with this microservice.</em>
-<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> <em class="jxr_javadoccomment">	 * @return The console commands associated with this microservice as an unmodifiable map.</em>
-<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,ConsoleCommand&gt; getConsoleCommands() {
-<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		<strong class="jxr_keyword">return</strong> consoleCommandMap;
-<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 	}
-<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 
-<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> <em class="jxr_javadoccomment">	 * Returns the console reader.</em>
-<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to provide their own console input.</em>
-<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	 * @return The console reader.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 	<strong class="jxr_keyword">protected</strong> Scanner getConsoleReader() {
-<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 		<strong class="jxr_keyword">return</strong> consoleReader;
-<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 	}
-<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 
-<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> <em class="jxr_javadoccomment">	 * Returns the console writer.</em>
-<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to provide their own console output.</em>
-<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> <em class="jxr_javadoccomment">	 * @return The console writer.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 	<strong class="jxr_keyword">protected</strong> PrintWriter getConsoleWriter() {
-<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		<strong class="jxr_keyword">return</strong> consoleWriter;
-<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 	}
-<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 
-<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> <em class="jxr_javadoccomment">	 * Prints a localized message to the console writer.</em>
-<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">	 * Ignored if &lt;js&gt;"Console/enabled"&lt;/js&gt; is &lt;jk&gt;false&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> <em class="jxr_javadoccomment">	 * @param mb The message bundle containing the message.</em>
-<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> <em class="jxr_javadoccomment">	 * @param messageKey The message key.</em>
-<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
-<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> out(<a name="Messages" href="../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a> mb, String messageKey, Object...args) {
-<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		String msg = mb.getString(messageKey, args);
-<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 		<strong class="jxr_keyword">if</strong> (consoleEnabled)
-<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 			getConsoleWriter().println(msg);
-<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 		log(Level.INFO, msg);
-<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 	}
-<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 
-<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> <em class="jxr_javadoccomment">	 * Prints a localized message to STDERR.</em>
-<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 * Ignored if &lt;js&gt;"Console/enabled"&lt;/js&gt; is &lt;jk&gt;false&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">	 * @param mb The message bundle containing the message.</em>
-<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">	 * @param messageKey The message key.</em>
-<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
-<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> err(<a name="Messages" href="../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a> mb, String messageKey, Object...args) {
-<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 		String msg = mb.getString(messageKey, args);
-<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 		<strong class="jxr_keyword">if</strong> (consoleEnabled)
-<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 			System.err.println(mb.getString(messageKey, args));  <em class="jxr_comment">// NOT DEBUG</em>
-<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 		log(Level.SEVERE, msg);
-<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 	}
-<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 
-<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> <em class="jxr_javadoccomment">	 * Logs a message to the log file.</em>
-<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 * @param level The log level.</em>
-<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 * @param message The message text.</em>
-<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
-<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> log(Level level, String message, Object...args) {
-<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		String msg = args.length == 0 ? message : MessageFormat.format(message, args);
-<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 		getLogger().log(level, msg);
-<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 	}
-<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 
-<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 	@Override <em class="jxr_comment">/* ConfigChangeListener */</em>
-<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onConfigChange(<a name="ConfigEvents" href="../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> events) {
-<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 		listener.onConfigChange(<strong class="jxr_keyword">this</strong>, events);
-<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 	}
-<a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> }
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 	<em class="jxr_comment">// Other methods</em>
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> <em class="jxr_javadoccomment">	 * Returns the console commands associated with this microservice.</em>
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> <em class="jxr_javadoccomment">	 * @return The console commands associated with this microservice as an unmodifiable map.</em>
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,ConsoleCommand&gt; getConsoleCommands() {
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 		<strong class="jxr_keyword">return</strong> consoleCommandMap;
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 	}
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> <em class="jxr_javadoccomment">	 * Returns the console reader.</em>
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to provide their own console input.</em>
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">	 * @return The console reader.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 	<strong class="jxr_keyword">protected</strong> Scanner getConsoleReader() {
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 		<strong class="jxr_keyword">return</strong> consoleReader;
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 	}
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> <em class="jxr_javadoccomment">	 * Returns the console writer.</em>
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> <em class="jxr_javadoccomment">	 * Subclasses can override this method to provide their own console output.</em>
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> <em class="jxr_javadoccomment">	 * @return The console writer.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 	<strong class="jxr_keyword">protected</strong> PrintWriter getConsoleWriter() {
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 		<strong class="jxr_keyword">return</strong> consoleWriter;
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 	}
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> <em class="jxr_javadoccomment">	 * Prints a localized message to the console writer.</em>
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> <em class="jxr_javadoccomment">	 * Ignored if &lt;js&gt;"Console/enabled"&lt;/js&gt; is &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> <em class="jxr_javadoccomment">	 * @param mb The message bundle containing the message.</em>
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> <em class="jxr_javadoccomment">	 * @param messageKey The message key.</em>
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> out(<a name="Messages" href="../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a> mb, String messageKey, Object...args) {
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> 		String msg = mb.getString(messageKey, args);
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> 		<strong class="jxr_keyword">if</strong> (consoleEnabled)
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> 			getConsoleWriter().println(msg);
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> 		log(Level.INFO, msg);
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> 	}
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> 
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> <em class="jxr_javadoccomment">	 * Prints a localized message to STDERR.</em>
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">	 * Ignored if &lt;js&gt;"Console/enabled"&lt;/js&gt; is &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">	 * @param mb The message bundle containing the message.</em>
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">	 * @param messageKey The message key.</em>
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> err(<a name="Messages" href="../../../../org/apache/juneau/cp/Messages.html#Messages">Messages</a> mb, String messageKey, Object...args) {
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> 		String msg = mb.getString(messageKey, args);
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> 		<strong class="jxr_keyword">if</strong> (consoleEnabled)
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 			System.err.println(mb.getString(messageKey, args));  <em class="jxr_comment">// NOT DEBUG</em>
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 		log(Level.SEVERE, msg);
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 	}
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> <em class="jxr_javadoccomment">	 * Logs a message to the log file.</em>
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> <em class="jxr_javadoccomment">	 * @param level The log level.</em>
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 * @param message The message text.</em>
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 * @param args Optional {@link MessageFormat}-style arguments.</em>
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> log(Level level, String message, Object...args) {
+<a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 		String msg = args.length == 0 ? message : MessageFormat.format(message, args);
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		getLogger().log(level, msg);
+<a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 	}
+<a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 	@Override <em class="jxr_comment">/* ConfigChangeListener */</em>
+<a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onConfigChange(<a name="ConfigEvents" href="../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> events) {
+<a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 		listener.onConfigChange(<strong class="jxr_keyword">this</strong>, events);
+<a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 	}
+<a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

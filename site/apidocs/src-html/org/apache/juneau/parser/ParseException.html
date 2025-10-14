@@ -134,52 +134,51 @@
 <span class="source-line-no">121</span><span id="line-121">      super(causedBy, getMessage(session, causedBy.getMessage()));</span>
 <span class="source-line-no">122</span><span id="line-122">   }</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">   private static String getMessage(ParserSession session, String msg, Object... args) {</span>
-<span class="source-line-no">126</span><span id="line-126">      if (args.length != 0)</span>
-<span class="source-line-no">127</span><span id="line-127">         msg = format(msg, args);</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">      if (session != null) {</span>
-<span class="source-line-no">130</span><span id="line-130">         Position p = session.getPosition();</span>
-<span class="source-line-no">131</span><span id="line-131">         StringBuilder sb = new StringBuilder(msg);</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">         sb.append("\n\tAt: ").append(p);</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">         JsonMap lastLocation = session.getLastLocation();</span>
-<span class="source-line-no">136</span><span id="line-136">         if (lastLocation != null) {</span>
-<span class="source-line-no">137</span><span id="line-137">            sb.append("\n\tWhile parsing into: ");</span>
-<span class="source-line-no">138</span><span id="line-138">            lastLocation.forEach((k,v) -&gt; sb.append("\n\t\t").append(k).append(": ").append(v));</span>
-<span class="source-line-no">139</span><span id="line-139">         }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">         String lines = session.getInputAsString();</span>
-<span class="source-line-no">142</span><span id="line-142">         if (lines == null)</span>
-<span class="source-line-no">143</span><span id="line-143">            sb.append("\n\tUse BEAN_debug setting to display content.");</span>
-<span class="source-line-no">144</span><span id="line-144">         else {</span>
-<span class="source-line-no">145</span><span id="line-145">            int numLines = session.getDebugOutputLines();</span>
-<span class="source-line-no">146</span><span id="line-146">            int start = p.line - numLines, end = p.line + numLines;</span>
-<span class="source-line-no">147</span><span id="line-147">            sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");</span>
-<span class="source-line-no">148</span><span id="line-148">         }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">         msg = sb.toString();</span>
-<span class="source-line-no">151</span><span id="line-151">      }</span>
-<span class="source-line-no">152</span><span id="line-152">      return msg;</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   /**</span>
-<span class="source-line-no">156</span><span id="line-156">    * Returns the highest-level &lt;c&gt;ParseException&lt;/c&gt; in the stack trace.</span>
-<span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * &lt;p&gt;</span>
-<span class="source-line-no">159</span><span id="line-159">    * Useful for JUnit testing of error conditions.</span>
-<span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * @return The root parse exception, or this exception if there isn't one.</span>
-<span class="source-line-no">162</span><span id="line-162">    */</span>
-<span class="source-line-no">163</span><span id="line-163">   public ParseException getRootCause() {</span>
-<span class="source-line-no">164</span><span id="line-164">      ParseException t = this;</span>
-<span class="source-line-no">165</span><span id="line-165">      while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException)))</span>
-<span class="source-line-no">166</span><span id="line-166">         t = (ParseException)t.getCause();</span>
-<span class="source-line-no">167</span><span id="line-167">      return t;</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169">}</span>
+<span class="source-line-no">124</span><span id="line-124">   private static String getMessage(ParserSession session, String msg, Object... args) {</span>
+<span class="source-line-no">125</span><span id="line-125">      if (args.length != 0)</span>
+<span class="source-line-no">126</span><span id="line-126">         msg = format(msg, args);</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">      if (session != null) {</span>
+<span class="source-line-no">129</span><span id="line-129">         Position p = session.getPosition();</span>
+<span class="source-line-no">130</span><span id="line-130">         StringBuilder sb = new StringBuilder(msg);</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">         sb.append("\n\tAt: ").append(p);</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">         JsonMap lastLocation = session.getLastLocation();</span>
+<span class="source-line-no">135</span><span id="line-135">         if (lastLocation != null) {</span>
+<span class="source-line-no">136</span><span id="line-136">            sb.append("\n\tWhile parsing into: ");</span>
+<span class="source-line-no">137</span><span id="line-137">            lastLocation.forEach((k,v) -&gt; sb.append("\n\t\t").append(k).append(": ").append(v));</span>
+<span class="source-line-no">138</span><span id="line-138">         }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">         String lines = session.getInputAsString();</span>
+<span class="source-line-no">141</span><span id="line-141">         if (lines == null)</span>
+<span class="source-line-no">142</span><span id="line-142">            sb.append("\n\tUse BEAN_debug setting to display content.");</span>
+<span class="source-line-no">143</span><span id="line-143">         else {</span>
+<span class="source-line-no">144</span><span id="line-144">            int numLines = session.getDebugOutputLines();</span>
+<span class="source-line-no">145</span><span id="line-145">            int start = p.line - numLines, end = p.line + numLines;</span>
+<span class="source-line-no">146</span><span id="line-146">            sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");</span>
+<span class="source-line-no">147</span><span id="line-147">         }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">         msg = sb.toString();</span>
+<span class="source-line-no">150</span><span id="line-150">      }</span>
+<span class="source-line-no">151</span><span id="line-151">      return msg;</span>
+<span class="source-line-no">152</span><span id="line-152">   }</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   /**</span>
+<span class="source-line-no">155</span><span id="line-155">    * Returns the highest-level &lt;c&gt;ParseException&lt;/c&gt; in the stack trace.</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * &lt;p&gt;</span>
+<span class="source-line-no">158</span><span id="line-158">    * Useful for JUnit testing of error conditions.</span>
+<span class="source-line-no">159</span><span id="line-159">    *</span>
+<span class="source-line-no">160</span><span id="line-160">    * @return The root parse exception, or this exception if there isn't one.</span>
+<span class="source-line-no">161</span><span id="line-161">    */</span>
+<span class="source-line-no">162</span><span id="line-162">   public ParseException getRootCause() {</span>
+<span class="source-line-no">163</span><span id="line-163">      ParseException t = this;</span>
+<span class="source-line-no">164</span><span id="line-164">      while (! (t.getCause() == null || ! (t.getCause() instanceof ParseException)))</span>
+<span class="source-line-no">165</span><span id="line-165">         t = (ParseException)t.getCause();</span>
+<span class="source-line-no">166</span><span id="line-166">      return t;</span>
+<span class="source-line-no">167</span><span id="line-167">   }</span>
+<span class="source-line-no">168</span><span id="line-168">}</span>
 
 
 

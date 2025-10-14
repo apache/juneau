@@ -46,20 +46,20 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">036</span><span id="line-36"> * </span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Simple head with title&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    Head &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">039</span><span id="line-39"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"My Website"&lt;/js&gt;),</span>
 <span class="source-line-no">040</span><span id="line-40"> *       &lt;jsm&gt;meta&lt;/jsm&gt;().charset(&lt;js&gt;"UTF-8"&lt;/js&gt;)</span>
 <span class="source-line-no">041</span><span id="line-41"> *    );</span>
-<span class="source-line-no">042</span><span id="line-42"> * </span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;jc&gt;// Head with styling&lt;/jc&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    Head &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">045</span><span id="line-45"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"Styled Page"&lt;/js&gt;),</span>
 <span class="source-line-no">046</span><span id="line-46"> *       &lt;jsm&gt;meta&lt;/jsm&gt;().charset(&lt;js&gt;"UTF-8"&lt;/js&gt;),</span>
 <span class="source-line-no">047</span><span id="line-47"> *       &lt;jsm&gt;link&lt;/jsm&gt;().rel(&lt;js&gt;"stylesheet"&lt;/js&gt;).href(&lt;js&gt;"/css/style.css"&lt;/js&gt;)</span>
 <span class="source-line-no">048</span><span id="line-48"> *    );</span>
-<span class="source-line-no">049</span><span id="line-49"> * </span>
+<span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Head with complex content&lt;/jc&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    Head &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">052</span><span id="line-52"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"Complete Page"&lt;/js&gt;),</span>
@@ -69,19 +69,19 @@
 <span class="source-line-no">056</span><span id="line-56"> *       &lt;jsm&gt;link&lt;/jsm&gt;().rel(&lt;js&gt;"icon"&lt;/js&gt;).href(&lt;js&gt;"/favicon.ico"&lt;/js&gt;),</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;jsm&gt;script&lt;/jsm&gt;().src(&lt;js&gt;"/js/main.js"&lt;/js&gt;)</span>
 <span class="source-line-no">058</span><span id="line-58"> *    );</span>
-<span class="source-line-no">059</span><span id="line-59"> * </span>
+<span class="source-line-no">059</span><span id="line-59"> *</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;jc&gt;// Head with ID&lt;/jc&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    Head &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">062</span><span id="line-62"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"Page with ID"&lt;/js&gt;),</span>
 <span class="source-line-no">063</span><span id="line-63"> *       &lt;jsm&gt;meta&lt;/jsm&gt;().charset(&lt;js&gt;"UTF-8"&lt;/js&gt;)</span>
 <span class="source-line-no">064</span><span id="line-64"> *    ).id(&lt;js&gt;"page-head"&lt;/js&gt;);</span>
-<span class="source-line-no">065</span><span id="line-65"> * </span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;jc&gt;// Head with styling&lt;/jc&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    Head &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">068</span><span id="line-68"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"Styled Head"&lt;/js&gt;),</span>
 <span class="source-line-no">069</span><span id="line-69"> *       &lt;jsm&gt;meta&lt;/jsm&gt;().charset(&lt;js&gt;"UTF-8"&lt;/js&gt;)</span>
 <span class="source-line-no">070</span><span id="line-70"> *    ).style(&lt;js&gt;"background-color: #f0f0f0;"&lt;/js&gt;);</span>
-<span class="source-line-no">071</span><span id="line-71"> * </span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;jc&gt;// Head with multiple elements&lt;/jc&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *    Head &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">074</span><span id="line-74"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"Multi-Element Head"&lt;/js&gt;),</span>
@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79"> *       &lt;jsm&gt;script&lt;/jsm&gt;().src(&lt;js&gt;"/js/jquery.js"&lt;/js&gt;),</span>
 <span class="source-line-no">080</span><span id="line-80"> *       &lt;jsm&gt;script&lt;/jsm&gt;().src(&lt;js&gt;"/js/app.js"&lt;/js&gt;)</span>
 <span class="source-line-no">081</span><span id="line-81"> *    );</span>
-<span class="source-line-no">082</span><span id="line-82"> * </span>
+<span class="source-line-no">082</span><span id="line-82"> *</span>
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;jc&gt;// Head with base element&lt;/jc&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *    Head &lt;jv&gt;withBase&lt;/jv&gt; = &lt;jsm&gt;head&lt;/jsm&gt;(</span>
 <span class="source-line-no">085</span><span id="line-85"> *       &lt;jsm&gt;title&lt;/jsm&gt;(&lt;js&gt;"Page with Base"&lt;/js&gt;),</span>

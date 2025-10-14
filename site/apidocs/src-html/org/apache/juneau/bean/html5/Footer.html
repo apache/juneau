@@ -45,10 +45,10 @@
 <span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">035</span><span id="line-35"> * </span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;jc&gt;// Simple page footer&lt;/jc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    Footer &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(&lt;js&gt;"© 2024 My Company. All rights reserved."&lt;/js&gt;);</span>
-<span class="source-line-no">038</span><span id="line-38"> * </span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;jc&gt;// Footer with multiple elements&lt;/jc&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    Footer &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(</span>
 <span class="source-line-no">041</span><span id="line-41"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"© 2024 My Company. All rights reserved."&lt;/js&gt;),</span>
@@ -57,13 +57,13 @@
 <span class="source-line-no">044</span><span id="line-44"> *          &lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"mailto:info@company.com"&lt;/js&gt;, &lt;js&gt;"info@company.com"&lt;/js&gt;)</span>
 <span class="source-line-no">045</span><span id="line-45"> *       )</span>
 <span class="source-line-no">046</span><span id="line-46"> *    );</span>
-<span class="source-line-no">047</span><span id="line-47"> * </span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;jc&gt;// Footer with styling&lt;/jc&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    Footer &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(</span>
 <span class="source-line-no">050</span><span id="line-50"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"© 2024 My Company"&lt;/js&gt;),</span>
 <span class="source-line-no">051</span><span id="line-51"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"Privacy Policy | Terms of Service"&lt;/js&gt;)</span>
 <span class="source-line-no">052</span><span id="line-52"> *    )._class(&lt;js&gt;"page-footer"&lt;/js&gt;);</span>
-<span class="source-line-no">053</span><span id="line-53"> * </span>
+<span class="source-line-no">053</span><span id="line-53"> *</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// Footer with navigation&lt;/jc&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    Footer &lt;jv&gt;withNav&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(</span>
 <span class="source-line-no">056</span><span id="line-56"> *       &lt;jsm&gt;nav&lt;/jsm&gt;(</span>
@@ -75,19 +75,19 @@
 <span class="source-line-no">062</span><span id="line-62"> *       ),</span>
 <span class="source-line-no">063</span><span id="line-63"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"© 2024 My Company"&lt;/js&gt;)</span>
 <span class="source-line-no">064</span><span id="line-64"> *    );</span>
-<span class="source-line-no">065</span><span id="line-65"> * </span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;jc&gt;// Footer with ID&lt;/jc&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    Footer &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(</span>
 <span class="source-line-no">068</span><span id="line-68"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"© 2024 My Company. All rights reserved."&lt;/js&gt;),</span>
 <span class="source-line-no">069</span><span id="line-69"> *       &lt;jsm&gt;address&lt;/jsm&gt;(&lt;js&gt;"123 Main St, City, State 12345"&lt;/js&gt;)</span>
 <span class="source-line-no">070</span><span id="line-70"> *    ).id(&lt;js&gt;"main-footer"&lt;/js&gt;);</span>
-<span class="source-line-no">071</span><span id="line-71"> * </span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;jc&gt;// Footer with styling&lt;/jc&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *    Footer &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(</span>
 <span class="source-line-no">074</span><span id="line-74"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"© 2024 My Company"&lt;/js&gt;),</span>
 <span class="source-line-no">075</span><span id="line-75"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"Built with ❤️ using modern web technologies"&lt;/js&gt;)</span>
 <span class="source-line-no">076</span><span id="line-76"> *    ).style(&lt;js&gt;"background-color: #f0f0f0; padding: 20px; text-align: center;"&lt;/js&gt;);</span>
-<span class="source-line-no">077</span><span id="line-77"> * </span>
+<span class="source-line-no">077</span><span id="line-77"> *</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;jc&gt;// Footer with multiple sections&lt;/jc&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    Footer &lt;jv&gt;multiSection&lt;/jv&gt; = &lt;jsm&gt;footer&lt;/jsm&gt;(</span>
 <span class="source-line-no">080</span><span id="line-80"> *       &lt;jsm&gt;div&lt;/jsm&gt;(</span>

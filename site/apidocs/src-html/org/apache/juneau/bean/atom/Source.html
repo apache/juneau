@@ -35,13 +35,13 @@
 <span class="source-line-no">022</span><span id="line-22"> * Represents metadata from the source feed when an entry is copied from one feed to another.</span>
 <span class="source-line-no">023</span><span id="line-23"> *</span>
 <span class="source-line-no">024</span><span id="line-24"> * &lt;p&gt;</span>
-<span class="source-line-no">025</span><span id="line-25"> * When entries are aggregated, copied, or republished from their original feed, the source </span>
-<span class="source-line-no">026</span><span id="line-26"> * element preserves metadata about the original feed. This is crucial for proper attribution </span>
+<span class="source-line-no">025</span><span id="line-25"> * When entries are aggregated, copied, or republished from their original feed, the source</span>
+<span class="source-line-no">026</span><span id="line-26"> * element preserves metadata about the original feed. This is crucial for proper attribution</span>
 <span class="source-line-no">027</span><span id="line-27"> * and maintaining provenance information.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * The source element is a child of entry and contains a subset of feed-level metadata that </span>
-<span class="source-line-no">031</span><span id="line-31"> * identifies where the entry originally came from. All child elements are optional, but </span>
+<span class="source-line-no">030</span><span id="line-30"> * The source element is a child of entry and contains a subset of feed-level metadata that</span>
+<span class="source-line-no">031</span><span id="line-31"> * identifies where the entry originally came from. All child elements are optional, but</span>
 <span class="source-line-no">032</span><span id="line-32"> * including at minimum the source feed's ID, title, and updated timestamp is recommended.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> *          .setTitle(&lt;js&gt;"Original Blog"&lt;/js&gt;)</span>
 <span class="source-line-no">075</span><span id="line-75"> *          .setUpdated(&lt;js&gt;"2024-01-15T12:00:00Z"&lt;/js&gt;)</span>
 <span class="source-line-no">076</span><span id="line-76"> *          .setLinks(</span>
-<span class="source-line-no">077</span><span id="line-77"> *             &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"self"&lt;/js&gt;, &lt;js&gt;"application/atom+xml"&lt;/js&gt;, </span>
+<span class="source-line-no">077</span><span id="line-77"> *             &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"self"&lt;/js&gt;, &lt;js&gt;"application/atom+xml"&lt;/js&gt;,</span>
 <span class="source-line-no">078</span><span id="line-78"> *                &lt;js&gt;"http://originalblog.example.com/feed.atom"&lt;/js&gt;)</span>
 <span class="source-line-no">079</span><span id="line-79"> *          )</span>
 <span class="source-line-no">080</span><span id="line-80"> *    );</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82"> *</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> * &lt;p&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> * Represents an &lt;c&gt;atomSource&lt;/c&gt; construct in the </span>
+<span class="source-line-no">085</span><span id="line-85"> * Represents an &lt;c&gt;atomSource&lt;/c&gt; construct in the</span>
 <span class="source-line-no">086</span><span id="line-86"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.11"&gt;RFC 4287 - Section 4.2.11&lt;/a&gt; specification.</span>
 <span class="source-line-no">087</span><span id="line-87"> *</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -110,228 +110,226 @@
 <span class="source-line-no">097</span><span id="line-97">   private Logo logo;</span>
 <span class="source-line-no">098</span><span id="line-98">   private Text subtitle;</span>
 <span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">102</span><span id="line-102">   // Bean properties</span>
-<span class="source-line-no">103</span><span id="line-103">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Bean property getter:  &lt;property&gt;generator&lt;/property&gt;.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;p&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    * The generator info of this source.</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   public Generator getGenerator() {</span>
-<span class="source-line-no">114</span><span id="line-114">      return generator;</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Bean property setter:  &lt;property&gt;generator&lt;/property&gt;.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    * The generator info of this source.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param value</span>
-<span class="source-line-no">124</span><span id="line-124">    *    The new value for this property.</span>
-<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">126</span><span id="line-126">    * @return This object</span>
-<span class="source-line-no">127</span><span id="line-127">    */</span>
-<span class="source-line-no">128</span><span id="line-128">   public Source setGenerator(Generator value) {</span>
-<span class="source-line-no">129</span><span id="line-129">      this.generator = value;</span>
-<span class="source-line-no">130</span><span id="line-130">      return this;</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">   /**</span>
-<span class="source-line-no">134</span><span id="line-134">    * Bean property getter:  &lt;property&gt;icon&lt;/property&gt;.</span>
-<span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
-<span class="source-line-no">137</span><span id="line-137">    * The icon of this source.</span>
-<span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">140</span><span id="line-140">    */</span>
-<span class="source-line-no">141</span><span id="line-141">   public Icon getIcon() {</span>
-<span class="source-line-no">142</span><span id="line-142">      return icon;</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   /**</span>
-<span class="source-line-no">146</span><span id="line-146">    * Bean property setter:  &lt;property&gt;icon&lt;/property&gt;.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * &lt;p&gt;</span>
-<span class="source-line-no">149</span><span id="line-149">    * The icon of this source.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param value</span>
-<span class="source-line-no">152</span><span id="line-152">    *    The new value for this property.</span>
-<span class="source-line-no">153</span><span id="line-153">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">154</span><span id="line-154">    * @return This object</span>
-<span class="source-line-no">155</span><span id="line-155">    */</span>
-<span class="source-line-no">156</span><span id="line-156">   public Source setIcon(Icon value) {</span>
-<span class="source-line-no">157</span><span id="line-157">      this.icon = value;</span>
-<span class="source-line-no">158</span><span id="line-158">      return this;</span>
-<span class="source-line-no">159</span><span id="line-159">   }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   /**</span>
-<span class="source-line-no">162</span><span id="line-162">    * Bean property getter:  &lt;property&gt;logo&lt;/property&gt;.</span>
-<span class="source-line-no">163</span><span id="line-163">    *</span>
-<span class="source-line-no">164</span><span id="line-164">    * &lt;p&gt;</span>
-<span class="source-line-no">165</span><span id="line-165">    * The logo of this source.</span>
-<span class="source-line-no">166</span><span id="line-166">    *</span>
-<span class="source-line-no">167</span><span id="line-167">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">168</span><span id="line-168">    */</span>
-<span class="source-line-no">169</span><span id="line-169">   public Logo getLogo() {</span>
-<span class="source-line-no">170</span><span id="line-170">      return logo;</span>
-<span class="source-line-no">171</span><span id="line-171">   }</span>
-<span class="source-line-no">172</span><span id="line-172"></span>
-<span class="source-line-no">173</span><span id="line-173">   /**</span>
-<span class="source-line-no">174</span><span id="line-174">    * Bean property setter:  &lt;property&gt;logo&lt;/property&gt;.</span>
-<span class="source-line-no">175</span><span id="line-175">    *</span>
-<span class="source-line-no">176</span><span id="line-176">    * &lt;p&gt;</span>
-<span class="source-line-no">177</span><span id="line-177">    * The logo of this source.</span>
-<span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * @param value</span>
-<span class="source-line-no">180</span><span id="line-180">    *    The new value for this property.</span>
-<span class="source-line-no">181</span><span id="line-181">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">182</span><span id="line-182">    * @return This object</span>
-<span class="source-line-no">183</span><span id="line-183">    */</span>
-<span class="source-line-no">184</span><span id="line-184">   public Source setLogo(Logo value) {</span>
-<span class="source-line-no">185</span><span id="line-185">      this.logo = value;</span>
-<span class="source-line-no">186</span><span id="line-186">      return this;</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188"></span>
-<span class="source-line-no">189</span><span id="line-189">   /**</span>
-<span class="source-line-no">190</span><span id="line-190">    * Bean property getter:  &lt;property&gt;subtitle&lt;/property&gt;.</span>
-<span class="source-line-no">191</span><span id="line-191">    *</span>
-<span class="source-line-no">192</span><span id="line-192">    * &lt;p&gt;</span>
-<span class="source-line-no">193</span><span id="line-193">    * The subtitle of this source.</span>
-<span class="source-line-no">194</span><span id="line-194">    *</span>
-<span class="source-line-no">195</span><span id="line-195">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">196</span><span id="line-196">    */</span>
-<span class="source-line-no">197</span><span id="line-197">   public Text getSubtitle() {</span>
-<span class="source-line-no">198</span><span id="line-198">      return subtitle;</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">   /**</span>
-<span class="source-line-no">202</span><span id="line-202">    * Bean property setter:  &lt;property&gt;subtitle&lt;/property&gt;.</span>
-<span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * &lt;p&gt;</span>
-<span class="source-line-no">205</span><span id="line-205">    * The subtitle of this source.</span>
-<span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * @param value</span>
-<span class="source-line-no">208</span><span id="line-208">    *    The new value for this property.</span>
-<span class="source-line-no">209</span><span id="line-209">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">210</span><span id="line-210">    * @return This object</span>
-<span class="source-line-no">211</span><span id="line-211">    */</span>
-<span class="source-line-no">212</span><span id="line-212">   public Source setSubtitle(Text value) {</span>
-<span class="source-line-no">213</span><span id="line-213">      this.subtitle = value;</span>
-<span class="source-line-no">214</span><span id="line-214">      return this;</span>
-<span class="source-line-no">215</span><span id="line-215">   }</span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">   /**</span>
-<span class="source-line-no">218</span><span id="line-218">    * Bean property fluent setter:  &lt;property&gt;subtitle&lt;/property&gt;.</span>
-<span class="source-line-no">219</span><span id="line-219">    *</span>
-<span class="source-line-no">220</span><span id="line-220">    * &lt;p&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">    * The subtitle of this source.</span>
-<span class="source-line-no">222</span><span id="line-222">    *</span>
-<span class="source-line-no">223</span><span id="line-223">    * @param value</span>
-<span class="source-line-no">224</span><span id="line-224">    *    The new value for this property.</span>
-<span class="source-line-no">225</span><span id="line-225">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">226</span><span id="line-226">    * @return This object.</span>
-<span class="source-line-no">227</span><span id="line-227">    */</span>
-<span class="source-line-no">228</span><span id="line-228">   public Source setSubtitle(String value) {</span>
-<span class="source-line-no">229</span><span id="line-229">      setSubtitle(new Text(value));</span>
-<span class="source-line-no">230</span><span id="line-230">      return this;</span>
-<span class="source-line-no">231</span><span id="line-231">   }</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">100</span><span id="line-100">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">101</span><span id="line-101">   // Bean properties</span>
+<span class="source-line-no">102</span><span id="line-102">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /**</span>
+<span class="source-line-no">105</span><span id="line-105">    * Bean property getter:  &lt;property&gt;generator&lt;/property&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    *</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;p&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    * The generator info of this source.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">111</span><span id="line-111">    */</span>
+<span class="source-line-no">112</span><span id="line-112">   public Generator getGenerator() {</span>
+<span class="source-line-no">113</span><span id="line-113">      return generator;</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Bean property setter:  &lt;property&gt;generator&lt;/property&gt;.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * The generator info of this source.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param value</span>
+<span class="source-line-no">123</span><span id="line-123">    *    The new value for this property.</span>
+<span class="source-line-no">124</span><span id="line-124">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @return This object</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   public Source setGenerator(Generator value) {</span>
+<span class="source-line-no">128</span><span id="line-128">      this.generator = value;</span>
+<span class="source-line-no">129</span><span id="line-129">      return this;</span>
+<span class="source-line-no">130</span><span id="line-130">   }</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">   /**</span>
+<span class="source-line-no">133</span><span id="line-133">    * Bean property getter:  &lt;property&gt;icon&lt;/property&gt;.</span>
+<span class="source-line-no">134</span><span id="line-134">    *</span>
+<span class="source-line-no">135</span><span id="line-135">    * &lt;p&gt;</span>
+<span class="source-line-no">136</span><span id="line-136">    * The icon of this source.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">139</span><span id="line-139">    */</span>
+<span class="source-line-no">140</span><span id="line-140">   public Icon getIcon() {</span>
+<span class="source-line-no">141</span><span id="line-141">      return icon;</span>
+<span class="source-line-no">142</span><span id="line-142">   }</span>
+<span class="source-line-no">143</span><span id="line-143"></span>
+<span class="source-line-no">144</span><span id="line-144">   /**</span>
+<span class="source-line-no">145</span><span id="line-145">    * Bean property setter:  &lt;property&gt;icon&lt;/property&gt;.</span>
+<span class="source-line-no">146</span><span id="line-146">    *</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;p&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">    * The icon of this source.</span>
+<span class="source-line-no">149</span><span id="line-149">    *</span>
+<span class="source-line-no">150</span><span id="line-150">    * @param value</span>
+<span class="source-line-no">151</span><span id="line-151">    *    The new value for this property.</span>
+<span class="source-line-no">152</span><span id="line-152">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">153</span><span id="line-153">    * @return This object</span>
+<span class="source-line-no">154</span><span id="line-154">    */</span>
+<span class="source-line-no">155</span><span id="line-155">   public Source setIcon(Icon value) {</span>
+<span class="source-line-no">156</span><span id="line-156">      this.icon = value;</span>
+<span class="source-line-no">157</span><span id="line-157">      return this;</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   /**</span>
+<span class="source-line-no">161</span><span id="line-161">    * Bean property getter:  &lt;property&gt;logo&lt;/property&gt;.</span>
+<span class="source-line-no">162</span><span id="line-162">    *</span>
+<span class="source-line-no">163</span><span id="line-163">    * &lt;p&gt;</span>
+<span class="source-line-no">164</span><span id="line-164">    * The logo of this source.</span>
+<span class="source-line-no">165</span><span id="line-165">    *</span>
+<span class="source-line-no">166</span><span id="line-166">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">167</span><span id="line-167">    */</span>
+<span class="source-line-no">168</span><span id="line-168">   public Logo getLogo() {</span>
+<span class="source-line-no">169</span><span id="line-169">      return logo;</span>
+<span class="source-line-no">170</span><span id="line-170">   }</span>
+<span class="source-line-no">171</span><span id="line-171"></span>
+<span class="source-line-no">172</span><span id="line-172">   /**</span>
+<span class="source-line-no">173</span><span id="line-173">    * Bean property setter:  &lt;property&gt;logo&lt;/property&gt;.</span>
+<span class="source-line-no">174</span><span id="line-174">    *</span>
+<span class="source-line-no">175</span><span id="line-175">    * &lt;p&gt;</span>
+<span class="source-line-no">176</span><span id="line-176">    * The logo of this source.</span>
+<span class="source-line-no">177</span><span id="line-177">    *</span>
+<span class="source-line-no">178</span><span id="line-178">    * @param value</span>
+<span class="source-line-no">179</span><span id="line-179">    *    The new value for this property.</span>
+<span class="source-line-no">180</span><span id="line-180">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">181</span><span id="line-181">    * @return This object</span>
+<span class="source-line-no">182</span><span id="line-182">    */</span>
+<span class="source-line-no">183</span><span id="line-183">   public Source setLogo(Logo value) {</span>
+<span class="source-line-no">184</span><span id="line-184">      this.logo = value;</span>
+<span class="source-line-no">185</span><span id="line-185">      return this;</span>
+<span class="source-line-no">186</span><span id="line-186">   }</span>
+<span class="source-line-no">187</span><span id="line-187"></span>
+<span class="source-line-no">188</span><span id="line-188">   /**</span>
+<span class="source-line-no">189</span><span id="line-189">    * Bean property getter:  &lt;property&gt;subtitle&lt;/property&gt;.</span>
+<span class="source-line-no">190</span><span id="line-190">    *</span>
+<span class="source-line-no">191</span><span id="line-191">    * &lt;p&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    * The subtitle of this source.</span>
+<span class="source-line-no">193</span><span id="line-193">    *</span>
+<span class="source-line-no">194</span><span id="line-194">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">195</span><span id="line-195">    */</span>
+<span class="source-line-no">196</span><span id="line-196">   public Text getSubtitle() {</span>
+<span class="source-line-no">197</span><span id="line-197">      return subtitle;</span>
+<span class="source-line-no">198</span><span id="line-198">   }</span>
+<span class="source-line-no">199</span><span id="line-199"></span>
+<span class="source-line-no">200</span><span id="line-200">   /**</span>
+<span class="source-line-no">201</span><span id="line-201">    * Bean property setter:  &lt;property&gt;subtitle&lt;/property&gt;.</span>
+<span class="source-line-no">202</span><span id="line-202">    *</span>
+<span class="source-line-no">203</span><span id="line-203">    * &lt;p&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    * The subtitle of this source.</span>
+<span class="source-line-no">205</span><span id="line-205">    *</span>
+<span class="source-line-no">206</span><span id="line-206">    * @param value</span>
+<span class="source-line-no">207</span><span id="line-207">    *    The new value for this property.</span>
+<span class="source-line-no">208</span><span id="line-208">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">209</span><span id="line-209">    * @return This object</span>
+<span class="source-line-no">210</span><span id="line-210">    */</span>
+<span class="source-line-no">211</span><span id="line-211">   public Source setSubtitle(Text value) {</span>
+<span class="source-line-no">212</span><span id="line-212">      this.subtitle = value;</span>
+<span class="source-line-no">213</span><span id="line-213">      return this;</span>
+<span class="source-line-no">214</span><span id="line-214">   }</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">   /**</span>
+<span class="source-line-no">217</span><span id="line-217">    * Bean property fluent setter:  &lt;property&gt;subtitle&lt;/property&gt;.</span>
+<span class="source-line-no">218</span><span id="line-218">    *</span>
+<span class="source-line-no">219</span><span id="line-219">    * &lt;p&gt;</span>
+<span class="source-line-no">220</span><span id="line-220">    * The subtitle of this source.</span>
+<span class="source-line-no">221</span><span id="line-221">    *</span>
+<span class="source-line-no">222</span><span id="line-222">    * @param value</span>
+<span class="source-line-no">223</span><span id="line-223">    *    The new value for this property.</span>
+<span class="source-line-no">224</span><span id="line-224">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">225</span><span id="line-225">    * @return This object.</span>
+<span class="source-line-no">226</span><span id="line-226">    */</span>
+<span class="source-line-no">227</span><span id="line-227">   public Source setSubtitle(String value) {</span>
+<span class="source-line-no">228</span><span id="line-228">      setSubtitle(new Text(value));</span>
+<span class="source-line-no">229</span><span id="line-229">      return this;</span>
+<span class="source-line-no">230</span><span id="line-230">   }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">233</span><span id="line-233">   // Overridden setters (to simplify method chaining)</span>
 <span class="source-line-no">234</span><span id="line-234">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">235</span><span id="line-235">   // Overridden setters (to simplify method chaining)</span>
-<span class="source-line-no">236</span><span id="line-236">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   @Override /* Overridden from Common */</span>
-<span class="source-line-no">239</span><span id="line-239">   public Source setBase(Object value) {</span>
-<span class="source-line-no">240</span><span id="line-240">      super.setBase(value);</span>
-<span class="source-line-no">241</span><span id="line-241">      return this;</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">   @Override /* Overridden from Common */</span>
-<span class="source-line-no">245</span><span id="line-245">   public Source setLang(String value) {</span>
-<span class="source-line-no">246</span><span id="line-246">      super.setLang(value);</span>
-<span class="source-line-no">247</span><span id="line-247">      return this;</span>
-<span class="source-line-no">248</span><span id="line-248">   }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">251</span><span id="line-251">   public Source setAuthors(Person...value) {</span>
-<span class="source-line-no">252</span><span id="line-252">      super.setAuthors(value);</span>
-<span class="source-line-no">253</span><span id="line-253">      return this;</span>
-<span class="source-line-no">254</span><span id="line-254">   }</span>
-<span class="source-line-no">255</span><span id="line-255"></span>
-<span class="source-line-no">256</span><span id="line-256">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">257</span><span id="line-257">   public Source setCategories(Category...value) {</span>
-<span class="source-line-no">258</span><span id="line-258">      super.setCategories(value);</span>
-<span class="source-line-no">259</span><span id="line-259">      return this;</span>
-<span class="source-line-no">260</span><span id="line-260">   }</span>
-<span class="source-line-no">261</span><span id="line-261"></span>
-<span class="source-line-no">262</span><span id="line-262">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">263</span><span id="line-263">   public Source setContributors(Person...value) {</span>
-<span class="source-line-no">264</span><span id="line-264">      super.setContributors(value);</span>
-<span class="source-line-no">265</span><span id="line-265">      return this;</span>
-<span class="source-line-no">266</span><span id="line-266">   }</span>
-<span class="source-line-no">267</span><span id="line-267"></span>
-<span class="source-line-no">268</span><span id="line-268">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">269</span><span id="line-269">   public Source setId(String value) {</span>
-<span class="source-line-no">270</span><span id="line-270">      super.setId(value);</span>
-<span class="source-line-no">271</span><span id="line-271">      return this;</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273"></span>
-<span class="source-line-no">274</span><span id="line-274">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">275</span><span id="line-275">   public Source setId(Id value) {</span>
-<span class="source-line-no">276</span><span id="line-276">      super.setId(value);</span>
-<span class="source-line-no">277</span><span id="line-277">      return this;</span>
-<span class="source-line-no">278</span><span id="line-278">   }</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">281</span><span id="line-281">   public Source setLinks(Link...value) {</span>
-<span class="source-line-no">282</span><span id="line-282">      super.setLinks(value);</span>
-<span class="source-line-no">283</span><span id="line-283">      return this;</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">287</span><span id="line-287">   public Source setRights(String value) {</span>
-<span class="source-line-no">288</span><span id="line-288">      super.setRights(value);</span>
-<span class="source-line-no">289</span><span id="line-289">      return this;</span>
-<span class="source-line-no">290</span><span id="line-290">   }</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">293</span><span id="line-293">   public Source setRights(Text value) {</span>
-<span class="source-line-no">294</span><span id="line-294">      super.setRights(value);</span>
-<span class="source-line-no">295</span><span id="line-295">      return this;</span>
-<span class="source-line-no">296</span><span id="line-296">   }</span>
-<span class="source-line-no">297</span><span id="line-297"></span>
-<span class="source-line-no">298</span><span id="line-298">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">299</span><span id="line-299">   public Source setTitle(String value) {</span>
-<span class="source-line-no">300</span><span id="line-300">      super.setTitle(value);</span>
-<span class="source-line-no">301</span><span id="line-301">      return this;</span>
-<span class="source-line-no">302</span><span id="line-302">   }</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">305</span><span id="line-305">   public Source setTitle(Text value) {</span>
-<span class="source-line-no">306</span><span id="line-306">      super.setTitle(value);</span>
-<span class="source-line-no">307</span><span id="line-307">      return this;</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">311</span><span id="line-311">   public Source setUpdated(String value) {</span>
-<span class="source-line-no">312</span><span id="line-312">      super.setUpdated(value);</span>
-<span class="source-line-no">313</span><span id="line-313">      return this;</span>
-<span class="source-line-no">314</span><span id="line-314">   }</span>
-<span class="source-line-no">315</span><span id="line-315"></span>
-<span class="source-line-no">316</span><span id="line-316">   @Override /* Overridden from CommonEntry */</span>
-<span class="source-line-no">317</span><span id="line-317">   public Source setUpdated(Calendar value) {</span>
-<span class="source-line-no">318</span><span id="line-318">      super.setUpdated(value);</span>
-<span class="source-line-no">319</span><span id="line-319">      return this;</span>
-<span class="source-line-no">320</span><span id="line-320">   }</span>
-<span class="source-line-no">321</span><span id="line-321">}</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">237</span><span id="line-237">   public Source setBase(Object value) {</span>
+<span class="source-line-no">238</span><span id="line-238">      super.setBase(value);</span>
+<span class="source-line-no">239</span><span id="line-239">      return this;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">243</span><span id="line-243">   public Source setLang(String value) {</span>
+<span class="source-line-no">244</span><span id="line-244">      super.setLang(value);</span>
+<span class="source-line-no">245</span><span id="line-245">      return this;</span>
+<span class="source-line-no">246</span><span id="line-246">   }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">249</span><span id="line-249">   public Source setAuthors(Person...value) {</span>
+<span class="source-line-no">250</span><span id="line-250">      super.setAuthors(value);</span>
+<span class="source-line-no">251</span><span id="line-251">      return this;</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">255</span><span id="line-255">   public Source setCategories(Category...value) {</span>
+<span class="source-line-no">256</span><span id="line-256">      super.setCategories(value);</span>
+<span class="source-line-no">257</span><span id="line-257">      return this;</span>
+<span class="source-line-no">258</span><span id="line-258">   }</span>
+<span class="source-line-no">259</span><span id="line-259"></span>
+<span class="source-line-no">260</span><span id="line-260">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">261</span><span id="line-261">   public Source setContributors(Person...value) {</span>
+<span class="source-line-no">262</span><span id="line-262">      super.setContributors(value);</span>
+<span class="source-line-no">263</span><span id="line-263">      return this;</span>
+<span class="source-line-no">264</span><span id="line-264">   }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">267</span><span id="line-267">   public Source setId(String value) {</span>
+<span class="source-line-no">268</span><span id="line-268">      super.setId(value);</span>
+<span class="source-line-no">269</span><span id="line-269">      return this;</span>
+<span class="source-line-no">270</span><span id="line-270">   }</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">273</span><span id="line-273">   public Source setId(Id value) {</span>
+<span class="source-line-no">274</span><span id="line-274">      super.setId(value);</span>
+<span class="source-line-no">275</span><span id="line-275">      return this;</span>
+<span class="source-line-no">276</span><span id="line-276">   }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">279</span><span id="line-279">   public Source setLinks(Link...value) {</span>
+<span class="source-line-no">280</span><span id="line-280">      super.setLinks(value);</span>
+<span class="source-line-no">281</span><span id="line-281">      return this;</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">285</span><span id="line-285">   public Source setRights(String value) {</span>
+<span class="source-line-no">286</span><span id="line-286">      super.setRights(value);</span>
+<span class="source-line-no">287</span><span id="line-287">      return this;</span>
+<span class="source-line-no">288</span><span id="line-288">   }</span>
+<span class="source-line-no">289</span><span id="line-289"></span>
+<span class="source-line-no">290</span><span id="line-290">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">291</span><span id="line-291">   public Source setRights(Text value) {</span>
+<span class="source-line-no">292</span><span id="line-292">      super.setRights(value);</span>
+<span class="source-line-no">293</span><span id="line-293">      return this;</span>
+<span class="source-line-no">294</span><span id="line-294">   }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">297</span><span id="line-297">   public Source setTitle(String value) {</span>
+<span class="source-line-no">298</span><span id="line-298">      super.setTitle(value);</span>
+<span class="source-line-no">299</span><span id="line-299">      return this;</span>
+<span class="source-line-no">300</span><span id="line-300">   }</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">303</span><span id="line-303">   public Source setTitle(Text value) {</span>
+<span class="source-line-no">304</span><span id="line-304">      super.setTitle(value);</span>
+<span class="source-line-no">305</span><span id="line-305">      return this;</span>
+<span class="source-line-no">306</span><span id="line-306">   }</span>
+<span class="source-line-no">307</span><span id="line-307"></span>
+<span class="source-line-no">308</span><span id="line-308">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">309</span><span id="line-309">   public Source setUpdated(String value) {</span>
+<span class="source-line-no">310</span><span id="line-310">      super.setUpdated(value);</span>
+<span class="source-line-no">311</span><span id="line-311">      return this;</span>
+<span class="source-line-no">312</span><span id="line-312">   }</span>
+<span class="source-line-no">313</span><span id="line-313"></span>
+<span class="source-line-no">314</span><span id="line-314">   @Override /* Overridden from CommonEntry */</span>
+<span class="source-line-no">315</span><span id="line-315">   public Source setUpdated(Calendar value) {</span>
+<span class="source-line-no">316</span><span id="line-316">      super.setUpdated(value);</span>
+<span class="source-line-no">317</span><span id="line-317">      return this;</span>
+<span class="source-line-no">318</span><span id="line-318">   }</span>
+<span class="source-line-no">319</span><span id="line-319">}</span>
 
 
 

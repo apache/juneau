@@ -46,16 +46,16 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">036</span><span id="line-36"> * </span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Basic CSS styles&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    Style &lt;jv&gt;basic&lt;/jv&gt; = &lt;jsm&gt;style&lt;/jsm&gt;()</span>
 <span class="source-line-no">039</span><span id="line-39"> *       .text(&lt;js&gt;"body { font-family: Arial, sans-serif; }"&lt;/js&gt;);</span>
-<span class="source-line-no">040</span><span id="line-40"> * </span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;jc&gt;// CSS with media query&lt;/jc&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    Style &lt;jv&gt;responsive&lt;/jv&gt; = &lt;jsm&gt;style&lt;/jsm&gt;()</span>
 <span class="source-line-no">043</span><span id="line-43"> *       .media(&lt;js&gt;"screen and (max-width: 600px)"&lt;/js&gt;)</span>
 <span class="source-line-no">044</span><span id="line-44"> *       .text(&lt;js&gt;"body { font-size: 14px; }"&lt;/js&gt;);</span>
-<span class="source-line-no">045</span><span id="line-45"> * </span>
+<span class="source-line-no">045</span><span id="line-45"> *</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;jc&gt;// Multiple CSS rules&lt;/jc&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    Style &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;style&lt;/jsm&gt;()</span>
 <span class="source-line-no">048</span><span id="line-48"> *       .text(</span>
@@ -63,12 +63,12 @@
 <span class="source-line-no">050</span><span id="line-50"> *          &lt;js&gt;"p { margin: 10px; }"&lt;/js&gt;,</span>
 <span class="source-line-no">051</span><span id="line-51"> *          &lt;js&gt;".highlight { background-color: yellow; }"&lt;/js&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *       );</span>
-<span class="source-line-no">053</span><span id="line-53"> * </span>
+<span class="source-line-no">053</span><span id="line-53"> *</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// CSS with type specification&lt;/jc&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    Style &lt;jv&gt;typed&lt;/jv&gt; = &lt;jsm&gt;style&lt;/jsm&gt;()</span>
 <span class="source-line-no">056</span><span id="line-56"> *       .type(&lt;js&gt;"text/css"&lt;/js&gt;)</span>
 <span class="source-line-no">057</span><span id="line-57"> *       .text(&lt;js&gt;".button { padding: 10px; background: #007bff; }"&lt;/js&gt;);</span>
-<span class="source-line-no">058</span><span id="line-58"> * </span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;jc&gt;// Print-specific styles&lt;/jc&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    Style &lt;jv&gt;print&lt;/jv&gt; = &lt;jsm&gt;style&lt;/jsm&gt;()</span>
 <span class="source-line-no">061</span><span id="line-61"> *       .media(&lt;js&gt;"print"&lt;/js&gt;)</span>

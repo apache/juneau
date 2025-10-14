@@ -1369,130 +1369,129 @@
 <span class="source-line-no">1356</span><span id="line-1356">      return getSession().parseArgs(input, argTypes);</span>
 <span class="source-line-no">1357</span><span id="line-1357">   }</span>
 <span class="source-line-no">1358</span><span id="line-1358"></span>
-<span class="source-line-no">1359</span><span id="line-1359"></span>
-<span class="source-line-no">1360</span><span id="line-1360">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1361</span><span id="line-1361">   // Other methods</span>
-<span class="source-line-no">1362</span><span id="line-1362">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1363</span><span id="line-1363"></span>
-<span class="source-line-no">1364</span><span id="line-1364">   /**</span>
-<span class="source-line-no">1365</span><span id="line-1365">    * Returns the media types handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</span>
-<span class="source-line-no">1366</span><span id="line-1366">    *</span>
-<span class="source-line-no">1367</span><span id="line-1367">    * @return The list of media types.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1368</span><span id="line-1368">    */</span>
-<span class="source-line-no">1369</span><span id="line-1369">   public final List&lt;MediaType&gt; getMediaTypes() {</span>
-<span class="source-line-no">1370</span><span id="line-1370">      return Utils.alist(consumesArray);</span>
-<span class="source-line-no">1371</span><span id="line-1371">   }</span>
-<span class="source-line-no">1372</span><span id="line-1372"></span>
-<span class="source-line-no">1373</span><span id="line-1373">   /**</span>
-<span class="source-line-no">1374</span><span id="line-1374">    * Returns the first media type handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</span>
-<span class="source-line-no">1375</span><span id="line-1375">    *</span>
-<span class="source-line-no">1376</span><span id="line-1376">    * @return The media type.</span>
-<span class="source-line-no">1377</span><span id="line-1377">    */</span>
-<span class="source-line-no">1378</span><span id="line-1378">   public final MediaType getPrimaryMediaType() {</span>
-<span class="source-line-no">1379</span><span id="line-1379">      return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0];</span>
-<span class="source-line-no">1380</span><span id="line-1380">   }</span>
-<span class="source-line-no">1381</span><span id="line-1381"></span>
-<span class="source-line-no">1382</span><span id="line-1382">   /**</span>
-<span class="source-line-no">1383</span><span id="line-1383">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</span>
-<span class="source-line-no">1384</span><span id="line-1384">    *</span>
-<span class="source-line-no">1385</span><span id="line-1385">    * @param contentType The content type to test.</span>
-<span class="source-line-no">1386</span><span id="line-1386">    * @return &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</span>
-<span class="source-line-no">1387</span><span id="line-1387">    */</span>
-<span class="source-line-no">1388</span><span id="line-1388">   public boolean canHandle(String contentType) {</span>
-<span class="source-line-no">1389</span><span id="line-1389">      if (contentType != null)</span>
-<span class="source-line-no">1390</span><span id="line-1390">         for (MediaType mt : getMediaTypes())</span>
-<span class="source-line-no">1391</span><span id="line-1391">            if (contentType.equals(mt.toString()))</span>
-<span class="source-line-no">1392</span><span id="line-1392">               return true;</span>
-<span class="source-line-no">1393</span><span id="line-1393">      return false;</span>
-<span class="source-line-no">1394</span><span id="line-1394">   }</span>
-<span class="source-line-no">1395</span><span id="line-1395"></span>
-<span class="source-line-no">1396</span><span id="line-1396">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1397</span><span id="line-1397">   // Properties</span>
-<span class="source-line-no">1398</span><span id="line-1398">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1399</span><span id="line-1399"></span>
-<span class="source-line-no">1400</span><span id="line-1400">   /**</span>
-<span class="source-line-no">1401</span><span id="line-1401">    * Auto-close streams.</span>
-<span class="source-line-no">1402</span><span id="line-1402">    *</span>
-<span class="source-line-no">1403</span><span id="line-1403">    * @see Parser.Builder#autoCloseStreams()</span>
-<span class="source-line-no">1404</span><span id="line-1404">    * @return</span>
-<span class="source-line-no">1405</span><span id="line-1405">    *    &lt;jk&gt;true&lt;/jk&gt; if &lt;l&gt;InputStreams&lt;/l&gt; and &lt;l&gt;Readers&lt;/l&gt; passed into parsers will be closed</span>
-<span class="source-line-no">1406</span><span id="line-1406">    *    after parsing is complete.</span>
-<span class="source-line-no">1407</span><span id="line-1407">    */</span>
-<span class="source-line-no">1408</span><span id="line-1408">   protected final boolean isAutoCloseStreams() {</span>
-<span class="source-line-no">1409</span><span id="line-1409">      return autoCloseStreams;</span>
-<span class="source-line-no">1410</span><span id="line-1410">   }</span>
-<span class="source-line-no">1411</span><span id="line-1411"></span>
-<span class="source-line-no">1412</span><span id="line-1412">   /**</span>
-<span class="source-line-no">1413</span><span id="line-1413">    * Debug output lines.</span>
-<span class="source-line-no">1414</span><span id="line-1414">    *</span>
-<span class="source-line-no">1415</span><span id="line-1415">    * @see Parser.Builder#debugOutputLines(int)</span>
-<span class="source-line-no">1416</span><span id="line-1416">    * @return</span>
-<span class="source-line-no">1417</span><span id="line-1417">    *    The number of lines of input before and after the error location to be printed as part of the exception message.</span>
-<span class="source-line-no">1418</span><span id="line-1418">    */</span>
-<span class="source-line-no">1419</span><span id="line-1419">   protected final int getDebugOutputLines() {</span>
-<span class="source-line-no">1420</span><span id="line-1420">      return debugOutputLines;</span>
-<span class="source-line-no">1421</span><span id="line-1421">   }</span>
-<span class="source-line-no">1422</span><span id="line-1422"></span>
-<span class="source-line-no">1423</span><span id="line-1423">   /**</span>
-<span class="source-line-no">1424</span><span id="line-1424">    * Parser listener.</span>
-<span class="source-line-no">1425</span><span id="line-1425">    *</span>
-<span class="source-line-no">1426</span><span id="line-1426">    * @see Parser.Builder#listener(Class)</span>
-<span class="source-line-no">1427</span><span id="line-1427">    * @return</span>
-<span class="source-line-no">1428</span><span id="line-1428">    *    Class used to listen for errors and warnings that occur during parsing.</span>
-<span class="source-line-no">1429</span><span id="line-1429">    */</span>
-<span class="source-line-no">1430</span><span id="line-1430">   protected final Class&lt;? extends ParserListener&gt; getListener() {</span>
-<span class="source-line-no">1431</span><span id="line-1431">      return listener;</span>
-<span class="source-line-no">1432</span><span id="line-1432">   }</span>
-<span class="source-line-no">1433</span><span id="line-1433"></span>
-<span class="source-line-no">1434</span><span id="line-1434">   /**</span>
-<span class="source-line-no">1435</span><span id="line-1435">    * Strict mode.</span>
-<span class="source-line-no">1436</span><span id="line-1436">    *</span>
-<span class="source-line-no">1437</span><span id="line-1437">    * @see Parser.Builder#strict()</span>
-<span class="source-line-no">1438</span><span id="line-1438">    * @return</span>
-<span class="source-line-no">1439</span><span id="line-1439">    *    &lt;jk&gt;true&lt;/jk&gt; if strict mode for the parser is enabled.</span>
-<span class="source-line-no">1440</span><span id="line-1440">    */</span>
-<span class="source-line-no">1441</span><span id="line-1441">   protected final boolean isStrict() {</span>
-<span class="source-line-no">1442</span><span id="line-1442">      return strict;</span>
-<span class="source-line-no">1443</span><span id="line-1443">   }</span>
-<span class="source-line-no">1444</span><span id="line-1444"></span>
-<span class="source-line-no">1445</span><span id="line-1445">   /**</span>
-<span class="source-line-no">1446</span><span id="line-1446">    * Trim parsed strings.</span>
-<span class="source-line-no">1447</span><span id="line-1447">    *</span>
-<span class="source-line-no">1448</span><span id="line-1448">    * @see Parser.Builder#trimStrings()</span>
-<span class="source-line-no">1449</span><span id="line-1449">    * @return</span>
-<span class="source-line-no">1450</span><span id="line-1450">    *    &lt;jk&gt;true&lt;/jk&gt; if string values will be trimmed of whitespace using {@link String#trim()} before being added to</span>
-<span class="source-line-no">1451</span><span id="line-1451">    *    the POJO.</span>
-<span class="source-line-no">1452</span><span id="line-1452">    */</span>
-<span class="source-line-no">1453</span><span id="line-1453">   protected final boolean isTrimStrings() {</span>
-<span class="source-line-no">1454</span><span id="line-1454">      return trimStrings;</span>
-<span class="source-line-no">1455</span><span id="line-1455">   }</span>
-<span class="source-line-no">1456</span><span id="line-1456"></span>
-<span class="source-line-no">1457</span><span id="line-1457">   /**</span>
-<span class="source-line-no">1458</span><span id="line-1458">    * Unbuffered.</span>
-<span class="source-line-no">1459</span><span id="line-1459">    *</span>
-<span class="source-line-no">1460</span><span id="line-1460">    * @see Parser.Builder#unbuffered()</span>
-<span class="source-line-no">1461</span><span id="line-1461">    * @return</span>
-<span class="source-line-no">1462</span><span id="line-1462">    *    &lt;jk&gt;true&lt;/jk&gt; if parsers don't use internal buffering during parsing.</span>
-<span class="source-line-no">1463</span><span id="line-1463">    */</span>
-<span class="source-line-no">1464</span><span id="line-1464">   protected final boolean isUnbuffered() {</span>
-<span class="source-line-no">1465</span><span id="line-1465">      return unbuffered;</span>
-<span class="source-line-no">1466</span><span id="line-1466">   }</span>
-<span class="source-line-no">1467</span><span id="line-1467"></span>
-<span class="source-line-no">1468</span><span id="line-1468">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1469</span><span id="line-1469">   // Other methods</span>
-<span class="source-line-no">1470</span><span id="line-1470">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1471</span><span id="line-1471"></span>
-<span class="source-line-no">1472</span><span id="line-1472">   @Override /* Context */</span>
-<span class="source-line-no">1473</span><span id="line-1473">   protected JsonMap properties() {</span>
-<span class="source-line-no">1474</span><span id="line-1474">      return filteredMap()</span>
-<span class="source-line-no">1475</span><span id="line-1475">         .append("autoCloseStreams", autoCloseStreams)</span>
-<span class="source-line-no">1476</span><span id="line-1476">         .append("debugOutputLines", debugOutputLines)</span>
-<span class="source-line-no">1477</span><span id="line-1477">         .append("listener", listener)</span>
-<span class="source-line-no">1478</span><span id="line-1478">         .append("strict", strict)</span>
-<span class="source-line-no">1479</span><span id="line-1479">         .append("trimStrings", trimStrings)</span>
-<span class="source-line-no">1480</span><span id="line-1480">         .append("unbuffered", unbuffered);</span>
-<span class="source-line-no">1481</span><span id="line-1481">   }</span>
-<span class="source-line-no">1482</span><span id="line-1482">}</span>
+<span class="source-line-no">1359</span><span id="line-1359">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1360</span><span id="line-1360">   // Other methods</span>
+<span class="source-line-no">1361</span><span id="line-1361">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1362</span><span id="line-1362"></span>
+<span class="source-line-no">1363</span><span id="line-1363">   /**</span>
+<span class="source-line-no">1364</span><span id="line-1364">    * Returns the media types handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</span>
+<span class="source-line-no">1365</span><span id="line-1365">    *</span>
+<span class="source-line-no">1366</span><span id="line-1366">    * @return The list of media types.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1367</span><span id="line-1367">    */</span>
+<span class="source-line-no">1368</span><span id="line-1368">   public final List&lt;MediaType&gt; getMediaTypes() {</span>
+<span class="source-line-no">1369</span><span id="line-1369">      return Utils.alist(consumesArray);</span>
+<span class="source-line-no">1370</span><span id="line-1370">   }</span>
+<span class="source-line-no">1371</span><span id="line-1371"></span>
+<span class="source-line-no">1372</span><span id="line-1372">   /**</span>
+<span class="source-line-no">1373</span><span id="line-1373">    * Returns the first media type handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</span>
+<span class="source-line-no">1374</span><span id="line-1374">    *</span>
+<span class="source-line-no">1375</span><span id="line-1375">    * @return The media type.</span>
+<span class="source-line-no">1376</span><span id="line-1376">    */</span>
+<span class="source-line-no">1377</span><span id="line-1377">   public final MediaType getPrimaryMediaType() {</span>
+<span class="source-line-no">1378</span><span id="line-1378">      return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0];</span>
+<span class="source-line-no">1379</span><span id="line-1379">   }</span>
+<span class="source-line-no">1380</span><span id="line-1380"></span>
+<span class="source-line-no">1381</span><span id="line-1381">   /**</span>
+<span class="source-line-no">1382</span><span id="line-1382">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</span>
+<span class="source-line-no">1383</span><span id="line-1383">    *</span>
+<span class="source-line-no">1384</span><span id="line-1384">    * @param contentType The content type to test.</span>
+<span class="source-line-no">1385</span><span id="line-1385">    * @return &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</span>
+<span class="source-line-no">1386</span><span id="line-1386">    */</span>
+<span class="source-line-no">1387</span><span id="line-1387">   public boolean canHandle(String contentType) {</span>
+<span class="source-line-no">1388</span><span id="line-1388">      if (contentType != null)</span>
+<span class="source-line-no">1389</span><span id="line-1389">         for (MediaType mt : getMediaTypes())</span>
+<span class="source-line-no">1390</span><span id="line-1390">            if (contentType.equals(mt.toString()))</span>
+<span class="source-line-no">1391</span><span id="line-1391">               return true;</span>
+<span class="source-line-no">1392</span><span id="line-1392">      return false;</span>
+<span class="source-line-no">1393</span><span id="line-1393">   }</span>
+<span class="source-line-no">1394</span><span id="line-1394"></span>
+<span class="source-line-no">1395</span><span id="line-1395">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1396</span><span id="line-1396">   // Properties</span>
+<span class="source-line-no">1397</span><span id="line-1397">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1398</span><span id="line-1398"></span>
+<span class="source-line-no">1399</span><span id="line-1399">   /**</span>
+<span class="source-line-no">1400</span><span id="line-1400">    * Auto-close streams.</span>
+<span class="source-line-no">1401</span><span id="line-1401">    *</span>
+<span class="source-line-no">1402</span><span id="line-1402">    * @see Parser.Builder#autoCloseStreams()</span>
+<span class="source-line-no">1403</span><span id="line-1403">    * @return</span>
+<span class="source-line-no">1404</span><span id="line-1404">    *    &lt;jk&gt;true&lt;/jk&gt; if &lt;l&gt;InputStreams&lt;/l&gt; and &lt;l&gt;Readers&lt;/l&gt; passed into parsers will be closed</span>
+<span class="source-line-no">1405</span><span id="line-1405">    *    after parsing is complete.</span>
+<span class="source-line-no">1406</span><span id="line-1406">    */</span>
+<span class="source-line-no">1407</span><span id="line-1407">   protected final boolean isAutoCloseStreams() {</span>
+<span class="source-line-no">1408</span><span id="line-1408">      return autoCloseStreams;</span>
+<span class="source-line-no">1409</span><span id="line-1409">   }</span>
+<span class="source-line-no">1410</span><span id="line-1410"></span>
+<span class="source-line-no">1411</span><span id="line-1411">   /**</span>
+<span class="source-line-no">1412</span><span id="line-1412">    * Debug output lines.</span>
+<span class="source-line-no">1413</span><span id="line-1413">    *</span>
+<span class="source-line-no">1414</span><span id="line-1414">    * @see Parser.Builder#debugOutputLines(int)</span>
+<span class="source-line-no">1415</span><span id="line-1415">    * @return</span>
+<span class="source-line-no">1416</span><span id="line-1416">    *    The number of lines of input before and after the error location to be printed as part of the exception message.</span>
+<span class="source-line-no">1417</span><span id="line-1417">    */</span>
+<span class="source-line-no">1418</span><span id="line-1418">   protected final int getDebugOutputLines() {</span>
+<span class="source-line-no">1419</span><span id="line-1419">      return debugOutputLines;</span>
+<span class="source-line-no">1420</span><span id="line-1420">   }</span>
+<span class="source-line-no">1421</span><span id="line-1421"></span>
+<span class="source-line-no">1422</span><span id="line-1422">   /**</span>
+<span class="source-line-no">1423</span><span id="line-1423">    * Parser listener.</span>
+<span class="source-line-no">1424</span><span id="line-1424">    *</span>
+<span class="source-line-no">1425</span><span id="line-1425">    * @see Parser.Builder#listener(Class)</span>
+<span class="source-line-no">1426</span><span id="line-1426">    * @return</span>
+<span class="source-line-no">1427</span><span id="line-1427">    *    Class used to listen for errors and warnings that occur during parsing.</span>
+<span class="source-line-no">1428</span><span id="line-1428">    */</span>
+<span class="source-line-no">1429</span><span id="line-1429">   protected final Class&lt;? extends ParserListener&gt; getListener() {</span>
+<span class="source-line-no">1430</span><span id="line-1430">      return listener;</span>
+<span class="source-line-no">1431</span><span id="line-1431">   }</span>
+<span class="source-line-no">1432</span><span id="line-1432"></span>
+<span class="source-line-no">1433</span><span id="line-1433">   /**</span>
+<span class="source-line-no">1434</span><span id="line-1434">    * Strict mode.</span>
+<span class="source-line-no">1435</span><span id="line-1435">    *</span>
+<span class="source-line-no">1436</span><span id="line-1436">    * @see Parser.Builder#strict()</span>
+<span class="source-line-no">1437</span><span id="line-1437">    * @return</span>
+<span class="source-line-no">1438</span><span id="line-1438">    *    &lt;jk&gt;true&lt;/jk&gt; if strict mode for the parser is enabled.</span>
+<span class="source-line-no">1439</span><span id="line-1439">    */</span>
+<span class="source-line-no">1440</span><span id="line-1440">   protected final boolean isStrict() {</span>
+<span class="source-line-no">1441</span><span id="line-1441">      return strict;</span>
+<span class="source-line-no">1442</span><span id="line-1442">   }</span>
+<span class="source-line-no">1443</span><span id="line-1443"></span>
+<span class="source-line-no">1444</span><span id="line-1444">   /**</span>
+<span class="source-line-no">1445</span><span id="line-1445">    * Trim parsed strings.</span>
+<span class="source-line-no">1446</span><span id="line-1446">    *</span>
+<span class="source-line-no">1447</span><span id="line-1447">    * @see Parser.Builder#trimStrings()</span>
+<span class="source-line-no">1448</span><span id="line-1448">    * @return</span>
+<span class="source-line-no">1449</span><span id="line-1449">    *    &lt;jk&gt;true&lt;/jk&gt; if string values will be trimmed of whitespace using {@link String#trim()} before being added to</span>
+<span class="source-line-no">1450</span><span id="line-1450">    *    the POJO.</span>
+<span class="source-line-no">1451</span><span id="line-1451">    */</span>
+<span class="source-line-no">1452</span><span id="line-1452">   protected final boolean isTrimStrings() {</span>
+<span class="source-line-no">1453</span><span id="line-1453">      return trimStrings;</span>
+<span class="source-line-no">1454</span><span id="line-1454">   }</span>
+<span class="source-line-no">1455</span><span id="line-1455"></span>
+<span class="source-line-no">1456</span><span id="line-1456">   /**</span>
+<span class="source-line-no">1457</span><span id="line-1457">    * Unbuffered.</span>
+<span class="source-line-no">1458</span><span id="line-1458">    *</span>
+<span class="source-line-no">1459</span><span id="line-1459">    * @see Parser.Builder#unbuffered()</span>
+<span class="source-line-no">1460</span><span id="line-1460">    * @return</span>
+<span class="source-line-no">1461</span><span id="line-1461">    *    &lt;jk&gt;true&lt;/jk&gt; if parsers don't use internal buffering during parsing.</span>
+<span class="source-line-no">1462</span><span id="line-1462">    */</span>
+<span class="source-line-no">1463</span><span id="line-1463">   protected final boolean isUnbuffered() {</span>
+<span class="source-line-no">1464</span><span id="line-1464">      return unbuffered;</span>
+<span class="source-line-no">1465</span><span id="line-1465">   }</span>
+<span class="source-line-no">1466</span><span id="line-1466"></span>
+<span class="source-line-no">1467</span><span id="line-1467">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1468</span><span id="line-1468">   // Other methods</span>
+<span class="source-line-no">1469</span><span id="line-1469">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1470</span><span id="line-1470"></span>
+<span class="source-line-no">1471</span><span id="line-1471">   @Override /* Context */</span>
+<span class="source-line-no">1472</span><span id="line-1472">   protected JsonMap properties() {</span>
+<span class="source-line-no">1473</span><span id="line-1473">      return filteredMap()</span>
+<span class="source-line-no">1474</span><span id="line-1474">         .append("autoCloseStreams", autoCloseStreams)</span>
+<span class="source-line-no">1475</span><span id="line-1475">         .append("debugOutputLines", debugOutputLines)</span>
+<span class="source-line-no">1476</span><span id="line-1476">         .append("listener", listener)</span>
+<span class="source-line-no">1477</span><span id="line-1477">         .append("strict", strict)</span>
+<span class="source-line-no">1478</span><span id="line-1478">         .append("trimStrings", trimStrings)</span>
+<span class="source-line-no">1479</span><span id="line-1479">         .append("unbuffered", unbuffered);</span>
+<span class="source-line-no">1480</span><span id="line-1480">   }</span>
+<span class="source-line-no">1481</span><span id="line-1481">}</span>
 
 
 

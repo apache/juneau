@@ -98,37 +98,37 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple data element</jc>
    Data <jv>simple</jv> = <jsm>data</jsm>(<js>"12345"</js>, <js>"Product #12345"</js>);
- 
+
    <jc>// Data with styling</jc>
    Data <jv>styled</jv> = <jsm>data</jsm>(<js>"USD"</js>, <js>"US Dollar"</js>)
       ._class(<js>"currency"</js>);
- 
+
    <jc>// Data in a sentence</jc>
    P <jv>sentence</jv> = <jsm>p</jsm>(
       <js>"Price: "</js>,
       <jsm>data</jsm>(<js>"29.99"</js>, <js>"$29.99"</js>),
       <js>" per item"</js>
    );
- 
+
    <jc>// Data with complex content</jc>
    Data <jv>complex</jv> = <jsm>data</jsm>(<js>"2024-01-15"</js>,
       <js>"January 15, 2024"</js>,
       <jsm>span</jsm>()._class(<js>"date"</js>).children(<js>" (Monday)"</js>)
    );
- 
+
    <jc>// Data with multiple attributes</jc>
    Data <jv>multiple</jv> = <jsm>data</jsm>(<js>"SKU-12345"</js>, <js>"SKU: 12345"</js>)
       ._class(<js>"product-sku"</js>)
       .title(<js>"Product SKU"</js>);
- 
+
    <jc>// Data with ID</jc>
    Data <jv>withId</jv> = <jsm>data</jsm>(<js>"user-123"</js>, <js>"User ID: 123"</js>)
       .id(<js>"user-id"</js>)
       .children(<js>"User ID: 123"</js>);
- 
+
    <jc>// Data with styling</jc>
    Data <jv>styled2</jv> = <jsm>data</jsm>(<js>"active"</js>, <js>"Active"</js>)
       .style(<js>"color: green; font-weight: bold;"</js>);

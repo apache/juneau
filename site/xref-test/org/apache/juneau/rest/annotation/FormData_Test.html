@@ -314,17 +314,16 @@
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			.assertStatus(200)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			.assertContent(<span class="jxr_string">"[{a:2,b:'bar'}]"</span>);
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		f.post(<span class="jxr_string">"/d"</span>, <span class="jxr_string">"f1=@((a=1,b=foo))"</span>)
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			.run()
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			.assertStatus(200)
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			.assertContent(<span class="jxr_string">"[{a:1,b:'foo'}]"</span>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		f.post(<span class="jxr_string">"/d"</span>, <span class="jxr_string">"null"</span>)
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			.run()
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			.assertStatus(200)
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			.assertContent(<span class="jxr_string">"[{a:2,b:'bar'}]"</span>);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> }
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		f.post(<span class="jxr_string">"/d"</span>, <span class="jxr_string">"f1=@((a=1,b=foo))"</span>)
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			.run()
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			.assertStatus(200)
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			.assertContent(<span class="jxr_string">"[{a:1,b:'foo'}]"</span>);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		f.post(<span class="jxr_string">"/d"</span>, <span class="jxr_string">"null"</span>)
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			.run()
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			.assertStatus(200)
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			.assertContent(<span class="jxr_string">"[{a:2,b:'bar'}]"</span>);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

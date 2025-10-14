@@ -454,46 +454,45 @@
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,b.toString());
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	@Test <strong class="jxr_keyword">void</strong> a13_toString() {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">var</strong> s = client().rootUrl(<span class="jxr_string">"https://foo"</span>).build().toString();
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		assertTrue(s.contains(<span class="jxr_string">"rootUrl: 'https://foo'"</span>));
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	}
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	@Test <strong class="jxr_keyword">void</strong> a14_request_target() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		client().build().get(<span class="jxr_string">"/bean"</span>).target(<strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"localhost"</span>)).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	@Test <strong class="jxr_keyword">void</strong> a15_request_context() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		client().build().get(<span class="jxr_string">"/bean"</span>).context(<strong class="jxr_keyword">new</strong> BasicHttpContext()).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Test <strong class="jxr_keyword">void</strong> a16_request_uriParts() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> uri = client().build().get().uriScheme(<span class="jxr_string">"http"</span>).uriHost(<span class="jxr_string">"localhost"</span>).uriPort(8080).uriUserInfo(<span class="jxr_string">"foo:bar"</span>).uri(<span class="jxr_string">"/bean"</span>).uriFragment(<span class="jxr_string">"baz"</span>).queryData(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		uri = client().build().get().uriScheme(<span class="jxr_string">"http"</span>).uriHost(<span class="jxr_string">"localhost"</span>).uriPort(8080).uriUserInfo(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>).uri(<span class="jxr_string">"/bean"</span>).uriFragment(<span class="jxr_string">"baz"</span>).queryData(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		uri = client().build().get().uri(<span class="jxr_string">"http://localhost"</span>).uri(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		uri = client().build().get().uri(<strong class="jxr_keyword">new</strong> java.net.URI(<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>)).uri(<strong class="jxr_keyword">new</strong> java.net.URI(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>)).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<em class="jxr_comment">// Helper methods.</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder client() {
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).json5();
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	}
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder client(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c).json5();
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	}
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> }
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	@Test <strong class="jxr_keyword">void</strong> a13_toString() {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">var</strong> s = client().rootUrl(<span class="jxr_string">"https://foo"</span>).build().toString();
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		assertTrue(s.contains(<span class="jxr_string">"rootUrl: 'https://foo'"</span>));
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	@Test <strong class="jxr_keyword">void</strong> a14_request_target() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		client().build().get(<span class="jxr_string">"/bean"</span>).target(<strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"localhost"</span>)).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	@Test <strong class="jxr_keyword">void</strong> a15_request_context() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		client().build().get(<span class="jxr_string">"/bean"</span>).context(<strong class="jxr_keyword">new</strong> BasicHttpContext()).run().assertContent(<span class="jxr_string">"{f:1}"</span>);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	@Test <strong class="jxr_keyword">void</strong> a16_request_uriParts() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> uri = client().build().get().uriScheme(<span class="jxr_string">"http"</span>).uriHost(<span class="jxr_string">"localhost"</span>).uriPort(8080).uriUserInfo(<span class="jxr_string">"foo:bar"</span>).uri(<span class="jxr_string">"/bean"</span>).uriFragment(<span class="jxr_string">"baz"</span>).queryData(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		uri = client().build().get().uriScheme(<span class="jxr_string">"http"</span>).uriHost(<span class="jxr_string">"localhost"</span>).uriPort(8080).uriUserInfo(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>).uri(<span class="jxr_string">"/bean"</span>).uriFragment(<span class="jxr_string">"baz"</span>).queryData(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		uri = client().build().get().uri(<span class="jxr_string">"http://localhost"</span>).uri(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		uri = client().build().get().uri(<strong class="jxr_keyword">new</strong> java.net.URI(<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>)).uri(<strong class="jxr_keyword">new</strong> java.net.URI(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>)).run().assertContent(<span class="jxr_string">"{f:1}"</span>).getRequest().getURI();
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertEquals(<span class="jxr_string">"http://foo:bar@localhost:8080/bean?foo=bar#baz"</span>,uri.toString());
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<em class="jxr_comment">// Helper methods.</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder client() {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).json5();
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	}
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder client(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c).json5();
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

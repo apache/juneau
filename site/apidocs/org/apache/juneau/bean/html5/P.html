@@ -97,11 +97,11 @@ loadScripts(document, 'script');</script>
  <p class='bcode w800'>
    <jc>// Simple paragraph</jc>
    P <jv>simple</jv> = <jsm>p</jsm>(<js>"This is a simple paragraph of text."</js>);
- 
+
    <jc>// Paragraph with styling</jc>
    P <jv>styled</jv> = <jsm>p</jsm>(<js>"This paragraph has custom styling."</js>)
       ._class(<js>"lead"</js>);
- 
+
    <jc>// Paragraph with mixed content</jc>
    P <jv>mixed</jv> = <jsm>p</jsm>(
       <js>"This paragraph contains "</js>,
@@ -110,19 +110,19 @@ loadScripts(document, 'script');</script>
       <jsm>em</jsm>(<js>"italic text"</js>),
       <js>"."</js>
    );
- 
+
    <jc>// Paragraph with link</jc>
    P <jv>withLink</jv> = <jsm>p</jsm>(
       <js>"Visit our "</js>,
       <jsm>a</jsm>(<js>"/help"</js>, <js>"help page"</js>),
       <js>" for more information."</js>
    );
- 
+
    <jc>// Paragraph with ID and class</jc>
    P <jv>withAttrs</jv> = <jsm>p</jsm>(<js>"Important notice"</js>)
       .id(<js>"notice"</js>)
       ._class(<js>"alert alert-warning"</js>);
- 
+
    <jc>// Paragraph with inline styles</jc>
    P <jv>withStyle</jv> = <jsm>p</jsm>(<js>"Styled paragraph"</js>)
       .style(<js>"color: blue; font-size: 16px;"</js>);

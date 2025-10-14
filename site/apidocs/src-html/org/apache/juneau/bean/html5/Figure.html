@@ -46,44 +46,44 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">036</span><span id="line-36"> * </span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Simple figure with image&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    Figure &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">039</span><span id="line-39"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/images/sunset.jpg"&lt;/js&gt;, &lt;js&gt;"Sunset"&lt;/js&gt;),</span>
 <span class="source-line-no">040</span><span id="line-40"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"A beautiful sunset over the mountains."&lt;/js&gt;)</span>
 <span class="source-line-no">041</span><span id="line-41"> *    );</span>
-<span class="source-line-no">042</span><span id="line-42"> * </span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;jc&gt;// Figure with code snippet&lt;/jc&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    Figure &lt;jv&gt;codeFigure&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">045</span><span id="line-45"> *       &lt;jsm&gt;pre&lt;/jsm&gt;(&lt;jsm&gt;code&lt;/jsm&gt;(&lt;js&gt;"function hello() {\n  return 'Hello World';\n}"&lt;/js&gt;)),</span>
 <span class="source-line-no">046</span><span id="line-46"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"A simple JavaScript function."&lt;/js&gt;)</span>
 <span class="source-line-no">047</span><span id="line-47"> *    );</span>
-<span class="source-line-no">048</span><span id="line-48"> * </span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Figure with styling&lt;/jc&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    Figure &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">051</span><span id="line-51"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/charts/sales.png"&lt;/js&gt;, &lt;js&gt;"Sales Chart"&lt;/js&gt;),</span>
 <span class="source-line-no">052</span><span id="line-52"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Monthly sales data for 2024."&lt;/js&gt;)</span>
 <span class="source-line-no">053</span><span id="line-53"> *    )._class(&lt;js&gt;"chart-figure"&lt;/js&gt;);</span>
-<span class="source-line-no">054</span><span id="line-54"> * </span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Figure with multiple elements&lt;/jc&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *    Figure &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/images/diagram.png"&lt;/js&gt;, &lt;js&gt;"Process Diagram"&lt;/js&gt;),</span>
 <span class="source-line-no">058</span><span id="line-58"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"This diagram shows the complete workflow."&lt;/js&gt;),</span>
 <span class="source-line-no">059</span><span id="line-59"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Figure 1: System Architecture Overview."&lt;/js&gt;)</span>
 <span class="source-line-no">060</span><span id="line-60"> *    );</span>
-<span class="source-line-no">061</span><span id="line-61"> * </span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;jc&gt;// Figure with ID&lt;/jc&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    Figure &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">064</span><span id="line-64"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/charts/main.png"&lt;/js&gt;, &lt;js&gt;"Main Chart"&lt;/js&gt;),</span>
 <span class="source-line-no">065</span><span id="line-65"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Primary performance metrics."&lt;/js&gt;)</span>
 <span class="source-line-no">066</span><span id="line-66"> *    ).id(&lt;js&gt;"main-chart"&lt;/js&gt;);</span>
-<span class="source-line-no">067</span><span id="line-67"> * </span>
+<span class="source-line-no">067</span><span id="line-67"> *</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;jc&gt;// Figure with styling&lt;/jc&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *    Figure &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">070</span><span id="line-70"> *       &lt;jsm&gt;img&lt;/jsm&gt;(&lt;js&gt;"/images/example.png"&lt;/js&gt;, &lt;js&gt;"Example"&lt;/js&gt;),</span>
 <span class="source-line-no">071</span><span id="line-71"> *       &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"An example of the new feature."&lt;/js&gt;)</span>
 <span class="source-line-no">072</span><span id="line-72"> *    ).style(&lt;js&gt;"border: 1px solid #ccc; padding: 10px; margin: 20px 0;"&lt;/js&gt;);</span>
-<span class="source-line-no">073</span><span id="line-73"> * </span>
+<span class="source-line-no">073</span><span id="line-73"> *</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;jc&gt;// Figure with table&lt;/jc&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    Figure &lt;jv&gt;tableFigure&lt;/jv&gt; = &lt;jsm&gt;figure&lt;/jsm&gt;(</span>
 <span class="source-line-no">076</span><span id="line-76"> *       &lt;jsm&gt;table&lt;/jsm&gt;(</span>

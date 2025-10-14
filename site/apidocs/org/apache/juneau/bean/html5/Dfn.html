@@ -97,35 +97,35 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple definition</jc>
    Dfn <jv>simple</jv> = <jsm>dfn</jsm>(<js>"HTML"</js>);
- 
+
    <jc>// Definition with styling</jc>
    Dfn <jv>styled</jv> = <jsm>dfn</jsm>(<js>"CSS"</js>)
       ._class(<js>"term"</js>);
- 
+
    <jc>// Definition in a sentence</jc>
    P <jv>sentence</jv> = <jsm>p</jsm>(
       <js>"The "</js>,
       <jsm>dfn</jsm>(<js>"DOM"</js>),
       <js>" represents the structure of a web page."</js>
    );
- 
+
    <jc>// Definition with complex content</jc>
    Dfn <jv>complex</jv> = <jsm>dfn</jsm>(
       <js>"JavaScript"</js>,
       <jsm>span</jsm>()._class(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
    );
- 
+
    <jc>// Definition with title</jc>
    Dfn <jv>withTitle</jv> = <jsm>dfn</jsm>(<js>"HTML"</js>)
       .title(<js>"HyperText Markup Language"</js>);
- 
+
    <jc>// Definition with ID</jc>
    Dfn <jv>withId</jv> = <jsm>dfn</jsm>(<js>"CSS"</js>)
       .id(<js>"css-term"</js>);
- 
+
    <jc>// Definition with styling</jc>
    Dfn <jv>styled2</jv> = <jsm>dfn</jsm>(<js>"API"</js>)
       .style(<js>"font-style: italic; color: blue;"</js>);

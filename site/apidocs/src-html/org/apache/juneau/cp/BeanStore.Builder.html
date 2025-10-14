@@ -640,83 +640,82 @@
 <span class="source-line-no">627</span><span id="line-627">      return true;</span>
 <span class="source-line-no">628</span><span id="line-628">   }</span>
 <span class="source-line-no">629</span><span id="line-629"></span>
-<span class="source-line-no">630</span><span id="line-630"></span>
-<span class="source-line-no">631</span><span id="line-631">   /**</span>
-<span class="source-line-no">632</span><span id="line-632">    * Returns the corresponding beans in this factory for the specified param types.</span>
-<span class="source-line-no">633</span><span id="line-633">    *</span>
-<span class="source-line-no">634</span><span id="line-634">    * @param executable The constructor or method to get the params for.</span>
-<span class="source-line-no">635</span><span id="line-635">    * @return The corresponding beans in this factory for the specified param types.</span>
-<span class="source-line-no">636</span><span id="line-636">    */</span>
-<span class="source-line-no">637</span><span id="line-637">   public Object[] getParams(ExecutableInfo executable) {</span>
-<span class="source-line-no">638</span><span id="line-638">      Object[] o = new Object[executable.getParamCount()];</span>
-<span class="source-line-no">639</span><span id="line-639">      for (int i = 0; i &lt; executable.getParamCount(); i++) {</span>
-<span class="source-line-no">640</span><span id="line-640">         ParamInfo pi = executable.getParam(i);</span>
-<span class="source-line-no">641</span><span id="line-641">         ClassInfo pt = pi.getParameterType();</span>
-<span class="source-line-no">642</span><span id="line-642">         if (i == 0 &amp;&amp; outer.isPresent() &amp;&amp; pt.isInstance(outer.get())) {</span>
-<span class="source-line-no">643</span><span id="line-643">            o[i] = outer.get();</span>
-<span class="source-line-no">644</span><span id="line-644">         } else if (pt.is(BeanStore.class)) {</span>
-<span class="source-line-no">645</span><span id="line-645">            o[i] = this;</span>
-<span class="source-line-no">646</span><span id="line-646">         } else {</span>
-<span class="source-line-no">647</span><span id="line-647">            String beanName = findBeanName(pi);</span>
-<span class="source-line-no">648</span><span id="line-648">            Class&lt;?&gt; ptc = pt.unwrap(Optional.class).inner();</span>
-<span class="source-line-no">649</span><span id="line-649">            Optional&lt;?&gt; o2 = beanName == null ? getBean(ptc) : getBean(ptc, beanName);</span>
-<span class="source-line-no">650</span><span id="line-650">            o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);</span>
-<span class="source-line-no">651</span><span id="line-651">         }</span>
-<span class="source-line-no">652</span><span id="line-652">      }</span>
-<span class="source-line-no">653</span><span id="line-653">      return o;</span>
-<span class="source-line-no">654</span><span id="line-654">   }</span>
-<span class="source-line-no">655</span><span id="line-655"></span>
-<span class="source-line-no">656</span><span id="line-656">   @Override /* Object */</span>
-<span class="source-line-no">657</span><span id="line-657">   public String toString() {</span>
-<span class="source-line-no">658</span><span id="line-658">      return Json5.of(properties());</span>
-<span class="source-line-no">659</span><span id="line-659">   }</span>
-<span class="source-line-no">660</span><span id="line-660"></span>
-<span class="source-line-no">661</span><span id="line-661">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">662</span><span id="line-662">   // Extension methods</span>
-<span class="source-line-no">663</span><span id="line-663">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">664</span><span id="line-664"></span>
-<span class="source-line-no">665</span><span id="line-665">   /**</span>
-<span class="source-line-no">666</span><span id="line-666">    * Creates an entry in this store for the specified bean.</span>
-<span class="source-line-no">667</span><span id="line-667">    *</span>
-<span class="source-line-no">668</span><span id="line-668">    * &lt;p&gt;</span>
-<span class="source-line-no">669</span><span id="line-669">    * Subclasses can override this method to create their own entry subtypes.</span>
-<span class="source-line-no">670</span><span id="line-670">    *</span>
-<span class="source-line-no">671</span><span id="line-671">    * @param &lt;T&gt; The class type to associate with the bean.</span>
-<span class="source-line-no">672</span><span id="line-672">    * @param type The class type to associate with the bean.</span>
-<span class="source-line-no">673</span><span id="line-673">    * @param bean The bean supplier.</span>
-<span class="source-line-no">674</span><span id="line-674">    * @param name Optional name to associate with the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">675</span><span id="line-675">    * @return A new bean store entry.</span>
-<span class="source-line-no">676</span><span id="line-676">    */</span>
-<span class="source-line-no">677</span><span id="line-677">   protected &lt;T&gt; BeanStoreEntry&lt;T&gt; createEntry(Class&lt;T&gt; type, Supplier&lt;T&gt; bean, String name) {</span>
-<span class="source-line-no">678</span><span id="line-678">      return BeanStoreEntry.create(type, bean, name);</span>
-<span class="source-line-no">679</span><span id="line-679">   }</span>
-<span class="source-line-no">680</span><span id="line-680">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">681</span><span id="line-681">   // Helper methods</span>
-<span class="source-line-no">682</span><span id="line-682">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">683</span><span id="line-683">   private String findBeanName(ParamInfo pi) {</span>
-<span class="source-line-no">684</span><span id="line-684">      Annotation n = pi.getAnnotation(Annotation.class, x -&gt; x.annotationType().getSimpleName().equals("Named"));</span>
-<span class="source-line-no">685</span><span id="line-685">      if (n != null)</span>
-<span class="source-line-no">686</span><span id="line-686">         return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);</span>
-<span class="source-line-no">687</span><span id="line-687">      return null;</span>
-<span class="source-line-no">688</span><span id="line-688">   }</span>
-<span class="source-line-no">689</span><span id="line-689"></span>
-<span class="source-line-no">690</span><span id="line-690">   private void assertCanWrite() {</span>
-<span class="source-line-no">691</span><span id="line-691">      if (readOnly)</span>
-<span class="source-line-no">692</span><span id="line-692">         throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");</span>
-<span class="source-line-no">693</span><span id="line-693">   }</span>
-<span class="source-line-no">694</span><span id="line-694"></span>
-<span class="source-line-no">695</span><span id="line-695">   private JsonMap properties() {</span>
-<span class="source-line-no">696</span><span id="line-696">      Predicate&lt;Boolean&gt; nf = Utils::isTrue;</span>
-<span class="source-line-no">697</span><span id="line-697">      return filteredMap()</span>
-<span class="source-line-no">698</span><span id="line-698">         .append("identity", Utils2.identity(this))</span>
-<span class="source-line-no">699</span><span id="line-699">         .append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))</span>
-<span class="source-line-no">700</span><span id="line-700">         .append("outer", Utils2.identity(outer.orElse(null)))</span>
-<span class="source-line-no">701</span><span id="line-701">         .append("parent", parent.map(BeanStore::properties).orElse(null))</span>
-<span class="source-line-no">702</span><span id="line-702">         .appendIf(nf, "readOnly", readOnly)</span>
-<span class="source-line-no">703</span><span id="line-703">         .appendIf(nf, "threadSafe", threadSafe)</span>
-<span class="source-line-no">704</span><span id="line-704">      ;</span>
-<span class="source-line-no">705</span><span id="line-705">   }</span>
-<span class="source-line-no">706</span><span id="line-706">}</span>
+<span class="source-line-no">630</span><span id="line-630">   /**</span>
+<span class="source-line-no">631</span><span id="line-631">    * Returns the corresponding beans in this factory for the specified param types.</span>
+<span class="source-line-no">632</span><span id="line-632">    *</span>
+<span class="source-line-no">633</span><span id="line-633">    * @param executable The constructor or method to get the params for.</span>
+<span class="source-line-no">634</span><span id="line-634">    * @return The corresponding beans in this factory for the specified param types.</span>
+<span class="source-line-no">635</span><span id="line-635">    */</span>
+<span class="source-line-no">636</span><span id="line-636">   public Object[] getParams(ExecutableInfo executable) {</span>
+<span class="source-line-no">637</span><span id="line-637">      Object[] o = new Object[executable.getParamCount()];</span>
+<span class="source-line-no">638</span><span id="line-638">      for (int i = 0; i &lt; executable.getParamCount(); i++) {</span>
+<span class="source-line-no">639</span><span id="line-639">         ParamInfo pi = executable.getParam(i);</span>
+<span class="source-line-no">640</span><span id="line-640">         ClassInfo pt = pi.getParameterType();</span>
+<span class="source-line-no">641</span><span id="line-641">         if (i == 0 &amp;&amp; outer.isPresent() &amp;&amp; pt.isInstance(outer.get())) {</span>
+<span class="source-line-no">642</span><span id="line-642">            o[i] = outer.get();</span>
+<span class="source-line-no">643</span><span id="line-643">         } else if (pt.is(BeanStore.class)) {</span>
+<span class="source-line-no">644</span><span id="line-644">            o[i] = this;</span>
+<span class="source-line-no">645</span><span id="line-645">         } else {</span>
+<span class="source-line-no">646</span><span id="line-646">            String beanName = findBeanName(pi);</span>
+<span class="source-line-no">647</span><span id="line-647">            Class&lt;?&gt; ptc = pt.unwrap(Optional.class).inner();</span>
+<span class="source-line-no">648</span><span id="line-648">            Optional&lt;?&gt; o2 = beanName == null ? getBean(ptc) : getBean(ptc, beanName);</span>
+<span class="source-line-no">649</span><span id="line-649">            o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);</span>
+<span class="source-line-no">650</span><span id="line-650">         }</span>
+<span class="source-line-no">651</span><span id="line-651">      }</span>
+<span class="source-line-no">652</span><span id="line-652">      return o;</span>
+<span class="source-line-no">653</span><span id="line-653">   }</span>
+<span class="source-line-no">654</span><span id="line-654"></span>
+<span class="source-line-no">655</span><span id="line-655">   @Override /* Object */</span>
+<span class="source-line-no">656</span><span id="line-656">   public String toString() {</span>
+<span class="source-line-no">657</span><span id="line-657">      return Json5.of(properties());</span>
+<span class="source-line-no">658</span><span id="line-658">   }</span>
+<span class="source-line-no">659</span><span id="line-659"></span>
+<span class="source-line-no">660</span><span id="line-660">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">661</span><span id="line-661">   // Extension methods</span>
+<span class="source-line-no">662</span><span id="line-662">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">663</span><span id="line-663"></span>
+<span class="source-line-no">664</span><span id="line-664">   /**</span>
+<span class="source-line-no">665</span><span id="line-665">    * Creates an entry in this store for the specified bean.</span>
+<span class="source-line-no">666</span><span id="line-666">    *</span>
+<span class="source-line-no">667</span><span id="line-667">    * &lt;p&gt;</span>
+<span class="source-line-no">668</span><span id="line-668">    * Subclasses can override this method to create their own entry subtypes.</span>
+<span class="source-line-no">669</span><span id="line-669">    *</span>
+<span class="source-line-no">670</span><span id="line-670">    * @param &lt;T&gt; The class type to associate with the bean.</span>
+<span class="source-line-no">671</span><span id="line-671">    * @param type The class type to associate with the bean.</span>
+<span class="source-line-no">672</span><span id="line-672">    * @param bean The bean supplier.</span>
+<span class="source-line-no">673</span><span id="line-673">    * @param name Optional name to associate with the bean.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">674</span><span id="line-674">    * @return A new bean store entry.</span>
+<span class="source-line-no">675</span><span id="line-675">    */</span>
+<span class="source-line-no">676</span><span id="line-676">   protected &lt;T&gt; BeanStoreEntry&lt;T&gt; createEntry(Class&lt;T&gt; type, Supplier&lt;T&gt; bean, String name) {</span>
+<span class="source-line-no">677</span><span id="line-677">      return BeanStoreEntry.create(type, bean, name);</span>
+<span class="source-line-no">678</span><span id="line-678">   }</span>
+<span class="source-line-no">679</span><span id="line-679">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">680</span><span id="line-680">   // Helper methods</span>
+<span class="source-line-no">681</span><span id="line-681">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">682</span><span id="line-682">   private String findBeanName(ParamInfo pi) {</span>
+<span class="source-line-no">683</span><span id="line-683">      Annotation n = pi.getAnnotation(Annotation.class, x -&gt; x.annotationType().getSimpleName().equals("Named"));</span>
+<span class="source-line-no">684</span><span id="line-684">      if (n != null)</span>
+<span class="source-line-no">685</span><span id="line-685">         return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);</span>
+<span class="source-line-no">686</span><span id="line-686">      return null;</span>
+<span class="source-line-no">687</span><span id="line-687">   }</span>
+<span class="source-line-no">688</span><span id="line-688"></span>
+<span class="source-line-no">689</span><span id="line-689">   private void assertCanWrite() {</span>
+<span class="source-line-no">690</span><span id="line-690">      if (readOnly)</span>
+<span class="source-line-no">691</span><span id="line-691">         throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");</span>
+<span class="source-line-no">692</span><span id="line-692">   }</span>
+<span class="source-line-no">693</span><span id="line-693"></span>
+<span class="source-line-no">694</span><span id="line-694">   private JsonMap properties() {</span>
+<span class="source-line-no">695</span><span id="line-695">      Predicate&lt;Boolean&gt; nf = Utils::isTrue;</span>
+<span class="source-line-no">696</span><span id="line-696">      return filteredMap()</span>
+<span class="source-line-no">697</span><span id="line-697">         .append("identity", Utils2.identity(this))</span>
+<span class="source-line-no">698</span><span id="line-698">         .append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))</span>
+<span class="source-line-no">699</span><span id="line-699">         .append("outer", Utils2.identity(outer.orElse(null)))</span>
+<span class="source-line-no">700</span><span id="line-700">         .append("parent", parent.map(BeanStore::properties).orElse(null))</span>
+<span class="source-line-no">701</span><span id="line-701">         .appendIf(nf, "readOnly", readOnly)</span>
+<span class="source-line-no">702</span><span id="line-702">         .appendIf(nf, "threadSafe", threadSafe)</span>
+<span class="source-line-no">703</span><span id="line-703">      ;</span>
+<span class="source-line-no">704</span><span id="line-704">   }</span>
+<span class="source-line-no">705</span><span id="line-705">}</span>
 
 
 

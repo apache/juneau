@@ -610,408 +610,407 @@
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 		validateXml(t, s.build());
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 	}
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<em class="jxr_comment">// Namespace on package, no namespace on class.</em>
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	@Test <strong class="jxr_keyword">void</strong> a20_nsOnPackageNoNsOnClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T3" href="../../../../org/apache/juneau/xml/xml1b/T3.html#T3">T3</a>();
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		assertTrue(t.equals(p.parse(r, T3.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		s.enableNamespaces();
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		s.disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			Namespace.of(<span class="jxr_string">"p1"</span>,<span class="jxr_string">"http://p1"</span>),
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		);
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		assertTrue(t.equals(p.parse(r, T3.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		s.enableNamespaces();
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		assertTrue(t.equals(p.parse(r, T3.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<em class="jxr_comment">// Namespace on package, no namespace on class, element name on class.</em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	@Test <strong class="jxr_keyword">void</strong> a21_nsOnPackageNoNsOnClassElementNameOnClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T4" href="../../../../org/apache/juneau/xml/xml1b/T4.html#T4">T4</a>();
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		assertEquals(<span class="jxr_string">"&lt;T4&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		assertTrue(t.equals(p.parse(r, T4.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		s.enableNamespaces();
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4 xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>),
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			Namespace.of(<span class="jxr_string">"p1"</span>,<span class="jxr_string">"http://p1"</span>)
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		);
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		assertTrue(t.equals(p.parse(r, T4.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		assertEquals(<span class="jxr_string">"&lt;T4&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		assertEquals(<span class="jxr_string">"&lt;T4&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		s.enableNamespaces();
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		assertTrue(t.equals(p.parse(r, T4.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	}
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<em class="jxr_comment">// Namespace on package, namespace on class, element name on class.</em>
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	@Test <strong class="jxr_keyword">void</strong> a22_nsOnPackageNsOnClassElementNameOnClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T5" href="../../../../org/apache/juneau/xml/xml1b/T5.html#T5">T5</a>();
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		assertEquals(<span class="jxr_string">"&lt;T5&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		assertTrue(t.equals(p.parse(r, T5.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		s.ns().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5 xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		);
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 		assertTrue(t.equals(p.parse(r, T5.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		assertEquals(<span class="jxr_string">"&lt;T5&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		assertEquals(<span class="jxr_string">"&lt;T5&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		s.ns();
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		assertTrue(t.equals(p.parse(r, T5.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 	}
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<em class="jxr_comment">// Namespace on package, namespace on class, no element name on class.</em>
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	@Test <strong class="jxr_keyword">void</strong> a23_nsOnPackageNsOnClassNoElementNameOnClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T6" href="../../../../org/apache/juneau/xml/xml1b/T6.html#T6">T6</a>();
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		assertTrue(t.equals(p.parse(r, T6.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		s.ns();
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		);
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		assertTrue(t.equals(p.parse(r, T6.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		s.ns();
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		assertTrue(t.equals(p.parse(r, T6.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 	}
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<em class="jxr_comment">// Combination of namespaces and overridden bean property names.</em>
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	@Test <strong class="jxr_keyword">void</strong> a24_comboOfNsAndOverriddenBeanPropertyNames() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T7" href="../../../../org/apache/juneau/xml/xml1b/T7.html#T7">T7</a>();
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;g1&gt;1&lt;/g1&gt;&lt;g2&gt;2&lt;/g2&gt;&lt;g3&gt;3&lt;/g3&gt;&lt;g4&gt;4&lt;/g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		assertTrue(t.equals(p.parse(r, T7.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		s.enableNamespaces();
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>),
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 			Namespace.of(<span class="jxr_string">"p1"</span>,<span class="jxr_string">"http://p1"</span>)
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		);
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		assertTrue(t.equals(p.parse(r, T7.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> 
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;g1&gt;1&lt;/g1&gt;&lt;g2&gt;2&lt;/g2&gt;&lt;g3&gt;3&lt;/g3&gt;&lt;g4&gt;4&lt;/g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;g1&gt;1&lt;/g1&gt;&lt;g2&gt;2&lt;/g2&gt;&lt;g3&gt;3&lt;/g3&gt;&lt;g4&gt;4&lt;/g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		s.ns().addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		assertTrue(t.equals(p.parse(r, T7.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 	}
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 	<em class="jxr_comment">// @XmlNs annotation</em>
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	@Test <strong class="jxr_keyword">void</strong> a25_xmlNsAnnotation() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T8" href="../../../../org/apache/juneau/xml/xml1c/T8.html#T8">T8</a>();
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		assertTrue(t.equals(p.parse(r, T8.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> 
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		s.ns().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> 
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		);
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		assertTrue(t.equals(p.parse(r, T8.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		s.ns();
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p2='http://p2' xmlns:p1='http://p1' xmlns:c1='http://c1' xmlns:f1='http://f1'&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		assertTrue(t.equals(p.parse(r, T8.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	}
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 	<em class="jxr_comment">// @Xml.ns on package, @Xml.nsUri not on package but in @XmlNs.</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 	@Test <strong class="jxr_keyword">void</strong> a26_xmlNsOnPackageNsUriInXmlNs() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T9" href="../../../../org/apache/juneau/xml/xml1c/T9.html#T9">T9</a>();
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		assertTrue(t.equals(p.parse(r, T9.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		s.ns().disableAutoDetectNamespaces();
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<em class="jxr_comment">// Manually set namespaces</em>
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		s.namespaces(
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		);
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		assertTrue(t.equals(p.parse(r, T9.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		s.addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		s.ns();
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		assertTrue(t.equals(p.parse(r, T9.<strong class="jxr_keyword">class</strong>)));
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	}
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<em class="jxr_comment">// @Xml.format=ATTR</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	@Test <strong class="jxr_keyword">void</strong> a27_xmlAttrs() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq();
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> Q();
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		t.f1 = url(<span class="jxr_string">"http://xf1"</span>);
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		t.f2 = <span class="jxr_string">"xf2"</span>;
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		t.f3 = <span class="jxr_string">"xf3"</span>;
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		assertEquals(<span class="jxr_string">"&lt;object f1='http://xf1' f2='xf2' x3='xf3'/&gt;"</span>, r);
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		t = p.parse(r, Q.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		assertEquals(<span class="jxr_string">"http://xf1"</span>, t.f1.toString());
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		assertEquals(<span class="jxr_string">"xf2"</span>, t.f2);
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		assertEquals(<span class="jxr_string">"xf3"</span>, t.f3);
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		s.ns().addNamespaceUrisToRoot();
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		r = s.build().serialize(t);
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:ns='http://ns' xmlns:nsf1='http://nsf1' xmlns:nsf3='http://nsf3' nsf1:f1='http://xf1' ns:f2='xf2' nsf3:x3='xf3'/&gt;"</span>, r);
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		validateXml(t, s.build());
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		t = p.parse(r, Q.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		assertEquals(<span class="jxr_string">"http://xf1"</span>, t.f1.toString());
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		assertEquals(<span class="jxr_string">"xf2"</span>, t.f2);
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		assertEquals(<span class="jxr_string">"xf3"</span>, t.f3);
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	}
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	@Xml(prefix=<span class="jxr_string">"ns"</span>, namespace=<span class="jxr_string">"http://ns"</span>)
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q {
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		@Xml(format=ATTR, prefix=<span class="jxr_string">"nsf1"</span>, namespace=<span class="jxr_string">"http://nsf1"</span>)
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">public</strong> URL f1;
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		@Xml(format=ATTR)
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 		<strong class="jxr_keyword">public</strong> String f2;
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		@Beanp(name=<span class="jxr_string">"x3"</span>)
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		@Xml(format=ATTR, prefix=<span class="jxr_string">"nsf3"</span>, namespace=<span class="jxr_string">"http://nsf3"</span>)
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<strong class="jxr_keyword">public</strong> String f3;
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<strong class="jxr_keyword">public</strong> Q() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 			f1 = url(<span class="jxr_string">"http://f1"</span>);
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			f2 = <span class="jxr_string">"f2"</span>;
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 			f3 = <span class="jxr_string">"f3"</span>;
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		}
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 	}
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> }
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	<em class="jxr_comment">// Namespace on package, no namespace on class.</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	@Test <strong class="jxr_keyword">void</strong> a20_nsOnPackageNoNsOnClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T3" href="../../../../org/apache/juneau/xml/xml1b/T3.html#T3">T3</a>();
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertTrue(t.equals(p.parse(r, T3.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		s.enableNamespaces();
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		s.disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			Namespace.of(<span class="jxr_string">"p1"</span>,<span class="jxr_string">"http://p1"</span>),
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		assertTrue(t.equals(p.parse(r, T3.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		s.enableNamespaces();
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		assertTrue(t.equals(p.parse(r, T3.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	}
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<em class="jxr_comment">// Namespace on package, no namespace on class, element name on class.</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	@Test <strong class="jxr_keyword">void</strong> a21_nsOnPackageNoNsOnClassElementNameOnClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T4" href="../../../../org/apache/juneau/xml/xml1b/T4.html#T4">T4</a>();
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		assertEquals(<span class="jxr_string">"&lt;T4&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		assertTrue(t.equals(p.parse(r, T4.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		s.enableNamespaces();
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4 xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>),
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			Namespace.of(<span class="jxr_string">"p1"</span>,<span class="jxr_string">"http://p1"</span>)
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		assertTrue(t.equals(p.parse(r, T4.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		assertEquals(<span class="jxr_string">"&lt;T4&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		assertEquals(<span class="jxr_string">"&lt;T4&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		s.enableNamespaces();
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		assertEquals(<span class="jxr_string">"&lt;p1:T4 xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;p1:f3&gt;3&lt;/p1:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/p1:T4&gt;"</span>, r);
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		assertTrue(t.equals(p.parse(r, T4.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	}
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<em class="jxr_comment">// Namespace on package, namespace on class, element name on class.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	@Test <strong class="jxr_keyword">void</strong> a22_nsOnPackageNsOnClassElementNameOnClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T5" href="../../../../org/apache/juneau/xml/xml1b/T5.html#T5">T5</a>();
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		assertEquals(<span class="jxr_string">"&lt;T5&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		assertTrue(t.equals(p.parse(r, T5.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		s.ns().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5 xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		);
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		assertTrue(t.equals(p.parse(r, T5.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		assertEquals(<span class="jxr_string">"&lt;T5&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		assertEquals(<span class="jxr_string">"&lt;T5&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		s.ns();
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		assertEquals(<span class="jxr_string">"&lt;foo:T5 xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/foo:T5&gt;"</span>, r);
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		assertTrue(t.equals(p.parse(r, T5.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	}
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	<em class="jxr_comment">// Namespace on package, namespace on class, no element name on class.</em>
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	@Test <strong class="jxr_keyword">void</strong> a23_nsOnPackageNsOnClassNoElementNameOnClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T6" href="../../../../org/apache/juneau/xml/xml1b/T6.html#T6">T6</a>();
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		assertTrue(t.equals(p.parse(r, T6.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		s.ns();
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		);
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		assertTrue(t.equals(p.parse(r, T6.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		s.ns();
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;foo:f1&gt;1&lt;/foo:f1&gt;&lt;bar:f2&gt;2&lt;/bar:f2&gt;&lt;foo:f3&gt;3&lt;/foo:f3&gt;&lt;baz:f4&gt;4&lt;/baz:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		assertTrue(t.equals(p.parse(r, T6.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	}
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	<em class="jxr_comment">// Combination of namespaces and overridden bean property names.</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	@Test <strong class="jxr_keyword">void</strong> a24_comboOfNsAndOverriddenBeanPropertyNames() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T7" href="../../../../org/apache/juneau/xml/xml1b/T7.html#T7">T7</a>();
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;g1&gt;1&lt;/g1&gt;&lt;g2&gt;2&lt;/g2&gt;&lt;g3&gt;3&lt;/g3&gt;&lt;g4&gt;4&lt;/g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		assertTrue(t.equals(p.parse(r, T7.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		s.enableNamespaces();
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		s.addNamespaceUrisToRoot().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>),
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 			Namespace.of(<span class="jxr_string">"p1"</span>,<span class="jxr_string">"http://p1"</span>)
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		);
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz' xmlns:p1='http://p1'&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 		assertTrue(t.equals(p.parse(r, T7.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;g1&gt;1&lt;/g1&gt;&lt;g2&gt;2&lt;/g2&gt;&lt;g3&gt;3&lt;/g3&gt;&lt;g4&gt;4&lt;/g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;g1&gt;1&lt;/g1&gt;&lt;g2&gt;2&lt;/g2&gt;&lt;g3&gt;3&lt;/g3&gt;&lt;g4&gt;4&lt;/g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 		s.ns().addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:g1&gt;1&lt;/p1:g1&gt;&lt;bar:g2&gt;2&lt;/bar:g2&gt;&lt;p1:g3&gt;3&lt;/p1:g3&gt;&lt;baz:g4&gt;4&lt;/baz:g4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		assertTrue(t.equals(p.parse(r, T7.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	}
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	<em class="jxr_comment">// @XmlNs annotation</em>
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 	@Test <strong class="jxr_keyword">void</strong> a25_xmlNsAnnotation() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T8" href="../../../../org/apache/juneau/xml/xml1c/T8.html#T8">T8</a>();
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		assertTrue(t.equals(p.parse(r, T8.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		s.ns().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		);
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 		assertTrue(t.equals(p.parse(r, T8.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;f2&gt;2&lt;/f2&gt;&lt;f3&gt;3&lt;/f3&gt;&lt;f4&gt;4&lt;/f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		s.ns();
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p2='http://p2' xmlns:p1='http://p1' xmlns:c1='http://c1' xmlns:f1='http://f1'&gt;&lt;p2:f1&gt;1&lt;/p2:f1&gt;&lt;p1:f2&gt;2&lt;/p1:f2&gt;&lt;c1:f3&gt;3&lt;/c1:f3&gt;&lt;f1:f4&gt;4&lt;/f1:f4&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		assertTrue(t.equals(p.parse(r, T8.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	}
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	<em class="jxr_comment">// @Xml.ns on package, @Xml.nsUri not on package but in @XmlNs.</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 	@Test <strong class="jxr_keyword">void</strong> a26_xmlNsOnPackageNsUriInXmlNs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> <a name="T9" href="../../../../org/apache/juneau/xml/xml1c/T9.html#T9">T9</a>();
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 		assertTrue(t.equals(p.parse(r, T9.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		s.ns().disableAutoDetectNamespaces();
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		<em class="jxr_comment">// Add namespace URIs to root, but don't auto-detect.</em>
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<em class="jxr_comment">// Only xsi should be added to root.</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		<em class="jxr_comment">// Manually set namespaces</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		s.namespaces(
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 			Namespace.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"http://foo"</span>),
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			Namespace.of(<span class="jxr_string">"bar"</span>,<span class="jxr_string">"http://bar"</span>),
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			Namespace.of(<span class="jxr_string">"baz"</span>,<span class="jxr_string">"http://baz"</span>)
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		);
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:foo='http://foo' xmlns:bar='http://bar' xmlns:baz='http://baz'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		<em class="jxr_comment">// Auto-detect namespaces.</em>
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		assertTrue(t.equals(p.parse(r, T9.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		s.addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;f1&gt;1&lt;/f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		s.ns();
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:p1='http://p1'&gt;&lt;p1:f1&gt;1&lt;/p1:f1&gt;&lt;/object&gt;"</span>, r);
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertTrue(t.equals(p.parse(r, T9.<strong class="jxr_keyword">class</strong>)));
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 	}
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_comment">// @Xml.format=ATTR</em>
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	@Test <strong class="jxr_keyword">void</strong> a27_xmlAttrs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().sq();
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> Q();
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		t.f1 = url(<span class="jxr_string">"http://xf1"</span>);
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 		t.f2 = <span class="jxr_string">"xf2"</span>;
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 		t.f3 = <span class="jxr_string">"xf3"</span>;
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<strong class="jxr_keyword">var</strong> r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		assertEquals(<span class="jxr_string">"&lt;object f1='http://xf1' f2='xf2' x3='xf3'/&gt;"</span>, r);
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		t = p.parse(r, Q.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		assertEquals(<span class="jxr_string">"http://xf1"</span>, t.f1.toString());
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		assertEquals(<span class="jxr_string">"xf2"</span>, t.f2);
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		assertEquals(<span class="jxr_string">"xf3"</span>, t.f3);
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		s.ns().addNamespaceUrisToRoot();
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		r = s.build().serialize(t);
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		assertEquals(<span class="jxr_string">"&lt;object xmlns='http://www.apache.org/2013/Juneau' xmlns:ns='http://ns' xmlns:nsf1='http://nsf1' xmlns:nsf3='http://nsf3' nsf1:f1='http://xf1' ns:f2='xf2' nsf3:x3='xf3'/&gt;"</span>, r);
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		validateXml(t, s.build());
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		t = p.parse(r, Q.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		assertEquals(<span class="jxr_string">"http://xf1"</span>, t.f1.toString());
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		assertEquals(<span class="jxr_string">"xf2"</span>, t.f2);
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		assertEquals(<span class="jxr_string">"xf3"</span>, t.f3);
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	}
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	@Xml(prefix=<span class="jxr_string">"ns"</span>, namespace=<span class="jxr_string">"http://ns"</span>)
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q {
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		@Xml(format=ATTR, prefix=<span class="jxr_string">"nsf1"</span>, namespace=<span class="jxr_string">"http://nsf1"</span>)
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<strong class="jxr_keyword">public</strong> URL f1;
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 		@Xml(format=ATTR)
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		<strong class="jxr_keyword">public</strong> String f2;
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		@Beanp(name=<span class="jxr_string">"x3"</span>)
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		@Xml(format=ATTR, prefix=<span class="jxr_string">"nsf3"</span>, namespace=<span class="jxr_string">"http://nsf3"</span>)
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		<strong class="jxr_keyword">public</strong> String f3;
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<strong class="jxr_keyword">public</strong> Q() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 			f1 = url(<span class="jxr_string">"http://f1"</span>);
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 			f2 = <span class="jxr_string">"f2"</span>;
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			f3 = <span class="jxr_string">"f3"</span>;
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		}
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 	}
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

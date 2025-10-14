@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple table body with data rows</jc>
    Tbody <jv>simple</jv> = <jsm>tbody</jsm>(
       <jsm>tr</jsm>(
@@ -111,7 +111,7 @@ loadScripts(document, 'script');</script>
          <jsm>td</jsm>(<js>"Los Angeles"</js>)
       )
    );
- 
+
    <jc>// Table body with styling</jc>
    Tbody <jv>styled</jv> = <jsm>tbody</jsm>(
       <jsm>tr</jsm>(
@@ -120,7 +120,7 @@ loadScripts(document, 'script');</script>
          <jsm>td</jsm>(<js>"$10.00"</js>)
       )
    )._class(<js>"data-rows"</js>);
- 
+
    <jc>// Table body with multiple rows</jc>
    Tbody <jv>multiple</jv> = <jsm>tbody</jsm>(
       .children(
@@ -135,7 +135,7 @@ loadScripts(document, 'script');</script>
                new Td().children("Row 2, Col 2")
             )
       );
- 
+
    // Table body with event handlers
    Tbody interactive = new Tbody()
       .onclick("handleRowClick(event)")

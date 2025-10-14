@@ -124,21 +124,20 @@
 <span class="source-line-no">111</span><span id="line-111">      return readBytes(is);</span>
 <span class="source-line-no">112</span><span id="line-112">   }</span>
 <span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   /**</span>
-<span class="source-line-no">116</span><span id="line-116">    * Convert the specified byte array into an input stream.</span>
-<span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * @param b The byte array.</span>
-<span class="source-line-no">119</span><span id="line-119">    * @param hint Contains a hint about what subtype is being requested.</span>
-<span class="source-line-no">120</span><span id="line-120">    * @return The byte array.</span>
-<span class="source-line-no">121</span><span id="line-121">    */</span>
-<span class="source-line-no">122</span><span id="line-122">   protected InputStream toStream(byte[] b, ClassMeta&lt;?&gt; hint) {</span>
-<span class="source-line-no">123</span><span id="line-123">      Class&lt;?&gt; c = hint == null ? InputStream.class : hint.getInnerClass();</span>
-<span class="source-line-no">124</span><span id="line-124">      if (c == InputStream.class || c == ByteArrayInputStream.class)</span>
-<span class="source-line-no">125</span><span id="line-125">         return new ByteArrayInputStream(b);</span>
-<span class="source-line-no">126</span><span id="line-126">      return null;</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128">}</span>
+<span class="source-line-no">114</span><span id="line-114">   /**</span>
+<span class="source-line-no">115</span><span id="line-115">    * Convert the specified byte array into an input stream.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param b The byte array.</span>
+<span class="source-line-no">118</span><span id="line-118">    * @param hint Contains a hint about what subtype is being requested.</span>
+<span class="source-line-no">119</span><span id="line-119">    * @return The byte array.</span>
+<span class="source-line-no">120</span><span id="line-120">    */</span>
+<span class="source-line-no">121</span><span id="line-121">   protected InputStream toStream(byte[] b, ClassMeta&lt;?&gt; hint) {</span>
+<span class="source-line-no">122</span><span id="line-122">      Class&lt;?&gt; c = hint == null ? InputStream.class : hint.getInnerClass();</span>
+<span class="source-line-no">123</span><span id="line-123">      if (c == InputStream.class || c == ByteArrayInputStream.class)</span>
+<span class="source-line-no">124</span><span id="line-124">         return new ByteArrayInputStream(b);</span>
+<span class="source-line-no">125</span><span id="line-125">      return null;</span>
+<span class="source-line-no">126</span><span id="line-126">   }</span>
+<span class="source-line-no">127</span><span id="line-127">}</span>
 
 
 

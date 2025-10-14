@@ -46,21 +46,21 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">036</span><span id="line-36"> * </span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Simple datalist&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    Datalist &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;datalist&lt;/jsm&gt;(&lt;js&gt;"colors"&lt;/js&gt;,</span>
 <span class="source-line-no">039</span><span id="line-39"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"red"&lt;/js&gt;, &lt;js&gt;"Red"&lt;/js&gt;),</span>
 <span class="source-line-no">040</span><span id="line-40"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"green"&lt;/js&gt;, &lt;js&gt;"Green"&lt;/js&gt;),</span>
 <span class="source-line-no">041</span><span id="line-41"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"blue"&lt;/js&gt;, &lt;js&gt;"Blue"&lt;/js&gt;)</span>
 <span class="source-line-no">042</span><span id="line-42"> *    );</span>
-<span class="source-line-no">043</span><span id="line-43"> * </span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;jc&gt;// Datalist with styling&lt;/jc&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    Datalist &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;datalist&lt;/jsm&gt;(&lt;js&gt;"countries"&lt;/js&gt;,</span>
 <span class="source-line-no">046</span><span id="line-46"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"us"&lt;/js&gt;, &lt;js&gt;"United States"&lt;/js&gt;),</span>
 <span class="source-line-no">047</span><span id="line-47"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"ca"&lt;/js&gt;, &lt;js&gt;"Canada"&lt;/js&gt;),</span>
 <span class="source-line-no">048</span><span id="line-48"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"mx"&lt;/js&gt;, &lt;js&gt;"Mexico"&lt;/js&gt;)</span>
 <span class="source-line-no">049</span><span id="line-49"> *    )._class(&lt;js&gt;"country-list"&lt;/js&gt;);</span>
-<span class="source-line-no">050</span><span id="line-50"> * </span>
+<span class="source-line-no">050</span><span id="line-50"> *</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Datalist with multiple options&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    Datalist &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;datalist&lt;/jsm&gt;(&lt;js&gt;"fruits"&lt;/js&gt;,</span>
 <span class="source-line-no">053</span><span id="line-53"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"apple"&lt;/js&gt;, &lt;js&gt;"Apple"&lt;/js&gt;),</span>
@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"date"&lt;/js&gt;, &lt;js&gt;"Date"&lt;/js&gt;),</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"elderberry"&lt;/js&gt;, &lt;js&gt;"Elderberry"&lt;/js&gt;)</span>
 <span class="source-line-no">058</span><span id="line-58"> *    );</span>
-<span class="source-line-no">059</span><span id="line-59"> * </span>
+<span class="source-line-no">059</span><span id="line-59"> *</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;jc&gt;// Datalist with complex options&lt;/jc&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    Datalist &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;datalist&lt;/jsm&gt;(&lt;js&gt;"products"&lt;/js&gt;,</span>
 <span class="source-line-no">062</span><span id="line-62"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"laptop-001"&lt;/js&gt;, &lt;js&gt;"Laptop Pro 15\" - $1,299"&lt;/js&gt;),</span>
@@ -83,7 +83,7 @@
 <span class="source-line-no">070</span><span id="line-70"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"los-angeles"&lt;/js&gt;, &lt;js&gt;"Los Angeles"&lt;/js&gt;),</span>
 <span class="source-line-no">071</span><span id="line-71"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"chicago"&lt;/js&gt;, &lt;js&gt;"Chicago"&lt;/js&gt;)</span>
 <span class="source-line-no">072</span><span id="line-72"> *    );</span>
-<span class="source-line-no">073</span><span id="line-73"> * </span>
+<span class="source-line-no">073</span><span id="line-73"> *</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;jc&gt;// Datalist with styling&lt;/jc&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    Datalist &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;datalist&lt;/jsm&gt;(&lt;js&gt;"sizes"&lt;/js&gt;,</span>
 <span class="source-line-no">076</span><span id="line-76"> *       &lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"xs"&lt;/js&gt;, &lt;js&gt;"Extra Small"&lt;/js&gt;),</span>

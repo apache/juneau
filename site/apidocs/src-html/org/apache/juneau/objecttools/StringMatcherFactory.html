@@ -143,47 +143,46 @@
 <span class="source-line-no">130</span><span id="line-130">                  s = sb.toString();</span>
 <span class="source-line-no">131</span><span id="line-131">               }</span>
 <span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">               int flags = Pattern.DOTALL;</span>
-<span class="source-line-no">135</span><span id="line-135">               if (ignoreCase)</span>
-<span class="source-line-no">136</span><span id="line-136">                  flags |= Pattern.CASE_INSENSITIVE;</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">               Pattern p = Pattern.compile(s, flags);</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">               if (prefix == '-')</span>
-<span class="source-line-no">141</span><span id="line-141">                  nots.add(p);</span>
-<span class="source-line-no">142</span><span id="line-142">               else if (prefix == '+')</span>
-<span class="source-line-no">143</span><span id="line-143">                  ands.add(p);</span>
-<span class="source-line-no">144</span><span id="line-144">               else</span>
-<span class="source-line-no">145</span><span id="line-145">                  ors.add(p);</span>
-<span class="source-line-no">146</span><span id="line-146">            }</span>
-<span class="source-line-no">147</span><span id="line-147">         }</span>
-<span class="source-line-no">148</span><span id="line-148">         orPatterns = ors.toArray(new Pattern[ors.size()]);</span>
-<span class="source-line-no">149</span><span id="line-149">         andPatterns = ands.toArray(new Pattern[ands.size()]);</span>
-<span class="source-line-no">150</span><span id="line-150">         notPatterns = nots.toArray(new Pattern[nots.size()]);</span>
-<span class="source-line-no">151</span><span id="line-151">      }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">      @Override</span>
-<span class="source-line-no">154</span><span id="line-154">      public boolean matches(ClassMeta&lt;?&gt; cm, Object o) {</span>
-<span class="source-line-no">155</span><span id="line-155">         String s = (String)o;</span>
-<span class="source-line-no">156</span><span id="line-156">         for (Pattern andPattern : andPatterns)</span>
-<span class="source-line-no">157</span><span id="line-157">                if (! andPattern.matcher(s).matches())</span>
-<span class="source-line-no">158</span><span id="line-158">               return false;</span>
-<span class="source-line-no">159</span><span id="line-159">         for (Pattern notPattern : notPatterns)</span>
-<span class="source-line-no">160</span><span id="line-160">                if (notPattern.matcher(s).matches())</span>
-<span class="source-line-no">161</span><span id="line-161">               return false;</span>
-<span class="source-line-no">162</span><span id="line-162">         for (Pattern orPattern : orPatterns)</span>
-<span class="source-line-no">163</span><span id="line-163">                if (orPattern.matcher(s).matches())</span>
-<span class="source-line-no">164</span><span id="line-164">               return true;</span>
-<span class="source-line-no">165</span><span id="line-165">         return orPatterns.length == 0;</span>
-<span class="source-line-no">166</span><span id="line-166">      }</span>
-<span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">      @Override</span>
-<span class="source-line-no">169</span><span id="line-169">      public String toString() {</span>
-<span class="source-line-no">170</span><span id="line-170">         return pattern;</span>
-<span class="source-line-no">171</span><span id="line-171">      }</span>
-<span class="source-line-no">172</span><span id="line-172">   }</span>
-<span class="source-line-no">173</span><span id="line-173">}</span>
+<span class="source-line-no">133</span><span id="line-133">               int flags = Pattern.DOTALL;</span>
+<span class="source-line-no">134</span><span id="line-134">               if (ignoreCase)</span>
+<span class="source-line-no">135</span><span id="line-135">                  flags |= Pattern.CASE_INSENSITIVE;</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">               Pattern p = Pattern.compile(s, flags);</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">               if (prefix == '-')</span>
+<span class="source-line-no">140</span><span id="line-140">                  nots.add(p);</span>
+<span class="source-line-no">141</span><span id="line-141">               else if (prefix == '+')</span>
+<span class="source-line-no">142</span><span id="line-142">                  ands.add(p);</span>
+<span class="source-line-no">143</span><span id="line-143">               else</span>
+<span class="source-line-no">144</span><span id="line-144">                  ors.add(p);</span>
+<span class="source-line-no">145</span><span id="line-145">            }</span>
+<span class="source-line-no">146</span><span id="line-146">         }</span>
+<span class="source-line-no">147</span><span id="line-147">         orPatterns = ors.toArray(new Pattern[ors.size()]);</span>
+<span class="source-line-no">148</span><span id="line-148">         andPatterns = ands.toArray(new Pattern[ands.size()]);</span>
+<span class="source-line-no">149</span><span id="line-149">         notPatterns = nots.toArray(new Pattern[nots.size()]);</span>
+<span class="source-line-no">150</span><span id="line-150">      }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">      @Override</span>
+<span class="source-line-no">153</span><span id="line-153">      public boolean matches(ClassMeta&lt;?&gt; cm, Object o) {</span>
+<span class="source-line-no">154</span><span id="line-154">         String s = (String)o;</span>
+<span class="source-line-no">155</span><span id="line-155">         for (Pattern andPattern : andPatterns)</span>
+<span class="source-line-no">156</span><span id="line-156">                if (! andPattern.matcher(s).matches())</span>
+<span class="source-line-no">157</span><span id="line-157">               return false;</span>
+<span class="source-line-no">158</span><span id="line-158">         for (Pattern notPattern : notPatterns)</span>
+<span class="source-line-no">159</span><span id="line-159">                if (notPattern.matcher(s).matches())</span>
+<span class="source-line-no">160</span><span id="line-160">               return false;</span>
+<span class="source-line-no">161</span><span id="line-161">         for (Pattern orPattern : orPatterns)</span>
+<span class="source-line-no">162</span><span id="line-162">                if (orPattern.matcher(s).matches())</span>
+<span class="source-line-no">163</span><span id="line-163">               return true;</span>
+<span class="source-line-no">164</span><span id="line-164">         return orPatterns.length == 0;</span>
+<span class="source-line-no">165</span><span id="line-165">      }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">      @Override</span>
+<span class="source-line-no">168</span><span id="line-168">      public String toString() {</span>
+<span class="source-line-no">169</span><span id="line-169">         return pattern;</span>
+<span class="source-line-no">170</span><span id="line-170">      }</span>
+<span class="source-line-no">171</span><span id="line-171">   }</span>
+<span class="source-line-no">172</span><span id="line-172">}</span>
 
 
 

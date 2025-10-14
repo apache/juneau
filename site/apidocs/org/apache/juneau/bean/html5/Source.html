@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Video with multiple sources</jc>
    Video <jv>video</jv> = <jsm>video</jsm>()
       .controls(<jk>true</jk>)
@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
          <jsm>source</jsm>().src(<js>"movie.webm"</js>).type(<js>"video/webm"</js>),
          <jsm>source</jsm>().src(<js>"movie.ogg"</js>).type(<js>"video/ogg"</js>)
       );
- 
+
    <jc>// Audio with multiple sources</jc>
    Audio <jv>audio</jv> = <jsm>audio</jsm>()
       .controls(<jk>true</jk>)
@@ -115,13 +115,13 @@ loadScripts(document, 'script');</script>
          <jsm>source</jsm>().src(<js>"sound.ogg"</js>).type(<js>"audio/ogg"</js>),
          <jsm>source</jsm>().src(<js>"sound.wav"</js>).type(<js>"audio/wav"</js>)
       );
- 
+
    <jc>// Picture with multiple sources</jc>
    Picture <jv>picture</jv> = <jsm>picture</jsm>(
       <jsm>source</jsm>().src(<js>"image.webp"</js>).type(<js>"image/webp"</js>),
       <jsm>source</jsm>().src(<js>"image.jpg"</js>).type(<js>"image/jpeg"</js>)
    );
- 
+
    <jc>// Source with media query</jc>
    Source <jv>responsive</jv> = <jsm>source</jsm>()
       .src(<js>"large-image.jpg"</js>)

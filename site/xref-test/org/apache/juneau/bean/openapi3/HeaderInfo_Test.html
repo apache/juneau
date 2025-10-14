@@ -302,7 +302,7 @@
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			refStack.add(<span class="jxr_string">"#/components/schemas/Header1"</span>); <em class="jxr_comment">// Pre-populate to simulate circular reference</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">var</strong> header = headerInfo().setRef(<span class="jxr_string">"#/components/schemas/Header1"</span>);
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">var</strong> result = header.resolveRefs(openApi, refStack, 10);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 
@@ -321,7 +321,7 @@
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			refStack.add(<span class="jxr_string">"dummy1"</span>);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			refStack.add(<span class="jxr_string">"dummy2"</span>);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			refStack.add(<span class="jxr_string">"dummy3"</span>);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">var</strong> header = headerInfo().setRef(<span class="jxr_string">"#/components/schemas/MyHeader"</span>);
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">var</strong> result = header.resolveRefs(openApi, refStack, 3); <em class="jxr_comment">// maxDepth = 3, refStack.size() = 3</em>
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 

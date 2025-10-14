@@ -98,20 +98,20 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple head with title</jc>
    Head <jv>simple</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"My Website"</js>),
       <jsm>meta</jsm>().charset(<js>"UTF-8"</js>)
    );
- 
+
    <jc>// Head with styling</jc>
    Head <jv>styled</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"Styled Page"</js>),
       <jsm>meta</jsm>().charset(<js>"UTF-8"</js>),
       <jsm>link</jsm>().rel(<js>"stylesheet"</js>).href(<js>"/css/style.css"</js>)
    );
- 
+
    <jc>// Head with complex content</jc>
    Head <jv>complex</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"Complete Page"</js>),
@@ -121,19 +121,19 @@ loadScripts(document, 'script');</script>
       <jsm>link</jsm>().rel(<js>"icon"</js>).href(<js>"/favicon.ico"</js>),
       <jsm>script</jsm>().src(<js>"/js/main.js"</js>)
    );
- 
+
    <jc>// Head with ID</jc>
    Head <jv>withId</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"Page with ID"</js>),
       <jsm>meta</jsm>().charset(<js>"UTF-8"</js>)
    ).id(<js>"page-head"</js>);
- 
+
    <jc>// Head with styling</jc>
    Head <jv>styled2</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"Styled Head"</js>),
       <jsm>meta</jsm>().charset(<js>"UTF-8"</js>)
    ).style(<js>"background-color: #f0f0f0;"</js>);
- 
+
    <jc>// Head with multiple elements</jc>
    Head <jv>multiple</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"Multi-Element Head"</js>),
@@ -144,7 +144,7 @@ loadScripts(document, 'script');</script>
       <jsm>script</jsm>().src(<js>"/js/jquery.js"</js>),
       <jsm>script</jsm>().src(<js>"/js/app.js"</js>)
    );
- 
+
    <jc>// Head with base element</jc>
    Head <jv>withBase</jv> = <jsm>head</jsm>(
       <jsm>title</jsm>(<js>"Page with Base"</js>),

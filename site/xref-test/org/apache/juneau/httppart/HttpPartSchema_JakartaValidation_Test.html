@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Tests for Jakarta Bean Validation integration with HttpPartSchema.</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * This test uses the real jakarta.validation-api (test scope dependency) to verify</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * that HttpPartSchema correctly processes Jakarta Validation constraint annotations.</em>
@@ -333,7 +333,7 @@
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			.apply(field.getAnnotation(Size.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 			.apply(field.getAnnotation(Pattern.<strong class="jxr_keyword">class</strong>))
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 			.build();
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertTrue(s.isRequired());
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 		assertEquals(5L, s.getMinLength());
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 		assertEquals(20L, s.getMaxLength());

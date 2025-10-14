@@ -98,21 +98,21 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple datalist</jc>
    Datalist <jv>simple</jv> = <jsm>datalist</jsm>(<js>"colors"</js>,
       <jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>),
       <jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>),
       <jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
    );
- 
+
    <jc>// Datalist with styling</jc>
    Datalist <jv>styled</jv> = <jsm>datalist</jsm>(<js>"countries"</js>,
       <jsm>option</jsm>(<js>"us"</js>, <js>"United States"</js>),
       <jsm>option</jsm>(<js>"ca"</js>, <js>"Canada"</js>),
       <jsm>option</jsm>(<js>"mx"</js>, <js>"Mexico"</js>)
    )._class(<js>"country-list"</js>);
- 
+
    <jc>// Datalist with multiple options</jc>
    Datalist <jv>multiple</jv> = <jsm>datalist</jsm>(<js>"fruits"</js>,
       <jsm>option</jsm>(<js>"apple"</js>, <js>"Apple"</js>),
@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
       <jsm>option</jsm>(<js>"date"</js>, <js>"Date"</js>),
       <jsm>option</jsm>(<js>"elderberry"</js>, <js>"Elderberry"</js>)
    );
- 
+
    <jc>// Datalist with complex options</jc>
    Datalist <jv>complex</jv> = <jsm>datalist</jsm>(<js>"products"</js>,
       <jsm>option</jsm>(<js>"laptop-001"</js>, <js>"Laptop Pro 15\" - $1,299"</js>),
@@ -135,7 +135,7 @@ loadScripts(document, 'script');</script>
       <jsm>option</jsm>(<js>"los-angeles"</js>, <js>"Los Angeles"</js>),
       <jsm>option</jsm>(<js>"chicago"</js>, <js>"Chicago"</js>)
    );
- 
+
    <jc>// Datalist with styling</jc>
    Datalist <jv>styled2</jv> = <jsm>datalist</jsm>(<js>"sizes"</js>,
       <jsm>option</jsm>(<js>"xs"</js>, <js>"Extra Small"</js>),

@@ -360,7 +360,7 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">var</strong> refStack = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;String&gt;();
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 			refStack.add(<span class="jxr_string">"#/definitions/Header1"</span>); <em class="jxr_comment">// Pre-populate the stack to simulate circular reference</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">var</strong> header = headerInfo().setRef(<span class="jxr_string">"#/definitions/Header1"</span>);
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">var</strong> result = header.resolveRefs(swagger, refStack, 10);
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
@@ -379,7 +379,7 @@
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			refStack.add(<span class="jxr_string">"dummy1"</span>);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			refStack.add(<span class="jxr_string">"dummy2"</span>);
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 			refStack.add(<span class="jxr_string">"dummy3"</span>);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">var</strong> header = headerInfo().setRef(<span class="jxr_string">"#/definitions/MyHeader"</span>);
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">var</strong> result = header.resolveRefs(swagger, refStack, 3); <em class="jxr_comment">// maxDepth = 3, refStack.size() = 3</em>
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 

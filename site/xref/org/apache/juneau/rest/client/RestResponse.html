@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability, </em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability,</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 		while catching and logging checked exceptions to follow AutoCloseable best practices.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> *</em>
@@ -881,8 +881,8 @@
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Unchecked exceptions ({@link RuntimeException} and {@link Error}) from interceptors are allowed to propagate.</em>
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> <em class="jxr_javadoccomment">	 * 		This ensures programming errors and serious issues are visible during development and testing.</em>
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown. </em>
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> <em class="jxr_javadoccomment">	 * 		This follows AutoCloseable best practices and prevents close exceptions from interfering with </em>
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown.</em>
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> <em class="jxr_javadoccomment">	 * 		This follows AutoCloseable best practices and prevents close exceptions from interfering with</em>
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> <em class="jxr_javadoccomment">	 * 		try-with-resources cleanup or masking the original exception.</em>
 <a class="jxr_linenumber" name="L879" href="#L879">879</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L880" href="#L880">880</a> <em class="jxr_javadoccomment">	 */</em>

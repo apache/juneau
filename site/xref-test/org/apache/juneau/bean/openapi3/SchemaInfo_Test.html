@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			assertTrue(bean().strict().isStrict());
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			assertFalse(bean().strict(false).isStrict());
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		}
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		@Test <strong class="jxr_keyword">void</strong> a13_collectionSetters() {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">var</strong> x = bean()
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				.setEnum(list(<span class="jxr_string">"a1"</span>, <span class="jxr_string">"a2"</span>))
@@ -392,7 +392,7 @@
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 			refStack.add(<span class="jxr_string">"dummy1"</span>);
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			refStack.add(<span class="jxr_string">"dummy2"</span>);
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 			refStack.add(<span class="jxr_string">"dummy3"</span>);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">var</strong> schema = schemaInfo().setRef(<span class="jxr_string">"#/components/schemas/MySchema"</span>);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">var</strong> result = schema.resolveRefs(openApi, refStack, 3);
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 

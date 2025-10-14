@@ -97,27 +97,27 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Right-to-left text</jc>
    Bdo <jv>rtl</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"مرحبا بالعالم"</js>);
- 
+
    <jc>// Left-to-right text</jc>
    Bdo <jv>ltr</jv> = <jsm>bdo</jsm>(<js>"ltr"</js>, <js>"Hello World"</js>);
- 
+
    <jc>// Mixed direction text</jc>
    Bdo <jv>mixed</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"Hello "</js>, <jsm>bdo</jsm>(<js>"ltr"</js>, <js>"World"</js>), <js>" مرحبا"</js>);
- 
+
    <jc>// Hebrew text with explicit direction</jc>
    Bdo <jv>hebrew</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"שלום עולם"</js>);
- 
+
    <jc>// Arabic text with explicit direction</jc>
    Bdo <jv>arabic</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"مرحبا بالعالم"</js>);
- 
+
    <jc>// Styled bidirectional text</jc>
    Bdo <jv>styled</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"نص باللغة العربية"</js>)
       ._class(<js>"bidi-text"</js>)
       .style(<js>"color: blue;"</js>);
- 
+
    <jc>// Numbers with explicit direction</jc>
    Bdo <jv>numbers</jv> = <jsm>bdo</jsm>(<js>"rtl"</js>, <js>"١٢٣٤٥"</js>);
  </p>

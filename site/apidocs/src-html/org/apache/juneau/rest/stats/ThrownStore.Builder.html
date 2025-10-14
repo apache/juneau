@@ -201,152 +201,151 @@
 <span class="source-line-no">188</span><span id="line-188">      this.ignoreClasses = u(s);</span>
 <span class="source-line-no">189</span><span id="line-189">   }</span>
 <span class="source-line-no">190</span><span id="line-190"></span>
-<span class="source-line-no">191</span><span id="line-191"></span>
-<span class="source-line-no">192</span><span id="line-192">   /**</span>
-<span class="source-line-no">193</span><span id="line-193">    * Adds the specified thrown exception to this database.</span>
-<span class="source-line-no">194</span><span id="line-194">    *</span>
-<span class="source-line-no">195</span><span id="line-195">    * @param e The exception to add.</span>
-<span class="source-line-no">196</span><span id="line-196">    * @return This object.</span>
-<span class="source-line-no">197</span><span id="line-197">    */</span>
-<span class="source-line-no">198</span><span id="line-198">   public ThrownStats add(Throwable e) {</span>
-<span class="source-line-no">199</span><span id="line-199">      ThrownStats s = find(e);</span>
-<span class="source-line-no">200</span><span id="line-200">      s.increment();</span>
-<span class="source-line-no">201</span><span id="line-201">      parent.ifPresent(x-&gt;x.add(e));</span>
-<span class="source-line-no">202</span><span id="line-202">      return s;</span>
-<span class="source-line-no">203</span><span id="line-203">   }</span>
-<span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">   /**</span>
-<span class="source-line-no">206</span><span id="line-206">    * Retrieves the stats for the specified thrown exception.</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * @param e The exception.</span>
-<span class="source-line-no">209</span><span id="line-209">    * @return A clone of the stats, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">210</span><span id="line-210">    */</span>
-<span class="source-line-no">211</span><span id="line-211">   public Optional&lt;ThrownStats&gt; getStats(Throwable e) {</span>
-<span class="source-line-no">212</span><span id="line-212">      return getStats(hash(e));</span>
-<span class="source-line-no">213</span><span id="line-213">   }</span>
-<span class="source-line-no">214</span><span id="line-214"></span>
-<span class="source-line-no">215</span><span id="line-215">   /**</span>
-<span class="source-line-no">216</span><span id="line-216">    * Retrieves the stack trace information for the exception with the specified hash as calculated by {@link #hash(Throwable)}.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * @param hash The hash of the exception.</span>
-<span class="source-line-no">219</span><span id="line-219">    * @return A clone of the stack trace info, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">220</span><span id="line-220">    */</span>
-<span class="source-line-no">221</span><span id="line-221">   public Optional&lt;ThrownStats&gt; getStats(long hash) {</span>
-<span class="source-line-no">222</span><span id="line-222">      ThrownStats s = db.get(hash);</span>
-<span class="source-line-no">223</span><span id="line-223">      return Utils.opt(s == null ? null : s.clone());</span>
-<span class="source-line-no">224</span><span id="line-224">   }</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">   /**</span>
-<span class="source-line-no">227</span><span id="line-227">    * Returns the list of all stack traces in this database.</span>
-<span class="source-line-no">228</span><span id="line-228">    *</span>
-<span class="source-line-no">229</span><span id="line-229">    * @return The list of all stack traces in this database, cloned and sorted by count descending.</span>
-<span class="source-line-no">230</span><span id="line-230">    */</span>
-<span class="source-line-no">231</span><span id="line-231">   public List&lt;ThrownStats&gt; getStats() {</span>
-<span class="source-line-no">232</span><span id="line-232">      return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());</span>
-<span class="source-line-no">233</span><span id="line-233">   }</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   /**</span>
-<span class="source-line-no">236</span><span id="line-236">    * Clears out the stack trace cache.</span>
-<span class="source-line-no">237</span><span id="line-237">    */</span>
-<span class="source-line-no">238</span><span id="line-238">   public void reset() {</span>
-<span class="source-line-no">239</span><span id="line-239">      db.clear();</span>
-<span class="source-line-no">240</span><span id="line-240">   }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">   /**</span>
-<span class="source-line-no">243</span><span id="line-243">    * Calculates a 32-bit hash for the specified throwable based on the stack trace generated by {@link #createStackTrace(Throwable)}.</span>
-<span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * &lt;p&gt;</span>
-<span class="source-line-no">246</span><span id="line-246">    * Subclasses can override this method to provide their own implementation.</span>
-<span class="source-line-no">247</span><span id="line-247">    *</span>
-<span class="source-line-no">248</span><span id="line-248">    * @param t The throwable to calculate the stack trace on.</span>
-<span class="source-line-no">249</span><span id="line-249">    * @return A calculated hash.</span>
-<span class="source-line-no">250</span><span id="line-250">    */</span>
-<span class="source-line-no">251</span><span id="line-251">   protected long hash(Throwable t) {</span>
-<span class="source-line-no">252</span><span id="line-252">      long h = 1125899906842597L; // prime</span>
-<span class="source-line-no">253</span><span id="line-253">      for (String s : createStackTrace(t)) {</span>
-<span class="source-line-no">254</span><span id="line-254">         int len = s.length();</span>
-<span class="source-line-no">255</span><span id="line-255">         for (int i = 0; i &lt; len; i++)</span>
-<span class="source-line-no">256</span><span id="line-256">            h = 31*h + s.charAt(i);</span>
-<span class="source-line-no">257</span><span id="line-257">      }</span>
-<span class="source-line-no">258</span><span id="line-258">      return h;</span>
-<span class="source-line-no">259</span><span id="line-259">   }</span>
-<span class="source-line-no">260</span><span id="line-260"></span>
-<span class="source-line-no">261</span><span id="line-261">   /**</span>
-<span class="source-line-no">262</span><span id="line-262">    * Converts the stack trace for the specified throwable into a simple list of strings.</span>
-<span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * &lt;p&gt;</span>
-<span class="source-line-no">265</span><span id="line-265">    * The stack trace elements for the throwable are sent through {@link #normalize(StackTraceElement)} to convert</span>
-<span class="source-line-no">266</span><span id="line-266">    * them to simple strings.</span>
+<span class="source-line-no">191</span><span id="line-191">   /**</span>
+<span class="source-line-no">192</span><span id="line-192">    * Adds the specified thrown exception to this database.</span>
+<span class="source-line-no">193</span><span id="line-193">    *</span>
+<span class="source-line-no">194</span><span id="line-194">    * @param e The exception to add.</span>
+<span class="source-line-no">195</span><span id="line-195">    * @return This object.</span>
+<span class="source-line-no">196</span><span id="line-196">    */</span>
+<span class="source-line-no">197</span><span id="line-197">   public ThrownStats add(Throwable e) {</span>
+<span class="source-line-no">198</span><span id="line-198">      ThrownStats s = find(e);</span>
+<span class="source-line-no">199</span><span id="line-199">      s.increment();</span>
+<span class="source-line-no">200</span><span id="line-200">      parent.ifPresent(x-&gt;x.add(e));</span>
+<span class="source-line-no">201</span><span id="line-201">      return s;</span>
+<span class="source-line-no">202</span><span id="line-202">   }</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">   /**</span>
+<span class="source-line-no">205</span><span id="line-205">    * Retrieves the stats for the specified thrown exception.</span>
+<span class="source-line-no">206</span><span id="line-206">    *</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param e The exception.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @return A clone of the stats, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">209</span><span id="line-209">    */</span>
+<span class="source-line-no">210</span><span id="line-210">   public Optional&lt;ThrownStats&gt; getStats(Throwable e) {</span>
+<span class="source-line-no">211</span><span id="line-211">      return getStats(hash(e));</span>
+<span class="source-line-no">212</span><span id="line-212">   }</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">   /**</span>
+<span class="source-line-no">215</span><span id="line-215">    * Retrieves the stack trace information for the exception with the specified hash as calculated by {@link #hash(Throwable)}.</span>
+<span class="source-line-no">216</span><span id="line-216">    *</span>
+<span class="source-line-no">217</span><span id="line-217">    * @param hash The hash of the exception.</span>
+<span class="source-line-no">218</span><span id="line-218">    * @return A clone of the stack trace info, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">219</span><span id="line-219">    */</span>
+<span class="source-line-no">220</span><span id="line-220">   public Optional&lt;ThrownStats&gt; getStats(long hash) {</span>
+<span class="source-line-no">221</span><span id="line-221">      ThrownStats s = db.get(hash);</span>
+<span class="source-line-no">222</span><span id="line-222">      return Utils.opt(s == null ? null : s.clone());</span>
+<span class="source-line-no">223</span><span id="line-223">   }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   /**</span>
+<span class="source-line-no">226</span><span id="line-226">    * Returns the list of all stack traces in this database.</span>
+<span class="source-line-no">227</span><span id="line-227">    *</span>
+<span class="source-line-no">228</span><span id="line-228">    * @return The list of all stack traces in this database, cloned and sorted by count descending.</span>
+<span class="source-line-no">229</span><span id="line-229">    */</span>
+<span class="source-line-no">230</span><span id="line-230">   public List&lt;ThrownStats&gt; getStats() {</span>
+<span class="source-line-no">231</span><span id="line-231">      return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /**</span>
+<span class="source-line-no">235</span><span id="line-235">    * Clears out the stack trace cache.</span>
+<span class="source-line-no">236</span><span id="line-236">    */</span>
+<span class="source-line-no">237</span><span id="line-237">   public void reset() {</span>
+<span class="source-line-no">238</span><span id="line-238">      db.clear();</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   /**</span>
+<span class="source-line-no">242</span><span id="line-242">    * Calculates a 32-bit hash for the specified throwable based on the stack trace generated by {@link #createStackTrace(Throwable)}.</span>
+<span class="source-line-no">243</span><span id="line-243">    *</span>
+<span class="source-line-no">244</span><span id="line-244">    * &lt;p&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    * Subclasses can override this method to provide their own implementation.</span>
+<span class="source-line-no">246</span><span id="line-246">    *</span>
+<span class="source-line-no">247</span><span id="line-247">    * @param t The throwable to calculate the stack trace on.</span>
+<span class="source-line-no">248</span><span id="line-248">    * @return A calculated hash.</span>
+<span class="source-line-no">249</span><span id="line-249">    */</span>
+<span class="source-line-no">250</span><span id="line-250">   protected long hash(Throwable t) {</span>
+<span class="source-line-no">251</span><span id="line-251">      long h = 1125899906842597L; // prime</span>
+<span class="source-line-no">252</span><span id="line-252">      for (String s : createStackTrace(t)) {</span>
+<span class="source-line-no">253</span><span id="line-253">         int len = s.length();</span>
+<span class="source-line-no">254</span><span id="line-254">         for (int i = 0; i &lt; len; i++)</span>
+<span class="source-line-no">255</span><span id="line-255">            h = 31*h + s.charAt(i);</span>
+<span class="source-line-no">256</span><span id="line-256">      }</span>
+<span class="source-line-no">257</span><span id="line-257">      return h;</span>
+<span class="source-line-no">258</span><span id="line-258">   }</span>
+<span class="source-line-no">259</span><span id="line-259"></span>
+<span class="source-line-no">260</span><span id="line-260">   /**</span>
+<span class="source-line-no">261</span><span id="line-261">    * Converts the stack trace for the specified throwable into a simple list of strings.</span>
+<span class="source-line-no">262</span><span id="line-262">    *</span>
+<span class="source-line-no">263</span><span id="line-263">    * &lt;p&gt;</span>
+<span class="source-line-no">264</span><span id="line-264">    * The stack trace elements for the throwable are sent through {@link #normalize(StackTraceElement)} to convert</span>
+<span class="source-line-no">265</span><span id="line-265">    * them to simple strings.</span>
+<span class="source-line-no">266</span><span id="line-266">    *</span>
 <span class="source-line-no">267</span><span id="line-267">    *</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param t The throwable to create the stack trace for.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @return A modifiable list of strings.</span>
-<span class="source-line-no">271</span><span id="line-271">    */</span>
-<span class="source-line-no">272</span><span id="line-272">   protected List&lt;String&gt; createStackTrace(Throwable t) {</span>
-<span class="source-line-no">273</span><span id="line-273">      return alist(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());</span>
-<span class="source-line-no">274</span><span id="line-274">   }</span>
-<span class="source-line-no">275</span><span id="line-275"></span>
-<span class="source-line-no">276</span><span id="line-276">   /**</span>
-<span class="source-line-no">277</span><span id="line-277">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified stack trace element should be included in {@link #createStackTrace(Throwable)}.</span>
-<span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * @param e The stack trace element.</span>
-<span class="source-line-no">280</span><span id="line-280">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified stack trace element should be included in {@link #createStackTrace(Throwable)}.</span>
-<span class="source-line-no">281</span><span id="line-281">    */</span>
-<span class="source-line-no">282</span><span id="line-282">   protected boolean include(StackTraceElement e) {</span>
-<span class="source-line-no">283</span><span id="line-283">      return true;</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /**</span>
-<span class="source-line-no">287</span><span id="line-287">    * Converts the specified stack trace element into a normalized string.</span>
-<span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * &lt;p&gt;</span>
-<span class="source-line-no">290</span><span id="line-290">    * The default implementation simply replaces &lt;js&gt;"\\$.*"&lt;/js&gt; with &lt;js&gt;"..."&lt;/js&gt; which should take care of stuff like stack</span>
-<span class="source-line-no">291</span><span id="line-291">    * trace elements of lambda expressions.</span>
-<span class="source-line-no">292</span><span id="line-292">    *</span>
-<span class="source-line-no">293</span><span id="line-293">    * @param e The stack trace element to convert.</span>
-<span class="source-line-no">294</span><span id="line-294">    * @return The converted stack trace element.</span>
-<span class="source-line-no">295</span><span id="line-295">    */</span>
-<span class="source-line-no">296</span><span id="line-296">   protected String normalize(StackTraceElement e) {</span>
-<span class="source-line-no">297</span><span id="line-297">      if (ignoreClasses.contains(e.getClassName()))</span>
-<span class="source-line-no">298</span><span id="line-298">         return "&lt;ignored&gt;";</span>
-<span class="source-line-no">299</span><span id="line-299">      String s = e.toString();</span>
-<span class="source-line-no">300</span><span id="line-300">      int i = s.indexOf('$');</span>
-<span class="source-line-no">301</span><span id="line-301">      if (i == -1)</span>
-<span class="source-line-no">302</span><span id="line-302">         return s;</span>
-<span class="source-line-no">303</span><span id="line-303">      int j = s.indexOf('(', i);</span>
-<span class="source-line-no">304</span><span id="line-304">      if (j == -1)</span>
-<span class="source-line-no">305</span><span id="line-305">         return s;  // Probably can't happen.</span>
-<span class="source-line-no">306</span><span id="line-306">      String s2 = s.substring(0, i), s3 = s.substring(j);</span>
-<span class="source-line-no">307</span><span id="line-307">      if (ignoreClasses.contains(s2))</span>
-<span class="source-line-no">308</span><span id="line-308">         return "&lt;ignored&gt;";</span>
-<span class="source-line-no">309</span><span id="line-309">      return s2 + "..." + s3;</span>
-<span class="source-line-no">310</span><span id="line-310">   }</span>
-<span class="source-line-no">311</span><span id="line-311"></span>
-<span class="source-line-no">312</span><span id="line-312">   private ThrownStats find(final Throwable t) {</span>
-<span class="source-line-no">313</span><span id="line-313"></span>
-<span class="source-line-no">314</span><span id="line-314">      if (t == null)</span>
-<span class="source-line-no">315</span><span id="line-315">         return null;</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">      long hash = hash(t);</span>
-<span class="source-line-no">318</span><span id="line-318"></span>
-<span class="source-line-no">319</span><span id="line-319">      ThrownStats stc = db.get(hash);</span>
-<span class="source-line-no">320</span><span id="line-320">      if (stc == null) {</span>
-<span class="source-line-no">321</span><span id="line-321">         stc = ThrownStats</span>
-<span class="source-line-no">322</span><span id="line-322">            .create(beanStore)</span>
-<span class="source-line-no">323</span><span id="line-323">            .type(statsImplClass)</span>
-<span class="source-line-no">324</span><span id="line-324">            .throwable(t)</span>
-<span class="source-line-no">325</span><span id="line-325">            .hash(hash)</span>
-<span class="source-line-no">326</span><span id="line-326">            .stackTrace(createStackTrace(t))</span>
-<span class="source-line-no">327</span><span id="line-327">            .causedBy(find(t.getCause()))</span>
-<span class="source-line-no">328</span><span id="line-328">            .build();</span>
-<span class="source-line-no">329</span><span id="line-329"></span>
-<span class="source-line-no">330</span><span id="line-330">         db.putIfAbsent(hash, stc);</span>
-<span class="source-line-no">331</span><span id="line-331">         stc = db.get(hash);</span>
-<span class="source-line-no">332</span><span id="line-332">      }</span>
-<span class="source-line-no">333</span><span id="line-333"></span>
-<span class="source-line-no">334</span><span id="line-334">      return stc;</span>
-<span class="source-line-no">335</span><span id="line-335">   }</span>
-<span class="source-line-no">336</span><span id="line-336">}</span>
+<span class="source-line-no">268</span><span id="line-268">    * @param t The throwable to create the stack trace for.</span>
+<span class="source-line-no">269</span><span id="line-269">    * @return A modifiable list of strings.</span>
+<span class="source-line-no">270</span><span id="line-270">    */</span>
+<span class="source-line-no">271</span><span id="line-271">   protected List&lt;String&gt; createStackTrace(Throwable t) {</span>
+<span class="source-line-no">272</span><span id="line-272">      return alist(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());</span>
+<span class="source-line-no">273</span><span id="line-273">   }</span>
+<span class="source-line-no">274</span><span id="line-274"></span>
+<span class="source-line-no">275</span><span id="line-275">   /**</span>
+<span class="source-line-no">276</span><span id="line-276">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified stack trace element should be included in {@link #createStackTrace(Throwable)}.</span>
+<span class="source-line-no">277</span><span id="line-277">    *</span>
+<span class="source-line-no">278</span><span id="line-278">    * @param e The stack trace element.</span>
+<span class="source-line-no">279</span><span id="line-279">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified stack trace element should be included in {@link #createStackTrace(Throwable)}.</span>
+<span class="source-line-no">280</span><span id="line-280">    */</span>
+<span class="source-line-no">281</span><span id="line-281">   protected boolean include(StackTraceElement e) {</span>
+<span class="source-line-no">282</span><span id="line-282">      return true;</span>
+<span class="source-line-no">283</span><span id="line-283">   }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">   /**</span>
+<span class="source-line-no">286</span><span id="line-286">    * Converts the specified stack trace element into a normalized string.</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * &lt;p&gt;</span>
+<span class="source-line-no">289</span><span id="line-289">    * The default implementation simply replaces &lt;js&gt;"\\$.*"&lt;/js&gt; with &lt;js&gt;"..."&lt;/js&gt; which should take care of stuff like stack</span>
+<span class="source-line-no">290</span><span id="line-290">    * trace elements of lambda expressions.</span>
+<span class="source-line-no">291</span><span id="line-291">    *</span>
+<span class="source-line-no">292</span><span id="line-292">    * @param e The stack trace element to convert.</span>
+<span class="source-line-no">293</span><span id="line-293">    * @return The converted stack trace element.</span>
+<span class="source-line-no">294</span><span id="line-294">    */</span>
+<span class="source-line-no">295</span><span id="line-295">   protected String normalize(StackTraceElement e) {</span>
+<span class="source-line-no">296</span><span id="line-296">      if (ignoreClasses.contains(e.getClassName()))</span>
+<span class="source-line-no">297</span><span id="line-297">         return "&lt;ignored&gt;";</span>
+<span class="source-line-no">298</span><span id="line-298">      String s = e.toString();</span>
+<span class="source-line-no">299</span><span id="line-299">      int i = s.indexOf('$');</span>
+<span class="source-line-no">300</span><span id="line-300">      if (i == -1)</span>
+<span class="source-line-no">301</span><span id="line-301">         return s;</span>
+<span class="source-line-no">302</span><span id="line-302">      int j = s.indexOf('(', i);</span>
+<span class="source-line-no">303</span><span id="line-303">      if (j == -1)</span>
+<span class="source-line-no">304</span><span id="line-304">         return s;  // Probably can't happen.</span>
+<span class="source-line-no">305</span><span id="line-305">      String s2 = s.substring(0, i), s3 = s.substring(j);</span>
+<span class="source-line-no">306</span><span id="line-306">      if (ignoreClasses.contains(s2))</span>
+<span class="source-line-no">307</span><span id="line-307">         return "&lt;ignored&gt;";</span>
+<span class="source-line-no">308</span><span id="line-308">      return s2 + "..." + s3;</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   private ThrownStats find(final Throwable t) {</span>
+<span class="source-line-no">312</span><span id="line-312"></span>
+<span class="source-line-no">313</span><span id="line-313">      if (t == null)</span>
+<span class="source-line-no">314</span><span id="line-314">         return null;</span>
+<span class="source-line-no">315</span><span id="line-315"></span>
+<span class="source-line-no">316</span><span id="line-316">      long hash = hash(t);</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">      ThrownStats stc = db.get(hash);</span>
+<span class="source-line-no">319</span><span id="line-319">      if (stc == null) {</span>
+<span class="source-line-no">320</span><span id="line-320">         stc = ThrownStats</span>
+<span class="source-line-no">321</span><span id="line-321">            .create(beanStore)</span>
+<span class="source-line-no">322</span><span id="line-322">            .type(statsImplClass)</span>
+<span class="source-line-no">323</span><span id="line-323">            .throwable(t)</span>
+<span class="source-line-no">324</span><span id="line-324">            .hash(hash)</span>
+<span class="source-line-no">325</span><span id="line-325">            .stackTrace(createStackTrace(t))</span>
+<span class="source-line-no">326</span><span id="line-326">            .causedBy(find(t.getCause()))</span>
+<span class="source-line-no">327</span><span id="line-327">            .build();</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">         db.putIfAbsent(hash, stc);</span>
+<span class="source-line-no">330</span><span id="line-330">         stc = db.get(hash);</span>
+<span class="source-line-no">331</span><span id="line-331">      }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">      return stc;</span>
+<span class="source-line-no">334</span><span id="line-334">   }</span>
+<span class="source-line-no">335</span><span id="line-335">}</span>
 
 
 

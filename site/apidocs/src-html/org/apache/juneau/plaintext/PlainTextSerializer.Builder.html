@@ -797,48 +797,47 @@
 <span class="source-line-no">784</span><span id="line-784">      super(builder);</span>
 <span class="source-line-no">785</span><span id="line-785">   }</span>
 <span class="source-line-no">786</span><span id="line-786"></span>
-<span class="source-line-no">787</span><span id="line-787"></span>
-<span class="source-line-no">788</span><span id="line-788">   @Override /* Context */</span>
-<span class="source-line-no">789</span><span id="line-789">   public Builder copy() {</span>
-<span class="source-line-no">790</span><span id="line-790">      return new Builder(this);</span>
-<span class="source-line-no">791</span><span id="line-791">   }</span>
-<span class="source-line-no">792</span><span id="line-792"></span>
-<span class="source-line-no">793</span><span id="line-793">   @Override /* Context */</span>
-<span class="source-line-no">794</span><span id="line-794">   public  PlainTextSerializerSession.Builder createSession() {</span>
-<span class="source-line-no">795</span><span id="line-795">      return PlainTextSerializerSession.create(this);</span>
-<span class="source-line-no">796</span><span id="line-796">   }</span>
-<span class="source-line-no">797</span><span id="line-797"></span>
-<span class="source-line-no">798</span><span id="line-798">   @Override /* Context */</span>
-<span class="source-line-no">799</span><span id="line-799">   public PlainTextSerializerSession getSession() {</span>
-<span class="source-line-no">800</span><span id="line-800">      return createSession().build();</span>
-<span class="source-line-no">801</span><span id="line-801">   }</span>
-<span class="source-line-no">802</span><span id="line-802"></span>
-<span class="source-line-no">803</span><span id="line-803">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">804</span><span id="line-804">   // Extended metadata</span>
-<span class="source-line-no">805</span><span id="line-805">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">806</span><span id="line-806"></span>
-<span class="source-line-no">807</span><span id="line-807">   @Override /* PlainTextMetaProvider */</span>
-<span class="source-line-no">808</span><span id="line-808">   public PlainTextClassMeta getPlainTextClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">809</span><span id="line-809">      PlainTextClassMeta m = plainTextClassMetas.get(cm);</span>
-<span class="source-line-no">810</span><span id="line-810">      if (m == null) {</span>
-<span class="source-line-no">811</span><span id="line-811">         m = new PlainTextClassMeta(cm, this);</span>
-<span class="source-line-no">812</span><span id="line-812">         plainTextClassMetas.put(cm, m);</span>
-<span class="source-line-no">813</span><span id="line-813">      }</span>
-<span class="source-line-no">814</span><span id="line-814">      return m;</span>
-<span class="source-line-no">815</span><span id="line-815">   }</span>
-<span class="source-line-no">816</span><span id="line-816"></span>
-<span class="source-line-no">817</span><span id="line-817">   @Override /* PlainTextMetaProvider */</span>
-<span class="source-line-no">818</span><span id="line-818">   public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">819</span><span id="line-819">      if (bpm == null)</span>
-<span class="source-line-no">820</span><span id="line-820">         return PlainTextBeanPropertyMeta.DEFAULT;</span>
-<span class="source-line-no">821</span><span id="line-821">      PlainTextBeanPropertyMeta m = plainTextBeanPropertyMetas.get(bpm);</span>
-<span class="source-line-no">822</span><span id="line-822">      if (m == null) {</span>
-<span class="source-line-no">823</span><span id="line-823">         m = new PlainTextBeanPropertyMeta(bpm.getDelegateFor(), this);</span>
-<span class="source-line-no">824</span><span id="line-824">         plainTextBeanPropertyMetas.put(bpm, m);</span>
-<span class="source-line-no">825</span><span id="line-825">      }</span>
-<span class="source-line-no">826</span><span id="line-826">      return m;</span>
-<span class="source-line-no">827</span><span id="line-827">   }</span>
-<span class="source-line-no">828</span><span id="line-828">}</span>
+<span class="source-line-no">787</span><span id="line-787">   @Override /* Context */</span>
+<span class="source-line-no">788</span><span id="line-788">   public Builder copy() {</span>
+<span class="source-line-no">789</span><span id="line-789">      return new Builder(this);</span>
+<span class="source-line-no">790</span><span id="line-790">   }</span>
+<span class="source-line-no">791</span><span id="line-791"></span>
+<span class="source-line-no">792</span><span id="line-792">   @Override /* Context */</span>
+<span class="source-line-no">793</span><span id="line-793">   public  PlainTextSerializerSession.Builder createSession() {</span>
+<span class="source-line-no">794</span><span id="line-794">      return PlainTextSerializerSession.create(this);</span>
+<span class="source-line-no">795</span><span id="line-795">   }</span>
+<span class="source-line-no">796</span><span id="line-796"></span>
+<span class="source-line-no">797</span><span id="line-797">   @Override /* Context */</span>
+<span class="source-line-no">798</span><span id="line-798">   public PlainTextSerializerSession getSession() {</span>
+<span class="source-line-no">799</span><span id="line-799">      return createSession().build();</span>
+<span class="source-line-no">800</span><span id="line-800">   }</span>
+<span class="source-line-no">801</span><span id="line-801"></span>
+<span class="source-line-no">802</span><span id="line-802">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">803</span><span id="line-803">   // Extended metadata</span>
+<span class="source-line-no">804</span><span id="line-804">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">805</span><span id="line-805"></span>
+<span class="source-line-no">806</span><span id="line-806">   @Override /* PlainTextMetaProvider */</span>
+<span class="source-line-no">807</span><span id="line-807">   public PlainTextClassMeta getPlainTextClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">808</span><span id="line-808">      PlainTextClassMeta m = plainTextClassMetas.get(cm);</span>
+<span class="source-line-no">809</span><span id="line-809">      if (m == null) {</span>
+<span class="source-line-no">810</span><span id="line-810">         m = new PlainTextClassMeta(cm, this);</span>
+<span class="source-line-no">811</span><span id="line-811">         plainTextClassMetas.put(cm, m);</span>
+<span class="source-line-no">812</span><span id="line-812">      }</span>
+<span class="source-line-no">813</span><span id="line-813">      return m;</span>
+<span class="source-line-no">814</span><span id="line-814">   }</span>
+<span class="source-line-no">815</span><span id="line-815"></span>
+<span class="source-line-no">816</span><span id="line-816">   @Override /* PlainTextMetaProvider */</span>
+<span class="source-line-no">817</span><span id="line-817">   public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">818</span><span id="line-818">      if (bpm == null)</span>
+<span class="source-line-no">819</span><span id="line-819">         return PlainTextBeanPropertyMeta.DEFAULT;</span>
+<span class="source-line-no">820</span><span id="line-820">      PlainTextBeanPropertyMeta m = plainTextBeanPropertyMetas.get(bpm);</span>
+<span class="source-line-no">821</span><span id="line-821">      if (m == null) {</span>
+<span class="source-line-no">822</span><span id="line-822">         m = new PlainTextBeanPropertyMeta(bpm.getDelegateFor(), this);</span>
+<span class="source-line-no">823</span><span id="line-823">         plainTextBeanPropertyMetas.put(bpm, m);</span>
+<span class="source-line-no">824</span><span id="line-824">      }</span>
+<span class="source-line-no">825</span><span id="line-825">      return m;</span>
+<span class="source-line-no">826</span><span id="line-826">   }</span>
+<span class="source-line-no">827</span><span id="line-827">}</span>
 
 
 

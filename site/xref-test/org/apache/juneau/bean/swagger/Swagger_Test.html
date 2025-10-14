@@ -423,51 +423,49 @@
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Nested <strong class="jxr_keyword">class</strong> D_refs <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		@Test <strong class="jxr_keyword">void</strong> d01_findRef() {
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">var</strong> x = swagger().addDefinition(<span class="jxr_string">"a1"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"a2"</span>));
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			assertBean(
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				x.findRef(<span class="jxr_string">"#/definitions/a1"</span>, JsonMap.<strong class="jxr_keyword">class</strong>),
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<span class="jxr_string">"type"</span>,
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 				<span class="jxr_string">"a2"</span>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			);
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertNull(x.findRef(<span class="jxr_string">"#/definitions/notfound"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<strong class="jxr_keyword">null</strong>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">""</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unsupported reference:  'invalid'"</span>, () -&gt; x.findRef(<span class="jxr_string">"invalid"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		}
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		@Test <strong class="jxr_keyword">void</strong> d02_findRefInvalidType() {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			<em class="jxr_comment">// Test findRef with invalid type - should throw exception</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">var</strong> x = swagger()
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 				.addDefinition(<span class="jxr_string">"Pet"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"object"</span>))
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 				.addResponse(<span class="jxr_string">"Error"</span>, responseInfo().setDescription(<span class="jxr_string">"Error response"</span>))
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 				.addParameter(<span class="jxr_string">"petId"</span>, parameterInfo(<span class="jxr_string">"path"</span>, <span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<em class="jxr_comment">// Test trying to parse a definition into an invalid type</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/definitions/Pet"</span>, Integer.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<em class="jxr_comment">// Test trying to parse a response into an invalid type</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/responses/Error"</span>, Integer.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<em class="jxr_comment">// Test trying to parse a parameter into an invalid type</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/parameters/petId"</span>, Integer.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		}
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<em class="jxr_comment">// Helper methods</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Swagger bean() {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">return</strong> swagger();
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> }
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		@Test <strong class="jxr_keyword">void</strong> d01_findRef() {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">var</strong> x = swagger().addDefinition(<span class="jxr_string">"a1"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"a2"</span>));
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			assertBean(
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				x.findRef(<span class="jxr_string">"#/definitions/a1"</span>, JsonMap.<strong class="jxr_keyword">class</strong>),
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				<span class="jxr_string">"type"</span>,
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<span class="jxr_string">"a2"</span>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			assertNull(x.findRef(<span class="jxr_string">"#/definitions/notfound"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<strong class="jxr_keyword">null</strong>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">""</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			assertThrowsWithMessage(BasicRuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unsupported reference:  'invalid'"</span>, () -&gt; x.findRef(<span class="jxr_string">"invalid"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		@Test <strong class="jxr_keyword">void</strong> d02_findRefInvalidType() {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<em class="jxr_comment">// Test findRef with invalid type - should throw exception</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			<strong class="jxr_keyword">var</strong> x = swagger()
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				.addDefinition(<span class="jxr_string">"Pet"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"object"</span>))
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 				.addResponse(<span class="jxr_string">"Error"</span>, responseInfo().setDescription(<span class="jxr_string">"Error response"</span>))
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 				.addParameter(<span class="jxr_string">"petId"</span>, parameterInfo(<span class="jxr_string">"path"</span>, <span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<em class="jxr_comment">// Test trying to parse a definition into an invalid type</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/definitions/Pet"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<em class="jxr_comment">// Test trying to parse a response into an invalid type</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/responses/Error"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<em class="jxr_comment">// Test trying to parse a parameter into an invalid type</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/parameters/petId"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<em class="jxr_comment">// Helper methods</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Swagger bean() {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">return</strong> swagger();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

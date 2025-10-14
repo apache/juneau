@@ -207,71 +207,70 @@
 <span class="source-line-no">194</span><span id="line-194">   // Utility methods</span>
 <span class="source-line-no">195</span><span id="line-195">   //-----------------------------------------------------------------------------------------------------------------</span>
 <span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">   /**</span>
-<span class="source-line-no">199</span><span id="line-199">    * Creates a new {@link BasicAssertionError}.</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * @param msg The message.</span>
-<span class="source-line-no">202</span><span id="line-202">    * @param args The message arguments.</span>
-<span class="source-line-no">203</span><span id="line-203">    * @return A new {@link BasicAssertionError}.</span>
-<span class="source-line-no">204</span><span id="line-204">    */</span>
-<span class="source-line-no">205</span><span id="line-205">   protected BasicAssertionError error(String msg, Object...args) {</span>
-<span class="source-line-no">206</span><span id="line-206">      return error(null, msg, args);</span>
-<span class="source-line-no">207</span><span id="line-207">   }</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">   /**</span>
-<span class="source-line-no">210</span><span id="line-210">    * Creates a new {@link BasicAssertionError}.</span>
-<span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * @param cause Optional caused-by throwable.</span>
-<span class="source-line-no">213</span><span id="line-213">    * @param msg The message.</span>
-<span class="source-line-no">214</span><span id="line-214">    * @param args The message arguments.</span>
-<span class="source-line-no">215</span><span id="line-215">    * @return A new {@link BasicAssertionError}.</span>
-<span class="source-line-no">216</span><span id="line-216">    */</span>
-<span class="source-line-no">217</span><span id="line-217">   protected BasicAssertionError error(Throwable cause, String msg, Object...args) {</span>
-<span class="source-line-no">218</span><span id="line-218">      msg = format(msg, args);</span>
-<span class="source-line-no">219</span><span id="line-219">      if (this.msg != null)</span>
-<span class="source-line-no">220</span><span id="line-220">         msg = format(this.msg, this.msgArgs).replace("&lt;&lt;&lt;MSG&gt;&gt;&gt;", msg);</span>
-<span class="source-line-no">221</span><span id="line-221">      if (out != null)</span>
-<span class="source-line-no">222</span><span id="line-222">         out.println(msg);</span>
-<span class="source-line-no">223</span><span id="line-223">      if (throwable != null) {</span>
-<span class="source-line-no">224</span><span id="line-224">         try {</span>
-<span class="source-line-no">225</span><span id="line-225">            throw BeanStore</span>
-<span class="source-line-no">226</span><span id="line-226">               .create()</span>
-<span class="source-line-no">227</span><span id="line-227">               .build()</span>
-<span class="source-line-no">228</span><span id="line-228">               .addBean(Throwable.class, cause)</span>
-<span class="source-line-no">229</span><span id="line-229">               .addBean(String.class, msg)</span>
-<span class="source-line-no">230</span><span id="line-230">               .addBean(Object[].class,new Object[0])</span>
-<span class="source-line-no">231</span><span id="line-231">               .createBean(throwable)</span>
-<span class="source-line-no">232</span><span id="line-232">               .run();</span>
-<span class="source-line-no">233</span><span id="line-233">         } catch (ExecutableException e) {</span>
-<span class="source-line-no">234</span><span id="line-234">            // If we couldn't create requested exception, just throw a RuntimeException.</span>
-<span class="source-line-no">235</span><span id="line-235">            throw new BasicRuntimeException(cause, msg);</span>
-<span class="source-line-no">236</span><span id="line-236">         }</span>
-<span class="source-line-no">237</span><span id="line-237">      }</span>
-<span class="source-line-no">238</span><span id="line-238">      return new BasicAssertionError(cause, msg);</span>
-<span class="source-line-no">239</span><span id="line-239">   }</span>
-<span class="source-line-no">240</span><span id="line-240"></span>
-<span class="source-line-no">241</span><span id="line-241">   /**</span>
-<span class="source-line-no">242</span><span id="line-242">    * Convenience method for getting the class name for an object.</span>
-<span class="source-line-no">243</span><span id="line-243">    *</span>
-<span class="source-line-no">244</span><span id="line-244">    * @param o The object to get the class name for.</span>
-<span class="source-line-no">245</span><span id="line-245">    * @return The class name for an object.</span>
-<span class="source-line-no">246</span><span id="line-246">    */</span>
-<span class="source-line-no">247</span><span id="line-247">   protected static String className(Object o) {</span>
-<span class="source-line-no">248</span><span id="line-248">      return ClassUtils.className(o);</span>
-<span class="source-line-no">249</span><span id="line-249">   }</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">   /**</span>
-<span class="source-line-no">252</span><span id="line-252">    * Convenience method for getting the array class of the specified element type.</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @param c The object to get the class name for.</span>
-<span class="source-line-no">256</span><span id="line-256">    * @return The class name for an object.</span>
-<span class="source-line-no">257</span><span id="line-257">    */</span>
-<span class="source-line-no">258</span><span id="line-258">   protected static &lt;E&gt; Class&lt;E[]&gt; arrayClass(Class&lt;E&gt; c) {</span>
-<span class="source-line-no">259</span><span id="line-259">      return (Class&lt;E[]&gt;)Array.newInstance(c,0).getClass();</span>
-<span class="source-line-no">260</span><span id="line-260">   }</span>
-<span class="source-line-no">261</span><span id="line-261">}</span>
+<span class="source-line-no">197</span><span id="line-197">   /**</span>
+<span class="source-line-no">198</span><span id="line-198">    * Creates a new {@link BasicAssertionError}.</span>
+<span class="source-line-no">199</span><span id="line-199">    *</span>
+<span class="source-line-no">200</span><span id="line-200">    * @param msg The message.</span>
+<span class="source-line-no">201</span><span id="line-201">    * @param args The message arguments.</span>
+<span class="source-line-no">202</span><span id="line-202">    * @return A new {@link BasicAssertionError}.</span>
+<span class="source-line-no">203</span><span id="line-203">    */</span>
+<span class="source-line-no">204</span><span id="line-204">   protected BasicAssertionError error(String msg, Object...args) {</span>
+<span class="source-line-no">205</span><span id="line-205">      return error(null, msg, args);</span>
+<span class="source-line-no">206</span><span id="line-206">   }</span>
+<span class="source-line-no">207</span><span id="line-207"></span>
+<span class="source-line-no">208</span><span id="line-208">   /**</span>
+<span class="source-line-no">209</span><span id="line-209">    * Creates a new {@link BasicAssertionError}.</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    * @param cause Optional caused-by throwable.</span>
+<span class="source-line-no">212</span><span id="line-212">    * @param msg The message.</span>
+<span class="source-line-no">213</span><span id="line-213">    * @param args The message arguments.</span>
+<span class="source-line-no">214</span><span id="line-214">    * @return A new {@link BasicAssertionError}.</span>
+<span class="source-line-no">215</span><span id="line-215">    */</span>
+<span class="source-line-no">216</span><span id="line-216">   protected BasicAssertionError error(Throwable cause, String msg, Object...args) {</span>
+<span class="source-line-no">217</span><span id="line-217">      msg = format(msg, args);</span>
+<span class="source-line-no">218</span><span id="line-218">      if (this.msg != null)</span>
+<span class="source-line-no">219</span><span id="line-219">         msg = format(this.msg, this.msgArgs).replace("&lt;&lt;&lt;MSG&gt;&gt;&gt;", msg);</span>
+<span class="source-line-no">220</span><span id="line-220">      if (out != null)</span>
+<span class="source-line-no">221</span><span id="line-221">         out.println(msg);</span>
+<span class="source-line-no">222</span><span id="line-222">      if (throwable != null) {</span>
+<span class="source-line-no">223</span><span id="line-223">         try {</span>
+<span class="source-line-no">224</span><span id="line-224">            throw BeanStore</span>
+<span class="source-line-no">225</span><span id="line-225">               .create()</span>
+<span class="source-line-no">226</span><span id="line-226">               .build()</span>
+<span class="source-line-no">227</span><span id="line-227">               .addBean(Throwable.class, cause)</span>
+<span class="source-line-no">228</span><span id="line-228">               .addBean(String.class, msg)</span>
+<span class="source-line-no">229</span><span id="line-229">               .addBean(Object[].class,new Object[0])</span>
+<span class="source-line-no">230</span><span id="line-230">               .createBean(throwable)</span>
+<span class="source-line-no">231</span><span id="line-231">               .run();</span>
+<span class="source-line-no">232</span><span id="line-232">         } catch (ExecutableException e) {</span>
+<span class="source-line-no">233</span><span id="line-233">            // If we couldn't create requested exception, just throw a RuntimeException.</span>
+<span class="source-line-no">234</span><span id="line-234">            throw new BasicRuntimeException(cause, msg);</span>
+<span class="source-line-no">235</span><span id="line-235">         }</span>
+<span class="source-line-no">236</span><span id="line-236">      }</span>
+<span class="source-line-no">237</span><span id="line-237">      return new BasicAssertionError(cause, msg);</span>
+<span class="source-line-no">238</span><span id="line-238">   }</span>
+<span class="source-line-no">239</span><span id="line-239"></span>
+<span class="source-line-no">240</span><span id="line-240">   /**</span>
+<span class="source-line-no">241</span><span id="line-241">    * Convenience method for getting the class name for an object.</span>
+<span class="source-line-no">242</span><span id="line-242">    *</span>
+<span class="source-line-no">243</span><span id="line-243">    * @param o The object to get the class name for.</span>
+<span class="source-line-no">244</span><span id="line-244">    * @return The class name for an object.</span>
+<span class="source-line-no">245</span><span id="line-245">    */</span>
+<span class="source-line-no">246</span><span id="line-246">   protected static String className(Object o) {</span>
+<span class="source-line-no">247</span><span id="line-247">      return ClassUtils.className(o);</span>
+<span class="source-line-no">248</span><span id="line-248">   }</span>
+<span class="source-line-no">249</span><span id="line-249"></span>
+<span class="source-line-no">250</span><span id="line-250">   /**</span>
+<span class="source-line-no">251</span><span id="line-251">    * Convenience method for getting the array class of the specified element type.</span>
+<span class="source-line-no">252</span><span id="line-252">    *</span>
+<span class="source-line-no">253</span><span id="line-253">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">254</span><span id="line-254">    * @param c The object to get the class name for.</span>
+<span class="source-line-no">255</span><span id="line-255">    * @return The class name for an object.</span>
+<span class="source-line-no">256</span><span id="line-256">    */</span>
+<span class="source-line-no">257</span><span id="line-257">   protected static &lt;E&gt; Class&lt;E[]&gt; arrayClass(Class&lt;E&gt; c) {</span>
+<span class="source-line-no">258</span><span id="line-258">      return (Class&lt;E[]&gt;)Array.newInstance(c,0).getClass();</span>
+<span class="source-line-no">259</span><span id="line-259">   }</span>
+<span class="source-line-no">260</span><span id="line-260">}</span>
 
 
 

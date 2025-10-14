@@ -46,33 +46,33 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">036</span><span id="line-36"> * </span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Simple div&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    Div &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;div&lt;/jsm&gt;(&lt;js&gt;"Hello World"&lt;/js&gt;);</span>
-<span class="source-line-no">039</span><span id="line-39"> * </span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;jc&gt;// Div with styling&lt;/jc&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    Div &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;div&lt;/jsm&gt;()</span>
 <span class="source-line-no">042</span><span id="line-42"> *       ._class(&lt;js&gt;"container"&lt;/js&gt;)</span>
 <span class="source-line-no">043</span><span id="line-43"> *       .style(&lt;js&gt;"padding: 20px; background-color: #f0f0f0;"&lt;/js&gt;);</span>
-<span class="source-line-no">044</span><span id="line-44"> * </span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Div with multiple children&lt;/jc&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    Div &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;div&lt;/jsm&gt;(</span>
 <span class="source-line-no">047</span><span id="line-47"> *       &lt;jsm&gt;h1&lt;/jsm&gt;(&lt;js&gt;"Title"&lt;/js&gt;),</span>
 <span class="source-line-no">048</span><span id="line-48"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"Content"&lt;/js&gt;),</span>
 <span class="source-line-no">049</span><span id="line-49"> *       &lt;jsm&gt;p&lt;/jsm&gt;(&lt;js&gt;"More content"&lt;/js&gt;)</span>
 <span class="source-line-no">050</span><span id="line-50"> *    );</span>
-<span class="source-line-no">051</span><span id="line-51"> * </span>
+<span class="source-line-no">051</span><span id="line-51"> *</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;jc&gt;// Div with complex content&lt;/jc&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *    Div &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;div&lt;/jsm&gt;(</span>
 <span class="source-line-no">054</span><span id="line-54"> *       &lt;jsm&gt;div&lt;/jsm&gt;()._class(&lt;js&gt;"card-header"&lt;/js&gt;).children(&lt;js&gt;"Card Title"&lt;/js&gt;),</span>
 <span class="source-line-no">055</span><span id="line-55"> *       &lt;jsm&gt;div&lt;/jsm&gt;()._class(&lt;js&gt;"card-body"&lt;/js&gt;).children(&lt;js&gt;"Card content"&lt;/js&gt;),</span>
 <span class="source-line-no">056</span><span id="line-56"> *       &lt;jsm&gt;div&lt;/jsm&gt;()._class(&lt;js&gt;"card-footer"&lt;/js&gt;).children(&lt;js&gt;"Card footer"&lt;/js&gt;)</span>
 <span class="source-line-no">057</span><span id="line-57"> *    )._class(&lt;js&gt;"card"&lt;/js&gt;);</span>
-<span class="source-line-no">058</span><span id="line-58"> * </span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;jc&gt;// Div with ID&lt;/jc&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    Div &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;div&lt;/jsm&gt;(&lt;js&gt;"Main content area"&lt;/js&gt;)</span>
 <span class="source-line-no">061</span><span id="line-61"> *       .id(&lt;js&gt;"main-content"&lt;/js&gt;);</span>
-<span class="source-line-no">062</span><span id="line-62"> * </span>
+<span class="source-line-no">062</span><span id="line-62"> *</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Div with styling&lt;/jc&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    Div &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;div&lt;/jsm&gt;(</span>
 <span class="source-line-no">065</span><span id="line-65"> *       &lt;jsm&gt;div&lt;/jsm&gt;()._class(&lt;js&gt;"left-column"&lt;/js&gt;).children(&lt;js&gt;"Left content"&lt;/js&gt;),</span>

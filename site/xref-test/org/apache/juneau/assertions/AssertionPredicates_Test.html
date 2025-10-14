@@ -109,58 +109,57 @@
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertThrown(()-&gt;A2.is(match(<span class="jxr_string">"ba*"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='ba*'.  Value='null'."</span>);
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> a10_regex() {
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		A1.is(regex(<span class="jxr_string">"fo.*"</span>));
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertThrown(()-&gt;A1.is(regex(<span class="jxr_string">"ba.*"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='ba.*'.  Value='foo'."</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertThrown(()-&gt;A2.is(regex(<span class="jxr_string">"ba.*"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='ba.*'.  Value='null'."</span>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a11_regex_wFlags() {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		A1.is(regex(<span class="jxr_string">"FO.*"</span>, CASE_INSENSITIVE));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertThrown(()-&gt;A1.is(regex(<span class="jxr_string">"BA.*"</span>, CASE_INSENSITIVE))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='foo'."</span>);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertThrown(()-&gt;A2.is(regex(<span class="jxr_string">"BA.*"</span>, CASE_INSENSITIVE))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='null'."</span>);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a12_regex_wPattern() {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> p1 = Pattern.compile(<span class="jxr_string">"FO.*"</span>, CASE_INSENSITIVE);
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> p2 = Pattern.compile(<span class="jxr_string">"BA.*"</span>, CASE_INSENSITIVE);
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		A1.is(regex(p1));
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertThrown(()-&gt;A1.is(regex(p2))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='foo'."</span>);
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertThrown(()-&gt;A2.is(regex(p2))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='null'."</span>);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a13_and() {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		A1.is(and(notNull(),eq(<span class="jxr_string">"foo"</span>),<strong class="jxr_keyword">null</strong>,x-&gt;x.equals(<span class="jxr_string">"foo"</span>)));
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertThrown(()-&gt;A1.is(and(isNull()))).asMessage().asOneLine().is(<span class="jxr_string">"Predicate test #1 failed.  Value was not null."</span>);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(and(x -&gt; x.equals(<span class="jxr_string">"bar"</span>))), <span class="jxr_string">"Predicate test #1 failed."</span>);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a14_or() {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		A1.is(or(<strong class="jxr_keyword">null</strong>,isNull(),eq(<span class="jxr_string">"foo"</span>),x-&gt;x.equals(<span class="jxr_string">"bar"</span>)));
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(or(isNull())), <span class="jxr_string">"No predicate tests passed."</span>);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(or(x -&gt; x.equals(<span class="jxr_string">"bar"</span>))), <span class="jxr_string">"No predicate tests passed."</span>);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@Test <strong class="jxr_keyword">void</strong> a15_not() {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		A1.is(not(ne(<span class="jxr_string">"foo"</span>)));
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A2.is(not(ne(<span class="jxr_string">"foo"</span>))), <span class="jxr_string">"Predicate test unexpectedly passed."</span>);
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(not(eq(<span class="jxr_string">"foo"</span>))), <span class="jxr_string">"Predicate test unexpectedly passed."</span>);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		A2.is(not(x -&gt; x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.equals(<span class="jxr_string">"bar"</span>)));
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		A1.is(not(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		A2.is(not(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@Test <strong class="jxr_keyword">void</strong> a16_test() {
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		A1.is(test(eq(<span class="jxr_string">"foo"</span>)));
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertThrown(()-&gt;A1.is(test(eq(<span class="jxr_string">"bar"</span>)))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not pass test.  Value did not match expected.  Expect='bar'.  Actual='foo'."</span>);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> a17_contains() {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		A1.is(test(contains(<span class="jxr_string">"o"</span>)));
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertThrown(()-&gt;A1.is(test(contains(<span class="jxr_string">"x"</span>)))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not pass test.  Value did not contain expected.  Expect='x'.  Actual='foo'."</span>);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Test <strong class="jxr_keyword">void</strong> a10_regex() {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		A1.is(regex(<span class="jxr_string">"fo.*"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertThrown(()-&gt;A1.is(regex(<span class="jxr_string">"ba.*"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='ba.*'.  Value='foo'."</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertThrown(()-&gt;A2.is(regex(<span class="jxr_string">"ba.*"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='ba.*'.  Value='null'."</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> a11_regex_wFlags() {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		A1.is(regex(<span class="jxr_string">"FO.*"</span>, CASE_INSENSITIVE));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertThrown(()-&gt;A1.is(regex(<span class="jxr_string">"BA.*"</span>, CASE_INSENSITIVE))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='foo'."</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertThrown(()-&gt;A2.is(regex(<span class="jxr_string">"BA.*"</span>, CASE_INSENSITIVE))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='null'."</span>);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> a12_regex_wPattern() {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> p1 = Pattern.compile(<span class="jxr_string">"FO.*"</span>, CASE_INSENSITIVE);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> p2 = Pattern.compile(<span class="jxr_string">"BA.*"</span>, CASE_INSENSITIVE);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		A1.is(regex(p1));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertThrown(()-&gt;A1.is(regex(p2))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='foo'."</span>);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertThrown(()-&gt;A2.is(regex(p2))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not match pattern.  Pattern='BA.*'.  Value='null'."</span>);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@Test <strong class="jxr_keyword">void</strong> a13_and() {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		A1.is(and(notNull(),eq(<span class="jxr_string">"foo"</span>),<strong class="jxr_keyword">null</strong>,x-&gt;x.equals(<span class="jxr_string">"foo"</span>)));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertThrown(()-&gt;A1.is(and(isNull()))).asMessage().asOneLine().is(<span class="jxr_string">"Predicate test #1 failed.  Value was not null."</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(and(x -&gt; x.equals(<span class="jxr_string">"bar"</span>))), <span class="jxr_string">"Predicate test #1 failed."</span>);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> a14_or() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		A1.is(or(<strong class="jxr_keyword">null</strong>,isNull(),eq(<span class="jxr_string">"foo"</span>),x-&gt;x.equals(<span class="jxr_string">"bar"</span>)));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(or(isNull())), <span class="jxr_string">"No predicate tests passed."</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(or(x -&gt; x.equals(<span class="jxr_string">"bar"</span>))), <span class="jxr_string">"No predicate tests passed."</span>);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a15_not() {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		A1.is(not(ne(<span class="jxr_string">"foo"</span>)));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A2.is(not(ne(<span class="jxr_string">"foo"</span>))), <span class="jxr_string">"Predicate test unexpectedly passed."</span>);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;A1.is(not(eq(<span class="jxr_string">"foo"</span>))), <span class="jxr_string">"Predicate test unexpectedly passed."</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		A2.is(not(x -&gt; x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.equals(<span class="jxr_string">"bar"</span>)));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		A1.is(not(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		A2.is(not(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> a16_test() {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		A1.is(test(eq(<span class="jxr_string">"foo"</span>)));
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertThrown(()-&gt;A1.is(test(eq(<span class="jxr_string">"bar"</span>)))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not pass test.  Value did not match expected.  Expect='bar'.  Actual='foo'."</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a17_contains() {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		A1.is(test(contains(<span class="jxr_string">"o"</span>)));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertThrown(()-&gt;A1.is(test(contains(<span class="jxr_string">"x"</span>)))).asMessage().asOneLine().is(<span class="jxr_string">"Value did not pass test.  Value did not contain expected.  Expect='x'.  Actual='foo'."</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

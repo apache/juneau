@@ -126,12 +126,12 @@
 <span class="source-line-no">113</span><span id="line-113">         .appendIf(ne, "description", joinnl(a.description(), a.d()))</span>
 <span class="source-line-no">114</span><span id="line-114">         .appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))</span>
 <span class="source-line-no">115</span><span id="line-115">         // Handle exclusiveMaximum with Draft 2020-12 fallback</span>
-<span class="source-line-no">116</span><span id="line-116">         .appendIf(ne, "exclusiveMaximum", </span>
-<span class="source-line-no">117</span><span id="line-117">            ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() : </span>
+<span class="source-line-no">116</span><span id="line-116">         .appendIf(ne, "exclusiveMaximum",</span>
+<span class="source-line-no">117</span><span id="line-117">            ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() :</span>
 <span class="source-line-no">118</span><span id="line-118">            (a.exclusiveMaximum() || a.emax()) ? "true" : null)</span>
 <span class="source-line-no">119</span><span id="line-119">         // Handle exclusiveMinimum with Draft 2020-12 fallback</span>
-<span class="source-line-no">120</span><span id="line-120">         .appendIf(ne, "exclusiveMinimum", </span>
-<span class="source-line-no">121</span><span id="line-121">            ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() : </span>
+<span class="source-line-no">120</span><span id="line-120">         .appendIf(ne, "exclusiveMinimum",</span>
+<span class="source-line-no">121</span><span id="line-121">            ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() :</span>
 <span class="source-line-no">122</span><span id="line-122">            (a.exclusiveMinimum() || a.emin()) ? "true" : null)</span>
 <span class="source-line-no">123</span><span id="line-123">         .appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))</span>
 <span class="source-line-no">124</span><span id="line-124">         .appendFirst(ne, "format", a.format(), a.f())</span>

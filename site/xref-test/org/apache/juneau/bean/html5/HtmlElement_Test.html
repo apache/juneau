@@ -46,10 +46,10 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> a03_deminimize() {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		Button x1 = button().disabled(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertString(<span class="jxr_string">"&lt;button disabled='disabled'&gt;&lt;/button&gt;"</span>, x1);
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  		Button x2 = button().disabled(false);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertString(<span class="jxr_string">"&lt;button&gt;&lt;/button&gt;"</span>, x2);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		Button x3 = button().disabled(<span class="jxr_string">"custom"</span>);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertString(<span class="jxr_string">"&lt;button disabled='custom'&gt;&lt;/button&gt;"</span>, x3);
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
@@ -65,11 +65,11 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		A x = a();
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		x.attr(<span class="jxr_string">"url"</span>, <span class="jxr_string">"http://example.com"</span>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertString(<span class="jxr_string">"http://example.com"</span>, x.getAttr(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"url"</span>));
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		A x2 = a();
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		x2.attr(<span class="jxr_string">"href"</span>, <span class="jxr_string">"http://example.com"</span>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertString(<span class="jxr_string">"http://example.com"</span>, x2.getAttr(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"href"</span>));
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		Form x3 = form();
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		x3.attr(<span class="jxr_string">"action"</span>, <span class="jxr_string">"http://example.com"</span>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertString(<span class="jxr_string">"http://example.com"</span>, x3.getAttr(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"action"</span>));

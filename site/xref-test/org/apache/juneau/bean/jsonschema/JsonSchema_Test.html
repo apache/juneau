@@ -250,56 +250,55 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(expected, r);
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<em class="jxr_javadoccomment">/** Bean with simple values for each property */</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> JsonSchema getTest1() {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonSchema()
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			.setId(<span class="jxr_string">"http://id"</span>)
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			.setSchemaVersionUri(<span class="jxr_string">"http://schemaVersionUri"</span>)
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			.setTitle(<span class="jxr_string">"title"</span>)
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			.setDescription(<span class="jxr_string">"description"</span>)
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			.setType(JsonType.NUMBER)
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			.addDefinition(<span class="jxr_string">"definition"</span>, <strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://definition"</span>))
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			.addProperties(<strong class="jxr_keyword">new</strong> JsonSchemaProperty(<span class="jxr_string">"property"</span>, JsonType.NUMBER))
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			.addPatternProperties(<strong class="jxr_keyword">new</strong> JsonSchemaProperty(<span class="jxr_string">"/pattern/"</span>, JsonType.NUMBER))
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			.addDependency(<span class="jxr_string">"dependency"</span>, <strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://dependency"</span>))
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			.addItems(<strong class="jxr_keyword">new</strong> JsonSchema().setType(JsonType.NUMBER))
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			.setMultipleOf(1)
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			.setMaximum(2)
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			.setExclusiveMaximum(Integer.valueOf(10))  <em class="jxr_comment">// Changed from Boolean to Number (Draft 06+)</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			.setMinimum(3)
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			.setExclusiveMinimum(Integer.valueOf(1))   <em class="jxr_comment">// Changed from Boolean to Number (Draft 06+)</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			.setMaxLength(4)
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			.setMinLength(5)
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			.setPattern(<span class="jxr_string">"/pattern/"</span>)
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			.addAdditionalItems(<strong class="jxr_keyword">new</strong> JsonSchemaProperty(<span class="jxr_string">"additionalItem"</span>, JsonType.NUMBER))
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.setMaxItems(6)
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.setMinItems(7)
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.setUniqueItems(<strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.setMaxProperties(8)
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.setMinProperties(9)
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.addRequired(<span class="jxr_string">"required"</span>)
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.setAdditionalProperties(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://additionalProperty"</span>))
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			.addEnum(<span class="jxr_string">"enum"</span>)
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			.addAllOf(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://allOf"</span>))
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			.addAnyOf(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://anyOf"</span>))
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			.addOneOf(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://oneOf"</span>))
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			.setNot(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://not"</span>))
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_javadoccomment">/** Bean with other possible property value types not covered in test1 */</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> JsonSchema getTest2() {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonSchema()
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			.setId(URI.create(<span class="jxr_string">"http://id"</span>))
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			.setSchemaVersionUri(URI.create(<span class="jxr_string">"http://schemaVersionUri"</span>))
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			.setType(<strong class="jxr_keyword">new</strong> JsonTypeArray(JsonType.STRING, JsonType.NUMBER))
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			.addDefinition(<span class="jxr_string">"definition"</span>, <strong class="jxr_keyword">new</strong> JsonSchema().setId(<span class="jxr_string">"http://definition"</span>))
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.setItems(<strong class="jxr_keyword">new</strong> JsonSchemaArray(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://items"</span>)))
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.setAdditionalItems(Boolean.TRUE)
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			.setAdditionalProperties(Boolean.TRUE);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> }
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<em class="jxr_javadoccomment">/** Bean with simple values for each property */</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> JsonSchema getTest1() {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonSchema()
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			.setId(<span class="jxr_string">"http://id"</span>)
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			.setSchemaVersionUri(<span class="jxr_string">"http://schemaVersionUri"</span>)
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			.setTitle(<span class="jxr_string">"title"</span>)
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			.setDescription(<span class="jxr_string">"description"</span>)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			.setType(JsonType.NUMBER)
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			.addDefinition(<span class="jxr_string">"definition"</span>, <strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://definition"</span>))
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			.addProperties(<strong class="jxr_keyword">new</strong> JsonSchemaProperty(<span class="jxr_string">"property"</span>, JsonType.NUMBER))
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			.addPatternProperties(<strong class="jxr_keyword">new</strong> JsonSchemaProperty(<span class="jxr_string">"/pattern/"</span>, JsonType.NUMBER))
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			.addDependency(<span class="jxr_string">"dependency"</span>, <strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://dependency"</span>))
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			.addItems(<strong class="jxr_keyword">new</strong> JsonSchema().setType(JsonType.NUMBER))
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			.setMultipleOf(1)
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			.setMaximum(2)
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			.setExclusiveMaximum(Integer.valueOf(10))  <em class="jxr_comment">// Changed from Boolean to Number (Draft 06+)</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			.setMinimum(3)
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			.setExclusiveMinimum(Integer.valueOf(1))   <em class="jxr_comment">// Changed from Boolean to Number (Draft 06+)</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			.setMaxLength(4)
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			.setMinLength(5)
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			.setPattern(<span class="jxr_string">"/pattern/"</span>)
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			.addAdditionalItems(<strong class="jxr_keyword">new</strong> JsonSchemaProperty(<span class="jxr_string">"additionalItem"</span>, JsonType.NUMBER))
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			.setMaxItems(6)
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.setMinItems(7)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			.setUniqueItems(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			.setMaxProperties(8)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.setMinProperties(9)
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.addRequired(<span class="jxr_string">"required"</span>)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.setAdditionalProperties(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://additionalProperty"</span>))
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			.addEnum(<span class="jxr_string">"enum"</span>)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			.addAllOf(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://allOf"</span>))
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			.addAnyOf(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://anyOf"</span>))
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			.addOneOf(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://oneOf"</span>))
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			.setNot(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://not"</span>))
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		;
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_javadoccomment">/** Bean with other possible property value types not covered in test1 */</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> JsonSchema getTest2() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonSchema()
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			.setId(URI.create(<span class="jxr_string">"http://id"</span>))
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			.setSchemaVersionUri(URI.create(<span class="jxr_string">"http://schemaVersionUri"</span>))
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			.setType(<strong class="jxr_keyword">new</strong> JsonTypeArray(JsonType.STRING, JsonType.NUMBER))
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			.addDefinition(<span class="jxr_string">"definition"</span>, <strong class="jxr_keyword">new</strong> JsonSchema().setId(<span class="jxr_string">"http://definition"</span>))
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			.setItems(<strong class="jxr_keyword">new</strong> JsonSchemaArray(<strong class="jxr_keyword">new</strong> JsonSchemaRef(<span class="jxr_string">"http://items"</span>)))
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.setAdditionalItems(Boolean.TRUE)
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.setAdditionalProperties(Boolean.TRUE);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

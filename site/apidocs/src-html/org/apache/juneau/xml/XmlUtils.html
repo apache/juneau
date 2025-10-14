@@ -258,354 +258,351 @@
 <span class="source-line-no">245</span><span id="line-245">      .append((char)0x0A, "&amp;#x000a;")</span>
 <span class="source-line-no">246</span><span id="line-246">      .append((char)0x0D, "&amp;#x000d;");</span>
 <span class="source-line-no">247</span><span id="line-247"></span>
-<span class="source-line-no">248</span><span id="line-248"></span>
-<span class="source-line-no">249</span><span id="line-249">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">250</span><span id="line-250">   // XML attribute names</span>
-<span class="source-line-no">251</span><span id="line-251">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">   /**</span>
-<span class="source-line-no">254</span><span id="line-254">    * Serializes and encodes the specified object as valid XML attribute name.</span>
-<span class="source-line-no">255</span><span id="line-255">    *</span>
-<span class="source-line-no">256</span><span id="line-256">    * @param w The writer to send the output to.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @param value The object being serialized.</span>
-<span class="source-line-no">258</span><span id="line-258">    * @return This object.</span>
-<span class="source-line-no">259</span><span id="line-259">    * @throws IOException If a problem occurred.</span>
-<span class="source-line-no">260</span><span id="line-260">    */</span>
-<span class="source-line-no">261</span><span id="line-261">   public static Writer encodeAttrName(Writer w, Object value) throws IOException {</span>
-<span class="source-line-no">262</span><span id="line-262">      if (value == null)</span>
-<span class="source-line-no">263</span><span id="line-263">         return w.append("_x0000_");</span>
-<span class="source-line-no">264</span><span id="line-264">      String s = value.toString();</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">      if (needsAttrNameEncoding(s)) {</span>
-<span class="source-line-no">267</span><span id="line-267">         for (int i = 0; i &lt; s.length(); i++) {</span>
-<span class="source-line-no">268</span><span id="line-268">            char c = s.charAt(i);</span>
-<span class="source-line-no">269</span><span id="line-269">            if (i == 0) {</span>
-<span class="source-line-no">270</span><span id="line-270">               if (c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z' || c == ':')</span>
-<span class="source-line-no">271</span><span id="line-271">                  w.append(c);</span>
-<span class="source-line-no">272</span><span id="line-272">               else if (c == '_' &amp;&amp; ! isEscapeSequence(s,i))</span>
-<span class="source-line-no">273</span><span id="line-273">                  w.append(c);</span>
-<span class="source-line-no">274</span><span id="line-274">               else</span>
-<span class="source-line-no">275</span><span id="line-275">                  appendPaddedHexChar(w, c);</span>
-<span class="source-line-no">276</span><span id="line-276">            } else {</span>
-<span class="source-line-no">277</span><span id="line-277">               if ((c &gt;= '0' &amp;&amp; c &lt;= '9' || c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z' || c == ':'))</span>
-<span class="source-line-no">278</span><span id="line-278">                  w.append(c);</span>
-<span class="source-line-no">279</span><span id="line-279">               else if (c == '_' &amp;&amp; ! isEscapeSequence(s,i))</span>
-<span class="source-line-no">280</span><span id="line-280">                  w.append(c);</span>
-<span class="source-line-no">281</span><span id="line-281">               else</span>
-<span class="source-line-no">282</span><span id="line-282">                  appendPaddedHexChar(w, c);</span>
-<span class="source-line-no">283</span><span id="line-283">            }</span>
-<span class="source-line-no">284</span><span id="line-284">         }</span>
-<span class="source-line-no">285</span><span id="line-285">      } else {</span>
-<span class="source-line-no">286</span><span id="line-286">         w.append(s);</span>
-<span class="source-line-no">287</span><span id="line-287">      }</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">      return w;</span>
-<span class="source-line-no">290</span><span id="line-290">   }</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   private static boolean needsAttrNameEncoding(String value) {</span>
-<span class="source-line-no">293</span><span id="line-293">      // Note that this doesn't need to be perfect, just fast.</span>
-<span class="source-line-no">294</span><span id="line-294">      for (int i = 0; i &lt; value.length(); i++) {</span>
-<span class="source-line-no">295</span><span id="line-295">         char c = value.charAt(i);</span>
-<span class="source-line-no">296</span><span id="line-296">         if (! (c &gt;= '0' &amp;&amp; c &lt;= '9' || c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z') || (i == 0 &amp;&amp; ! (c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z')))</span>
-<span class="source-line-no">297</span><span id="line-297">            return true;</span>
-<span class="source-line-no">298</span><span id="line-298">      }</span>
-<span class="source-line-no">299</span><span id="line-299">      return false;</span>
-<span class="source-line-no">300</span><span id="line-300">   }</span>
-<span class="source-line-no">301</span><span id="line-301"></span>
-<span class="source-line-no">302</span><span id="line-302">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">303</span><span id="line-303">   // XML attribute values</span>
-<span class="source-line-no">304</span><span id="line-304">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">305</span><span id="line-305"></span>
-<span class="source-line-no">306</span><span id="line-306">   /**</span>
-<span class="source-line-no">307</span><span id="line-307">    * Encodes the specified attribute value and sends the results to the specified writer.</span>
-<span class="source-line-no">308</span><span id="line-308">    *</span>
-<span class="source-line-no">309</span><span id="line-309">    * &lt;p&gt;</span>
-<span class="source-line-no">310</span><span id="line-310">    * Encodes any invalid XML text characters to &lt;c&gt;_x####_&lt;/c&gt; sequences and sends the response to the specified</span>
-<span class="source-line-no">311</span><span id="line-311">    * writer.</span>
-<span class="source-line-no">312</span><span id="line-312">    * &lt;br&gt;Encodes &lt;js&gt;'&amp;amp;'&lt;/js&gt;, &lt;js&gt;'&amp;lt;'&lt;/js&gt;, &lt;js&gt;'&amp;gt;'&lt;/js&gt;, &lt;js&gt;'"'&lt;/js&gt;, and &lt;js&gt;'\''&lt;/js&gt; as XML entities.</span>
-<span class="source-line-no">313</span><span id="line-313">    * &lt;br&gt;Encodes invalid XML text characters to &lt;c&gt;_x####_&lt;/c&gt; sequences.</span>
-<span class="source-line-no">314</span><span id="line-314">    *</span>
-<span class="source-line-no">315</span><span id="line-315">    * @param w The writer to send the output to.</span>
-<span class="source-line-no">316</span><span id="line-316">    * @param value The object being encoded.</span>
-<span class="source-line-no">317</span><span id="line-317">    * @param trim</span>
-<span class="source-line-no">318</span><span id="line-318">    *    Trim the text before serializing it.</span>
-<span class="source-line-no">319</span><span id="line-319">    *    If &lt;jk&gt;true&lt;/jk&gt;, leading and trailing whitespace characters will be encoded.</span>
-<span class="source-line-no">320</span><span id="line-320">    * @return The same writer passed in.</span>
-<span class="source-line-no">321</span><span id="line-321">    */</span>
-<span class="source-line-no">322</span><span id="line-322">   public static Writer encodeAttrValue(Writer w, Object value, boolean trim) {</span>
-<span class="source-line-no">323</span><span id="line-323">      try {</span>
-<span class="source-line-no">324</span><span id="line-324">         if (value == null)</span>
-<span class="source-line-no">325</span><span id="line-325">            return w.append("_x0000_");</span>
-<span class="source-line-no">326</span><span id="line-326">         String s = value.toString();</span>
-<span class="source-line-no">327</span><span id="line-327">         if (s.isEmpty())</span>
-<span class="source-line-no">328</span><span id="line-328">            return w;</span>
-<span class="source-line-no">329</span><span id="line-329">         if (trim)</span>
-<span class="source-line-no">330</span><span id="line-330">            s = s.trim();</span>
-<span class="source-line-no">331</span><span id="line-331"></span>
-<span class="source-line-no">332</span><span id="line-332">         if (needsAttrValueEncoding(s)) {</span>
-<span class="source-line-no">333</span><span id="line-333">            final int len = s.length();</span>
-<span class="source-line-no">334</span><span id="line-334">            for (int i = 0; i &lt; len; i++) {</span>
-<span class="source-line-no">335</span><span id="line-335">               char c = s.charAt(i);</span>
-<span class="source-line-no">336</span><span id="line-336">               if ((i == 0 || i == len-1) &amp;&amp; Character.isWhitespace(c))</span>
-<span class="source-line-no">337</span><span id="line-337">                  appendPaddedHexChar(w, c);</span>
-<span class="source-line-no">338</span><span id="line-338">               else if (REPLACE_ATTR_VAL.contains(c))</span>
-<span class="source-line-no">339</span><span id="line-339">                  w.append(REPLACE_ATTR_VAL.get(c));</span>
-<span class="source-line-no">340</span><span id="line-340">               else if (c == '_' &amp;&amp; isEscapeSequence(s,i))</span>
-<span class="source-line-no">341</span><span id="line-341">                  appendPaddedHexChar(w, c);</span>
-<span class="source-line-no">342</span><span id="line-342">               else if (isValidXmlCharacter(c))</span>
-<span class="source-line-no">343</span><span id="line-343">                  w.append(c);</span>
-<span class="source-line-no">344</span><span id="line-344">               else</span>
-<span class="source-line-no">345</span><span id="line-345">                  appendPaddedHexChar(w, c);</span>
-<span class="source-line-no">346</span><span id="line-346">            }</span>
-<span class="source-line-no">347</span><span id="line-347">         } else {</span>
-<span class="source-line-no">348</span><span id="line-348">            w.append(s);</span>
-<span class="source-line-no">349</span><span id="line-349">         }</span>
-<span class="source-line-no">350</span><span id="line-350">      } catch (IOException e) {</span>
-<span class="source-line-no">351</span><span id="line-351">         throw asRuntimeException(e);</span>
-<span class="source-line-no">352</span><span id="line-352">      }</span>
-<span class="source-line-no">353</span><span id="line-353"></span>
-<span class="source-line-no">354</span><span id="line-354">      return w;</span>
-<span class="source-line-no">355</span><span id="line-355">   }</span>
-<span class="source-line-no">356</span><span id="line-356"></span>
-<span class="source-line-no">357</span><span id="line-357">   private static boolean needsAttrValueEncoding(String value) {</span>
-<span class="source-line-no">358</span><span id="line-358">      // See if we need to convert the string.</span>
-<span class="source-line-no">359</span><span id="line-359">      // Conversion is somewhat expensive, so make sure we need to do so before hand.</span>
-<span class="source-line-no">360</span><span id="line-360">      final int len = value.length();</span>
-<span class="source-line-no">361</span><span id="line-361">      for (int i = 0; i &lt; len; i++) {</span>
-<span class="source-line-no">362</span><span id="line-362">         char c = value.charAt(i);</span>
-<span class="source-line-no">363</span><span id="line-363">         if ((i == 0 || i == len-1) &amp;&amp; Character.isWhitespace(c))</span>
-<span class="source-line-no">364</span><span id="line-364">            return true;</span>
-<span class="source-line-no">365</span><span id="line-365">         if (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' &amp;&amp; isEscapeSequence(value,i)))</span>
-<span class="source-line-no">366</span><span id="line-366">            return true;</span>
-<span class="source-line-no">367</span><span id="line-367">      }</span>
-<span class="source-line-no">368</span><span id="line-368">      return false;</span>
-<span class="source-line-no">369</span><span id="line-369">   }</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   private static AsciiMap REPLACE_ATTR_VAL = new AsciiMap()</span>
-<span class="source-line-no">372</span><span id="line-372">      .append('&amp;', "&amp;amp;")</span>
-<span class="source-line-no">373</span><span id="line-373">      .append('&lt;', "&amp;lt;")</span>
-<span class="source-line-no">374</span><span id="line-374">      .append('&gt;', "&amp;gt;")</span>
-<span class="source-line-no">375</span><span id="line-375">      .append('"', "&amp;quot;")</span>
-<span class="source-line-no">376</span><span id="line-376">      .append('\'', "&amp;apos;")</span>
-<span class="source-line-no">377</span><span id="line-377">      .append((char)0x09, "&amp;#x0009;")</span>
-<span class="source-line-no">378</span><span id="line-378">      .append((char)0x0A, "&amp;#x000a;")</span>
-<span class="source-line-no">379</span><span id="line-379">      .append((char)0x0D, "&amp;#x000d;");</span>
-<span class="source-line-no">380</span><span id="line-380"></span>
-<span class="source-line-no">381</span><span id="line-381"></span>
+<span class="source-line-no">248</span><span id="line-248">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">249</span><span id="line-249">   // XML attribute names</span>
+<span class="source-line-no">250</span><span id="line-250">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">251</span><span id="line-251"></span>
+<span class="source-line-no">252</span><span id="line-252">   /**</span>
+<span class="source-line-no">253</span><span id="line-253">    * Serializes and encodes the specified object as valid XML attribute name.</span>
+<span class="source-line-no">254</span><span id="line-254">    *</span>
+<span class="source-line-no">255</span><span id="line-255">    * @param w The writer to send the output to.</span>
+<span class="source-line-no">256</span><span id="line-256">    * @param value The object being serialized.</span>
+<span class="source-line-no">257</span><span id="line-257">    * @return This object.</span>
+<span class="source-line-no">258</span><span id="line-258">    * @throws IOException If a problem occurred.</span>
+<span class="source-line-no">259</span><span id="line-259">    */</span>
+<span class="source-line-no">260</span><span id="line-260">   public static Writer encodeAttrName(Writer w, Object value) throws IOException {</span>
+<span class="source-line-no">261</span><span id="line-261">      if (value == null)</span>
+<span class="source-line-no">262</span><span id="line-262">         return w.append("_x0000_");</span>
+<span class="source-line-no">263</span><span id="line-263">      String s = value.toString();</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">      if (needsAttrNameEncoding(s)) {</span>
+<span class="source-line-no">266</span><span id="line-266">         for (int i = 0; i &lt; s.length(); i++) {</span>
+<span class="source-line-no">267</span><span id="line-267">            char c = s.charAt(i);</span>
+<span class="source-line-no">268</span><span id="line-268">            if (i == 0) {</span>
+<span class="source-line-no">269</span><span id="line-269">               if (c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z' || c == ':')</span>
+<span class="source-line-no">270</span><span id="line-270">                  w.append(c);</span>
+<span class="source-line-no">271</span><span id="line-271">               else if (c == '_' &amp;&amp; ! isEscapeSequence(s,i))</span>
+<span class="source-line-no">272</span><span id="line-272">                  w.append(c);</span>
+<span class="source-line-no">273</span><span id="line-273">               else</span>
+<span class="source-line-no">274</span><span id="line-274">                  appendPaddedHexChar(w, c);</span>
+<span class="source-line-no">275</span><span id="line-275">            } else {</span>
+<span class="source-line-no">276</span><span id="line-276">               if ((c &gt;= '0' &amp;&amp; c &lt;= '9' || c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z' || c == ':'))</span>
+<span class="source-line-no">277</span><span id="line-277">                  w.append(c);</span>
+<span class="source-line-no">278</span><span id="line-278">               else if (c == '_' &amp;&amp; ! isEscapeSequence(s,i))</span>
+<span class="source-line-no">279</span><span id="line-279">                  w.append(c);</span>
+<span class="source-line-no">280</span><span id="line-280">               else</span>
+<span class="source-line-no">281</span><span id="line-281">                  appendPaddedHexChar(w, c);</span>
+<span class="source-line-no">282</span><span id="line-282">            }</span>
+<span class="source-line-no">283</span><span id="line-283">         }</span>
+<span class="source-line-no">284</span><span id="line-284">      } else {</span>
+<span class="source-line-no">285</span><span id="line-285">         w.append(s);</span>
+<span class="source-line-no">286</span><span id="line-286">      }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">      return w;</span>
+<span class="source-line-no">289</span><span id="line-289">   }</span>
+<span class="source-line-no">290</span><span id="line-290"></span>
+<span class="source-line-no">291</span><span id="line-291">   private static boolean needsAttrNameEncoding(String value) {</span>
+<span class="source-line-no">292</span><span id="line-292">      // Note that this doesn't need to be perfect, just fast.</span>
+<span class="source-line-no">293</span><span id="line-293">      for (int i = 0; i &lt; value.length(); i++) {</span>
+<span class="source-line-no">294</span><span id="line-294">         char c = value.charAt(i);</span>
+<span class="source-line-no">295</span><span id="line-295">         if (! (c &gt;= '0' &amp;&amp; c &lt;= '9' || c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z') || (i == 0 &amp;&amp; ! (c &gt;= 'a' &amp;&amp; c &lt;= 'z' || c &gt;= 'A' &amp;&amp; c &lt;= 'Z')))</span>
+<span class="source-line-no">296</span><span id="line-296">            return true;</span>
+<span class="source-line-no">297</span><span id="line-297">      }</span>
+<span class="source-line-no">298</span><span id="line-298">      return false;</span>
+<span class="source-line-no">299</span><span id="line-299">   }</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">302</span><span id="line-302">   // XML attribute values</span>
+<span class="source-line-no">303</span><span id="line-303">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">   /**</span>
+<span class="source-line-no">306</span><span id="line-306">    * Encodes the specified attribute value and sends the results to the specified writer.</span>
+<span class="source-line-no">307</span><span id="line-307">    *</span>
+<span class="source-line-no">308</span><span id="line-308">    * &lt;p&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    * Encodes any invalid XML text characters to &lt;c&gt;_x####_&lt;/c&gt; sequences and sends the response to the specified</span>
+<span class="source-line-no">310</span><span id="line-310">    * writer.</span>
+<span class="source-line-no">311</span><span id="line-311">    * &lt;br&gt;Encodes &lt;js&gt;'&amp;amp;'&lt;/js&gt;, &lt;js&gt;'&amp;lt;'&lt;/js&gt;, &lt;js&gt;'&amp;gt;'&lt;/js&gt;, &lt;js&gt;'"'&lt;/js&gt;, and &lt;js&gt;'\''&lt;/js&gt; as XML entities.</span>
+<span class="source-line-no">312</span><span id="line-312">    * &lt;br&gt;Encodes invalid XML text characters to &lt;c&gt;_x####_&lt;/c&gt; sequences.</span>
+<span class="source-line-no">313</span><span id="line-313">    *</span>
+<span class="source-line-no">314</span><span id="line-314">    * @param w The writer to send the output to.</span>
+<span class="source-line-no">315</span><span id="line-315">    * @param value The object being encoded.</span>
+<span class="source-line-no">316</span><span id="line-316">    * @param trim</span>
+<span class="source-line-no">317</span><span id="line-317">    *    Trim the text before serializing it.</span>
+<span class="source-line-no">318</span><span id="line-318">    *    If &lt;jk&gt;true&lt;/jk&gt;, leading and trailing whitespace characters will be encoded.</span>
+<span class="source-line-no">319</span><span id="line-319">    * @return The same writer passed in.</span>
+<span class="source-line-no">320</span><span id="line-320">    */</span>
+<span class="source-line-no">321</span><span id="line-321">   public static Writer encodeAttrValue(Writer w, Object value, boolean trim) {</span>
+<span class="source-line-no">322</span><span id="line-322">      try {</span>
+<span class="source-line-no">323</span><span id="line-323">         if (value == null)</span>
+<span class="source-line-no">324</span><span id="line-324">            return w.append("_x0000_");</span>
+<span class="source-line-no">325</span><span id="line-325">         String s = value.toString();</span>
+<span class="source-line-no">326</span><span id="line-326">         if (s.isEmpty())</span>
+<span class="source-line-no">327</span><span id="line-327">            return w;</span>
+<span class="source-line-no">328</span><span id="line-328">         if (trim)</span>
+<span class="source-line-no">329</span><span id="line-329">            s = s.trim();</span>
+<span class="source-line-no">330</span><span id="line-330"></span>
+<span class="source-line-no">331</span><span id="line-331">         if (needsAttrValueEncoding(s)) {</span>
+<span class="source-line-no">332</span><span id="line-332">            final int len = s.length();</span>
+<span class="source-line-no">333</span><span id="line-333">            for (int i = 0; i &lt; len; i++) {</span>
+<span class="source-line-no">334</span><span id="line-334">               char c = s.charAt(i);</span>
+<span class="source-line-no">335</span><span id="line-335">               if ((i == 0 || i == len-1) &amp;&amp; Character.isWhitespace(c))</span>
+<span class="source-line-no">336</span><span id="line-336">                  appendPaddedHexChar(w, c);</span>
+<span class="source-line-no">337</span><span id="line-337">               else if (REPLACE_ATTR_VAL.contains(c))</span>
+<span class="source-line-no">338</span><span id="line-338">                  w.append(REPLACE_ATTR_VAL.get(c));</span>
+<span class="source-line-no">339</span><span id="line-339">               else if (c == '_' &amp;&amp; isEscapeSequence(s,i))</span>
+<span class="source-line-no">340</span><span id="line-340">                  appendPaddedHexChar(w, c);</span>
+<span class="source-line-no">341</span><span id="line-341">               else if (isValidXmlCharacter(c))</span>
+<span class="source-line-no">342</span><span id="line-342">                  w.append(c);</span>
+<span class="source-line-no">343</span><span id="line-343">               else</span>
+<span class="source-line-no">344</span><span id="line-344">                  appendPaddedHexChar(w, c);</span>
+<span class="source-line-no">345</span><span id="line-345">            }</span>
+<span class="source-line-no">346</span><span id="line-346">         } else {</span>
+<span class="source-line-no">347</span><span id="line-347">            w.append(s);</span>
+<span class="source-line-no">348</span><span id="line-348">         }</span>
+<span class="source-line-no">349</span><span id="line-349">      } catch (IOException e) {</span>
+<span class="source-line-no">350</span><span id="line-350">         throw asRuntimeException(e);</span>
+<span class="source-line-no">351</span><span id="line-351">      }</span>
+<span class="source-line-no">352</span><span id="line-352"></span>
+<span class="source-line-no">353</span><span id="line-353">      return w;</span>
+<span class="source-line-no">354</span><span id="line-354">   }</span>
+<span class="source-line-no">355</span><span id="line-355"></span>
+<span class="source-line-no">356</span><span id="line-356">   private static boolean needsAttrValueEncoding(String value) {</span>
+<span class="source-line-no">357</span><span id="line-357">      // See if we need to convert the string.</span>
+<span class="source-line-no">358</span><span id="line-358">      // Conversion is somewhat expensive, so make sure we need to do so before hand.</span>
+<span class="source-line-no">359</span><span id="line-359">      final int len = value.length();</span>
+<span class="source-line-no">360</span><span id="line-360">      for (int i = 0; i &lt; len; i++) {</span>
+<span class="source-line-no">361</span><span id="line-361">         char c = value.charAt(i);</span>
+<span class="source-line-no">362</span><span id="line-362">         if ((i == 0 || i == len-1) &amp;&amp; Character.isWhitespace(c))</span>
+<span class="source-line-no">363</span><span id="line-363">            return true;</span>
+<span class="source-line-no">364</span><span id="line-364">         if (REPLACE_ATTR_VAL.contains(c) || ! isValidXmlCharacter(c) || (c == '_' &amp;&amp; isEscapeSequence(value,i)))</span>
+<span class="source-line-no">365</span><span id="line-365">            return true;</span>
+<span class="source-line-no">366</span><span id="line-366">      }</span>
+<span class="source-line-no">367</span><span id="line-367">      return false;</span>
+<span class="source-line-no">368</span><span id="line-368">   }</span>
+<span class="source-line-no">369</span><span id="line-369"></span>
+<span class="source-line-no">370</span><span id="line-370">   private static AsciiMap REPLACE_ATTR_VAL = new AsciiMap()</span>
+<span class="source-line-no">371</span><span id="line-371">      .append('&amp;', "&amp;amp;")</span>
+<span class="source-line-no">372</span><span id="line-372">      .append('&lt;', "&amp;lt;")</span>
+<span class="source-line-no">373</span><span id="line-373">      .append('&gt;', "&amp;gt;")</span>
+<span class="source-line-no">374</span><span id="line-374">      .append('"', "&amp;quot;")</span>
+<span class="source-line-no">375</span><span id="line-375">      .append('\'', "&amp;apos;")</span>
+<span class="source-line-no">376</span><span id="line-376">      .append((char)0x09, "&amp;#x0009;")</span>
+<span class="source-line-no">377</span><span id="line-377">      .append((char)0x0A, "&amp;#x000a;")</span>
+<span class="source-line-no">378</span><span id="line-378">      .append((char)0x0D, "&amp;#x000d;");</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">381</span><span id="line-381">   // Decode XML text</span>
 <span class="source-line-no">382</span><span id="line-382">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">383</span><span id="line-383">   // Decode XML text</span>
-<span class="source-line-no">384</span><span id="line-384">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">385</span><span id="line-385"></span>
-<span class="source-line-no">386</span><span id="line-386">   /**</span>
-<span class="source-line-no">387</span><span id="line-387">    * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.</span>
-<span class="source-line-no">388</span><span id="line-388">    *</span>
-<span class="source-line-no">389</span><span id="line-389">    * @param value The string being decoded.</span>
-<span class="source-line-no">390</span><span id="line-390">    * @param sb The string builder to use as a scratch pad.</span>
-<span class="source-line-no">391</span><span id="line-391">    * @return The decoded string.</span>
-<span class="source-line-no">392</span><span id="line-392">    */</span>
-<span class="source-line-no">393</span><span id="line-393">   public static String decode(String value, StringBuilder sb) {</span>
-<span class="source-line-no">394</span><span id="line-394">      if (value == null)</span>
-<span class="source-line-no">395</span><span id="line-395">         return null;</span>
-<span class="source-line-no">396</span><span id="line-396">      if (value.isEmpty() || value.indexOf('_') == -1)</span>
-<span class="source-line-no">397</span><span id="line-397">         return value;</span>
-<span class="source-line-no">398</span><span id="line-398">      if (sb == null)</span>
-<span class="source-line-no">399</span><span id="line-399">         sb = new StringBuilder(value.length());</span>
-<span class="source-line-no">400</span><span id="line-400"></span>
-<span class="source-line-no">401</span><span id="line-401">      for (int i = 0; i &lt; value.length(); i++) {</span>
-<span class="source-line-no">402</span><span id="line-402">         char c = value.charAt(i);</span>
-<span class="source-line-no">403</span><span id="line-403">         if (c == '_' &amp;&amp; isEscapeSequence(value,i)) {</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">   /**</span>
+<span class="source-line-no">385</span><span id="line-385">    * Translates any _x####_ sequences (introduced by the various encode methods) back into their original characters.</span>
+<span class="source-line-no">386</span><span id="line-386">    *</span>
+<span class="source-line-no">387</span><span id="line-387">    * @param value The string being decoded.</span>
+<span class="source-line-no">388</span><span id="line-388">    * @param sb The string builder to use as a scratch pad.</span>
+<span class="source-line-no">389</span><span id="line-389">    * @return The decoded string.</span>
+<span class="source-line-no">390</span><span id="line-390">    */</span>
+<span class="source-line-no">391</span><span id="line-391">   public static String decode(String value, StringBuilder sb) {</span>
+<span class="source-line-no">392</span><span id="line-392">      if (value == null)</span>
+<span class="source-line-no">393</span><span id="line-393">         return null;</span>
+<span class="source-line-no">394</span><span id="line-394">      if (value.isEmpty() || value.indexOf('_') == -1)</span>
+<span class="source-line-no">395</span><span id="line-395">         return value;</span>
+<span class="source-line-no">396</span><span id="line-396">      if (sb == null)</span>
+<span class="source-line-no">397</span><span id="line-397">         sb = new StringBuilder(value.length());</span>
+<span class="source-line-no">398</span><span id="line-398"></span>
+<span class="source-line-no">399</span><span id="line-399">      for (int i = 0; i &lt; value.length(); i++) {</span>
+<span class="source-line-no">400</span><span id="line-400">         char c = value.charAt(i);</span>
+<span class="source-line-no">401</span><span id="line-401">         if (c == '_' &amp;&amp; isEscapeSequence(value,i)) {</span>
+<span class="source-line-no">402</span><span id="line-402"></span>
+<span class="source-line-no">403</span><span id="line-403">            int x = Integer.parseInt(value.substring(i+2, i+6), 16);</span>
 <span class="source-line-no">404</span><span id="line-404"></span>
-<span class="source-line-no">405</span><span id="line-405">            int x = Integer.parseInt(value.substring(i+2, i+6), 16);</span>
-<span class="source-line-no">406</span><span id="line-406"></span>
-<span class="source-line-no">407</span><span id="line-407">            // If we find _x0000_, then that means a null.</span>
-<span class="source-line-no">408</span><span id="line-408">            // If we find _xE000_, then that means an empty string.</span>
-<span class="source-line-no">409</span><span id="line-409">            if (x == 0)</span>
-<span class="source-line-no">410</span><span id="line-410">               return null;</span>
-<span class="source-line-no">411</span><span id="line-411">            else if (x != 0xE000)</span>
-<span class="source-line-no">412</span><span id="line-412">               sb.append((char)x);</span>
-<span class="source-line-no">413</span><span id="line-413"></span>
-<span class="source-line-no">414</span><span id="line-414">            i+=6;</span>
-<span class="source-line-no">415</span><span id="line-415">         } else {</span>
-<span class="source-line-no">416</span><span id="line-416">            sb.append(c);</span>
-<span class="source-line-no">417</span><span id="line-417">         }</span>
-<span class="source-line-no">418</span><span id="line-418">      }</span>
-<span class="source-line-no">419</span><span id="line-419">      return sb.toString();</span>
-<span class="source-line-no">420</span><span id="line-420">   }</span>
-<span class="source-line-no">421</span><span id="line-421"></span>
-<span class="source-line-no">422</span><span id="line-422"></span>
-<span class="source-line-no">423</span><span id="line-423">   /**</span>
-<span class="source-line-no">424</span><span id="line-424">    * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.</span>
-<span class="source-line-no">425</span><span id="line-425">    *</span>
-<span class="source-line-no">426</span><span id="line-426">    * @param value The list of text nodes to collapse.</span>
-<span class="source-line-no">427</span><span id="line-427">    * @return The same list.</span>
-<span class="source-line-no">428</span><span id="line-428">    */</span>
-<span class="source-line-no">429</span><span id="line-429">   public static LinkedList&lt;Object&gt; collapseTextNodes(LinkedList&lt;Object&gt; value) {</span>
-<span class="source-line-no">430</span><span id="line-430"></span>
-<span class="source-line-no">431</span><span id="line-431">      String prev = null;</span>
-<span class="source-line-no">432</span><span id="line-432">      for (ListIterator&lt;Object&gt; i = value.listIterator(); i.hasNext();) {</span>
-<span class="source-line-no">433</span><span id="line-433">         Object o = i.next();</span>
-<span class="source-line-no">434</span><span id="line-434">         if (o instanceof String) {</span>
-<span class="source-line-no">435</span><span id="line-435">            if (prev == null)</span>
-<span class="source-line-no">436</span><span id="line-436">               prev = o.toString();</span>
-<span class="source-line-no">437</span><span id="line-437">            else {</span>
-<span class="source-line-no">438</span><span id="line-438">               prev += o;</span>
-<span class="source-line-no">439</span><span id="line-439">               i.remove();</span>
-<span class="source-line-no">440</span><span id="line-440">               i.previous();</span>
-<span class="source-line-no">441</span><span id="line-441">               i.remove();</span>
-<span class="source-line-no">442</span><span id="line-442">               i.add(prev);</span>
-<span class="source-line-no">443</span><span id="line-443">            }</span>
-<span class="source-line-no">444</span><span id="line-444">         } else {</span>
-<span class="source-line-no">445</span><span id="line-445">            prev = null;</span>
-<span class="source-line-no">446</span><span id="line-446">         }</span>
-<span class="source-line-no">447</span><span id="line-447">      }</span>
-<span class="source-line-no">448</span><span id="line-448">      return value;</span>
-<span class="source-line-no">449</span><span id="line-449">   }</span>
-<span class="source-line-no">450</span><span id="line-450"></span>
-<span class="source-line-no">451</span><span id="line-451">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">452</span><span id="line-452">   // Other methods</span>
-<span class="source-line-no">453</span><span id="line-453">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">454</span><span id="line-454"></span>
-<span class="source-line-no">455</span><span id="line-455">   // Returns true if the specified character can safely be used in XML text or an attribute.</span>
-<span class="source-line-no">456</span><span id="line-456">   private static boolean isValidXmlCharacter(char c) {</span>
-<span class="source-line-no">457</span><span id="line-457">      return (c &gt;= 0x20 &amp;&amp; c &lt;= 0xD7FF) /*|| c == 0xA || c == 0xD*/ || (c &gt;= 0xE000 &amp;&amp; c &lt;= 0xFFFD);</span>
-<span class="source-line-no">458</span><span id="line-458">   }</span>
-<span class="source-line-no">459</span><span id="line-459"></span>
-<span class="source-line-no">460</span><span id="line-460">   // Returns true if the string at the specified position is of the form "_x####_"</span>
-<span class="source-line-no">461</span><span id="line-461">   // where '#' are hexadecimal characters.</span>
-<span class="source-line-no">462</span><span id="line-462">   private static boolean isEscapeSequence(String s, int i) {</span>
-<span class="source-line-no">463</span><span id="line-463">      return s.length() &gt; i+6</span>
-<span class="source-line-no">464</span><span id="line-464">         &amp;&amp; s.charAt(i) == '_'</span>
-<span class="source-line-no">465</span><span id="line-465">         &amp;&amp; s.charAt(i+1) == 'x'</span>
-<span class="source-line-no">466</span><span id="line-466">         &amp;&amp; isHexCharacter(s.charAt(i+2))</span>
-<span class="source-line-no">467</span><span id="line-467">         &amp;&amp; isHexCharacter(s.charAt(i+3))</span>
-<span class="source-line-no">468</span><span id="line-468">         &amp;&amp; isHexCharacter(s.charAt(i+4))</span>
-<span class="source-line-no">469</span><span id="line-469">         &amp;&amp; isHexCharacter(s.charAt(i+5))</span>
-<span class="source-line-no">470</span><span id="line-470">         &amp;&amp; s.charAt(i+6) == '_';</span>
-<span class="source-line-no">471</span><span id="line-471">   }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">   // Returns true if the character is a hexadecimal character</span>
-<span class="source-line-no">474</span><span id="line-474">   private static boolean isHexCharacter(char c) {</span>
-<span class="source-line-no">475</span><span id="line-475">      return (c &gt;= '0' &amp;&amp; c &lt;= '9') || (c &gt;= 'A' &amp;&amp; c &lt;= 'F');</span>
-<span class="source-line-no">476</span><span id="line-476">   }</span>
-<span class="source-line-no">477</span><span id="line-477"></span>
-<span class="source-line-no">478</span><span id="line-478">   // Converts an integer to a hexadecimal string padded to 4 places.</span>
-<span class="source-line-no">479</span><span id="line-479">   private static Writer appendPaddedHexChar(Writer out, int num) throws IOException {</span>
-<span class="source-line-no">480</span><span id="line-480">      out.append("_x");</span>
-<span class="source-line-no">481</span><span id="line-481">      for (char c : toHex4(num))</span>
-<span class="source-line-no">482</span><span id="line-482">         out.append(c);</span>
-<span class="source-line-no">483</span><span id="line-483">      return out.append('_');</span>
-<span class="source-line-no">484</span><span id="line-484">   }</span>
-<span class="source-line-no">485</span><span id="line-485"></span>
-<span class="source-line-no">486</span><span id="line-486">   /**</span>
-<span class="source-line-no">487</span><span id="line-487">    * Find the namespace given a list of &lt;ja&gt;@Xml&lt;/ja&gt; and &lt;ja&gt;@XmlSchema&lt;/ja&gt; annotations.</span>
+<span class="source-line-no">405</span><span id="line-405">            // If we find _x0000_, then that means a null.</span>
+<span class="source-line-no">406</span><span id="line-406">            // If we find _xE000_, then that means an empty string.</span>
+<span class="source-line-no">407</span><span id="line-407">            if (x == 0)</span>
+<span class="source-line-no">408</span><span id="line-408">               return null;</span>
+<span class="source-line-no">409</span><span id="line-409">            else if (x != 0xE000)</span>
+<span class="source-line-no">410</span><span id="line-410">               sb.append((char)x);</span>
+<span class="source-line-no">411</span><span id="line-411"></span>
+<span class="source-line-no">412</span><span id="line-412">            i+=6;</span>
+<span class="source-line-no">413</span><span id="line-413">         } else {</span>
+<span class="source-line-no">414</span><span id="line-414">            sb.append(c);</span>
+<span class="source-line-no">415</span><span id="line-415">         }</span>
+<span class="source-line-no">416</span><span id="line-416">      }</span>
+<span class="source-line-no">417</span><span id="line-417">      return sb.toString();</span>
+<span class="source-line-no">418</span><span id="line-418">   }</span>
+<span class="source-line-no">419</span><span id="line-419"></span>
+<span class="source-line-no">420</span><span id="line-420">   /**</span>
+<span class="source-line-no">421</span><span id="line-421">    * Given a list of Strings and other Objects, combines Strings that are next to each other in the list.</span>
+<span class="source-line-no">422</span><span id="line-422">    *</span>
+<span class="source-line-no">423</span><span id="line-423">    * @param value The list of text nodes to collapse.</span>
+<span class="source-line-no">424</span><span id="line-424">    * @return The same list.</span>
+<span class="source-line-no">425</span><span id="line-425">    */</span>
+<span class="source-line-no">426</span><span id="line-426">   public static LinkedList&lt;Object&gt; collapseTextNodes(LinkedList&lt;Object&gt; value) {</span>
+<span class="source-line-no">427</span><span id="line-427"></span>
+<span class="source-line-no">428</span><span id="line-428">      String prev = null;</span>
+<span class="source-line-no">429</span><span id="line-429">      for (ListIterator&lt;Object&gt; i = value.listIterator(); i.hasNext();) {</span>
+<span class="source-line-no">430</span><span id="line-430">         Object o = i.next();</span>
+<span class="source-line-no">431</span><span id="line-431">         if (o instanceof String) {</span>
+<span class="source-line-no">432</span><span id="line-432">            if (prev == null)</span>
+<span class="source-line-no">433</span><span id="line-433">               prev = o.toString();</span>
+<span class="source-line-no">434</span><span id="line-434">            else {</span>
+<span class="source-line-no">435</span><span id="line-435">               prev += o;</span>
+<span class="source-line-no">436</span><span id="line-436">               i.remove();</span>
+<span class="source-line-no">437</span><span id="line-437">               i.previous();</span>
+<span class="source-line-no">438</span><span id="line-438">               i.remove();</span>
+<span class="source-line-no">439</span><span id="line-439">               i.add(prev);</span>
+<span class="source-line-no">440</span><span id="line-440">            }</span>
+<span class="source-line-no">441</span><span id="line-441">         } else {</span>
+<span class="source-line-no">442</span><span id="line-442">            prev = null;</span>
+<span class="source-line-no">443</span><span id="line-443">         }</span>
+<span class="source-line-no">444</span><span id="line-444">      }</span>
+<span class="source-line-no">445</span><span id="line-445">      return value;</span>
+<span class="source-line-no">446</span><span id="line-446">   }</span>
+<span class="source-line-no">447</span><span id="line-447"></span>
+<span class="source-line-no">448</span><span id="line-448">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">449</span><span id="line-449">   // Other methods</span>
+<span class="source-line-no">450</span><span id="line-450">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">451</span><span id="line-451"></span>
+<span class="source-line-no">452</span><span id="line-452">   // Returns true if the specified character can safely be used in XML text or an attribute.</span>
+<span class="source-line-no">453</span><span id="line-453">   private static boolean isValidXmlCharacter(char c) {</span>
+<span class="source-line-no">454</span><span id="line-454">      return (c &gt;= 0x20 &amp;&amp; c &lt;= 0xD7FF) /*|| c == 0xA || c == 0xD*/ || (c &gt;= 0xE000 &amp;&amp; c &lt;= 0xFFFD);</span>
+<span class="source-line-no">455</span><span id="line-455">   }</span>
+<span class="source-line-no">456</span><span id="line-456"></span>
+<span class="source-line-no">457</span><span id="line-457">   // Returns true if the string at the specified position is of the form "_x####_"</span>
+<span class="source-line-no">458</span><span id="line-458">   // where '#' are hexadecimal characters.</span>
+<span class="source-line-no">459</span><span id="line-459">   private static boolean isEscapeSequence(String s, int i) {</span>
+<span class="source-line-no">460</span><span id="line-460">      return s.length() &gt; i+6</span>
+<span class="source-line-no">461</span><span id="line-461">         &amp;&amp; s.charAt(i) == '_'</span>
+<span class="source-line-no">462</span><span id="line-462">         &amp;&amp; s.charAt(i+1) == 'x'</span>
+<span class="source-line-no">463</span><span id="line-463">         &amp;&amp; isHexCharacter(s.charAt(i+2))</span>
+<span class="source-line-no">464</span><span id="line-464">         &amp;&amp; isHexCharacter(s.charAt(i+3))</span>
+<span class="source-line-no">465</span><span id="line-465">         &amp;&amp; isHexCharacter(s.charAt(i+4))</span>
+<span class="source-line-no">466</span><span id="line-466">         &amp;&amp; isHexCharacter(s.charAt(i+5))</span>
+<span class="source-line-no">467</span><span id="line-467">         &amp;&amp; s.charAt(i+6) == '_';</span>
+<span class="source-line-no">468</span><span id="line-468">   }</span>
+<span class="source-line-no">469</span><span id="line-469"></span>
+<span class="source-line-no">470</span><span id="line-470">   // Returns true if the character is a hexadecimal character</span>
+<span class="source-line-no">471</span><span id="line-471">   private static boolean isHexCharacter(char c) {</span>
+<span class="source-line-no">472</span><span id="line-472">      return (c &gt;= '0' &amp;&amp; c &lt;= '9') || (c &gt;= 'A' &amp;&amp; c &lt;= 'F');</span>
+<span class="source-line-no">473</span><span id="line-473">   }</span>
+<span class="source-line-no">474</span><span id="line-474"></span>
+<span class="source-line-no">475</span><span id="line-475">   // Converts an integer to a hexadecimal string padded to 4 places.</span>
+<span class="source-line-no">476</span><span id="line-476">   private static Writer appendPaddedHexChar(Writer out, int num) throws IOException {</span>
+<span class="source-line-no">477</span><span id="line-477">      out.append("_x");</span>
+<span class="source-line-no">478</span><span id="line-478">      for (char c : toHex4(num))</span>
+<span class="source-line-no">479</span><span id="line-479">         out.append(c);</span>
+<span class="source-line-no">480</span><span id="line-480">      return out.append('_');</span>
+<span class="source-line-no">481</span><span id="line-481">   }</span>
+<span class="source-line-no">482</span><span id="line-482"></span>
+<span class="source-line-no">483</span><span id="line-483">   /**</span>
+<span class="source-line-no">484</span><span id="line-484">    * Find the namespace given a list of &lt;ja&gt;@Xml&lt;/ja&gt; and &lt;ja&gt;@XmlSchema&lt;/ja&gt; annotations.</span>
+<span class="source-line-no">485</span><span id="line-485">    *</span>
+<span class="source-line-no">486</span><span id="line-486">    * &lt;p&gt;</span>
+<span class="source-line-no">487</span><span id="line-487">    * The annotations should be a parent-to-child ordering of annotations found on a class or method.</span>
 <span class="source-line-no">488</span><span id="line-488">    *</span>
-<span class="source-line-no">489</span><span id="line-489">    * &lt;p&gt;</span>
-<span class="source-line-no">490</span><span id="line-490">    * The annotations should be a parent-to-child ordering of annotations found on a class or method.</span>
-<span class="source-line-no">491</span><span id="line-491">    *</span>
-<span class="source-line-no">492</span><span id="line-492">    * @param xmls The list of &lt;ja&gt;@Xml&lt;/ja&gt; annotations.</span>
-<span class="source-line-no">493</span><span id="line-493">    * @param schemas The list of &lt;ja&gt;@XmlSchema&lt;/ja&gt; annotations.</span>
-<span class="source-line-no">494</span><span id="line-494">    * @return The namespace, or &lt;jk&gt;null&lt;/jk&gt; if it couldn't be found.</span>
-<span class="source-line-no">495</span><span id="line-495">    */</span>
-<span class="source-line-no">496</span><span id="line-496">   public static Namespace findNamespace(List&lt;Xml&gt; xmls, List&lt;XmlSchema&gt; schemas) {</span>
-<span class="source-line-no">497</span><span id="line-497"></span>
-<span class="source-line-no">498</span><span id="line-498">      for (int i = xmls.size()-1; i &gt;= 0; i--) {</span>
-<span class="source-line-no">499</span><span id="line-499">         Xml xml = xmls.get(i);</span>
-<span class="source-line-no">500</span><span id="line-500">         Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);</span>
-<span class="source-line-no">501</span><span id="line-501">         if (ns != null)</span>
-<span class="source-line-no">502</span><span id="line-502">            return ns;</span>
-<span class="source-line-no">503</span><span id="line-503">      }</span>
-<span class="source-line-no">504</span><span id="line-504"></span>
-<span class="source-line-no">505</span><span id="line-505">      for (int i = schemas.size()-1; i &gt;= 0; i--) {</span>
-<span class="source-line-no">506</span><span id="line-506">         XmlSchema schema = schemas.get(i);</span>
-<span class="source-line-no">507</span><span id="line-507">         Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);</span>
-<span class="source-line-no">508</span><span id="line-508">         if (ns != null)</span>
-<span class="source-line-no">509</span><span id="line-509">            return ns;</span>
-<span class="source-line-no">510</span><span id="line-510">      }</span>
+<span class="source-line-no">489</span><span id="line-489">    * @param xmls The list of &lt;ja&gt;@Xml&lt;/ja&gt; annotations.</span>
+<span class="source-line-no">490</span><span id="line-490">    * @param schemas The list of &lt;ja&gt;@XmlSchema&lt;/ja&gt; annotations.</span>
+<span class="source-line-no">491</span><span id="line-491">    * @return The namespace, or &lt;jk&gt;null&lt;/jk&gt; if it couldn't be found.</span>
+<span class="source-line-no">492</span><span id="line-492">    */</span>
+<span class="source-line-no">493</span><span id="line-493">   public static Namespace findNamespace(List&lt;Xml&gt; xmls, List&lt;XmlSchema&gt; schemas) {</span>
+<span class="source-line-no">494</span><span id="line-494"></span>
+<span class="source-line-no">495</span><span id="line-495">      for (int i = xmls.size()-1; i &gt;= 0; i--) {</span>
+<span class="source-line-no">496</span><span id="line-496">         Xml xml = xmls.get(i);</span>
+<span class="source-line-no">497</span><span id="line-497">         Namespace ns = findNamespace(xml.prefix(), xml.namespace(), xmls, schemas);</span>
+<span class="source-line-no">498</span><span id="line-498">         if (ns != null)</span>
+<span class="source-line-no">499</span><span id="line-499">            return ns;</span>
+<span class="source-line-no">500</span><span id="line-500">      }</span>
+<span class="source-line-no">501</span><span id="line-501"></span>
+<span class="source-line-no">502</span><span id="line-502">      for (int i = schemas.size()-1; i &gt;= 0; i--) {</span>
+<span class="source-line-no">503</span><span id="line-503">         XmlSchema schema = schemas.get(i);</span>
+<span class="source-line-no">504</span><span id="line-504">         Namespace ns = findNamespace(schema.prefix(), schema.namespace(), null, schemas);</span>
+<span class="source-line-no">505</span><span id="line-505">         if (ns != null)</span>
+<span class="source-line-no">506</span><span id="line-506">            return ns;</span>
+<span class="source-line-no">507</span><span id="line-507">      }</span>
+<span class="source-line-no">508</span><span id="line-508"></span>
+<span class="source-line-no">509</span><span id="line-509">      return null;</span>
+<span class="source-line-no">510</span><span id="line-510">   }</span>
 <span class="source-line-no">511</span><span id="line-511"></span>
-<span class="source-line-no">512</span><span id="line-512">      return null;</span>
-<span class="source-line-no">513</span><span id="line-513">   }</span>
-<span class="source-line-no">514</span><span id="line-514"></span>
-<span class="source-line-no">515</span><span id="line-515">   private static Namespace findNamespace(String prefix, String ns, List&lt;Xml&gt; xmls, List&lt;XmlSchema&gt; schemas) {</span>
-<span class="source-line-no">516</span><span id="line-516"></span>
-<span class="source-line-no">517</span><span id="line-517">      // If both prefix and namespace specified, use that Namespace mapping.</span>
-<span class="source-line-no">518</span><span id="line-518">      if (! (prefix.isEmpty() || ns.isEmpty()))</span>
-<span class="source-line-no">519</span><span id="line-519">         return Namespace.of(prefix, ns);</span>
-<span class="source-line-no">520</span><span id="line-520"></span>
-<span class="source-line-no">521</span><span id="line-521">      // If only prefix specified, need to search for namespaceURI.</span>
-<span class="source-line-no">522</span><span id="line-522">      if (! prefix.isEmpty()) {</span>
-<span class="source-line-no">523</span><span id="line-523">         if (xmls != null)</span>
-<span class="source-line-no">524</span><span id="line-524">            for (Xml xml2 : xmls)</span>
-<span class="source-line-no">525</span><span id="line-525">               if (xml2.prefix().equals(prefix) &amp;&amp; ! xml2.namespace().isEmpty())</span>
-<span class="source-line-no">526</span><span id="line-526">                  return Namespace.of(prefix, xml2.namespace());</span>
-<span class="source-line-no">527</span><span id="line-527">         for (XmlSchema schema : schemas) {</span>
-<span class="source-line-no">528</span><span id="line-528">            if (schema.prefix().equals(prefix) &amp;&amp; ! schema.namespace().isEmpty())</span>
-<span class="source-line-no">529</span><span id="line-529">               return Namespace.of(prefix, schema.namespace());</span>
-<span class="source-line-no">530</span><span id="line-530">            for (XmlNs xmlNs : schema.xmlNs())</span>
-<span class="source-line-no">531</span><span id="line-531">               if (xmlNs.prefix().equals(prefix))</span>
-<span class="source-line-no">532</span><span id="line-532">                  return Namespace.of(prefix, xmlNs.namespaceURI());</span>
-<span class="source-line-no">533</span><span id="line-533">         }</span>
-<span class="source-line-no">534</span><span id="line-534">         throw new BeanRuntimeException("Found @Xml.prefix annotation with no matching URI.  prefix='"+prefix+"'");</span>
-<span class="source-line-no">535</span><span id="line-535">      }</span>
-<span class="source-line-no">536</span><span id="line-536"></span>
-<span class="source-line-no">537</span><span id="line-537">      // If only namespaceURI specified, need to search for prefix.</span>
-<span class="source-line-no">538</span><span id="line-538">      if (! ns.isEmpty()) {</span>
-<span class="source-line-no">539</span><span id="line-539">         if (xmls != null)</span>
-<span class="source-line-no">540</span><span id="line-540">            for (Xml xml2 : xmls)</span>
-<span class="source-line-no">541</span><span id="line-541">               if (xml2.namespace().equals(ns) &amp;&amp; ! xml2.prefix().isEmpty())</span>
-<span class="source-line-no">542</span><span id="line-542">                  return Namespace.of(xml2.prefix(), ns);</span>
-<span class="source-line-no">543</span><span id="line-543">         for (XmlSchema schema : schemas) {</span>
-<span class="source-line-no">544</span><span id="line-544">            if (schema.namespace().equals(ns) &amp;&amp; ! schema.prefix().isEmpty())</span>
-<span class="source-line-no">545</span><span id="line-545">               return Namespace.of(schema.prefix(), ns);</span>
-<span class="source-line-no">546</span><span id="line-546">            for (XmlNs xmlNs : schema.xmlNs())</span>
-<span class="source-line-no">547</span><span id="line-547">               if (xmlNs.namespaceURI().equals(ns))</span>
-<span class="source-line-no">548</span><span id="line-548">                  return Namespace.of(xmlNs.prefix(), ns);</span>
-<span class="source-line-no">549</span><span id="line-549">         }</span>
-<span class="source-line-no">550</span><span id="line-550">      }</span>
+<span class="source-line-no">512</span><span id="line-512">   private static Namespace findNamespace(String prefix, String ns, List&lt;Xml&gt; xmls, List&lt;XmlSchema&gt; schemas) {</span>
+<span class="source-line-no">513</span><span id="line-513"></span>
+<span class="source-line-no">514</span><span id="line-514">      // If both prefix and namespace specified, use that Namespace mapping.</span>
+<span class="source-line-no">515</span><span id="line-515">      if (! (prefix.isEmpty() || ns.isEmpty()))</span>
+<span class="source-line-no">516</span><span id="line-516">         return Namespace.of(prefix, ns);</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">      // If only prefix specified, need to search for namespaceURI.</span>
+<span class="source-line-no">519</span><span id="line-519">      if (! prefix.isEmpty()) {</span>
+<span class="source-line-no">520</span><span id="line-520">         if (xmls != null)</span>
+<span class="source-line-no">521</span><span id="line-521">            for (Xml xml2 : xmls)</span>
+<span class="source-line-no">522</span><span id="line-522">               if (xml2.prefix().equals(prefix) &amp;&amp; ! xml2.namespace().isEmpty())</span>
+<span class="source-line-no">523</span><span id="line-523">                  return Namespace.of(prefix, xml2.namespace());</span>
+<span class="source-line-no">524</span><span id="line-524">         for (XmlSchema schema : schemas) {</span>
+<span class="source-line-no">525</span><span id="line-525">            if (schema.prefix().equals(prefix) &amp;&amp; ! schema.namespace().isEmpty())</span>
+<span class="source-line-no">526</span><span id="line-526">               return Namespace.of(prefix, schema.namespace());</span>
+<span class="source-line-no">527</span><span id="line-527">            for (XmlNs xmlNs : schema.xmlNs())</span>
+<span class="source-line-no">528</span><span id="line-528">               if (xmlNs.prefix().equals(prefix))</span>
+<span class="source-line-no">529</span><span id="line-529">                  return Namespace.of(prefix, xmlNs.namespaceURI());</span>
+<span class="source-line-no">530</span><span id="line-530">         }</span>
+<span class="source-line-no">531</span><span id="line-531">         throw new BeanRuntimeException("Found @Xml.prefix annotation with no matching URI.  prefix='"+prefix+"'");</span>
+<span class="source-line-no">532</span><span id="line-532">      }</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">      // If only namespaceURI specified, need to search for prefix.</span>
+<span class="source-line-no">535</span><span id="line-535">      if (! ns.isEmpty()) {</span>
+<span class="source-line-no">536</span><span id="line-536">         if (xmls != null)</span>
+<span class="source-line-no">537</span><span id="line-537">            for (Xml xml2 : xmls)</span>
+<span class="source-line-no">538</span><span id="line-538">               if (xml2.namespace().equals(ns) &amp;&amp; ! xml2.prefix().isEmpty())</span>
+<span class="source-line-no">539</span><span id="line-539">                  return Namespace.of(xml2.prefix(), ns);</span>
+<span class="source-line-no">540</span><span id="line-540">         for (XmlSchema schema : schemas) {</span>
+<span class="source-line-no">541</span><span id="line-541">            if (schema.namespace().equals(ns) &amp;&amp; ! schema.prefix().isEmpty())</span>
+<span class="source-line-no">542</span><span id="line-542">               return Namespace.of(schema.prefix(), ns);</span>
+<span class="source-line-no">543</span><span id="line-543">            for (XmlNs xmlNs : schema.xmlNs())</span>
+<span class="source-line-no">544</span><span id="line-544">               if (xmlNs.namespaceURI().equals(ns))</span>
+<span class="source-line-no">545</span><span id="line-545">                  return Namespace.of(xmlNs.prefix(), ns);</span>
+<span class="source-line-no">546</span><span id="line-546">         }</span>
+<span class="source-line-no">547</span><span id="line-547">      }</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">      return null;</span>
+<span class="source-line-no">550</span><span id="line-550">   }</span>
 <span class="source-line-no">551</span><span id="line-551"></span>
-<span class="source-line-no">552</span><span id="line-552">      return null;</span>
-<span class="source-line-no">553</span><span id="line-553">   }</span>
-<span class="source-line-no">554</span><span id="line-554"></span>
-<span class="source-line-no">555</span><span id="line-555">   /**</span>
-<span class="source-line-no">556</span><span id="line-556">    * Utility method that converts the current event on the XML stream to something human-readable for debug purposes.</span>
-<span class="source-line-no">557</span><span id="line-557">    *</span>
-<span class="source-line-no">558</span><span id="line-558">    * @param r The XML stream reader whose current event is to be converted to a readable string.</span>
-<span class="source-line-no">559</span><span id="line-559">    * @return The event in human-readable form.</span>
-<span class="source-line-no">560</span><span id="line-560">    */</span>
-<span class="source-line-no">561</span><span id="line-561">   public static String toReadableEvent(XMLStreamReader r) {</span>
-<span class="source-line-no">562</span><span id="line-562">      int t = r.getEventType();</span>
-<span class="source-line-no">563</span><span id="line-563">      if (t == 1)</span>
-<span class="source-line-no">564</span><span id="line-564">         return "&lt;"+r.getLocalName()+"&gt;";</span>
-<span class="source-line-no">565</span><span id="line-565">      if (t == 2)</span>
-<span class="source-line-no">566</span><span id="line-566">         return "&lt;/"+r.getLocalName()+"&gt;";</span>
-<span class="source-line-no">567</span><span id="line-567">      if (t == 3)</span>
-<span class="source-line-no">568</span><span id="line-568">         return "PROCESSING_INSTRUCTION";</span>
-<span class="source-line-no">569</span><span id="line-569">      if (t == 4)</span>
-<span class="source-line-no">570</span><span id="line-570">         return "CHARACTERS=[" + r.getText() + "]";</span>
-<span class="source-line-no">571</span><span id="line-571">      if (t == 5)</span>
-<span class="source-line-no">572</span><span id="line-572">         return "COMMENTS=[" + r.getText() + "]";</span>
-<span class="source-line-no">573</span><span id="line-573">      if (t == 6)</span>
-<span class="source-line-no">574</span><span id="line-574">         return "SPACE=[" + r.getText() + "]";</span>
-<span class="source-line-no">575</span><span id="line-575">      if (t == 7)</span>
-<span class="source-line-no">576</span><span id="line-576">         return "START_DOCUMENT";</span>
-<span class="source-line-no">577</span><span id="line-577">      if (t == 8)</span>
-<span class="source-line-no">578</span><span id="line-578">         return "END_DOCUMENT";</span>
-<span class="source-line-no">579</span><span id="line-579">      if (t == 9)</span>
-<span class="source-line-no">580</span><span id="line-580">         return "ENTITY_REFERENCE";</span>
-<span class="source-line-no">581</span><span id="line-581">      if (t == 10)</span>
-<span class="source-line-no">582</span><span id="line-582">         return "ATTRIBUTE";</span>
-<span class="source-line-no">583</span><span id="line-583">      if (t == 11)</span>
-<span class="source-line-no">584</span><span id="line-584">         return "DTD";</span>
-<span class="source-line-no">585</span><span id="line-585">      if (t == 12)</span>
-<span class="source-line-no">586</span><span id="line-586">         return "CDATA=["+r.getText()+"]";</span>
-<span class="source-line-no">587</span><span id="line-587">      if (t == 13)</span>
-<span class="source-line-no">588</span><span id="line-588">         return "NAMESPACE";</span>
-<span class="source-line-no">589</span><span id="line-589">      if (t == 14)</span>
-<span class="source-line-no">590</span><span id="line-590">         return "NOTATION_DECLARATION";</span>
-<span class="source-line-no">591</span><span id="line-591">      if (t == 15)</span>
-<span class="source-line-no">592</span><span id="line-592">         return "ENTITY_DECLARATION";</span>
-<span class="source-line-no">593</span><span id="line-593">      return "UNKNOWN";</span>
-<span class="source-line-no">594</span><span id="line-594">   }</span>
-<span class="source-line-no">595</span><span id="line-595">}</span>
+<span class="source-line-no">552</span><span id="line-552">   /**</span>
+<span class="source-line-no">553</span><span id="line-553">    * Utility method that converts the current event on the XML stream to something human-readable for debug purposes.</span>
+<span class="source-line-no">554</span><span id="line-554">    *</span>
+<span class="source-line-no">555</span><span id="line-555">    * @param r The XML stream reader whose current event is to be converted to a readable string.</span>
+<span class="source-line-no">556</span><span id="line-556">    * @return The event in human-readable form.</span>
+<span class="source-line-no">557</span><span id="line-557">    */</span>
+<span class="source-line-no">558</span><span id="line-558">   public static String toReadableEvent(XMLStreamReader r) {</span>
+<span class="source-line-no">559</span><span id="line-559">      int t = r.getEventType();</span>
+<span class="source-line-no">560</span><span id="line-560">      if (t == 1)</span>
+<span class="source-line-no">561</span><span id="line-561">         return "&lt;"+r.getLocalName()+"&gt;";</span>
+<span class="source-line-no">562</span><span id="line-562">      if (t == 2)</span>
+<span class="source-line-no">563</span><span id="line-563">         return "&lt;/"+r.getLocalName()+"&gt;";</span>
+<span class="source-line-no">564</span><span id="line-564">      if (t == 3)</span>
+<span class="source-line-no">565</span><span id="line-565">         return "PROCESSING_INSTRUCTION";</span>
+<span class="source-line-no">566</span><span id="line-566">      if (t == 4)</span>
+<span class="source-line-no">567</span><span id="line-567">         return "CHARACTERS=[" + r.getText() + "]";</span>
+<span class="source-line-no">568</span><span id="line-568">      if (t == 5)</span>
+<span class="source-line-no">569</span><span id="line-569">         return "COMMENTS=[" + r.getText() + "]";</span>
+<span class="source-line-no">570</span><span id="line-570">      if (t == 6)</span>
+<span class="source-line-no">571</span><span id="line-571">         return "SPACE=[" + r.getText() + "]";</span>
+<span class="source-line-no">572</span><span id="line-572">      if (t == 7)</span>
+<span class="source-line-no">573</span><span id="line-573">         return "START_DOCUMENT";</span>
+<span class="source-line-no">574</span><span id="line-574">      if (t == 8)</span>
+<span class="source-line-no">575</span><span id="line-575">         return "END_DOCUMENT";</span>
+<span class="source-line-no">576</span><span id="line-576">      if (t == 9)</span>
+<span class="source-line-no">577</span><span id="line-577">         return "ENTITY_REFERENCE";</span>
+<span class="source-line-no">578</span><span id="line-578">      if (t == 10)</span>
+<span class="source-line-no">579</span><span id="line-579">         return "ATTRIBUTE";</span>
+<span class="source-line-no">580</span><span id="line-580">      if (t == 11)</span>
+<span class="source-line-no">581</span><span id="line-581">         return "DTD";</span>
+<span class="source-line-no">582</span><span id="line-582">      if (t == 12)</span>
+<span class="source-line-no">583</span><span id="line-583">         return "CDATA=["+r.getText()+"]";</span>
+<span class="source-line-no">584</span><span id="line-584">      if (t == 13)</span>
+<span class="source-line-no">585</span><span id="line-585">         return "NAMESPACE";</span>
+<span class="source-line-no">586</span><span id="line-586">      if (t == 14)</span>
+<span class="source-line-no">587</span><span id="line-587">         return "NOTATION_DECLARATION";</span>
+<span class="source-line-no">588</span><span id="line-588">      if (t == 15)</span>
+<span class="source-line-no">589</span><span id="line-589">         return "ENTITY_DECLARATION";</span>
+<span class="source-line-no">590</span><span id="line-590">      return "UNKNOWN";</span>
+<span class="source-line-no">591</span><span id="line-591">   }</span>
+<span class="source-line-no">592</span><span id="line-592">}</span>
 
 
 

@@ -96,12 +96,12 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple image with alt text</jc>
    Img <jv>img1</jv> = <jsm>img</jsm>()
       .src(<js>"photo.jpg"</js>)
       .alt(<js>"A beautiful sunset over the mountains"</js>);
- 
+
    <jc>// Image with dimensions and styling</jc>
    Img <jv>img2</jv> = <jsm>img</jsm>()
       .src(<js>"logo.png"</js>)
@@ -109,14 +109,14 @@ loadScripts(document, 'script');</script>
       .width(<js>"200"</js>)
       .height(<js>"100"</js>)
       ._class(<js>"logo"</js>);
- 
+
    <jc>// Image with CORS and image map</jc>
    Img <jv>img3</jv> = <jsm>img</jsm>()
       .src(<js>"https://example.com/image.jpg"</js>)
       .alt(<js>"Interactive image"</js>)
       .crossorigin(<js>"anonymous"</js>)
       .usemap(<js>"#imagemap"</js>);
- 
+
    <jc>// Responsive image with multiple sources</jc>
    Img <jv>img4</jv> = <jsm>img</jsm>()
       .src(<js>"image-800w.jpg"</js>)

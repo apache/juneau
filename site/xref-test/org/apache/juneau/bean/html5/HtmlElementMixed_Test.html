@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a09_getChildren() {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		P x1 = <strong class="jxr_keyword">new</strong> P();
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertNull(x1.getChildren());
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		P x2 = p(<span class="jxr_string">"child1"</span>, <span class="jxr_string">"child2"</span>);
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertString(<span class="jxr_string">"[child1,child2]"</span>, x2.getChildren());
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			),
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			span(<span class="jxr_string">"text3"</span>)
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<em class="jxr_comment">// Navigate to nested elements</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertString(<span class="jxr_string">"text1"</span>, x.getChild(0, 0, 0));
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertString(<span class="jxr_string">"text2"</span>, x.getChild(0, 1, 0));
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 				span(<span class="jxr_string">"nested"</span>)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			)
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		);
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertString(<span class="jxr_string">"nested"</span>, x.getChild(0, 0, 0));
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 

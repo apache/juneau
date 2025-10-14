@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Sidebar with related links</jc>
    Aside <jv>sidebar</jv> = <jsm>aside</jsm>(
       <jsm>h3</jsm>(<js>"Related Articles"</js>),
@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
          <jsm>li</jsm>(<jsm>a</jsm>(<js>"/article3"</js>, <js>"Article 3"</js>))
       )
    )._class(<js>"sidebar"</js>);
- 
+
    <jc>// Pull quote</jc>
    Aside <jv>pullQuote</jv> = <jsm>aside</jsm>(
       <jsm>blockquote</jsm>(
@@ -115,21 +115,21 @@ loadScripts(document, 'script');</script>
          <jsm>footer</jsm>(<js>"— Peter Drucker"</js>)
       )
    )._class(<js>"pull-quote"</js>);
- 
+
    <jc>// Advertisement</jc>
    Aside <jv>advertisement</jv> = <jsm>aside</jsm>(
       <jsm>h4</jsm>(<js>"Sponsored Content"</js>),
       <jsm>p</jsm>(<js>"Check out our latest product!"</js>),
       <jsm>a</jsm>(<js>"/product"</js>, <js>"Learn More"</js>)
    )._class(<js>"advertisement"</js>);
- 
+
    <jc>// Author bio</jc>
    Aside <jv>authorBio</jv> = <jsm>aside</jsm>(
       <jsm>h3</jsm>(<js>"About the Author"</js>),
       <jsm>p</jsm>(<js>"John Doe is a web developer with 10 years of experience..."</js>),
       <jsm>a</jsm>(<js>"/author/john-doe"</js>, <js>"Read more articles"</js>)
    )._class(<js>"author-bio"</js>);
- 
+
    <jc>// Navigation menu</jc>
    Aside <jv>navigation</jv> = <jsm>aside</jsm>(
       <jsm>nav</jsm>(
@@ -140,7 +140,7 @@ loadScripts(document, 'script');</script>
          )
       )
    )._class(<js>"navigation"</js>);
- 
+
    <jc>// Glossary or definitions</jc>
    Aside <jv>glossary</jv> = <jsm>aside</jsm>(
       <jsm>h3</jsm>(<js>"Key Terms"</js>),

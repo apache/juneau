@@ -265,27 +265,26 @@
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentListAssertion&lt;&gt;(u(alist(value())), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * Return the value if present, otherwise return &lt;c&gt;other&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * This is a shortened form for calling &lt;c&gt;asArray().orElse(&lt;jv&gt;other&lt;/jv&gt;)&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * @param other The value to be returned if there is no value present, can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @return The value, if present, otherwise &lt;c&gt;other&lt;/c&gt;.</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<strong class="jxr_keyword">public</strong> String[] orElse(String[] other) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		String[] x = value();
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">return</strong> x != <strong class="jxr_keyword">null</strong> ? x : other;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">private</strong> String[] value() {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">if</strong> (supplier != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * Return the value if present, otherwise return &lt;c&gt;other&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * This is a shortened form for calling &lt;c&gt;asArray().orElse(&lt;jv&gt;other&lt;/jv&gt;)&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * @param other The value to be returned if there is no value present, can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * @return The value, if present, otherwise &lt;c&gt;other&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<strong class="jxr_keyword">public</strong> String[] orElse(String[] other) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		String[] x = value();
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">return</strong> x != <strong class="jxr_keyword">null</strong> ? x : other;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<strong class="jxr_keyword">private</strong> String[] value() {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">if</strong> (supplier != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> supplier.get();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">return</strong> value;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

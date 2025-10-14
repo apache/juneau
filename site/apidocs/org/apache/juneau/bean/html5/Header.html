@@ -98,13 +98,13 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple page header</jc>
    Header <jv>simple</jv> = <jsm>header</jsm>(
       <jsm>h1</jsm>(<js>"My Website"</js>),
       <jsm>p</jsm>(<js>"Welcome to our site"</js>)
    );
- 
+
    <jc>// Header with navigation</jc>
    Header <jv>withNav</jv> = <jsm>header</jsm>(
       <jsm>h1</jsm>(<js>"Company Name"</js>),
@@ -116,13 +116,13 @@ loadScripts(document, 'script');</script>
          )
       )
    );
- 
+
    <jc>// Header with styling</jc>
    Header <jv>styled</jv> = <jsm>header</jsm>(
       <jsm>h1</jsm>(<js>"Styled Header"</js>),
       <jsm>p</jsm>(<js>"A beautifully styled header"</js>)
    )._class(<js>"page-header"</js>);
- 
+
    <jc>// Header with logo and navigation</jc>
    Header <jv>withLogo</jv> = <jsm>header</jsm>(
       <jsm>img</jsm>(<js>"/logo.png"</js>, <js>"Company Logo"</js>),
@@ -134,19 +134,19 @@ loadScripts(document, 'script');</script>
          )
       )
    );
- 
+
    <jc>// Header with ID</jc>
    Header <jv>withId</jv> = <jsm>header</jsm>(
       <jsm>h1</jsm>(<js>"Main Header"</js>),
       <jsm>p</jsm>(<js>"This is the main header of the page"</js>)
    ).id(<js>"main-header"</js>);
- 
+
    <jc>// Header with styling</jc>
    Header <jv>styled2</jv> = <jsm>header</jsm>(
       <jsm>h1</jsm>(<js>"Dark Header"</js>),
       <jsm>p</jsm>(<js>"A header with dark styling"</js>)
    ).style(<js>"background-color: #333; color: white; padding: 20px;"</js>);
- 
+
    <jc>// Header with multiple sections</jc>
    Header <jv>multiSection</jv> = <jsm>header</jsm>(
       <jsm>div</jsm>()._class(<js>"header-top"</js>).children(

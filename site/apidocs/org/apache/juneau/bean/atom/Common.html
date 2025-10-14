@@ -87,8 +87,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Base class for all Atom elements, providing common attributes.
 
  <p>
- This abstract class defines attributes that can appear on any Atom element. Per RFC 4287, 
- all Atom elements may have <c>xml:base</c> and <c>xml:lang</c> attributes for managing 
+ This abstract class defines attributes that can appear on any Atom element. Per RFC 4287,
+ all Atom elements may have <c>xml:base</c> and <c>xml:lang</c> attributes for managing
  URIs and language context.
 
  <p>
@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <p>
- This class is extended by all Atom bean classes (<a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a>, <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a>, <a href="Link.html" title="class in org.apache.juneau.bean.atom"><code>Link</code></a>, 
+ This class is extended by all Atom bean classes (<a href="Feed.html" title="class in org.apache.juneau.bean.atom"><code>Feed</code></a>, <a href="Entry.html" title="class in org.apache.juneau.bean.atom"><code>Entry</code></a>, <a href="Link.html" title="class in org.apache.juneau.bean.atom"><code>Link</code></a>,
  <a href="Person.html" title="class in org.apache.juneau.bean.atom"><code>Person</code></a>, <a href="Category.html" title="class in org.apache.juneau.bean.atom"><code>Category</code></a>, <a href="Text.html" title="class in org.apache.juneau.bean.atom"><code>Text</code></a>, etc.).
 
  <h5 class='figure'>Schema</h5>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Specification:</h5>
  <p>
- Represents <c>atomCommonAttributes</c> in the 
+ Represents <c>atomCommonAttributes</c> in the
  <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-2">RFC 4287 - Section 2</a> specification.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -217,15 +217,15 @@ loadScripts(document, 'script');</script>
 <h3>getBase</h3>
 <div class="member-signature"><span class="annotations"><a href="../../xml/annotation/Xml.html" title="annotation interface in org.apache.juneau.xml.annotation">@Xml</a>(<a href="../../xml/annotation/Xml.html#prefix()">prefix</a>="xml",
      <a href="../../xml/annotation/Xml.html#format()">format</a>=<a href="../../xml/annotation/XmlFormat.html#ATTR">ATTR</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-100">getBase</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-99">getBase</a></span>()</div>
 <div class="block">Bean property getter:  <property>base</property>.
 
  <p>
  Returns the base URI for resolving relative URI references (xml:base attribute).
 
  <p>
- This attribute, defined by XML Base, establishes a base URI for resolving any 
- relative references within the scope of this element. This is particularly useful 
+ This attribute, defined by XML Base, establishes a base URI for resolving any
+ relative references within the scope of this element. This is particularly useful
  when aggregating content from multiple sources.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -236,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setBase(java.lang.Object)">
 <h3>setBase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-126">setBase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-125">setBase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>base</property>.
 
  <p>
@@ -265,15 +265,15 @@ loadScripts(document, 'script');</script>
 <h3>getLang</h3>
 <div class="member-signature"><span class="annotations"><a href="../../xml/annotation/Xml.html" title="annotation interface in org.apache.juneau.xml.annotation">@Xml</a>(<a href="../../xml/annotation/Xml.html#prefix()">prefix</a>="xml",
      <a href="../../xml/annotation/Xml.html#format()">format</a>=<a href="../../xml/annotation/XmlFormat.html#ATTR">ATTR</a>)
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-144">getLang</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-143">getLang</a></span>()</div>
 <div class="block">Bean property getter:  <property>lang</property>.
 
  <p>
  Returns the natural language of the element's content (xml:lang attribute).
 
  <p>
- The language tag should be a language identifier as defined by RFC 3066. This attribute 
- is inherited by child elements, so it need only be specified on the highest-level 
+ The language tag should be a language identifier as defined by RFC 3066. This attribute
+ is inherited by child elements, so it need only be specified on the highest-level
  element where it applies.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -284,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLang(java.lang.String)">
 <h3>setLang</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-167">setLang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Common.html" title="class in org.apache.juneau.bean.atom">Common</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-166">setLang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>lang</property>.
 
  <p>
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-172">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Common.html#line-171">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

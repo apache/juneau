@@ -1364,130 +1364,129 @@
 <a class="jxr_linenumber" name="L1356" href="#L1356">1356</a> 		<strong class="jxr_keyword">return</strong> getSession().parseArgs(input, argTypes);
 <a class="jxr_linenumber" name="L1357" href="#L1357">1357</a> 	}
 <a class="jxr_linenumber" name="L1358" href="#L1358">1358</a> 
-<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 
-<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 	<em class="jxr_comment">// Other methods</em>
-<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 
-<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> <em class="jxr_javadoccomment">	 * Returns the media types handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</em>
-<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> <em class="jxr_javadoccomment">	 * @return The list of media types.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> List&lt;MediaType&gt; getMediaTypes() {
-<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 		<strong class="jxr_keyword">return</strong> Utils.alist(consumesArray);
-<a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> 	}
-<a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> 
-<a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1374" href="#L1374">1374</a> <em class="jxr_javadoccomment">	 * Returns the first media type handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</em>
-<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1376" href="#L1376">1376</a> <em class="jxr_javadoccomment">	 * @return The media type.</em>
-<a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> getPrimaryMediaType() {
-<a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> 		<strong class="jxr_keyword">return</strong> consumesArray == <strong class="jxr_keyword">null</strong> || consumesArray.length == 0 ? <strong class="jxr_keyword">null</strong> : consumesArray[0];
-<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> 	}
-<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> 
-<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</em>
-<a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">	 * @param contentType The content type to test.</em>
-<a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</em>
-<a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canHandle(String contentType) {
-<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 		<strong class="jxr_keyword">if</strong> (contentType != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 			<strong class="jxr_keyword">for</strong> (<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> mt : getMediaTypes())
-<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 				<strong class="jxr_keyword">if</strong> (contentType.equals(mt.toString()))
-<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 	}
-<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 
-<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 	<em class="jxr_comment">// Properties</em>
-<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> 
-<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> <em class="jxr_javadoccomment">	 * Auto-close streams.</em>
-<a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#autoCloseStreams()</em>
-<a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;l&gt;InputStreams&lt;/l&gt; and &lt;l&gt;Readers&lt;/l&gt; passed into parsers will be closed</em>
-<a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> <em class="jxr_javadoccomment">	 * 	after parsing is complete.</em>
-<a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAutoCloseStreams() {
-<a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> 		<strong class="jxr_keyword">return</strong> autoCloseStreams;
-<a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> 	}
-<a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 
-<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> <em class="jxr_javadoccomment">	 * Debug output lines.</em>
-<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#debugOutputLines(int)</em>
-<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.</em>
-<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getDebugOutputLines() {
-<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 		<strong class="jxr_keyword">return</strong> debugOutputLines;
-<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 	}
-<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 
-<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> <em class="jxr_javadoccomment">	 * Parser listener.</em>
-<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#listener(Class)</em>
-<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> <em class="jxr_javadoccomment">	 * 	Class used to listen for errors and warnings that occur during parsing.</em>
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> ParserListener&gt; getListener() {
-<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 		<strong class="jxr_keyword">return</strong> listener;
-<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	}
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 
-<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> <em class="jxr_javadoccomment">	 * Strict mode.</em>
-<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#strict()</em>
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if strict mode for the parser is enabled.</em>
-<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isStrict() {
-<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 		<strong class="jxr_keyword">return</strong> strict;
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 	}
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 * Trim parsed strings.</em>
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#trimStrings()</em>
-<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if string values will be trimmed of whitespace using {@link String#trim()} before being added to</em>
-<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> <em class="jxr_javadoccomment">	 * 	the POJO.</em>
-<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isTrimStrings() {
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 		<strong class="jxr_keyword">return</strong> trimStrings;
-<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 	}
-<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> <em class="jxr_javadoccomment">	 * Unbuffered.</em>
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#unbuffered()</em>
-<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if parsers don't use internal buffering during parsing.</em>
-<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isUnbuffered() {
-<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 		<strong class="jxr_keyword">return</strong> unbuffered;
-<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 	}
-<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 	<em class="jxr_comment">// Other methods</em>
-<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 
-<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 	@Override <em class="jxr_comment">/* Context */</em>
-<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
-<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 			.append(<span class="jxr_string">"autoCloseStreams"</span>, autoCloseStreams)
-<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 			.append(<span class="jxr_string">"debugOutputLines"</span>, debugOutputLines)
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 			.append(<span class="jxr_string">"listener"</span>, listener)
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 			.append(<span class="jxr_string">"strict"</span>, strict)
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 			.append(<span class="jxr_string">"trimStrings"</span>, trimStrings)
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 			.append(<span class="jxr_string">"unbuffered"</span>, unbuffered);
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 	}
-<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> }
+<a class="jxr_linenumber" name="L1359" href="#L1359">1359</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1360" href="#L1360">1360</a> 	<em class="jxr_comment">// Other methods</em>
+<a class="jxr_linenumber" name="L1361" href="#L1361">1361</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1362" href="#L1362">1362</a> 
+<a class="jxr_linenumber" name="L1363" href="#L1363">1363</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1364" href="#L1364">1364</a> <em class="jxr_javadoccomment">	 * Returns the media types handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</em>
+<a class="jxr_linenumber" name="L1365" href="#L1365">1365</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1366" href="#L1366">1366</a> <em class="jxr_javadoccomment">	 * @return The list of media types.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1367" href="#L1367">1367</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1368" href="#L1368">1368</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> List&lt;MediaType&gt; getMediaTypes() {
+<a class="jxr_linenumber" name="L1369" href="#L1369">1369</a> 		<strong class="jxr_keyword">return</strong> Utils.alist(consumesArray);
+<a class="jxr_linenumber" name="L1370" href="#L1370">1370</a> 	}
+<a class="jxr_linenumber" name="L1371" href="#L1371">1371</a> 
+<a class="jxr_linenumber" name="L1372" href="#L1372">1372</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1373" href="#L1373">1373</a> <em class="jxr_javadoccomment">	 * Returns the first media type handled based on the values passed to the &lt;c&gt;consumes&lt;/c&gt; constructor parameter.</em>
+<a class="jxr_linenumber" name="L1374" href="#L1374">1374</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1375" href="#L1375">1375</a> <em class="jxr_javadoccomment">	 * @return The media type.</em>
+<a class="jxr_linenumber" name="L1376" href="#L1376">1376</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1377" href="#L1377">1377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> getPrimaryMediaType() {
+<a class="jxr_linenumber" name="L1378" href="#L1378">1378</a> 		<strong class="jxr_keyword">return</strong> consumesArray == <strong class="jxr_keyword">null</strong> || consumesArray.length == 0 ? <strong class="jxr_keyword">null</strong> : consumesArray[0];
+<a class="jxr_linenumber" name="L1379" href="#L1379">1379</a> 	}
+<a class="jxr_linenumber" name="L1380" href="#L1380">1380</a> 
+<a class="jxr_linenumber" name="L1381" href="#L1381">1381</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</em>
+<a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> <em class="jxr_javadoccomment">	 * @param contentType The content type to test.</em>
+<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this parser can handle the specified content type.</em>
+<a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canHandle(String contentType) {
+<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 		<strong class="jxr_keyword">if</strong> (contentType != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 			<strong class="jxr_keyword">for</strong> (<a name="MediaType" href="../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> mt : getMediaTypes())
+<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 				<strong class="jxr_keyword">if</strong> (contentType.equals(mt.toString()))
+<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 	}
+<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 
+<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 	<em class="jxr_comment">// Properties</em>
+<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 
+<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> <em class="jxr_javadoccomment">	 * Auto-close streams.</em>
+<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#autoCloseStreams()</em>
+<a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if &lt;l&gt;InputStreams&lt;/l&gt; and &lt;l&gt;Readers&lt;/l&gt; passed into parsers will be closed</em>
+<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> <em class="jxr_javadoccomment">	 * 	after parsing is complete.</em>
+<a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isAutoCloseStreams() {
+<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 		<strong class="jxr_keyword">return</strong> autoCloseStreams;
+<a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> 	}
+<a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> 
+<a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> <em class="jxr_javadoccomment">	 * Debug output lines.</em>
+<a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#debugOutputLines(int)</em>
+<a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> <em class="jxr_javadoccomment">	 * 	The number of lines of input before and after the error location to be printed as part of the exception message.</em>
+<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> getDebugOutputLines() {
+<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		<strong class="jxr_keyword">return</strong> debugOutputLines;
+<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 	}
+<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 
+<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> <em class="jxr_javadoccomment">	 * Parser listener.</em>
+<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#listener(Class)</em>
+<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> <em class="jxr_javadoccomment">	 * 	Class used to listen for errors and warnings that occur during parsing.</em>
+<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> Class&lt;? <strong class="jxr_keyword">extends</strong> ParserListener&gt; getListener() {
+<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 		<strong class="jxr_keyword">return</strong> listener;
+<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 	}
+<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> <em class="jxr_javadoccomment">	 * Strict mode.</em>
+<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#strict()</em>
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if strict mode for the parser is enabled.</em>
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isStrict() {
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 		<strong class="jxr_keyword">return</strong> strict;
+<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 	}
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> <em class="jxr_javadoccomment">	 * Trim parsed strings.</em>
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#trimStrings()</em>
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if string values will be trimmed of whitespace using {@link String#trim()} before being added to</em>
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> <em class="jxr_javadoccomment">	 * 	the POJO.</em>
+<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isTrimStrings() {
+<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 		<strong class="jxr_keyword">return</strong> trimStrings;
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 	}
+<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 
+<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> <em class="jxr_javadoccomment">	 * Unbuffered.</em>
+<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> <em class="jxr_javadoccomment">	 * @see Parser.Builder#unbuffered()</em>
+<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;true&lt;/jk&gt; if parsers don't use internal buffering during parsing.</em>
+<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> isUnbuffered() {
+<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 		<strong class="jxr_keyword">return</strong> unbuffered;
+<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 	}
+<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 
+<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 	<em class="jxr_comment">// Other methods</em>
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 
+<a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
+<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
+<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 			.append(<span class="jxr_string">"autoCloseStreams"</span>, autoCloseStreams)
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 			.append(<span class="jxr_string">"debugOutputLines"</span>, debugOutputLines)
+<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 			.append(<span class="jxr_string">"listener"</span>, listener)
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 			.append(<span class="jxr_string">"strict"</span>, strict)
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 			.append(<span class="jxr_string">"trimStrings"</span>, trimStrings)
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 			.append(<span class="jxr_string">"unbuffered"</span>, unbuffered);
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 	}
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

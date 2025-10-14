@@ -771,267 +771,266 @@
 <span class="source-line-no">758</span><span id="line-758">      return url;</span>
 <span class="source-line-no">759</span><span id="line-759">   }</span>
 <span class="source-line-no">760</span><span id="line-760"></span>
-<span class="source-line-no">761</span><span id="line-761"></span>
-<span class="source-line-no">762</span><span id="line-762">   /*</span>
-<span class="source-line-no">763</span><span id="line-763">    * Workhorse method.</span>
-<span class="source-line-no">764</span><span id="line-764">    */</span>
-<span class="source-line-no">765</span><span id="line-765">   private Object service(int method, String url, Object val) throws ObjectRestException {</span>
-<span class="source-line-no">766</span><span id="line-766"></span>
-<span class="source-line-no">767</span><span id="line-767">      url = normalizeUrl(url);</span>
-<span class="source-line-no">768</span><span id="line-768"></span>
-<span class="source-line-no">769</span><span id="line-769">      if (method == GET) {</span>
-<span class="source-line-no">770</span><span id="line-770">         JsonNode p = getNode(url, root);</span>
-<span class="source-line-no">771</span><span id="line-771">         return p == null ? null : p.o;</span>
-<span class="source-line-no">772</span><span id="line-772">      }</span>
-<span class="source-line-no">773</span><span id="line-773"></span>
-<span class="source-line-no">774</span><span id="line-774">      // Get the url of the parent and the property name of the addressed object.</span>
-<span class="source-line-no">775</span><span id="line-775">      int i = url.lastIndexOf('/');</span>
-<span class="source-line-no">776</span><span id="line-776">      String parentUrl = (i == -1 ? null : url.substring(0, i));</span>
-<span class="source-line-no">777</span><span id="line-777">      String childKey = (i == -1 ? url : url.substring(i + 1));</span>
-<span class="source-line-no">778</span><span id="line-778"></span>
-<span class="source-line-no">779</span><span id="line-779">      if (method == PUT) {</span>
-<span class="source-line-no">780</span><span id="line-780">         if (url.isEmpty()) {</span>
-<span class="source-line-no">781</span><span id="line-781">            if (rootLocked)</span>
-<span class="source-line-no">782</span><span id="line-782">               throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");</span>
-<span class="source-line-no">783</span><span id="line-783">            Object o = root.o;</span>
-<span class="source-line-no">784</span><span id="line-784">            root = new JsonNode(null, null, val, session.object());</span>
-<span class="source-line-no">785</span><span id="line-785">            return o;</span>
-<span class="source-line-no">786</span><span id="line-786">         }</span>
-<span class="source-line-no">787</span><span id="line-787">         JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));</span>
-<span class="source-line-no">788</span><span id="line-788">         if (n == null)</span>
-<span class="source-line-no">789</span><span id="line-789">            throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);</span>
-<span class="source-line-no">790</span><span id="line-790">         ClassMeta cm = n.cm;</span>
-<span class="source-line-no">791</span><span id="line-791">         Object o = n.o;</span>
-<span class="source-line-no">792</span><span id="line-792">         if (cm.isMap())</span>
-<span class="source-line-no">793</span><span id="line-793">            return ((Map)o).put(childKey, convert(val, cm.getValueType()));</span>
-<span class="source-line-no">794</span><span id="line-794">         if (cm.isCollection() &amp;&amp; o instanceof List)</span>
-<span class="source-line-no">795</span><span id="line-795">            return ((List)o).set(parseInt(childKey), convert(val, cm.getElementType()));</span>
-<span class="source-line-no">796</span><span id="line-796">         if (cm.isArray()) {</span>
-<span class="source-line-no">797</span><span id="line-797">            o = setArrayEntry(n.o, parseInt(childKey), val, cm.getElementType());</span>
-<span class="source-line-no">798</span><span id="line-798">            ClassMeta pct = n.parent.cm;</span>
-<span class="source-line-no">799</span><span id="line-799">            Object po = n.parent.o;</span>
-<span class="source-line-no">800</span><span id="line-800">            if (pct.isMap()) {</span>
-<span class="source-line-no">801</span><span id="line-801">               ((Map)po).put(n.keyName, o);</span>
-<span class="source-line-no">802</span><span id="line-802">               return url;</span>
-<span class="source-line-no">803</span><span id="line-803">            }</span>
-<span class="source-line-no">804</span><span id="line-804">            if (pct.isBean()) {</span>
-<span class="source-line-no">805</span><span id="line-805">               BeanMap m = session.toBeanMap(po);</span>
-<span class="source-line-no">806</span><span id="line-806">               m.put(n.keyName, o);</span>
-<span class="source-line-no">807</span><span id="line-807">               return url;</span>
-<span class="source-line-no">808</span><span id="line-808">            }</span>
-<span class="source-line-no">809</span><span id="line-809">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);</span>
-<span class="source-line-no">810</span><span id="line-810">         }</span>
-<span class="source-line-no">811</span><span id="line-811">         if (cm.isBean())</span>
-<span class="source-line-no">812</span><span id="line-812">            return session.toBeanMap(o).put(childKey, val);</span>
-<span class="source-line-no">813</span><span id="line-813">         throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);</span>
-<span class="source-line-no">814</span><span id="line-814">      }</span>
-<span class="source-line-no">815</span><span id="line-815"></span>
-<span class="source-line-no">816</span><span id="line-816">      if (method == POST) {</span>
-<span class="source-line-no">817</span><span id="line-817">         // Handle POST to root special</span>
-<span class="source-line-no">818</span><span id="line-818">         if (url.isEmpty()) {</span>
-<span class="source-line-no">819</span><span id="line-819">            ClassMeta cm = root.cm;</span>
-<span class="source-line-no">820</span><span id="line-820">            Object o = root.o;</span>
-<span class="source-line-no">821</span><span id="line-821">            if (cm.isCollection()) {</span>
-<span class="source-line-no">822</span><span id="line-822">               Collection c = (Collection)o;</span>
-<span class="source-line-no">823</span><span id="line-823">               c.add(convert(val, cm.getElementType()));</span>
-<span class="source-line-no">824</span><span id="line-824">               return (c instanceof List ? url + "/" + (c.size()-1) : null);</span>
-<span class="source-line-no">825</span><span id="line-825">            }</span>
-<span class="source-line-no">826</span><span id="line-826">            if (cm.isArray()) {</span>
-<span class="source-line-no">827</span><span id="line-827">               Object[] o2 = addArrayEntry(o, val, cm.getElementType());</span>
-<span class="source-line-no">828</span><span id="line-828">               root = new JsonNode(null, null, o2, null);</span>
-<span class="source-line-no">829</span><span id="line-829">               return url + "/" + (o2.length-1);</span>
-<span class="source-line-no">830</span><span id="line-830">            }</span>
-<span class="source-line-no">831</span><span id="line-831">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);</span>
-<span class="source-line-no">832</span><span id="line-832">         }</span>
-<span class="source-line-no">833</span><span id="line-833">         JsonNode n = getNode(url, root);</span>
-<span class="source-line-no">834</span><span id="line-834">         if (n == null)</span>
-<span class="source-line-no">835</span><span id="line-835">            throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);</span>
-<span class="source-line-no">836</span><span id="line-836">         ClassMeta cm = n.cm;</span>
-<span class="source-line-no">837</span><span id="line-837">         Object o = n.o;</span>
-<span class="source-line-no">838</span><span id="line-838">         if (cm.isArray()) {</span>
-<span class="source-line-no">839</span><span id="line-839">            Object[] o2 = addArrayEntry(o, val, cm.getElementType());</span>
-<span class="source-line-no">840</span><span id="line-840">            ClassMeta pct = n.parent.cm;</span>
-<span class="source-line-no">841</span><span id="line-841">            Object po = n.parent.o;</span>
-<span class="source-line-no">842</span><span id="line-842">            if (pct.isMap()) {</span>
-<span class="source-line-no">843</span><span id="line-843">               ((Map)po).put(childKey, o2);</span>
-<span class="source-line-no">844</span><span id="line-844">               return url + "/" + (o2.length-1);</span>
-<span class="source-line-no">845</span><span id="line-845">            }</span>
-<span class="source-line-no">846</span><span id="line-846">            if (pct.isBean()) {</span>
-<span class="source-line-no">847</span><span id="line-847">               BeanMap m = session.toBeanMap(po);</span>
-<span class="source-line-no">848</span><span id="line-848">               m.put(childKey, o2);</span>
-<span class="source-line-no">849</span><span id="line-849">               return url + "/" + (o2.length-1);</span>
-<span class="source-line-no">850</span><span id="line-850">            }</span>
-<span class="source-line-no">851</span><span id="line-851">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);</span>
-<span class="source-line-no">852</span><span id="line-852">         }</span>
-<span class="source-line-no">853</span><span id="line-853">         if (cm.isCollection()) {</span>
-<span class="source-line-no">854</span><span id="line-854">            Collection c = (Collection)o;</span>
-<span class="source-line-no">855</span><span id="line-855">            c.add(convert(val, cm.getElementType()));</span>
-<span class="source-line-no">856</span><span id="line-856">            return (c instanceof List ? url + "/" + (c.size()-1) : null);</span>
-<span class="source-line-no">857</span><span id="line-857">         }</span>
-<span class="source-line-no">858</span><span id="line-858">         throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);</span>
-<span class="source-line-no">859</span><span id="line-859">      }</span>
-<span class="source-line-no">860</span><span id="line-860"></span>
-<span class="source-line-no">861</span><span id="line-861">      if (method == DELETE) {</span>
-<span class="source-line-no">862</span><span id="line-862">         if (url.isEmpty()) {</span>
-<span class="source-line-no">863</span><span id="line-863">            if (rootLocked)</span>
-<span class="source-line-no">864</span><span id="line-864">               throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");</span>
-<span class="source-line-no">865</span><span id="line-865">            Object o = root.o;</span>
-<span class="source-line-no">866</span><span id="line-866">            root = new JsonNode(null, null, null, session.object());</span>
-<span class="source-line-no">867</span><span id="line-867">            return o;</span>
-<span class="source-line-no">868</span><span id="line-868">         }</span>
-<span class="source-line-no">869</span><span id="line-869">         JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));</span>
-<span class="source-line-no">870</span><span id="line-870">         ClassMeta cm = n.cm;</span>
-<span class="source-line-no">871</span><span id="line-871">         Object o = n.o;</span>
-<span class="source-line-no">872</span><span id="line-872">         if (cm.isMap())</span>
-<span class="source-line-no">873</span><span id="line-873">            return ((Map)o).remove(childKey);</span>
-<span class="source-line-no">874</span><span id="line-874">         if (cm.isCollection() &amp;&amp; o instanceof List)</span>
-<span class="source-line-no">875</span><span id="line-875">            return ((List)o).remove(parseInt(childKey));</span>
-<span class="source-line-no">876</span><span id="line-876">         if (cm.isArray()) {</span>
-<span class="source-line-no">877</span><span id="line-877">            int index = parseInt(childKey);</span>
-<span class="source-line-no">878</span><span id="line-878">            Object old = ((Object[])o)[index];</span>
-<span class="source-line-no">879</span><span id="line-879">            Object[] o2 = removeArrayEntry(o, index);</span>
-<span class="source-line-no">880</span><span id="line-880">            ClassMeta pct = n.parent.cm;</span>
-<span class="source-line-no">881</span><span id="line-881">            Object po = n.parent.o;</span>
-<span class="source-line-no">882</span><span id="line-882">            if (pct.isMap()) {</span>
-<span class="source-line-no">883</span><span id="line-883">               ((Map)po).put(n.keyName, o2);</span>
-<span class="source-line-no">884</span><span id="line-884">               return old;</span>
-<span class="source-line-no">885</span><span id="line-885">            }</span>
-<span class="source-line-no">886</span><span id="line-886">            if (pct.isBean()) {</span>
-<span class="source-line-no">887</span><span id="line-887">               BeanMap m = session.toBeanMap(po);</span>
-<span class="source-line-no">888</span><span id="line-888">               m.put(n.keyName, o2);</span>
-<span class="source-line-no">889</span><span id="line-889">               return old;</span>
-<span class="source-line-no">890</span><span id="line-890">            }</span>
-<span class="source-line-no">891</span><span id="line-891">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);</span>
-<span class="source-line-no">892</span><span id="line-892">         }</span>
-<span class="source-line-no">893</span><span id="line-893">         if (cm.isBean())</span>
-<span class="source-line-no">894</span><span id="line-894">            return session.toBeanMap(o).put(childKey, null);</span>
-<span class="source-line-no">895</span><span id="line-895">         throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);</span>
-<span class="source-line-no">896</span><span id="line-896">      }</span>
-<span class="source-line-no">897</span><span id="line-897"></span>
-<span class="source-line-no">898</span><span id="line-898">      return null;   // Never gets here.</span>
-<span class="source-line-no">899</span><span id="line-899">   }</span>
-<span class="source-line-no">900</span><span id="line-900"></span>
-<span class="source-line-no">901</span><span id="line-901">   private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {</span>
-<span class="source-line-no">902</span><span id="line-902">      Object[] a = (Object[])o;</span>
-<span class="source-line-no">903</span><span id="line-903">      if (a.length &lt;= index) {</span>
-<span class="source-line-no">904</span><span id="line-904">         // Expand out the array.</span>
-<span class="source-line-no">905</span><span id="line-905">         Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index+1);</span>
-<span class="source-line-no">906</span><span id="line-906">         System.arraycopy(a, 0, a2, 0, a.length);</span>
-<span class="source-line-no">907</span><span id="line-907">         a = a2;</span>
-<span class="source-line-no">908</span><span id="line-908">      }</span>
-<span class="source-line-no">909</span><span id="line-909">      a[index] = convert(val, componentType);</span>
-<span class="source-line-no">910</span><span id="line-910">      return a;</span>
-<span class="source-line-no">911</span><span id="line-911">   }</span>
-<span class="source-line-no">912</span><span id="line-912"></span>
-<span class="source-line-no">913</span><span id="line-913">   private Object[] addArrayEntry(Object o, Object val, ClassMeta componentType) {</span>
-<span class="source-line-no">914</span><span id="line-914">      Object[] a = (Object[])o;</span>
-<span class="source-line-no">915</span><span id="line-915">      // Expand out the array.</span>
-<span class="source-line-no">916</span><span id="line-916">      Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length+1);</span>
-<span class="source-line-no">917</span><span id="line-917">      System.arraycopy(a, 0, a2, 0, a.length);</span>
-<span class="source-line-no">918</span><span id="line-918">      a2[a.length] = convert(val, componentType);</span>
-<span class="source-line-no">919</span><span id="line-919">      return a2;</span>
-<span class="source-line-no">920</span><span id="line-920">   }</span>
-<span class="source-line-no">921</span><span id="line-921"></span>
-<span class="source-line-no">922</span><span id="line-922">   private static Object[] removeArrayEntry(Object o, int index) {</span>
-<span class="source-line-no">923</span><span id="line-923">      Object[] a = (Object[])o;</span>
-<span class="source-line-no">924</span><span id="line-924">      // Shrink the array.</span>
-<span class="source-line-no">925</span><span id="line-925">      Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length-1);</span>
-<span class="source-line-no">926</span><span id="line-926">      System.arraycopy(a, 0, a2, 0, index);</span>
-<span class="source-line-no">927</span><span id="line-927">      System.arraycopy(a, index+1, a2, index, a.length-index-1);</span>
-<span class="source-line-no">928</span><span id="line-928">      return a2;</span>
-<span class="source-line-no">929</span><span id="line-929">   }</span>
-<span class="source-line-no">930</span><span id="line-930"></span>
-<span class="source-line-no">931</span><span id="line-931">   class JsonNode {</span>
-<span class="source-line-no">932</span><span id="line-932">      Object o;</span>
-<span class="source-line-no">933</span><span id="line-933">      ClassMeta cm;</span>
-<span class="source-line-no">934</span><span id="line-934">      JsonNode parent;</span>
-<span class="source-line-no">935</span><span id="line-935">      String keyName;</span>
-<span class="source-line-no">936</span><span id="line-936"></span>
-<span class="source-line-no">937</span><span id="line-937">      JsonNode(JsonNode parent, String keyName, Object o, ClassMeta cm) {</span>
-<span class="source-line-no">938</span><span id="line-938">         this.o = o;</span>
-<span class="source-line-no">939</span><span id="line-939">         this.keyName = keyName;</span>
-<span class="source-line-no">940</span><span id="line-940">         this.parent = parent;</span>
-<span class="source-line-no">941</span><span id="line-941">         if (cm == null || cm.isObject()) {</span>
-<span class="source-line-no">942</span><span id="line-942">            if (o == null)</span>
-<span class="source-line-no">943</span><span id="line-943">               cm = session.object();</span>
-<span class="source-line-no">944</span><span id="line-944">            else</span>
-<span class="source-line-no">945</span><span id="line-945">               cm = session.getClassMetaForObject(o);</span>
-<span class="source-line-no">946</span><span id="line-946">         }</span>
-<span class="source-line-no">947</span><span id="line-947">         this.cm = cm;</span>
-<span class="source-line-no">948</span><span id="line-948">      }</span>
-<span class="source-line-no">949</span><span id="line-949">   }</span>
-<span class="source-line-no">950</span><span id="line-950"></span>
-<span class="source-line-no">951</span><span id="line-951">   JsonNode getNode(String url, JsonNode n) {</span>
-<span class="source-line-no">952</span><span id="line-952">      if (url == null || url.isEmpty())</span>
-<span class="source-line-no">953</span><span id="line-953">         return n;</span>
-<span class="source-line-no">954</span><span id="line-954">      int i = url.indexOf('/');</span>
-<span class="source-line-no">955</span><span id="line-955">      String parentKey, childUrl = null;</span>
-<span class="source-line-no">956</span><span id="line-956">      if (i == -1) {</span>
-<span class="source-line-no">957</span><span id="line-957">         parentKey = url;</span>
-<span class="source-line-no">958</span><span id="line-958">      } else {</span>
-<span class="source-line-no">959</span><span id="line-959">         parentKey = url.substring(0, i);</span>
-<span class="source-line-no">960</span><span id="line-960">         childUrl = url.substring(i + 1);</span>
-<span class="source-line-no">961</span><span id="line-961">      }</span>
-<span class="source-line-no">962</span><span id="line-962"></span>
-<span class="source-line-no">963</span><span id="line-963">      Object o = n.o;</span>
-<span class="source-line-no">964</span><span id="line-964">      Object o2 = null;</span>
-<span class="source-line-no">965</span><span id="line-965">      ClassMeta cm = n.cm;</span>
-<span class="source-line-no">966</span><span id="line-966">      ClassMeta ct2 = null;</span>
-<span class="source-line-no">967</span><span id="line-967">      if (o == null)</span>
-<span class="source-line-no">968</span><span id="line-968">         return null;</span>
-<span class="source-line-no">969</span><span id="line-969">      if (cm.isMap()) {</span>
-<span class="source-line-no">970</span><span id="line-970">         o2 = ((Map)o).get(parentKey);</span>
-<span class="source-line-no">971</span><span id="line-971">         ct2 = cm.getValueType();</span>
-<span class="source-line-no">972</span><span id="line-972">      } else if (cm.isCollection() &amp;&amp; o instanceof List) {</span>
-<span class="source-line-no">973</span><span id="line-973">         int key = parseInt(parentKey);</span>
-<span class="source-line-no">974</span><span id="line-974">         List l = ((List)o);</span>
-<span class="source-line-no">975</span><span id="line-975">         if (l.size() &lt;= key)</span>
-<span class="source-line-no">976</span><span id="line-976">            return null;</span>
-<span class="source-line-no">977</span><span id="line-977">         o2 = l.get(key);</span>
-<span class="source-line-no">978</span><span id="line-978">         ct2 = cm.getElementType();</span>
-<span class="source-line-no">979</span><span id="line-979">      } else if (cm.isArray()) {</span>
-<span class="source-line-no">980</span><span id="line-980">         int key = parseInt(parentKey);</span>
-<span class="source-line-no">981</span><span id="line-981">         Object[] a = ((Object[])o);</span>
-<span class="source-line-no">982</span><span id="line-982">         if (a.length &lt;= key)</span>
-<span class="source-line-no">983</span><span id="line-983">            return null;</span>
-<span class="source-line-no">984</span><span id="line-984">         o2 = a[key];</span>
-<span class="source-line-no">985</span><span id="line-985">         ct2 = cm.getElementType();</span>
-<span class="source-line-no">986</span><span id="line-986">      } else if (cm.isBean()) {</span>
-<span class="source-line-no">987</span><span id="line-987">         BeanMap m = session.toBeanMap(o);</span>
-<span class="source-line-no">988</span><span id="line-988">         o2 = m.get(parentKey);</span>
-<span class="source-line-no">989</span><span id="line-989">         BeanPropertyMeta pMeta = m.getPropertyMeta(parentKey);</span>
-<span class="source-line-no">990</span><span id="line-990">         if (pMeta == null)</span>
-<span class="source-line-no">991</span><span id="line-991">            throw new ObjectRestException(HTTP_BAD_REQUEST,</span>
-<span class="source-line-no">992</span><span id="line-992">               "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''",</span>
-<span class="source-line-no">993</span><span id="line-993">               parentKey, m.getClassMeta()</span>
-<span class="source-line-no">994</span><span id="line-994">            );</span>
-<span class="source-line-no">995</span><span id="line-995">         ct2 = pMeta.getClassMeta();</span>
-<span class="source-line-no">996</span><span id="line-996">      }</span>
-<span class="source-line-no">997</span><span id="line-997"></span>
-<span class="source-line-no">998</span><span id="line-998">      if (childUrl == null)</span>
-<span class="source-line-no">999</span><span id="line-999">         return new JsonNode(n, parentKey, o2, ct2);</span>
-<span class="source-line-no">1000</span><span id="line-1000"></span>
-<span class="source-line-no">1001</span><span id="line-1001">      return getNode(childUrl, new JsonNode(n, parentKey, o2, ct2));</span>
-<span class="source-line-no">1002</span><span id="line-1002">   }</span>
-<span class="source-line-no">1003</span><span id="line-1003"></span>
-<span class="source-line-no">1004</span><span id="line-1004">   private Object convert(Object in, ClassMeta cm) {</span>
-<span class="source-line-no">1005</span><span id="line-1005">      if (cm == null)</span>
-<span class="source-line-no">1006</span><span id="line-1006">         return in;</span>
-<span class="source-line-no">1007</span><span id="line-1007">      if (cm.isBean() &amp;&amp; in instanceof Map)</span>
-<span class="source-line-no">1008</span><span id="line-1008">         return session.convertToType(in, cm);</span>
-<span class="source-line-no">1009</span><span id="line-1009">      return in;</span>
-<span class="source-line-no">1010</span><span id="line-1010">   }</span>
-<span class="source-line-no">1011</span><span id="line-1011"></span>
-<span class="source-line-no">1012</span><span id="line-1012">   private static int parseInt(String key) {</span>
-<span class="source-line-no">1013</span><span id="line-1013">      try {</span>
-<span class="source-line-no">1014</span><span id="line-1014">         return Integer.parseInt(key);</span>
-<span class="source-line-no">1015</span><span id="line-1015">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">1016</span><span id="line-1016">         throw new ObjectRestException(HTTP_BAD_REQUEST,</span>
-<span class="source-line-no">1017</span><span id="line-1017">            "Cannot address an item in an array with a non-integer key ''{0}''", key</span>
-<span class="source-line-no">1018</span><span id="line-1018">         );</span>
-<span class="source-line-no">1019</span><span id="line-1019">      }</span>
-<span class="source-line-no">1020</span><span id="line-1020">   }</span>
-<span class="source-line-no">1021</span><span id="line-1021">}</span>
+<span class="source-line-no">761</span><span id="line-761">   /*</span>
+<span class="source-line-no">762</span><span id="line-762">    * Workhorse method.</span>
+<span class="source-line-no">763</span><span id="line-763">    */</span>
+<span class="source-line-no">764</span><span id="line-764">   private Object service(int method, String url, Object val) throws ObjectRestException {</span>
+<span class="source-line-no">765</span><span id="line-765"></span>
+<span class="source-line-no">766</span><span id="line-766">      url = normalizeUrl(url);</span>
+<span class="source-line-no">767</span><span id="line-767"></span>
+<span class="source-line-no">768</span><span id="line-768">      if (method == GET) {</span>
+<span class="source-line-no">769</span><span id="line-769">         JsonNode p = getNode(url, root);</span>
+<span class="source-line-no">770</span><span id="line-770">         return p == null ? null : p.o;</span>
+<span class="source-line-no">771</span><span id="line-771">      }</span>
+<span class="source-line-no">772</span><span id="line-772"></span>
+<span class="source-line-no">773</span><span id="line-773">      // Get the url of the parent and the property name of the addressed object.</span>
+<span class="source-line-no">774</span><span id="line-774">      int i = url.lastIndexOf('/');</span>
+<span class="source-line-no">775</span><span id="line-775">      String parentUrl = (i == -1 ? null : url.substring(0, i));</span>
+<span class="source-line-no">776</span><span id="line-776">      String childKey = (i == -1 ? url : url.substring(i + 1));</span>
+<span class="source-line-no">777</span><span id="line-777"></span>
+<span class="source-line-no">778</span><span id="line-778">      if (method == PUT) {</span>
+<span class="source-line-no">779</span><span id="line-779">         if (url.isEmpty()) {</span>
+<span class="source-line-no">780</span><span id="line-780">            if (rootLocked)</span>
+<span class="source-line-no">781</span><span id="line-781">               throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");</span>
+<span class="source-line-no">782</span><span id="line-782">            Object o = root.o;</span>
+<span class="source-line-no">783</span><span id="line-783">            root = new JsonNode(null, null, val, session.object());</span>
+<span class="source-line-no">784</span><span id="line-784">            return o;</span>
+<span class="source-line-no">785</span><span id="line-785">         }</span>
+<span class="source-line-no">786</span><span id="line-786">         JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));</span>
+<span class="source-line-no">787</span><span id="line-787">         if (n == null)</span>
+<span class="source-line-no">788</span><span id="line-788">            throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);</span>
+<span class="source-line-no">789</span><span id="line-789">         ClassMeta cm = n.cm;</span>
+<span class="source-line-no">790</span><span id="line-790">         Object o = n.o;</span>
+<span class="source-line-no">791</span><span id="line-791">         if (cm.isMap())</span>
+<span class="source-line-no">792</span><span id="line-792">            return ((Map)o).put(childKey, convert(val, cm.getValueType()));</span>
+<span class="source-line-no">793</span><span id="line-793">         if (cm.isCollection() &amp;&amp; o instanceof List)</span>
+<span class="source-line-no">794</span><span id="line-794">            return ((List)o).set(parseInt(childKey), convert(val, cm.getElementType()));</span>
+<span class="source-line-no">795</span><span id="line-795">         if (cm.isArray()) {</span>
+<span class="source-line-no">796</span><span id="line-796">            o = setArrayEntry(n.o, parseInt(childKey), val, cm.getElementType());</span>
+<span class="source-line-no">797</span><span id="line-797">            ClassMeta pct = n.parent.cm;</span>
+<span class="source-line-no">798</span><span id="line-798">            Object po = n.parent.o;</span>
+<span class="source-line-no">799</span><span id="line-799">            if (pct.isMap()) {</span>
+<span class="source-line-no">800</span><span id="line-800">               ((Map)po).put(n.keyName, o);</span>
+<span class="source-line-no">801</span><span id="line-801">               return url;</span>
+<span class="source-line-no">802</span><span id="line-802">            }</span>
+<span class="source-line-no">803</span><span id="line-803">            if (pct.isBean()) {</span>
+<span class="source-line-no">804</span><span id="line-804">               BeanMap m = session.toBeanMap(po);</span>
+<span class="source-line-no">805</span><span id="line-805">               m.put(n.keyName, o);</span>
+<span class="source-line-no">806</span><span id="line-806">               return url;</span>
+<span class="source-line-no">807</span><span id="line-807">            }</span>
+<span class="source-line-no">808</span><span id="line-808">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);</span>
+<span class="source-line-no">809</span><span id="line-809">         }</span>
+<span class="source-line-no">810</span><span id="line-810">         if (cm.isBean())</span>
+<span class="source-line-no">811</span><span id="line-811">            return session.toBeanMap(o).put(childKey, val);</span>
+<span class="source-line-no">812</span><span id="line-812">         throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);</span>
+<span class="source-line-no">813</span><span id="line-813">      }</span>
+<span class="source-line-no">814</span><span id="line-814"></span>
+<span class="source-line-no">815</span><span id="line-815">      if (method == POST) {</span>
+<span class="source-line-no">816</span><span id="line-816">         // Handle POST to root special</span>
+<span class="source-line-no">817</span><span id="line-817">         if (url.isEmpty()) {</span>
+<span class="source-line-no">818</span><span id="line-818">            ClassMeta cm = root.cm;</span>
+<span class="source-line-no">819</span><span id="line-819">            Object o = root.o;</span>
+<span class="source-line-no">820</span><span id="line-820">            if (cm.isCollection()) {</span>
+<span class="source-line-no">821</span><span id="line-821">               Collection c = (Collection)o;</span>
+<span class="source-line-no">822</span><span id="line-822">               c.add(convert(val, cm.getElementType()));</span>
+<span class="source-line-no">823</span><span id="line-823">               return (c instanceof List ? url + "/" + (c.size()-1) : null);</span>
+<span class="source-line-no">824</span><span id="line-824">            }</span>
+<span class="source-line-no">825</span><span id="line-825">            if (cm.isArray()) {</span>
+<span class="source-line-no">826</span><span id="line-826">               Object[] o2 = addArrayEntry(o, val, cm.getElementType());</span>
+<span class="source-line-no">827</span><span id="line-827">               root = new JsonNode(null, null, o2, null);</span>
+<span class="source-line-no">828</span><span id="line-828">               return url + "/" + (o2.length-1);</span>
+<span class="source-line-no">829</span><span id="line-829">            }</span>
+<span class="source-line-no">830</span><span id="line-830">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);</span>
+<span class="source-line-no">831</span><span id="line-831">         }</span>
+<span class="source-line-no">832</span><span id="line-832">         JsonNode n = getNode(url, root);</span>
+<span class="source-line-no">833</span><span id="line-833">         if (n == null)</span>
+<span class="source-line-no">834</span><span id="line-834">            throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);</span>
+<span class="source-line-no">835</span><span id="line-835">         ClassMeta cm = n.cm;</span>
+<span class="source-line-no">836</span><span id="line-836">         Object o = n.o;</span>
+<span class="source-line-no">837</span><span id="line-837">         if (cm.isArray()) {</span>
+<span class="source-line-no">838</span><span id="line-838">            Object[] o2 = addArrayEntry(o, val, cm.getElementType());</span>
+<span class="source-line-no">839</span><span id="line-839">            ClassMeta pct = n.parent.cm;</span>
+<span class="source-line-no">840</span><span id="line-840">            Object po = n.parent.o;</span>
+<span class="source-line-no">841</span><span id="line-841">            if (pct.isMap()) {</span>
+<span class="source-line-no">842</span><span id="line-842">               ((Map)po).put(childKey, o2);</span>
+<span class="source-line-no">843</span><span id="line-843">               return url + "/" + (o2.length-1);</span>
+<span class="source-line-no">844</span><span id="line-844">            }</span>
+<span class="source-line-no">845</span><span id="line-845">            if (pct.isBean()) {</span>
+<span class="source-line-no">846</span><span id="line-846">               BeanMap m = session.toBeanMap(po);</span>
+<span class="source-line-no">847</span><span id="line-847">               m.put(childKey, o2);</span>
+<span class="source-line-no">848</span><span id="line-848">               return url + "/" + (o2.length-1);</span>
+<span class="source-line-no">849</span><span id="line-849">            }</span>
+<span class="source-line-no">850</span><span id="line-850">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);</span>
+<span class="source-line-no">851</span><span id="line-851">         }</span>
+<span class="source-line-no">852</span><span id="line-852">         if (cm.isCollection()) {</span>
+<span class="source-line-no">853</span><span id="line-853">            Collection c = (Collection)o;</span>
+<span class="source-line-no">854</span><span id="line-854">            c.add(convert(val, cm.getElementType()));</span>
+<span class="source-line-no">855</span><span id="line-855">            return (c instanceof List ? url + "/" + (c.size()-1) : null);</span>
+<span class="source-line-no">856</span><span id="line-856">         }</span>
+<span class="source-line-no">857</span><span id="line-857">         throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);</span>
+<span class="source-line-no">858</span><span id="line-858">      }</span>
+<span class="source-line-no">859</span><span id="line-859"></span>
+<span class="source-line-no">860</span><span id="line-860">      if (method == DELETE) {</span>
+<span class="source-line-no">861</span><span id="line-861">         if (url.isEmpty()) {</span>
+<span class="source-line-no">862</span><span id="line-862">            if (rootLocked)</span>
+<span class="source-line-no">863</span><span id="line-863">               throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");</span>
+<span class="source-line-no">864</span><span id="line-864">            Object o = root.o;</span>
+<span class="source-line-no">865</span><span id="line-865">            root = new JsonNode(null, null, null, session.object());</span>
+<span class="source-line-no">866</span><span id="line-866">            return o;</span>
+<span class="source-line-no">867</span><span id="line-867">         }</span>
+<span class="source-line-no">868</span><span id="line-868">         JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));</span>
+<span class="source-line-no">869</span><span id="line-869">         ClassMeta cm = n.cm;</span>
+<span class="source-line-no">870</span><span id="line-870">         Object o = n.o;</span>
+<span class="source-line-no">871</span><span id="line-871">         if (cm.isMap())</span>
+<span class="source-line-no">872</span><span id="line-872">            return ((Map)o).remove(childKey);</span>
+<span class="source-line-no">873</span><span id="line-873">         if (cm.isCollection() &amp;&amp; o instanceof List)</span>
+<span class="source-line-no">874</span><span id="line-874">            return ((List)o).remove(parseInt(childKey));</span>
+<span class="source-line-no">875</span><span id="line-875">         if (cm.isArray()) {</span>
+<span class="source-line-no">876</span><span id="line-876">            int index = parseInt(childKey);</span>
+<span class="source-line-no">877</span><span id="line-877">            Object old = ((Object[])o)[index];</span>
+<span class="source-line-no">878</span><span id="line-878">            Object[] o2 = removeArrayEntry(o, index);</span>
+<span class="source-line-no">879</span><span id="line-879">            ClassMeta pct = n.parent.cm;</span>
+<span class="source-line-no">880</span><span id="line-880">            Object po = n.parent.o;</span>
+<span class="source-line-no">881</span><span id="line-881">            if (pct.isMap()) {</span>
+<span class="source-line-no">882</span><span id="line-882">               ((Map)po).put(n.keyName, o2);</span>
+<span class="source-line-no">883</span><span id="line-883">               return old;</span>
+<span class="source-line-no">884</span><span id="line-884">            }</span>
+<span class="source-line-no">885</span><span id="line-885">            if (pct.isBean()) {</span>
+<span class="source-line-no">886</span><span id="line-886">               BeanMap m = session.toBeanMap(po);</span>
+<span class="source-line-no">887</span><span id="line-887">               m.put(n.keyName, o2);</span>
+<span class="source-line-no">888</span><span id="line-888">               return old;</span>
+<span class="source-line-no">889</span><span id="line-889">            }</span>
+<span class="source-line-no">890</span><span id="line-890">            throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);</span>
+<span class="source-line-no">891</span><span id="line-891">         }</span>
+<span class="source-line-no">892</span><span id="line-892">         if (cm.isBean())</span>
+<span class="source-line-no">893</span><span id="line-893">            return session.toBeanMap(o).put(childKey, null);</span>
+<span class="source-line-no">894</span><span id="line-894">         throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);</span>
+<span class="source-line-no">895</span><span id="line-895">      }</span>
+<span class="source-line-no">896</span><span id="line-896"></span>
+<span class="source-line-no">897</span><span id="line-897">      return null;   // Never gets here.</span>
+<span class="source-line-no">898</span><span id="line-898">   }</span>
+<span class="source-line-no">899</span><span id="line-899"></span>
+<span class="source-line-no">900</span><span id="line-900">   private Object[] setArrayEntry(Object o, int index, Object val, ClassMeta componentType) {</span>
+<span class="source-line-no">901</span><span id="line-901">      Object[] a = (Object[])o;</span>
+<span class="source-line-no">902</span><span id="line-902">      if (a.length &lt;= index) {</span>
+<span class="source-line-no">903</span><span id="line-903">         // Expand out the array.</span>
+<span class="source-line-no">904</span><span id="line-904">         Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), index+1);</span>
+<span class="source-line-no">905</span><span id="line-905">         System.arraycopy(a, 0, a2, 0, a.length);</span>
+<span class="source-line-no">906</span><span id="line-906">         a = a2;</span>
+<span class="source-line-no">907</span><span id="line-907">      }</span>
+<span class="source-line-no">908</span><span id="line-908">      a[index] = convert(val, componentType);</span>
+<span class="source-line-no">909</span><span id="line-909">      return a;</span>
+<span class="source-line-no">910</span><span id="line-910">   }</span>
+<span class="source-line-no">911</span><span id="line-911"></span>
+<span class="source-line-no">912</span><span id="line-912">   private Object[] addArrayEntry(Object o, Object val, ClassMeta componentType) {</span>
+<span class="source-line-no">913</span><span id="line-913">      Object[] a = (Object[])o;</span>
+<span class="source-line-no">914</span><span id="line-914">      // Expand out the array.</span>
+<span class="source-line-no">915</span><span id="line-915">      Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length+1);</span>
+<span class="source-line-no">916</span><span id="line-916">      System.arraycopy(a, 0, a2, 0, a.length);</span>
+<span class="source-line-no">917</span><span id="line-917">      a2[a.length] = convert(val, componentType);</span>
+<span class="source-line-no">918</span><span id="line-918">      return a2;</span>
+<span class="source-line-no">919</span><span id="line-919">   }</span>
+<span class="source-line-no">920</span><span id="line-920"></span>
+<span class="source-line-no">921</span><span id="line-921">   private static Object[] removeArrayEntry(Object o, int index) {</span>
+<span class="source-line-no">922</span><span id="line-922">      Object[] a = (Object[])o;</span>
+<span class="source-line-no">923</span><span id="line-923">      // Shrink the array.</span>
+<span class="source-line-no">924</span><span id="line-924">      Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length-1);</span>
+<span class="source-line-no">925</span><span id="line-925">      System.arraycopy(a, 0, a2, 0, index);</span>
+<span class="source-line-no">926</span><span id="line-926">      System.arraycopy(a, index+1, a2, index, a.length-index-1);</span>
+<span class="source-line-no">927</span><span id="line-927">      return a2;</span>
+<span class="source-line-no">928</span><span id="line-928">   }</span>
+<span class="source-line-no">929</span><span id="line-929"></span>
+<span class="source-line-no">930</span><span id="line-930">   class JsonNode {</span>
+<span class="source-line-no">931</span><span id="line-931">      Object o;</span>
+<span class="source-line-no">932</span><span id="line-932">      ClassMeta cm;</span>
+<span class="source-line-no">933</span><span id="line-933">      JsonNode parent;</span>
+<span class="source-line-no">934</span><span id="line-934">      String keyName;</span>
+<span class="source-line-no">935</span><span id="line-935"></span>
+<span class="source-line-no">936</span><span id="line-936">      JsonNode(JsonNode parent, String keyName, Object o, ClassMeta cm) {</span>
+<span class="source-line-no">937</span><span id="line-937">         this.o = o;</span>
+<span class="source-line-no">938</span><span id="line-938">         this.keyName = keyName;</span>
+<span class="source-line-no">939</span><span id="line-939">         this.parent = parent;</span>
+<span class="source-line-no">940</span><span id="line-940">         if (cm == null || cm.isObject()) {</span>
+<span class="source-line-no">941</span><span id="line-941">            if (o == null)</span>
+<span class="source-line-no">942</span><span id="line-942">               cm = session.object();</span>
+<span class="source-line-no">943</span><span id="line-943">            else</span>
+<span class="source-line-no">944</span><span id="line-944">               cm = session.getClassMetaForObject(o);</span>
+<span class="source-line-no">945</span><span id="line-945">         }</span>
+<span class="source-line-no">946</span><span id="line-946">         this.cm = cm;</span>
+<span class="source-line-no">947</span><span id="line-947">      }</span>
+<span class="source-line-no">948</span><span id="line-948">   }</span>
+<span class="source-line-no">949</span><span id="line-949"></span>
+<span class="source-line-no">950</span><span id="line-950">   JsonNode getNode(String url, JsonNode n) {</span>
+<span class="source-line-no">951</span><span id="line-951">      if (url == null || url.isEmpty())</span>
+<span class="source-line-no">952</span><span id="line-952">         return n;</span>
+<span class="source-line-no">953</span><span id="line-953">      int i = url.indexOf('/');</span>
+<span class="source-line-no">954</span><span id="line-954">      String parentKey, childUrl = null;</span>
+<span class="source-line-no">955</span><span id="line-955">      if (i == -1) {</span>
+<span class="source-line-no">956</span><span id="line-956">         parentKey = url;</span>
+<span class="source-line-no">957</span><span id="line-957">      } else {</span>
+<span class="source-line-no">958</span><span id="line-958">         parentKey = url.substring(0, i);</span>
+<span class="source-line-no">959</span><span id="line-959">         childUrl = url.substring(i + 1);</span>
+<span class="source-line-no">960</span><span id="line-960">      }</span>
+<span class="source-line-no">961</span><span id="line-961"></span>
+<span class="source-line-no">962</span><span id="line-962">      Object o = n.o;</span>
+<span class="source-line-no">963</span><span id="line-963">      Object o2 = null;</span>
+<span class="source-line-no">964</span><span id="line-964">      ClassMeta cm = n.cm;</span>
+<span class="source-line-no">965</span><span id="line-965">      ClassMeta ct2 = null;</span>
+<span class="source-line-no">966</span><span id="line-966">      if (o == null)</span>
+<span class="source-line-no">967</span><span id="line-967">         return null;</span>
+<span class="source-line-no">968</span><span id="line-968">      if (cm.isMap()) {</span>
+<span class="source-line-no">969</span><span id="line-969">         o2 = ((Map)o).get(parentKey);</span>
+<span class="source-line-no">970</span><span id="line-970">         ct2 = cm.getValueType();</span>
+<span class="source-line-no">971</span><span id="line-971">      } else if (cm.isCollection() &amp;&amp; o instanceof List) {</span>
+<span class="source-line-no">972</span><span id="line-972">         int key = parseInt(parentKey);</span>
+<span class="source-line-no">973</span><span id="line-973">         List l = ((List)o);</span>
+<span class="source-line-no">974</span><span id="line-974">         if (l.size() &lt;= key)</span>
+<span class="source-line-no">975</span><span id="line-975">            return null;</span>
+<span class="source-line-no">976</span><span id="line-976">         o2 = l.get(key);</span>
+<span class="source-line-no">977</span><span id="line-977">         ct2 = cm.getElementType();</span>
+<span class="source-line-no">978</span><span id="line-978">      } else if (cm.isArray()) {</span>
+<span class="source-line-no">979</span><span id="line-979">         int key = parseInt(parentKey);</span>
+<span class="source-line-no">980</span><span id="line-980">         Object[] a = ((Object[])o);</span>
+<span class="source-line-no">981</span><span id="line-981">         if (a.length &lt;= key)</span>
+<span class="source-line-no">982</span><span id="line-982">            return null;</span>
+<span class="source-line-no">983</span><span id="line-983">         o2 = a[key];</span>
+<span class="source-line-no">984</span><span id="line-984">         ct2 = cm.getElementType();</span>
+<span class="source-line-no">985</span><span id="line-985">      } else if (cm.isBean()) {</span>
+<span class="source-line-no">986</span><span id="line-986">         BeanMap m = session.toBeanMap(o);</span>
+<span class="source-line-no">987</span><span id="line-987">         o2 = m.get(parentKey);</span>
+<span class="source-line-no">988</span><span id="line-988">         BeanPropertyMeta pMeta = m.getPropertyMeta(parentKey);</span>
+<span class="source-line-no">989</span><span id="line-989">         if (pMeta == null)</span>
+<span class="source-line-no">990</span><span id="line-990">            throw new ObjectRestException(HTTP_BAD_REQUEST,</span>
+<span class="source-line-no">991</span><span id="line-991">               "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''",</span>
+<span class="source-line-no">992</span><span id="line-992">               parentKey, m.getClassMeta()</span>
+<span class="source-line-no">993</span><span id="line-993">            );</span>
+<span class="source-line-no">994</span><span id="line-994">         ct2 = pMeta.getClassMeta();</span>
+<span class="source-line-no">995</span><span id="line-995">      }</span>
+<span class="source-line-no">996</span><span id="line-996"></span>
+<span class="source-line-no">997</span><span id="line-997">      if (childUrl == null)</span>
+<span class="source-line-no">998</span><span id="line-998">         return new JsonNode(n, parentKey, o2, ct2);</span>
+<span class="source-line-no">999</span><span id="line-999"></span>
+<span class="source-line-no">1000</span><span id="line-1000">      return getNode(childUrl, new JsonNode(n, parentKey, o2, ct2));</span>
+<span class="source-line-no">1001</span><span id="line-1001">   }</span>
+<span class="source-line-no">1002</span><span id="line-1002"></span>
+<span class="source-line-no">1003</span><span id="line-1003">   private Object convert(Object in, ClassMeta cm) {</span>
+<span class="source-line-no">1004</span><span id="line-1004">      if (cm == null)</span>
+<span class="source-line-no">1005</span><span id="line-1005">         return in;</span>
+<span class="source-line-no">1006</span><span id="line-1006">      if (cm.isBean() &amp;&amp; in instanceof Map)</span>
+<span class="source-line-no">1007</span><span id="line-1007">         return session.convertToType(in, cm);</span>
+<span class="source-line-no">1008</span><span id="line-1008">      return in;</span>
+<span class="source-line-no">1009</span><span id="line-1009">   }</span>
+<span class="source-line-no">1010</span><span id="line-1010"></span>
+<span class="source-line-no">1011</span><span id="line-1011">   private static int parseInt(String key) {</span>
+<span class="source-line-no">1012</span><span id="line-1012">      try {</span>
+<span class="source-line-no">1013</span><span id="line-1013">         return Integer.parseInt(key);</span>
+<span class="source-line-no">1014</span><span id="line-1014">      } catch (NumberFormatException e) {</span>
+<span class="source-line-no">1015</span><span id="line-1015">         throw new ObjectRestException(HTTP_BAD_REQUEST,</span>
+<span class="source-line-no">1016</span><span id="line-1016">            "Cannot address an item in an array with a non-integer key ''{0}''", key</span>
+<span class="source-line-no">1017</span><span id="line-1017">         );</span>
+<span class="source-line-no">1018</span><span id="line-1018">      }</span>
+<span class="source-line-no">1019</span><span id="line-1019">   }</span>
+<span class="source-line-no">1020</span><span id="line-1020">}</span>
 
 
 

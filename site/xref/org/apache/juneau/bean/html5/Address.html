@@ -40,10 +40,10 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;p class='bcode w800'&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Simple contact address&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	Address &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;address&lt;/jsm&gt;(&lt;js&gt;"123 Main Street, Anytown, ST 12345"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Contact information with multiple elements&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 	Address &lt;jv&gt;contact&lt;/jv&gt; = &lt;jsm&gt;address&lt;/jsm&gt;(</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 		&lt;js&gt;"John Doe"&lt;/js&gt;,</em>
@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * 		&lt;jsm&gt;br&lt;/jsm&gt;(),</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * 		&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"<a href="mailto:john@example.com" target="alexandria_uri">mailto:john@example.com</a>"&lt;/js&gt;, &lt;js&gt;"john@example.com"&lt;/js&gt;)</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 	);</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Company address&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	Address &lt;jv&gt;company&lt;/jv&gt; = &lt;jsm&gt;address&lt;/jsm&gt;(</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 		&lt;js&gt;"Acme Corporation"&lt;/js&gt;,</em>
@@ -67,14 +67,14 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 		&lt;jsm&gt;br&lt;/jsm&gt;(),</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 		&lt;js&gt;"Phone: (555) 123-4567"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 	);</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Styled address&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 	Address &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;address&lt;/jsm&gt;(</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 		&lt;js&gt;"Contact us at:"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 		&lt;jsm&gt;br&lt;/jsm&gt;(),</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 		&lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"<a href="mailto:info@company.com" target="alexandria_uri">mailto:info@company.com</a>"&lt;/js&gt;, &lt;js&gt;"info@company.com"&lt;/js&gt;)</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	)._class(&lt;js&gt;"contact-info"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * </em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// Address with multiple contact methods&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 	Address &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;address&lt;/jsm&gt;(</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 		&lt;js&gt;"Support Team"&lt;/js&gt;,</em>

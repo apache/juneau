@@ -189,59 +189,58 @@
 <span class="source-line-no">176</span><span id="line-176">      return session.convertToType(value, type);</span>
 <span class="source-line-no">177</span><span id="line-177">   }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   /**</span>
-<span class="source-line-no">181</span><span id="line-181">    * Converts the specified object to the specified type.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * @param &lt;T&gt; The class type to convert the value to.</span>
-<span class="source-line-no">184</span><span id="line-184">    * @param value The value to convert.</span>
-<span class="source-line-no">185</span><span id="line-185">    * @param type The class type to convert the value to.</span>
-<span class="source-line-no">186</span><span id="line-186">    * @param args The type arguments.</span>
-<span class="source-line-no">187</span><span id="line-187">    * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.</span>
-<span class="source-line-no">188</span><span id="line-188">    * @return The converted value.</span>
-<span class="source-line-no">189</span><span id="line-189">    */</span>
-<span class="source-line-no">190</span><span id="line-190">   public static &lt;T&gt; T toType(Object value, Class&lt;T&gt; type, Type...args) {</span>
-<span class="source-line-no">191</span><span id="line-191">      return session.convertToType(value, type, args);</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   /**</span>
-<span class="source-line-no">195</span><span id="line-195">    * Converts an object to a Boolean.</span>
-<span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * @param o The object to convert.</span>
-<span class="source-line-no">198</span><span id="line-198">    * @return The converted object.</span>
-<span class="source-line-no">199</span><span id="line-199">    */</span>
-<span class="source-line-no">200</span><span id="line-200">   public static Boolean toBoolean(Object o) {</span>
-<span class="source-line-no">201</span><span id="line-201">      return toType(o, Boolean.class);</span>
-<span class="source-line-no">202</span><span id="line-202">   }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   /**</span>
-<span class="source-line-no">205</span><span id="line-205">    * Converts an object to an Integer.</span>
-<span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * @param o The object to convert.</span>
-<span class="source-line-no">208</span><span id="line-208">    * @return The converted object.</span>
-<span class="source-line-no">209</span><span id="line-209">    */</span>
-<span class="source-line-no">210</span><span id="line-210">   public static Integer toInteger(Object o) {</span>
-<span class="source-line-no">211</span><span id="line-211">      return toType(o, Integer.class);</span>
-<span class="source-line-no">212</span><span id="line-212">   }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   /**</span>
-<span class="source-line-no">215</span><span id="line-215">    * Converts an object to a Number.</span>
-<span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * @param o The object to convert.</span>
-<span class="source-line-no">218</span><span id="line-218">    * @return The converted object.</span>
-<span class="source-line-no">219</span><span id="line-219">    */</span>
-<span class="source-line-no">220</span><span id="line-220">   public static Number toNumber(Object o) {</span>
-<span class="source-line-no">221</span><span id="line-221">      if (o == null)</span>
-<span class="source-line-no">222</span><span id="line-222">         return null;</span>
-<span class="source-line-no">223</span><span id="line-223">      if (o instanceof Number)</span>
-<span class="source-line-no">224</span><span id="line-224">         return (Number)o;</span>
-<span class="source-line-no">225</span><span id="line-225">      try {</span>
-<span class="source-line-no">226</span><span id="line-226">         return StringUtils.parseNumber(o.toString(), null);</span>
-<span class="source-line-no">227</span><span id="line-227">      } catch (ParseException e) {</span>
-<span class="source-line-no">228</span><span id="line-228">         throw asRuntimeException(e);</span>
-<span class="source-line-no">229</span><span id="line-229">      }</span>
-<span class="source-line-no">230</span><span id="line-230">   }</span>
-<span class="source-line-no">231</span><span id="line-231">}</span>
+<span class="source-line-no">179</span><span id="line-179">   /**</span>
+<span class="source-line-no">180</span><span id="line-180">    * Converts the specified object to the specified type.</span>
+<span class="source-line-no">181</span><span id="line-181">    *</span>
+<span class="source-line-no">182</span><span id="line-182">    * @param &lt;T&gt; The class type to convert the value to.</span>
+<span class="source-line-no">183</span><span id="line-183">    * @param value The value to convert.</span>
+<span class="source-line-no">184</span><span id="line-184">    * @param type The class type to convert the value to.</span>
+<span class="source-line-no">185</span><span id="line-185">    * @param args The type arguments.</span>
+<span class="source-line-no">186</span><span id="line-186">    * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.</span>
+<span class="source-line-no">187</span><span id="line-187">    * @return The converted value.</span>
+<span class="source-line-no">188</span><span id="line-188">    */</span>
+<span class="source-line-no">189</span><span id="line-189">   public static &lt;T&gt; T toType(Object value, Class&lt;T&gt; type, Type...args) {</span>
+<span class="source-line-no">190</span><span id="line-190">      return session.convertToType(value, type, args);</span>
+<span class="source-line-no">191</span><span id="line-191">   }</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">   /**</span>
+<span class="source-line-no">194</span><span id="line-194">    * Converts an object to a Boolean.</span>
+<span class="source-line-no">195</span><span id="line-195">    *</span>
+<span class="source-line-no">196</span><span id="line-196">    * @param o The object to convert.</span>
+<span class="source-line-no">197</span><span id="line-197">    * @return The converted object.</span>
+<span class="source-line-no">198</span><span id="line-198">    */</span>
+<span class="source-line-no">199</span><span id="line-199">   public static Boolean toBoolean(Object o) {</span>
+<span class="source-line-no">200</span><span id="line-200">      return toType(o, Boolean.class);</span>
+<span class="source-line-no">201</span><span id="line-201">   }</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">   /**</span>
+<span class="source-line-no">204</span><span id="line-204">    * Converts an object to an Integer.</span>
+<span class="source-line-no">205</span><span id="line-205">    *</span>
+<span class="source-line-no">206</span><span id="line-206">    * @param o The object to convert.</span>
+<span class="source-line-no">207</span><span id="line-207">    * @return The converted object.</span>
+<span class="source-line-no">208</span><span id="line-208">    */</span>
+<span class="source-line-no">209</span><span id="line-209">   public static Integer toInteger(Object o) {</span>
+<span class="source-line-no">210</span><span id="line-210">      return toType(o, Integer.class);</span>
+<span class="source-line-no">211</span><span id="line-211">   }</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">   /**</span>
+<span class="source-line-no">214</span><span id="line-214">    * Converts an object to a Number.</span>
+<span class="source-line-no">215</span><span id="line-215">    *</span>
+<span class="source-line-no">216</span><span id="line-216">    * @param o The object to convert.</span>
+<span class="source-line-no">217</span><span id="line-217">    * @return The converted object.</span>
+<span class="source-line-no">218</span><span id="line-218">    */</span>
+<span class="source-line-no">219</span><span id="line-219">   public static Number toNumber(Object o) {</span>
+<span class="source-line-no">220</span><span id="line-220">      if (o == null)</span>
+<span class="source-line-no">221</span><span id="line-221">         return null;</span>
+<span class="source-line-no">222</span><span id="line-222">      if (o instanceof Number)</span>
+<span class="source-line-no">223</span><span id="line-223">         return (Number)o;</span>
+<span class="source-line-no">224</span><span id="line-224">      try {</span>
+<span class="source-line-no">225</span><span id="line-225">         return StringUtils.parseNumber(o.toString(), null);</span>
+<span class="source-line-no">226</span><span id="line-226">      } catch (ParseException e) {</span>
+<span class="source-line-no">227</span><span id="line-227">         throw asRuntimeException(e);</span>
+<span class="source-line-no">228</span><span id="line-228">      }</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230">}</span>
 
 
 

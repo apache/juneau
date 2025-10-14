@@ -45,27 +45,27 @@
 <span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">035</span><span id="line-35"> * </span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;jc&gt;// Right-to-left text&lt;/jc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    Bdo &lt;jv&gt;rtl&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"rtl"&lt;/js&gt;, &lt;js&gt;"مرحبا بالعالم"&lt;/js&gt;);</span>
-<span class="source-line-no">038</span><span id="line-38"> * </span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;jc&gt;// Left-to-right text&lt;/jc&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    Bdo &lt;jv&gt;ltr&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"ltr"&lt;/js&gt;, &lt;js&gt;"Hello World"&lt;/js&gt;);</span>
-<span class="source-line-no">041</span><span id="line-41"> * </span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;jc&gt;// Mixed direction text&lt;/jc&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    Bdo &lt;jv&gt;mixed&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"rtl"&lt;/js&gt;, &lt;js&gt;"Hello "&lt;/js&gt;, &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"ltr"&lt;/js&gt;, &lt;js&gt;"World"&lt;/js&gt;), &lt;js&gt;" مرحبا"&lt;/js&gt;);</span>
-<span class="source-line-no">044</span><span id="line-44"> * </span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Hebrew text with explicit direction&lt;/jc&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    Bdo &lt;jv&gt;hebrew&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"rtl"&lt;/js&gt;, &lt;js&gt;"שלום עולם"&lt;/js&gt;);</span>
-<span class="source-line-no">047</span><span id="line-47"> * </span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;jc&gt;// Arabic text with explicit direction&lt;/jc&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    Bdo &lt;jv&gt;arabic&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"rtl"&lt;/js&gt;, &lt;js&gt;"مرحبا بالعالم"&lt;/js&gt;);</span>
-<span class="source-line-no">050</span><span id="line-50"> * </span>
+<span class="source-line-no">050</span><span id="line-50"> *</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Styled bidirectional text&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    Bdo &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"rtl"&lt;/js&gt;, &lt;js&gt;"نص باللغة العربية"&lt;/js&gt;)</span>
 <span class="source-line-no">053</span><span id="line-53"> *       ._class(&lt;js&gt;"bidi-text"&lt;/js&gt;)</span>
 <span class="source-line-no">054</span><span id="line-54"> *       .style(&lt;js&gt;"color: blue;"&lt;/js&gt;);</span>
-<span class="source-line-no">055</span><span id="line-55"> * </span>
+<span class="source-line-no">055</span><span id="line-55"> *</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;jc&gt;// Numbers with explicit direction&lt;/jc&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *    Bdo &lt;jv&gt;numbers&lt;/jv&gt; = &lt;jsm&gt;bdo&lt;/jsm&gt;(&lt;js&gt;"rtl"&lt;/js&gt;, &lt;js&gt;"١٢٣٤٥"&lt;/js&gt;);</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>

@@ -191,88 +191,87 @@
 <span class="source-line-no">178</span><span id="line-178">      return new BuilderSwap(objectClass, builderClass, objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createObjectMethod);</span>
 <span class="source-line-no">179</span><span id="line-179">   }</span>
 <span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   /**</span>
-<span class="source-line-no">183</span><span id="line-183">    * Creates a BuilderSwap from the specified object class if it has one.</span>
-<span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * @param bc The bean context to use to look up annotations.</span>
-<span class="source-line-no">186</span><span id="line-186">    * @param objectClass The object class to check.</span>
-<span class="source-line-no">187</span><span id="line-187">    * @param cVis Minimum constructor visibility.</span>
-<span class="source-line-no">188</span><span id="line-188">    * @param mVis Minimum method visibility.</span>
-<span class="source-line-no">189</span><span id="line-189">    * @return A new swap instance, or &lt;jk&gt;null&lt;/jk&gt; if class didn't have a builder class.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   @SuppressWarnings("rawtypes")</span>
-<span class="source-line-no">192</span><span id="line-192">   public static BuilderSwap&lt;?,?&gt; findSwapFromObjectClass(BeanContext bc, Class&lt;?&gt; objectClass, Visibility cVis, Visibility mVis) {</span>
-<span class="source-line-no">193</span><span id="line-193">      Value&lt;Class&lt;?&gt;&gt; builderClass = Value.empty();</span>
-<span class="source-line-no">194</span><span id="line-194">      MethodInfo objectCreateMethod, builderCreateMethod;</span>
-<span class="source-line-no">195</span><span id="line-195">      ConstructorInfo objectConstructor = null;</span>
-<span class="source-line-no">196</span><span id="line-196">      ConstructorInfo builderConstructor;</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">      bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -&gt; isNotVoid(x.value()), x -&gt; builderClass.set(x.value()));</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">      ClassInfo pci = ClassInfo.of(objectClass);</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">      builderCreateMethod = getBuilderCreateMethod(pci);</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">      if (builderClass.isEmpty() &amp;&amp; builderCreateMethod != null)</span>
-<span class="source-line-no">205</span><span id="line-205">         builderClass.set(builderCreateMethod.getReturnType().inner());</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">      if (builderClass.isEmpty()) {</span>
-<span class="source-line-no">208</span><span id="line-208">         ConstructorInfo cc = pci.getPublicConstructor(</span>
-<span class="source-line-no">209</span><span id="line-209">            x -&gt; x.isVisible(cVis)</span>
-<span class="source-line-no">210</span><span id="line-210">            &amp;&amp; x.hasNumParams(1)</span>
-<span class="source-line-no">211</span><span id="line-211">            &amp;&amp; x.getParamType(0).isChildOf(Builder.class)</span>
-<span class="source-line-no">212</span><span id="line-212">         );</span>
-<span class="source-line-no">213</span><span id="line-213">         if (cc != null) {</span>
-<span class="source-line-no">214</span><span id="line-214">            objectConstructor = cc;</span>
-<span class="source-line-no">215</span><span id="line-215">            builderClass.set(cc.getParamType(0).inner());</span>
-<span class="source-line-no">216</span><span id="line-216">         }</span>
-<span class="source-line-no">217</span><span id="line-217">      }</span>
-<span class="source-line-no">218</span><span id="line-218"></span>
-<span class="source-line-no">219</span><span id="line-219">      if (builderClass.isEmpty())</span>
-<span class="source-line-no">220</span><span id="line-220">         return null;</span>
-<span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">      ClassInfo bci = ClassInfo.of(builderClass.get());</span>
-<span class="source-line-no">223</span><span id="line-223">      builderConstructor = bci.getNoArgConstructor(cVis);</span>
-<span class="source-line-no">224</span><span id="line-224">      if (builderConstructor == null &amp;&amp; builderCreateMethod == null)</span>
-<span class="source-line-no">225</span><span id="line-225">         return null;</span>
-<span class="source-line-no">226</span><span id="line-226"></span>
-<span class="source-line-no">227</span><span id="line-227">      objectCreateMethod = getBuilderBuildMethod(bci);</span>
-<span class="source-line-no">228</span><span id="line-228">      Class&lt;?&gt; builderClass2 = builderClass.get();</span>
-<span class="source-line-no">229</span><span id="line-229">      if (objectConstructor == null)</span>
-<span class="source-line-no">230</span><span id="line-230">         objectConstructor = pci.getDeclaredConstructor(x -&gt; x.isVisible(cVis) &amp;&amp; x.hasParamTypes(builderClass2));</span>
-<span class="source-line-no">231</span><span id="line-231"></span>
-<span class="source-line-no">232</span><span id="line-232">      if (objectConstructor == null &amp;&amp; objectCreateMethod == null)</span>
-<span class="source-line-no">233</span><span id="line-233">         return null;</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">      return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);</span>
-<span class="source-line-no">236</span><span id="line-236">   }</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">   private static MethodInfo getBuilderCreateMethod(ClassInfo c) {</span>
-<span class="source-line-no">239</span><span id="line-239">      return c.getPublicMethod(</span>
-<span class="source-line-no">240</span><span id="line-240">         x -&gt; x.isStatic()</span>
-<span class="source-line-no">241</span><span id="line-241">         &amp;&amp; (x.hasName("create") || x.hasName("builder"))</span>
-<span class="source-line-no">242</span><span id="line-242">         &amp;&amp; ! x.hasReturnType(c)</span>
-<span class="source-line-no">243</span><span id="line-243">         &amp;&amp; hasConstructorThatTakesType(c, x.getReturnType())</span>
-<span class="source-line-no">244</span><span id="line-244">      );</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {</span>
-<span class="source-line-no">248</span><span id="line-248">      return c.getPublicConstructor(</span>
-<span class="source-line-no">249</span><span id="line-249">         x -&gt; x.hasNumParams(1)</span>
-<span class="source-line-no">250</span><span id="line-250">         &amp;&amp; x.hasParamTypes(argType)</span>
-<span class="source-line-no">251</span><span id="line-251">      ) != null;</span>
-<span class="source-line-no">252</span><span id="line-252">   }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">   private static MethodInfo getBuilderBuildMethod(ClassInfo c) {</span>
-<span class="source-line-no">255</span><span id="line-255">      return c.getDeclaredMethod(</span>
-<span class="source-line-no">256</span><span id="line-256">         x -&gt; x.isNotStatic()</span>
-<span class="source-line-no">257</span><span id="line-257">         &amp;&amp; x.hasNoParams()</span>
-<span class="source-line-no">258</span><span id="line-258">         &amp;&amp; (!x.hasReturnType(void.class))</span>
-<span class="source-line-no">259</span><span id="line-259">         &amp;&amp; x.hasName("build")</span>
-<span class="source-line-no">260</span><span id="line-260">      );</span>
-<span class="source-line-no">261</span><span id="line-261">   }</span>
-<span class="source-line-no">262</span><span id="line-262">}</span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * Creates a BuilderSwap from the specified object class if it has one.</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    * @param bc The bean context to use to look up annotations.</span>
+<span class="source-line-no">185</span><span id="line-185">    * @param objectClass The object class to check.</span>
+<span class="source-line-no">186</span><span id="line-186">    * @param cVis Minimum constructor visibility.</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param mVis Minimum method visibility.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @return A new swap instance, or &lt;jk&gt;null&lt;/jk&gt; if class didn't have a builder class.</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   @SuppressWarnings("rawtypes")</span>
+<span class="source-line-no">191</span><span id="line-191">   public static BuilderSwap&lt;?,?&gt; findSwapFromObjectClass(BeanContext bc, Class&lt;?&gt; objectClass, Visibility cVis, Visibility mVis) {</span>
+<span class="source-line-no">192</span><span id="line-192">      Value&lt;Class&lt;?&gt;&gt; builderClass = Value.empty();</span>
+<span class="source-line-no">193</span><span id="line-193">      MethodInfo objectCreateMethod, builderCreateMethod;</span>
+<span class="source-line-no">194</span><span id="line-194">      ConstructorInfo objectConstructor = null;</span>
+<span class="source-line-no">195</span><span id="line-195">      ConstructorInfo builderConstructor;</span>
+<span class="source-line-no">196</span><span id="line-196"></span>
+<span class="source-line-no">197</span><span id="line-197">      bc.forEachAnnotation(org.apache.juneau.annotation.Builder.class, objectClass, x -&gt; isNotVoid(x.value()), x -&gt; builderClass.set(x.value()));</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">      ClassInfo pci = ClassInfo.of(objectClass);</span>
+<span class="source-line-no">200</span><span id="line-200"></span>
+<span class="source-line-no">201</span><span id="line-201">      builderCreateMethod = getBuilderCreateMethod(pci);</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">      if (builderClass.isEmpty() &amp;&amp; builderCreateMethod != null)</span>
+<span class="source-line-no">204</span><span id="line-204">         builderClass.set(builderCreateMethod.getReturnType().inner());</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">      if (builderClass.isEmpty()) {</span>
+<span class="source-line-no">207</span><span id="line-207">         ConstructorInfo cc = pci.getPublicConstructor(</span>
+<span class="source-line-no">208</span><span id="line-208">            x -&gt; x.isVisible(cVis)</span>
+<span class="source-line-no">209</span><span id="line-209">            &amp;&amp; x.hasNumParams(1)</span>
+<span class="source-line-no">210</span><span id="line-210">            &amp;&amp; x.getParamType(0).isChildOf(Builder.class)</span>
+<span class="source-line-no">211</span><span id="line-211">         );</span>
+<span class="source-line-no">212</span><span id="line-212">         if (cc != null) {</span>
+<span class="source-line-no">213</span><span id="line-213">            objectConstructor = cc;</span>
+<span class="source-line-no">214</span><span id="line-214">            builderClass.set(cc.getParamType(0).inner());</span>
+<span class="source-line-no">215</span><span id="line-215">         }</span>
+<span class="source-line-no">216</span><span id="line-216">      }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">      if (builderClass.isEmpty())</span>
+<span class="source-line-no">219</span><span id="line-219">         return null;</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">      ClassInfo bci = ClassInfo.of(builderClass.get());</span>
+<span class="source-line-no">222</span><span id="line-222">      builderConstructor = bci.getNoArgConstructor(cVis);</span>
+<span class="source-line-no">223</span><span id="line-223">      if (builderConstructor == null &amp;&amp; builderCreateMethod == null)</span>
+<span class="source-line-no">224</span><span id="line-224">         return null;</span>
+<span class="source-line-no">225</span><span id="line-225"></span>
+<span class="source-line-no">226</span><span id="line-226">      objectCreateMethod = getBuilderBuildMethod(bci);</span>
+<span class="source-line-no">227</span><span id="line-227">      Class&lt;?&gt; builderClass2 = builderClass.get();</span>
+<span class="source-line-no">228</span><span id="line-228">      if (objectConstructor == null)</span>
+<span class="source-line-no">229</span><span id="line-229">         objectConstructor = pci.getDeclaredConstructor(x -&gt; x.isVisible(cVis) &amp;&amp; x.hasParamTypes(builderClass2));</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">      if (objectConstructor == null &amp;&amp; objectCreateMethod == null)</span>
+<span class="source-line-no">232</span><span id="line-232">         return null;</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">      return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);</span>
+<span class="source-line-no">235</span><span id="line-235">   }</span>
+<span class="source-line-no">236</span><span id="line-236"></span>
+<span class="source-line-no">237</span><span id="line-237">   private static MethodInfo getBuilderCreateMethod(ClassInfo c) {</span>
+<span class="source-line-no">238</span><span id="line-238">      return c.getPublicMethod(</span>
+<span class="source-line-no">239</span><span id="line-239">         x -&gt; x.isStatic()</span>
+<span class="source-line-no">240</span><span id="line-240">         &amp;&amp; (x.hasName("create") || x.hasName("builder"))</span>
+<span class="source-line-no">241</span><span id="line-241">         &amp;&amp; ! x.hasReturnType(c)</span>
+<span class="source-line-no">242</span><span id="line-242">         &amp;&amp; hasConstructorThatTakesType(c, x.getReturnType())</span>
+<span class="source-line-no">243</span><span id="line-243">      );</span>
+<span class="source-line-no">244</span><span id="line-244">   }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {</span>
+<span class="source-line-no">247</span><span id="line-247">      return c.getPublicConstructor(</span>
+<span class="source-line-no">248</span><span id="line-248">         x -&gt; x.hasNumParams(1)</span>
+<span class="source-line-no">249</span><span id="line-249">         &amp;&amp; x.hasParamTypes(argType)</span>
+<span class="source-line-no">250</span><span id="line-250">      ) != null;</span>
+<span class="source-line-no">251</span><span id="line-251">   }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">   private static MethodInfo getBuilderBuildMethod(ClassInfo c) {</span>
+<span class="source-line-no">254</span><span id="line-254">      return c.getDeclaredMethod(</span>
+<span class="source-line-no">255</span><span id="line-255">         x -&gt; x.isNotStatic()</span>
+<span class="source-line-no">256</span><span id="line-256">         &amp;&amp; x.hasNoParams()</span>
+<span class="source-line-no">257</span><span id="line-257">         &amp;&amp; (!x.hasReturnType(void.class))</span>
+<span class="source-line-no">258</span><span id="line-258">         &amp;&amp; x.hasName("build")</span>
+<span class="source-line-no">259</span><span id="line-259">      );</span>
+<span class="source-line-no">260</span><span id="line-260">   }</span>
+<span class="source-line-no">261</span><span id="line-261">}</span>
 
 
 

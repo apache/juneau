@@ -98,33 +98,33 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple horizontal rule</jc>
    Hr <jv>simple</jv> = <jsm>hr</jsm>();
- 
+
    <jc>// HR with styling</jc>
    Hr <jv>styled</jv> = <jsm>hr</jsm>()
       ._class(<js>"section-divider"</js>)
       .style(<js>"border: 2px solid #ccc; margin: 20px 0;"</js>);
- 
+
    <jc>// HR with ID</jc>
    Hr <jv>withId</jv> = <jsm>hr</jsm>()
       .id(<js>"content-break"</js>);
- 
+
    <jc>// HR with styling</jc>
    Hr <jv>styled2</jv> = <jsm>hr</jsm>()
       .style(<js>"border: none; border-top: 1px dashed #999; margin: 30px 0;"</js>);
- 
+
    <jc>// HR with multiple attributes</jc>
    Hr <jv>complex</jv> = <jsm>hr</jsm>()
       ._class(<js>"fancy-divider"</js>)
       .style(<js>"border: none; height: 3px; background: linear-gradient(to right, #ff6b6b, #4ecdc4); margin: 40px 0;"</js>);
- 
+
    <jc>// HR with accessibility</jc>
    Hr <jv>accessible</jv> = <jsm>hr</jsm>()
       .title(<js>"Section break"</js>)
       .style(<js>"border: 1px solid #ddd; margin: 25px 0;"</js>);
- 
+
    <jc>// HR with custom styling</jc>
    Hr <jv>custom</jv> = <jsm>hr</jsm>()
       ._class(<js>"custom-hr"</js>)

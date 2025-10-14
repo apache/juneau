@@ -41,8 +41,8 @@
 <span class="source-line-no">028</span><span id="line-28"> * Represents a category or tag associated with a feed or entry.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * Categories provide a way to classify or tag feeds and entries, enabling better organization </span>
-<span class="source-line-no">032</span><span id="line-32"> * and discovery of content. Each category has a term (required) and optionally a scheme (for </span>
+<span class="source-line-no">031</span><span id="line-31"> * Categories provide a way to classify or tag feeds and entries, enabling better organization</span>
+<span class="source-line-no">032</span><span id="line-32"> * and discovery of content. Each category has a term (required) and optionally a scheme (for</span>
 <span class="source-line-no">033</span><span id="line-33"> * namespacing) and a human-readable label.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> *</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;p&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> * Represents an &lt;c&gt;atomCategory&lt;/c&gt; construct in the </span>
+<span class="source-line-no">072</span><span id="line-72"> * Represents an &lt;c&gt;atomCategory&lt;/c&gt; construct in the</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.2"&gt;RFC 4287 - Section 4.2.2&lt;/a&gt; specification.</span>
 <span class="source-line-no">074</span><span id="line-74"> *</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -109,119 +109,118 @@
 <span class="source-line-no">096</span><span id="line-96">   /** Bean constructor. */</span>
 <span class="source-line-no">097</span><span id="line-97">   public Category() {}</span>
 <span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">101</span><span id="line-101">   // Bean properties</span>
-<span class="source-line-no">102</span><span id="line-102">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   /**</span>
-<span class="source-line-no">105</span><span id="line-105">    * Bean property getter:  &lt;property&gt;term&lt;/property&gt;.</span>
-<span class="source-line-no">106</span><span id="line-106">    *</span>
-<span class="source-line-no">107</span><span id="line-107">    * &lt;p&gt;</span>
-<span class="source-line-no">108</span><span id="line-108">    * The category term.</span>
-<span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">111</span><span id="line-111">    */</span>
-<span class="source-line-no">112</span><span id="line-112">   @Xml(format=ATTR)</span>
-<span class="source-line-no">113</span><span id="line-113">   public String getTerm() {</span>
-<span class="source-line-no">114</span><span id="line-114">      return term;</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Bean property setter:  &lt;property&gt;term&lt;/property&gt;.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    * The category term.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param value</span>
-<span class="source-line-no">124</span><span id="line-124">    *    The new value for this property.</span>
-<span class="source-line-no">125</span><span id="line-125">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">126</span><span id="line-126">    * @return This object</span>
-<span class="source-line-no">127</span><span id="line-127">    */</span>
-<span class="source-line-no">128</span><span id="line-128">   @Xml(format=ATTR)</span>
-<span class="source-line-no">129</span><span id="line-129">   public Category setTerm(String value) {</span>
-<span class="source-line-no">130</span><span id="line-130">      this.term = value;</span>
-<span class="source-line-no">131</span><span id="line-131">      return this;</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   /**</span>
-<span class="source-line-no">135</span><span id="line-135">    * Bean property getter:  &lt;property&gt;scheme&lt;/property&gt;.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
-<span class="source-line-no">138</span><span id="line-138">    * The category scheme.</span>
-<span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">141</span><span id="line-141">    */</span>
-<span class="source-line-no">142</span><span id="line-142">   @Xml(format=ATTR)</span>
-<span class="source-line-no">143</span><span id="line-143">   public URI getScheme() {</span>
-<span class="source-line-no">144</span><span id="line-144">      return scheme;</span>
-<span class="source-line-no">145</span><span id="line-145">   }</span>
-<span class="source-line-no">146</span><span id="line-146"></span>
-<span class="source-line-no">147</span><span id="line-147">   /**</span>
-<span class="source-line-no">148</span><span id="line-148">    * Bean property setter:  &lt;property&gt;scheme&lt;/property&gt;.</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;p&gt;</span>
-<span class="source-line-no">151</span><span id="line-151">    * The category scheme.</span>
-<span class="source-line-no">152</span><span id="line-152">    *</span>
-<span class="source-line-no">153</span><span id="line-153">    * &lt;p&gt;</span>
-<span class="source-line-no">154</span><span id="line-154">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">155</span><span id="line-155">    * Strings must be valid URIs.</span>
-<span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * @param value</span>
-<span class="source-line-no">158</span><span id="line-158">    *    The new value for this property.</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">160</span><span id="line-160">    * @return This object</span>
-<span class="source-line-no">161</span><span id="line-161">    */</span>
-<span class="source-line-no">162</span><span id="line-162">   public Category setScheme(Object value) {</span>
-<span class="source-line-no">163</span><span id="line-163">      this.scheme = toURI(value);</span>
-<span class="source-line-no">164</span><span id="line-164">      return this;</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   /**</span>
-<span class="source-line-no">168</span><span id="line-168">    * Bean property getter:  &lt;property&gt;label&lt;/property&gt;.</span>
-<span class="source-line-no">169</span><span id="line-169">    *</span>
-<span class="source-line-no">170</span><span id="line-170">    * &lt;p&gt;</span>
-<span class="source-line-no">171</span><span id="line-171">    * The category label.</span>
-<span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">174</span><span id="line-174">    */</span>
-<span class="source-line-no">175</span><span id="line-175">   @Xml(format=ATTR)</span>
-<span class="source-line-no">176</span><span id="line-176">   public String getLabel() {</span>
-<span class="source-line-no">177</span><span id="line-177">      return label;</span>
-<span class="source-line-no">178</span><span id="line-178">   }</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   /**</span>
-<span class="source-line-no">181</span><span id="line-181">    * Bean property setter:  &lt;property&gt;scheme&lt;/property&gt;.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * &lt;p&gt;</span>
-<span class="source-line-no">184</span><span id="line-184">    * The category label.</span>
-<span class="source-line-no">185</span><span id="line-185">    *</span>
-<span class="source-line-no">186</span><span id="line-186">    * @param value</span>
-<span class="source-line-no">187</span><span id="line-187">    *    The new value for this property.</span>
-<span class="source-line-no">188</span><span id="line-188">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">189</span><span id="line-189">    * @return This object</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   public Category setLabel(String value) {</span>
-<span class="source-line-no">192</span><span id="line-192">      this.label = value;</span>
-<span class="source-line-no">193</span><span id="line-193">      return this;</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">197</span><span id="line-197">   // Overridden setters (to simplify method chaining)</span>
-<span class="source-line-no">198</span><span id="line-198">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   @Override /* Overridden from Common */</span>
-<span class="source-line-no">201</span><span id="line-201">   public Category setBase(Object value) {</span>
-<span class="source-line-no">202</span><span id="line-202">      super.setBase(value);</span>
-<span class="source-line-no">203</span><span id="line-203">      return this;</span>
-<span class="source-line-no">204</span><span id="line-204">   }</span>
-<span class="source-line-no">205</span><span id="line-205"></span>
-<span class="source-line-no">206</span><span id="line-206">   @Override /* Overridden from Common */</span>
-<span class="source-line-no">207</span><span id="line-207">   public Category setLang(String value) {</span>
-<span class="source-line-no">208</span><span id="line-208">      super.setLang(value);</span>
-<span class="source-line-no">209</span><span id="line-209">      return this;</span>
-<span class="source-line-no">210</span><span id="line-210">   }</span>
-<span class="source-line-no">211</span><span id="line-211">}</span>
+<span class="source-line-no">099</span><span id="line-99">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">100</span><span id="line-100">   // Bean properties</span>
+<span class="source-line-no">101</span><span id="line-101">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Bean property getter:  &lt;property&gt;term&lt;/property&gt;.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;p&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">    * The category term.</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">110</span><span id="line-110">    */</span>
+<span class="source-line-no">111</span><span id="line-111">   @Xml(format=ATTR)</span>
+<span class="source-line-no">112</span><span id="line-112">   public String getTerm() {</span>
+<span class="source-line-no">113</span><span id="line-113">      return term;</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Bean property setter:  &lt;property&gt;term&lt;/property&gt;.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * The category term.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * @param value</span>
+<span class="source-line-no">123</span><span id="line-123">    *    The new value for this property.</span>
+<span class="source-line-no">124</span><span id="line-124">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @return This object</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   @Xml(format=ATTR)</span>
+<span class="source-line-no">128</span><span id="line-128">   public Category setTerm(String value) {</span>
+<span class="source-line-no">129</span><span id="line-129">      this.term = value;</span>
+<span class="source-line-no">130</span><span id="line-130">      return this;</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * Bean property getter:  &lt;property&gt;scheme&lt;/property&gt;.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    * The category scheme.</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">140</span><span id="line-140">    */</span>
+<span class="source-line-no">141</span><span id="line-141">   @Xml(format=ATTR)</span>
+<span class="source-line-no">142</span><span id="line-142">   public URI getScheme() {</span>
+<span class="source-line-no">143</span><span id="line-143">      return scheme;</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">   /**</span>
+<span class="source-line-no">147</span><span id="line-147">    * Bean property setter:  &lt;property&gt;scheme&lt;/property&gt;.</span>
+<span class="source-line-no">148</span><span id="line-148">    *</span>
+<span class="source-line-no">149</span><span id="line-149">    * &lt;p&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">    * The category scheme.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">154</span><span id="line-154">    * Strings must be valid URIs.</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param value</span>
+<span class="source-line-no">157</span><span id="line-157">    *    The new value for this property.</span>
+<span class="source-line-no">158</span><span id="line-158">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return This object</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   public Category setScheme(Object value) {</span>
+<span class="source-line-no">162</span><span id="line-162">      this.scheme = toURI(value);</span>
+<span class="source-line-no">163</span><span id="line-163">      return this;</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   /**</span>
+<span class="source-line-no">167</span><span id="line-167">    * Bean property getter:  &lt;property&gt;label&lt;/property&gt;.</span>
+<span class="source-line-no">168</span><span id="line-168">    *</span>
+<span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    * The category label.</span>
+<span class="source-line-no">171</span><span id="line-171">    *</span>
+<span class="source-line-no">172</span><span id="line-172">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">173</span><span id="line-173">    */</span>
+<span class="source-line-no">174</span><span id="line-174">   @Xml(format=ATTR)</span>
+<span class="source-line-no">175</span><span id="line-175">   public String getLabel() {</span>
+<span class="source-line-no">176</span><span id="line-176">      return label;</span>
+<span class="source-line-no">177</span><span id="line-177">   }</span>
+<span class="source-line-no">178</span><span id="line-178"></span>
+<span class="source-line-no">179</span><span id="line-179">   /**</span>
+<span class="source-line-no">180</span><span id="line-180">    * Bean property setter:  &lt;property&gt;scheme&lt;/property&gt;.</span>
+<span class="source-line-no">181</span><span id="line-181">    *</span>
+<span class="source-line-no">182</span><span id="line-182">    * &lt;p&gt;</span>
+<span class="source-line-no">183</span><span id="line-183">    * The category label.</span>
+<span class="source-line-no">184</span><span id="line-184">    *</span>
+<span class="source-line-no">185</span><span id="line-185">    * @param value</span>
+<span class="source-line-no">186</span><span id="line-186">    *    The new value for this property.</span>
+<span class="source-line-no">187</span><span id="line-187">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @return This object</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   public Category setLabel(String value) {</span>
+<span class="source-line-no">191</span><span id="line-191">      this.label = value;</span>
+<span class="source-line-no">192</span><span id="line-192">      return this;</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">196</span><span id="line-196">   // Overridden setters (to simplify method chaining)</span>
+<span class="source-line-no">197</span><span id="line-197">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">200</span><span id="line-200">   public Category setBase(Object value) {</span>
+<span class="source-line-no">201</span><span id="line-201">      super.setBase(value);</span>
+<span class="source-line-no">202</span><span id="line-202">      return this;</span>
+<span class="source-line-no">203</span><span id="line-203">   }</span>
+<span class="source-line-no">204</span><span id="line-204"></span>
+<span class="source-line-no">205</span><span id="line-205">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">206</span><span id="line-206">   public Category setLang(String value) {</span>
+<span class="source-line-no">207</span><span id="line-207">      super.setLang(value);</span>
+<span class="source-line-no">208</span><span id="line-208">      return this;</span>
+<span class="source-line-no">209</span><span id="line-209">   }</span>
+<span class="source-line-no">210</span><span id="line-210">}</span>
 
 
 

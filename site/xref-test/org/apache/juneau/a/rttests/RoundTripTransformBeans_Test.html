@@ -236,507 +236,504 @@
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 		}
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_comment">// testSwapBeans2</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">void</strong> a02_swapBeans2(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A().init();
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		x = t.roundTrip(x, A.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<em class="jxr_comment">// ByteArrayBase64Swap</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(3, x.fByte[3]);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertNull(x.fnByte);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(5, x.faByte[2][1]);
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(6, x.flByte.get(1)[2]);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertNull(x.flByte.get(2));
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(6, x.fmByte.get(<span class="jxr_string">"bar"</span>)[2]);
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertNull(x.fmByte.get(<span class="jxr_string">"baz"</span>));
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<em class="jxr_comment">// CalendarSwap</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		x.fCalendar.setTimeZone(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>));
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertEquals(2001, x.fCalendar.get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertEquals(01, x.fCalendar.get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		x.faCalendar[0].setTimeZone(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>));
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(2001, x.faCalendar[0].get(Calendar.YEAR));
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(01, x.faCalendar[0].get(Calendar.MONTH));
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertNull(x.fnCalendar);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		assertNull(x.fn2Calendar);
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<em class="jxr_comment">// DateSwap</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertEquals(1000, x.fDate.getTime() % 3600000);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertNull(x.fnDate);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertEquals(3000, x.faDate[2].getTime() % 3600000);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertEquals(4000, x.flDate.get(0).getTime() % 3600000);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertNull(x.flDate.get(1));
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertBean(x, <span class="jxr_string">"fmDate{foo{time}}"</span>, <span class="jxr_string">"{{5000}}"</span>);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		assertNull(x.fmDate.get(<span class="jxr_string">"bar"</span>));
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	}
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<em class="jxr_comment">// swaps - Bean.swaps annotation</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">void</strong> a03_swaps(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B();
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		x.f1 = <span class="jxr_string">"bar"</span>;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		x = t.roundTrip(x, B.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertBean(x, <span class="jxr_string">"f1"</span>, <span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Swap(BSwap.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">public</strong> String f1;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BSwap <strong class="jxr_keyword">extends</strong> StringSwap&lt;B&gt; {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">public</strong> String swap(BeanSession session, B o) <strong class="jxr_keyword">throws</strong> SerializeException {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">return</strong> o.f1;
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		}
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">public</strong> B unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">var</strong> b1 = <strong class="jxr_keyword">new</strong> B();
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			b1.f1 = f;
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">return</strong> b1;
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">void</strong> a04_Swaps_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> Bc();
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		x.f1 = <span class="jxr_string">"bar"</span>;
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		x = t.roundTrip(x, Bc.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertBean(x, <span class="jxr_string">"f1"</span>, <span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	@Swap(on=<span class="jxr_string">"Dummy1"</span>,value=BcSwap.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Swap(on=<span class="jxr_string">"Bc"</span>,value=BcSwap.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Swap(on=<span class="jxr_string">"Dummy2"</span>,value=BcSwap.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BcConfig {}
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Bc {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">public</strong> String f1;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BcSwap <strong class="jxr_keyword">extends</strong> StringSwap&lt;Bc&gt; {
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Bc o) <strong class="jxr_keyword">throws</strong> SerializeException {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">return</strong> o.f1;
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		}
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">public</strong> Bc unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">var</strong> b1 = <strong class="jxr_keyword">new</strong> Bc();
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			b1.f1 = f;
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">return</strong> b1;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_comment">// testXMLGregorianCalendar - Test XMLGregorianCalendarSwap class.</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">void</strong> a05_xmlGregorianCalendar(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> gc = <strong class="jxr_keyword">new</strong> GregorianCalendar();
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">var</strong> c = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> s = t.getSerializer();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> p = t.getParser();
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(c);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> c2 = p.parse(r, XMLGregorianCalendar.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertEquals(c, c2);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_comment">// testSubTypeWithGenerics</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">void</strong> a06_subTypeWithGenerics(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> s = JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> x = C3.create();
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(<span class="jxr_string">"{\&quot;_type\&quot;:\&quot;C3\&quot;,\&quot;f1\&quot;:{\&quot;f2\&quot;:\&quot;f2\&quot;,\&quot;f3\&quot;:3}}"</span>, r);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	@Bean(dictionary={C3.<strong class="jxr_keyword">class</strong>})
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> C1&lt;T&gt; <strong class="jxr_keyword">extends</strong> Serializable {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">void</strong> setF1(T f1);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		T getF1();
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C2&lt;T&gt; <strong class="jxr_keyword">implements</strong> C1&lt;T&gt; {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">protected</strong> T f1;
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> T getF1() { <strong class="jxr_keyword">return</strong> f1; }
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setF1(T v) { f1 = v; }
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	@Bean(typeName=<span class="jxr_string">"C3"</span>)
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C3&lt;T&gt; <strong class="jxr_keyword">extends</strong> C2&lt;T&gt; {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C3 create() {
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">var</strong> c3 = <strong class="jxr_keyword">new</strong> C3&lt;&gt;();
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			<strong class="jxr_keyword">var</strong> cdto = <strong class="jxr_keyword">new</strong> CDTO();
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			cdto.f2 = <span class="jxr_string">"f2"</span>;
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			cdto.f3 = 3;
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			c3.f1 = cdto;
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">return</strong> c3;
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		}
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> T getF1() { <strong class="jxr_keyword">return</strong> f1; }
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setF1(T v) { f1 = v; }
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> CDTO {
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">public</strong> String f2;
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f3;
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_comment">// testSwapBeans2</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">void</strong> a02_swapBeans2(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> A().init();
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		x = t.roundTrip(x, A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<em class="jxr_comment">// ByteArrayBase64Swap</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(3, x.fByte[3]);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertNull(x.fnByte);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertEquals(5, x.faByte[2][1]);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(6, x.flByte.get(1)[2]);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertNull(x.flByte.get(2));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(6, x.fmByte.get(<span class="jxr_string">"bar"</span>)[2]);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertNull(x.fmByte.get(<span class="jxr_string">"baz"</span>));
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<em class="jxr_comment">// CalendarSwap</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		x.fCalendar.setTimeZone(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>));
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(2001, x.fCalendar.get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertEquals(01, x.fCalendar.get(Calendar.MONTH));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		x.faCalendar[0].setTimeZone(TimeZone.getTimeZone(<span class="jxr_string">"GMT"</span>));
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(2001, x.faCalendar[0].get(Calendar.YEAR));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(01, x.faCalendar[0].get(Calendar.MONTH));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertNull(x.fnCalendar);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertNull(x.fn2Calendar);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<em class="jxr_comment">// DateSwap</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertEquals(1000, x.fDate.getTime() % 3600000);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertNull(x.fnDate);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertEquals(3000, x.faDate[2].getTime() % 3600000);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertEquals(4000, x.flDate.get(0).getTime() % 3600000);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertNull(x.flDate.get(1));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertBean(x, <span class="jxr_string">"fmDate{foo{time}}"</span>, <span class="jxr_string">"{{5000}}"</span>);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertNull(x.fmDate.get(<span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<em class="jxr_comment">// swaps - Bean.swaps annotation</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	<strong class="jxr_keyword">void</strong> a03_swaps(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B();
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		x.f1 = <span class="jxr_string">"bar"</span>;
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		x = t.roundTrip(x, B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertBean(x, <span class="jxr_string">"f1"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	@Swap(BSwap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BSwap <strong class="jxr_keyword">extends</strong> StringSwap&lt;B&gt; {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">public</strong> String swap(BeanSession session, B o) <strong class="jxr_keyword">throws</strong> SerializeException {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<strong class="jxr_keyword">return</strong> o.f1;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">public</strong> B unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">var</strong> b1 = <strong class="jxr_keyword">new</strong> B();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			b1.f1 = f;
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">return</strong> b1;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">void</strong> a04_Swaps_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> Bc();
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		x.f1 = <span class="jxr_string">"bar"</span>;
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		x = t.roundTrip(x, Bc.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertBean(x, <span class="jxr_string">"f1"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Swap(on=<span class="jxr_string">"Dummy1"</span>,value=BcSwap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	@Swap(on=<span class="jxr_string">"Bc"</span>,value=BcSwap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Swap(on=<span class="jxr_string">"Dummy2"</span>,value=BcSwap.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BcConfig {}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Bc {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BcSwap <strong class="jxr_keyword">extends</strong> StringSwap&lt;Bc&gt; {
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Bc o) <strong class="jxr_keyword">throws</strong> SerializeException {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">return</strong> o.f1;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		}
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">public</strong> Bc unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> ParseException {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">var</strong> b1 = <strong class="jxr_keyword">new</strong> Bc();
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			b1.f1 = f;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">return</strong> b1;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<em class="jxr_comment">// testXMLGregorianCalendar - Test XMLGregorianCalendarSwap class.</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">void</strong> a05_xmlGregorianCalendar(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> gc = <strong class="jxr_keyword">new</strong> GregorianCalendar();
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> c = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> s = t.getSerializer();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> p = t.getParser();
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(c);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> c2 = p.parse(r, XMLGregorianCalendar.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertEquals(c, c2);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<em class="jxr_comment">// testSubTypeWithGenerics</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">void</strong> a06_subTypeWithGenerics(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> s = JsonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build();
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> x = C3.create();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		assertEquals(<span class="jxr_string">"{\&quot;_type\&quot;:\&quot;C3\&quot;,\&quot;f1\&quot;:{\&quot;f2\&quot;:\&quot;f2\&quot;,\&quot;f3\&quot;:3}}"</span>, r);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	@Bean(dictionary={C3.<strong class="jxr_keyword">class</strong>})
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> C1&lt;T&gt; <strong class="jxr_keyword">extends</strong> Serializable {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">void</strong> setF1(T f1);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		T getF1();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C2&lt;T&gt; <strong class="jxr_keyword">implements</strong> C1&lt;T&gt; {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">protected</strong> T f1;
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> T getF1() { <strong class="jxr_keyword">return</strong> f1; }
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setF1(T v) { f1 = v; }
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	@Bean(typeName=<span class="jxr_string">"C3"</span>)
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C3&lt;T&gt; <strong class="jxr_keyword">extends</strong> C2&lt;T&gt; {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C3 create() {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">var</strong> c3 = <strong class="jxr_keyword">new</strong> C3&lt;&gt;();
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">var</strong> cdto = <strong class="jxr_keyword">new</strong> CDTO();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			cdto.f2 = <span class="jxr_string">"f2"</span>;
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			cdto.f3 = 3;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			c3.f1 = cdto;
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			<strong class="jxr_keyword">return</strong> c3;
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> T getF1() { <strong class="jxr_keyword">return</strong> f1; }
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		@Override <em class="jxr_comment">/* C1 */</em> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setF1(T v) { f1 = v; }
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> CDTO {
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">public</strong> String f2;
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f3;
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<em class="jxr_comment">// Surrogate transforms</em>
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<em class="jxr_comment">// Surrogate transforms</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	<strong class="jxr_keyword">void</strong> a07_surrogates(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> s = JsonSerializer.create().json5().swaps(D2.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.create().swaps(D2.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> x = D1.create();
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> r = (Object)s.serialize(x);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(<span class="jxr_string">"{f2:'f1'}"</span>, r);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		x = p.parse(r, D1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertEquals(<span class="jxr_string">"f1"</span>, x.f1);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		r = t.getSerializer().serialize(x);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertTrue(toString(r).contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		t.roundTrip(x, D1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D1 {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">public</strong> String f1;
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> D1 create() {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> D1();
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			x.f1 = <span class="jxr_string">"f1"</span>;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		}
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D2 <strong class="jxr_keyword">implements</strong> Surrogate {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">public</strong> String f2;
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">public</strong> D2(D1 x) {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			f2 = x.f1;
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		}
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">public</strong> D2() {}
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">public</strong> D1 create() {
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> D1();
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			x.f1 = <strong class="jxr_keyword">this</strong>.f2;
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">void</strong> a08_surrogatesThroughAnnotation(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT;
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> x = E1.create();
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">var</strong> r = (Object)s.serialize(x);
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		assertEquals(<span class="jxr_string">"{f2:'f1'}"</span>, r);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		x = p.parse(r, E1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		assertEquals(<span class="jxr_string">"f1"</span>, x.f1);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		r = t.getSerializer().serialize(x);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		assertTrue(toString(r).contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		t.roundTrip(x, E1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	}
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	@Swap(E2.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1 {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">public</strong> String f1;
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> E1 create() {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1();
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			x.f1 = <span class="jxr_string">"f1"</span>;
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		}
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	}
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2 <strong class="jxr_keyword">implements</strong> Surrogate {
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">public</strong> String f2;
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">public</strong> E2(E1 x) {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			f2 = x.f1;
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		}
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">public</strong> E2() {}
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">public</strong> E1 create() {
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1();
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			x.f1 = <strong class="jxr_keyword">this</strong>.f2;
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		}
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	}
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<strong class="jxr_keyword">void</strong> a09_surrogatesThroughAnnotation_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT.copy().applyAnnotations(E1cConfig.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">var</strong> x = E1c.create();
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> r = (Object)s.serialize(x);
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		assertEquals(<span class="jxr_string">"{f2:'f1'}"</span>, r);
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		x = p.parse(r, E1c.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertEquals(<span class="jxr_string">"f1"</span>, x.f1);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		r = t.getSerializer().serialize(x);
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		assertTrue(toString(r).contains(<span class="jxr_string">"f2"</span>));
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		t.roundTrip(x, E1c.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	}
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	@Swap(on=<span class="jxr_string">"Dummy1"</span>,value=E2c.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	@Swap(on=<span class="jxr_string">"E1c"</span>,value=E2c.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	@Swap(on=<span class="jxr_string">"Dummy2"</span>,value=E2c.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1cConfig {}
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1c {
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">public</strong> String f1;
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> E1c create() {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1c();
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			x.f1 = <span class="jxr_string">"f1"</span>;
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		}
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	}
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2c <strong class="jxr_keyword">implements</strong> Surrogate {
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">public</strong> String f2;
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">public</strong> E2c(E1c x) {
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			f2 = x.f1;
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		}
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">public</strong> E2c() {}
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">public</strong> E1c create() {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1c();
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			x.f1 = <strong class="jxr_keyword">this</strong>.f2;
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		}
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	}
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">void</strong> a07_surrogates(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> s = JsonSerializer.create().json5().swaps(D2.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.create().swaps(D2.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> x = D1.create();
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> r = (Object)s.serialize(x);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertEquals(<span class="jxr_string">"{f2:'f1'}"</span>, r);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		x = p.parse(r, D1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertEquals(<span class="jxr_string">"f1"</span>, x.f1);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		r = t.getSerializer().serialize(x);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertTrue(toString(r).contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		t.roundTrip(x, D1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D1 {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> D1 create() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> D1();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			x.f1 = <span class="jxr_string">"f1"</span>;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D2 <strong class="jxr_keyword">implements</strong> Surrogate {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">public</strong> String f2;
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">public</strong> D2(D1 x) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			f2 = x.f1;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">public</strong> D2() {}
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">public</strong> D1 create() {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> D1();
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			x.f1 = <strong class="jxr_keyword">this</strong>.f2;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<strong class="jxr_keyword">void</strong> a08_surrogatesThroughAnnotation(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> x = E1.create();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> r = (Object)s.serialize(x);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		assertEquals(<span class="jxr_string">"{f2:'f1'}"</span>, r);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		x = p.parse(r, E1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		assertEquals(<span class="jxr_string">"f1"</span>, x.f1);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		r = t.getSerializer().serialize(x);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		assertTrue(toString(r).contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		t.roundTrip(x, E1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	@Swap(E2.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1 {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> E1 create() {
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1();
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			x.f1 = <span class="jxr_string">"f1"</span>;
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	}
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2 <strong class="jxr_keyword">implements</strong> Surrogate {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">public</strong> String f2;
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">public</strong> E2(E1 x) {
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			f2 = x.f1;
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">public</strong> E2() {}
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">public</strong> E1 create() {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			x.f1 = <strong class="jxr_keyword">this</strong>.f2;
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		}
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<strong class="jxr_keyword">void</strong> a09_surrogatesThroughAnnotation_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT.copy().applyAnnotations(E1cConfig.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT.copy().applyAnnotations(E1cConfig.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">var</strong> x = E1c.create();
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">var</strong> r = (Object)s.serialize(x);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		assertEquals(<span class="jxr_string">"{f2:'f1'}"</span>, r);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		x = p.parse(r, E1c.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertEquals(<span class="jxr_string">"f1"</span>, x.f1);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		r = t.getSerializer().serialize(x);
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertTrue(toString(r).contains(<span class="jxr_string">"f2"</span>));
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		t.roundTrip(x, E1c.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	@Swap(on=<span class="jxr_string">"Dummy1"</span>,value=E2c.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	@Swap(on=<span class="jxr_string">"E1c"</span>,value=E2c.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	@Swap(on=<span class="jxr_string">"Dummy2"</span>,value=E2c.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1cConfig {}
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E1c {
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> E1c create() {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1c();
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 			x.f1 = <span class="jxr_string">"f1"</span>;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		}
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	}
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E2c <strong class="jxr_keyword">implements</strong> Surrogate {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">public</strong> String f2;
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">public</strong> E2c(E1c x) {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 			f2 = x.f1;
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		}
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">public</strong> E2c() {}
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">public</strong> E1c create() {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E1c();
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			x.f1 = <strong class="jxr_keyword">this</strong>.f2;
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		}
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<em class="jxr_comment">// Transforms on private fields.</em>
 <a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<em class="jxr_comment">// Transforms on private fields.</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F1 {
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F1 {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		@Swap(TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">private</strong> Calendar c;
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F1 create() {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F1();
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		}
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	}
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	<strong class="jxr_keyword">void</strong> a10_swapOnPrivateField(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT;
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		@Swap(TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">private</strong> Calendar c;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F1 create() {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F1();
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		}
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	<strong class="jxr_keyword">void</strong> a10_swapOnPrivateField(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT;
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> x = F1.create();
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> x = F1.create();
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		x = p.parse(r, F1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		assertBean(x, <span class="jxr_string">"c"</span>, <span class="jxr_string">"2018-12-12T05:12:00Z"</span>);
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		t.roundTrip(x, F1.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	}
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	@Swap(on=<span class="jxr_string">"Dummy1.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	@Swap(on=<span class="jxr_string">"F1c.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	@Swap(on=<span class="jxr_string">"Dummy2.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F1cConfig {}
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		x = p.parse(r, F1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		assertBean(x, <span class="jxr_string">"c"</span>, <span class="jxr_string">"2018-12-12T05:12:00Z"</span>);
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		t.roundTrip(x, F1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	@Swap(on=<span class="jxr_string">"Dummy1.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	@Swap(on=<span class="jxr_string">"F1c.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	@Swap(on=<span class="jxr_string">"Dummy2.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F1cConfig {}
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F1c {
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F1c {
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">private</strong> Calendar c;
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F1c create() {
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F1c();
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		}
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<strong class="jxr_keyword">void</strong> a11_swapOnPrivateField_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT.copy().applyAnnotations(F1cConfig.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT.copy().applyAnnotations(F1cConfig.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">private</strong> Calendar c;
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F1c create() {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F1c();
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		}
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	}
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<strong class="jxr_keyword">void</strong> a11_swapOnPrivateField_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT.copy().applyAnnotations(F1cConfig.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT.copy().applyAnnotations(F1cConfig.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">var</strong> x = F1c.create();
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> x = F1c.create();
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		x = p.parse(r, F1c.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		assertSerialized(x, s, <span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>);
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		t.roundTrip(x, F1c.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	}
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2a {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		@Swap(TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">protected</strong> Calendar c;
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	}
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		x = p.parse(r, F1c.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		assertSerialized(x, s, <span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		t.roundTrip(x, F1c.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	}
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2a {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		@Swap(TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">protected</strong> Calendar c;
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	}
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2 <strong class="jxr_keyword">extends</strong> F2a {
 <a class="jxr_linenumber" name="L616" href="#L616">616</a> 
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2 <strong class="jxr_keyword">extends</strong> F2a {
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F2 create() {
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F2();
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		}
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	}
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	<strong class="jxr_keyword">void</strong> a12_swapOnPrivateField_Inherited(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT;
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F2 create() {
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F2();
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	}
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	<strong class="jxr_keyword">void</strong> a12_swapOnPrivateField_Inherited(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT;
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT;
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<strong class="jxr_keyword">var</strong> x = F2.create();
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">var</strong> x = F2.create();
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		x = p.parse(r, F2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		assertBean(x, <span class="jxr_string">"c"</span>, <span class="jxr_string">"2018-12-12T05:12:00Z"</span>);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		t.roundTrip(x, F2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	}
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	@Swap(on=<span class="jxr_string">"Dummy1.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	@Swap(on=<span class="jxr_string">"F2ac.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	@Swap(on=<span class="jxr_string">"Dummy2.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2acConfig {}
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2ac {
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">protected</strong> Calendar c;
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	}
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		x = p.parse(r, F2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		assertBean(x, <span class="jxr_string">"c"</span>, <span class="jxr_string">"2018-12-12T05:12:00Z"</span>);
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		t.roundTrip(x, F2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	}
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	@Swap(on=<span class="jxr_string">"Dummy1.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	@Swap(on=<span class="jxr_string">"F2ac.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	@Swap(on=<span class="jxr_string">"Dummy2.c"</span>, value=TemporalCalendarSwap.IsoInstant.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2acConfig {}
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2ac {
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<strong class="jxr_keyword">protected</strong> Calendar c;
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	}
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2c <strong class="jxr_keyword">extends</strong> F2ac {
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F2c <strong class="jxr_keyword">extends</strong> F2ac {
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F2c create() {
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F2c();
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		}
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	}
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">void</strong> a13_swapOnPrivateField_Inherited_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT.copy().applyAnnotations(F2ac.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT.copy().applyAnnotations(F2ac.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setC(Calendar v) { c = v; }
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">public</strong> Calendar getC() { <strong class="jxr_keyword">return</strong> c; }
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F2c create() {
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> F2c();
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			x.setC(parseISO8601Calendar(<span class="jxr_string">"2018-12-12T05:12:00Z"</span>));
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 			<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		}
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<strong class="jxr_keyword">void</strong> a13_swapOnPrivateField_Inherited_usingConfig(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">var</strong> s = Json5Serializer.DEFAULT.copy().applyAnnotations(F2ac.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">var</strong> p = JsonParser.DEFAULT.copy().applyAnnotations(F2ac.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">var</strong> x = F2.create();
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">var</strong> x = F2.create();
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		x = p.parse(r, F2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		assertBean(x, <span class="jxr_string">"c"</span>, <span class="jxr_string">"2018-12-12T05:12:00Z"</span>);
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		t.roundTrip(x, F2.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<strong class="jxr_keyword">var</strong> r = s.serialize(x);
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		assertEquals(<span class="jxr_string">"{c:'2018-12-12T05:12:00Z'}"</span>, r);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		x = p.parse(r, F2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		assertBean(x, <span class="jxr_string">"c"</span>, <span class="jxr_string">"2018-12-12T05:12:00Z"</span>);
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		t.roundTrip(x, F2.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	}
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	<em class="jxr_comment">//==================================================================================================================</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<em class="jxr_comment">// testBeanWithIncompleteCopyConstructor</em>
 <a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<em class="jxr_comment">//==================================================================================================================</em>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<em class="jxr_comment">// testBeanWithIncompleteCopyConstructor</em>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_comment">//==================================================================================================================</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F {
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1, f2;
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F {
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> f1, f2;
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">public</strong> F() {}
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">public</strong> F() {}
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		<strong class="jxr_keyword">public</strong> F(F c) {
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			<strong class="jxr_keyword">this</strong>.f1 = c.f1;
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		}
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F create() {
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> F();
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			f.f1 = 1;
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			f.f2 = 2;
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			<strong class="jxr_keyword">return</strong> f;
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	}
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * The create() method and copy constructor should not be confused as the classes Builder class.</em>
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	<strong class="jxr_keyword">void</strong> a14_beanWithIncompleteCopyConstructor(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">var</strong> x = F.create();
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		x = t.roundTrip(x);
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		assertBean(x, <span class="jxr_string">"f1,f2"</span>, <span class="jxr_string">"1,2"</span>);
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	}
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	<em class="jxr_comment">// Utility methods.</em>
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String toString(Object o) {
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">if</strong> (o instanceof String)
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 			<strong class="jxr_keyword">return</strong> (String)o;
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">if</strong> (o instanceof byte[])
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String((byte[])o, UTF8);
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		<strong class="jxr_keyword">return</strong> o.toString();
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 	}
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> }
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">public</strong> F(F c) {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			<strong class="jxr_keyword">this</strong>.f1 = c.f1;
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		}
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> F create() {
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> F();
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 			f.f1 = 1;
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			f.f2 = 2;
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			<strong class="jxr_keyword">return</strong> f;
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		}
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	}
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * The create() method and copy constructor should not be confused as the classes Builder class.</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<strong class="jxr_keyword">void</strong> a14_beanWithIncompleteCopyConstructor(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">var</strong> x = F.create();
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		assertBean(x, <span class="jxr_string">"f1,f2"</span>, <span class="jxr_string">"1,2"</span>);
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 	}
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	<em class="jxr_comment">// Utility methods.</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String toString(Object o) {
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">if</strong> (o instanceof String)
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 			<strong class="jxr_keyword">return</strong> (String)o;
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">if</strong> (o instanceof byte[])
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String((byte[])o, UTF8);
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		<strong class="jxr_keyword">return</strong> o.toString();
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 	}
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

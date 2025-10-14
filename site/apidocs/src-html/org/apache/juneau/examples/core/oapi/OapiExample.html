@@ -43,60 +43,59 @@
 <span class="source-line-no">030</span><span id="line-30"> */</span>
 <span class="source-line-no">031</span><span id="line-31">public class OapiExample {</span>
 <span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   /**</span>
-<span class="source-line-no">035</span><span id="line-35">    * Get a reference to a parser and usage of oapiserializer.</span>
-<span class="source-line-no">036</span><span id="line-36">    *</span>
-<span class="source-line-no">037</span><span id="line-37">    * @param args Unused.</span>
-<span class="source-line-no">038</span><span id="line-38">    * @throws Exception Unused.</span>
-<span class="source-line-no">039</span><span id="line-39">    */</span>
-<span class="source-line-no">040</span><span id="line-40">   @SuppressWarnings("unused")</span>
-<span class="source-line-no">041</span><span id="line-41">   public static void main(String[] args) throws Exception{</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">      OpenApiSerializer oapiSerializer = OpenApiSerializer.DEFAULT;</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">      OpenApiParser oapiParser = OpenApiParser.DEFAULT;</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">      Pojo pojo = new Pojo("id","name");</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">      String flat = oapiSerializer.serialize(pojo);</span>
-<span class="source-line-no">050</span><span id="line-50">      // Print out the created POJO in OpenAPI format.</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">      Pojo parse = oapiParser.parse(flat, Pojo.class);</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">      assert parse.getId().equals(pojo.getId());</span>
-<span class="source-line-no">055</span><span id="line-55">      assert parse.getName().equals(pojo.getName());</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">      //Http part schmea</span>
-<span class="source-line-no">058</span><span id="line-58">      HttpPartSchema schema = HttpPartSchema</span>
-<span class="source-line-no">059</span><span id="line-59">         .create("array")</span>
-<span class="source-line-no">060</span><span id="line-60">         .collectionFormat("pipes")</span>
-<span class="source-line-no">061</span><span id="line-61">         .items(</span>
-<span class="source-line-no">062</span><span id="line-62">            HttpPartSchema</span>
-<span class="source-line-no">063</span><span id="line-63">            .create("array")</span>
-<span class="source-line-no">064</span><span id="line-64">            .collectionFormat("csv")</span>
-<span class="source-line-no">065</span><span id="line-65">            .items(</span>
-<span class="source-line-no">066</span><span id="line-66">               HttpPartSchema.create("integer","int64")</span>
-<span class="source-line-no">067</span><span id="line-67">            )</span>
-<span class="source-line-no">068</span><span id="line-68">         )</span>
-<span class="source-line-no">069</span><span id="line-69">         .build();</span>
-<span class="source-line-no">070</span><span id="line-70">      Object value = new long[][]{{1,2,3},{4,5,6},{7,8,9}};</span>
-<span class="source-line-no">071</span><span id="line-71">      String output = OpenApiSerializer.DEFAULT.serialize(HEADER, schema, value);</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">      HttpPartSchema schemab = HttpPartSchema.create().type("string").build();</span>
-<span class="source-line-no">074</span><span id="line-74">      // Convert POJO to BASE64-encoded string.</span>
-<span class="source-line-no">075</span><span id="line-75">      HttpPartSerializer s = OpenApiSerializer.DEFAULT;</span>
-<span class="source-line-no">076</span><span id="line-76">      String httpPart = s.getPartSession().serialize(HEADER, schemab, pojo);</span>
-<span class="source-line-no">077</span><span id="line-77">      System.out.println(httpPart);</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">      // Convert BASE64-encoded string back into a POJO.</span>
-<span class="source-line-no">080</span><span id="line-80">      HttpPartParser p = OpenApiParser.DEFAULT;</span>
-<span class="source-line-no">081</span><span id="line-81">      pojo = p.getPartSession().parse(HEADER, schemab, httpPart, oapiParser.getClassMeta(Pojo.class));</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">      // The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo</span>
-<span class="source-line-no">084</span><span id="line-84">      // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.</span>
-<span class="source-line-no">085</span><span id="line-85">   }</span>
-<span class="source-line-no">086</span><span id="line-86">}</span>
+<span class="source-line-no">033</span><span id="line-33">   /**</span>
+<span class="source-line-no">034</span><span id="line-34">    * Get a reference to a parser and usage of oapiserializer.</span>
+<span class="source-line-no">035</span><span id="line-35">    *</span>
+<span class="source-line-no">036</span><span id="line-36">    * @param args Unused.</span>
+<span class="source-line-no">037</span><span id="line-37">    * @throws Exception Unused.</span>
+<span class="source-line-no">038</span><span id="line-38">    */</span>
+<span class="source-line-no">039</span><span id="line-39">   @SuppressWarnings("unused")</span>
+<span class="source-line-no">040</span><span id="line-40">   public static void main(String[] args) throws Exception{</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">      OpenApiSerializer oapiSerializer = OpenApiSerializer.DEFAULT;</span>
+<span class="source-line-no">043</span><span id="line-43"></span>
+<span class="source-line-no">044</span><span id="line-44">      OpenApiParser oapiParser = OpenApiParser.DEFAULT;</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">      Pojo pojo = new Pojo("id","name");</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">      String flat = oapiSerializer.serialize(pojo);</span>
+<span class="source-line-no">049</span><span id="line-49">      // Print out the created POJO in OpenAPI format.</span>
+<span class="source-line-no">050</span><span id="line-50"></span>
+<span class="source-line-no">051</span><span id="line-51">      Pojo parse = oapiParser.parse(flat, Pojo.class);</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">      assert parse.getId().equals(pojo.getId());</span>
+<span class="source-line-no">054</span><span id="line-54">      assert parse.getName().equals(pojo.getName());</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">      //Http part schmea</span>
+<span class="source-line-no">057</span><span id="line-57">      HttpPartSchema schema = HttpPartSchema</span>
+<span class="source-line-no">058</span><span id="line-58">         .create("array")</span>
+<span class="source-line-no">059</span><span id="line-59">         .collectionFormat("pipes")</span>
+<span class="source-line-no">060</span><span id="line-60">         .items(</span>
+<span class="source-line-no">061</span><span id="line-61">            HttpPartSchema</span>
+<span class="source-line-no">062</span><span id="line-62">            .create("array")</span>
+<span class="source-line-no">063</span><span id="line-63">            .collectionFormat("csv")</span>
+<span class="source-line-no">064</span><span id="line-64">            .items(</span>
+<span class="source-line-no">065</span><span id="line-65">               HttpPartSchema.create("integer","int64")</span>
+<span class="source-line-no">066</span><span id="line-66">            )</span>
+<span class="source-line-no">067</span><span id="line-67">         )</span>
+<span class="source-line-no">068</span><span id="line-68">         .build();</span>
+<span class="source-line-no">069</span><span id="line-69">      Object value = new long[][]{{1,2,3},{4,5,6},{7,8,9}};</span>
+<span class="source-line-no">070</span><span id="line-70">      String output = OpenApiSerializer.DEFAULT.serialize(HEADER, schema, value);</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">      HttpPartSchema schemab = HttpPartSchema.create().type("string").build();</span>
+<span class="source-line-no">073</span><span id="line-73">      // Convert POJO to BASE64-encoded string.</span>
+<span class="source-line-no">074</span><span id="line-74">      HttpPartSerializer s = OpenApiSerializer.DEFAULT;</span>
+<span class="source-line-no">075</span><span id="line-75">      String httpPart = s.getPartSession().serialize(HEADER, schemab, pojo);</span>
+<span class="source-line-no">076</span><span id="line-76">      System.out.println(httpPart);</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">      // Convert BASE64-encoded string back into a POJO.</span>
+<span class="source-line-no">079</span><span id="line-79">      HttpPartParser p = OpenApiParser.DEFAULT;</span>
+<span class="source-line-no">080</span><span id="line-80">      pojo = p.getPartSession().parse(HEADER, schemab, httpPart, oapiParser.getClassMeta(Pojo.class));</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">      // The object above can be parsed thanks to the @Beanc(properties = id,name) annotation on Pojo</span>
+<span class="source-line-no">083</span><span id="line-83">      // Using this approach, you can keep your POJOs immutable, and still serialize and deserialize them.</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85">}</span>
 
 
 

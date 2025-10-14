@@ -42,8 +42,8 @@
 <span class="source-line-no">029</span><span id="line-29"> * Base class for all Atom elements, providing common attributes.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * This abstract class defines attributes that can appear on any Atom element. Per RFC 4287, </span>
-<span class="source-line-no">033</span><span id="line-33"> * all Atom elements may have &lt;c&gt;xml:base&lt;/c&gt; and &lt;c&gt;xml:lang&lt;/c&gt; attributes for managing </span>
+<span class="source-line-no">032</span><span id="line-32"> * This abstract class defines attributes that can appear on any Atom element. Per RFC 4287,</span>
+<span class="source-line-no">033</span><span id="line-33"> * all Atom elements may have &lt;c&gt;xml:base&lt;/c&gt; and &lt;c&gt;xml:lang&lt;/c&gt; attributes for managing</span>
 <span class="source-line-no">034</span><span id="line-34"> * URIs and language context.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * This class is extended by all Atom bean classes ({@link Feed}, {@link Entry}, {@link Link}, </span>
+<span class="source-line-no">044</span><span id="line-44"> * This class is extended by all Atom bean classes ({@link Feed}, {@link Entry}, {@link Link},</span>
 <span class="source-line-no">045</span><span id="line-45"> * {@link Person}, {@link Category}, {@link Text}, etc.).</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='figure'&gt;Schema&lt;/h5&gt;</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> *</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;p&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> * Represents &lt;c&gt;atomCommonAttributes&lt;/c&gt; in the </span>
+<span class="source-line-no">069</span><span id="line-69"> * Represents &lt;c&gt;atomCommonAttributes&lt;/c&gt; in the</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-2"&gt;RFC 4287 - Section 2&lt;/a&gt; specification.</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -92,101 +92,100 @@
 <span class="source-line-no">079</span><span id="line-79">   private URI base;</span>
 <span class="source-line-no">080</span><span id="line-80">   private String lang;</span>
 <span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">084</span><span id="line-84">   // Bean properties</span>
-<span class="source-line-no">085</span><span id="line-85">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   /**</span>
-<span class="source-line-no">088</span><span id="line-88">    * Bean property getter:  &lt;property&gt;base&lt;/property&gt;.</span>
-<span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    * Returns the base URI for resolving relative URI references (xml:base attribute).</span>
-<span class="source-line-no">092</span><span id="line-92">    *</span>
-<span class="source-line-no">093</span><span id="line-93">    * &lt;p&gt;</span>
-<span class="source-line-no">094</span><span id="line-94">    * This attribute, defined by XML Base, establishes a base URI for resolving any </span>
-<span class="source-line-no">095</span><span id="line-95">    * relative references within the scope of this element. This is particularly useful </span>
-<span class="source-line-no">096</span><span id="line-96">    * when aggregating content from multiple sources.</span>
-<span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">099</span><span id="line-99">    */</span>
-<span class="source-line-no">100</span><span id="line-100">   @Xml(prefix="xml", format=ATTR)</span>
-<span class="source-line-no">101</span><span id="line-101">   public URI getBase() {</span>
-<span class="source-line-no">102</span><span id="line-102">      return base;</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Bean property setter:  &lt;property&gt;base&lt;/property&gt;.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;p&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    * Sets the base URI for resolving relative URI references (xml:base attribute).</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * &lt;p&gt;</span>
-<span class="source-line-no">112</span><span id="line-112">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
-<span class="source-line-no">113</span><span id="line-113">    * Strings must be valid URIs.</span>
-<span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">117</span><span id="line-117">    *    Feed &lt;jv&gt;feed&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Feed(...)</span>
-<span class="source-line-no">118</span><span id="line-118">    *       .setBase(&lt;js&gt;"http://example.org/"&lt;/js&gt;);</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;/p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    *</span>
-<span class="source-line-no">121</span><span id="line-121">    * @param value</span>
-<span class="source-line-no">122</span><span id="line-122">    *    The new value for this property.</span>
-<span class="source-line-no">123</span><span id="line-123">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return This object.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   public Common setBase(Object value) {</span>
-<span class="source-line-no">127</span><span id="line-127">      this.base = toURI(value);</span>
-<span class="source-line-no">128</span><span id="line-128">      return this;</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   /**</span>
-<span class="source-line-no">132</span><span id="line-132">    * Bean property getter:  &lt;property&gt;lang&lt;/property&gt;.</span>
-<span class="source-line-no">133</span><span id="line-133">    *</span>
-<span class="source-line-no">134</span><span id="line-134">    * &lt;p&gt;</span>
-<span class="source-line-no">135</span><span id="line-135">    * Returns the natural language of the element's content (xml:lang attribute).</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
-<span class="source-line-no">138</span><span id="line-138">    * The language tag should be a language identifier as defined by RFC 3066. This attribute </span>
-<span class="source-line-no">139</span><span id="line-139">    * is inherited by child elements, so it need only be specified on the highest-level </span>
-<span class="source-line-no">140</span><span id="line-140">    * element where it applies.</span>
-<span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">143</span><span id="line-143">    */</span>
-<span class="source-line-no">144</span><span id="line-144">   @Xml(prefix="xml", format=ATTR)</span>
-<span class="source-line-no">145</span><span id="line-145">   public String getLang() {</span>
-<span class="source-line-no">146</span><span id="line-146">      return lang;</span>
-<span class="source-line-no">147</span><span id="line-147">   }</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">   /**</span>
-<span class="source-line-no">150</span><span id="line-150">    * Bean property setter:  &lt;property&gt;lang&lt;/property&gt;.</span>
-<span class="source-line-no">151</span><span id="line-151">    *</span>
-<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">    * Sets the natural language of the element's content (xml:lang attribute).</span>
-<span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">157</span><span id="line-157">    *    Text &lt;jv&gt;title&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Text(&lt;js&gt;"text"&lt;/js&gt;)</span>
-<span class="source-line-no">158</span><span id="line-158">    *       .setText(&lt;js&gt;"Mon Blog"&lt;/js&gt;)</span>
-<span class="source-line-no">159</span><span id="line-159">    *       .setLang(&lt;js&gt;"fr"&lt;/js&gt;);</span>
-<span class="source-line-no">160</span><span id="line-160">    * &lt;/p&gt;</span>
-<span class="source-line-no">161</span><span id="line-161">    *</span>
-<span class="source-line-no">162</span><span id="line-162">    * @param value</span>
-<span class="source-line-no">163</span><span id="line-163">    *    The new value for this property (e.g., "en", "fr", "de", "en-US").</span>
-<span class="source-line-no">164</span><span id="line-164">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">165</span><span id="line-165">    * @return This object.</span>
-<span class="source-line-no">166</span><span id="line-166">    */</span>
-<span class="source-line-no">167</span><span id="line-167">   public Common setLang(String value) {</span>
-<span class="source-line-no">168</span><span id="line-168">      this.lang = value;</span>
-<span class="source-line-no">169</span><span id="line-169">      return this;</span>
-<span class="source-line-no">170</span><span id="line-170">   }</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   @Override /* Object */</span>
-<span class="source-line-no">173</span><span id="line-173">   public String toString() {</span>
-<span class="source-line-no">174</span><span id="line-174">      return XmlSerializer.DEFAULT_SQ.toString(this);</span>
-<span class="source-line-no">175</span><span id="line-175">   }</span>
-<span class="source-line-no">176</span><span id="line-176">}</span>
+<span class="source-line-no">082</span><span id="line-82">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">083</span><span id="line-83">   // Bean properties</span>
+<span class="source-line-no">084</span><span id="line-84">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * Bean property getter:  &lt;property&gt;base&lt;/property&gt;.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * &lt;p&gt;</span>
+<span class="source-line-no">090</span><span id="line-90">    * Returns the base URI for resolving relative URI references (xml:base attribute).</span>
+<span class="source-line-no">091</span><span id="line-91">    *</span>
+<span class="source-line-no">092</span><span id="line-92">    * &lt;p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93">    * This attribute, defined by XML Base, establishes a base URI for resolving any</span>
+<span class="source-line-no">094</span><span id="line-94">    * relative references within the scope of this element. This is particularly useful</span>
+<span class="source-line-no">095</span><span id="line-95">    * when aggregating content from multiple sources.</span>
+<span class="source-line-no">096</span><span id="line-96">    *</span>
+<span class="source-line-no">097</span><span id="line-97">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   @Xml(prefix="xml", format=ATTR)</span>
+<span class="source-line-no">100</span><span id="line-100">   public URI getBase() {</span>
+<span class="source-line-no">101</span><span id="line-101">      return base;</span>
+<span class="source-line-no">102</span><span id="line-102">   }</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /**</span>
+<span class="source-line-no">105</span><span id="line-105">    * Bean property setter:  &lt;property&gt;base&lt;/property&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    *</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;p&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    * Sets the base URI for resolving relative URI references (xml:base attribute).</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.</span>
+<span class="source-line-no">112</span><span id="line-112">    * Strings must be valid URIs.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">116</span><span id="line-116">    *    Feed &lt;jv&gt;feed&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Feed(...)</span>
+<span class="source-line-no">117</span><span id="line-117">    *       .setBase(&lt;js&gt;"http://example.org/"&lt;/js&gt;);</span>
+<span class="source-line-no">118</span><span id="line-118">    * &lt;/p&gt;</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * @param value</span>
+<span class="source-line-no">121</span><span id="line-121">    *    The new value for this property.</span>
+<span class="source-line-no">122</span><span id="line-122">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">123</span><span id="line-123">    * @return This object.</span>
+<span class="source-line-no">124</span><span id="line-124">    */</span>
+<span class="source-line-no">125</span><span id="line-125">   public Common setBase(Object value) {</span>
+<span class="source-line-no">126</span><span id="line-126">      this.base = toURI(value);</span>
+<span class="source-line-no">127</span><span id="line-127">      return this;</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   /**</span>
+<span class="source-line-no">131</span><span id="line-131">    * Bean property getter:  &lt;property&gt;lang&lt;/property&gt;.</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * Returns the natural language of the element's content (xml:lang attribute).</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
+<span class="source-line-no">137</span><span id="line-137">    * The language tag should be a language identifier as defined by RFC 3066. This attribute</span>
+<span class="source-line-no">138</span><span id="line-138">    * is inherited by child elements, so it need only be specified on the highest-level</span>
+<span class="source-line-no">139</span><span id="line-139">    * element where it applies.</span>
+<span class="source-line-no">140</span><span id="line-140">    *</span>
+<span class="source-line-no">141</span><span id="line-141">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">142</span><span id="line-142">    */</span>
+<span class="source-line-no">143</span><span id="line-143">   @Xml(prefix="xml", format=ATTR)</span>
+<span class="source-line-no">144</span><span id="line-144">   public String getLang() {</span>
+<span class="source-line-no">145</span><span id="line-145">      return lang;</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   /**</span>
+<span class="source-line-no">149</span><span id="line-149">    * Bean property setter:  &lt;property&gt;lang&lt;/property&gt;.</span>
+<span class="source-line-no">150</span><span id="line-150">    *</span>
+<span class="source-line-no">151</span><span id="line-151">    * &lt;p&gt;</span>
+<span class="source-line-no">152</span><span id="line-152">    * Sets the natural language of the element's content (xml:lang attribute).</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    *    Text &lt;jv&gt;title&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Text(&lt;js&gt;"text"&lt;/js&gt;)</span>
+<span class="source-line-no">157</span><span id="line-157">    *       .setText(&lt;js&gt;"Mon Blog"&lt;/js&gt;)</span>
+<span class="source-line-no">158</span><span id="line-158">    *       .setLang(&lt;js&gt;"fr"&lt;/js&gt;);</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;/p&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * @param value</span>
+<span class="source-line-no">162</span><span id="line-162">    *    The new value for this property (e.g., "en", "fr", "de", "en-US").</span>
+<span class="source-line-no">163</span><span id="line-163">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @return This object.</span>
+<span class="source-line-no">165</span><span id="line-165">    */</span>
+<span class="source-line-no">166</span><span id="line-166">   public Common setLang(String value) {</span>
+<span class="source-line-no">167</span><span id="line-167">      this.lang = value;</span>
+<span class="source-line-no">168</span><span id="line-168">      return this;</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   @Override /* Object */</span>
+<span class="source-line-no">172</span><span id="line-172">   public String toString() {</span>
+<span class="source-line-no">173</span><span id="line-173">      return XmlSerializer.DEFAULT_SQ.toString(this);</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175">}</span>
 
 
 

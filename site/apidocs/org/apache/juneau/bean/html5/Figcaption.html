@@ -98,21 +98,21 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple figure caption</jc>
    Figcaption <jv>simple</jv> = <jsm>figcaption</jsm>(<js>"A beautiful sunset over the mountains."</js>);
- 
+
    <jc>// Figure caption with styling</jc>
    Figcaption <jv>styled</jv> = <jsm>figcaption</jsm>(<js>"Chart showing sales data for Q1 2024."</js>)
       ._class(<js>"image-caption"</js>);
- 
+
    <jc>// Figure caption with complex content</jc>
    Figcaption <jv>complex</jv> = <jsm>figcaption</jsm>(
       <js>"Figure 1: "</js>,
       <jsm>strong</jsm>(<js>"Web Development Process"</js>),
       <js>" - A step-by-step guide to building websites."</js>
    );
- 
+
    <jc>// Figure caption with links</jc>
    Figcaption <jv>withLinks</jv> = <jsm>figcaption</jsm>(
       <js>"Source: "</js>,
@@ -120,15 +120,15 @@ loadScripts(document, 'script');</script>
       <js>" | "</js>,
       <jsm>a</jsm>(<js>"/methodology"</js>, <js>"Methodology"</js>)
    );
- 
+
    <jc>// Figure caption with ID</jc>
    Figcaption <jv>withId</jv> = <jsm>figcaption</jsm>(<js>"Interactive chart showing user engagement metrics."</js>)
       .id(<js>"chart-caption"</js>);
- 
+
    <jc>// Figure caption with styling</jc>
    Figcaption <jv>styled2</jv> = <jsm>figcaption</jsm>(<js>"Photograph by John Doe, 2024"</js>)
       .style(<js>"text-align: center; font-style: italic; color: #666;"</js>);
- 
+
    <jc>// Figure caption with multiple elements</jc>
    Figcaption <jv>multiple</jv> = <jsm>figcaption</jsm>(
       <js>"Code Example: "</js>,

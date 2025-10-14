@@ -97,28 +97,28 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple date</jc>
    Time <jv>date</jv> = <jsm>time</jsm>(<js>"January 15, 2024"</js>)
       .datetime(<js>"2024-01-15"</js>);
- 
+
    <jc>// Date and time</jc>
    Time <jv>datetime</jv> = <jsm>time</jsm>(<js>"2:30 PM on January 15, 2024"</js>)
       .datetime(<js>"2024-01-15T14:30:00Z"</js>);
- 
+
    <jc>// Relative time</jc>
    Time <jv>relative</jv> = <jsm>time</jsm>(<js>"yesterday"</js>)
       .datetime(<js>"2024-01-15"</js>);
- 
+
    <jc>// Duration</jc>
    Time <jv>duration</jv> = <jsm>time</jsm>(<js>"2 hours and 30 minutes"</js>)
       .datetime(<js>"PT2H30M"</js>);
- 
+
    <jc>// Time with styling</jc>
    Time <jv>styled</jv> = <jsm>time</jsm>(<js>"Event Date: January 15, 2024"</js>)
       .datetime(<js>"2024-01-15"</js>)
       ._class(<js>"event-date"</js>);
- 
+
    <jc>// Time with timezone</jc>
    Time <jv>timezone</jv> = <jsm>time</jsm>(<js>"2:30 PM EST on January 15, 2024"</js>)
       .datetime(<js>"2024-01-15T14:30:00-05:00"</js>);

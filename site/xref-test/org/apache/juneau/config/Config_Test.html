@@ -1393,141 +1393,139 @@
 <a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> 		assertEquals(<span class="jxr_string">"a = b|"</span>, pipedLines(sw));
 <a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> 	}
 <a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> 
-<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 
-<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 	<em class="jxr_comment">// Test resolving with override</em>
-<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 	@Test <strong class="jxr_keyword">void</strong> a16_resolvingWithOverride() {
-<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 		<strong class="jxr_keyword">var</strong> cf = init();
-<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 		cf.set(<span class="jxr_string">"a"</span>, <span class="jxr_string">"$A{X}"</span>);
-<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 		cf.set(<span class="jxr_string">"b"</span>, <span class="jxr_string">"$B{X}"</span>);
-<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 		cf.set(<span class="jxr_string">"c"</span>, <span class="jxr_string">"$A{$B{X}}"</span>);
-<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 		cf.set(<span class="jxr_string">"d"</span>, <span class="jxr_string">"$B{$A{X}}"</span>);
-<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 		cf.set(<span class="jxr_string">"e"</span>, <span class="jxr_string">"$D{X}"</span>);
-<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> 
-<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> 		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().defaultVars().vars(ALVar.<strong class="jxr_keyword">class</strong>, BLVar.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> 
-<a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> 		cf = cf.resolving(vr.createSession());
-<a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> 
-<a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> 		assertEquals(<span class="jxr_string">"aXa"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
-<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> 		assertEquals(<span class="jxr_string">"bXb"</span>, cf.get(<span class="jxr_string">"b"</span>).get());
-<a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> 		assertEquals(<span class="jxr_string">"abXba"</span>, cf.get(<span class="jxr_string">"c"</span>).get());
-<a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> 		assertEquals(<span class="jxr_string">"baXab"</span>, cf.get(<span class="jxr_string">"d"</span>).get());
-<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 		assertEquals(<span class="jxr_string">"$D{X}"</span>, cf.get(<span class="jxr_string">"e"</span>).get());
-<a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> 
-<a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> 		<em class="jxr_comment">// Create new resolver that addx $C and overrides $A</em>
-<a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 		<strong class="jxr_keyword">var</strong> vr2 = vr.copy().vars(AUVar.<strong class="jxr_keyword">class</strong>, DUVar.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 
-<a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> 		<em class="jxr_comment">// true == augment by adding existing as parent to the new resolver</em>
-<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> 		cf = cf.resolving(vr2.createSession());
-<a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> 		assertEquals(<span class="jxr_string">"AXA"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
-<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> 		assertEquals(<span class="jxr_string">"bXb"</span>, cf.get(<span class="jxr_string">"b"</span>).get());
-<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 		assertEquals(<span class="jxr_string">"AbXbA"</span>, cf.get(<span class="jxr_string">"c"</span>).get());
-<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 		assertEquals(<span class="jxr_string">"bAXAb"</span>, cf.get(<span class="jxr_string">"d"</span>).get());
-<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 		assertEquals(<span class="jxr_string">"DXD"</span>, cf.get(<span class="jxr_string">"e"</span>).get());
-<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 	}
-<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 
-<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ALVar <strong class="jxr_keyword">extends</strong> SimpleVar {
-<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 		<strong class="jxr_keyword">public</strong> ALVar() {
-<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"A"</span>);
-<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 		}
-<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 		@Override
-<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
-<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 			<strong class="jxr_keyword">return</strong> 'a' + key + 'a';
-<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 		}
-<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 	}
-<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 
-<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> AUVar <strong class="jxr_keyword">extends</strong> SimpleVar {
-<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 		<strong class="jxr_keyword">public</strong> AUVar() {
-<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"A"</span>);
-<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 		}
-<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 		@Override
-<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 			<strong class="jxr_keyword">return</strong> 'A' + key + 'A';
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 		}
-<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 	}
-<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 
-<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BLVar <strong class="jxr_keyword">extends</strong> SimpleVar {
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 		<strong class="jxr_keyword">public</strong> BLVar() {
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"B"</span>);
-<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		}
-<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 		@Override
-<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
-<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 			<strong class="jxr_keyword">return</strong> 'b' + key + 'b';
-<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 		}
-<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 	}
-<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 
-<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> DUVar <strong class="jxr_keyword">extends</strong> SimpleVar {
-<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 		<strong class="jxr_keyword">public</strong> DUVar() {
-<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"D"</span>);
-<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 		}
-<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 		@Override
-<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
-<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 			<strong class="jxr_keyword">return</strong> 'D' + key + 'D';
-<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 		}
-<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 	}
-<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> 
-<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> 
+<a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1389" href="#L1389">1389</a> 	<em class="jxr_comment">// Test resolving with override</em>
+<a class="jxr_linenumber" name="L1390" href="#L1390">1390</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1391" href="#L1391">1391</a> 	@Test <strong class="jxr_keyword">void</strong> a16_resolvingWithOverride() {
+<a class="jxr_linenumber" name="L1392" href="#L1392">1392</a> 		<strong class="jxr_keyword">var</strong> cf = init();
+<a class="jxr_linenumber" name="L1393" href="#L1393">1393</a> 		cf.set(<span class="jxr_string">"a"</span>, <span class="jxr_string">"$A{X}"</span>);
+<a class="jxr_linenumber" name="L1394" href="#L1394">1394</a> 		cf.set(<span class="jxr_string">"b"</span>, <span class="jxr_string">"$B{X}"</span>);
+<a class="jxr_linenumber" name="L1395" href="#L1395">1395</a> 		cf.set(<span class="jxr_string">"c"</span>, <span class="jxr_string">"$A{$B{X}}"</span>);
+<a class="jxr_linenumber" name="L1396" href="#L1396">1396</a> 		cf.set(<span class="jxr_string">"d"</span>, <span class="jxr_string">"$B{$A{X}}"</span>);
+<a class="jxr_linenumber" name="L1397" href="#L1397">1397</a> 		cf.set(<span class="jxr_string">"e"</span>, <span class="jxr_string">"$D{X}"</span>);
+<a class="jxr_linenumber" name="L1398" href="#L1398">1398</a> 
+<a class="jxr_linenumber" name="L1399" href="#L1399">1399</a> 		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().defaultVars().vars(ALVar.<strong class="jxr_keyword">class</strong>, BLVar.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L1400" href="#L1400">1400</a> 
+<a class="jxr_linenumber" name="L1401" href="#L1401">1401</a> 		cf = cf.resolving(vr.createSession());
+<a class="jxr_linenumber" name="L1402" href="#L1402">1402</a> 
+<a class="jxr_linenumber" name="L1403" href="#L1403">1403</a> 		assertEquals(<span class="jxr_string">"aXa"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
+<a class="jxr_linenumber" name="L1404" href="#L1404">1404</a> 		assertEquals(<span class="jxr_string">"bXb"</span>, cf.get(<span class="jxr_string">"b"</span>).get());
+<a class="jxr_linenumber" name="L1405" href="#L1405">1405</a> 		assertEquals(<span class="jxr_string">"abXba"</span>, cf.get(<span class="jxr_string">"c"</span>).get());
+<a class="jxr_linenumber" name="L1406" href="#L1406">1406</a> 		assertEquals(<span class="jxr_string">"baXab"</span>, cf.get(<span class="jxr_string">"d"</span>).get());
+<a class="jxr_linenumber" name="L1407" href="#L1407">1407</a> 		assertEquals(<span class="jxr_string">"$D{X}"</span>, cf.get(<span class="jxr_string">"e"</span>).get());
+<a class="jxr_linenumber" name="L1408" href="#L1408">1408</a> 
+<a class="jxr_linenumber" name="L1409" href="#L1409">1409</a> 		<em class="jxr_comment">// Create new resolver that addx $C and overrides $A</em>
+<a class="jxr_linenumber" name="L1410" href="#L1410">1410</a> 		<strong class="jxr_keyword">var</strong> vr2 = vr.copy().vars(AUVar.<strong class="jxr_keyword">class</strong>, DUVar.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L1411" href="#L1411">1411</a> 
+<a class="jxr_linenumber" name="L1412" href="#L1412">1412</a> 		<em class="jxr_comment">// true == augment by adding existing as parent to the new resolver</em>
+<a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> 		cf = cf.resolving(vr2.createSession());
+<a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> 		assertEquals(<span class="jxr_string">"AXA"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
+<a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> 		assertEquals(<span class="jxr_string">"bXb"</span>, cf.get(<span class="jxr_string">"b"</span>).get());
+<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> 		assertEquals(<span class="jxr_string">"AbXbA"</span>, cf.get(<span class="jxr_string">"c"</span>).get());
+<a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 		assertEquals(<span class="jxr_string">"bAXAb"</span>, cf.get(<span class="jxr_string">"d"</span>).get());
+<a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 		assertEquals(<span class="jxr_string">"DXD"</span>, cf.get(<span class="jxr_string">"e"</span>).get());
+<a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 	}
+<a class="jxr_linenumber" name="L1420" href="#L1420">1420</a> 
+<a class="jxr_linenumber" name="L1421" href="#L1421">1421</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ALVar <strong class="jxr_keyword">extends</strong> SimpleVar {
+<a class="jxr_linenumber" name="L1422" href="#L1422">1422</a> 		<strong class="jxr_keyword">public</strong> ALVar() {
+<a class="jxr_linenumber" name="L1423" href="#L1423">1423</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"A"</span>);
+<a class="jxr_linenumber" name="L1424" href="#L1424">1424</a> 		}
+<a class="jxr_linenumber" name="L1425" href="#L1425">1425</a> 		@Override
+<a class="jxr_linenumber" name="L1426" href="#L1426">1426</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
+<a class="jxr_linenumber" name="L1427" href="#L1427">1427</a> 			<strong class="jxr_keyword">return</strong> 'a' + key + 'a';
+<a class="jxr_linenumber" name="L1428" href="#L1428">1428</a> 		}
+<a class="jxr_linenumber" name="L1429" href="#L1429">1429</a> 	}
+<a class="jxr_linenumber" name="L1430" href="#L1430">1430</a> 
+<a class="jxr_linenumber" name="L1431" href="#L1431">1431</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> AUVar <strong class="jxr_keyword">extends</strong> SimpleVar {
+<a class="jxr_linenumber" name="L1432" href="#L1432">1432</a> 		<strong class="jxr_keyword">public</strong> AUVar() {
+<a class="jxr_linenumber" name="L1433" href="#L1433">1433</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"A"</span>);
+<a class="jxr_linenumber" name="L1434" href="#L1434">1434</a> 		}
+<a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> 		@Override
+<a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
+<a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> 			<strong class="jxr_keyword">return</strong> 'A' + key + 'A';
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> 		}
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> 	}
+<a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> 
+<a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BLVar <strong class="jxr_keyword">extends</strong> SimpleVar {
+<a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> 		<strong class="jxr_keyword">public</strong> BLVar() {
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"B"</span>);
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 		}
+<a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		@Override
+<a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
+<a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 			<strong class="jxr_keyword">return</strong> 'b' + key + 'b';
+<a class="jxr_linenumber" name="L1448" href="#L1448">1448</a> 		}
+<a class="jxr_linenumber" name="L1449" href="#L1449">1449</a> 	}
+<a class="jxr_linenumber" name="L1450" href="#L1450">1450</a> 
+<a class="jxr_linenumber" name="L1451" href="#L1451">1451</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> DUVar <strong class="jxr_keyword">extends</strong> SimpleVar {
+<a class="jxr_linenumber" name="L1452" href="#L1452">1452</a> 		<strong class="jxr_keyword">public</strong> DUVar() {
+<a class="jxr_linenumber" name="L1453" href="#L1453">1453</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"D"</span>);
+<a class="jxr_linenumber" name="L1454" href="#L1454">1454</a> 		}
+<a class="jxr_linenumber" name="L1455" href="#L1455">1455</a> 		@Override
+<a class="jxr_linenumber" name="L1456" href="#L1456">1456</a> 		<strong class="jxr_keyword">public</strong> String resolve(VarResolverSession session, String key) {
+<a class="jxr_linenumber" name="L1457" href="#L1457">1457</a> 			<strong class="jxr_keyword">return</strong> 'D' + key + 'D';
+<a class="jxr_linenumber" name="L1458" href="#L1458">1458</a> 		}
+<a class="jxr_linenumber" name="L1459" href="#L1459">1459</a> 	}
+<a class="jxr_linenumber" name="L1460" href="#L1460">1460</a> 
+<a class="jxr_linenumber" name="L1461" href="#L1461">1461</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1462" href="#L1462">1462</a> 	<em class="jxr_comment">// Ensure pound signs in values are encoded.</em>
 <a class="jxr_linenumber" name="L1463" href="#L1463">1463</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 	<em class="jxr_comment">// Ensure pound signs in values are encoded.</em>
-<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 	@Test <strong class="jxr_keyword">void</strong> a17_poundSignEscape() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 		<strong class="jxr_keyword">var</strong> cf = init();
-<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 		cf.set(<span class="jxr_string">"a"</span>, <span class="jxr_string">"a,#b,=c"</span>);
-<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 		cf.set(<span class="jxr_string">"A/a"</span>, <span class="jxr_string">"a,#b,=c"</span>);
-<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 
+<a class="jxr_linenumber" name="L1464" href="#L1464">1464</a> 	@Test <strong class="jxr_keyword">void</strong> a17_poundSignEscape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1465" href="#L1465">1465</a> 		<strong class="jxr_keyword">var</strong> cf = init();
+<a class="jxr_linenumber" name="L1466" href="#L1466">1466</a> 		cf.set(<span class="jxr_string">"a"</span>, <span class="jxr_string">"a,#b,=c"</span>);
+<a class="jxr_linenumber" name="L1467" href="#L1467">1467</a> 		cf.set(<span class="jxr_string">"A/a"</span>, <span class="jxr_string">"a,#b,=c"</span>);
+<a class="jxr_linenumber" name="L1468" href="#L1468">1468</a> 
+<a class="jxr_linenumber" name="L1469" href="#L1469">1469</a> 		assertEquals(<span class="jxr_string">"a = a,&#92;&#92;u0023b,=c|[A]|a = a,&#92;&#92;u0023b,=c|"</span>, pipedLines(cf));
+<a class="jxr_linenumber" name="L1470" href="#L1470">1470</a> 		cf.commit();
 <a class="jxr_linenumber" name="L1471" href="#L1471">1471</a> 		assertEquals(<span class="jxr_string">"a = a,&#92;&#92;u0023b,=c|[A]|a = a,&#92;&#92;u0023b,=c|"</span>, pipedLines(cf));
-<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 		cf.commit();
-<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 		assertEquals(<span class="jxr_string">"a = a,&#92;&#92;u0023b,=c|[A]|a = a,&#92;&#92;u0023b,=c|"</span>, pipedLines(cf));
-<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 
-<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 		assertEquals(<span class="jxr_string">"a,#b,=c"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
-<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 		assertEquals(<span class="jxr_string">"a,#b,=c"</span>, cf.get(<span class="jxr_string">"A/a"</span>).get());
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 
-<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		cf.set(<span class="jxr_string">"a"</span>, <span class="jxr_string">"a,#b,=c"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"comment#comment"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		assertEquals(<span class="jxr_string">"a = a,&#92;&#92;u0023b,=c # comment#comment|[A]|a = a,&#92;&#92;u0023b,=c|"</span>, pipedLines(cf));
-<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		assertEquals(<span class="jxr_string">"a,#b,=c"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
-<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 	}
-<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 
-<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ABean {
-<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 		<strong class="jxr_keyword">public</strong> String foo;
-<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 
-<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 		<strong class="jxr_keyword">public</strong> ABean init() {
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 			foo = <span class="jxr_string">"bar"</span>;
-<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 		}
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 	}
-<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 
-<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BBean {
-<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 		<strong class="jxr_keyword">private</strong> String foo;
-<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 
-<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		<strong class="jxr_keyword">public</strong> String getFoo() { <strong class="jxr_keyword">return</strong> foo; }
-<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 		<strong class="jxr_keyword">public</strong> BBean setFoo(String v) {<strong class="jxr_keyword">this</strong>.foo = v; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;}
-<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 		<strong class="jxr_keyword">public</strong> BBean init() {
-<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 			foo = <span class="jxr_string">"bar"</span>;
-<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 		}
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 	}
+<a class="jxr_linenumber" name="L1472" href="#L1472">1472</a> 
+<a class="jxr_linenumber" name="L1473" href="#L1473">1473</a> 		assertEquals(<span class="jxr_string">"a,#b,=c"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
+<a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 		assertEquals(<span class="jxr_string">"a,#b,=c"</span>, cf.get(<span class="jxr_string">"A/a"</span>).get());
+<a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 
+<a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 		cf.set(<span class="jxr_string">"a"</span>, <span class="jxr_string">"a,#b,=c"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"comment#comment"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 		assertEquals(<span class="jxr_string">"a = a,&#92;&#92;u0023b,=c # comment#comment|[A]|a = a,&#92;&#92;u0023b,=c|"</span>, pipedLines(cf));
+<a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 		assertEquals(<span class="jxr_string">"a,#b,=c"</span>, cf.get(<span class="jxr_string">"a"</span>).get());
+<a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 	}
+<a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 
+<a class="jxr_linenumber" name="L1481" href="#L1481">1481</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ABean {
+<a class="jxr_linenumber" name="L1482" href="#L1482">1482</a> 		<strong class="jxr_keyword">public</strong> String foo;
+<a class="jxr_linenumber" name="L1483" href="#L1483">1483</a> 
+<a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> 		<strong class="jxr_keyword">public</strong> ABean init() {
+<a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> 			foo = <span class="jxr_string">"bar"</span>;
+<a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> 		}
+<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> 	}
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> 
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BBean {
+<a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> 		<strong class="jxr_keyword">private</strong> String foo;
+<a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> 
+<a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> 		<strong class="jxr_keyword">public</strong> String getFoo() { <strong class="jxr_keyword">return</strong> foo; }
+<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 		<strong class="jxr_keyword">public</strong> BBean setFoo(String v) {<strong class="jxr_keyword">this</strong>.foo = v; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;}
+<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		<strong class="jxr_keyword">public</strong> BBean init() {
+<a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 			foo = <span class="jxr_string">"bar"</span>;
+<a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 		}
+<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 	}
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 	@Test <strong class="jxr_keyword">void</strong> a18_getCandidateSystemDefaultConfigNames() {
 <a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 	@Test <strong class="jxr_keyword">void</strong> a18_getCandidateSystemDefaultConfigNames() {
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 		System.setProperty(<span class="jxr_string">"juneau.configFile"</span>, <span class="jxr_string">"foo.txt"</span>);
-<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 		assertJson(<span class="jxr_string">"['foo.txt']"</span>, Config.getCandidateSystemDefaultConfigNames());
-<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 		System.clearProperty(<span class="jxr_string">"juneau.configFile"</span>);
-<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 		assertJson(<span class="jxr_string">"['test.cfg','juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg','application.properties']"</span>, Config.getCandidateSystemDefaultConfigNames());
-<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 	}
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 		System.setProperty(<span class="jxr_string">"juneau.configFile"</span>, <span class="jxr_string">"foo.txt"</span>);
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 		assertJson(<span class="jxr_string">"['foo.txt']"</span>, Config.getCandidateSystemDefaultConfigNames());
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 
+<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 		System.clearProperty(<span class="jxr_string">"juneau.configFile"</span>);
+<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 		assertJson(<span class="jxr_string">"['test.cfg','juneau.cfg','default.cfg','application.cfg','app.cfg','settings.cfg','application.properties']"</span>, Config.getCandidateSystemDefaultConfigNames());
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 	}
+<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 
+<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 	<em class="jxr_comment">//	setSystemProperties</em>
 <a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 	<em class="jxr_comment">//	setSystemProperties</em>
-<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 
-<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 	@Test <strong class="jxr_keyword">void</strong> setSystemProperties() {
-<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 		<strong class="jxr_keyword">var</strong> c = init(<span class="jxr_string">"a=1"</span>, <span class="jxr_string">"[S]"</span>, <span class="jxr_string">"b=2"</span>);
-<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 		c.setSystemProperties();
-<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 		assertEquals(<span class="jxr_string">"1"</span>, System.getProperty(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 		assertEquals(<span class="jxr_string">"2"</span>, System.getProperty(<span class="jxr_string">"S/b"</span>));
-<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 	}
-<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> }
+<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 
+<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 	@Test <strong class="jxr_keyword">void</strong> setSystemProperties() {
+<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 		<strong class="jxr_keyword">var</strong> c = init(<span class="jxr_string">"a=1"</span>, <span class="jxr_string">"[S]"</span>, <span class="jxr_string">"b=2"</span>);
+<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 		c.setSystemProperties();
+<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 		assertEquals(<span class="jxr_string">"1"</span>, System.getProperty(<span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 		assertEquals(<span class="jxr_string">"2"</span>, System.getProperty(<span class="jxr_string">"S/b"</span>));
+<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 	}
+<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

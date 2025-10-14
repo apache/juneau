@@ -370,603 +370,602 @@
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">return</strong> applyChange(<strong class="jxr_keyword">true</strong>, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * Not implemented.</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * @param section</em>
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * 	The section name where to place the import statement.</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank for the default section.</em>
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * @param importName</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * 	The import name.</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * @param preLines</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * 	Optional comment and blank lines to add immediately before the import statement.</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, previous pre-lines will not be replaced.</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> setImport(String section, String importName, List&lt;String&gt; preLines) {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * Removes a section.</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * This eliminates all entries in the section as well.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * @param section</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * 	The section name.</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank to refer to the default section.</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> removeSection(String section) {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		checkSectionName(section);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">return</strong> applyChange(<strong class="jxr_keyword">true</strong>, ConfigEvent.removeSection(name, section));
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * Removes an entry.</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * @param section</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * 	The section name.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank to refer to the default section.</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @param key</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * 	The entry key.</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> removeEntry(String section, String key) {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		checkSectionName(section);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		checkKeyName(key);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">return</strong> applyChange(<strong class="jxr_keyword">true</strong>, ConfigEvent.removeEntry(name, section, key));
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * Not implemented.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * @param section</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * 	The section name where to place the import statement.</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank for the default section.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * @param importName</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * 	The import name.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> removeImport(String section, String importName) {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">private</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> applyChange(<strong class="jxr_keyword">boolean</strong> addToChangeList, <a name="ConfigEvent" href="../../../../../org/apache/juneau/config/event/ConfigEvent.html#ConfigEvent">ConfigEvent</a> ce) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">if</strong> (ce == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">var</strong> section = ce.getSection();
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">var</strong> cs = entries.get(section);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">if</strong> (ce.getType() == SET_ENTRY) {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				<strong class="jxr_keyword">if</strong> (cs == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					cs = <strong class="jxr_keyword">new</strong> ConfigSection(section);
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 					entries.put(section, cs);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 				}
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">var</strong> oe = cs.entries.get(ce.getKey());
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<strong class="jxr_keyword">if</strong> (oe == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 					oe = ConfigMapEntry.NULL;
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				cs.addEntry(
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 					ce.getKey(),
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 					ce.getValue() == <strong class="jxr_keyword">null</strong> ? oe.value : ce.getValue(),
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 					ce.getModifiers() == <strong class="jxr_keyword">null</strong> ? oe.modifiers : ce.getModifiers(),
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 					ce.getComment() == <strong class="jxr_keyword">null</strong> ? oe.comment : ce.getComment(),
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 					ce.getPreLines() == <strong class="jxr_keyword">null</strong> ? oe.preLines : ce.getPreLines()
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ce.getType() == SET_SECTION) {
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 				<strong class="jxr_keyword">if</strong> (cs == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 					cs = <strong class="jxr_keyword">new</strong> ConfigSection(section);
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 					entries.put(section, cs);
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 				}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				<strong class="jxr_keyword">if</strong> (ce.getPreLines() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 					cs.setPreLines(ce.getPreLines());
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ce.getType() == REMOVE_ENTRY) {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 				<strong class="jxr_keyword">if</strong> (cs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 					cs.entries.remove(ce.getKey());
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ce.getType() == REMOVE_SECTION) {
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 				<strong class="jxr_keyword">if</strong> (cs != <strong class="jxr_keyword">null</strong>)  <em class="jxr_comment">// NOSONAR - Intentional.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 					entries.remove(section);
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			}
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">if</strong> (addToChangeList)
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 				changes.add(ce);
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		}
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * Overwrites the contents of the config file.</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * @param contents The new contents of the config file.</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @param synchronous Wait until the change has been persisted before returning this map.</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * @throws InterruptedException Thread was interrupted.</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> load(String contents, <strong class="jxr_keyword">boolean</strong> synchronous) <strong class="jxr_keyword">throws</strong> IOException, InterruptedException {
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">if</strong> (synchronous) {
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> latch = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">var</strong> listener = (<a name="ConfigStoreListener" href="../../../../../org/apache/juneau/config/store/ConfigStoreListener.html#ConfigStoreListener">ConfigStoreListener</a>) x -&gt; latch.countDown();
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			store.register(name, listener);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			store.write(name, <strong class="jxr_keyword">null</strong>, contents);
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">if</strong> (latch.await(30, TimeUnit.SECONDS)) {
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 				store.unregister(name, listener);
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Unable to store contents of config to store."</span>);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			}
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			store.write(name, <strong class="jxr_keyword">null</strong>, contents);
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		}
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	}
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<em class="jxr_comment">// Lifecycle events</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * Persist any changes made to this map and signal all listeners.</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 * If the underlying contents of the file have changed, this will reload it and apply the changes</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * on top of the modified file.</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * Subsequent changes made to the underlying file will also be signaled to all listeners.</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * We try saving the file up to 10 times.</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;If the file keeps changing on the file system, we throw an exception.</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> commit() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 			<strong class="jxr_keyword">var</strong> newContents = asString();
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt;= 10; i++) {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 				<strong class="jxr_keyword">if</strong> (i == 10)
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Unable to store contents of config to store."</span>);
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 				<strong class="jxr_keyword">var</strong> currentContents = store.write(name, contents, newContents);
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 				<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 					<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 				onChange(currentContents);
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			}
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">this</strong>.changes.clear();
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		}
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	}
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<em class="jxr_comment">// Listeners</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * Registers an event listener on this map.</em>
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * @param listener The new listener.</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> register(<a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		listeners.add(listener);
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		imports.forEach(x -&gt; x.register(listener));
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	}
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	<strong class="jxr_keyword">boolean</strong> hasEntry(String section, String key) {
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">var</strong> cs = entries.get(section);
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> ce = cs == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : cs.entries.get(key);
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">return</strong> ce != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * Unregisters an event listener from this map.</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * @param listener The listener to remove.</em>
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> unregister(<a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		listeners.remove(listener);
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		imports.forEach(x -&gt; x.register(listener));
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * Returns the listeners currently associated with this config map.</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * @return The listeners currently associated with this config map.</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">public</strong> Set&lt;ConfigEventListener&gt; getListeners() {
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">return</strong> u(listeners);
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 	}
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	@Override <em class="jxr_comment">/* ConfigStoreListener */</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onChange(String newContents) {
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		ConfigEvents changes2 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 			<strong class="jxr_keyword">if</strong> (Utils.ne(contents, newContents)) {
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				changes2 = findDiffs(newContents);
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				load(newContents);
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				<em class="jxr_comment">// Reapply our changes on top of the modifications.</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 				<strong class="jxr_keyword">this</strong>.changes.forEach(y -&gt; applyChange(false, y));
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			}
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		}
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">if</strong> (changes2 != <strong class="jxr_keyword">null</strong> &amp;&amp; ! changes2.isEmpty())
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			signal(changes2);
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	}
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	@Override <em class="jxr_comment">/* Object */</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">return</strong> asString();
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		}
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	}
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 * Returns the values in this config map as a map of maps.</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 * This is considered a snapshot copy of the config map.</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.</em>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 * @return A copy of this config as a map of maps.</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> asMap() {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			imports.forEach(y -&gt; m.putAll(y.getConfigMap().asMap()));
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			entries.values().forEach(z -&gt; {
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 				<strong class="jxr_keyword">var</strong> m2 = mapOf(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 				z.entries.values().forEach(y -&gt; m2.put(y.key, y.value));
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 				m.put(z.name, m2);
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			});
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		}
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 * Serializes this map to the specified writer.</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * @param w The writer to serialize to.</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 * @return The same writer passed in.</em>
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<strong class="jxr_keyword">public</strong> Writer writeTo(Writer w) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cs : entries.values())
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 				cs.writeTo(w);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		}
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">return</strong> w;
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	}
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 * Does a rollback of any changes on this map currently in memory.</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> rollback() {
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<strong class="jxr_keyword">if</strong> (!changes.isEmpty()) {
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 				changes.clear();
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 				load(contents);
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 				<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			}
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		}
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<em class="jxr_comment">// Private methods</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkSectionName(String s) {
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">if</strong> (! (<span class="jxr_string">""</span>.equals(s) || isValidNewSectionName(s)))
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid section name: '"</span>+s+<span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	}
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkKeyName(String s) {
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<strong class="jxr_keyword">if</strong> (! isValidKeyName(s))
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid key name: '"</span>+s+<span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidKeyName(String s) {
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		s = s.trim();
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 			<strong class="jxr_keyword">if</strong> (c == '/' || c == '&#92;&#92;' || c == '[' || c == ']' || c == '=' || c == '#')
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		}
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	}
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidNewSectionName(String s) {
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		s = s.trim();
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			<strong class="jxr_keyword">if</strong> (c == '/' || c == '&#92;&#92;' || c == '[' || c == ']')
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		}
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	}
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidConfigName(String s) {
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		s = s.trim();
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">if</strong> (i == 0) {
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 				<strong class="jxr_keyword">if</strong> (! Character.isJavaIdentifierStart(c))
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 				<strong class="jxr_keyword">if</strong> (! Character.isJavaIdentifierPart(c))
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 			}
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		}
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	}
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> signal(<a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> changes) {
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		<strong class="jxr_keyword">if</strong> (Utils.isNotEmpty(changes))
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 			listeners.forEach(x -&gt; x.onConfigChange(changes));
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 	}
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<strong class="jxr_keyword">private</strong> <a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> findDiffs(String updatedContents) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">var</strong> changes2 = <strong class="jxr_keyword">new</strong> <a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a>();
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<strong class="jxr_keyword">var</strong> newMap = <strong class="jxr_keyword">new</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a>(store, name, updatedContents);
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<em class="jxr_comment">// Imports added.</em>
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : newMap.imports) {
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">if</strong> (! imports.contains(i)) {
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : i.getConfigMap().entries.values()) {
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values()) {
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 						<strong class="jxr_keyword">if</strong> (! newMap.hasEntry(s.name, e.key)) {
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 							changes2.add(ConfigEvent.setEntry(name, s.name, e.key, e.value, e.modifiers, e.comment, e.preLines));
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 						}
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 					}
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 				}
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			}
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		}
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<em class="jxr_comment">// Imports removed.</em>
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : imports) {
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<strong class="jxr_keyword">if</strong> (! newMap.imports.contains(i)) {
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : i.getConfigMap().entries.values()) {
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values()) {
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 						<strong class="jxr_keyword">if</strong> (! newMap.hasEntry(s.name, e.key)) {
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 							changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 						}
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 					}
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 				}
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			}
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		}
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ns : newMap.oentries.values()) {
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 			<strong class="jxr_keyword">var</strong> s = oentries.get(ns.name);
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ne : ns.entries.values()) {
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 					changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 				}
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ne : ns.oentries.values()) {
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 					<strong class="jxr_keyword">var</strong> e = s.oentries.get(ne.key);
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 					<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong> || Utils.ne(e.value, ne.value)) {
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 					}
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 				}
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values()) {
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 					<strong class="jxr_keyword">var</strong> ne = ns.oentries.get(e.key);
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 					<strong class="jxr_keyword">if</strong> (ne == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 						changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 					}
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 				}
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			}
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		}
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : oentries.values()) {
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">var</strong> ns = newMap.oentries.get(s.name);
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			<strong class="jxr_keyword">if</strong> (ns == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values())
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 					changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			}
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		}
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">return</strong> changes2;
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	}
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	<em class="jxr_comment">// This method should only be called from behind a lock.</em>
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	<strong class="jxr_keyword">private</strong> String asString() {
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 			<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter();
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cs : entries.values())
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 				cs.writeTo(sw);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 			<strong class="jxr_keyword">return</strong> sw.toString();
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);  <em class="jxr_comment">// Not possible.</em>
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		}
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	<em class="jxr_comment">// ConfigSection</em>
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	<strong class="jxr_keyword">class</strong> ConfigSection {
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		<strong class="jxr_keyword">final</strong> String name;   <em class="jxr_comment">// The config section name, or blank if the default section.  Never null.</em>
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; preLines = synced(Utils.list());
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String rawLine;
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">final</strong> Map&lt;String,ConfigMapEntry&gt; oentries = synced(map());
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">final</strong> Map&lt;String,ConfigMapEntry&gt; entries = synced(map());
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 		ConfigSection(String name) {
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 			<strong class="jxr_keyword">this</strong>.name = name;
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 			<strong class="jxr_keyword">this</strong>.rawLine = <span class="jxr_string">"["</span> + name + <span class="jxr_string">"]"</span>;
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		}
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		ConfigSection(List&lt;String&gt; lines) {
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 			String name2 = <strong class="jxr_keyword">null</strong>, rawLine2 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 				S1 = 1, <em class="jxr_comment">// Looking for section.</em>
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 				S2 = 2; <em class="jxr_comment">// Found section, looking for end.</em>
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> 			<strong class="jxr_keyword">var</strong> state = S1;
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 			<strong class="jxr_keyword">var</strong> start = 0;
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; lines.size(); i++) {
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> 				<strong class="jxr_keyword">var</strong> l = lines.get(i);
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> 				<strong class="jxr_keyword">var</strong> c = StringUtils.firstNonWhitespaceChar(l);
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 				<strong class="jxr_keyword">if</strong> (state == S1) {
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> 					<strong class="jxr_keyword">if</strong> (c == '[') {
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 						<strong class="jxr_keyword">var</strong> i1 = l.indexOf('[');
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> 						<strong class="jxr_keyword">var</strong> i2 = l.indexOf(']');
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> 						name2 = l.substring(i1+1, i2).trim();
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 						rawLine2 = l;
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 						state = S2;
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 						start = i+1;
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 						preLines.add(l);
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 					}
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 					<strong class="jxr_keyword">if</strong> (c != '#' &amp;&amp; l.indexOf('=') != -1) {
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 						<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> <a name="ConfigMapEntry" href="../../../../../org/apache/juneau/config/internal/ConfigMapEntry.html#ConfigMapEntry">ConfigMapEntry</a>(l, lines.subList(start, i));
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 						<strong class="jxr_keyword">if</strong> (entries.containsKey(e.key))
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Duplicate entry found in section [{0}] of configuration:  {1}"</span>, name2, e.key);
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 						entries.put(e.key, e);
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 						start = i+1;
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 					}
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 				}
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 			}
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 			<strong class="jxr_keyword">this</strong>.name = name2;
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 			<strong class="jxr_keyword">this</strong>.rawLine = rawLine2;
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> 			<strong class="jxr_keyword">this</strong>.oentries.putAll(entries);
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		}
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		ConfigSection addEntry(String key, String value, String modifiers, String comment, List&lt;String&gt; preLines) {
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> 			<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> <a name="ConfigMapEntry" href="../../../../../org/apache/juneau/config/internal/ConfigMapEntry.html#ConfigMapEntry">ConfigMapEntry</a>(key, value, modifiers, comment, preLines);
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 			<strong class="jxr_keyword">this</strong>.entries.put(e.key, e);
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		}
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 		ConfigSection setPreLines(List&lt;String&gt; preLines) {
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 			<strong class="jxr_keyword">this</strong>.preLines.clear();
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 			<strong class="jxr_keyword">this</strong>.preLines.addAll(preLines);
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> 		}
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> 
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> 		Writer writeTo(Writer w) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : preLines)
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 				w.append(s).append('\n');
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 			<strong class="jxr_keyword">if</strong> (! name.isEmpty())
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 				w.append(rawLine).append('\n');
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 				<em class="jxr_comment">// Need separation between default prelines and first-entry prelines.</em>
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 				<strong class="jxr_keyword">if</strong> (! preLines.isEmpty())
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 					w.append('\n');
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 			}
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries.values())
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 				e.writeTo(w);
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 			<strong class="jxr_keyword">return</strong> w;
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 		}
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	}
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<em class="jxr_comment">// Import</em>
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	<strong class="jxr_keyword">class</strong> Import {
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> configMap;
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ConfigEventListener,ConfigEventListener&gt; listenerMap = synced(map());
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		Import(<a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> configMap) {
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 			<strong class="jxr_keyword">this</strong>.configMap = configMap;
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		}
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">synchronized</strong> Import register(Collection&lt;ConfigEventListener&gt; listeners) {
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			listeners.forEach(<strong class="jxr_keyword">this</strong>::register);
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		}
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<strong class="jxr_keyword">synchronized</strong> Import register(<strong class="jxr_keyword">final</strong> <a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 			<strong class="jxr_keyword">var</strong> l2 = (<a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a>) events -&gt; {
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 				<strong class="jxr_keyword">var</strong> events2 = events.stream().filter(x -&gt; ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::<strong class="jxr_keyword">new</strong>));
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 				<strong class="jxr_keyword">if</strong> (!events2.isEmpty())
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 					listener.onConfigChange(events2);
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 			};
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 			listenerMap.put(listener, l2);
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 			configMap.register(l2);
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		}
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		<strong class="jxr_keyword">synchronized</strong> Import unregister(<strong class="jxr_keyword">final</strong> <a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			configMap.unregister(listenerMap.remove(listener));
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		}
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">synchronized</strong> Import unregisterAll() {
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 			listenerMap.values().forEach(configMap::unregister);
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 			listenerMap.clear();
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		}
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		String getConfigName() {
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 			<strong class="jxr_keyword">return</strong> configMap.name;
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		}
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		ConfigMap getConfigMap() {
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 			<strong class="jxr_keyword">return</strong> configMap;
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		}
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		@Override
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 			<strong class="jxr_keyword">return</strong> o instanceof Import ir &amp;&amp; ir.getConfigName().equals(getConfigName());
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		}
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		@Override
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 			<strong class="jxr_keyword">return</strong> getConfigName().hashCode();
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		}
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	}
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> }
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * Not implemented.</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 * @param section</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * 	The section name where to place the import statement.</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank for the default section.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * @param importName</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * 	The import name.</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * @param preLines</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * 	Optional comment and blank lines to add immediately before the import statement.</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;If &lt;jk&gt;null&lt;/jk&gt;, previous pre-lines will not be replaced.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> setImport(String section, String importName, List&lt;String&gt; preLines) {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * Removes a section.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * This eliminates all entries in the section as well.</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * @param section</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * 	The section name.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank to refer to the default section.</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> removeSection(String section) {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		checkSectionName(section);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">return</strong> applyChange(<strong class="jxr_keyword">true</strong>, ConfigEvent.removeSection(name, section));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * Removes an entry.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * @param section</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * 	The section name.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank to refer to the default section.</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * @param key</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * 	The entry key.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> removeEntry(String section, String key) {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		checkSectionName(section);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		checkKeyName(key);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">return</strong> applyChange(<strong class="jxr_keyword">true</strong>, ConfigEvent.removeEntry(name, section, key));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * Not implemented.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * @param section</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * 	The section name where to place the import statement.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Use blank for the default section.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * @param importName</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * 	The import name.</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> removeImport(String section, String importName) {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented."</span>);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">private</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> applyChange(<strong class="jxr_keyword">boolean</strong> addToChangeList, <a name="ConfigEvent" href="../../../../../org/apache/juneau/config/event/ConfigEvent.html#ConfigEvent">ConfigEvent</a> ce) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">if</strong> (ce == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">var</strong> section = ce.getSection();
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">var</strong> cs = entries.get(section);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">if</strong> (ce.getType() == SET_ENTRY) {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				<strong class="jxr_keyword">if</strong> (cs == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 					cs = <strong class="jxr_keyword">new</strong> ConfigSection(section);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					entries.put(section, cs);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 				}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 				<strong class="jxr_keyword">var</strong> oe = cs.entries.get(ce.getKey());
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">if</strong> (oe == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 					oe = ConfigMapEntry.NULL;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				cs.addEntry(
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 					ce.getKey(),
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 					ce.getValue() == <strong class="jxr_keyword">null</strong> ? oe.value : ce.getValue(),
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 					ce.getModifiers() == <strong class="jxr_keyword">null</strong> ? oe.modifiers : ce.getModifiers(),
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 					ce.getComment() == <strong class="jxr_keyword">null</strong> ? oe.comment : ce.getComment(),
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 					ce.getPreLines() == <strong class="jxr_keyword">null</strong> ? oe.preLines : ce.getPreLines()
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 				);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ce.getType() == SET_SECTION) {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<strong class="jxr_keyword">if</strong> (cs == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 					cs = <strong class="jxr_keyword">new</strong> ConfigSection(section);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 					entries.put(section, cs);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 				<strong class="jxr_keyword">if</strong> (ce.getPreLines() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 					cs.setPreLines(ce.getPreLines());
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ce.getType() == REMOVE_ENTRY) {
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 				<strong class="jxr_keyword">if</strong> (cs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 					cs.entries.remove(ce.getKey());
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ce.getType() == REMOVE_SECTION) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				<strong class="jxr_keyword">if</strong> (cs != <strong class="jxr_keyword">null</strong>)  <em class="jxr_comment">// NOSONAR - Intentional.</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 					entries.remove(section);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			<strong class="jxr_keyword">if</strong> (addToChangeList)
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 				changes.add(ce);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		}
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * Overwrites the contents of the config file.</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * @param contents The new contents of the config file.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * @param synchronous Wait until the change has been persisted before returning this map.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * @throws InterruptedException Thread was interrupted.</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> load(String contents, <strong class="jxr_keyword">boolean</strong> synchronous) <strong class="jxr_keyword">throws</strong> IOException, InterruptedException {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">if</strong> (synchronous) {
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> latch = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">var</strong> listener = (<a name="ConfigStoreListener" href="../../../../../org/apache/juneau/config/store/ConfigStoreListener.html#ConfigStoreListener">ConfigStoreListener</a>) x -&gt; latch.countDown();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			store.register(name, listener);
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			store.write(name, <strong class="jxr_keyword">null</strong>, contents);
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">if</strong> (latch.await(30, TimeUnit.SECONDS)) {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 				store.unregister(name, listener);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Unable to store contents of config to store."</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			}
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			store.write(name, <strong class="jxr_keyword">null</strong>, contents);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		}
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	}
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<em class="jxr_comment">// Lifecycle events</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * Persist any changes made to this map and signal all listeners.</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * If the underlying contents of the file have changed, this will reload it and apply the changes</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 * on top of the modified file.</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * Subsequent changes made to the underlying file will also be signaled to all listeners.</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * We try saving the file up to 10 times.</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;If the file keeps changing on the file system, we throw an exception.</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> commit() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">var</strong> newContents = asString();
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt;= 10; i++) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 				<strong class="jxr_keyword">if</strong> (i == 10)
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Unable to store contents of config to store."</span>);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 				<strong class="jxr_keyword">var</strong> currentContents = store.write(name, contents, newContents);
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 				<strong class="jxr_keyword">if</strong> (currentContents == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 				onChange(currentContents);
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			}
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			<strong class="jxr_keyword">this</strong>.changes.clear();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<em class="jxr_comment">// Listeners</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * Registers an event listener on this map.</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * @param listener The new listener.</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> register(<a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		listeners.add(listener);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		imports.forEach(x -&gt; x.register(listener));
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	}
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<strong class="jxr_keyword">boolean</strong> hasEntry(String section, String key) {
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		<strong class="jxr_keyword">var</strong> cs = entries.get(section);
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">var</strong> ce = cs == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : cs.entries.get(key);
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">return</strong> ce != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * Unregisters an event listener from this map.</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * @param listener The listener to remove.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> unregister(<a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		listeners.remove(listener);
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		imports.forEach(x -&gt; x.register(listener));
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * Returns the listeners currently associated with this config map.</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * @return The listeners currently associated with this config map.</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	<strong class="jxr_keyword">public</strong> Set&lt;ConfigEventListener&gt; getListeners() {
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">return</strong> u(listeners);
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	}
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	@Override <em class="jxr_comment">/* ConfigStoreListener */</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onChange(String newContents) {
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		ConfigEvents changes2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 			<strong class="jxr_keyword">if</strong> (Utils.ne(contents, newContents)) {
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 				changes2 = findDiffs(newContents);
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				load(newContents);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				<em class="jxr_comment">// Reapply our changes on top of the modifications.</em>
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				<strong class="jxr_keyword">this</strong>.changes.forEach(y -&gt; applyChange(false, y));
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		}
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">if</strong> (changes2 != <strong class="jxr_keyword">null</strong> &amp;&amp; ! changes2.isEmpty())
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 			signal(changes2);
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	}
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">return</strong> asString();
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		}
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	}
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 * Returns the values in this config map as a map of maps.</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 * This is considered a snapshot copy of the config map.</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> <em class="jxr_javadoccomment">	 * The returned map is modifiable, but modifications to the returned map are not reflected in the config map.</em>
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 * @return A copy of this config as a map of maps.</em>
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> asMap() {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			imports.forEach(y -&gt; m.putAll(y.getConfigMap().asMap()));
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			entries.values().forEach(z -&gt; {
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 				<strong class="jxr_keyword">var</strong> m2 = mapOf(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 				z.entries.values().forEach(y -&gt; m2.put(y.key, y.value));
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 				m.put(z.name, m2);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			});
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		}
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	}
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * Serializes this map to the specified writer.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 * @param w The writer to serialize to.</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_javadoccomment">	 * @return The same writer passed in.</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	<strong class="jxr_keyword">public</strong> Writer writeTo(Writer w) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cs : entries.values())
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				cs.writeTo(w);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		}
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">return</strong> w;
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 * Does a rollback of any changes on this map currently in memory.</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	<strong class="jxr_keyword">public</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> rollback() {
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">if</strong> (!changes.isEmpty()) {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 				changes.clear();
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 				load(contents);
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			}
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		}
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<em class="jxr_comment">// Private methods</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkSectionName(String s) {
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">if</strong> (! (<span class="jxr_string">""</span>.equals(s) || isValidNewSectionName(s)))
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid section name: '"</span>+s+<span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	}
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkKeyName(String s) {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">if</strong> (! isValidKeyName(s))
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Invalid key name: '"</span>+s+<span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	}
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidKeyName(String s) {
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		s = s.trim();
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			<strong class="jxr_keyword">if</strong> (c == '/' || c == '&#92;&#92;' || c == '[' || c == ']' || c == '=' || c == '#')
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		}
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	}
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidNewSectionName(String s) {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		s = s.trim();
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">if</strong> (c == '/' || c == '&#92;&#92;' || c == '[' || c == ']')
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	}
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isValidConfigName(String s) {
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		s = s.trim();
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">if</strong> (s.isEmpty())
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			<strong class="jxr_keyword">if</strong> (i == 0) {
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 				<strong class="jxr_keyword">if</strong> (! Character.isJavaIdentifierStart(c))
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 				<strong class="jxr_keyword">if</strong> (! Character.isJavaIdentifierPart(c))
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 			}
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		}
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	}
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> signal(<a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> changes) {
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		<strong class="jxr_keyword">if</strong> (Utils.isNotEmpty(changes))
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 			listeners.forEach(x -&gt; x.onConfigChange(changes));
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 	}
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 	<strong class="jxr_keyword">private</strong> <a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> findDiffs(String updatedContents) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		<strong class="jxr_keyword">var</strong> changes2 = <strong class="jxr_keyword">new</strong> <a name="ConfigEvents" href="../../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a>();
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">var</strong> newMap = <strong class="jxr_keyword">new</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a>(store, name, updatedContents);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		<em class="jxr_comment">// Imports added.</em>
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : newMap.imports) {
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 			<strong class="jxr_keyword">if</strong> (! imports.contains(i)) {
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : i.getConfigMap().entries.values()) {
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values()) {
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 						<strong class="jxr_keyword">if</strong> (! newMap.hasEntry(s.name, e.key)) {
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 							changes2.add(ConfigEvent.setEntry(name, s.name, e.key, e.value, e.modifiers, e.comment, e.preLines));
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 						}
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 					}
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 				}
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 			}
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 		}
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<em class="jxr_comment">// Imports removed.</em>
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : imports) {
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 			<strong class="jxr_keyword">if</strong> (! newMap.imports.contains(i)) {
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : i.getConfigMap().entries.values()) {
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values()) {
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 						<strong class="jxr_keyword">if</strong> (! newMap.hasEntry(s.name, e.key)) {
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 							changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 						}
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 					}
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 				}
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			}
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		}
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ns : newMap.oentries.values()) {
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<strong class="jxr_keyword">var</strong> s = oentries.get(ns.name);
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ne : ns.entries.values()) {
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 					changes2.add(ConfigEvent.setEntry(name, ns.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 				}
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> ne : ns.oentries.values()) {
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 					<strong class="jxr_keyword">var</strong> e = s.oentries.get(ne.key);
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 					<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong> || Utils.ne(e.value, ne.value)) {
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 					}
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 				}
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values()) {
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 					<strong class="jxr_keyword">var</strong> ne = ns.oentries.get(e.key);
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 					<strong class="jxr_keyword">if</strong> (ne == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 						changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 					}
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 				}
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 			}
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		}
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : oentries.values()) {
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 			<strong class="jxr_keyword">var</strong> ns = newMap.oentries.get(s.name);
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">if</strong> (ns == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : s.oentries.values())
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 					changes2.add(ConfigEvent.removeEntry(name, s.name, e.key));
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			}
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		}
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">return</strong> changes2;
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 	}
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 	<em class="jxr_comment">// This method should only be called from behind a lock.</em>
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	<strong class="jxr_keyword">private</strong> String asString() {
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 			<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cs : entries.values())
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 				cs.writeTo(sw);
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 			<strong class="jxr_keyword">return</strong> sw.toString();
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 			<strong class="jxr_keyword">throw</strong> asRuntimeException(e);  <em class="jxr_comment">// Not possible.</em>
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		}
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 	}
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	<em class="jxr_comment">// ConfigSection</em>
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	<strong class="jxr_keyword">class</strong> ConfigSection {
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		<strong class="jxr_keyword">final</strong> String name;   <em class="jxr_comment">// The config section name, or blank if the default section.  Never null.</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; preLines = synced(Utils.list());
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String rawLine;
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<strong class="jxr_keyword">final</strong> Map&lt;String,ConfigMapEntry&gt; oentries = synced(map());
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<strong class="jxr_keyword">final</strong> Map&lt;String,ConfigMapEntry&gt; entries = synced(map());
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 		ConfigSection(String name) {
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 			<strong class="jxr_keyword">this</strong>.name = name;
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 			<strong class="jxr_keyword">this</strong>.rawLine = <span class="jxr_string">"["</span> + name + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 		}
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 		ConfigSection(List&lt;String&gt; lines) {
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 			String name2 = <strong class="jxr_keyword">null</strong>, rawLine2 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 			<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 				S1 = 1, <em class="jxr_comment">// Looking for section.</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 				S2 = 2; <em class="jxr_comment">// Found section, looking for end.</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 			<strong class="jxr_keyword">var</strong> state = S1;
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 			<strong class="jxr_keyword">var</strong> start = 0;
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; lines.size(); i++) {
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 				<strong class="jxr_keyword">var</strong> l = lines.get(i);
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 				<strong class="jxr_keyword">var</strong> c = StringUtils.firstNonWhitespaceChar(l);
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 				<strong class="jxr_keyword">if</strong> (state == S1) {
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 					<strong class="jxr_keyword">if</strong> (c == '[') {
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 						<strong class="jxr_keyword">var</strong> i1 = l.indexOf('[');
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 						<strong class="jxr_keyword">var</strong> i2 = l.indexOf(']');
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 						name2 = l.substring(i1+1, i2).trim();
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 						rawLine2 = l;
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 						state = S2;
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 						start = i+1;
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 						preLines.add(l);
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 					}
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 					<strong class="jxr_keyword">if</strong> (c != '#' &amp;&amp; l.indexOf('=') != -1) {
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 						<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> <a name="ConfigMapEntry" href="../../../../../org/apache/juneau/config/internal/ConfigMapEntry.html#ConfigMapEntry">ConfigMapEntry</a>(l, lines.subList(start, i));
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 						<strong class="jxr_keyword">if</strong> (entries.containsKey(e.key))
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Duplicate entry found in section [{0}] of configuration:  {1}"</span>, name2, e.key);
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 						entries.put(e.key, e);
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 						start = i+1;
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 					}
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 				}
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 			}
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 			<strong class="jxr_keyword">this</strong>.name = name2;
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 			<strong class="jxr_keyword">this</strong>.rawLine = rawLine2;
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 			<strong class="jxr_keyword">this</strong>.oentries.putAll(entries);
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		}
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		ConfigSection addEntry(String key, String value, String modifiers, String comment, List&lt;String&gt; preLines) {
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 			<strong class="jxr_keyword">var</strong> e = <strong class="jxr_keyword">new</strong> <a name="ConfigMapEntry" href="../../../../../org/apache/juneau/config/internal/ConfigMapEntry.html#ConfigMapEntry">ConfigMapEntry</a>(key, value, modifiers, comment, preLines);
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 			<strong class="jxr_keyword">this</strong>.entries.put(e.key, e);
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		}
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		ConfigSection setPreLines(List&lt;String&gt; preLines) {
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 			<strong class="jxr_keyword">this</strong>.preLines.clear();
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 			<strong class="jxr_keyword">this</strong>.preLines.addAll(preLines);
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 		}
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 		Writer writeTo(Writer w) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : preLines)
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 				w.append(s).append('\n');
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 			<strong class="jxr_keyword">if</strong> (! name.isEmpty())
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 				w.append(rawLine).append('\n');
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 			<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 				<em class="jxr_comment">// Need separation between default prelines and first-entry prelines.</em>
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 				<strong class="jxr_keyword">if</strong> (! preLines.isEmpty())
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 					w.append('\n');
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 			}
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : entries.values())
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 				e.writeTo(w);
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 			<strong class="jxr_keyword">return</strong> w;
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 		}
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	}
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	<em class="jxr_comment">// Import</em>
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<strong class="jxr_keyword">class</strong> Import {
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> configMap;
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;ConfigEventListener,ConfigEventListener&gt; listenerMap = synced(map());
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		Import(<a name="ConfigMap" href="../../../../../org/apache/juneau/config/internal/ConfigMap.html#ConfigMap">ConfigMap</a> configMap) {
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 			<strong class="jxr_keyword">this</strong>.configMap = configMap;
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		}
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		<strong class="jxr_keyword">synchronized</strong> Import register(Collection&lt;ConfigEventListener&gt; listeners) {
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 			listeners.forEach(<strong class="jxr_keyword">this</strong>::register);
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		}
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<strong class="jxr_keyword">synchronized</strong> Import register(<strong class="jxr_keyword">final</strong> <a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			<strong class="jxr_keyword">var</strong> l2 = (<a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a>) events -&gt; {
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 				<strong class="jxr_keyword">var</strong> events2 = events.stream().filter(x -&gt; ! hasEntry(x.getSection(), x.getKey())).collect(Collectors.toCollection(ConfigEvents::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 				<strong class="jxr_keyword">if</strong> (!events2.isEmpty())
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 					listener.onConfigChange(events2);
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 			};
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 			listenerMap.put(listener, l2);
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 			configMap.register(l2);
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		}
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">synchronized</strong> Import unregister(<strong class="jxr_keyword">final</strong> <a name="ConfigEventListener" href="../../../../../org/apache/juneau/config/event/ConfigEventListener.html#ConfigEventListener">ConfigEventListener</a> listener) {
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			configMap.unregister(listenerMap.remove(listener));
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		}
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		<strong class="jxr_keyword">synchronized</strong> Import unregisterAll() {
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 			listenerMap.values().forEach(configMap::unregister);
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 			listenerMap.clear();
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		}
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		String getConfigName() {
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 			<strong class="jxr_keyword">return</strong> configMap.name;
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		}
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		ConfigMap getConfigMap() {
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 			<strong class="jxr_keyword">return</strong> configMap;
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		}
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		@Override
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 			<strong class="jxr_keyword">return</strong> o instanceof Import ir &amp;&amp; ir.getConfigName().equals(getConfigName());
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		}
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		@Override
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 			<strong class="jxr_keyword">return</strong> getConfigName().hashCode();
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		}
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	}
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -65,22 +65,21 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		test(x2.isType(String.<strong class="jxr_keyword">class</strong>)).is(<span class="jxr_string">"Expected type 'java.lang.String' but was 'null'."</span>);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		test(x1.isType(<strong class="jxr_keyword">null</strong>)).is(<span class="jxr_string">"Expected type 'null' but was 'java.lang.String'."</span>);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		test(verify(<strong class="jxr_keyword">true</strong>).isTrue()).isNull();
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		test(verify(false).isFalse()).isNull();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		test(verify(<strong class="jxr_keyword">null</strong>).isTrue()).is(<span class="jxr_string">"Expected 'true' but was 'null'."</span>);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		test(verify(<strong class="jxr_keyword">null</strong>).isFalse()).is(<span class="jxr_string">"Expected 'false' but was 'null'."</span>);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		test(verify(Boolean.TRUE).isTrue()).isNull();
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		test(verify(Boolean.FALSE).isFalse()).isNull();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		test(x1.is(<span class="jxr_string">"foo"</span>)).isNull();
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<span class="jxr_string">"foo"</span>)).isNull();
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<span class="jxr_string">"bar"</span>)).is(<span class="jxr_string">"barbaz"</span>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).isType(Integer.<strong class="jxr_keyword">class</strong>)).is(<span class="jxr_string">"barbaz"</span>);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		test(verify(<strong class="jxr_keyword">null</strong>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<span class="jxr_string">"bar"</span>)).is(<span class="jxr_string">"barbaz"</span>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<strong class="jxr_keyword">null</strong>)).is(<span class="jxr_string">"barbaz"</span>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		test(verify(<strong class="jxr_keyword">true</strong>).isTrue()).isNull();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		test(verify(false).isFalse()).isNull();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		test(verify(<strong class="jxr_keyword">null</strong>).isTrue()).is(<span class="jxr_string">"Expected 'true' but was 'null'."</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		test(verify(<strong class="jxr_keyword">null</strong>).isFalse()).is(<span class="jxr_string">"Expected 'false' but was 'null'."</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		test(verify(Boolean.TRUE).isTrue()).isNull();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		test(verify(Boolean.FALSE).isFalse()).isNull();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		test(x1.is(<span class="jxr_string">"foo"</span>)).isNull();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<span class="jxr_string">"foo"</span>)).isNull();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<span class="jxr_string">"bar"</span>)).is(<span class="jxr_string">"barbaz"</span>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).isType(Integer.<strong class="jxr_keyword">class</strong>)).is(<span class="jxr_string">"barbaz"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		test(verify(<strong class="jxr_keyword">null</strong>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<span class="jxr_string">"bar"</span>)).is(<span class="jxr_string">"barbaz"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		test(verify(<span class="jxr_string">"foo"</span>).msg(<span class="jxr_string">"bar{0}"</span>, <span class="jxr_string">"baz"</span>).is(<strong class="jxr_keyword">null</strong>)).is(<span class="jxr_string">"barbaz"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -97,11 +97,11 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Text with highlighted portion</jc>
    Span <jv>highlight</jv> = <jsm>span</jsm>(<js>"This is highlighted text"</js>)
       ._class(<js>"highlight"</js>);
- 
+
    <jc>// Text with multiple styled portions</jc>
    Span <jv>styled</jv> = <jsm>span</jsm>(
       <js>"Normal text "</js>,
@@ -109,18 +109,18 @@ loadScripts(document, 'script');</script>
       <js>" and "</js>,
       <jsm>span</jsm>(<js>"italic text"</js>)._class(<js>"italic"</js>)
    );
- 
+
    <jc>// Text with clickable portion</jc>
    Span <jv>clickable</jv> = <jsm>span</jsm>(
       <js>"Click "</js>,
       <jsm>span</jsm>(<js>"here"</js>)._class(<js>"link"</js>).onclick(<js>"showDetails()"</js>),
       <js>" for more information"</js>
    );
- 
+
    <jc>// Text with tooltip</jc>
    Span <jv>tooltip</jv> = <jsm>span</jsm>(<js>"Hover over this text"</js>)
       .title(<js>"This is a tooltip"</js>);
- 
+
    <jc>// Text with language specification</jc>
    Span <jv>lang</jv> = <jsm>span</jsm>(<js>"Hola mundo"</js>)
       .lang(<js>"es"</js>);

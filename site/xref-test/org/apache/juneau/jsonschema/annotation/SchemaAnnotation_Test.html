@@ -458,17 +458,17 @@
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 			.maximum(<span class="jxr_string">"100"</span>)
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 			.minimum(<span class="jxr_string">"0"</span>)
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 			.build();
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		assertBean(oldStyle, <span class="jxr_string">"exclusiveMaximum,exclusiveMinimum,maximum,minimum"</span>, <span class="jxr_string">"true,true,100,0"</span>);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<em class="jxr_comment">// Test that new numeric style takes precedence</em>
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 		Schema newStyle = SchemaAnnotation.create()
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 			.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 			.build();
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 		assertBean(newStyle, <span class="jxr_string">"exclusiveMaximumValue,exclusiveMinimumValue"</span>, <span class="jxr_string">"100,0"</span>);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<em class="jxr_comment">// Test that new style takes precedence when both are set</em>
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		Schema mixed = SchemaAnnotation.create()
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 			.exclusiveMaximum(false)
@@ -476,7 +476,7 @@
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			.exclusiveMaximumValue(<span class="jxr_string">"100"</span>)
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 			.exclusiveMinimumValue(<span class="jxr_string">"0"</span>)
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.build();
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 		assertBean(mixed, <span class="jxr_string">"exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue"</span>, <span class="jxr_string">"false,false,100,0"</span>);
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 	}
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> }

@@ -90,39 +90,38 @@
 <span class="source-line-no">077</span><span id="line-77">      };</span>
 <span class="source-line-no">078</span><span id="line-78">   }</span>
 <span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   @Override /* Map */</span>
-<span class="source-line-no">082</span><span id="line-82">   public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() {</span>
-<span class="source-line-no">083</span><span id="line-83">      return entries;</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * A set with ordered entries (a List with a Set API).</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   private static class ListSet&lt;E&gt; extends AbstractSet&lt;E&gt; {</span>
-<span class="source-line-no">090</span><span id="line-90"></span>
-<span class="source-line-no">091</span><span id="line-91">      private List&lt;E&gt; entries;</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">      public ListSet(List&lt;E&gt; entries) {</span>
-<span class="source-line-no">094</span><span id="line-94">         this.entries = entries;</span>
-<span class="source-line-no">095</span><span id="line-95">      }</span>
-<span class="source-line-no">096</span><span id="line-96"></span>
-<span class="source-line-no">097</span><span id="line-97">      @Override /* Set */</span>
-<span class="source-line-no">098</span><span id="line-98">      public Iterator&lt;E&gt; iterator() {</span>
-<span class="source-line-no">099</span><span id="line-99">         return entries.iterator();</span>
-<span class="source-line-no">100</span><span id="line-100">      }</span>
-<span class="source-line-no">101</span><span id="line-101"></span>
-<span class="source-line-no">102</span><span id="line-102">      @Override /* Set */</span>
-<span class="source-line-no">103</span><span id="line-103">      public int size() {</span>
-<span class="source-line-no">104</span><span id="line-104">         return entries.size();</span>
-<span class="source-line-no">105</span><span id="line-105">      }</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   @Override /* Delegate */</span>
-<span class="source-line-no">109</span><span id="line-109">   public ClassMeta&lt;Map&lt;K,V&gt;&gt; getClassMeta() {</span>
-<span class="source-line-no">110</span><span id="line-110">      return classMeta;</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
-<span class="source-line-no">112</span><span id="line-112">}</span>
+<span class="source-line-no">080</span><span id="line-80">   @Override /* Map */</span>
+<span class="source-line-no">081</span><span id="line-81">   public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() {</span>
+<span class="source-line-no">082</span><span id="line-82">      return entries;</span>
+<span class="source-line-no">083</span><span id="line-83">   }</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * A set with ordered entries (a List with a Set API).</span>
+<span class="source-line-no">087</span><span id="line-87">    */</span>
+<span class="source-line-no">088</span><span id="line-88">   private static class ListSet&lt;E&gt; extends AbstractSet&lt;E&gt; {</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">      private List&lt;E&gt; entries;</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">      public ListSet(List&lt;E&gt; entries) {</span>
+<span class="source-line-no">093</span><span id="line-93">         this.entries = entries;</span>
+<span class="source-line-no">094</span><span id="line-94">      }</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">      @Override /* Set */</span>
+<span class="source-line-no">097</span><span id="line-97">      public Iterator&lt;E&gt; iterator() {</span>
+<span class="source-line-no">098</span><span id="line-98">         return entries.iterator();</span>
+<span class="source-line-no">099</span><span id="line-99">      }</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">      @Override /* Set */</span>
+<span class="source-line-no">102</span><span id="line-102">      public int size() {</span>
+<span class="source-line-no">103</span><span id="line-103">         return entries.size();</span>
+<span class="source-line-no">104</span><span id="line-104">      }</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   @Override /* Delegate */</span>
+<span class="source-line-no">108</span><span id="line-108">   public ClassMeta&lt;Map&lt;K,V&gt;&gt; getClassMeta() {</span>
+<span class="source-line-no">109</span><span id="line-109">      return classMeta;</span>
+<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">111</span><span id="line-111">}</span>
 
 
 

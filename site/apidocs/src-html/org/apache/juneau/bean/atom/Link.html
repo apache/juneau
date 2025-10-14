@@ -38,12 +38,12 @@
 <span class="source-line-no">025</span><span id="line-25"> * Represents a reference from an entry or feed to a Web resource.</span>
 <span class="source-line-no">026</span><span id="line-26"> *</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> * Atom links define references to related resources such as alternate representations, </span>
-<span class="source-line-no">029</span><span id="line-29"> * related documents, enclosures (for podcasts), and navigation links. Links are one of the </span>
+<span class="source-line-no">028</span><span id="line-28"> * Atom links define references to related resources such as alternate representations,</span>
+<span class="source-line-no">029</span><span id="line-29"> * related documents, enclosures (for podcasts), and navigation links. Links are one of the</span>
 <span class="source-line-no">030</span><span id="line-30"> * fundamental components of Atom and enable rich hypermedia relationships between resources.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * The link's &lt;c&gt;rel&lt;/c&gt; attribute defines the relationship type, while &lt;c&gt;href&lt;/c&gt; provides </span>
+<span class="source-line-no">033</span><span id="line-33"> * The link's &lt;c&gt;rel&lt;/c&gt; attribute defines the relationship type, while &lt;c&gt;href&lt;/c&gt; provides</span>
 <span class="source-line-no">034</span><span id="line-34"> * the target URI. Common relationship types include:</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;c&gt;alternate&lt;/c&gt; - An alternate representation (e.g., HTML version of entry)</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Specification:&lt;/h5&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> * Represents an &lt;c&gt;atomLink&lt;/c&gt; construct in the </span>
+<span class="source-line-no">074</span><span id="line-74"> * Represents an &lt;c&gt;atomLink&lt;/c&gt; construct in the</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.7"&gt;RFC 4287 - Section 4.2.7&lt;/a&gt; specification.</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -103,281 +103,279 @@
 <span class="source-line-no">090</span><span id="line-90">   private String title;</span>
 <span class="source-line-no">091</span><span id="line-91">   private Integer length;</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /**</span>
-<span class="source-line-no">095</span><span id="line-95">    * Normal constructor.</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param rel The rel of the link.</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param type The type of the link.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param href The URI of the link.</span>
-<span class="source-line-no">100</span><span id="line-100">    */</span>
-<span class="source-line-no">101</span><span id="line-101">   public Link(String rel, String type, String href) {</span>
-<span class="source-line-no">102</span><span id="line-102">      setRel(rel).setType(type).setHref(href);</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /** Bean constructor. */</span>
-<span class="source-line-no">106</span><span id="line-106">   public Link() {}</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">093</span><span id="line-93">   /**</span>
+<span class="source-line-no">094</span><span id="line-94">    * Normal constructor.</span>
+<span class="source-line-no">095</span><span id="line-95">    *</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param rel The rel of the link.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param type The type of the link.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param href The URI of the link.</span>
+<span class="source-line-no">099</span><span id="line-99">    */</span>
+<span class="source-line-no">100</span><span id="line-100">   public Link(String rel, String type, String href) {</span>
+<span class="source-line-no">101</span><span id="line-101">      setRel(rel).setType(type).setHref(href);</span>
+<span class="source-line-no">102</span><span id="line-102">   }</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /** Bean constructor. */</span>
+<span class="source-line-no">105</span><span id="line-105">   public Link() {}</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">108</span><span id="line-108">   // Bean properties</span>
 <span class="source-line-no">109</span><span id="line-109">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">110</span><span id="line-110">   // Bean properties</span>
-<span class="source-line-no">111</span><span id="line-111">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   /**</span>
-<span class="source-line-no">114</span><span id="line-114">    * Bean property getter:  &lt;property&gt;href&lt;/property&gt;.</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * &lt;p&gt;</span>
-<span class="source-line-no">117</span><span id="line-117">    * Returns the URI of the referenced resource.</span>
-<span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    * This is the target address of the link and is a required attribute for all Atom links.</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   @Xml(format=ATTR)</span>
-<span class="source-line-no">125</span><span id="line-125">   public String getHref() {</span>
-<span class="source-line-no">126</span><span id="line-126">      return href;</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   /**</span>
-<span class="source-line-no">130</span><span id="line-130">    * Bean property setter:  &lt;property&gt;href&lt;/property&gt;.</span>
-<span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * &lt;p&gt;</span>
-<span class="source-line-no">133</span><span id="line-133">    * Sets the URI of the referenced resource (required).</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">136</span><span id="line-136">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">137</span><span id="line-137">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link()</span>
-<span class="source-line-no">138</span><span id="line-138">    *       .setHref(&lt;js&gt;"http://example.org/posts/1"&lt;/js&gt;);</span>
-<span class="source-line-no">139</span><span id="line-139">    * &lt;/p&gt;</span>
-<span class="source-line-no">140</span><span id="line-140">    *</span>
-<span class="source-line-no">141</span><span id="line-141">    * @param value</span>
-<span class="source-line-no">142</span><span id="line-142">    *    The new value for this property.</span>
-<span class="source-line-no">143</span><span id="line-143">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">144</span><span id="line-144">    * @return This object.</span>
-<span class="source-line-no">145</span><span id="line-145">    */</span>
-<span class="source-line-no">146</span><span id="line-146">   public Link setHref(String value) {</span>
-<span class="source-line-no">147</span><span id="line-147">      this.href = value;</span>
-<span class="source-line-no">148</span><span id="line-148">      return this;</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   /**</span>
-<span class="source-line-no">152</span><span id="line-152">    * Bean property getter:  &lt;property&gt;rel&lt;/property&gt;.</span>
-<span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * &lt;p&gt;</span>
-<span class="source-line-no">155</span><span id="line-155">    * Returns the link relation type.</span>
-<span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * &lt;p&gt;</span>
-<span class="source-line-no">158</span><span id="line-158">    * The &lt;c&gt;rel&lt;/c&gt; attribute indicates the type of relationship between the entry/feed and </span>
-<span class="source-line-no">159</span><span id="line-159">    * the linked resource. When not specified, the default is "alternate".</span>
-<span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">162</span><span id="line-162">    */</span>
-<span class="source-line-no">163</span><span id="line-163">   @Xml(format=ATTR)</span>
-<span class="source-line-no">164</span><span id="line-164">   public String getRel() {</span>
-<span class="source-line-no">165</span><span id="line-165">      return rel;</span>
-<span class="source-line-no">166</span><span id="line-166">   }</span>
-<span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">   /**</span>
-<span class="source-line-no">169</span><span id="line-169">    * Bean property setter:  &lt;property&gt;rel&lt;/property&gt;.</span>
-<span class="source-line-no">170</span><span id="line-170">    *</span>
-<span class="source-line-no">171</span><span id="line-171">    * &lt;p&gt;</span>
-<span class="source-line-no">172</span><span id="line-172">    * Sets the link relation type.</span>
-<span class="source-line-no">173</span><span id="line-173">    *</span>
-<span class="source-line-no">174</span><span id="line-174">    * &lt;p&gt;</span>
-<span class="source-line-no">175</span><span id="line-175">    * Common values include &lt;js&gt;"alternate"&lt;/js&gt;, &lt;js&gt;"self"&lt;/js&gt;, &lt;js&gt;"related"&lt;/js&gt;, </span>
-<span class="source-line-no">176</span><span id="line-176">    * &lt;js&gt;"enclosure"&lt;/js&gt;, &lt;js&gt;"via"&lt;/js&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"last"&lt;/js&gt;, </span>
-<span class="source-line-no">177</span><span id="line-177">    * &lt;js&gt;"previous"&lt;/js&gt;, &lt;js&gt;"next"&lt;/js&gt;.</span>
-<span class="source-line-no">178</span><span id="line-178">    *</span>
-<span class="source-line-no">179</span><span id="line-179">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">180</span><span id="line-180">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">181</span><span id="line-181">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link()</span>
-<span class="source-line-no">182</span><span id="line-182">    *       .setRel(&lt;js&gt;"alternate"&lt;/js&gt;)</span>
-<span class="source-line-no">183</span><span id="line-183">    *       .setHref(&lt;js&gt;"http://example.org/post1.html"&lt;/js&gt;);</span>
-<span class="source-line-no">184</span><span id="line-184">    * &lt;/p&gt;</span>
-<span class="source-line-no">185</span><span id="line-185">    *</span>
-<span class="source-line-no">186</span><span id="line-186">    * @param value</span>
-<span class="source-line-no">187</span><span id="line-187">    *    The new value for this property.</span>
-<span class="source-line-no">188</span><span id="line-188">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property (defaults to "alternate").</span>
-<span class="source-line-no">189</span><span id="line-189">    * @return This object.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   public Link setRel(String value) {</span>
-<span class="source-line-no">192</span><span id="line-192">      this.rel = value;</span>
-<span class="source-line-no">193</span><span id="line-193">      return this;</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195"></span>
-<span class="source-line-no">196</span><span id="line-196">   /**</span>
-<span class="source-line-no">197</span><span id="line-197">    * Bean property getter:  &lt;property&gt;type&lt;/property&gt;.</span>
-<span class="source-line-no">198</span><span id="line-198">    *</span>
-<span class="source-line-no">199</span><span id="line-199">    * &lt;p&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">    * The content type of the target of this link.</span>
-<span class="source-line-no">201</span><span id="line-201">    *</span>
-<span class="source-line-no">202</span><span id="line-202">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">203</span><span id="line-203">    */</span>
-<span class="source-line-no">204</span><span id="line-204">   @Xml(format=ATTR)</span>
-<span class="source-line-no">205</span><span id="line-205">   public String getType() {</span>
-<span class="source-line-no">206</span><span id="line-206">      return type;</span>
-<span class="source-line-no">207</span><span id="line-207">   }</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">   /**</span>
-<span class="source-line-no">210</span><span id="line-210">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
-<span class="source-line-no">211</span><span id="line-211">    *</span>
-<span class="source-line-no">212</span><span id="line-212">    * &lt;p&gt;</span>
-<span class="source-line-no">213</span><span id="line-213">    * The content type of the target of this link.</span>
-<span class="source-line-no">214</span><span id="line-214">    *</span>
-<span class="source-line-no">215</span><span id="line-215">    * &lt;p&gt;</span>
-<span class="source-line-no">216</span><span id="line-216">    * This should be a valid MIME media type as defined by RFC 4287.</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">219</span><span id="line-219">    * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">220</span><span id="line-220">    *    &lt;li&gt;&lt;js&gt;"text/html"&lt;/js&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">    *    &lt;li&gt;&lt;js&gt;"application/pdf"&lt;/js&gt;</span>
-<span class="source-line-no">222</span><span id="line-222">    *    &lt;li&gt;&lt;js&gt;"image/jpeg"&lt;/js&gt;</span>
-<span class="source-line-no">223</span><span id="line-223">    *    &lt;li&gt;&lt;js&gt;"application/atom+xml"&lt;/js&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">    * &lt;/ul&gt;</span>
-<span class="source-line-no">225</span><span id="line-225">    *</span>
-<span class="source-line-no">226</span><span id="line-226">    * @param value</span>
-<span class="source-line-no">227</span><span id="line-227">    *    The new value for this property.</span>
-<span class="source-line-no">228</span><span id="line-228">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">229</span><span id="line-229">    * @return This object</span>
-<span class="source-line-no">230</span><span id="line-230">    */</span>
-<span class="source-line-no">231</span><span id="line-231">   public Link setType(String value) {</span>
-<span class="source-line-no">232</span><span id="line-232">      this.type = value;</span>
-<span class="source-line-no">233</span><span id="line-233">      return this;</span>
-<span class="source-line-no">234</span><span id="line-234">   }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">   /**</span>
-<span class="source-line-no">237</span><span id="line-237">    * Bean property getter:  &lt;property&gt;hreflang&lt;/property&gt;.</span>
-<span class="source-line-no">238</span><span id="line-238">    *</span>
-<span class="source-line-no">239</span><span id="line-239">    * &lt;p&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    * Returns the language of the resource pointed to by the link.</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * &lt;p&gt;</span>
-<span class="source-line-no">243</span><span id="line-243">    * The value should be a language tag as defined by RFC 3066.</span>
-<span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">246</span><span id="line-246">    */</span>
-<span class="source-line-no">247</span><span id="line-247">   @Xml(format=ATTR)</span>
-<span class="source-line-no">248</span><span id="line-248">   public String getHreflang() {</span>
-<span class="source-line-no">249</span><span id="line-249">      return hreflang;</span>
-<span class="source-line-no">250</span><span id="line-250">   }</span>
-<span class="source-line-no">251</span><span id="line-251"></span>
-<span class="source-line-no">252</span><span id="line-252">   /**</span>
-<span class="source-line-no">253</span><span id="line-253">    * Bean property setter:  &lt;property&gt;hreflang&lt;/property&gt;.</span>
-<span class="source-line-no">254</span><span id="line-254">    *</span>
-<span class="source-line-no">255</span><span id="line-255">    * &lt;p&gt;</span>
-<span class="source-line-no">256</span><span id="line-256">    * Sets the language of the resource pointed to by the link.</span>
-<span class="source-line-no">257</span><span id="line-257">    *</span>
-<span class="source-line-no">258</span><span id="line-258">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">259</span><span id="line-259">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">260</span><span id="line-260">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"alternate"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://example.org/post1.html"&lt;/js&gt;)</span>
-<span class="source-line-no">261</span><span id="line-261">    *       .setHreflang(&lt;js&gt;"en-US"&lt;/js&gt;);</span>
-<span class="source-line-no">262</span><span id="line-262">    * &lt;/p&gt;</span>
-<span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * @param value</span>
-<span class="source-line-no">265</span><span id="line-265">    *    The new value for this property (e.g., "en", "fr", "de", "en-US").</span>
-<span class="source-line-no">266</span><span id="line-266">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">267</span><span id="line-267">    * @return This object.</span>
-<span class="source-line-no">268</span><span id="line-268">    */</span>
-<span class="source-line-no">269</span><span id="line-269">   public Link setHreflang(String value) {</span>
-<span class="source-line-no">270</span><span id="line-270">      this.hreflang = value;</span>
-<span class="source-line-no">271</span><span id="line-271">      return this;</span>
-<span class="source-line-no">272</span><span id="line-272">   }</span>
-<span class="source-line-no">273</span><span id="line-273"></span>
-<span class="source-line-no">274</span><span id="line-274">   /**</span>
-<span class="source-line-no">275</span><span id="line-275">    * Bean property getter:  &lt;property&gt;title&lt;/property&gt;.</span>
-<span class="source-line-no">276</span><span id="line-276">    *</span>
-<span class="source-line-no">277</span><span id="line-277">    * &lt;p&gt;</span>
-<span class="source-line-no">278</span><span id="line-278">    * Returns human-readable information about the link.</span>
-<span class="source-line-no">279</span><span id="line-279">    *</span>
-<span class="source-line-no">280</span><span id="line-280">    * &lt;p&gt;</span>
-<span class="source-line-no">281</span><span id="line-281">    * The title provides advisory information about the link, typically for display to users.</span>
-<span class="source-line-no">282</span><span id="line-282">    *</span>
-<span class="source-line-no">283</span><span id="line-283">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">284</span><span id="line-284">    */</span>
-<span class="source-line-no">285</span><span id="line-285">   @Xml(format=ATTR)</span>
-<span class="source-line-no">286</span><span id="line-286">   public String getTitle() {</span>
-<span class="source-line-no">287</span><span id="line-287">      return title;</span>
-<span class="source-line-no">288</span><span id="line-288">   }</span>
-<span class="source-line-no">289</span><span id="line-289"></span>
-<span class="source-line-no">290</span><span id="line-290">   /**</span>
-<span class="source-line-no">291</span><span id="line-291">    * Bean property setter:  &lt;property&gt;title&lt;/property&gt;.</span>
-<span class="source-line-no">292</span><span id="line-292">    *</span>
-<span class="source-line-no">293</span><span id="line-293">    * &lt;p&gt;</span>
-<span class="source-line-no">294</span><span id="line-294">    * Sets human-readable information about the link.</span>
-<span class="source-line-no">295</span><span id="line-295">    *</span>
-<span class="source-line-no">296</span><span id="line-296">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">297</span><span id="line-297">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">298</span><span id="line-298">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"related"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://example.org/related"&lt;/js&gt;)</span>
-<span class="source-line-no">299</span><span id="line-299">    *       .setTitle(&lt;js&gt;"Related Article"&lt;/js&gt;);</span>
-<span class="source-line-no">300</span><span id="line-300">    * &lt;/p&gt;</span>
-<span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * @param value</span>
-<span class="source-line-no">303</span><span id="line-303">    *    The new value for this property.</span>
-<span class="source-line-no">304</span><span id="line-304">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">305</span><span id="line-305">    * @return This object.</span>
-<span class="source-line-no">306</span><span id="line-306">    */</span>
-<span class="source-line-no">307</span><span id="line-307">   public Link setTitle(String value) {</span>
-<span class="source-line-no">308</span><span id="line-308">      this.title = value;</span>
-<span class="source-line-no">309</span><span id="line-309">      return this;</span>
-<span class="source-line-no">310</span><span id="line-310">   }</span>
-<span class="source-line-no">311</span><span id="line-311"></span>
-<span class="source-line-no">312</span><span id="line-312">   /**</span>
-<span class="source-line-no">313</span><span id="line-313">    * Bean property getter:  &lt;property&gt;length&lt;/property&gt;.</span>
-<span class="source-line-no">314</span><span id="line-314">    *</span>
-<span class="source-line-no">315</span><span id="line-315">    * &lt;p&gt;</span>
-<span class="source-line-no">316</span><span id="line-316">    * Returns an advisory size in bytes of the linked resource.</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    * &lt;p&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    * This is particularly useful for enclosures (podcast episodes, video files, etc.) to </span>
-<span class="source-line-no">320</span><span id="line-320">    * help clients decide whether to download the resource.</span>
-<span class="source-line-no">321</span><span id="line-321">    *</span>
-<span class="source-line-no">322</span><span id="line-322">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
-<span class="source-line-no">323</span><span id="line-323">    */</span>
-<span class="source-line-no">324</span><span id="line-324">   @Xml(format=ATTR)</span>
-<span class="source-line-no">325</span><span id="line-325">   public Integer getLength() {</span>
-<span class="source-line-no">326</span><span id="line-326">      return length;</span>
-<span class="source-line-no">327</span><span id="line-327">   }</span>
-<span class="source-line-no">328</span><span id="line-328"></span>
-<span class="source-line-no">329</span><span id="line-329">   /**</span>
-<span class="source-line-no">330</span><span id="line-330">    * Bean property setter:  &lt;property&gt;length&lt;/property&gt;.</span>
-<span class="source-line-no">331</span><span id="line-331">    *</span>
-<span class="source-line-no">332</span><span id="line-332">    * &lt;p&gt;</span>
-<span class="source-line-no">333</span><span id="line-333">    * Sets an advisory size in bytes of the linked resource.</span>
-<span class="source-line-no">334</span><span id="line-334">    *</span>
-<span class="source-line-no">335</span><span id="line-335">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">336</span><span id="line-336">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">337</span><span id="line-337">    *    &lt;jc&gt;// Podcast episode with file size&lt;/jc&gt;</span>
-<span class="source-line-no">338</span><span id="line-338">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"enclosure"&lt;/js&gt;, &lt;js&gt;"audio/mpeg"&lt;/js&gt;, &lt;js&gt;"http://example.org/episode1.mp3"&lt;/js&gt;)</span>
-<span class="source-line-no">339</span><span id="line-339">    *       .setLength(24986239);  &lt;jc&gt;// ~24 MB&lt;/jc&gt;</span>
-<span class="source-line-no">340</span><span id="line-340">    * &lt;/p&gt;</span>
-<span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * @param value</span>
-<span class="source-line-no">343</span><span id="line-343">    *    The new value for this property in bytes.</span>
-<span class="source-line-no">344</span><span id="line-344">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">345</span><span id="line-345">    * @return This object.</span>
-<span class="source-line-no">346</span><span id="line-346">    */</span>
-<span class="source-line-no">347</span><span id="line-347">   public Link setLength(Integer value) {</span>
-<span class="source-line-no">348</span><span id="line-348">      this.length = value;</span>
-<span class="source-line-no">349</span><span id="line-349">      return this;</span>
-<span class="source-line-no">350</span><span id="line-350">   }</span>
-<span class="source-line-no">351</span><span id="line-351"></span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   /**</span>
+<span class="source-line-no">112</span><span id="line-112">    * Bean property getter:  &lt;property&gt;href&lt;/property&gt;.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;p&gt;</span>
+<span class="source-line-no">115</span><span id="line-115">    * Returns the URI of the referenced resource.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;p&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * This is the target address of the link and is a required attribute for all Atom links.</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">121</span><span id="line-121">    */</span>
+<span class="source-line-no">122</span><span id="line-122">   @Xml(format=ATTR)</span>
+<span class="source-line-no">123</span><span id="line-123">   public String getHref() {</span>
+<span class="source-line-no">124</span><span id="line-124">      return href;</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">   /**</span>
+<span class="source-line-no">128</span><span id="line-128">    * Bean property setter:  &lt;property&gt;href&lt;/property&gt;.</span>
+<span class="source-line-no">129</span><span id="line-129">    *</span>
+<span class="source-line-no">130</span><span id="line-130">    * &lt;p&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">    * Sets the URI of the referenced resource (required).</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">135</span><span id="line-135">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link()</span>
+<span class="source-line-no">136</span><span id="line-136">    *       .setHref(&lt;js&gt;"http://example.org/posts/1"&lt;/js&gt;);</span>
+<span class="source-line-no">137</span><span id="line-137">    * &lt;/p&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * @param value</span>
+<span class="source-line-no">140</span><span id="line-140">    *    The new value for this property.</span>
+<span class="source-line-no">141</span><span id="line-141">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">142</span><span id="line-142">    * @return This object.</span>
+<span class="source-line-no">143</span><span id="line-143">    */</span>
+<span class="source-line-no">144</span><span id="line-144">   public Link setHref(String value) {</span>
+<span class="source-line-no">145</span><span id="line-145">      this.href = value;</span>
+<span class="source-line-no">146</span><span id="line-146">      return this;</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   /**</span>
+<span class="source-line-no">150</span><span id="line-150">    * Bean property getter:  &lt;property&gt;rel&lt;/property&gt;.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    * Returns the link relation type.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    * The &lt;c&gt;rel&lt;/c&gt; attribute indicates the type of relationship between the entry/feed and</span>
+<span class="source-line-no">157</span><span id="line-157">    * the linked resource. When not specified, the default is "alternate".</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   @Xml(format=ATTR)</span>
+<span class="source-line-no">162</span><span id="line-162">   public String getRel() {</span>
+<span class="source-line-no">163</span><span id="line-163">      return rel;</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   /**</span>
+<span class="source-line-no">167</span><span id="line-167">    * Bean property setter:  &lt;property&gt;rel&lt;/property&gt;.</span>
+<span class="source-line-no">168</span><span id="line-168">    *</span>
+<span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    * Sets the link relation type.</span>
+<span class="source-line-no">171</span><span id="line-171">    *</span>
+<span class="source-line-no">172</span><span id="line-172">    * &lt;p&gt;</span>
+<span class="source-line-no">173</span><span id="line-173">    * Common values include &lt;js&gt;"alternate"&lt;/js&gt;, &lt;js&gt;"self"&lt;/js&gt;, &lt;js&gt;"related"&lt;/js&gt;,</span>
+<span class="source-line-no">174</span><span id="line-174">    * &lt;js&gt;"enclosure"&lt;/js&gt;, &lt;js&gt;"via"&lt;/js&gt;, &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"last"&lt;/js&gt;,</span>
+<span class="source-line-no">175</span><span id="line-175">    * &lt;js&gt;"previous"&lt;/js&gt;, &lt;js&gt;"next"&lt;/js&gt;.</span>
+<span class="source-line-no">176</span><span id="line-176">    *</span>
+<span class="source-line-no">177</span><span id="line-177">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">178</span><span id="line-178">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">179</span><span id="line-179">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link()</span>
+<span class="source-line-no">180</span><span id="line-180">    *       .setRel(&lt;js&gt;"alternate"&lt;/js&gt;)</span>
+<span class="source-line-no">181</span><span id="line-181">    *       .setHref(&lt;js&gt;"http://example.org/post1.html"&lt;/js&gt;);</span>
+<span class="source-line-no">182</span><span id="line-182">    * &lt;/p&gt;</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    * @param value</span>
+<span class="source-line-no">185</span><span id="line-185">    *    The new value for this property.</span>
+<span class="source-line-no">186</span><span id="line-186">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property (defaults to "alternate").</span>
+<span class="source-line-no">187</span><span id="line-187">    * @return This object.</span>
+<span class="source-line-no">188</span><span id="line-188">    */</span>
+<span class="source-line-no">189</span><span id="line-189">   public Link setRel(String value) {</span>
+<span class="source-line-no">190</span><span id="line-190">      this.rel = value;</span>
+<span class="source-line-no">191</span><span id="line-191">      return this;</span>
+<span class="source-line-no">192</span><span id="line-192">   }</span>
+<span class="source-line-no">193</span><span id="line-193"></span>
+<span class="source-line-no">194</span><span id="line-194">   /**</span>
+<span class="source-line-no">195</span><span id="line-195">    * Bean property getter:  &lt;property&gt;type&lt;/property&gt;.</span>
+<span class="source-line-no">196</span><span id="line-196">    *</span>
+<span class="source-line-no">197</span><span id="line-197">    * &lt;p&gt;</span>
+<span class="source-line-no">198</span><span id="line-198">    * The content type of the target of this link.</span>
+<span class="source-line-no">199</span><span id="line-199">    *</span>
+<span class="source-line-no">200</span><span id="line-200">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">201</span><span id="line-201">    */</span>
+<span class="source-line-no">202</span><span id="line-202">   @Xml(format=ATTR)</span>
+<span class="source-line-no">203</span><span id="line-203">   public String getType() {</span>
+<span class="source-line-no">204</span><span id="line-204">      return type;</span>
+<span class="source-line-no">205</span><span id="line-205">   }</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">   /**</span>
+<span class="source-line-no">208</span><span id="line-208">    * Bean property setter:  &lt;property&gt;type&lt;/property&gt;.</span>
+<span class="source-line-no">209</span><span id="line-209">    *</span>
+<span class="source-line-no">210</span><span id="line-210">    * &lt;p&gt;</span>
+<span class="source-line-no">211</span><span id="line-211">    * The content type of the target of this link.</span>
+<span class="source-line-no">212</span><span id="line-212">    *</span>
+<span class="source-line-no">213</span><span id="line-213">    * &lt;p&gt;</span>
+<span class="source-line-no">214</span><span id="line-214">    * This should be a valid MIME media type as defined by RFC 4287.</span>
+<span class="source-line-no">215</span><span id="line-215">    *</span>
+<span class="source-line-no">216</span><span id="line-216">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">217</span><span id="line-217">    * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    *    &lt;li&gt;&lt;js&gt;"text/html"&lt;/js&gt;</span>
+<span class="source-line-no">219</span><span id="line-219">    *    &lt;li&gt;&lt;js&gt;"application/pdf"&lt;/js&gt;</span>
+<span class="source-line-no">220</span><span id="line-220">    *    &lt;li&gt;&lt;js&gt;"image/jpeg"&lt;/js&gt;</span>
+<span class="source-line-no">221</span><span id="line-221">    *    &lt;li&gt;&lt;js&gt;"application/atom+xml"&lt;/js&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    * &lt;/ul&gt;</span>
+<span class="source-line-no">223</span><span id="line-223">    *</span>
+<span class="source-line-no">224</span><span id="line-224">    * @param value</span>
+<span class="source-line-no">225</span><span id="line-225">    *    The new value for this property.</span>
+<span class="source-line-no">226</span><span id="line-226">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">227</span><span id="line-227">    * @return This object</span>
+<span class="source-line-no">228</span><span id="line-228">    */</span>
+<span class="source-line-no">229</span><span id="line-229">   public Link setType(String value) {</span>
+<span class="source-line-no">230</span><span id="line-230">      this.type = value;</span>
+<span class="source-line-no">231</span><span id="line-231">      return this;</span>
+<span class="source-line-no">232</span><span id="line-232">   }</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /**</span>
+<span class="source-line-no">235</span><span id="line-235">    * Bean property getter:  &lt;property&gt;hreflang&lt;/property&gt;.</span>
+<span class="source-line-no">236</span><span id="line-236">    *</span>
+<span class="source-line-no">237</span><span id="line-237">    * &lt;p&gt;</span>
+<span class="source-line-no">238</span><span id="line-238">    * Returns the language of the resource pointed to by the link.</span>
+<span class="source-line-no">239</span><span id="line-239">    *</span>
+<span class="source-line-no">240</span><span id="line-240">    * &lt;p&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    * The value should be a language tag as defined by RFC 3066.</span>
+<span class="source-line-no">242</span><span id="line-242">    *</span>
+<span class="source-line-no">243</span><span id="line-243">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">244</span><span id="line-244">    */</span>
+<span class="source-line-no">245</span><span id="line-245">   @Xml(format=ATTR)</span>
+<span class="source-line-no">246</span><span id="line-246">   public String getHreflang() {</span>
+<span class="source-line-no">247</span><span id="line-247">      return hreflang;</span>
+<span class="source-line-no">248</span><span id="line-248">   }</span>
+<span class="source-line-no">249</span><span id="line-249"></span>
+<span class="source-line-no">250</span><span id="line-250">   /**</span>
+<span class="source-line-no">251</span><span id="line-251">    * Bean property setter:  &lt;property&gt;hreflang&lt;/property&gt;.</span>
+<span class="source-line-no">252</span><span id="line-252">    *</span>
+<span class="source-line-no">253</span><span id="line-253">    * &lt;p&gt;</span>
+<span class="source-line-no">254</span><span id="line-254">    * Sets the language of the resource pointed to by the link.</span>
+<span class="source-line-no">255</span><span id="line-255">    *</span>
+<span class="source-line-no">256</span><span id="line-256">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">257</span><span id="line-257">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">258</span><span id="line-258">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"alternate"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://example.org/post1.html"&lt;/js&gt;)</span>
+<span class="source-line-no">259</span><span id="line-259">    *       .setHreflang(&lt;js&gt;"en-US"&lt;/js&gt;);</span>
+<span class="source-line-no">260</span><span id="line-260">    * &lt;/p&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    *</span>
+<span class="source-line-no">262</span><span id="line-262">    * @param value</span>
+<span class="source-line-no">263</span><span id="line-263">    *    The new value for this property (e.g., "en", "fr", "de", "en-US").</span>
+<span class="source-line-no">264</span><span id="line-264">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">265</span><span id="line-265">    * @return This object.</span>
+<span class="source-line-no">266</span><span id="line-266">    */</span>
+<span class="source-line-no">267</span><span id="line-267">   public Link setHreflang(String value) {</span>
+<span class="source-line-no">268</span><span id="line-268">      this.hreflang = value;</span>
+<span class="source-line-no">269</span><span id="line-269">      return this;</span>
+<span class="source-line-no">270</span><span id="line-270">   }</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">   /**</span>
+<span class="source-line-no">273</span><span id="line-273">    * Bean property getter:  &lt;property&gt;title&lt;/property&gt;.</span>
+<span class="source-line-no">274</span><span id="line-274">    *</span>
+<span class="source-line-no">275</span><span id="line-275">    * &lt;p&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    * Returns human-readable information about the link.</span>
+<span class="source-line-no">277</span><span id="line-277">    *</span>
+<span class="source-line-no">278</span><span id="line-278">    * &lt;p&gt;</span>
+<span class="source-line-no">279</span><span id="line-279">    * The title provides advisory information about the link, typically for display to users.</span>
+<span class="source-line-no">280</span><span id="line-280">    *</span>
+<span class="source-line-no">281</span><span id="line-281">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">282</span><span id="line-282">    */</span>
+<span class="source-line-no">283</span><span id="line-283">   @Xml(format=ATTR)</span>
+<span class="source-line-no">284</span><span id="line-284">   public String getTitle() {</span>
+<span class="source-line-no">285</span><span id="line-285">      return title;</span>
+<span class="source-line-no">286</span><span id="line-286">   }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   /**</span>
+<span class="source-line-no">289</span><span id="line-289">    * Bean property setter:  &lt;property&gt;title&lt;/property&gt;.</span>
+<span class="source-line-no">290</span><span id="line-290">    *</span>
+<span class="source-line-no">291</span><span id="line-291">    * &lt;p&gt;</span>
+<span class="source-line-no">292</span><span id="line-292">    * Sets human-readable information about the link.</span>
+<span class="source-line-no">293</span><span id="line-293">    *</span>
+<span class="source-line-no">294</span><span id="line-294">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">295</span><span id="line-295">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">296</span><span id="line-296">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"related"&lt;/js&gt;, &lt;js&gt;"text/html"&lt;/js&gt;, &lt;js&gt;"http://example.org/related"&lt;/js&gt;)</span>
+<span class="source-line-no">297</span><span id="line-297">    *       .setTitle(&lt;js&gt;"Related Article"&lt;/js&gt;);</span>
+<span class="source-line-no">298</span><span id="line-298">    * &lt;/p&gt;</span>
+<span class="source-line-no">299</span><span id="line-299">    *</span>
+<span class="source-line-no">300</span><span id="line-300">    * @param value</span>
+<span class="source-line-no">301</span><span id="line-301">    *    The new value for this property.</span>
+<span class="source-line-no">302</span><span id="line-302">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">303</span><span id="line-303">    * @return This object.</span>
+<span class="source-line-no">304</span><span id="line-304">    */</span>
+<span class="source-line-no">305</span><span id="line-305">   public Link setTitle(String value) {</span>
+<span class="source-line-no">306</span><span id="line-306">      this.title = value;</span>
+<span class="source-line-no">307</span><span id="line-307">      return this;</span>
+<span class="source-line-no">308</span><span id="line-308">   }</span>
+<span class="source-line-no">309</span><span id="line-309"></span>
+<span class="source-line-no">310</span><span id="line-310">   /**</span>
+<span class="source-line-no">311</span><span id="line-311">    * Bean property getter:  &lt;property&gt;length&lt;/property&gt;.</span>
+<span class="source-line-no">312</span><span id="line-312">    *</span>
+<span class="source-line-no">313</span><span id="line-313">    * &lt;p&gt;</span>
+<span class="source-line-no">314</span><span id="line-314">    * Returns an advisory size in bytes of the linked resource.</span>
+<span class="source-line-no">315</span><span id="line-315">    *</span>
+<span class="source-line-no">316</span><span id="line-316">    * &lt;p&gt;</span>
+<span class="source-line-no">317</span><span id="line-317">    * This is particularly useful for enclosures (podcast episodes, video files, etc.) to</span>
+<span class="source-line-no">318</span><span id="line-318">    * help clients decide whether to download the resource.</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
+<span class="source-line-no">321</span><span id="line-321">    */</span>
+<span class="source-line-no">322</span><span id="line-322">   @Xml(format=ATTR)</span>
+<span class="source-line-no">323</span><span id="line-323">   public Integer getLength() {</span>
+<span class="source-line-no">324</span><span id="line-324">      return length;</span>
+<span class="source-line-no">325</span><span id="line-325">   }</span>
+<span class="source-line-no">326</span><span id="line-326"></span>
+<span class="source-line-no">327</span><span id="line-327">   /**</span>
+<span class="source-line-no">328</span><span id="line-328">    * Bean property setter:  &lt;property&gt;length&lt;/property&gt;.</span>
+<span class="source-line-no">329</span><span id="line-329">    *</span>
+<span class="source-line-no">330</span><span id="line-330">    * &lt;p&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    * Sets an advisory size in bytes of the linked resource.</span>
+<span class="source-line-no">332</span><span id="line-332">    *</span>
+<span class="source-line-no">333</span><span id="line-333">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">334</span><span id="line-334">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">335</span><span id="line-335">    *    &lt;jc&gt;// Podcast episode with file size&lt;/jc&gt;</span>
+<span class="source-line-no">336</span><span id="line-336">    *    Link &lt;jv&gt;link&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Link(&lt;js&gt;"enclosure"&lt;/js&gt;, &lt;js&gt;"audio/mpeg"&lt;/js&gt;, &lt;js&gt;"http://example.org/episode1.mp3"&lt;/js&gt;)</span>
+<span class="source-line-no">337</span><span id="line-337">    *       .setLength(24986239);  &lt;jc&gt;// ~24 MB&lt;/jc&gt;</span>
+<span class="source-line-no">338</span><span id="line-338">    * &lt;/p&gt;</span>
+<span class="source-line-no">339</span><span id="line-339">    *</span>
+<span class="source-line-no">340</span><span id="line-340">    * @param value</span>
+<span class="source-line-no">341</span><span id="line-341">    *    The new value for this property in bytes.</span>
+<span class="source-line-no">342</span><span id="line-342">    *    &lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">343</span><span id="line-343">    * @return This object.</span>
+<span class="source-line-no">344</span><span id="line-344">    */</span>
+<span class="source-line-no">345</span><span id="line-345">   public Link setLength(Integer value) {</span>
+<span class="source-line-no">346</span><span id="line-346">      this.length = value;</span>
+<span class="source-line-no">347</span><span id="line-347">      return this;</span>
+<span class="source-line-no">348</span><span id="line-348">   }</span>
+<span class="source-line-no">349</span><span id="line-349"></span>
+<span class="source-line-no">350</span><span id="line-350">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">351</span><span id="line-351">   // Overridden setters (to simplify method chaining)</span>
 <span class="source-line-no">352</span><span id="line-352">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">353</span><span id="line-353">   // Overridden setters (to simplify method chaining)</span>
-<span class="source-line-no">354</span><span id="line-354">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">355</span><span id="line-355"></span>
-<span class="source-line-no">356</span><span id="line-356">   @Override /* Overridden from Common */</span>
-<span class="source-line-no">357</span><span id="line-357">   public Link setBase(Object value) {</span>
-<span class="source-line-no">358</span><span id="line-358">      super.setBase(value);</span>
-<span class="source-line-no">359</span><span id="line-359">      return this;</span>
-<span class="source-line-no">360</span><span id="line-360">   }</span>
-<span class="source-line-no">361</span><span id="line-361"></span>
-<span class="source-line-no">362</span><span id="line-362">   @Override /* Overridden from Common */</span>
-<span class="source-line-no">363</span><span id="line-363">   public Link setLang(String value) {</span>
-<span class="source-line-no">364</span><span id="line-364">      super.setLang(value);</span>
-<span class="source-line-no">365</span><span id="line-365">      return this;</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367">}</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">355</span><span id="line-355">   public Link setBase(Object value) {</span>
+<span class="source-line-no">356</span><span id="line-356">      super.setBase(value);</span>
+<span class="source-line-no">357</span><span id="line-357">      return this;</span>
+<span class="source-line-no">358</span><span id="line-358">   }</span>
+<span class="source-line-no">359</span><span id="line-359"></span>
+<span class="source-line-no">360</span><span id="line-360">   @Override /* Overridden from Common */</span>
+<span class="source-line-no">361</span><span id="line-361">   public Link setLang(String value) {</span>
+<span class="source-line-no">362</span><span id="line-362">      super.setLang(value);</span>
+<span class="source-line-no">363</span><span id="line-363">      return this;</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365">}</span>
 
 
 

@@ -226,33 +226,32 @@
 <span class="source-line-no">213</span><span id="line-213">      return m.invoke(service, params);</span>
 <span class="source-line-no">214</span><span id="line-214">   }</span>
 <span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">218</span><span id="line-218">   // Other methods</span>
-<span class="source-line-no">219</span><span id="line-219">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">   private Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) throws Exception {</span>
-<span class="source-line-no">222</span><span id="line-222">      return getInterfaceClass(javaInterface).getMethodsByPath();</span>
-<span class="source-line-no">223</span><span id="line-223">   }</span>
-<span class="source-line-no">224</span><span id="line-224"></span>
-<span class="source-line-no">225</span><span id="line-225">   /**</span>
-<span class="source-line-no">226</span><span id="line-226">    * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</span>
-<span class="source-line-no">227</span><span id="line-227">    */</span>
-<span class="source-line-no">228</span><span id="line-228">   private RrpcInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {</span>
-<span class="source-line-no">229</span><span id="line-229">      RrpcInterfaceMeta rm = serviceMap.get(javaInterface);</span>
-<span class="source-line-no">230</span><span id="line-230">      if (rm == null) {</span>
-<span class="source-line-no">231</span><span id="line-231">         for (Class&lt;?&gt; c : getServiceMap().keySet()) {</span>
-<span class="source-line-no">232</span><span id="line-232">            if (c.getName().equals(javaInterface)) {</span>
-<span class="source-line-no">233</span><span id="line-233">               rm = new RrpcInterfaceMeta(c, null);</span>
-<span class="source-line-no">234</span><span id="line-234">               serviceMap.put(javaInterface, rm);</span>
-<span class="source-line-no">235</span><span id="line-235">               return rm;</span>
-<span class="source-line-no">236</span><span id="line-236">            }</span>
-<span class="source-line-no">237</span><span id="line-237">         }</span>
-<span class="source-line-no">238</span><span id="line-238">         throw new NotFound("Interface class not found");</span>
-<span class="source-line-no">239</span><span id="line-239">      }</span>
-<span class="source-line-no">240</span><span id="line-240">      return rm;</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242">}</span>
+<span class="source-line-no">216</span><span id="line-216">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">217</span><span id="line-217">   // Other methods</span>
+<span class="source-line-no">218</span><span id="line-218">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">219</span><span id="line-219"></span>
+<span class="source-line-no">220</span><span id="line-220">   private Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) throws Exception {</span>
+<span class="source-line-no">221</span><span id="line-221">      return getInterfaceClass(javaInterface).getMethodsByPath();</span>
+<span class="source-line-no">222</span><span id="line-222">   }</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">   /**</span>
+<span class="source-line-no">225</span><span id="line-225">    * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</span>
+<span class="source-line-no">226</span><span id="line-226">    */</span>
+<span class="source-line-no">227</span><span id="line-227">   private RrpcInterfaceMeta getInterfaceClass(String javaInterface) throws NotFound, Exception {</span>
+<span class="source-line-no">228</span><span id="line-228">      RrpcInterfaceMeta rm = serviceMap.get(javaInterface);</span>
+<span class="source-line-no">229</span><span id="line-229">      if (rm == null) {</span>
+<span class="source-line-no">230</span><span id="line-230">         for (Class&lt;?&gt; c : getServiceMap().keySet()) {</span>
+<span class="source-line-no">231</span><span id="line-231">            if (c.getName().equals(javaInterface)) {</span>
+<span class="source-line-no">232</span><span id="line-232">               rm = new RrpcInterfaceMeta(c, null);</span>
+<span class="source-line-no">233</span><span id="line-233">               serviceMap.put(javaInterface, rm);</span>
+<span class="source-line-no">234</span><span id="line-234">               return rm;</span>
+<span class="source-line-no">235</span><span id="line-235">            }</span>
+<span class="source-line-no">236</span><span id="line-236">         }</span>
+<span class="source-line-no">237</span><span id="line-237">         throw new NotFound("Interface class not found");</span>
+<span class="source-line-no">238</span><span id="line-238">      }</span>
+<span class="source-line-no">239</span><span id="line-239">      return rm;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241">}</span>
 
 
 

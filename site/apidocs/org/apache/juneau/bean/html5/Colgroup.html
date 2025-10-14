@@ -98,38 +98,38 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple column group</jc>
    Colgroup <jv>simple</jv> = <jsm>colgroup</jsm>();
- 
+
    <jc>// Column group with span</jc>
    Colgroup <jv>withSpan</jv> = <jsm>colgroup</jsm>().span(3);
- 
+
    <jc>// Column group with individual columns</jc>
    Colgroup <jv>withColumns</jv> = <jsm>colgroup</jsm>(
       <jsm>col</jsm>().span(2),
       <jsm>col</jsm>().span(1)
    );
- 
+
    <jc>// Column group with styling</jc>
    Colgroup <jv>styled</jv> = <jsm>colgroup</jsm>()
       ._class(<js>"header-columns"</js>)
       .style(<js>"background-color: #f0f0f0;"</js>);
- 
+
    <jc>// Column group with multiple columns</jc>
    Colgroup <jv>multiple</jv> = <jsm>colgroup</jsm>(
       <jsm>col</jsm>()._class(<js>"name-column"</js>).style(<js>"width: 200px;"</js>),
       <jsm>col</jsm>()._class(<js>"age-column"</js>).style(<js>"width: 100px;"</js>),
       <jsm>col</jsm>()._class(<js>"city-column"</js>).style(<js>"width: 150px;"</js>)
    );
- 
+
    <jc>// Column group with alignment</jc>
    Colgroup <jv>aligned</jv> = <jsm>colgroup</jsm>(
       <jsm>col</jsm>().style(<js>"text-align: left;"</js>),
       <jsm>col</jsm>().style(<js>"text-align: center;"</js>),
       <jsm>col</jsm>().style(<js>"text-align: right;"</js>)
    );
- 
+
    <jc>// Column group with ID</jc>
    Colgroup <jv>withId</jv> = <jsm>colgroup</jsm>()
       .id(<js>"data-columns"</js>)

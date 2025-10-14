@@ -833,194 +833,192 @@
 <span class="source-line-no">820</span><span id="line-820">      throw new ParseException(this, "Unexpected condition.");</span>
 <span class="source-line-no">821</span><span id="line-821">   }</span>
 <span class="source-line-no">822</span><span id="line-822"></span>
-<span class="source-line-no">823</span><span id="line-823"></span>
-<span class="source-line-no">824</span><span id="line-824">   /*</span>
-<span class="source-line-no">825</span><span id="line-825">    * Returns true if the next character in the stream is preceded by an escape '~' character.</span>
-<span class="source-line-no">826</span><span id="line-826">    */</span>
-<span class="source-line-no">827</span><span id="line-827">   private static final boolean isInEscape(int c, ParserReader r, boolean prevIsInEscape) throws IOException {</span>
-<span class="source-line-no">828</span><span id="line-828">      if (c == '~' &amp;&amp; ! prevIsInEscape) {</span>
-<span class="source-line-no">829</span><span id="line-829">         c = r.peek();</span>
-<span class="source-line-no">830</span><span id="line-830">         if (escapedChars.contains(c)) {</span>
-<span class="source-line-no">831</span><span id="line-831">            r.delete();</span>
-<span class="source-line-no">832</span><span id="line-832">            return true;</span>
-<span class="source-line-no">833</span><span id="line-833">         }</span>
-<span class="source-line-no">834</span><span id="line-834">      }</span>
-<span class="source-line-no">835</span><span id="line-835">      return false;</span>
-<span class="source-line-no">836</span><span id="line-836">   }</span>
-<span class="source-line-no">837</span><span id="line-837"></span>
-<span class="source-line-no">838</span><span id="line-838">   /**</span>
-<span class="source-line-no">839</span><span id="line-839">    * Parses a string value from the specified reader.</span>
-<span class="source-line-no">840</span><span id="line-840">    *</span>
-<span class="source-line-no">841</span><span id="line-841">    * @param r The input reader.</span>
-<span class="source-line-no">842</span><span id="line-842">    * @param isUrlParamValue Whether this is a URL parameter.</span>
-<span class="source-line-no">843</span><span id="line-843">    * @return The parsed string.</span>
-<span class="source-line-no">844</span><span id="line-844">    * @throws IOException Exception thrown by underlying stream.</span>
-<span class="source-line-no">845</span><span id="line-845">    * @throws ParseException Malformed input found.</span>
-<span class="source-line-no">846</span><span id="line-846">    */</span>
-<span class="source-line-no">847</span><span id="line-847">   protected final String parseString(UonReader r, boolean isUrlParamValue) throws IOException, ParseException {</span>
-<span class="source-line-no">848</span><span id="line-848"></span>
-<span class="source-line-no">849</span><span id="line-849">      // If string is of form 'xxx', we're looking for ' at the end.</span>
-<span class="source-line-no">850</span><span id="line-850">      // Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.</span>
-<span class="source-line-no">851</span><span id="line-851"></span>
-<span class="source-line-no">852</span><span id="line-852">      int c = r.peekSkipWs();</span>
-<span class="source-line-no">853</span><span id="line-853">      if (c == '\'')</span>
-<span class="source-line-no">854</span><span id="line-854">         return parsePString(r);</span>
-<span class="source-line-no">855</span><span id="line-855"></span>
-<span class="source-line-no">856</span><span id="line-856">      r.mark();</span>
-<span class="source-line-no">857</span><span id="line-857">      boolean isInEscape = false;</span>
-<span class="source-line-no">858</span><span id="line-858">      String s = null;</span>
-<span class="source-line-no">859</span><span id="line-859">      AsciiSet endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);</span>
-<span class="source-line-no">860</span><span id="line-860">      while (c != -1) {</span>
-<span class="source-line-no">861</span><span id="line-861">         c = r.read();</span>
-<span class="source-line-no">862</span><span id="line-862">         if (! isInEscape) {</span>
-<span class="source-line-no">863</span><span id="line-863">            // If this is a URL parameter value, we're looking for:  &amp;</span>
-<span class="source-line-no">864</span><span id="line-864">            // If not, we're looking for:  &amp;,)</span>
-<span class="source-line-no">865</span><span id="line-865">            if (endChars.contains(c)) {</span>
-<span class="source-line-no">866</span><span id="line-866">               r.unread();</span>
-<span class="source-line-no">867</span><span id="line-867">               c = -1;</span>
-<span class="source-line-no">868</span><span id="line-868">            }</span>
-<span class="source-line-no">869</span><span id="line-869">         }</span>
-<span class="source-line-no">870</span><span id="line-870">         if (c == -1)</span>
-<span class="source-line-no">871</span><span id="line-871">            s = r.getMarked();</span>
-<span class="source-line-no">872</span><span id="line-872">         else if (c == EQ)</span>
-<span class="source-line-no">873</span><span id="line-873">            r.replace('=');</span>
-<span class="source-line-no">874</span><span id="line-874">         else if (Character.isWhitespace(c) &amp;&amp; ! isUrlParamValue) {</span>
-<span class="source-line-no">875</span><span id="line-875">            s = r.getMarked(0, -1);</span>
-<span class="source-line-no">876</span><span id="line-876">            skipSpace(r);</span>
-<span class="source-line-no">877</span><span id="line-877">            c = -1;</span>
-<span class="source-line-no">878</span><span id="line-878">         }</span>
-<span class="source-line-no">879</span><span id="line-879">         isInEscape = isInEscape(c, r, isInEscape);</span>
-<span class="source-line-no">880</span><span id="line-880">      }</span>
-<span class="source-line-no">881</span><span id="line-881"></span>
-<span class="source-line-no">882</span><span id="line-882">      if (isUrlParamValue)</span>
-<span class="source-line-no">883</span><span id="line-883">         s = StringUtils.trim(s);</span>
-<span class="source-line-no">884</span><span id="line-884"></span>
-<span class="source-line-no">885</span><span id="line-885">      return ("null".equals(s) ? null : trim(s));</span>
-<span class="source-line-no">886</span><span id="line-886">   }</span>
-<span class="source-line-no">887</span><span id="line-887"></span>
-<span class="source-line-no">888</span><span id="line-888">   private static final AsciiSet endCharsParam = AsciiSet.of(""+AMP), endCharsNormal = AsciiSet.of(",)"+AMP);</span>
-<span class="source-line-no">889</span><span id="line-889"></span>
-<span class="source-line-no">890</span><span id="line-890"></span>
-<span class="source-line-no">891</span><span id="line-891">   /*</span>
-<span class="source-line-no">892</span><span id="line-892">    * Parses a string of the form "'foo'"</span>
-<span class="source-line-no">893</span><span id="line-893">    * All whitespace within parenthesis are preserved.</span>
-<span class="source-line-no">894</span><span id="line-894">    */</span>
-<span class="source-line-no">895</span><span id="line-895">   private String parsePString(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">896</span><span id="line-896"></span>
-<span class="source-line-no">897</span><span id="line-897">      r.read(); // Skip first quote, NOSONAR - Intentional.</span>
-<span class="source-line-no">898</span><span id="line-898">      r.mark();</span>
-<span class="source-line-no">899</span><span id="line-899">      int c = 0;</span>
-<span class="source-line-no">900</span><span id="line-900"></span>
-<span class="source-line-no">901</span><span id="line-901">      boolean isInEscape = false;</span>
-<span class="source-line-no">902</span><span id="line-902">      while (c != -1) {</span>
-<span class="source-line-no">903</span><span id="line-903">         c = r.read();</span>
-<span class="source-line-no">904</span><span id="line-904">         if (! isInEscape) {</span>
-<span class="source-line-no">905</span><span id="line-905">            if (c == '\'')</span>
-<span class="source-line-no">906</span><span id="line-906">               return trim(r.getMarked(0, -1));</span>
-<span class="source-line-no">907</span><span id="line-907">         }</span>
-<span class="source-line-no">908</span><span id="line-908">         if (c == EQ)</span>
-<span class="source-line-no">909</span><span id="line-909">            r.replace('=');</span>
-<span class="source-line-no">910</span><span id="line-910">         isInEscape = isInEscape(c, r, isInEscape);</span>
-<span class="source-line-no">911</span><span id="line-911">      }</span>
-<span class="source-line-no">912</span><span id="line-912">      throw new ParseException(this, "Unmatched parenthesis");</span>
-<span class="source-line-no">913</span><span id="line-913">   }</span>
-<span class="source-line-no">914</span><span id="line-914"></span>
-<span class="source-line-no">915</span><span id="line-915">   private Boolean parseBoolean(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">916</span><span id="line-916">      String s = parseString(r, false);</span>
-<span class="source-line-no">917</span><span id="line-917">      if (s == null || s.equals("null"))</span>
-<span class="source-line-no">918</span><span id="line-918">         return null;</span>
-<span class="source-line-no">919</span><span id="line-919">      if (s.equalsIgnoreCase("true"))</span>
-<span class="source-line-no">920</span><span id="line-920">         return true;</span>
-<span class="source-line-no">921</span><span id="line-921">      if (s.equalsIgnoreCase("false"))</span>
-<span class="source-line-no">922</span><span id="line-922">         return false;</span>
-<span class="source-line-no">923</span><span id="line-923">      throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);</span>
-<span class="source-line-no">924</span><span id="line-924">   }</span>
-<span class="source-line-no">925</span><span id="line-925"></span>
-<span class="source-line-no">926</span><span id="line-926">   private Number parseNumber(UonReader r, Class&lt;? extends Number&gt; c) throws IOException, ParseException {</span>
-<span class="source-line-no">927</span><span id="line-927">      String s = parseString(r, false);</span>
-<span class="source-line-no">928</span><span id="line-928">      if (s == null)</span>
-<span class="source-line-no">929</span><span id="line-929">         return null;</span>
-<span class="source-line-no">930</span><span id="line-930">      return StringUtils.parseNumber(s, c);</span>
-<span class="source-line-no">931</span><span id="line-931">   }</span>
-<span class="source-line-no">932</span><span id="line-932"></span>
-<span class="source-line-no">933</span><span id="line-933">   /*</span>
-<span class="source-line-no">934</span><span id="line-934">    * Call this method after you've finished a parsing a string to make sure that if there's any</span>
-<span class="source-line-no">935</span><span id="line-935">    * remainder in the input, that it consists only of whitespace and comments.</span>
-<span class="source-line-no">936</span><span id="line-936">    */</span>
-<span class="source-line-no">937</span><span id="line-937">   private void validateEnd(UonReader r) throws IOException, ParseException {</span>
-<span class="source-line-no">938</span><span id="line-938">      if (! isValidateEnd())</span>
-<span class="source-line-no">939</span><span id="line-939">         return;</span>
-<span class="source-line-no">940</span><span id="line-940">      while (true) {</span>
-<span class="source-line-no">941</span><span id="line-941">         int c = r.read();</span>
-<span class="source-line-no">942</span><span id="line-942">         if (c == -1)</span>
-<span class="source-line-no">943</span><span id="line-943">            return;</span>
-<span class="source-line-no">944</span><span id="line-944">         if (! Character.isWhitespace(c))</span>
-<span class="source-line-no">945</span><span id="line-945">            throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);</span>
-<span class="source-line-no">946</span><span id="line-946">      }</span>
-<span class="source-line-no">947</span><span id="line-947">   }</span>
-<span class="source-line-no">948</span><span id="line-948"></span>
-<span class="source-line-no">949</span><span id="line-949">   private static void skipSpace(ParserReader r) throws IOException {</span>
-<span class="source-line-no">950</span><span id="line-950">      int c = 0;</span>
-<span class="source-line-no">951</span><span id="line-951">      while ((c = r.read()) != -1) {</span>
-<span class="source-line-no">952</span><span id="line-952">         if (c &lt;= 2 || ! Character.isWhitespace(c)) {</span>
-<span class="source-line-no">953</span><span id="line-953">            r.unread();</span>
-<span class="source-line-no">954</span><span id="line-954">            return;</span>
-<span class="source-line-no">955</span><span id="line-955">         }</span>
-<span class="source-line-no">956</span><span id="line-956">      }</span>
-<span class="source-line-no">957</span><span id="line-957">   }</span>
-<span class="source-line-no">958</span><span id="line-958"></span>
-<span class="source-line-no">959</span><span id="line-959">   /**</span>
-<span class="source-line-no">960</span><span id="line-960">    * Creates a {@link UonReader} from the specified parser pipe.</span>
-<span class="source-line-no">961</span><span id="line-961">    *</span>
-<span class="source-line-no">962</span><span id="line-962">    * @param pipe The parser input.</span>
-<span class="source-line-no">963</span><span id="line-963">    * @param decodeChars Whether the reader should automatically decode URL-encoded characters.</span>
-<span class="source-line-no">964</span><span id="line-964">    * @return A new {@link UonReader} object.</span>
-<span class="source-line-no">965</span><span id="line-965">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">966</span><span id="line-966">    */</span>
-<span class="source-line-no">967</span><span id="line-967">   public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {</span>
-<span class="source-line-no">968</span><span id="line-968">      Reader r = pipe.getReader();</span>
-<span class="source-line-no">969</span><span id="line-969">      if (r instanceof UonReader)</span>
-<span class="source-line-no">970</span><span id="line-970">         return (UonReader)r;</span>
-<span class="source-line-no">971</span><span id="line-971">      return new UonReader(pipe, decodeChars);</span>
-<span class="source-line-no">972</span><span id="line-972">   }</span>
-<span class="source-line-no">973</span><span id="line-973"></span>
+<span class="source-line-no">823</span><span id="line-823">   /*</span>
+<span class="source-line-no">824</span><span id="line-824">    * Returns true if the next character in the stream is preceded by an escape '~' character.</span>
+<span class="source-line-no">825</span><span id="line-825">    */</span>
+<span class="source-line-no">826</span><span id="line-826">   private static final boolean isInEscape(int c, ParserReader r, boolean prevIsInEscape) throws IOException {</span>
+<span class="source-line-no">827</span><span id="line-827">      if (c == '~' &amp;&amp; ! prevIsInEscape) {</span>
+<span class="source-line-no">828</span><span id="line-828">         c = r.peek();</span>
+<span class="source-line-no">829</span><span id="line-829">         if (escapedChars.contains(c)) {</span>
+<span class="source-line-no">830</span><span id="line-830">            r.delete();</span>
+<span class="source-line-no">831</span><span id="line-831">            return true;</span>
+<span class="source-line-no">832</span><span id="line-832">         }</span>
+<span class="source-line-no">833</span><span id="line-833">      }</span>
+<span class="source-line-no">834</span><span id="line-834">      return false;</span>
+<span class="source-line-no">835</span><span id="line-835">   }</span>
+<span class="source-line-no">836</span><span id="line-836"></span>
+<span class="source-line-no">837</span><span id="line-837">   /**</span>
+<span class="source-line-no">838</span><span id="line-838">    * Parses a string value from the specified reader.</span>
+<span class="source-line-no">839</span><span id="line-839">    *</span>
+<span class="source-line-no">840</span><span id="line-840">    * @param r The input reader.</span>
+<span class="source-line-no">841</span><span id="line-841">    * @param isUrlParamValue Whether this is a URL parameter.</span>
+<span class="source-line-no">842</span><span id="line-842">    * @return The parsed string.</span>
+<span class="source-line-no">843</span><span id="line-843">    * @throws IOException Exception thrown by underlying stream.</span>
+<span class="source-line-no">844</span><span id="line-844">    * @throws ParseException Malformed input found.</span>
+<span class="source-line-no">845</span><span id="line-845">    */</span>
+<span class="source-line-no">846</span><span id="line-846">   protected final String parseString(UonReader r, boolean isUrlParamValue) throws IOException, ParseException {</span>
+<span class="source-line-no">847</span><span id="line-847"></span>
+<span class="source-line-no">848</span><span id="line-848">      // If string is of form 'xxx', we're looking for ' at the end.</span>
+<span class="source-line-no">849</span><span id="line-849">      // Otherwise, we're looking for ',' or ')' or -1 denoting the end of this string.</span>
+<span class="source-line-no">850</span><span id="line-850"></span>
+<span class="source-line-no">851</span><span id="line-851">      int c = r.peekSkipWs();</span>
+<span class="source-line-no">852</span><span id="line-852">      if (c == '\'')</span>
+<span class="source-line-no">853</span><span id="line-853">         return parsePString(r);</span>
+<span class="source-line-no">854</span><span id="line-854"></span>
+<span class="source-line-no">855</span><span id="line-855">      r.mark();</span>
+<span class="source-line-no">856</span><span id="line-856">      boolean isInEscape = false;</span>
+<span class="source-line-no">857</span><span id="line-857">      String s = null;</span>
+<span class="source-line-no">858</span><span id="line-858">      AsciiSet endChars = (isUrlParamValue ? endCharsParam : endCharsNormal);</span>
+<span class="source-line-no">859</span><span id="line-859">      while (c != -1) {</span>
+<span class="source-line-no">860</span><span id="line-860">         c = r.read();</span>
+<span class="source-line-no">861</span><span id="line-861">         if (! isInEscape) {</span>
+<span class="source-line-no">862</span><span id="line-862">            // If this is a URL parameter value, we're looking for:  &amp;</span>
+<span class="source-line-no">863</span><span id="line-863">            // If not, we're looking for:  &amp;,)</span>
+<span class="source-line-no">864</span><span id="line-864">            if (endChars.contains(c)) {</span>
+<span class="source-line-no">865</span><span id="line-865">               r.unread();</span>
+<span class="source-line-no">866</span><span id="line-866">               c = -1;</span>
+<span class="source-line-no">867</span><span id="line-867">            }</span>
+<span class="source-line-no">868</span><span id="line-868">         }</span>
+<span class="source-line-no">869</span><span id="line-869">         if (c == -1)</span>
+<span class="source-line-no">870</span><span id="line-870">            s = r.getMarked();</span>
+<span class="source-line-no">871</span><span id="line-871">         else if (c == EQ)</span>
+<span class="source-line-no">872</span><span id="line-872">            r.replace('=');</span>
+<span class="source-line-no">873</span><span id="line-873">         else if (Character.isWhitespace(c) &amp;&amp; ! isUrlParamValue) {</span>
+<span class="source-line-no">874</span><span id="line-874">            s = r.getMarked(0, -1);</span>
+<span class="source-line-no">875</span><span id="line-875">            skipSpace(r);</span>
+<span class="source-line-no">876</span><span id="line-876">            c = -1;</span>
+<span class="source-line-no">877</span><span id="line-877">         }</span>
+<span class="source-line-no">878</span><span id="line-878">         isInEscape = isInEscape(c, r, isInEscape);</span>
+<span class="source-line-no">879</span><span id="line-879">      }</span>
+<span class="source-line-no">880</span><span id="line-880"></span>
+<span class="source-line-no">881</span><span id="line-881">      if (isUrlParamValue)</span>
+<span class="source-line-no">882</span><span id="line-882">         s = StringUtils.trim(s);</span>
+<span class="source-line-no">883</span><span id="line-883"></span>
+<span class="source-line-no">884</span><span id="line-884">      return ("null".equals(s) ? null : trim(s));</span>
+<span class="source-line-no">885</span><span id="line-885">   }</span>
+<span class="source-line-no">886</span><span id="line-886"></span>
+<span class="source-line-no">887</span><span id="line-887">   private static final AsciiSet endCharsParam = AsciiSet.of(""+AMP), endCharsNormal = AsciiSet.of(",)"+AMP);</span>
+<span class="source-line-no">888</span><span id="line-888"></span>
+<span class="source-line-no">889</span><span id="line-889">   /*</span>
+<span class="source-line-no">890</span><span id="line-890">    * Parses a string of the form "'foo'"</span>
+<span class="source-line-no">891</span><span id="line-891">    * All whitespace within parenthesis are preserved.</span>
+<span class="source-line-no">892</span><span id="line-892">    */</span>
+<span class="source-line-no">893</span><span id="line-893">   private String parsePString(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">894</span><span id="line-894"></span>
+<span class="source-line-no">895</span><span id="line-895">      r.read(); // Skip first quote, NOSONAR - Intentional.</span>
+<span class="source-line-no">896</span><span id="line-896">      r.mark();</span>
+<span class="source-line-no">897</span><span id="line-897">      int c = 0;</span>
+<span class="source-line-no">898</span><span id="line-898"></span>
+<span class="source-line-no">899</span><span id="line-899">      boolean isInEscape = false;</span>
+<span class="source-line-no">900</span><span id="line-900">      while (c != -1) {</span>
+<span class="source-line-no">901</span><span id="line-901">         c = r.read();</span>
+<span class="source-line-no">902</span><span id="line-902">         if (! isInEscape) {</span>
+<span class="source-line-no">903</span><span id="line-903">            if (c == '\'')</span>
+<span class="source-line-no">904</span><span id="line-904">               return trim(r.getMarked(0, -1));</span>
+<span class="source-line-no">905</span><span id="line-905">         }</span>
+<span class="source-line-no">906</span><span id="line-906">         if (c == EQ)</span>
+<span class="source-line-no">907</span><span id="line-907">            r.replace('=');</span>
+<span class="source-line-no">908</span><span id="line-908">         isInEscape = isInEscape(c, r, isInEscape);</span>
+<span class="source-line-no">909</span><span id="line-909">      }</span>
+<span class="source-line-no">910</span><span id="line-910">      throw new ParseException(this, "Unmatched parenthesis");</span>
+<span class="source-line-no">911</span><span id="line-911">   }</span>
+<span class="source-line-no">912</span><span id="line-912"></span>
+<span class="source-line-no">913</span><span id="line-913">   private Boolean parseBoolean(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">914</span><span id="line-914">      String s = parseString(r, false);</span>
+<span class="source-line-no">915</span><span id="line-915">      if (s == null || s.equals("null"))</span>
+<span class="source-line-no">916</span><span id="line-916">         return null;</span>
+<span class="source-line-no">917</span><span id="line-917">      if (s.equalsIgnoreCase("true"))</span>
+<span class="source-line-no">918</span><span id="line-918">         return true;</span>
+<span class="source-line-no">919</span><span id="line-919">      if (s.equalsIgnoreCase("false"))</span>
+<span class="source-line-no">920</span><span id="line-920">         return false;</span>
+<span class="source-line-no">921</span><span id="line-921">      throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);</span>
+<span class="source-line-no">922</span><span id="line-922">   }</span>
+<span class="source-line-no">923</span><span id="line-923"></span>
+<span class="source-line-no">924</span><span id="line-924">   private Number parseNumber(UonReader r, Class&lt;? extends Number&gt; c) throws IOException, ParseException {</span>
+<span class="source-line-no">925</span><span id="line-925">      String s = parseString(r, false);</span>
+<span class="source-line-no">926</span><span id="line-926">      if (s == null)</span>
+<span class="source-line-no">927</span><span id="line-927">         return null;</span>
+<span class="source-line-no">928</span><span id="line-928">      return StringUtils.parseNumber(s, c);</span>
+<span class="source-line-no">929</span><span id="line-929">   }</span>
+<span class="source-line-no">930</span><span id="line-930"></span>
+<span class="source-line-no">931</span><span id="line-931">   /*</span>
+<span class="source-line-no">932</span><span id="line-932">    * Call this method after you've finished a parsing a string to make sure that if there's any</span>
+<span class="source-line-no">933</span><span id="line-933">    * remainder in the input, that it consists only of whitespace and comments.</span>
+<span class="source-line-no">934</span><span id="line-934">    */</span>
+<span class="source-line-no">935</span><span id="line-935">   private void validateEnd(UonReader r) throws IOException, ParseException {</span>
+<span class="source-line-no">936</span><span id="line-936">      if (! isValidateEnd())</span>
+<span class="source-line-no">937</span><span id="line-937">         return;</span>
+<span class="source-line-no">938</span><span id="line-938">      while (true) {</span>
+<span class="source-line-no">939</span><span id="line-939">         int c = r.read();</span>
+<span class="source-line-no">940</span><span id="line-940">         if (c == -1)</span>
+<span class="source-line-no">941</span><span id="line-941">            return;</span>
+<span class="source-line-no">942</span><span id="line-942">         if (! Character.isWhitespace(c))</span>
+<span class="source-line-no">943</span><span id="line-943">            throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);</span>
+<span class="source-line-no">944</span><span id="line-944">      }</span>
+<span class="source-line-no">945</span><span id="line-945">   }</span>
+<span class="source-line-no">946</span><span id="line-946"></span>
+<span class="source-line-no">947</span><span id="line-947">   private static void skipSpace(ParserReader r) throws IOException {</span>
+<span class="source-line-no">948</span><span id="line-948">      int c = 0;</span>
+<span class="source-line-no">949</span><span id="line-949">      while ((c = r.read()) != -1) {</span>
+<span class="source-line-no">950</span><span id="line-950">         if (c &lt;= 2 || ! Character.isWhitespace(c)) {</span>
+<span class="source-line-no">951</span><span id="line-951">            r.unread();</span>
+<span class="source-line-no">952</span><span id="line-952">            return;</span>
+<span class="source-line-no">953</span><span id="line-953">         }</span>
+<span class="source-line-no">954</span><span id="line-954">      }</span>
+<span class="source-line-no">955</span><span id="line-955">   }</span>
+<span class="source-line-no">956</span><span id="line-956"></span>
+<span class="source-line-no">957</span><span id="line-957">   /**</span>
+<span class="source-line-no">958</span><span id="line-958">    * Creates a {@link UonReader} from the specified parser pipe.</span>
+<span class="source-line-no">959</span><span id="line-959">    *</span>
+<span class="source-line-no">960</span><span id="line-960">    * @param pipe The parser input.</span>
+<span class="source-line-no">961</span><span id="line-961">    * @param decodeChars Whether the reader should automatically decode URL-encoded characters.</span>
+<span class="source-line-no">962</span><span id="line-962">    * @return A new {@link UonReader} object.</span>
+<span class="source-line-no">963</span><span id="line-963">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">964</span><span id="line-964">    */</span>
+<span class="source-line-no">965</span><span id="line-965">   public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {</span>
+<span class="source-line-no">966</span><span id="line-966">      Reader r = pipe.getReader();</span>
+<span class="source-line-no">967</span><span id="line-967">      if (r instanceof UonReader)</span>
+<span class="source-line-no">968</span><span id="line-968">         return (UonReader)r;</span>
+<span class="source-line-no">969</span><span id="line-969">      return new UonReader(pipe, decodeChars);</span>
+<span class="source-line-no">970</span><span id="line-970">   }</span>
+<span class="source-line-no">971</span><span id="line-971"></span>
+<span class="source-line-no">972</span><span id="line-972">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">973</span><span id="line-973">   // Properties</span>
 <span class="source-line-no">974</span><span id="line-974">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">975</span><span id="line-975">   // Properties</span>
-<span class="source-line-no">976</span><span id="line-976">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">977</span><span id="line-977"></span>
-<span class="source-line-no">978</span><span id="line-978">   /**</span>
-<span class="source-line-no">979</span><span id="line-979">    * Decode &lt;js&gt;"%xx"&lt;/js&gt; sequences.</span>
-<span class="source-line-no">980</span><span id="line-980">    *</span>
-<span class="source-line-no">981</span><span id="line-981">    * @see UonParser.Builder#decoding()</span>
-<span class="source-line-no">982</span><span id="line-982">    * @return</span>
-<span class="source-line-no">983</span><span id="line-983">    *    &lt;jk&gt;true&lt;/jk&gt; if URI encoded characters should be decoded, &lt;jk&gt;false&lt;/jk&gt; if they've already been decoded</span>
-<span class="source-line-no">984</span><span id="line-984">    *    before being passed to this parser.</span>
-<span class="source-line-no">985</span><span id="line-985">    */</span>
-<span class="source-line-no">986</span><span id="line-986">   protected final boolean isDecoding() {</span>
-<span class="source-line-no">987</span><span id="line-987">      return decoding;</span>
-<span class="source-line-no">988</span><span id="line-988">   }</span>
-<span class="source-line-no">989</span><span id="line-989"></span>
-<span class="source-line-no">990</span><span id="line-990">   /**</span>
-<span class="source-line-no">991</span><span id="line-991">    * Validate end.</span>
-<span class="source-line-no">992</span><span id="line-992">    *</span>
-<span class="source-line-no">993</span><span id="line-993">    * @see UonParser.Builder#validateEnd()</span>
-<span class="source-line-no">994</span><span id="line-994">    * @return</span>
-<span class="source-line-no">995</span><span id="line-995">    *    &lt;jk&gt;true&lt;/jk&gt; if after parsing a POJO from the input, verifies that the remaining input in</span>
-<span class="source-line-no">996</span><span id="line-996">    *    the stream consists of only comments or whitespace.</span>
-<span class="source-line-no">997</span><span id="line-997">    */</span>
-<span class="source-line-no">998</span><span id="line-998">   protected final boolean isValidateEnd() {</span>
-<span class="source-line-no">999</span><span id="line-999">      return ctx.isValidateEnd();</span>
-<span class="source-line-no">1000</span><span id="line-1000">   }</span>
-<span class="source-line-no">1001</span><span id="line-1001"></span>
+<span class="source-line-no">975</span><span id="line-975"></span>
+<span class="source-line-no">976</span><span id="line-976">   /**</span>
+<span class="source-line-no">977</span><span id="line-977">    * Decode &lt;js&gt;"%xx"&lt;/js&gt; sequences.</span>
+<span class="source-line-no">978</span><span id="line-978">    *</span>
+<span class="source-line-no">979</span><span id="line-979">    * @see UonParser.Builder#decoding()</span>
+<span class="source-line-no">980</span><span id="line-980">    * @return</span>
+<span class="source-line-no">981</span><span id="line-981">    *    &lt;jk&gt;true&lt;/jk&gt; if URI encoded characters should be decoded, &lt;jk&gt;false&lt;/jk&gt; if they've already been decoded</span>
+<span class="source-line-no">982</span><span id="line-982">    *    before being passed to this parser.</span>
+<span class="source-line-no">983</span><span id="line-983">    */</span>
+<span class="source-line-no">984</span><span id="line-984">   protected final boolean isDecoding() {</span>
+<span class="source-line-no">985</span><span id="line-985">      return decoding;</span>
+<span class="source-line-no">986</span><span id="line-986">   }</span>
+<span class="source-line-no">987</span><span id="line-987"></span>
+<span class="source-line-no">988</span><span id="line-988">   /**</span>
+<span class="source-line-no">989</span><span id="line-989">    * Validate end.</span>
+<span class="source-line-no">990</span><span id="line-990">    *</span>
+<span class="source-line-no">991</span><span id="line-991">    * @see UonParser.Builder#validateEnd()</span>
+<span class="source-line-no">992</span><span id="line-992">    * @return</span>
+<span class="source-line-no">993</span><span id="line-993">    *    &lt;jk&gt;true&lt;/jk&gt; if after parsing a POJO from the input, verifies that the remaining input in</span>
+<span class="source-line-no">994</span><span id="line-994">    *    the stream consists of only comments or whitespace.</span>
+<span class="source-line-no">995</span><span id="line-995">    */</span>
+<span class="source-line-no">996</span><span id="line-996">   protected final boolean isValidateEnd() {</span>
+<span class="source-line-no">997</span><span id="line-997">      return ctx.isValidateEnd();</span>
+<span class="source-line-no">998</span><span id="line-998">   }</span>
+<span class="source-line-no">999</span><span id="line-999"></span>
+<span class="source-line-no">1000</span><span id="line-1000">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1001</span><span id="line-1001">   // Other methods</span>
 <span class="source-line-no">1002</span><span id="line-1002">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1003</span><span id="line-1003">   // Other methods</span>
-<span class="source-line-no">1004</span><span id="line-1004">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1005</span><span id="line-1005"></span>
-<span class="source-line-no">1006</span><span id="line-1006">   @Override /* ContextSession */</span>
-<span class="source-line-no">1007</span><span id="line-1007">   protected JsonMap properties() {</span>
-<span class="source-line-no">1008</span><span id="line-1008">      return filteredMap("decoding", decoding);</span>
-<span class="source-line-no">1009</span><span id="line-1009">   }</span>
-<span class="source-line-no">1010</span><span id="line-1010">}</span>
+<span class="source-line-no">1003</span><span id="line-1003"></span>
+<span class="source-line-no">1004</span><span id="line-1004">   @Override /* ContextSession */</span>
+<span class="source-line-no">1005</span><span id="line-1005">   protected JsonMap properties() {</span>
+<span class="source-line-no">1006</span><span id="line-1006">      return filteredMap("decoding", decoding);</span>
+<span class="source-line-no">1007</span><span id="line-1007">   }</span>
+<span class="source-line-no">1008</span><span id="line-1008">}</span>
 
 
 

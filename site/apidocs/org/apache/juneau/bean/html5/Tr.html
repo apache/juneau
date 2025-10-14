@@ -96,40 +96,40 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple table row with data cells</jc>
    Tr <jv>simple</jv> = <jsm>tr</jsm>(
       <jsm>td</jsm>(<js>"John"</js>),
       <jsm>td</jsm>(<js>"25"</js>),
       <jsm>td</jsm>(<js>"New York"</js>)
    );
- 
+
    <jc>// Table row with header cells</jc>
    Tr <jv>header</jv> = <jsm>tr</jsm>(
       <jsm>th</jsm>(<js>"Name"</js>),
       <jsm>th</jsm>(<js>"Age"</js>),
       <jsm>th</jsm>(<js>"City"</js>)
    );
- 
+
    <jc>// Table row with styling</jc>
    Tr <jv>styled</jv> = <jsm>tr</jsm>(
       <jsm>td</jsm>(<js>"Product A"</js>),
       <jsm>td</jsm>(<js>"100"</js>),
       <jsm>td</jsm>(<js>"$10.00"</js>)
    )._class(<js>"highlight-row"</js>);
- 
+
    <jc>// Table row with click handler</jc>
    Tr <jv>clickable</jv> = <jsm>tr</jsm>(
       <jsm>td</jsm>(<js>"Clickable Row"</js>)
    ).onclick(<js>"selectRow(this)"</js>);
- 
+
    <jc>// Table row with mixed cell types</jc>
    Tr <jv>mixed</jv> = <jsm>tr</jsm>(
       <jsm>th</jsm>(<js>"Total"</js>),
       <jsm>td</jsm>(<js>"$1,000"</js>),
       <jsm>td</jsm>(<js>"$2,000"</js>)
    );
- 
+
    <jc>// Table row with complex content</jc>
    Tr <jv>complex</jv> = <jsm>tr</jsm>(
       <jsm>td</jsm>(

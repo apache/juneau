@@ -40,16 +40,15 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="PoweredByJuneau" href="../../../../../org/apache/juneau/rest/widget/PoweredByJuneau.html#PoweredByJuneau">PoweredByJuneau</a> <strong class="jxr_keyword">extends</strong> <a name="Widget" href="../../../../../org/apache/juneau/rest/widget/Widget.html#Widget">Widget</a> {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * Returns an Apache Juneau image tag hyperlinked to &lt;js&gt;"<a href="http://juneau.apache.org" target="alexandria_uri">http://juneau.apache.org</a>"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Override <em class="jxr_comment">/* Widget */</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">public</strong> String getHtml(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		UriResolver r = req.getUriResolver();
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;a href='http://juneau.apache.org'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='"</span>+r.resolve(<span class="jxr_string">"servlet:/htdocs/images/juneau.png"</span>)+<span class="jxr_string">"'&gt;"</span>;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  }
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 * Returns an Apache Juneau image tag hyperlinked to &lt;js&gt;"<a href="http://juneau.apache.org" target="alexandria_uri">http://juneau.apache.org</a>"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Override <em class="jxr_comment">/* Widget */</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> String getHtml(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		UriResolver r = req.getUriResolver();
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;a href='http://juneau.apache.org'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='"</span>+r.resolve(<span class="jxr_string">"servlet:/htdocs/images/juneau.png"</span>)+<span class="jxr_string">"'&gt;"</span>;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

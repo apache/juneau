@@ -221,33 +221,32 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">return</strong> m.invoke(service, params);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">// Other methods</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">return</strong> getInterfaceClass(javaInterface).getMethodsByPath();
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">private</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a> getInterfaceClass(String javaInterface) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		RrpcInterfaceMeta rm = serviceMap.get(javaInterface);
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">if</strong> (rm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : getServiceMap().keySet()) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">if</strong> (c.getName().equals(javaInterface)) {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(c, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					serviceMap.put(javaInterface, rm);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 					<strong class="jxr_keyword">return</strong> rm;
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Interface class not found"</span>);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">return</strong> rm;
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> }
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">// Other methods</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> getInterfaceClass(javaInterface).getMethodsByPath();
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">private</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a> getInterfaceClass(String javaInterface) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		RrpcInterfaceMeta rm = serviceMap.get(javaInterface);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">if</strong> (rm == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : getServiceMap().keySet()) {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">if</strong> (c.getName().equals(javaInterface)) {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(c, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					serviceMap.put(javaInterface, rm);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					<strong class="jxr_keyword">return</strong> rm;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				}
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			}
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Interface class not found"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> rm;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

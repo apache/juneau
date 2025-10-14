@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> *</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='note'&gt;This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.</span>
-<span class="source-line-no">069</span><span id="line-69"> *       The {@link #close()} method allows unchecked exceptions to propagate for debuggability, </span>
+<span class="source-line-no">069</span><span id="line-69"> *       The {@link #close()} method allows unchecked exceptions to propagate for debuggability,</span>
 <span class="source-line-no">070</span><span id="line-70"> *       while catching and logging checked exceptions to follow AutoCloseable best practices.</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
@@ -886,8 +886,8 @@
 <span class="source-line-no">873</span><span id="line-873">    * &lt;ul&gt;</span>
 <span class="source-line-no">874</span><span id="line-874">    *    &lt;li&gt;Unchecked exceptions ({@link RuntimeException} and {@link Error}) from interceptors are allowed to propagate.</span>
 <span class="source-line-no">875</span><span id="line-875">    *       This ensures programming errors and serious issues are visible during development and testing.</span>
-<span class="source-line-no">876</span><span id="line-876">    *    &lt;li&gt;Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown. </span>
-<span class="source-line-no">877</span><span id="line-877">    *       This follows AutoCloseable best practices and prevents close exceptions from interfering with </span>
+<span class="source-line-no">876</span><span id="line-876">    *    &lt;li&gt;Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown.</span>
+<span class="source-line-no">877</span><span id="line-877">    *       This follows AutoCloseable best practices and prevents close exceptions from interfering with</span>
 <span class="source-line-no">878</span><span id="line-878">    *       try-with-resources cleanup or masking the original exception.</span>
 <span class="source-line-no">879</span><span id="line-879">    * &lt;/ul&gt;</span>
 <span class="source-line-no">880</span><span id="line-880">    */</span>

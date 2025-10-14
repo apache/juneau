@@ -97,34 +97,34 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple unordered list</jc>
    Ul <jv>simple</jv> = <jsm>ul</jsm>(
       <jsm>li</jsm>(<js>"First item"</js>),
       <jsm>li</jsm>(<js>"Second item"</js>),
       <jsm>li</jsm>(<js>"Third item"</js>)
    );
- 
+
    <jc>// Navigation menu</jc>
    Ul <jv>navigation</jv> = <jsm>ul</jsm>(
       <jsm>li</jsm>(<jsm>a</jsm>(<js>"/home"</js>, <js>"Home"</js>)),
       <jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>)),
       <jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
    )._class(<js>"nav-menu"</js>);
- 
+
    <jc>// Feature list</jc>
    Ul <jv>features</jv> = <jsm>ul</jsm>(
       <jsm>li</jsm>(<js>"Fast performance"</js>),
       <jsm>li</jsm>(<js>"Easy to use"</js>),
       <jsm>li</jsm>(<js>"24/7 support"</js>)
    )._class(<js>"feature-list"</js>);
- 
+
    <jc>// List with styling</jc>
    Ul <jv>styled</jv> = <jsm>ul</jsm>(
       <jsm>li</jsm>(<js>"Styled item 1"</js>),
       <jsm>li</jsm>(<js>"Styled item 2"</js>)
    )._class(<js>"custom-list"</js>).style(<js>"list-style-type: square;"</js>);
- 
+
    <jc>// Nested list</jc>
    Ul <jv>nested</jv> = <jsm>ul</jsm>(
       <jsm>li</jsm>(<js>"Main item 1"</js>),
@@ -136,7 +136,7 @@ loadScripts(document, 'script');</script>
          )
       )
    );
- 
+
    <jc>// List with complex content</jc>
    Ul <jv>complex</jv> = <jsm>ul</jsm>(
       <jsm>li</jsm>(

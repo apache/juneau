@@ -97,24 +97,24 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Chemical formula</jc>
    Sub <jv>chemical</jv> = <jsm>sub</jsm>(<js>"H"</js>, <jsm>sub</jsm>(<js>"2"</js>), <js>"O"</js>);
- 
+
    <jc>// Mathematical formula</jc>
    Sub <jv>math</jv> = <jsm>sub</jsm>(
       <js>"x"</js>, <jsm>sub</jsm>(<js>"2"</js>),
       <js>" + y"</js>, <jsm>sub</jsm>(<js>"2"</js>),
       <js>" = z"</js>, <jsm>sub</jsm>(<js>"2"</js>)
    );
- 
+
    <jc>// Footnote reference</jc>
    Sub <jv>footnote</jv> = <jsm>sub</jsm>(<js>"1"</js>);
- 
+
    <jc>// Subscript with styling</jc>
    Sub <jv>styled</jv> = <jsm>sub</jsm>(<js>"n"</js>)
       ._class(<js>"subscript"</js>);
- 
+
    <jc>// Multiple subscripts</jc>
    Sub <jv>multiple</jv> = <jsm>sub</jsm>(
       <js>"A"</js>, <jsm>sub</jsm>(<js>"i,j"</js>),

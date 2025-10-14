@@ -97,23 +97,23 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple abbreviation</jc>
    Abbr <jv>simple</jv> = <jsm>abbr</jsm>(<js>"HyperText Markup Language"</js>, <js>"HTML"</js>);
- 
+
    <jc>// Acronym with expansion</jc>
    Abbr <jv>acronym</jv> = <jsm>abbr</jsm>(<js>"World Wide Web"</js>, <js>"WWW"</js>);
- 
+
    <jc>// Technical abbreviation</jc>
    Abbr <jv>technical</jv> = <jsm>abbr</jsm>(<js>"Cascading Style Sheets"</js>, <js>"CSS"</js>);
- 
+
    <jc>// Date abbreviation</jc>
    Abbr <jv>date</jv> = <jsm>abbr</jsm>(<js>"January"</js>, <js>"Jan"</js>);
- 
+
    <jc>// Abbreviation with styling</jc>
    Abbr <jv>styled</jv> = <jsm>abbr</jsm>(<js>"JavaScript Object Notation"</js>, <js>"JSON"</js>)
       ._class(<js>"abbreviation"</js>);
- 
+
    <jc>// Multiple abbreviations in text</jc>
    Abbr <jv>multiple</jv> = <jsm>abbr</jsm>()
       .children(

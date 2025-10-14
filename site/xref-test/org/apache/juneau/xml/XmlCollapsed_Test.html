@@ -296,105 +296,102 @@
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		}
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<em class="jxr_comment">// testElementNameOnElementClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_comment">//	but overridden by @Xml.childName on property.</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> a07_elementNameOnElementClassOverridden() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.DEFAULT_SQ;
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> t = G.newInstance();
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;yf1&gt;x1&lt;/yf1&gt;&lt;yf1&gt;x2&lt;/yf1&gt;&lt;/object&gt;"</span>, xml);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<em class="jxr_comment">// Note that existing fields should be reused and appended to.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> t2 = p.parse(xml, G.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertEquals(json(t2), json(t));
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		validateXml(t, s);
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Xml(format=COLLAPSED, childName=<span class="jxr_string">"yf1"</span>) <strong class="jxr_keyword">public</strong> List&lt;F1&gt; f1;
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> G newInstance() {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> G();
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			t.f1 = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			t.f1.add(F1.newInstance(<span class="jxr_string">"x1"</span>));
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			t.f1.add(F1.newInstance(<span class="jxr_string">"x2"</span>));
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		}
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_comment">// testElementNameOnElementClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<em class="jxr_comment">//	but overridden by @Xml.childName on property.</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> a07_elementNameOnElementClassOverridden() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.DEFAULT_SQ;
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> t = G.newInstance();
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;yf1&gt;x1&lt;/yf1&gt;&lt;yf1&gt;x2&lt;/yf1&gt;&lt;/object&gt;"</span>, xml);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<em class="jxr_comment">// Note that existing fields should be reused and appended to.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">var</strong> t2 = p.parse(xml, G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertEquals(json(t2), json(t));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		validateXml(t, s);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		@Xml(format=COLLAPSED, childName=<span class="jxr_string">"yf1"</span>) <strong class="jxr_keyword">public</strong> List&lt;F1&gt; f1;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> G newInstance() {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> G();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			t.f1 = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			t.f1.add(F1.newInstance(<span class="jxr_string">"x1"</span>));
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			t.f1.add(F1.newInstance(<span class="jxr_string">"x2"</span>));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<em class="jxr_comment">// testElementNameOnCollectionClass - @Xml.format=COLLAPSED, element name defined on bean class.</em>
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<em class="jxr_comment">// testElementNameOnCollectionClass - @Xml.format=COLLAPSED, element name defined on bean class.</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> a08_elementNameOnCollectionClass() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.DEFAULT_SQ;
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">var</strong> t = H.newInstance();
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;xf1&gt;x1&lt;/xf1&gt;&lt;xf1&gt;x2&lt;/xf1&gt;&lt;/object&gt;"</span>, xml);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<em class="jxr_comment">// Note that existing fields should be reused and appended to.</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> t2 = p.parse(xml, H.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(json(t2), json(t));
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		validateXml(t, s);
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		@Xml(format=COLLAPSED) <strong class="jxr_keyword">public</strong> H1 f1;
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> H newInstance() {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> H();
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			t.f1 = <strong class="jxr_keyword">new</strong> H1();
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			t.f1.add(<span class="jxr_string">"x1"</span>);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			t.f1.add(<span class="jxr_string">"x2"</span>);
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	@Xml(childName=<span class="jxr_string">"xf1"</span>)
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H1 <strong class="jxr_keyword">extends</strong> LinkedList&lt;String&gt; {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@Test <strong class="jxr_keyword">void</strong> a08_elementNameOnCollectionClass() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.DEFAULT_SQ;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> t = H.newInstance();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;xf1&gt;x1&lt;/xf1&gt;&lt;xf1&gt;x2&lt;/xf1&gt;&lt;/object&gt;"</span>, xml);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<em class="jxr_comment">// Note that existing fields should be reused and appended to.</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> t2 = p.parse(xml, H.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertEquals(json(t2), json(t));
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		validateXml(t, s);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		@Xml(format=COLLAPSED) <strong class="jxr_keyword">public</strong> H1 f1;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> H newInstance() {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> H();
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			t.f1 = <strong class="jxr_keyword">new</strong> H1();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			t.f1.add(<span class="jxr_string">"x1"</span>);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			t.f1.add(<span class="jxr_string">"x2"</span>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@Xml(childName=<span class="jxr_string">"xf1"</span>)
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H1 <strong class="jxr_keyword">extends</strong> LinkedList&lt;String&gt; {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_comment">// testElementNameOnCollectionClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<em class="jxr_comment">//	but overridden by @Xml.childName on property.</em>
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_comment">// testElementNameOnCollectionClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_comment">//	but overridden by @Xml.childName on property.</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@Test <strong class="jxr_keyword">void</strong> a09_elementNameOnCollectionClassOverridden() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.DEFAULT_SQ;
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> t = G.newInstance();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> a09_elementNameOnCollectionClassOverridden() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.DEFAULT_SQ;
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> p = XmlParser.DEFAULT;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> t = G.newInstance();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;yf1&gt;x1&lt;/yf1&gt;&lt;yf1&gt;x2&lt;/yf1&gt;&lt;/object&gt;"</span>, xml);
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> xml = s.serialize(t);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(<span class="jxr_string">"&lt;object&gt;&lt;yf1&gt;x1&lt;/yf1&gt;&lt;yf1&gt;x2&lt;/yf1&gt;&lt;/object&gt;"</span>, xml);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<em class="jxr_comment">// Note that existing fields should be reused and appended to.</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> t2 = p.parse(xml, G.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(json(t2), json(t));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<em class="jxr_comment">// Note that existing fields should be reused and appended to.</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> t2 = p.parse(xml, G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertEquals(json(t2), json(t));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		validateXml(t, s);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		validateXml(t, s);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> I {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		@Xml(format=COLLAPSED, childName=<span class="jxr_string">"yf1"</span>) <strong class="jxr_keyword">public</strong> H1 f1;
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> I {
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		@Xml(format=COLLAPSED, childName=<span class="jxr_string">"yf1"</span>) <strong class="jxr_keyword">public</strong> H1 f1;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> I newInstance() {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> I();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			t.f1 = <strong class="jxr_keyword">new</strong> H1();
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			t.f1.add(<span class="jxr_string">"x1"</span>);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			t.f1.add(<span class="jxr_string">"x2"</span>);
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		}
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	}
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> }
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> I newInstance() {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> I();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			t.f1 = <strong class="jxr_keyword">new</strong> H1();
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			t.f1.add(<span class="jxr_string">"x1"</span>);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			t.f1.add(<span class="jxr_string">"x2"</span>);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

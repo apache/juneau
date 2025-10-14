@@ -97,27 +97,27 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple code snippet</jc>
    Code <jv>simple</jv> = <jsm>code</jsm>(<js>"console.log('Hello World');"</js>);
- 
+
    <jc>// Code with styling</jc>
    Code <jv>styled</jv> = <jsm>code</jsm>(<js>"getElementById"</js>)
       ._class(<js>"inline-code"</js>);
- 
+
    <jc>// Code in a sentence</jc>
    P <jv>sentence</jv> = <jsm>p</jsm>(
       <js>"Use the "</js>,
       <jsm>code</jsm>(<js>"print()"</js>),
       <js>" function to display output."</js>
    );
- 
+
    <jc>// Variable name</jc>
    Code <jv>variable</jv> = <jsm>code</jsm>(<js>"userName"</js>);
 
    <jc>// Function call</jc>
    Code <jv>function</jv> = <jsm>code</jsm>(<js>"calculateTotal(price, tax)"</js>);
- 
+
    <jc>// Multiple code elements</jc>
    P <jv>multiple</jv> = <jsm>p</jsm>(
       <js>"The "</js>,
@@ -126,7 +126,7 @@ loadScripts(document, 'script');</script>
       <jsm>code</jsm>(<js>"else"</js>),
       <js>" provides an alternative."</js>
    );
- 
+
    <jc>// Code with complex content</jc>
    Code <jv>complex</jv> = <jsm>code</jsm>(
       <js>"const "</js>,

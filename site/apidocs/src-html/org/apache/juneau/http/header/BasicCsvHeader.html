@@ -270,27 +270,26 @@
 <span class="source-line-no">257</span><span id="line-257">      return new FluentListAssertion&lt;&gt;(u(alist(value())), this);</span>
 <span class="source-line-no">258</span><span id="line-258">   }</span>
 <span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260"></span>
-<span class="source-line-no">261</span><span id="line-261">   /**</span>
-<span class="source-line-no">262</span><span id="line-262">    * Return the value if present, otherwise return &lt;c&gt;other&lt;/c&gt;.</span>
-<span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * &lt;p&gt;</span>
-<span class="source-line-no">265</span><span id="line-265">    * This is a shortened form for calling &lt;c&gt;asArray().orElse(&lt;jv&gt;other&lt;/jv&gt;)&lt;/c&gt;.</span>
-<span class="source-line-no">266</span><span id="line-266">    *</span>
-<span class="source-line-no">267</span><span id="line-267">    * @param other The value to be returned if there is no value present, can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">268</span><span id="line-268">    * @return The value, if present, otherwise &lt;c&gt;other&lt;/c&gt;.</span>
-<span class="source-line-no">269</span><span id="line-269">    */</span>
-<span class="source-line-no">270</span><span id="line-270">   public String[] orElse(String[] other) {</span>
-<span class="source-line-no">271</span><span id="line-271">      String[] x = value();</span>
-<span class="source-line-no">272</span><span id="line-272">      return x != null ? x : other;</span>
-<span class="source-line-no">273</span><span id="line-273">   }</span>
-<span class="source-line-no">274</span><span id="line-274"></span>
-<span class="source-line-no">275</span><span id="line-275">   private String[] value() {</span>
-<span class="source-line-no">276</span><span id="line-276">      if (supplier != null)</span>
-<span class="source-line-no">277</span><span id="line-277">         return supplier.get();</span>
-<span class="source-line-no">278</span><span id="line-278">      return value;</span>
-<span class="source-line-no">279</span><span id="line-279">   }</span>
-<span class="source-line-no">280</span><span id="line-280">}</span>
+<span class="source-line-no">260</span><span id="line-260">   /**</span>
+<span class="source-line-no">261</span><span id="line-261">    * Return the value if present, otherwise return &lt;c&gt;other&lt;/c&gt;.</span>
+<span class="source-line-no">262</span><span id="line-262">    *</span>
+<span class="source-line-no">263</span><span id="line-263">    * &lt;p&gt;</span>
+<span class="source-line-no">264</span><span id="line-264">    * This is a shortened form for calling &lt;c&gt;asArray().orElse(&lt;jv&gt;other&lt;/jv&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">265</span><span id="line-265">    *</span>
+<span class="source-line-no">266</span><span id="line-266">    * @param other The value to be returned if there is no value present, can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">267</span><span id="line-267">    * @return The value, if present, otherwise &lt;c&gt;other&lt;/c&gt;.</span>
+<span class="source-line-no">268</span><span id="line-268">    */</span>
+<span class="source-line-no">269</span><span id="line-269">   public String[] orElse(String[] other) {</span>
+<span class="source-line-no">270</span><span id="line-270">      String[] x = value();</span>
+<span class="source-line-no">271</span><span id="line-271">      return x != null ? x : other;</span>
+<span class="source-line-no">272</span><span id="line-272">   }</span>
+<span class="source-line-no">273</span><span id="line-273"></span>
+<span class="source-line-no">274</span><span id="line-274">   private String[] value() {</span>
+<span class="source-line-no">275</span><span id="line-275">      if (supplier != null)</span>
+<span class="source-line-no">276</span><span id="line-276">         return supplier.get();</span>
+<span class="source-line-no">277</span><span id="line-277">      return value;</span>
+<span class="source-line-no">278</span><span id="line-278">   }</span>
+<span class="source-line-no">279</span><span id="line-279">}</span>
 
 
 

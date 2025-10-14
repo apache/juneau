@@ -117,7 +117,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>This class implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link"><code>AutoCloseable</code></a> and can be used in try-with-resources blocks.
-      The <a href="#close()"><code>close()</code></a> method allows unchecked exceptions to propagate for debuggability, 
+      The <a href="#close()"><code>close()</code></a> method allows unchecked exceptions to propagate for debuggability,
       while catching and logging checked exceptions to follow AutoCloseable best practices.
  </ul>
 
@@ -1332,8 +1332,8 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <ul>
    <li>Unchecked exceptions (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Error.html" title="class or interface in java.lang" class="external-link"><code>Error</code></a>) from interceptors are allowed to propagate.
       This ensures programming errors and serious issues are visible during development and testing.
-   <li>Checked exceptions (including <a href="RestCallException.html" title="class in org.apache.juneau.rest.client"><code>RestCallException</code></a>) are caught and logged but not thrown. 
-      This follows AutoCloseable best practices and prevents close exceptions from interfering with 
+   <li>Checked exceptions (including <a href="RestCallException.html" title="class in org.apache.juneau.rest.client"><code>RestCallException</code></a>) are caught and logged but not thrown.
+      This follows AutoCloseable best practices and prevents close exceptions from interfering with
       try-with-resources cleanup or masking the original exception.
  </ul></div>
 <dl class="notes">

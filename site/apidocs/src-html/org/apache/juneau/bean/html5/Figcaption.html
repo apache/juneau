@@ -46,21 +46,21 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">036</span><span id="line-36"> * </span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Simple figure caption&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    Figcaption &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"A beautiful sunset over the mountains."&lt;/js&gt;);</span>
-<span class="source-line-no">039</span><span id="line-39"> * </span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;jc&gt;// Figure caption with styling&lt;/jc&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    Figcaption &lt;jv&gt;styled&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Chart showing sales data for Q1 2024."&lt;/js&gt;)</span>
 <span class="source-line-no">042</span><span id="line-42"> *       ._class(&lt;js&gt;"image-caption"&lt;/js&gt;);</span>
-<span class="source-line-no">043</span><span id="line-43"> * </span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;jc&gt;// Figure caption with complex content&lt;/jc&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    Figcaption &lt;jv&gt;complex&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(</span>
 <span class="source-line-no">046</span><span id="line-46"> *       &lt;js&gt;"Figure 1: "&lt;/js&gt;,</span>
 <span class="source-line-no">047</span><span id="line-47"> *       &lt;jsm&gt;strong&lt;/jsm&gt;(&lt;js&gt;"Web Development Process"&lt;/js&gt;),</span>
 <span class="source-line-no">048</span><span id="line-48"> *       &lt;js&gt;" - A step-by-step guide to building websites."&lt;/js&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    );</span>
-<span class="source-line-no">050</span><span id="line-50"> * </span>
+<span class="source-line-no">050</span><span id="line-50"> *</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Figure caption with links&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    Figcaption &lt;jv&gt;withLinks&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(</span>
 <span class="source-line-no">053</span><span id="line-53"> *       &lt;js&gt;"Source: "&lt;/js&gt;,</span>
@@ -68,15 +68,15 @@
 <span class="source-line-no">055</span><span id="line-55"> *       &lt;js&gt;" | "&lt;/js&gt;,</span>
 <span class="source-line-no">056</span><span id="line-56"> *       &lt;jsm&gt;a&lt;/jsm&gt;(&lt;js&gt;"/methodology"&lt;/js&gt;, &lt;js&gt;"Methodology"&lt;/js&gt;)</span>
 <span class="source-line-no">057</span><span id="line-57"> *    );</span>
-<span class="source-line-no">058</span><span id="line-58"> * </span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;jc&gt;// Figure caption with ID&lt;/jc&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    Figcaption &lt;jv&gt;withId&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Interactive chart showing user engagement metrics."&lt;/js&gt;)</span>
 <span class="source-line-no">061</span><span id="line-61"> *       .id(&lt;js&gt;"chart-caption"&lt;/js&gt;);</span>
-<span class="source-line-no">062</span><span id="line-62"> * </span>
+<span class="source-line-no">062</span><span id="line-62"> *</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Figure caption with styling&lt;/jc&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    Figcaption &lt;jv&gt;styled2&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(&lt;js&gt;"Photograph by John Doe, 2024"&lt;/js&gt;)</span>
 <span class="source-line-no">065</span><span id="line-65"> *       .style(&lt;js&gt;"text-align: center; font-style: italic; color: #666;"&lt;/js&gt;);</span>
-<span class="source-line-no">066</span><span id="line-66"> * </span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;jc&gt;// Figure caption with multiple elements&lt;/jc&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    Figcaption &lt;jv&gt;multiple&lt;/jv&gt; = &lt;jsm&gt;figcaption&lt;/jsm&gt;(</span>
 <span class="source-line-no">069</span><span id="line-69"> *       &lt;js&gt;"Code Example: "&lt;/js&gt;,</span>

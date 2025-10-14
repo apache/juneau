@@ -97,26 +97,26 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple data cell</jc>
    Td <jv>simple</jv> = <jsm>td</jsm>(<js>"John Doe"</js>);
- 
+
    <jc>// Data cell with styling</jc>
    Td <jv>styled</jv> = <jsm>td</jsm>(<js>"Important Data"</js>)
       ._class(<js>"highlight"</js>);
- 
+
    <jc>// Data cell spanning multiple columns</jc>
    Td <jv>colspan</jv> = <jsm>td</jsm>(<js>"Spans 2 columns"</js>)
       .colspan(2);
- 
+
    <jc>// Data cell spanning multiple rows</jc>
    Td <jv>rowspan</jv> = <jsm>td</jsm>(<js>"Spans 3 rows"</js>)
       .rowspan(3);
- 
+
    <jc>// Data cell with headers association</jc>
    Td <jv>headers</jv> = <jsm>td</jsm>(<js>"25"</js>)
       .headers(<js>"name-header age-header"</js>);
- 
+
    <jc>// Data cell with complex content</jc>
    Td <jv>complex</jv> = <jsm>td</jsm>(
       <jsm>strong</jsm>(<js>"Bold text"</js>),

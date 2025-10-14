@@ -96,21 +96,21 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Simple inline quotation</jc>
    Q <jv>q1</jv> = <jsm>q</jsm>(<js>"To be or not to be, that is the question."</js>);
- 
+
    <jc>// Quotation with citation</jc>
    Q <jv>q2</jv> = <jsm>q</jsm>(<js>"The only way to do great work is to love what you do."</js>)
       .cite(<js>"https://example.com/source"</js>);
- 
+
    <jc>// Quotation in a paragraph</jc>
    P <jv>p1</jv> = <jsm>p</jsm>(
       <js>"As Shakespeare once said, "</js>,
       <jsm>q</jsm>(<js>"All the world's a stage"</js>),
       <js>" and we are merely players."</js>
    );
- 
+
    <jc>// Quotation with styling</jc>
    Q <jv>q3</jv> = <jsm>q</jsm>(<js>"Innovation distinguishes between a leader and a follower."</js>)
       ._class(<js>"highlighted-quote"</js>)

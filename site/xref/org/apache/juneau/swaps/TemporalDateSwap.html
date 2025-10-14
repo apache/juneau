@@ -285,35 +285,34 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		}
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DateTimeFormatter formatter;
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<strong class="jxr_keyword">public</strong> <a name="TemporalDateSwap" href="../../../../org/apache/juneau/swaps/TemporalDateSwap.html#TemporalDateSwap">TemporalDateSwap</a>(String pattern) {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">super</strong>(Date.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">this</strong>.formatter = DateUtils.getFormatter(pattern);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	}
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Date o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">return</strong> formatter.format(o.toInstant().atZone(session.getTimeZoneId()));
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@Override <em class="jxr_comment">/* ObjectSwap */</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">public</strong> Date unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		ZoneId offset = session.getTimeZoneId();
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		TemporalAccessor ta = <strong class="jxr_keyword">new</strong> <a name="DefaultingTemporalAccessor" href="../../../../org/apache/juneau/swaps/DefaultingTemporalAccessor.html#DefaultingTemporalAccessor">DefaultingTemporalAccessor</a>(formatter.parse(f), offset);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">return</strong> Date.from(ZonedDateTime.from(ta).toInstant());
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> }
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DateTimeFormatter formatter;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">public</strong> <a name="TemporalDateSwap" href="../../../../org/apache/juneau/swaps/TemporalDateSwap.html#TemporalDateSwap">TemporalDateSwap</a>(String pattern) {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">super</strong>(Date.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">this</strong>.formatter = DateUtils.getFormatter(pattern);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Date o) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">return</strong> formatter.format(o.toInstant().atZone(session.getTimeZoneId()));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">public</strong> Date unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		ZoneId offset = session.getTimeZoneId();
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		TemporalAccessor ta = <strong class="jxr_keyword">new</strong> <a name="DefaultingTemporalAccessor" href="../../../../org/apache/juneau/swaps/DefaultingTemporalAccessor.html#DefaultingTemporalAccessor">DefaultingTemporalAccessor</a>(formatter.parse(f), offset);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">return</strong> Date.from(ZonedDateTime.from(ta).toInstant());
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

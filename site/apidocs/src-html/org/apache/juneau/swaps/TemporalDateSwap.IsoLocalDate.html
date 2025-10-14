@@ -290,35 +290,34 @@
 <span class="source-line-no">277</span><span id="line-277">      }</span>
 <span class="source-line-no">278</span><span id="line-278">   }</span>
 <span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280"></span>
-<span class="source-line-no">281</span><span id="line-281">   private final DateTimeFormatter formatter;</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * Constructor.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.</span>
-<span class="source-line-no">287</span><span id="line-287">    */</span>
-<span class="source-line-no">288</span><span id="line-288">   public TemporalDateSwap(String pattern) {</span>
-<span class="source-line-no">289</span><span id="line-289">      super(Date.class);</span>
-<span class="source-line-no">290</span><span id="line-290">      this.formatter = DateUtils.getFormatter(pattern);</span>
-<span class="source-line-no">291</span><span id="line-291">   }</span>
-<span class="source-line-no">292</span><span id="line-292"></span>
-<span class="source-line-no">293</span><span id="line-293">   @Override /* ObjectSwap */</span>
-<span class="source-line-no">294</span><span id="line-294">   public String swap(BeanSession session, Date o) throws Exception {</span>
-<span class="source-line-no">295</span><span id="line-295">      if (o == null)</span>
-<span class="source-line-no">296</span><span id="line-296">         return null;</span>
-<span class="source-line-no">297</span><span id="line-297">      return formatter.format(o.toInstant().atZone(session.getTimeZoneId()));</span>
-<span class="source-line-no">298</span><span id="line-298">   }</span>
-<span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">   @Override /* ObjectSwap */</span>
-<span class="source-line-no">301</span><span id="line-301">   public Date unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) throws Exception {</span>
-<span class="source-line-no">302</span><span id="line-302">      if (f == null)</span>
-<span class="source-line-no">303</span><span id="line-303">         return null;</span>
-<span class="source-line-no">304</span><span id="line-304">      ZoneId offset = session.getTimeZoneId();</span>
-<span class="source-line-no">305</span><span id="line-305">      TemporalAccessor ta = new DefaultingTemporalAccessor(formatter.parse(f), offset);</span>
-<span class="source-line-no">306</span><span id="line-306">      return Date.from(ZonedDateTime.from(ta).toInstant());</span>
-<span class="source-line-no">307</span><span id="line-307">   }</span>
-<span class="source-line-no">308</span><span id="line-308">}</span>
+<span class="source-line-no">280</span><span id="line-280">   private final DateTimeFormatter formatter;</span>
+<span class="source-line-no">281</span><span id="line-281"></span>
+<span class="source-line-no">282</span><span id="line-282">   /**</span>
+<span class="source-line-no">283</span><span id="line-283">    * Constructor.</span>
+<span class="source-line-no">284</span><span id="line-284">    *</span>
+<span class="source-line-no">285</span><span id="line-285">    * @param pattern The timestamp format or name of predefined {@link DateTimeFormatter}.</span>
+<span class="source-line-no">286</span><span id="line-286">    */</span>
+<span class="source-line-no">287</span><span id="line-287">   public TemporalDateSwap(String pattern) {</span>
+<span class="source-line-no">288</span><span id="line-288">      super(Date.class);</span>
+<span class="source-line-no">289</span><span id="line-289">      this.formatter = DateUtils.getFormatter(pattern);</span>
+<span class="source-line-no">290</span><span id="line-290">   }</span>
+<span class="source-line-no">291</span><span id="line-291"></span>
+<span class="source-line-no">292</span><span id="line-292">   @Override /* ObjectSwap */</span>
+<span class="source-line-no">293</span><span id="line-293">   public String swap(BeanSession session, Date o) throws Exception {</span>
+<span class="source-line-no">294</span><span id="line-294">      if (o == null)</span>
+<span class="source-line-no">295</span><span id="line-295">         return null;</span>
+<span class="source-line-no">296</span><span id="line-296">      return formatter.format(o.toInstant().atZone(session.getTimeZoneId()));</span>
+<span class="source-line-no">297</span><span id="line-297">   }</span>
+<span class="source-line-no">298</span><span id="line-298"></span>
+<span class="source-line-no">299</span><span id="line-299">   @Override /* ObjectSwap */</span>
+<span class="source-line-no">300</span><span id="line-300">   public Date unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) throws Exception {</span>
+<span class="source-line-no">301</span><span id="line-301">      if (f == null)</span>
+<span class="source-line-no">302</span><span id="line-302">         return null;</span>
+<span class="source-line-no">303</span><span id="line-303">      ZoneId offset = session.getTimeZoneId();</span>
+<span class="source-line-no">304</span><span id="line-304">      TemporalAccessor ta = new DefaultingTemporalAccessor(formatter.parse(f), offset);</span>
+<span class="source-line-no">305</span><span id="line-305">      return Date.from(ZonedDateTime.from(ta).toInstant());</span>
+<span class="source-line-no">306</span><span id="line-306">   }</span>
+<span class="source-line-no">307</span><span id="line-307">}</span>
 
 
 

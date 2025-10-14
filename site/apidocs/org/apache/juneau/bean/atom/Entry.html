@@ -88,13 +88,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Represents an individual entry within an Atom feed or as a standalone Atom document.
 
  <p>
- An Atom entry is a discrete item of content within a feed, such as a blog post, news article, 
- podcast episode, or other individual piece of content. Entries can exist within a feed or be 
+ An Atom entry is a discrete item of content within a feed, such as a blog post, news article,
+ podcast episode, or other individual piece of content. Entries can exist within a feed or be
  published as standalone Atom documents.
 
  <p>
- Each entry contains metadata about the content (title, authors, timestamps) and optionally the 
- content itself or links to it. Entries are designed to be independently meaningful and may be 
+ Each entry contains metadata about the content (title, authors, timestamps) and optionally the
+ content itself or links to it. Entries are designed to be independently meaningful and may be
  consumed separately from their containing feed.
 
  <h5 class='figure'>Schema</h5>
@@ -161,7 +161,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Specification:</h5>
  <p>
- Represents an <c>atomEntry</c> construct in the 
+ Represents an <c>atomEntry</c> construct in the
  <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.2">RFC 4287 - Section 4.1.2</a> specification.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -400,15 +400,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContent()">
 <h3>getContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Content.html" title="class in org.apache.juneau.bean.atom">Content</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-161">getContent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Content.html" title="class in org.apache.juneau.bean.atom">Content</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-160">getContent</a></span>()</div>
 <div class="block">Bean property getter:  <property>content</property>.
 
  <p>
  Returns the content of this entry, or a link to it.
 
  <p>
- The content element contains or links to the complete content of the entry. It can contain 
- text, HTML, XHTML, or other media types. When not present, the entry must have an alternate 
+ The content element contains or links to the complete content of the entry. It can contain
+ text, HTML, XHTML, or other media types. When not present, the entry must have an alternate
  link pointing to the content.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -419,7 +419,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setContent(org.apache.juneau.bean.atom.Content)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-201">setContent</a></span><wbr><span class="parameters">(<a href="Content.html" title="class in org.apache.juneau.bean.atom">Content</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-200">setContent</a></span><wbr><span class="parameters">(<a href="Content.html" title="class in org.apache.juneau.bean.atom">Content</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>content</property>.
 
  <p>
@@ -461,15 +461,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPublished()">
 <h3>getPublished</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-219">getPublished</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-218">getPublished</a></span>()</div>
 <div class="block">Bean property getter:  <property>published</property>.
 
  <p>
  Returns the time when this entry was first published or made available.
 
  <p>
- This differs from the updated time in that it represents the original publication date, 
- which typically doesn't change even when the entry is modified. The updated timestamp 
+ This differs from the updated time in that it represents the original publication date,
+ which typically doesn't change even when the entry is modified. The updated timestamp
  reflects the last modification time.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -480,7 +480,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPublished(java.util.Calendar)">
 <h3>setPublished</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-240">setPublished</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-239">setPublished</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>published</property>.
 
  <p>
@@ -503,7 +503,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setPublished(java.lang.String)">
 <h3>setPublished</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-262">setPublished</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-261">setPublished</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property fluent setter:  <property>published</property>.
 
  <p>
@@ -526,15 +526,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSource()">
 <h3>getSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Source.html" title="class in org.apache.juneau.bean.atom">Source</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-280">getSource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Source.html" title="class in org.apache.juneau.bean.atom">Source</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-279">getSource</a></span>()</div>
 <div class="block">Bean property getter:  <property>source</property>.
 
  <p>
  Returns metadata about the source feed if this entry was copied from another feed.
 
  <p>
- When an entry is copied or aggregated from another feed, the source element preserves 
- metadata from the original feed. This is useful for attribution and tracking the origin 
+ When an entry is copied or aggregated from another feed, the source element preserves
+ metadata from the original feed. This is useful for attribution and tracking the origin
  of syndicated content.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -545,7 +545,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSource(org.apache.juneau.bean.atom.Source)">
 <h3>setSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-306">setSource</a></span><wbr><span class="parameters">(<a href="Source.html" title="class in org.apache.juneau.bean.atom">Source</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-305">setSource</a></span><wbr><span class="parameters">(<a href="Source.html" title="class in org.apache.juneau.bean.atom">Source</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>source</property>.
 
  <p>
@@ -573,15 +573,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSummary()">
 <h3>getSummary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-324">getSummary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-323">getSummary</a></span>()</div>
 <div class="block">Bean property getter:  <property>summary</property>.
 
  <p>
  Returns a short summary, abstract, or excerpt of the entry.
 
  <p>
- The summary is typically used in feed readers to give users a preview of the entry's 
- content without loading the full content. It's especially useful when content is not 
+ The summary is typically used in feed readers to give users a preview of the entry's
+ content without loading the full content. It's especially useful when content is not
  inline or is very long.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -592,7 +592,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSummary(org.apache.juneau.bean.atom.Text)">
 <h3>setSummary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-348">setSummary</a></span><wbr><span class="parameters">(<a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-347">setSummary</a></span><wbr><span class="parameters">(<a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</span></div>
 <div class="block">Bean property setter:  <property>summary</property>.
 
  <p>
@@ -618,7 +618,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSummary(java.lang.String)">
 <h3>setSummary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-364">setSummary</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-363">setSummary</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Bean property fluent setter:  <property>summary</property>.
 
  <p>
@@ -635,7 +635,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setBase(java.lang.Object)">
 <h3>setBase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-374">setBase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-372">setBase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Common.html#setBase(java.lang.Object)">Common</a></code></span></div>
 <div class="block">Bean property setter:  <property>base</property>.
 
@@ -665,7 +665,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLang(java.lang.String)">
 <h3>setLang</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-380">setLang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-378">setLang</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Common.html#setLang(java.lang.String)">Common</a></code></span></div>
 <div class="block">Bean property setter:  <property>lang</property>.
 
@@ -692,7 +692,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAuthors(org.apache.juneau.bean.atom.Person...)">
 <h3>setAuthors</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-386">setAuthors</a></span><wbr><span class="parameters">(<a href="Person.html" title="class in org.apache.juneau.bean.atom">Person</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-384">setAuthors</a></span><wbr><span class="parameters">(<a href="Person.html" title="class in org.apache.juneau.bean.atom">Person</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setAuthors(org.apache.juneau.bean.atom.Person...)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>authors</property>.
 
@@ -712,7 +712,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setCategories(org.apache.juneau.bean.atom.Category...)">
 <h3>setCategories</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-392">setCategories</a></span><wbr><span class="parameters">(<a href="Category.html" title="class in org.apache.juneau.bean.atom">Category</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-390">setCategories</a></span><wbr><span class="parameters">(<a href="Category.html" title="class in org.apache.juneau.bean.atom">Category</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setCategories(org.apache.juneau.bean.atom.Category...)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>categories</property>.
 
@@ -732,7 +732,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setContributors(org.apache.juneau.bean.atom.Person...)">
 <h3>setContributors</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-398">setContributors</a></span><wbr><span class="parameters">(<a href="Person.html" title="class in org.apache.juneau.bean.atom">Person</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-396">setContributors</a></span><wbr><span class="parameters">(<a href="Person.html" title="class in org.apache.juneau.bean.atom">Person</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setContributors(org.apache.juneau.bean.atom.Person...)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>contributors</property>.
 
@@ -752,7 +752,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setId(java.lang.String)">
 <h3>setId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-404">setId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-402">setId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setId(java.lang.String)">CommonEntry</a></code></span></div>
 <div class="block">Bean property fluent setter:  <property>id</property>.
 
@@ -772,7 +772,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setId(org.apache.juneau.bean.atom.Id)">
 <h3>setId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-410">setId</a></span><wbr><span class="parameters">(<a href="Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-408">setId</a></span><wbr><span class="parameters">(<a href="Id.html" title="class in org.apache.juneau.bean.atom">Id</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setId(org.apache.juneau.bean.atom.Id)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>id</property>.
 
@@ -792,7 +792,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLinks(org.apache.juneau.bean.atom.Link...)">
 <h3>setLinks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-416">setLinks</a></span><wbr><span class="parameters">(<a href="Link.html" title="class in org.apache.juneau.bean.atom">Link</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-414">setLinks</a></span><wbr><span class="parameters">(<a href="Link.html" title="class in org.apache.juneau.bean.atom">Link</a>...&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setLinks(org.apache.juneau.bean.atom.Link...)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>links</property>.
 
@@ -812,7 +812,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setRights(java.lang.String)">
 <h3>setRights</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-422">setRights</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-420">setRights</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setRights(java.lang.String)">CommonEntry</a></code></span></div>
 <div class="block">Bean property fluent setter:  <property>rights</property>.
 
@@ -832,7 +832,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setRights(org.apache.juneau.bean.atom.Text)">
 <h3>setRights</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-428">setRights</a></span><wbr><span class="parameters">(<a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-426">setRights</a></span><wbr><span class="parameters">(<a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setRights(org.apache.juneau.bean.atom.Text)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>rights</property>.
 
@@ -852,7 +852,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTitle(java.lang.String)">
 <h3>setTitle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-434">setTitle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-432">setTitle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setTitle(java.lang.String)">CommonEntry</a></code></span></div>
 <div class="block">Bean property fluent setter:  <property>title</property>.
 
@@ -872,7 +872,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setTitle(org.apache.juneau.bean.atom.Text)">
 <h3>setTitle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-440">setTitle</a></span><wbr><span class="parameters">(<a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-438">setTitle</a></span><wbr><span class="parameters">(<a href="Text.html" title="class in org.apache.juneau.bean.atom">Text</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setTitle(org.apache.juneau.bean.atom.Text)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>title</property>.
 
@@ -892,7 +892,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setUpdated(java.lang.String)">
 <h3>setUpdated</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-446">setUpdated</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-444">setUpdated</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setUpdated(java.lang.String)">CommonEntry</a></code></span></div>
 <div class="block">Bean property fluent setter:  <property>updated</property>.
 
@@ -912,7 +912,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setUpdated(java.util.Calendar)">
 <h3>setUpdated</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-452">setUpdated</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Entry.html" title="class in org.apache.juneau.bean.atom">Entry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/atom/Entry.html#line-450">setUpdated</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Calendar.html" title="class or interface in java.util" class="external-link">Calendar</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CommonEntry.html#setUpdated(java.util.Calendar)">CommonEntry</a></code></span></div>
 <div class="block">Bean property setter:  <property>updated</property>.
 

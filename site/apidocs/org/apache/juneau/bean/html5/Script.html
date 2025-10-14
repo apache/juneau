@@ -96,28 +96,28 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Examples:</h5>
  <p class='bcode w800'>
    <jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- 
+
    <jc>// Inline JavaScript</jc>
    Script <jv>script1</jv> = <jsm>script</jsm>()
       .text(<js>"console.log('Hello, World!');"</js>);
- 
+
    <jc>// External JavaScript file</jc>
    Script <jv>script2</jv> = <jsm>script</jsm>()
       .src(<js>"https://example.com/script.js"</js>)
       .type(<js>"text/javascript"</js>);
- 
+
    <jc>// Async script loading</jc>
    Script <jv>script3</jv> = <jsm>script</jsm>()
       .src(<js>"https://example.com/analytics.js"</js>)
       .async(<jk>true</jk>)
       .defer(<jk>true</jk>);
- 
+
    <jc>// Script with integrity check</jc>
    Script <jv>script4</jv> = <jsm>script</jsm>()
       .src(<js>"https://example.com/library.js"</js>)
       .integrity(<js>"sha384-..."</js>)
       .crossorigin(<js>"anonymous"</js>);
- 
+
    <jc>// Module script</jc>
    Script <jv>script5</jv> = <jsm>script</jsm>()
       .src(<js>"https://example.com/module.js"</js>)
