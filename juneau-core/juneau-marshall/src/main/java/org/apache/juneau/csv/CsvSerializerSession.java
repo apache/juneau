@@ -242,7 +242,9 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						BeanMap<?> bean = toBeanMap(x);
 						bm.forEachProperty(BeanPropertyMeta::canRead, y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
-							w.writeEntry(y.get(bean, y.getName()));
+							// Bean property values are already swapped by BeanPropertyMeta.get() via toSerializedForm()
+							Object value = y.get(bean, y.getName());
+							w.writeEntry(value);
 						});
 						w.w('\n');
 					});
@@ -259,7 +261,8 @@ public class CsvSerializerSession extends WriterSerializerSession {
 						Map map = (Map)x;
 						map.values().forEach(y -> {
 							addComma2.ifSet(() -> w.w(',')).set();
-							w.writeEntry(y);
+							Object value = applySwap(y, getClassMetaForObject(y));
+							w.writeEntry(value);
 						});
 						w.w('\n');
 					});
@@ -267,11 +270,39 @@ public class CsvSerializerSession extends WriterSerializerSession {
 					w.writeEntry("value");
 					w.append('\n');
 					l.stream().forEach(x -> {
-						w.writeEntry(x);
+						Object value = applySwap(x, getClassMetaForObject(x));
+						w.writeEntry(value);
 						w.w('\n');
 					});
 				}
 			}
+		}
+	}
+
+	/**
+	 * Applies any registered object swap to the specified value.
+	 *
+	 * <p>
+	 * If a swap is registered for the value's type, the value is transformed using the swap's
+	 * {@code swap()} method before being serialized.
+	 *
+	 * @param value The value to potentially swap.
+	 * @param type The class metadata of the value's type.
+	 * @return The swapped value, or the original value if no swap is registered.
+	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private Object applySwap(Object value, ClassMeta<?> type) {
+		try {
+			if (value == null || type == null)
+				return value;
+			
+			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(this);
+			if (swap != null) {
+				return swap(swap, value);
+			}
+			return value;
+		} catch (SerializeException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
