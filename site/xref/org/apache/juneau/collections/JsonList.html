@@ -893,27 +893,27 @@
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> <em class="jxr_javadoccomment">	 * @param childType The child object type.</em>
 <a class="jxr_linenumber" name="L886" href="#L886">886</a> <em class="jxr_javadoccomment">	 * @return A new &lt;c&gt;Iterable&lt;/c&gt; object over this list.</em>
 <a class="jxr_linenumber" name="L887" href="#L887">887</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L888" href="#L888">888</a>     <strong class="jxr_keyword">public</strong> &lt;E&gt; Iterable&lt;E&gt; elements(<strong class="jxr_keyword">final</strong> Class&lt;E&gt; childType) {
-<a class="jxr_linenumber" name="L889" href="#L889">889</a>         <strong class="jxr_keyword">final</strong> Iterator&lt;?&gt; iterator = iterator();
-<a class="jxr_linenumber" name="L890" href="#L890">890</a>         <strong class="jxr_keyword">return</strong> () -&gt; <strong class="jxr_keyword">new</strong> Iterator&lt;&gt;() {
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<strong class="jxr_keyword">public</strong> &lt;E&gt; Iterable&lt;E&gt; elements(<strong class="jxr_keyword">final</strong> Class&lt;E&gt; childType) {
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">final</strong> Iterator&lt;?&gt; iterator = iterator();
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 		<strong class="jxr_keyword">return</strong> () -&gt; <strong class="jxr_keyword">new</strong> Iterator&lt;&gt;() {
 <a class="jxr_linenumber" name="L891" href="#L891">891</a> 
-<a class="jxr_linenumber" name="L892" href="#L892">892</a>             @Override <em class="jxr_comment">/* Iterator */</em>
-<a class="jxr_linenumber" name="L893" href="#L893">893</a>             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasNext() {
-<a class="jxr_linenumber" name="L894" href="#L894">894</a>                 <strong class="jxr_keyword">return</strong> iterator.hasNext();
-<a class="jxr_linenumber" name="L895" href="#L895">895</a>             }
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 			@Override <em class="jxr_comment">/* Iterator */</em>
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasNext() {
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 				<strong class="jxr_keyword">return</strong> iterator.hasNext();
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 			}
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 
-<a class="jxr_linenumber" name="L897" href="#L897">897</a>             @Override <em class="jxr_comment">/* Iterator */</em>
-<a class="jxr_linenumber" name="L898" href="#L898">898</a>             <strong class="jxr_keyword">public</strong> E next() {
-<a class="jxr_linenumber" name="L899" href="#L899">899</a>                 <strong class="jxr_keyword">return</strong> bs().convertToType(iterator.next(), childType);
-<a class="jxr_linenumber" name="L900" href="#L900">900</a>             }
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 			@Override <em class="jxr_comment">/* Iterator */</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> 			<strong class="jxr_keyword">public</strong> E next() {
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> 				<strong class="jxr_keyword">return</strong> bs().convertToType(iterator.next(), childType);
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 			}
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 
-<a class="jxr_linenumber" name="L902" href="#L902">902</a>             @Override <em class="jxr_comment">/* Iterator */</em>
-<a class="jxr_linenumber" name="L903" href="#L903">903</a>             <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove() {
-<a class="jxr_linenumber" name="L904" href="#L904">904</a>                 iterator.remove();
-<a class="jxr_linenumber" name="L905" href="#L905">905</a>             }
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 			@Override <em class="jxr_comment">/* Iterator */</em>
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove() {
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 				iterator.remove();
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 			}
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 
-<a class="jxr_linenumber" name="L907" href="#L907">907</a>         };
-<a class="jxr_linenumber" name="L908" href="#L908">908</a>     }
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 		};
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 	}
 <a class="jxr_linenumber" name="L909" href="#L909">909</a> 
 <a class="jxr_linenumber" name="L910" href="#L910">910</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * Returns the {@link ClassMeta} of the class of the object at the specified index.</em>

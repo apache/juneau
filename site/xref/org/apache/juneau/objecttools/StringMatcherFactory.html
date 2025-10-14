@@ -161,13 +161,13 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(ClassMeta&lt;?&gt; cm, Object o) {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			String s = (String)o;
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">for</strong> (Pattern andPattern : andPatterns)
-<a class="jxr_linenumber" name="L156" href="#L156">156</a>                 <strong class="jxr_keyword">if</strong> (! andPattern.matcher(s).matches())
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">if</strong> (! andPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">for</strong> (Pattern notPattern : notPatterns)
-<a class="jxr_linenumber" name="L159" href="#L159">159</a>                 <strong class="jxr_keyword">if</strong> (notPattern.matcher(s).matches())
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<strong class="jxr_keyword">if</strong> (notPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 					<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">for</strong> (Pattern orPattern : orPatterns)
-<a class="jxr_linenumber" name="L162" href="#L162">162</a>                 <strong class="jxr_keyword">if</strong> (orPattern.matcher(s).matches())
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				<strong class="jxr_keyword">if</strong> (orPattern.matcher(s).matches())
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">return</strong> orPatterns.length == 0;
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		}

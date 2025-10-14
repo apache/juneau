@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Tester[] TESTERS = {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<em class="jxr_comment">// Happy cases - All URL parts known.</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		tester(	<em class="jxr_comment">/* 0 */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		tester(1,
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<span class="jxr_string">"Happy-1a"</span>,
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  			input(
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  				<span class="jxr_string">"http://foo.com:123/foobar"</span>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			)
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		),
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		tester(	<em class="jxr_comment">/* 1 */</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		tester(2,
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<span class="jxr_string">"Happy-2"</span>,
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  			input(
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  				<span class="jxr_string">"http://foo.com:123"</span>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		),
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		tester(	<em class="jxr_comment">/* 2 */</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		tester(3,
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<span class="jxr_string">"Happy-3"</span>,
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			input(
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -86,7 +86,7 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  				<span class="jxr_string">"/foobar"</span>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			)
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		),
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		tester(	<em class="jxr_comment">/* 3 */</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		tester(4,
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<span class="jxr_string">"Happy-4"</span>,
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			input(
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  			)
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		),
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		tester(	<em class="jxr_comment">/* 4 */</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		tester(5,
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<span class="jxr_string">"Happy-5"</span>,
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			input(
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<span class="jxr_string">"foobar"</span>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			)
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		tester(	<em class="jxr_comment">/* 5 */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		tester(6,
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<span class="jxr_string">"Happy-6"</span>,
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 			input(
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 				<span class="jxr_string">""</span>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			)
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		),
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		tester(	<em class="jxr_comment">/* 6 */</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		tester(7,
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<span class="jxr_string">"Happy-7"</span>,
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			input(
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 				<span class="jxr_string">"/context/foo"</span>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			)
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		),
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		tester(	<em class="jxr_comment">/* 7 */</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		tester(8,
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 			<span class="jxr_string">"Happy-8"</span>,
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			input(
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -161,7 +161,7 @@
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<span class="jxr_string">"/context"</span>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			)
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		),
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		tester(	<em class="jxr_comment">/* 8 */</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		tester(9,
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<span class="jxr_string">"Happy-9"</span>,
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			input(
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -176,7 +176,7 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<span class="jxr_string">"/context/resource/foo"</span>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			)
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		),
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		tester(	<em class="jxr_comment">/* 9 */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		tester(10,
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<span class="jxr_string">"Happy-10"</span>,
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 			input(
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -193,7 +193,7 @@
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		),
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<em class="jxr_comment">// Multiple context and resource parts</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		tester(	<em class="jxr_comment">/* 10 */</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		tester(11,
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<span class="jxr_string">"MultiContextResource-1"</span>,
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			input(
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 				<span class="jxr_string">"http://foo.com:123/foobar"</span>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			)
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		),
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		tester(	<em class="jxr_comment">/* 11 */</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		tester(12,
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<span class="jxr_string">"MultiContextResource-2"</span>,
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			input(
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -223,7 +223,7 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<span class="jxr_string">"http://foo.com:123"</span>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 			)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		),
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		tester(	<em class="jxr_comment">/* 12 */</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		tester(13,
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<span class="jxr_string">"MultiContextResource-3"</span>,
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			input(
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<span class="jxr_string">"/foobar"</span>
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			)
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 		),
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		tester(	<em class="jxr_comment">/* 13 */</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		tester(14,
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<span class="jxr_string">"MultiContextResource-4"</span>,
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 			input(
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			)
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		),
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		tester(	<em class="jxr_comment">/* 14 */</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		tester(15,
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<span class="jxr_string">"MultiContextResource-5"</span>,
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 			input(
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 				<span class="jxr_string">"foobar"</span>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			)
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		),
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		tester(	<em class="jxr_comment">/* 15 */</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		tester(16,
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<span class="jxr_string">"MultiContextResource-6"</span>,
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 			input(
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 				<span class="jxr_string">""</span>
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 			)
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		),
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		tester(	<em class="jxr_comment">/* 16 */</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		tester(17,
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<span class="jxr_string">"MultiContextResource-7"</span>,
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			input(
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -298,7 +298,7 @@
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 				<span class="jxr_string">"/c1/c2/foo"</span>
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 			)
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		),
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		tester(	<em class="jxr_comment">/* 17 */</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		tester(18,
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<span class="jxr_string">"MultiContextResource-8"</span>,
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			input(
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -313,7 +313,7 @@
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 				<span class="jxr_string">"/c1/c2"</span>
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 			)
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 		),
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		tester(	<em class="jxr_comment">/* 18 */</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		tester(19,
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<span class="jxr_string">"MultiContextResource-9"</span>,
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 			input(
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -328,7 +328,7 @@
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 				<span class="jxr_string">"/c1/c2/r1/r2/foo"</span>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 			)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 		),
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		tester(	<em class="jxr_comment">/* 19 */</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		tester(20,
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<span class="jxr_string">"MultiContextResource-10"</span>,
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			input(
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/c1/c2"</span>,<span class="jxr_string">"/r1/r2"</span>,<span class="jxr_string">"/p1/p2"</span>,
@@ -345,7 +345,7 @@
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		),
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<em class="jxr_comment">// No authority given</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		tester(	<em class="jxr_comment">/* 20 */</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		tester(21,
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<span class="jxr_string">"NoAuthority-1"</span>,
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 			input(
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -360,7 +360,7 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 				<span class="jxr_string">"http://foo.com:123/foobar"</span>
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 			)
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 		),
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		tester(	<em class="jxr_comment">/* 21 */</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		tester(22,
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<span class="jxr_string">"NoAuthority-2"</span>,
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			input(
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -375,7 +375,7 @@
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<span class="jxr_string">"http://foo.com:123"</span>
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 			)
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 		),
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		tester(	<em class="jxr_comment">/* 22 */</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		tester(23,
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<span class="jxr_string">"NoAuthority-3"</span>,
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			input(
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -390,7 +390,7 @@
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 				<span class="jxr_string">"/foobar"</span>
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 			)
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		),
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		tester(	<em class="jxr_comment">/* 23 */</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		tester(24,
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<span class="jxr_string">"NoAuthority-4"</span>,
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 			input(
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -405,7 +405,7 @@
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 			)
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		),
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		tester(	<em class="jxr_comment">/* 24 */</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		tester(25,
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<span class="jxr_string">"NoAuthority-5"</span>,
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> 			input(
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -420,7 +420,7 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 				<span class="jxr_string">"foobar"</span>
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 			)
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		),
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		tester(	<em class="jxr_comment">/* 25 */</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		tester(26,
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<span class="jxr_string">"NoAuthority-6"</span>,
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 			input(
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -435,7 +435,7 @@
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 				<span class="jxr_string">""</span>
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			)
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 		),
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		tester(	<em class="jxr_comment">/* 26 */</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		tester(27,
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<span class="jxr_string">"NoAuthority-7"</span>,
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 			input(
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -450,7 +450,7 @@
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 				<span class="jxr_string">"/context/foo"</span>
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 			)
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		),
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		tester(	<em class="jxr_comment">/* 27 */</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		tester(28,
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<span class="jxr_string">"NoAuthority-8"</span>,
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 			input(
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -465,7 +465,7 @@
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<span class="jxr_string">"/context"</span>
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 			)
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 		),
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		tester(	<em class="jxr_comment">/* 28 */</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		tester(29,
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<span class="jxr_string">"NoAuthority-9"</span>,
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 			input(
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -480,7 +480,7 @@
 <a class="jxr_linenumber" name="L472" href="#L472">472</a> 				<span class="jxr_string">"/context/resource/foo"</span>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 			)
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> 		),
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		tester(	<em class="jxr_comment">/* 29 */</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		tester(30,
 <a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<span class="jxr_string">"NoAuthority-10"</span>,
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 			input(
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -497,7 +497,7 @@
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		),
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<em class="jxr_comment">// No authority or context given</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		tester(	<em class="jxr_comment">/* 30 */</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		tester(31,
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<span class="jxr_string">"NoAuthorityOrContext-1"</span>,
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 			input(
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -512,7 +512,7 @@
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 				<span class="jxr_string">"http://foo.com:123/foobar"</span>
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 			)
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 		),
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		tester(	<em class="jxr_comment">/* 31 */</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		tester(32,
 <a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<span class="jxr_string">"NoAuthorityOrContext-2"</span>,
 <a class="jxr_linenumber" name="L509" href="#L509">509</a> 			input(
 <a class="jxr_linenumber" name="L510" href="#L510">510</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -527,7 +527,7 @@
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 				<span class="jxr_string">"http://foo.com:123"</span>
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 			)
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 		),
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		tester(	<em class="jxr_comment">/* 32 */</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		tester(33,
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 			<span class="jxr_string">"NoAuthorityOrContext-3"</span>,
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 			input(
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -542,7 +542,7 @@
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 				<span class="jxr_string">"/foobar"</span>
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 			)
 <a class="jxr_linenumber" name="L536" href="#L536">536</a> 		),
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		tester(	<em class="jxr_comment">/* 33 */</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		tester(34,
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 			<span class="jxr_string">"NoAuthorityOrContext-4"</span>,
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			input(
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -557,7 +557,7 @@
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> 			)
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 		),
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		tester(	<em class="jxr_comment">/* 34 */</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		tester(35,
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 			<span class="jxr_string">"NoAuthorityOrContext-5"</span>,
 <a class="jxr_linenumber" name="L554" href="#L554">554</a> 			input(
 <a class="jxr_linenumber" name="L555" href="#L555">555</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -572,7 +572,7 @@
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 				<span class="jxr_string">"foobar"</span>
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 			)
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		),
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		tester(	<em class="jxr_comment">/* 35 */</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		tester(36,
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<span class="jxr_string">"NoAuthorityOrContext-6"</span>,
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 			input(
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -587,7 +587,7 @@
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 				<span class="jxr_string">""</span>
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 			)
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		),
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		tester(	<em class="jxr_comment">/* 36 */</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		tester(37,
 <a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<span class="jxr_string">"NoAuthorityOrContext-7"</span>,
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 			input(
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -602,7 +602,7 @@
 <a class="jxr_linenumber" name="L594" href="#L594">594</a> 				<span class="jxr_string">"/foo"</span>
 <a class="jxr_linenumber" name="L595" href="#L595">595</a> 			)
 <a class="jxr_linenumber" name="L596" href="#L596">596</a> 		),
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		tester(	<em class="jxr_comment">/* 37 */</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		tester(38,
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 			<span class="jxr_string">"NoAuthorityOrContext-8"</span>,
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 			input(
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -617,7 +617,7 @@
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 			)
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 		),
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		tester(	<em class="jxr_comment">/* 38 */</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		tester(39,
 <a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<span class="jxr_string">"NoAuthorityOrContext-9"</span>,
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 			input(
 <a class="jxr_linenumber" name="L615" href="#L615">615</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -632,7 +632,7 @@
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 				<span class="jxr_string">"/resource/foo"</span>
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 			)
 <a class="jxr_linenumber" name="L626" href="#L626">626</a> 		),
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		tester(	<em class="jxr_comment">/* 39 */</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		tester(40,
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> 			<span class="jxr_string">"NoAuthorityOrContext-10"</span>,
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 			input(
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
@@ -649,7 +649,7 @@
 <a class="jxr_linenumber" name="L641" href="#L641">641</a> 		),
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<em class="jxr_comment">// No authority or context or resource given</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		tester(	<em class="jxr_comment">/* 40 */</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		tester(41,
 <a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-1"</span>,
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 			input(
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -664,7 +664,7 @@
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 				<span class="jxr_string">"http://foo.com:123/foobar"</span>
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 			)
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 		),
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		tester(	<em class="jxr_comment">/* 41 */</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		tester(42,
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-2"</span>,
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 			input(
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -679,7 +679,7 @@
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 				<span class="jxr_string">"http://foo.com:123"</span>
 <a class="jxr_linenumber" name="L672" href="#L672">672</a> 			)
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 		),
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		tester(	<em class="jxr_comment">/* 42 */</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		tester(43,
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-3"</span>,
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 			input(
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -694,7 +694,7 @@
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 				<span class="jxr_string">"/foobar"</span>
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 			)
 <a class="jxr_linenumber" name="L688" href="#L688">688</a> 		),
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		tester(	<em class="jxr_comment">/* 43 */</em>
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		tester(44,
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-4"</span>,
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 			input(
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -709,7 +709,7 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 			)
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 		),
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		tester(	<em class="jxr_comment">/* 44 */</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		tester(45,
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-5"</span>,
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 			input(
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -724,7 +724,7 @@
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 				<span class="jxr_string">"foobar"</span>
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 			)
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 		),
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		tester(	<em class="jxr_comment">/* 45 */</em>
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		tester(46,
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-6"</span>,
 <a class="jxr_linenumber" name="L721" href="#L721">721</a> 			input(
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -739,7 +739,7 @@
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 				<span class="jxr_string">""</span>
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 			)
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 		),
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		tester(	<em class="jxr_comment">/* 46 */</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		tester(47,
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-7"</span>,
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 			input(
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -754,7 +754,7 @@
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 				<span class="jxr_string">"/foo"</span>
 <a class="jxr_linenumber" name="L747" href="#L747">747</a> 			)
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 		),
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		tester(	<em class="jxr_comment">/* 47 */</em>
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		tester(48,
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-8"</span>,
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 			input(
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -769,7 +769,7 @@
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 			)
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 		),
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		tester(	<em class="jxr_comment">/* 48 */</em>
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		tester(49,
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-9"</span>,
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 			input(
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -784,7 +784,7 @@
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 				<span class="jxr_string">"/foo"</span>
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 			)
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 		),
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		tester(	<em class="jxr_comment">/* 49 */</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		tester(50,
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 			<span class="jxr_string">"NoAuthorityOrContextOrResource-10"</span>,
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 			input(
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> 				<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -801,7 +801,7 @@
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 		),
 <a class="jxr_linenumber" name="L794" href="#L794">794</a> 
 <a class="jxr_linenumber" name="L795" href="#L795">795</a> 		<em class="jxr_comment">// No context or resource given.</em>
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		tester(	<em class="jxr_comment">/* 50 */</em>
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		tester(51,
 <a class="jxr_linenumber" name="L797" href="#L797">797</a> 			<span class="jxr_string">"NoContextOrResource-1"</span>,
 <a class="jxr_linenumber" name="L798" href="#L798">798</a> 			input(
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -816,7 +816,7 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 				<span class="jxr_string">"http://foo.com:123/foobar"</span>
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 			)
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 		),
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		tester(	<em class="jxr_comment">/* 51 */</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		tester(52,
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 			<span class="jxr_string">"NoContextOrResource-2"</span>,
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 			input(
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -831,7 +831,7 @@
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 				<span class="jxr_string">"http://foo.com:123"</span>
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 			)
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 		),
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		tester(	<em class="jxr_comment">/* 52 */</em>
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		tester(53,
 <a class="jxr_linenumber" name="L827" href="#L827">827</a> 			<span class="jxr_string">"NoContextOrResource-3"</span>,
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 			input(
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -846,7 +846,7 @@
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 				<span class="jxr_string">"/foobar"</span>
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 			)
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> 		),
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		tester(	<em class="jxr_comment">/* 53 */</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 		tester(54,
 <a class="jxr_linenumber" name="L842" href="#L842">842</a> 			<span class="jxr_string">"NoContextOrResource-4"</span>,
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 			input(
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -861,7 +861,7 @@
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 			)
 <a class="jxr_linenumber" name="L855" href="#L855">855</a> 		),
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		tester(	<em class="jxr_comment">/* 54 */</em>
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		tester(55,
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 			<span class="jxr_string">"NoContextOrResource-5"</span>,
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 			input(
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -876,7 +876,7 @@
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> 				<span class="jxr_string">"foobar"</span>
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 			)
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 		),
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		tester(	<em class="jxr_comment">/* 55 */</em>
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		tester(56,
 <a class="jxr_linenumber" name="L872" href="#L872">872</a> 			<span class="jxr_string">"NoContextOrResource-6"</span>,
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 			input(
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -891,7 +891,7 @@
 <a class="jxr_linenumber" name="L883" href="#L883">883</a> 				<span class="jxr_string">""</span>
 <a class="jxr_linenumber" name="L884" href="#L884">884</a> 			)
 <a class="jxr_linenumber" name="L885" href="#L885">885</a> 		),
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		tester(	<em class="jxr_comment">/* 56 */</em>
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		tester(57,
 <a class="jxr_linenumber" name="L887" href="#L887">887</a> 			<span class="jxr_string">"NoContextOrResource-7"</span>,
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> 			input(
 <a class="jxr_linenumber" name="L889" href="#L889">889</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -906,7 +906,7 @@
 <a class="jxr_linenumber" name="L898" href="#L898">898</a> 				<span class="jxr_string">"/foo"</span>
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> 			)
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 		),
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		tester(	<em class="jxr_comment">/* 57 */</em>
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		tester(58,
 <a class="jxr_linenumber" name="L902" href="#L902">902</a> 			<span class="jxr_string">"NoContextOrResource-8"</span>,
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 			input(
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -921,7 +921,7 @@
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 			)
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> 		),
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		tester(	<em class="jxr_comment">/* 58 */</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 		tester(59,
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<span class="jxr_string">"NoContextOrResource-9"</span>,
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> 			input(
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -936,7 +936,7 @@
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 				<span class="jxr_string">"/foo"</span>
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 			)
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 		),
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		tester(	<em class="jxr_comment">/* 59 */</em>
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		tester(60,
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<span class="jxr_string">"NoContextOrResource-10"</span>,
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 			input(
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">""</span>,<span class="jxr_string">""</span>,<span class="jxr_string">"/path"</span>,
@@ -950,147 +950,239 @@
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 				<span class="jxr_string">"/"</span>,
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 				<span class="jxr_string">"/"</span>
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 			)
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		)
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 	};
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Tester {
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">final</strong> String label;
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<strong class="jxr_keyword">final</strong> Input input;
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">final</strong> Results results;
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		Tester(String label, Input input, Results results) {
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			<strong class="jxr_keyword">this</strong>.label = label;
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 			<strong class="jxr_keyword">this</strong>.input = input;
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 			<strong class="jxr_keyword">this</strong>.results = results;
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		}
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	}
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Input {
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		<strong class="jxr_keyword">final</strong> String uri;
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		<strong class="jxr_keyword">final</strong> String authority, context, resource, path;
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		Input(String authority, String context, String resource, String path, String uri) {
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			<strong class="jxr_keyword">this</strong>.authority = authority;
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<strong class="jxr_keyword">this</strong>.context = context;
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 			<strong class="jxr_keyword">this</strong>.resource = resource;
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 			<strong class="jxr_keyword">this</strong>.path = path;
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			<strong class="jxr_keyword">this</strong>.uri = uri;
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		}
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 	}
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Results {
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		<strong class="jxr_keyword">final</strong> String aResource, aPathInfo, rrResource, rrPathInfo, nResource, nPathInfo;
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		<strong class="jxr_keyword">public</strong> Results(String aResource, String aPathInfo, String rrResource, String rrPathInfo, String nResource, String nPathInfo) {
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 			<strong class="jxr_keyword">this</strong>.aResource = aResource;
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 			<strong class="jxr_keyword">this</strong>.aPathInfo = aPathInfo;
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 			<strong class="jxr_keyword">this</strong>.rrResource = rrResource;
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			<strong class="jxr_keyword">this</strong>.rrPathInfo = rrPathInfo;
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 			<strong class="jxr_keyword">this</strong>.nResource = nResource;
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 			<strong class="jxr_keyword">this</strong>.nPathInfo = nPathInfo;
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		}
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 	}
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Tester tester(String label, Input input, Results results) {
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tester(label, input, results);
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	}
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Input input(String authority, String context, String resource, String path, String uri) {
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Input(authority, context, resource, path, uri);
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Results results(String eAbsResource, String eAbsPathInfo, String eRrResource, String eRrPathInfo, String eNoneResource, String eNonePathInfo) {
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Results(eAbsResource, eAbsPathInfo, eRrResource, eRrPathInfo, eNoneResource, eNonePathInfo);
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	}
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 	<strong class="jxr_keyword">static</strong> Tester[] testers() {
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<strong class="jxr_keyword">return</strong> TESTERS;
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	}
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 	<strong class="jxr_keyword">void</strong> a01_testAbsoluteResource(Tester t) {
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		assertEquals(t.results.aResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 	}
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 	<strong class="jxr_keyword">void</strong> a02_testAppendAbsoluteResource(Tester t) {
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		assertString(t.results.aResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 	}
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 	<strong class="jxr_keyword">void</strong> a03_testAbsolutePathInfo(Tester t) {
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		assertEquals(t.results.aPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 	}
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	<strong class="jxr_keyword">void</strong> a04_testAppendAbsolutePathInfo(Tester t) {
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		assertString(t.results.aPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 	}
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	<strong class="jxr_keyword">void</strong> a05_testRootRelativeResource(Tester t) {
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		assertEquals(t.results.rrResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 	}
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	<strong class="jxr_keyword">void</strong> a06_testAppendRootRelativeResource(Tester t) {
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		assertString(t.results.rrResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	}
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	<strong class="jxr_keyword">void</strong> a07_testRootRelativePathInfo(Tester t) {
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		assertEquals(t.results.rrPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 	}
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	<strong class="jxr_keyword">void</strong> a08_testAppendRootRelativePathInfo(Tester t) {
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		assertString(t.results.rrPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 	}
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 	<strong class="jxr_keyword">void</strong> a09_testNoneResource(Tester t) {
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 		assertEquals(t.results.nResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		),
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<em class="jxr_comment">// Test query string support (JUNEAU-117)</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		tester(61,
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 			<span class="jxr_string">"request:?query"</span>,
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 			input(
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 				<span class="jxr_string">"request:?foo=bar"</span>
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 			),
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			results(
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 				<span class="jxr_string">"http://host:port/context/resource/path?foo=bar"</span>,
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 				<span class="jxr_string">"http://host:port/context/resource/path?foo=bar"</span>,
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 				<span class="jxr_string">"/context/resource/path?foo=bar"</span>,
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 				<span class="jxr_string">"/context/resource/path?foo=bar"</span>,
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 				<span class="jxr_string">"/context/resource/path?foo=bar"</span>,
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				<span class="jxr_string">"/context/resource/path?foo=bar"</span>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 			)
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		),
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		tester(62,
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 			<span class="jxr_string">"servlet:?query"</span>,
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			input(
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 				<span class="jxr_string">"servlet:?foo=bar"</span>
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 			),
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			results(
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 				<span class="jxr_string">"http://host:port/context/resource?foo=bar"</span>,
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 				<span class="jxr_string">"http://host:port/context/resource?foo=bar"</span>,
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 				<span class="jxr_string">"/context/resource?foo=bar"</span>,
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 				<span class="jxr_string">"/context/resource?foo=bar"</span>,
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 				<span class="jxr_string">"/context/resource?foo=bar"</span>,
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 				<span class="jxr_string">"/context/resource?foo=bar"</span>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			)
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		),
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		tester(63,
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 			<span class="jxr_string">"context:?query"</span>,
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 			input(
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 				<span class="jxr_string">"context:?foo=bar"</span>
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			),
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 			results(
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 				<span class="jxr_string">"http://host:port/context?foo=bar"</span>,
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 				<span class="jxr_string">"http://host:port/context?foo=bar"</span>,
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 				<span class="jxr_string">"/context?foo=bar"</span>,
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 				<span class="jxr_string">"/context?foo=bar"</span>,
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 				<span class="jxr_string">"/context?foo=bar"</span>,
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 				<span class="jxr_string">"/context?foo=bar"</span>
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 			)
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 		),
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		tester(64,
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 			<span class="jxr_string">"request:#hash"</span>,
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 			input(
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 				<span class="jxr_string">"request:#section"</span>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 			),
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			results(
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 				<span class="jxr_string">"http://host:port/context/resource/path#section"</span>,
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 				<span class="jxr_string">"http://host:port/context/resource/path#section"</span>,
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 				<span class="jxr_string">"/context/resource/path#section"</span>,
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 				<span class="jxr_string">"/context/resource/path#section"</span>,
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 				<span class="jxr_string">"/context/resource/path#section"</span>,
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 				<span class="jxr_string">"/context/resource/path#section"</span>
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 			)
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		),
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		tester(65,
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			<span class="jxr_string">"request:pathOnly"</span>,
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 			input(
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 				<span class="jxr_string">"request:foo"</span>
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 			),
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			results(
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 				<span class="jxr_string">"http://host:port/context/resource/path/foo"</span>,
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 				<span class="jxr_string">"http://host:port/context/resource/path/foo"</span>,
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 				<span class="jxr_string">"/context/resource/path/foo"</span>,
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 				<span class="jxr_string">"/context/resource/path/foo"</span>,
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 				<span class="jxr_string">"/context/resource/path/foo"</span>,
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 				<span class="jxr_string">"/context/resource/path/foo"</span>
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 			)
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		),
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		tester(66,
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 			<span class="jxr_string">"request:empty"</span>,
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 			input(
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 				<span class="jxr_string">"http://host:port"</span>,<span class="jxr_string">"/context"</span>,<span class="jxr_string">"/resource"</span>,<span class="jxr_string">"/path"</span>,
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 				<span class="jxr_string">"request:"</span>
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			),
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 			results(
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 				<span class="jxr_string">"http://host:port/context/resource/path"</span>,
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 				<span class="jxr_string">"http://host:port/context/resource/path"</span>,
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 				<span class="jxr_string">"/context/resource/path"</span>,
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 				<span class="jxr_string">"/context/resource/path"</span>,
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 				<span class="jxr_string">"/context/resource/path"</span>,
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 				<span class="jxr_string">"/context/resource/path"</span>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 			)
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		)
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 	};
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Tester {
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<strong class="jxr_keyword">final</strong> String label;
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		<strong class="jxr_keyword">final</strong> Input input;
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">final</strong> Results results;
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		Tester(<strong class="jxr_keyword">int</strong> index, String label, Input input, Results results) {
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 			<strong class="jxr_keyword">this</strong>.label = <span class="jxr_string">"["</span> + index + <span class="jxr_string">"] "</span> + label;
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 			<strong class="jxr_keyword">this</strong>.input = input;
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			<strong class="jxr_keyword">this</strong>.results = results;
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		}
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 	}
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Input {
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">final</strong> String uri;
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">final</strong> String authority, context, resource, path;
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 		Input(String authority, String context, String resource, String path, String uri) {
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 			<strong class="jxr_keyword">this</strong>.authority = authority;
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 			<strong class="jxr_keyword">this</strong>.context = context;
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 			<strong class="jxr_keyword">this</strong>.resource = resource;
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 			<strong class="jxr_keyword">this</strong>.path = path;
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 			<strong class="jxr_keyword">this</strong>.uri = uri;
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 		}
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	}
 <a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	<strong class="jxr_keyword">void</strong> a10_testAppendNoneResource(Tester t) {
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
-<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 		assertString(t.results.nResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 	}
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 	<strong class="jxr_keyword">void</strong> a11_testNonePathInfo(Tester t) {
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 		assertEquals(t.results.nPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 	}
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 	<strong class="jxr_keyword">void</strong> a12_testAppendNonePathInfo(Tester t) {
-<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
-<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		assertString(t.results.nPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Results {
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 		<strong class="jxr_keyword">final</strong> String aResource, aPathInfo, rrResource, rrPathInfo, nResource, nPathInfo;
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		<strong class="jxr_keyword">public</strong> Results(String aResource, String aPathInfo, String rrResource, String rrPathInfo, String nResource, String nPathInfo) {
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 			<strong class="jxr_keyword">this</strong>.aResource = aResource;
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 			<strong class="jxr_keyword">this</strong>.aPathInfo = aPathInfo;
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 			<strong class="jxr_keyword">this</strong>.rrResource = rrResource;
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 			<strong class="jxr_keyword">this</strong>.rrPathInfo = rrPathInfo;
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 			<strong class="jxr_keyword">this</strong>.nResource = nResource;
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 			<strong class="jxr_keyword">this</strong>.nPathInfo = nPathInfo;
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		}
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 	}
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Tester tester(<strong class="jxr_keyword">int</strong> index, String label, Input input, Results results) {
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tester(index, label, input, results);
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 	}
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Input input(String authority, String context, String resource, String path, String uri) {
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Input(authority, context, resource, path, uri);
 <a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 	}
-<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> }
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Results results(String eAbsResource, String eAbsPathInfo, String eRrResource, String eRrPathInfo, String eNoneResource, String eNonePathInfo) {
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Results(eAbsResource, eAbsPathInfo, eRrResource, eRrPathInfo, eNoneResource, eNonePathInfo);
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 	}
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 	<strong class="jxr_keyword">static</strong> Tester[] testers() {
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<strong class="jxr_keyword">return</strong> TESTERS;
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 	}
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 	<strong class="jxr_keyword">void</strong> a01_testAbsoluteResource(Tester t) {
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 		assertEquals(t.results.aResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 	}
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 	<strong class="jxr_keyword">void</strong> a02_testAppendAbsoluteResource(Tester t) {
+<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 		assertString(t.results.aResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 	}
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 	<strong class="jxr_keyword">void</strong> a03_testAbsolutePathInfo(Tester t) {
+<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
+<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 		assertEquals(t.results.aPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 	}
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 	<strong class="jxr_keyword">void</strong> a04_testAppendAbsolutePathInfo(Tester t) {
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ABSOLUTE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 		assertString(t.results.aPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 	}
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 	<strong class="jxr_keyword">void</strong> a05_testRootRelativeResource(Tester t) {
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
+<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		assertEquals(t.results.rrResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 	}
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 
+<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 	<strong class="jxr_keyword">void</strong> a06_testAppendRootRelativeResource(Tester t) {
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
+<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		assertString(t.results.rrResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 	}
+<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 	<strong class="jxr_keyword">void</strong> a07_testRootRelativePathInfo(Tester t) {
+<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
+<a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> 		assertEquals(t.results.rrPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> 	}
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> 
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> 	<strong class="jxr_keyword">void</strong> a08_testAppendRootRelativePathInfo(Tester t) {
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(ROOT_RELATIVE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 		assertString(t.results.rrPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 	}
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> 	<strong class="jxr_keyword">void</strong> a09_testNoneResource(Tester t) {
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		assertEquals(t.results.nResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 	}
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 	<strong class="jxr_keyword">void</strong> a10_testAppendNoneResource(Tester t) {
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, RESOURCE, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 		assertString(t.results.nResource, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 	}
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 	<strong class="jxr_keyword">void</strong> a11_testNonePathInfo(Tester t) {
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).resolve(t.input.uri);
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 		assertEquals(t.results.nPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 	}
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 	<strong class="jxr_keyword">void</strong> a12_testAppendNonePathInfo(Tester t) {
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 		<strong class="jxr_keyword">var</strong> x = UriResolver.of(NONE, PATH_INFO, UriContext.of(t.input.authority, t.input.context, t.input.resource, t.input.path)).append(<strong class="jxr_keyword">new</strong> StringBuilder(), t.input.uri);
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 		assertString(t.results.nPathInfo, x, fms(<span class="jxr_string">"{0}: testAbsolute() failed"</span>, t.label));
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 	}
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

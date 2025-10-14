@@ -425,7 +425,35 @@
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		};
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(<span class="jxr_string">"&lt;table _type='array'&gt;&lt;tr&gt;&lt;th&gt;f3&lt;/th&gt;&lt;th&gt;f2&lt;/th&gt;&lt;th&gt;f1&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;td&gt;&lt;null/&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;"</span>, HtmlSerializer.DEFAULT_SQ.toString(ee));
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> }
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_comment">// Test @Html(style) annotation</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Test <strong class="jxr_keyword">void</strong> f01_htmlStyle() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> s = HtmlSerializer.DEFAULT_SQ;
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		F[] ff = {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">new</strong> F(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>),
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">new</strong> F(<span class="jxr_string">"baz"</span>, <span class="jxr_string">"qux"</span>)
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		};
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> html = s.serialize(ff);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertTrue(html.contains(<span class="jxr_string">"style='white-space:normal'"</span>));
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertTrue(html.contains(<span class="jxr_string">"style='min-width:200px'"</span>));
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		@Html(style=<span class="jxr_string">"white-space:normal"</span>)
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">public</strong> String f1;
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		@Html(style=<span class="jxr_string">"min-width:200px"</span>)
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">public</strong> String f2;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">public</strong> F(String f1, String f2) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">this</strong>.f1 = f1;
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">this</strong>.f2 = f2;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

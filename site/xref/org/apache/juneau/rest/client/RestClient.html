@@ -7330,24 +7330,24 @@
 <a class="jxr_linenumber" name="L7322" href="#L7322">7322</a> 					RemoteOperationReturn ror = rom.getReturns();
 <a class="jxr_linenumber" name="L7323" href="#L7323">7323</a> 					<strong class="jxr_keyword">if</strong> (ror.isFuture()) {
 <a class="jxr_linenumber" name="L7324" href="#L7324">7324</a> 						<strong class="jxr_keyword">return</strong> getExecutorService().submit(() -&gt; {
-<a class="jxr_linenumber" name="L7325" href="#L7325">7325</a>                         	<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L7326" href="#L7326">7326</a>                         		<strong class="jxr_keyword">return</strong> executeRemote(interfaceClass, rc, method, rom);
-<a class="jxr_linenumber" name="L7327" href="#L7327">7327</a>                         	} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L7328" href="#L7328">7328</a>                         		<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L7329" href="#L7329">7329</a>                         	} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L7330" href="#L7330">7330</a>                         		<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
-<a class="jxr_linenumber" name="L7331" href="#L7331">7331</a>                         	}
-<a class="jxr_linenumber" name="L7332" href="#L7332">7332</a>                         });
+<a class="jxr_linenumber" name="L7325" href="#L7325">7325</a> 							<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L7326" href="#L7326">7326</a> 								<strong class="jxr_keyword">return</strong> executeRemote(interfaceClass, rc, method, rom);
+<a class="jxr_linenumber" name="L7327" href="#L7327">7327</a> 							} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L7328" href="#L7328">7328</a> 								<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L7329" href="#L7329">7329</a> 							} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L7330" href="#L7330">7330</a> 								<strong class="jxr_keyword">throw</strong> asRuntimeException(e);
+<a class="jxr_linenumber" name="L7331" href="#L7331">7331</a> 							}
+<a class="jxr_linenumber" name="L7332" href="#L7332">7332</a> 						});
 <a class="jxr_linenumber" name="L7333" href="#L7333">7333</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (ror.isCompletableFuture()) {
 <a class="jxr_linenumber" name="L7334" href="#L7334">7334</a> 						CompletableFuture&lt;Object&gt; cf = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;&gt;();
 <a class="jxr_linenumber" name="L7335" href="#L7335">7335</a> 						getExecutorService().submit(() -&gt; {
-<a class="jxr_linenumber" name="L7336" href="#L7336">7336</a>                         	<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L7337" href="#L7337">7337</a>                         		cf.complete(executeRemote(interfaceClass, rc, method, rom));
-<a class="jxr_linenumber" name="L7338" href="#L7338">7338</a>                         	} <strong class="jxr_keyword">catch</strong> (Throwable e) {
-<a class="jxr_linenumber" name="L7339" href="#L7339">7339</a>                         		cf.completeExceptionally(e);
-<a class="jxr_linenumber" name="L7340" href="#L7340">7340</a>                         	}
-<a class="jxr_linenumber" name="L7341" href="#L7341">7341</a>                         	<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L7342" href="#L7342">7342</a>                         });
+<a class="jxr_linenumber" name="L7336" href="#L7336">7336</a> 							<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L7337" href="#L7337">7337</a> 								cf.complete(executeRemote(interfaceClass, rc, method, rom));
+<a class="jxr_linenumber" name="L7338" href="#L7338">7338</a> 							} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L7339" href="#L7339">7339</a> 								cf.completeExceptionally(e);
+<a class="jxr_linenumber" name="L7340" href="#L7340">7340</a> 							}
+<a class="jxr_linenumber" name="L7341" href="#L7341">7341</a> 							<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L7342" href="#L7342">7342</a> 						});
 <a class="jxr_linenumber" name="L7343" href="#L7343">7343</a> 						<strong class="jxr_keyword">return</strong> cf;
 <a class="jxr_linenumber" name="L7344" href="#L7344">7344</a> 					}
 <a class="jxr_linenumber" name="L7345" href="#L7345">7345</a> 

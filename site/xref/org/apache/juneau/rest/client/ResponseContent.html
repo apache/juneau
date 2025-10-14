@@ -767,9 +767,9 @@
 <a class="jxr_linenumber" name="L759" href="#L759">759</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
 <a class="jxr_linenumber" name="L760" href="#L760">760</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
 <a class="jxr_linenumber" name="L761" href="#L761">761</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L762" href="#L762">762</a>     <strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(<strong class="jxr_keyword">final</strong> Class&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L763" href="#L763">763</a>         <strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type));
-<a class="jxr_linenumber" name="L764" href="#L764">764</a>     }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(<strong class="jxr_keyword">final</strong> Class&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type));
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 	}
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.</em>
@@ -793,9 +793,9 @@
 <a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L788" href="#L788">788</a>     <strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(<strong class="jxr_keyword">final</strong> ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L789" href="#L789">789</a>         <strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type));
-<a class="jxr_linenumber" name="L790" href="#L790">790</a>     }
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(<strong class="jxr_keyword">final</strong> ClassMeta&lt;T&gt; type) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type));
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	}
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> <em class="jxr_javadoccomment">	 * Same as {@link #as(Type,Type...)} but allows you to run the call asynchronously.</em>
@@ -825,9 +825,9 @@
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L820" href="#L820">820</a>     <strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(<strong class="jxr_keyword">final</strong> Type type, <strong class="jxr_keyword">final</strong> Type... args) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L821" href="#L821">821</a>         <strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type, args));
-<a class="jxr_linenumber" name="L822" href="#L822">822</a>     }
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; Future&lt;T&gt; asFuture(<strong class="jxr_keyword">final</strong> Type type, <strong class="jxr_keyword">final</strong> Type... args) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(() -&gt; as(type, args));
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 	}
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> <em class="jxr_javadoccomment">	 * Returns the contents of this body as a string.</em>
@@ -876,9 +876,9 @@
 <a class="jxr_linenumber" name="L868" href="#L868">868</a> <em class="jxr_javadoccomment">	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating</em>
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> <em class="jxr_javadoccomment">	 * 	{@link Future Futures}.</em>
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L871" href="#L871">871</a>     <strong class="jxr_keyword">public</strong> Future&lt;String&gt; asStringFuture() <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
-<a class="jxr_linenumber" name="L872" href="#L872">872</a>         <strong class="jxr_keyword">return</strong> client.getExecutorService().submit(<strong class="jxr_keyword">this</strong>::asString);
-<a class="jxr_linenumber" name="L873" href="#L873">873</a>     }
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 	<strong class="jxr_keyword">public</strong> Future&lt;String&gt; asStringFuture() <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<strong class="jxr_keyword">return</strong> client.getExecutorService().submit(<strong class="jxr_keyword">this</strong>::asString);
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 	}
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> <em class="jxr_javadoccomment">	 * Same as {@link #asString()} but truncates the string to the specified length.</em>
