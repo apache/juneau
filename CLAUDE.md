@@ -45,6 +45,11 @@ If you encounter situations where your code changes don't appear to be taking ef
 - Test results seem to reflect old code despite edits
 - Compilation succeeds but runtime behavior is wrong
 
+**Java Runtime Location:**
+If you can't find Java on the file system using standard commands, look for it in the `~/jdk` folder. For example:
+- Java 17 can be found at: `~/jdk/openjdk_17.0.14.0.101_17.57.18_aarch64/bin/java`
+- Use this path when you need to run Java commands directly
+
 ### 5. HTML5 Bean Enhancement Rules
 
 #### Javadoc Enhancement for HTML5 Beans

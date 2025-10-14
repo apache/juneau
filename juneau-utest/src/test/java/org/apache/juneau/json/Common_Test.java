@@ -27,7 +27,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
-class Common_Test  extends TestBase{
+class Common_Test extends TestBase {
 
 	//====================================================================================================
 	// Trim nulls from beans
@@ -293,5 +293,59 @@ class Common_Test  extends TestBase{
 		public String toString() {
 			return ("J(f1: " + this.getF1() + ", f2: " + this.getF2() + ")");
 		}
+	}
+
+	//====================================================================================================
+	// @Beanp(format) tests
+	//====================================================================================================
+
+	@Test
+	void a10_beanpFormat() throws Exception {
+		var s = JsonSerializer.create().json5().sortProperties().build();
+
+		var bean = new K();
+		var json = s.serialize(bean);
+
+		// Verify all formatted fields are serialized correctly
+		assertTrue(json.contains("floatField:'3.14'"));
+		assertTrue(json.contains("floatWithCurrency:'$19.99'"));
+		assertTrue(json.contains("doubleField:'2.718'"));
+		assertTrue(json.contains("privateField:'9.88'"));
+		assertTrue(json.contains("intField:'00042'"));
+		assertTrue(json.contains("longField:'0000001234567890'"));
+		assertTrue(json.contains("hexField:'0xFF00FF'"));
+		assertTrue(json.contains("scientificField:'6.022e+23'") || json.contains("scientificField:'6.022E+23'"));
+		assertTrue(json.contains("name:'Test'"));
+	}
+
+	public static class K {
+		@Beanp(format="%.2f")
+		public float floatField = 3.14159f;
+
+		@Beanp(format="$%.2f")
+		public float floatWithCurrency = 19.987f;
+
+		@Beanp(format="%.3f")
+		public double doubleField = 2.71828;
+
+		@Beanp(format="%05d")
+		public int intField = 42;
+
+		@Beanp(format="%016d")
+		public long longField = 1234567890L;
+
+		@Beanp(format="0x%06X")
+		public int hexField = 0xFF00FF;
+
+		@Beanp(format="%.3e")
+		public double scientificField = 6.02214076e23;
+
+		public String name = "Test";
+
+		@Beanp(format="%.2f")
+		private float privateField = 9.876f;
+
+		public float getPrivateField() { return privateField; }
+		public void setPrivateField(float f) { privateField = f; }
 	}
 }

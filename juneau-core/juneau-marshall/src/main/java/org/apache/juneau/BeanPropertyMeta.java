@@ -194,6 +194,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lp.forEach(x -> {
+					if (swap == null)
+						swap = getPropertySwap(x);
 					if (! x.properties().isEmpty())
 						properties = splita(x.properties());
 					addAll(bdClasses, x.dictionary());
@@ -213,6 +215,8 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
 				lp.forEach(x -> {
+					if (swap == null)
+						swap = getPropertySwap(x);
 					if (properties != null && ! x.properties().isEmpty())
 						properties = splita(x.properties());
 					addAll(bdClasses, x.dictionary());

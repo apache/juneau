@@ -34,7 +34,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-class Date_Test  extends TestBase{
+class Date_Test extends TestBase {
 
 	private static final String HEADER = "Date";
 	private static final String VALUE = "Sat, 29 Oct 1994 19:43:31 GMT";

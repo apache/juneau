@@ -27,7 +27,7 @@ import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"rawtypes","serial"})
-class CommonParser_Test  extends TestBase{
+class CommonParser_Test extends TestBase {
 
 	//====================================================================================================
 	// testFromSerializer
