@@ -181,7 +181,7 @@
 						<configuration>
 							<executable>python3</executable>
 							<arguments>
-								<argument>${maven.multiModuleProjectDirectory}/juneau-check-topic-links.py</argument>
+								<argument>${maven.multiModuleProjectDirectory}/scripts/check-topic-links.py</argument>
 							</arguments>
 							<workingDirectory>${maven.multiModuleProjectDirectory}</workingDirectory>
 							<failOnError>true</failOnError>
