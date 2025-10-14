@@ -387,4 +387,97 @@ class Query_Test extends TestBase {
 			.assertStatus(200)
 			.assertContent("[{a:1,b:'foo'}]");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Class-level query defaults
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(
+		queryParams={
+			@Query(name="format", def="json", description="Output format"),
+			@Query(name="verbose", def="false", schema=@Schema(type="boolean", description="Verbose output"))
+		}
+	)
+	public static class G {
+		@RestGet
+		public String a(@Query("format") String format, @Query("verbose") boolean verbose) {
+			return "format="+format+",verbose="+verbose;
+		}
+		@RestGet
+		public String b(@Query(name="format", def="xml") String format, @Query("verbose") boolean verbose) {
+			return "format="+format+",verbose="+verbose;
+		}
+	}
+
+	@Test
+	void g01_classLevelQueryDefaults() throws Exception {
+		var g = MockRestClient.build(G.class);
+
+		// Test default values from class-level @Query
+		g.get("/a").run().assertContent("format=json,verbose=false");
+
+		// Test overriding with query params
+		g.get("/a?format=xml&verbose=true").run().assertContent("format=xml,verbose=true");
+
+		// Test method-level override of class-level default
+		g.get("/b").run().assertContent("format=xml,verbose=false");
+
+		// Test method-level override can still be overridden by query param
+		g.get("/b?format=json").run().assertContent("format=json,verbose=false");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test class-level parameter defaults for all HTTP part types
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest(
+		queryParams={
+			@Query(name="q", def="defaultQ")
+		},
+		headerParams={
+			@Header(name="X-Custom", def="defaultHeader")
+		},
+		formDataParams={
+			@FormData(name="f", def="defaultForm")
+		}
+	)
+	public static class H {
+		@RestGet("/query")
+		public String testQuery(@Query("q") String q) {
+			return "q="+q;
+		}
+		@RestGet("/header")
+		public String testHeader(@Header("X-Custom") String h) {
+			return "h="+h;
+		}
+		@RestPost("/form")
+		public String testForm(@FormData("f") String f) {
+			return "f="+f;
+		}
+		@RestGet("/override")
+		public String testOverride(@Query(name="q", def="overrideQ") String q, @Header(name="X-Custom", def="overrideHeader") String h) {
+			return "q="+q+",h="+h;
+		}
+	}
+
+	@Test
+	void h01_classLevelAllParamDefaults() throws Exception {
+		var h = MockRestClient.build(H.class);
+
+		// Test query default
+		h.get("/query").run().assertContent("q=defaultQ");
+		h.get("/query?q=custom").run().assertContent("q=custom");
+
+		// Test header default
+		h.get("/header").run().assertContent("h=defaultHeader");
+		h.get("/header").header("X-Custom", "custom").run().assertContent("h=custom");
+
+		// Test form data default
+		h.post("/form").contentType("application/x-www-form-urlencoded").run().assertContent("f=defaultForm");
+		h.post("/form").contentType("application/x-www-form-urlencoded").formData("f", "custom").run().assertContent("f=custom");
+
+		// Test method-level override
+		h.get("/override").run().assertContent("q=overrideQ,h=overrideHeader");
+		h.get("/override?q=custom").header("X-Custom", "custom").run().assertContent("q=custom,h=custom");
+	}
 }

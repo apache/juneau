@@ -26,6 +26,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -119,6 +120,10 @@ public class RestAnnotation {
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
 		String disableContentParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
 		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, produces={}, title={};
+		Query[] queryParams = new Query[0];
+		Header[] headerParams = new Header[0];
+		Path[] pathParams = new Path[0];
+		FormData[] formDataParams = new FormData[0];
 
 		/**
 		 * Constructor.
@@ -675,6 +680,10 @@ public class RestAnnotation {
 		private final Swagger swagger;
 		private final String disableContentParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
 		private final String[] consumes, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
+		private final Query[] queryParams;
+		private final Header[] headerParams;
+		private final Path[] pathParams;
+		private final FormData[] formDataParams;
 
 		Impl(Builder b) {
 			super(b);
@@ -724,6 +733,10 @@ public class RestAnnotation {
 			this.uriContext = b.uriContext;
 			this.uriRelativity = b.uriRelativity;
 			this.uriResolution = b.uriResolution;
+			this.queryParams = copyOf(b.queryParams);
+			this.headerParams = copyOf(b.headerParams);
+			this.pathParams = copyOf(b.pathParams);
+			this.formDataParams = copyOf(b.formDataParams);
 			postConstruct();
 		}
 
@@ -955,6 +968,26 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String uriResolution() {
 			return uriResolution;
+		}
+
+		@Override /* Rest */
+		public Query[] queryParams() {
+			return queryParams;
+		}
+
+		@Override /* Rest */
+		public Header[] headerParams() {
+			return headerParams;
+		}
+
+		@Override /* Rest */
+		public Path[] pathParams() {
+			return pathParams;
+		}
+
+		@Override /* Rest */
+		public FormData[] formDataParams() {
+			return formDataParams;
 		}
 	}
 

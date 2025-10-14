@@ -16,11 +16,13 @@
  */
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.http.annotation.PathAnnotation.*;
 
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
@@ -79,12 +81,96 @@ public class PathArg implements RestOpArg {
 	 * @param pathMatcher Path matcher for the specified method.
 	 */
 	protected PathArg(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
+		// Get the path parameter name
 		this.name = getName(paramInfo, pathMatcher);
-		this.def = findDef(paramInfo).orElse(null);
+
+		// Check for class-level defaults and merge if found
+		Path mergedPath = getMergedPath(paramInfo, name);
+
+		// Use merged path annotation for all lookups
+		this.def = mergedPath != null && !mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
-		this.schema = HttpPartSchema.create(Path.class, paramInfo);
+		this.schema = mergedPath != null ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
 		Class<? extends HttpPartParser> pp = schema.getParser();
 		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+	}
+
+	/**
+	 * Gets the merged @Path annotation combining class-level and parameter-level values.
+	 *
+	 * @param pi The parameter info.
+	 * @param paramName The path parameter name.
+	 * @return Merged annotation, or null if no class-level defaults exist.
+	 */
+	private static Path getMergedPath(ParamInfo pi, String paramName) {
+		// Get the declaring class
+		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+
+		// Find @Rest annotation on the class
+		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		if (restAnnotation == null)
+			return null;
+
+		// Find matching @Path from class-level pathParams array
+		Path classLevelPath = null;
+		for (Path p : restAnnotation.pathParams()) {
+			String pName = firstNonEmpty(p.name(), p.value());
+			if (paramName.equals(pName)) {
+				classLevelPath = p;
+				break;
+			}
+		}
+
+		if (classLevelPath == null)
+			return null;
+
+		// Get parameter-level @Path
+		Path paramPath = pi.getAnnotation(Path.class);
+		if (paramPath == null)
+			paramPath = pi.getParameterType().getAnnotation(Path.class);
+
+		if (paramPath == null) {
+			// No parameter-level @Path, use class-level as-is
+			return classLevelPath;
+		}
+
+		// Merge the two annotations: parameter-level takes precedence
+		return mergeAnnotations(classLevelPath, paramPath);
+	}
+
+	/**
+	 * Merges two @Path annotations, with param-level taking precedence over class-level.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Path mergeAnnotations(Path classLevel, Path paramLevel) {
+		return PathAnnotation.create()
+			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
+			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
+			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
+			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
+			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
+			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
+			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
+			.build();
+	}
+
+	/**
+	 * Merges two @Schema annotations, with param-level taking precedence.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
+		// If parameter has a non-default schema, use it; otherwise use class-level
+		if (!SchemaAnnotation.empty(paramLevel))
+			return paramLevel;
+		return classLevel;
 	}
 
 	private String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {

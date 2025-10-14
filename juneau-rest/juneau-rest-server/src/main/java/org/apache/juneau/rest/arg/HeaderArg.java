@@ -124,16 +124,100 @@ public class HeaderArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
+		// Get the header name from the parameter
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
-		this.def = findDef(pi).orElse(null);
+
+		// Check for class-level defaults and merge if found
+		Header mergedHeader = getMergedHeader(pi, name);
+
+		// Use merged header annotation for all lookups
+		this.def = mergedHeader != null && !mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = HttpPartSchema.create(Header.class, pi);
+		this.schema = mergedHeader != null ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
 		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())
 			throw new ArgException(pi, "Use of multipart flag on @Header parameter that is not an array or Collection");
+	}
+
+	/**
+	 * Gets the merged @Header annotation combining class-level and parameter-level values.
+	 *
+	 * @param pi The parameter info.
+	 * @param paramName The header name.
+	 * @return Merged annotation, or null if no class-level defaults exist.
+	 */
+	private static Header getMergedHeader(ParamInfo pi, String paramName) {
+		// Get the declaring class
+		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+
+		// Find @Rest annotation on the class
+		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		if (restAnnotation == null)
+			return null;
+
+		// Find matching @Header from class-level headerParams array
+		Header classLevelHeader = null;
+		for (Header h : restAnnotation.headerParams()) {
+			String hName = firstNonEmpty(h.name(), h.value());
+			if (paramName.equals(hName)) {
+				classLevelHeader = h;
+				break;
+			}
+		}
+
+		if (classLevelHeader == null)
+			return null;
+
+		// Get parameter-level @Header
+		Header paramHeader = pi.getAnnotation(Header.class);
+		if (paramHeader == null)
+			paramHeader = pi.getParameterType().getAnnotation(Header.class);
+
+		if (paramHeader == null) {
+			// No parameter-level @Header, use class-level as-is
+			return classLevelHeader;
+		}
+
+		// Merge the two annotations: parameter-level takes precedence
+		return mergeAnnotations(classLevelHeader, paramHeader);
+	}
+
+	/**
+	 * Merges two @Header annotations, with param-level taking precedence over class-level.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Header mergeAnnotations(Header classLevel, Header paramLevel) {
+		return HeaderAnnotation.create()
+			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
+			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
+			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
+			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
+			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
+			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
+			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
+			.build();
+	}
+
+	/**
+	 * Merges two @Schema annotations, with param-level taking precedence.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
+		// If parameter has a non-default schema, use it; otherwise use class-level
+		if (!SchemaAnnotation.empty(paramLevel))
+			return paramLevel;
+		return classLevel;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -83,16 +83,100 @@ public class FormDataArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
+		// Get the form data parameter name
 		this.name = findName(pi).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
-		this.def = findDef(pi).orElse(null);
+
+		// Check for class-level defaults and merge if found
+		FormData mergedFormData = getMergedFormData(pi, name);
+
+		// Use merged form data annotation for all lookups
+		this.def = mergedFormData != null && !mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = HttpPartSchema.create(FormData.class, pi);
+		this.schema = mergedFormData != null ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
 		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())
 			throw new ArgException(pi, "Use of multipart flag on @FormData parameter that is not an array or Collection");
+	}
+
+	/**
+	 * Gets the merged @FormData annotation combining class-level and parameter-level values.
+	 *
+	 * @param pi The parameter info.
+	 * @param paramName The form data parameter name.
+	 * @return Merged annotation, or null if no class-level defaults exist.
+	 */
+	private static FormData getMergedFormData(ParamInfo pi, String paramName) {
+		// Get the declaring class
+		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+
+		// Find @Rest annotation on the class
+		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		if (restAnnotation == null)
+			return null;
+
+		// Find matching @FormData from class-level formDataParams array
+		FormData classLevelFormData = null;
+		for (FormData f : restAnnotation.formDataParams()) {
+			String fName = firstNonEmpty(f.name(), f.value());
+			if (paramName.equals(fName)) {
+				classLevelFormData = f;
+				break;
+			}
+		}
+
+		if (classLevelFormData == null)
+			return null;
+
+		// Get parameter-level @FormData
+		FormData paramFormData = pi.getAnnotation(FormData.class);
+		if (paramFormData == null)
+			paramFormData = pi.getParameterType().getAnnotation(FormData.class);
+
+		if (paramFormData == null) {
+			// No parameter-level @FormData, use class-level as-is
+			return classLevelFormData;
+		}
+
+		// Merge the two annotations: parameter-level takes precedence
+		return mergeAnnotations(classLevelFormData, paramFormData);
+	}
+
+	/**
+	 * Merges two @FormData annotations, with param-level taking precedence over class-level.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static FormData mergeAnnotations(FormData classLevel, FormData paramLevel) {
+		return FormDataAnnotation.create()
+			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
+			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
+			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
+			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
+			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
+			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
+			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
+			.build();
+	}
+
+	/**
+	 * Merges two @Schema annotations, with param-level taking precedence.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
+		// If parameter has a non-default schema, use it; otherwise use class-level
+		if (!SchemaAnnotation.empty(paramLevel))
+			return paramLevel;
+		return classLevel;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

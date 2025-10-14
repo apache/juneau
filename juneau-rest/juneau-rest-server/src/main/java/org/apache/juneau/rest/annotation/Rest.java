@@ -28,6 +28,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -1439,4 +1440,111 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String uriResolution() default "";
+
+	/**
+	 * Default query parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link Query @Query} annotations on method parameters across all methods in this class.
+	 * Values specified here are used as defaults when the same property is not explicitly defined on a method parameter's
+	 * {@link Query @Query} annotation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Define common query parameters at class level</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		queryParams={
+	 * 			<ja>@Query</ja>(name=<js>"format"</js>, def=<js>"json"</js>, description=<js>"Output format"</js>),
+	 * 			<ja>@Query</ja>(name=<js>"verbose"</js>, def=<js>"false"</js>, schema=<ja>@Schema</ja>(type=<js>"boolean"</js>))
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Method will inherit the default query parameter definitions</jc>
+	 * 		<ja>@RestGet</ja>
+	 * 		<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"format"</js>) String format, <ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> verbose) {...}
+	 *
+	 * 		<jc>// Can override defaults on a per-method basis</jc>
+	 * 		<ja>@RestGet</ja>
+	 * 		<jk>public</jk> String doGet2(<ja>@Query</ja>(name=<js>"format"</js>, def=<js>"xml"</js>) String format) {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		These defaults apply to validation, parsing, and OpenAPI/Swagger documentation generation.
+	 * 	<li class='note'>
+	 * 		Method-level {@link Query @Query} annotations take precedence over class-level definitions.
+	 * 	<li class='note'>
+	 * 		The {@link Query#name() name} attribute must be specified for each query definition.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	Query[] queryParams() default {};
+
+	/**
+	 * Default header parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link Header @Header} annotations on method parameters across all methods in this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		headerParams={
+	 * 			<ja>@Header</ja>(name=<js>"Accept-Language"</js>, def=<js>"en-US"</js>),
+	 * 			<ja>@Header</ja>(name=<js>"X-API-Version"</js>, def=<js>"1.0"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	Header[] headerParams() default {};
+
+	/**
+	 * Default path parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link Path @Path} annotations on method parameters across all methods in this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		pathParams={
+	 * 			<ja>@Path</ja>(name=<js>"version"</js>, def=<js>"v1"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	Path[] pathParams() default {};
+
+	/**
+	 * Default form data parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link FormData @FormData} annotations on method parameters across all methods in this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		formDataParams={
+	 * 			<ja>@FormData</ja>(name=<js>"action"</js>, def=<js>"submit"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	FormData[] formDataParams() default {};
 }

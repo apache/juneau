@@ -83,16 +83,100 @@ public class QueryArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
+		// Get the query name from the parameter
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
-		this.def = findDef(pi).orElse(null);
+
+		// Check for class-level defaults and merge if found
+		Query mergedQuery = getMergedQuery(pi, name);
+
+		// Use merged query annotation for all lookups
+		this.def = mergedQuery != null && !mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
-		this.schema = HttpPartSchema.create(Query.class, pi);
+		this.schema = mergedQuery != null ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
 		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())
 			throw new ArgException(pi, "Use of multipart flag on @Query parameter that is not an array or Collection");
+	}
+
+	/**
+	 * Gets the merged @Query annotation combining class-level and parameter-level values.
+	 *
+	 * @param pi The parameter info.
+	 * @param paramName The query parameter name.
+	 * @return Merged annotation, or null if no class-level defaults exist.
+	 */
+	private static Query getMergedQuery(ParamInfo pi, String paramName) {
+		// Get the declaring class
+		ClassInfo declaringClass = pi.getMethod().getDeclaringClass();
+		if (declaringClass == null)
+			return null;
+
+		// Find @Rest annotation on the class
+		Rest restAnnotation = declaringClass.getAnnotation(Rest.class);
+		if (restAnnotation == null)
+			return null;
+
+		// Find matching @Query from class-level queryParams array
+		Query classLevelQuery = null;
+		for (Query q : restAnnotation.queryParams()) {
+			String qName = firstNonEmpty(q.name(), q.value());
+			if (paramName.equals(qName)) {
+				classLevelQuery = q;
+				break;
+			}
+		}
+
+		if (classLevelQuery == null)
+			return null;
+
+		// Get parameter-level @Query
+		Query paramQuery = pi.getAnnotation(Query.class);
+		if (paramQuery == null)
+			paramQuery = pi.getParameterType().getAnnotation(Query.class);
+
+		if (paramQuery == null) {
+			// No parameter-level @Query, use class-level as-is
+			return classLevelQuery;
+		}
+
+		// Merge the two annotations: parameter-level takes precedence
+		return mergeAnnotations(classLevelQuery, paramQuery);
+	}
+
+	/**
+	 * Merges two @Query annotations, with param-level taking precedence over class-level.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Query mergeAnnotations(Query classLevel, Query paramLevel) {
+		return QueryAnnotation.create()
+			.name(firstNonEmpty(paramLevel.name(), paramLevel.value(), classLevel.name(), classLevel.value()))
+			.value(firstNonEmpty(paramLevel.value(), paramLevel.name(), classLevel.value(), classLevel.name()))
+			.def(firstNonEmpty(paramLevel.def(), classLevel.def()))
+			.description(paramLevel.description().length > 0 ? paramLevel.description() : classLevel.description())
+			.parser(paramLevel.parser() != HttpPartParser.Void.class ? paramLevel.parser() : classLevel.parser())
+			.serializer(paramLevel.serializer() != HttpPartSerializer.Void.class ? paramLevel.serializer() : classLevel.serializer())
+			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
+			.build();
+	}
+
+	/**
+	 * Merges two @Schema annotations, with param-level taking precedence.
+	 *
+	 * @param classLevel The class-level default.
+	 * @param paramLevel The parameter-level override.
+	 * @return Merged annotation.
+	 */
+	private static Schema mergeSchemas(Schema classLevel, Schema paramLevel) {
+		// If parameter has a non-default schema, use it; otherwise use class-level
+		if (!SchemaAnnotation.empty(paramLevel))
+			return paramLevel;
+		return classLevel;
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
