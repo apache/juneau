@@ -19,4 +19,3 @@ package org.apache.juneau.urlencoding.annotation;
 /**
  * URL-Encoding Marshalling Annotations
  */
-

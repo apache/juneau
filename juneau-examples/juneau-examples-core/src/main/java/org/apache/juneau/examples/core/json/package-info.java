@@ -18,10 +18,9 @@ package org.apache.juneau.examples.core.json;
 
 /**
  * JSON Marshalling Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's JSON marshalling capabilities.
  * These examples show various JSON serialization and parsing scenarios.
  * </p>
  */
-

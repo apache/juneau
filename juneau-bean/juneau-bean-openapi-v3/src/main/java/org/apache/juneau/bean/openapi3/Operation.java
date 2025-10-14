@@ -702,5 +702,4 @@ public class Operation extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

@@ -306,7 +306,6 @@ class FormData_Test extends TestBase {
 			.assertStatus(200)
 			.assertContent("[{a:2,b:'bar'}]");
 
-
 		f.post("/d", "f1=@((a=1,b=foo))")
 			.run()
 			.assertStatus(200)

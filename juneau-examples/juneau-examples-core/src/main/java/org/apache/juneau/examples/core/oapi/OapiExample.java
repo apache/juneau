@@ -30,7 +30,6 @@ import org.apache.juneau.oapi.*;
  */
 public class OapiExample {
 
-
 	/**
 	 * Get a reference to a parser and usage of oapiserializer.
 	 *

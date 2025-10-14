@@ -32,23 +32,23 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Basic textarea</jc>
  * 	Textarea <jv>basic</jv> = <jsm>textarea</jsm>(<js>"comments"</js>)
  * 		.rows(4)
  * 		.cols(50);
- * 
+ *
  * 	<jc>// Textarea with placeholder and validation</jc>
  * 	Textarea <jv>validated</jv> = <jsm>textarea</jsm>(<js>"description"</js>)
  * 		.placeholder(<js>"Enter a description..."</js>)
  * 		.required(<jk>true</jk>)
  * 		.minlength(10)
  * 		.maxlength(500);
- * 
+ *
  * 	<jc>// Textarea with initial content</jc>
  * 	Textarea <jv>withContent</jv> = <jsm>textarea</jsm>(<js>"message"</js>)
  * 		.text(<js>"Default message text"</js>);
- * 
+ *
  * 	<jc>// Textarea with styling and behavior</jc>
  * 	Textarea <jv>styled</jv> = <jsm>textarea</jsm>(<js>"feedback"</js>)
  * 		._class(<js>"large-textarea"</js>)
@@ -56,12 +56,12 @@ import org.apache.juneau.internal.*;
  * 		.cols(60)
  * 		.placeholder(<js>"Please provide your feedback..."</js>)
  * 		.wrap(<js>"hard"</js>);
- * 
+ *
  * 	<jc>// Disabled textarea</jc>
  * 	Textarea <jv>disabled</jv> = <jsm>textarea</jsm>(<js>"readonly"</js>)
  * 		.disabled(true)
  * 		.text("This textarea is disabled");
- * 
+ *
  * 	// Textarea with form association
  * 	Textarea external = new Textarea()
  * 		.name="external"

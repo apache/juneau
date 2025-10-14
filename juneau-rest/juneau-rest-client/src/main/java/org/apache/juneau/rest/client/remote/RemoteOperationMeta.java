@@ -54,7 +54,7 @@ public class RemoteOperationMeta {
 	private final RemoteOperationArg contentArg;
 	private final RemoteOperationReturn methodReturn;
 	private final Class<?>[] exceptions;
-	
+
 	// Method-level annotations with defaults (9.2.0)
 	private final Map<String,String> pathDefaults, queryDefaults, headerDefaults, formDataDefaults;
 	private final String contentDefault;
@@ -96,7 +96,7 @@ public class RemoteOperationMeta {
 			requestArgs = new LinkedList<>();
 		RemoteOperationArg bodyArg;
 		RemoteOperationReturn methodReturn;
-		Map<String,String> 
+		Map<String,String>
 			pathDefaults = new LinkedHashMap<>(),
 			queryDefaults = new LinkedHashMap<>(),
 			headerDefaults = new LinkedHashMap<>(),

@@ -403,7 +403,6 @@ class SchemaInfo_Test extends TestBase {
 		}
 	}
 
-
 	//---------------------------------------------------------------------------------------------
 	// Helper methods
 	//---------------------------------------------------------------------------------------------
@@ -411,5 +410,4 @@ class SchemaInfo_Test extends TestBase {
 	private static SchemaInfo bean() {
 		return schemaInfo();
 	}
-
 }

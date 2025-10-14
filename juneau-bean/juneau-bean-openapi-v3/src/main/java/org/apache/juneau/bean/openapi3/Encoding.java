@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * A single encoding definition applied to a single schema property.
  *
  * <p>
- * The Encoding Object is a single encoding definition applied to a single schema property. It allows you to define 
+ * The Encoding Object is a single encoding definition applied to a single schema property. It allows you to define
  * how a property should be serialized when it's part of a request or response body with a specific media type.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>

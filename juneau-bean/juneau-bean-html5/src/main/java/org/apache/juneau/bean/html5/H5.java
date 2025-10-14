@@ -33,14 +33,14 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple sub-sub-subsection heading</jc>
  * 	H5 <jv>simple</jv> = <jsm>h5</jsm>(<js>"Connection Settings"</js>);
- * 
+ *
  * 	<jc>// H5 with styling</jc>
  * 	H5 <jv>styled</jv> = <jsm>h5</jsm>(<js>"Timeout Configuration"</js>)
  * 		._class(<js>"detail-heading"</js>);
- * 
+ *
  * 	<jc>// H5 with complex content</jc>
  * 	H5 <jv>complex</jv> = <jsm>h5</jsm>(
  * 		<js>"5.1 "</js>,
@@ -48,15 +48,15 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>em</jsm>(<js>"(Optional)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H5 with ID</jc>
  * 	H5 <jv>withId</jv> = <jsm>h5</jsm>(<js>"SSL Configuration"</js>)
  * 		.id(<js>"ssl-config"</js>);
- * 
+ *
  * 	<jc>// H5 with styling</jc>
  * 	H5 <jv>styled2</jv> = <jsm>h5</jsm>(<js>"Additional Parameters"</js>)
  * 		.style(<js>"color: #aaa; font-size: 0.9em;"</js>);
- * 
+ *
  * 	<jc>// H5 with multiple elements</jc>
  * 	H5 <jv>multiple</jv> = <jsm>h5</jsm>(
  * 		<js>"5.1.1 "</js>,
@@ -64,7 +64,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Default: 10)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H5 with links</jc>
  * 	H5 <jv>withLinks</jv> = <jsm>h5</jsm>(
  * 		<js>"See: "</js>,

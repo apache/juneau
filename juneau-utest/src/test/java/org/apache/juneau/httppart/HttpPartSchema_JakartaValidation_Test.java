@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests for Jakarta Bean Validation integration with HttpPartSchema.
- * 
+ *
  * <p>
  * This test uses the real jakarta.validation-api (test scope dependency) to verify
  * that HttpPartSchema correctly processes Jakarta Validation constraint annotations.
@@ -325,7 +325,7 @@ class HttpPartSchema_JakartaValidation_Test extends TestBase {
 			.apply(field.getAnnotation(Size.class))
 			.apply(field.getAnnotation(Pattern.class))
 			.build();
-		
+
 		assertTrue(s.isRequired());
 		assertEquals(5L, s.getMinLength());
 		assertEquals(20L, s.getMaxLength());

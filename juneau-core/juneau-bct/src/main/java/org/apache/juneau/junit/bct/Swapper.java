@@ -87,7 +87,7 @@ import java.util.function.*;
  *    <li><b>Preserve semantics</b> - the swapped object should represent the same logical value</li>
  *    <li><b>Consider performance</b> - swappers are called frequently during conversion</li>
  *    <li><b>Return meaningful values</b> for null or invalid states</li>
- *    <li><b>Avoid recursion</b> - ensure swappers don't create circular transformations that could 
+ *    <li><b>Avoid recursion</b> - ensure swappers don't create circular transformations that could
  *        lead to {@link StackOverflowError}. The framework does not detect recursion, so developers
  *        must ensure swapped objects don't trigger the same or related swappers in an endless cycle</li>
  * </ul>

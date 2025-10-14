@@ -482,5 +482,4 @@ class ParameterInfo_Test extends TestBase {
 	private static ParameterInfo bean() {
 		return parameterInfo();
 	}
-
 }

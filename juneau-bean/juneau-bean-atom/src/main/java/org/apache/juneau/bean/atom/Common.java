@@ -29,8 +29,8 @@ import org.apache.juneau.xml.annotation.*;
  * Base class for all Atom elements, providing common attributes.
  *
  * <p>
- * This abstract class defines attributes that can appear on any Atom element. Per RFC 4287, 
- * all Atom elements may have <c>xml:base</c> and <c>xml:lang</c> attributes for managing 
+ * This abstract class defines attributes that can appear on any Atom element. Per RFC 4287,
+ * all Atom elements may have <c>xml:base</c> and <c>xml:lang</c> attributes for managing
  * URIs and language context.
  *
  * <p>
@@ -41,7 +41,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  *
  * <p>
- * This class is extended by all Atom bean classes ({@link Feed}, {@link Entry}, {@link Link}, 
+ * This class is extended by all Atom bean classes ({@link Feed}, {@link Entry}, {@link Link},
  * {@link Person}, {@link Category}, {@link Text}, etc.).
  *
  * <h5 class='figure'>Schema</h5>
@@ -66,7 +66,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents <c>atomCommonAttributes</c> in the 
+ * Represents <c>atomCommonAttributes</c> in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-2">RFC 4287 - Section 2</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -79,7 +79,6 @@ public abstract class Common {
 	private URI base;
 	private String lang;
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -91,8 +90,8 @@ public abstract class Common {
 	 * Returns the base URI for resolving relative URI references (xml:base attribute).
 	 *
 	 * <p>
-	 * This attribute, defined by XML Base, establishes a base URI for resolving any 
-	 * relative references within the scope of this element. This is particularly useful 
+	 * This attribute, defined by XML Base, establishes a base URI for resolving any
+	 * relative references within the scope of this element. This is particularly useful
 	 * when aggregating content from multiple sources.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -135,8 +134,8 @@ public abstract class Common {
 	 * Returns the natural language of the element's content (xml:lang attribute).
 	 *
 	 * <p>
-	 * The language tag should be a language identifier as defined by RFC 3066. This attribute 
-	 * is inherited by child elements, so it need only be specified on the highest-level 
+	 * The language tag should be a language identifier as defined by RFC 3066. This attribute
+	 * is inherited by child elements, so it need only be specified on the highest-level
 	 * element where it applies.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.

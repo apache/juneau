@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * Configuration details for a supported OAuth Flow.
  *
  * <p>
- * The OAuthFlow Object provides configuration details for a supported OAuth Flow. This object contains the URLs and 
- * scopes needed to configure a specific OAuth 2.0 flow. Different flows require different combinations of URLs and 
+ * The OAuthFlow Object provides configuration details for a supported OAuth Flow. This object contains the URLs and
+ * scopes needed to configure a specific OAuth 2.0 flow. Different flows require different combinations of URLs and
  * have different security characteristics.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -283,5 +283,4 @@ public class OAuthFlow extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

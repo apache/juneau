@@ -25,7 +25,7 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a permanent, universally unique identifier for a feed or entry.
  *
  * <p>
- * The ID element provides a permanent, globally unique identifier for feeds and entries. 
+ * The ID element provides a permanent, globally unique identifier for feeds and entries.
  * IDs must never change, even if the resource is moved or its content is modified.
  *
  * <p>
@@ -67,7 +67,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomId</c> construct in the 
+ * Represents an <c>atomId</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.6">RFC 4287 - Section 4.2.6</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -92,7 +92,6 @@ public class Id extends Common {
 
 	/** Bean constructor. */
 	public Id() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

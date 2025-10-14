@@ -49,4 +49,3 @@ public class ReaderProcessor implements ResponseProcessor {
 		return FINISHED;
 	}
 }
-

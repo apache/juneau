@@ -60,5 +60,4 @@ public enum RdfCollectionFormat {
 	 * Note that enabling this setting will cause order of elements in the collection to be lost.
 	 */
 	MULTI_VALUED;
-
 }

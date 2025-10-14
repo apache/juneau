@@ -18,10 +18,9 @@ package org.apache.juneau.examples.core.pojo;
 
 /**
  * POJO Marshalling Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's POJO marshalling capabilities.
  * These examples show various Plain Old Java Object serialization and parsing scenarios.
  * </p>
  */
-

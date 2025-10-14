@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple table header</jc>
  * 	Thead <jv>simple</jv> = <jsm>thead</jsm>(
  * 		<jsm>tr</jsm>(
@@ -41,7 +41,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>th</jsm>(<js>"City"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Table header with styling</jc>
  * 	Thead <jv>styled</jv> = <jsm>thead</jsm>(
  * 		<jsm>tr</jsm>(
@@ -50,7 +50,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>th</jsm>(<js>"Stock"</js>)
  * 		)
  * 	)._class(<js>"table-header"</js>);
- * 
+ *
  * 	<jc>// Table header with multiple rows</jc>
  * 	Thead <jv>multiple</jv> = <jsm>thead</jsm>(
  * 		<jsm>tr</jsm>(
@@ -65,7 +65,7 @@ import org.apache.juneau.internal.*;
  * 					new Th().children("City")
  * 				)
  * 		);
- * 
+ *
  * 	// Table header with sorting
  * 	Thead sortable = new Thead()
  * 		.children(
@@ -76,7 +76,7 @@ import org.apache.juneau.internal.*;
  * 					new Th().children("Status")
  * 				)
  * 		);
- * 
+ *
  * 	// Table header with accessibility
  * 	Thead accessible = new Thead()
  * 		.children(

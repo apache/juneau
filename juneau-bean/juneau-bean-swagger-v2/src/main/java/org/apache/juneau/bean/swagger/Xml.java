@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * A metadata object that allows for more fine-tuned XML model definitions.
  *
  * <p>
- * The Xml Object is a metadata object that allows for more fine-tuned XML model definitions in Swagger 2.0. When using 
- * arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add 
+ * The Xml Object is a metadata object that allows for more fine-tuned XML model definitions in Swagger 2.0. When using
+ * arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add
  * that information. This object is used to control how schema properties are serialized to XML.
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -330,5 +330,4 @@ public class Xml extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

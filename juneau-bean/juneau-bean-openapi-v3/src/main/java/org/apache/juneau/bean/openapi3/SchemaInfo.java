@@ -1361,5 +1361,4 @@ public class SchemaInfo extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

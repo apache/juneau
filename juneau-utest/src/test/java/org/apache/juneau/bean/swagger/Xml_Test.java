@@ -223,5 +223,4 @@ class Xml_Test extends TestBase {
 	private static Xml bean() {
 		return xml();
 	}
-
 }

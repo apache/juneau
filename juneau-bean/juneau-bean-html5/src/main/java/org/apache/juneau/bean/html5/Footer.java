@@ -32,10 +32,10 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple page footer</jc>
  * 	Footer <jv>simple</jv> = <jsm>footer</jsm>(<js>"© 2024 My Company. All rights reserved."</js>);
- * 
+ *
  * 	<jc>// Footer with multiple elements</jc>
  * 	Footer <jv>complex</jv> = <jsm>footer</jsm>(
  * 		<jsm>p</jsm>(<js>"© 2024 My Company. All rights reserved."</js>),
@@ -44,13 +44,13 @@ import org.apache.juneau.internal.*;
  * 			<jsm>a</jsm>(<js>"mailto:info@company.com"</js>, <js>"info@company.com"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Footer with styling</jc>
  * 	Footer <jv>styled</jv> = <jsm>footer</jsm>(
  * 		<jsm>p</jsm>(<js>"© 2024 My Company"</js>),
  * 		<jsm>p</jsm>(<js>"Privacy Policy | Terms of Service"</js>)
  * 	)._class(<js>"page-footer"</js>);
- * 
+ *
  * 	<jc>// Footer with navigation</jc>
  * 	Footer <jv>withNav</jv> = <jsm>footer</jsm>(
  * 		<jsm>nav</jsm>(
@@ -62,19 +62,19 @@ import org.apache.juneau.internal.*;
  * 		),
  * 		<jsm>p</jsm>(<js>"© 2024 My Company"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Footer with ID</jc>
  * 	Footer <jv>withId</jv> = <jsm>footer</jsm>(
  * 		<jsm>p</jsm>(<js>"© 2024 My Company. All rights reserved."</js>),
  * 		<jsm>address</jsm>(<js>"123 Main St, City, State 12345"</js>)
  * 	).id(<js>"main-footer"</js>);
- * 
+ *
  * 	<jc>// Footer with styling</jc>
  * 	Footer <jv>styled2</jv> = <jsm>footer</jsm>(
  * 		<jsm>p</jsm>(<js>"© 2024 My Company"</js>),
  * 		<jsm>p</jsm>(<js>"Built with ❤️ using modern web technologies"</js>)
  * 	).style(<js>"background-color: #f0f0f0; padding: 20px; text-align: center;"</js>);
- * 
+ *
  * 	<jc>// Footer with multiple sections</jc>
  * 	Footer <jv>multiSection</jv> = <jsm>footer</jsm>(
  * 		<jsm>div</jsm>(

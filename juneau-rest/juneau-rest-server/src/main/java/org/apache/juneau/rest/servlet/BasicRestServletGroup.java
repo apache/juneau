@@ -47,10 +47,8 @@ import org.apache.juneau.rest.config.*;
 public abstract class BasicRestServletGroup extends BasicRestServlet implements BasicGroupOperations {
 	private static final long serialVersionUID = 1L;
 
-
 	@Override /* BasicGroupOperations */
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return ChildResourceDescriptions.of(req);
 	}
 }
-

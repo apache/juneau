@@ -77,7 +77,6 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 		};
 	}
 
-
 	@Override /* Map */
 	public Set<Map.Entry<K,V>> entrySet() {
 		return entries;

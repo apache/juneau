@@ -147,7 +147,7 @@ class Response_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
-		
+
 		@Test void a14_getHeader() {
 			// Test getHeader with null headers map (covers the null check branch)
 			var y = bean();

@@ -19,4 +19,3 @@ package org.apache.juneau.microservice.jetty.resources;
 /**
  * Predefined Jetty Microservice Resources
  */
-

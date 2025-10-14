@@ -19,4 +19,3 @@ package org.apache.juneau.jena.annotation;
 /**
  * RDF Marshalling Annotations
  */
-

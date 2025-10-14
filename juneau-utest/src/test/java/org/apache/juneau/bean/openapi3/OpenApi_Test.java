@@ -91,19 +91,19 @@ class OpenApi_Test extends TestBase {
 				"paths{/test{get{summary}}}",
 				"{{{a}}}"
 			);
-			
+
 			// Test addTags
 			var x1 = bean()
 				.addTags(tag("b1"), tag("b2"))
 				.addTags(list(tag("b3")));
 			assertBean(x1, "tags{#{name}}", "{[{b1},{b2},{b3}]}");
-			
+
 			// Test addServers
 			var x2 = bean()
 				.addServers(server().setUrl(URI.create("http://c1.com")), server().setUrl(URI.create("http://c2.com")))
 				.addServers(list(server().setUrl(URI.create("http://c3.com"))));
 			assertBean(x2, "servers{#{url}}", "{[{http://c1.com},{http://c2.com},{http://c3.com}]}");
-			
+
 			// Test addSecurity
 			var x3 = bean()
 				.addSecurity(securityRequirement().setRequirements(map("d1", list("d2"))))
@@ -154,7 +154,7 @@ class OpenApi_Test extends TestBase {
 				"{[{{a1=[a2]}},{{b1=[b2]}}]},{[{http://example1.com},{http://example2.com}]},{[{c1},{c2}]}"
 			);
 		}
-		
+
 		@Test void a14_addPath() {
 			// Test addPath method
 			var x = bean()

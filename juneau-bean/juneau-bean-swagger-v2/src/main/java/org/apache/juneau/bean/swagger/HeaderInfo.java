@@ -32,8 +32,8 @@ import org.apache.juneau.marshaller.*;
  * Describes a single HTTP header.
  *
  * <p>
- * The Header Object follows the structure of the Parameter Object with the following changes: it does not have a 
- * <c>name</c> field since the header name is specified in the key, and it does not have a <c>required</c> field 
+ * The Header Object follows the structure of the Parameter Object with the following changes: it does not have a
+ * <c>name</c> field since the header name is specified in the key, and it does not have a <c>required</c> field
  * since headers are always optional in HTTP for Swagger 2.0.
  *
  * <h5 class='section'>Swagger Specification:</h5>

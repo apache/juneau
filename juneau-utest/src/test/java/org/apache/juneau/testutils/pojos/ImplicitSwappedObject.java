@@ -31,7 +31,6 @@ public class ImplicitSwappedObject {
 
 	public ImplicitSwappedObject() {}
 
-
 	public ImplicitSwappedObject(String fromString) {
 		if (fromString.equals(SWAP))
 			wasUnswapped = true;

@@ -330,5 +330,4 @@ class Items_Test extends TestBase {
 	private static Items bean() {
 		return items();
 	}
-
 }

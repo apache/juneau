@@ -101,7 +101,6 @@ class AssertionPredicates_Test extends TestBase {
 		assertThrown(()->A2.is(match("ba*"))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='ba*'.  Value='null'.");
 	}
 
-
 	@Test void a10_regex() {
 		A1.is(regex("fo.*"));
 		assertThrown(()->A1.is(regex("ba.*"))).asMessage().asOneLine().is("Value did not match pattern.  Pattern='ba.*'.  Value='foo'.");

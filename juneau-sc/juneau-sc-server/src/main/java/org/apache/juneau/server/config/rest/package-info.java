@@ -19,4 +19,3 @@ package org.apache.juneau.server.config.rest;
 /**
  * Server Configuration REST
  */
-

@@ -45,6 +45,5 @@ class PatternReplaceVarTest extends TestBase {
 		assertEquals("size=23;display=none", vr.resolve("$PR{$S{PatternReplaceVarTest.test2},;\\$,}"));
 		assertEquals("size=23;none=display;", vr.resolve("$PR{$S{PatternReplaceVarTest.test2},;(*)=(*[^;]),;\\$2=\\$1}"));
 
-
 	}
 }

@@ -1197,5 +1197,4 @@ public class Rest_Debug_Test extends TestBase {
 		c2d.get("/g4").run().assertContent("false");
 		assertNotLogged();
 	}
-
 }

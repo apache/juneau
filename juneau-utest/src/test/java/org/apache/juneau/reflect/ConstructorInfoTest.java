@@ -111,7 +111,6 @@ class ConstructorInfoTest extends TestBase {
 		b_c3 = b.getDeclaredConstructor(x -> x.hasParamTypes(int.class)),
 		b_c4 = b.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
 
-
 	@Test void invoke() throws Exception {
 		assertEquals(null, b_c1.invokeFuzzy().toString());
 		assertEquals("foo", b_c2.invokeFuzzy("foo").toString());

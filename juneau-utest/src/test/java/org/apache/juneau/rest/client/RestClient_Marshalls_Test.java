@@ -157,7 +157,6 @@ public class RestClient_Marshalls_Test extends TestBase {
 	// Basic tests - Universal language support with default headers
 	//------------------------------------------------------------------------------------------------------------------
 
-
 	@Test void d01_universal() throws Exception {
 		var x = client().universal().headersDefault(Accept.APPLICATION_JSON, ContentType.APPLICATION_JSON).build();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertStatus(200).getContent().as(Bean.class).check();

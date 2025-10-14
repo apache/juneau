@@ -96,7 +96,6 @@ class ParamInfoTest extends TestBase {
 		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParam(0),  // NOSONAR
 		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParam(1);  // NOSONAR
 
-
 	@Test void getIndex() {
 		assertEquals(0, b_b_a.getIndex());
 		assertEquals(1, b_b_b.getIndex());

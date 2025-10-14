@@ -48,7 +48,6 @@ class BeanInheritance_RoundTripTest extends RoundTripTest_Base {
 		t.roundTrip(t3, A3.class);
 	}
 
-
 	public abstract static class A1 {
 		protected String x;
 		protected String y;

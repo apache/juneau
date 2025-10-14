@@ -47,7 +47,6 @@ import org.eclipse.jetty.server.*;
 
 import jakarta.servlet.*;
 
-
 /**
  * Entry point for Juneau microservice that implements a REST interface using Jetty on a single port.
  *

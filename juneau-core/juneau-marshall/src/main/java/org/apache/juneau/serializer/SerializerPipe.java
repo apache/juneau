@@ -118,7 +118,6 @@ public class SerializerPipe implements Closeable {
 		return new NoCloseOutputStream(outputStream);
 	}
 
-
 	/**
 	 * Wraps the specified output object inside a writer.
 	 *

@@ -25,12 +25,12 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a reference from an entry or feed to a Web resource.
  *
  * <p>
- * Atom links define references to related resources such as alternate representations, 
- * related documents, enclosures (for podcasts), and navigation links. Links are one of the 
+ * Atom links define references to related resources such as alternate representations,
+ * related documents, enclosures (for podcasts), and navigation links. Links are one of the
  * fundamental components of Atom and enable rich hypermedia relationships between resources.
  *
  * <p>
- * The link's <c>rel</c> attribute defines the relationship type, while <c>href</c> provides 
+ * The link's <c>rel</c> attribute defines the relationship type, while <c>href</c> provides
  * the target URI. Common relationship types include:
  * <ul class='spaced-list'>
  * 	<li><c>alternate</c> - An alternate representation (e.g., HTML version of entry)
@@ -71,7 +71,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomLink</c> construct in the 
+ * Represents an <c>atomLink</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.7">RFC 4287 - Section 4.2.7</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -90,7 +90,6 @@ public class Link extends Common {
 	private String title;
 	private Integer length;
 
-
 	/**
 	 * Normal constructor.
 	 *
@@ -104,7 +103,6 @@ public class Link extends Common {
 
 	/** Bean constructor. */
 	public Link() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
@@ -155,7 +153,7 @@ public class Link extends Common {
 	 * Returns the link relation type.
 	 *
 	 * <p>
-	 * The <c>rel</c> attribute indicates the type of relationship between the entry/feed and 
+	 * The <c>rel</c> attribute indicates the type of relationship between the entry/feed and
 	 * the linked resource. When not specified, the default is "alternate".
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -172,8 +170,8 @@ public class Link extends Common {
 	 * Sets the link relation type.
 	 *
 	 * <p>
-	 * Common values include <js>"alternate"</js>, <js>"self"</js>, <js>"related"</js>, 
-	 * <js>"enclosure"</js>, <js>"via"</js>, <js>"first"</js>, <js>"last"</js>, 
+	 * Common values include <js>"alternate"</js>, <js>"self"</js>, <js>"related"</js>,
+	 * <js>"enclosure"</js>, <js>"via"</js>, <js>"first"</js>, <js>"last"</js>,
 	 * <js>"previous"</js>, <js>"next"</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -316,7 +314,7 @@ public class Link extends Common {
 	 * Returns an advisory size in bytes of the linked resource.
 	 *
 	 * <p>
-	 * This is particularly useful for enclosures (podcast episodes, video files, etc.) to 
+	 * This is particularly useful for enclosures (podcast episodes, video files, etc.) to
 	 * help clients decide whether to download the resource.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.

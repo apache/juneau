@@ -19,4 +19,3 @@ package org.apache.juneau.json.annotation;
 /**
  * JSON Marshalling Annotations
  */
-

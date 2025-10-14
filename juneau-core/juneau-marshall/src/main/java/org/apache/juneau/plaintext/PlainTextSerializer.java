@@ -784,7 +784,6 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		super(builder);
 	}
 
-
 	@Override /* Context */
 	public Builder copy() {
 		return new Builder(this);

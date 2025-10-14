@@ -26,7 +26,7 @@ package org.apache.juneau.bean.html5;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Instead of this...</jc>
  * 	P <jv>address</jv> = <jk>new</jk> P()
  * 		.children(
@@ -36,7 +36,7 @@ package org.apache.juneau.bean.html5;
  * 			<jk>new</jk> Br(),
  * 			<js>"Anytown, ST 12345"</js>
  * 		);
- * 
+ *
  * 	<jc>// ...you can write this...</jc>
  * 	P <jv>address</jv> = <jsm>p</jsm>(
  * 		<js>"John Doe"</js>,
@@ -45,14 +45,14 @@ package org.apache.juneau.bean.html5;
  * 		<jsm>br</jsm>(),
  * 		<js>"Anytown, ST 12345"</js>
  * 	);
- * 
+ *
  * 	<jc>// Form with builder methods</jc>
  * 	Form <jv>form</jv> = <jsm>form</jsm>(<js>"/submit"</js>,
  * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"username"</js>).placeholder(<js>"Username"</js>),
  * 		<jsm>input</jsm>(<js>"password"</js>).name(<js>"password"</js>).placeholder(<js>"Password"</js>),
  * 		<jsm>button</jsm>(<js>"submit"</js>, <js>"Login"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Table with builder methods</jc>
  * 	Table <jv>table</jv> = <jsm>table</jsm>(
  * 		<jsm>thead</jsm>(
@@ -75,7 +75,7 @@ package org.apache.juneau.bean.html5;
  * 			)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Navigation menu</jc>
  * 	Nav <jv>nav</jv> = <jsm>nav</jsm>(
  * 		<jsm>ul</jsm>(
@@ -84,14 +84,14 @@ package org.apache.juneau.bean.html5;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Fieldset with attributes after children</jc>
  * 	Fieldset <jv>fieldset</jv> = <jsm>fieldset</jsm>(
  * 		<jsm>legend</jsm>(<js>"User Information"</js>),
  * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"firstName"</js>).placeholder(<js>"First Name"</js>),
  * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"lastName"</js>).placeholder(<js>"Last Name"</js>)
  * 	).disabled(<jk>true</jk>);
- * 
+ *
  * 	<jc>// List with mixed content</jc>
  * 	Ul <jv>list</jv> = <jsm>ul</jsm>(
  * 		<jsm>li</jsm>(<js>"Simple item"</js>),
@@ -103,7 +103,7 @@ package org.apache.juneau.bean.html5;
  * 			<jsm>code</jsm>(<js>"code"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Media elements</jc>
  * 	Video <jv>video</jv> = <jsm>video</jsm>(<js>"/path/to/video.mp4"</js>)
  * 		.controls(<jk>true</jk>)
@@ -112,7 +112,7 @@ package org.apache.juneau.bean.html5;
  * 		.children(
  * 			<jsm>track</jsm>(<js>"/path/to/subtitles.vtt"</js>, <js>"captions"</js>).srclang(<js>"en"</js>).label(<js>"English"</js>)
  * 		);
- * 
+ *
  * 	Audio <jv>audio</jv> = <jsm>audio</jsm>(<js>"/path/to/audio.mp3"</js>)
  * 		.controls(<jk>true</jk>)
  * 		.autoplay(<jk>false</jk>)

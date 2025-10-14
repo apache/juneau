@@ -18,10 +18,9 @@ package org.apache.juneau.examples.core.svl;
 
 /**
  * SVL (Simple Variable Language) Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's SVL variable language capabilities.
  * These examples show various variable resolution and template processing scenarios.
  * </p>
  */
-

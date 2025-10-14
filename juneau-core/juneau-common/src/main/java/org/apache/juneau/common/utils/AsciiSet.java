@@ -144,7 +144,6 @@ public class AsciiSet {
 		return b;
 	}
 
-
 	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
 	 *

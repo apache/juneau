@@ -31,22 +31,22 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple option</jc>
  * 	Option <jv>option1</jv> = <jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>);
- * 
+ *
  * 	<jc>// Selected option</jc>
  * 	Option <jv>option2</jv> = <jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
  * 		.selected(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Disabled option</jc>
  * 	Option <jv>option3</jv> = <jsm>option</jsm>(<js>"gray"</js>, <js>"Gray"</js>)
  * 		.disabled(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Option with label</jc>
  * 	Option <jv>option4</jv> = <jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>)
  * 		.label(<js>"Green Color"</js>);
- * 
+ *
  * 	<jc>// Options in a select</jc>
  * 	Select <jv>select1</jv> = <jsm>select</jsm>(<js>"color"</js>,
  * 		<jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>),

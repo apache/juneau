@@ -297,7 +297,6 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 		return this;
 	}
 
-
 	/**
 	 * Sets request header values.
 	 *

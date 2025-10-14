@@ -28,7 +28,7 @@ import org.apache.juneau.xml.annotation.*;
  * Identifies the software agent used to generate an Atom feed.
  *
  * <p>
- * The generator element provides information about the software that created the feed. This is 
+ * The generator element provides information about the software that created the feed. This is
  * useful for debugging, analytics, and understanding the tools used in feed creation.
  *
  * <p>
@@ -61,7 +61,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomGenerator</c> construct in the 
+ * Represents an <c>atomGenerator</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.4">RFC 4287 - Section 4.2.4</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -76,7 +76,6 @@ public class Generator extends Common {
 	private String version;
 	private String text;
 
-
 	/**
 	 * Normal constructor.
 	 *
@@ -88,7 +87,6 @@ public class Generator extends Common {
 
 	/** Bean constructor. */
 	public Generator() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

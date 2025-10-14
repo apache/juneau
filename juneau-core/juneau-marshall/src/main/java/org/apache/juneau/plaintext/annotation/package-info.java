@@ -19,4 +19,3 @@ package org.apache.juneau.plaintext.annotation;
 /**
  * Plaintext Marshalling Annotations
  */
-

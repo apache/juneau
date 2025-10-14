@@ -34,31 +34,31 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Text input field</jc>
  * 	Input <jv>input1</jv> = <jsm>input</jsm>(<js>"text"</js>)
  * 		.name(<js>"username"</js>)
  * 		.placeholder(<js>"Enter your username"</js>)
  * 		.required(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Email input with validation</jc>
  * 	Input <jv>input2</jv> = <jsm>input</jsm>(<js>"email"</js>)
  * 		.name(<js>"email"</js>)
  * 		.placeholder(<js>"your@email.com"</js>)
  * 		.autocomplete(<js>"email"</js>);
- * 
+ *
  * 	<jc>// File upload input</jc>
  * 	Input <jv>input3</jv> = <jsm>input</jsm>(<js>"file"</js>)
  * 		.name(<js>"avatar"</js>)
  * 		.accept(<js>"image/*"</js>)
  * 		.multiple(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Checkbox input</jc>
  * 	Input <jv>input4</jv> = <jsm>input</jsm>(<js>"checkbox"</js>)
  * 		.name(<js>"subscribe"</js>)
  * 		.value(<js>"yes"</js>)
  * 		.checked(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Password input with pattern</jc>
  * 	Input <jv>input5</jv> = <jsm>input</jsm>(<js>"password"</js>)
  * 		.name(<js>"password"</js>)
@@ -542,7 +542,6 @@ public class Input extends HtmlElementVoid {
 		attr("readonly", value);
 		return this;
 	}
-
 
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.

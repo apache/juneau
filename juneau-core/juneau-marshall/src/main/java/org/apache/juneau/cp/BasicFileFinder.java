@@ -52,7 +52,6 @@ import org.apache.juneau.internal.*;
  */
 public class BasicFileFinder implements FileFinder {
 
-
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
 
 	private final Map<String,LocalFile> files = new ConcurrentHashMap<>();

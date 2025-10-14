@@ -61,7 +61,6 @@ class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.build(),
 	};
 
-
 	@Bean(dictionary=HtmlBeanDictionary.class)
 	public static class FormTemplate {
 

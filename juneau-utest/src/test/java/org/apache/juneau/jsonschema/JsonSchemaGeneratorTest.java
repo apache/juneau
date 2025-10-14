@@ -172,7 +172,6 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@SuppressWarnings("serial")
 	public static class BeanMap2d extends LinkedHashMap<Integer,LinkedHashMap<Integer,SimpleBean>> {}
 
-
 	//====================================================================================================
 	// JSONSCHEMA_useBeanDefs
 	//====================================================================================================
@@ -1475,9 +1474,9 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "if,then,else", "properties:{foo:{const:'bar'}},required:['baz'],required:['qux']");
 	}
 
-	@Schema(type="object", 
-		_if="properties:{foo:{const:'bar'}}", 
-		_then="required:['baz']", 
+	@Schema(type="object",
+		_if="properties:{foo:{const:'bar'}}",
+		_then="required:['baz']",
 		_else="required:['qux']")
 	public static class ConditionalBean {
 		public String foo;
@@ -1488,7 +1487,7 @@ class JsonSchemaGeneratorTest extends TestBase {
 	@Test void draft2020_combinedProperties() throws Exception {
 		var s = JsonSchemaGenerator.DEFAULT.getSession();
 		var schema = s.getSchema(CombinedPropertiesBean.class);
-		assertBean(schema, "$comment,$id,const,deprecated,examples,exclusiveMaximum,exclusiveMinimum", 
+		assertBean(schema, "$comment,$id,const,deprecated,examples,exclusiveMaximum,exclusiveMinimum",
 			"A comprehensive example,https://example.com/combined,FIXED,true,[ex1,ex2],100,0");
 	}
 
@@ -1526,13 +1525,12 @@ class JsonSchemaGeneratorTest extends TestBase {
 		assertBean(schema, "exclusiveMaximum,exclusiveMinimum", "100,0");
 	}
 
-	@Schema(type="integer", 
-		exclusiveMaximumValue="100", 
+	@Schema(type="integer",
+		exclusiveMaximumValue="100",
 		exclusiveMinimumValue="0",
 		exclusiveMaximum=false,  // This should be ignored in favor of numeric values
 		exclusiveMinimum=false)
 	public static class MixedStyleExclusiveBean {
 		public int value;
 	}
-
 }

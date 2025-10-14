@@ -36,7 +36,6 @@ public class AtomXmlExample {
 	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 
-
 		Feed feed = AtomFeed.getAtomFeed();
 
 		// Example with no namespaces

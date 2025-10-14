@@ -62,7 +62,6 @@ class BeanMap_Test extends TestBase {
 		assertEquals("b1", m.getString("type"));
 	}
 
-
 	public static class B {
 		public B1 b1;
 

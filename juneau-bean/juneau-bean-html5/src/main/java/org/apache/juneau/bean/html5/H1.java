@@ -33,14 +33,14 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple page title</jc>
  * 	H1 <jv>simple</jv> = <jsm>h1</jsm>(<js>"Welcome to Our Website"</js>);
- * 
+ *
  * 	<jc>// H1 with styling</jc>
  * 	H1 <jv>styled</jv> = <jsm>h1</jsm>(<js>"About Our Company"</js>)
  * 		._class(<js>"page-title"</js>);
- * 
+ *
  * 	<jc>// H1 with complex content</jc>
  * 	H1 <jv>complex</jv> = <jsm>h1</jsm>(
  * 		<js>"Welcome to "</js>,
@@ -48,15 +48,15 @@ import org.apache.juneau.internal.*;
  * 		<js>" - "</js>,
  * 		<jsm>em</jsm>(<js>"Innovation at its finest"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H1 with ID</jc>
  * 	H1 <jv>withId</jv> = <jsm>h1</jsm>(<js>"Product Documentation"</js>)
  * 		.id(<js>"main-title"</js>);
- * 
+ *
  * 	<jc>// H1 with styling</jc>
  * 	H1 <jv>styled2</jv> = <jsm>h1</jsm>(<js>"User Guide"</js>)
  * 		.style(<js>"color: #333; text-align: center; margin-bottom: 30px;"</js>);
- * 
+ *
  * 	<jc>// H1 with multiple elements</jc>
  * 	H1 <jv>multiple</jv> = <jsm>h1</jsm>(
  * 		<js>"Chapter 1: "</js>,
@@ -64,7 +64,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Beginner Level)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H1 with links</jc>
  * 	H1 <jv>withLinks</jv> = <jsm>h1</jsm>(
  * 		<js>"Product: "</js>,

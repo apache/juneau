@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * Provides metadata about the API.
  *
  * <p>
- * The Info Object contains required and optional metadata about the API, including the title, version, description, 
- * terms of service, contact information, and license. This metadata can be used by client tooling and is typically 
+ * The Info Object contains required and optional metadata about the API, including the title, version, description,
+ * terms of service, contact information, and license. This metadata can be used by client tooling and is typically
  * displayed in API documentation interfaces.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -363,5 +363,4 @@ public class Info extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

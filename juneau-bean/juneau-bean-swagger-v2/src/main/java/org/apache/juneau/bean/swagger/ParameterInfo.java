@@ -33,8 +33,8 @@ import org.apache.juneau.marshaller.*;
  * Describes a single operation parameter.
  *
  * <p>
- * The Parameter Object describes a single parameter used in a Swagger 2.0 API operation. A unique parameter is 
- * defined by a combination of a name and location (in). Parameters can be passed in various locations including 
+ * The Parameter Object describes a single parameter used in a Swagger 2.0 API operation. A unique parameter is
+ * defined by a combination of a name and location (in). Parameters can be passed in various locations including
  * the path, query string, headers, body, or form data.
  *
  * <h5 class='section'>Swagger Specification:</h5>

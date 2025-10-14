@@ -28,8 +28,8 @@ import org.apache.juneau.internal.*;
  * Allows configuration of the supported OAuth Flows.
  *
  * <p>
- * The OAuthFlows Object allows configuration of the supported OAuth Flows. This object contains the configuration 
- * for different OAuth 2.0 flows that can be used to secure the API. Each flow type has its own specific configuration 
+ * The OAuthFlows Object allows configuration of the supported OAuth Flows. This object contains the configuration
+ * for different OAuth 2.0 flows that can be used to secure the API. Each flow type has its own specific configuration
  * requirements and use cases.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>

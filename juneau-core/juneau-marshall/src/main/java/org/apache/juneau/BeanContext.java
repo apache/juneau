@@ -196,7 +196,6 @@ public class BeanContext extends Context {
 		Throwable.class
 	};
 
-
 	/** Default config.  All default settings. */
 	public static final BeanContext DEFAULT = create().build();
 
@@ -4029,7 +4028,6 @@ public class BeanContext extends Context {
 			return null;
 		return (ClassMeta<T>)getClassMeta(o.getClass());
 	}
-
 
 	/**
 	 * Used for determining the class type on a method or field where a {@code @Beanp} annotation may be present.

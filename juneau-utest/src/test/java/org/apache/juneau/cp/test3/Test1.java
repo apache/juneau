@@ -17,5 +17,4 @@
 package org.apache.juneau.cp.test3;
 
 public class Test1 {
-
 }

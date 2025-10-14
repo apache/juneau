@@ -119,7 +119,6 @@ public class UrlEncodingAnnotation {
 			return new Impl(this);
 		}
 
-
 		/**
 		 * Sets the {@link UrlEncoding#expandedParams} property on this annotation.
 		 *
@@ -146,7 +145,6 @@ public class UrlEncodingAnnotation {
 			this.expandedParams = b.expandedParams;
 			postConstruct();
 		}
-
 
 		@Override /* UrlEncoding */
 		public boolean expandedParams() {

@@ -57,4 +57,3 @@ public class HttpResourceProcessor implements ResponseProcessor {
 		return FINISHED;
 	}
 }
-

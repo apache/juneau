@@ -83,5 +83,4 @@ public class GetConfiguration implements Command, GetValue<Map<String, ConfigIte
 	public Map<String, ConfigItem> get() {
 		return configs;
 	}
-
 }

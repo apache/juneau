@@ -43,7 +43,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>textarea</jsm>().name(<js>"message"</js>).placeholder(<js>"Your Message"</js>),
  * 			<jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Send Message"</js>)
  * 		);
- * 
+ *
  * 	<jc>// File upload form</jc>
  * 	Form <jv>form2</jv> = <jsm>form</jsm>()
  * 		.action(<js>"/upload"</js>)
@@ -53,7 +53,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>input</jsm>(<js>"file"</js>).name(<js>"file"</js>).accept(<js>"image/*"</js>),
  * 			<jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Upload"</js>)
  * 		);
- * 
+ *
  * 	<jc>// Form with validation</jc>
  * 	Form <jv>form3</jv> = <jsm>form</jsm>()
  * 		.action(<js>"/register"</js>)

@@ -19,4 +19,3 @@ package org.apache.juneau.internal;
 /**
  * Internal Utilities
  */
-

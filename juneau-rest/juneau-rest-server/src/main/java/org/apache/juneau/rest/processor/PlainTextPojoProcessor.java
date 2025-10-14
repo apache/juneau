@@ -58,4 +58,3 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 		return FINISHED;
 	}
 }
-

@@ -19,4 +19,3 @@ package org.apache.juneau.msgpack.annotation;
 /**
  * MessagePack Marshalling Annotations
  */
-

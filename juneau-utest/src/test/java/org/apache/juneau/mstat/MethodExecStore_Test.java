@@ -86,7 +86,6 @@ class MethodExecStore_Test extends TestBase {
 		assertInstanceOf(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 	}
 
-
 	public static class A6a {}
 
 	public static class A6b extends MethodExecStats {

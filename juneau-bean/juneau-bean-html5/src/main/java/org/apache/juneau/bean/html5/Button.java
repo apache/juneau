@@ -35,14 +35,14 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	<jc>// Simple submit button</jc>
  * 	Button <jv>btn1</jv> = <jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Submit Form"</js>);
- * 
+ *
  * 	<jc>// Button with custom styling and click handler</jc>
  * 	Button <jv>btn2</jv> = <jsm>button</jsm>()
  * 		.type(<js>"button"</js>)
  * 		._class(<js>"btn btn-primary"</js>)
  * 		.onclick(<js>"handleClick()"</js>)
  * 		.text(<js>"Click Me"</js>);
- * 
+ *
  * 	<jc>// Button with form override attributes</jc>
  * 	Button <jv>btn3</jv> = <jsm>button</jsm>()
  * 		.type(<js>"submit"</js>)
@@ -50,7 +50,7 @@ import org.apache.juneau.internal.*;
  * 		.formmethod(<js>"post"</js>)
  * 		.formtarget(<js>"_blank"</js>)
  * 		.text(<js>"Submit to API"</js>);
- * 
+ *
  * 	<jc>// Button with icon and text</jc>
  * 	Button <jv>btn4</jv> = <jsm>button</jsm>()
  * 		.type(<js>"button"</js>)

@@ -34,21 +34,21 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Embed a PDF document</jc>
  * 	Embed <jv>embed1</jv> = <jsm>embed</jsm>()
  * 		.src(<js>"document.pdf"</js>)
  * 		.type(<js>"application/pdf"</js>)
  * 		.width(<js>"800"</js>)
  * 		.height(<js>"600"</js>);
- * 
+ *
  * 	<jc>// Embed a Flash application</jc>
  * 	Embed <jv>embed2</jv> = <jsm>embed</jsm>()
  * 		.src(<js>"game.swf"</js>)
  * 		.type(<js>"application/x-shockwave-flash"</js>)
  * 		.width(<js>"640"</js>)
  * 		.height(<js>"480"</js>);
- * 
+ *
  * 	<jc>// Embed with fallback content</jc>
  * 	Embed <jv>embed3</jv> = <jsm>embed</jsm>()
  * 		.src(<js>"interactive-content.swf"</js>)

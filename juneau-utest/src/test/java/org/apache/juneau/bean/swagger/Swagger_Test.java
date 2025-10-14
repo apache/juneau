@@ -415,7 +415,6 @@ class Swagger_Test extends TestBase {
 
 	@Nested class D_refs extends TestBase {
 
-
 		@Test void d01_findRef() {
 			var x = swagger().addDefinition("a1", JsonMap.of("type", "a2"));
 			assertBean(
@@ -458,5 +457,4 @@ class Swagger_Test extends TestBase {
 	private static Swagger bean() {
 		return swagger();
 	}
-
 }

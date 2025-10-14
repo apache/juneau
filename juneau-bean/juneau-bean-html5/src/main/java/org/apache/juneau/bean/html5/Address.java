@@ -32,10 +32,10 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple contact address</jc>
  * 	Address <jv>simple</jv> = <jsm>address</jsm>(<js>"123 Main Street, Anytown, ST 12345"</js>);
- * 
+ *
  * 	<jc>// Contact information with multiple elements</jc>
  * 	Address <jv>contact</jv> = <jsm>address</jsm>(
  * 		<js>"John Doe"</js>,
@@ -46,7 +46,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>br</jsm>(),
  * 		<jsm>a</jsm>(<js>"mailto:john@example.com"</js>, <js>"john@example.com"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Company address</jc>
  * 	Address <jv>company</jv> = <jsm>address</jsm>(
  * 		<js>"Acme Corporation"</js>,
@@ -59,14 +59,14 @@ import org.apache.juneau.internal.*;
  * 		<jsm>br</jsm>(),
  * 		<js>"Phone: (555) 123-4567"</js>
  * 	);
- * 
+ *
  * 	<jc>// Styled address</jc>
  * 	Address <jv>styled</jv> = <jsm>address</jsm>(
  * 		<js>"Contact us at:"</js>,
  * 		<jsm>br</jsm>(),
  * 		<jsm>a</jsm>(<js>"mailto:info@company.com"</js>, <js>"info@company.com"</js>)
  * 	)._class(<js>"contact-info"</js>);
- * 
+ *
  * 	<jc>// Address with multiple contact methods</jc>
  * 	Address <jv>multiple</jv> = <jsm>address</jsm>(
  * 		<js>"Support Team"</js>,

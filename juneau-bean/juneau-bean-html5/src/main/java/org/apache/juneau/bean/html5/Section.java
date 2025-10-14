@@ -37,13 +37,13 @@ import org.apache.juneau.internal.*;
  * 		<jsm>h2</jsm>(<js>"Introduction"</js>),
  * 		<jsm>p</jsm>(<js>"This is the introduction section."</js>)
  * 	);
- * 
+ *
  * 	<jc>// Section with styling</jc>
  * 	Section <jv>styled</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Features"</js>),
  * 		<jsm>p</jsm>(<js>"Here are the key features of our product."</js>)
  * 	)._class(<js>"content-section"</js>);
- * 
+ *
  * 	<jc>// Section with complex content</jc>
  * 	Section <jv>complex</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Getting Started"</js>),
@@ -54,19 +54,19 @@ import org.apache.juneau.internal.*;
  * 			<jsm>li</jsm>(<js>"Step 3: Start using the application"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Section with ID</jc>
  * 	Section <jv>withId</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Main Content"</js>),
  * 		<jsm>p</jsm>(<js>"This is the main content section."</js>)
  * 	).id(<js>"main-content"</js>);
- * 
+ *
  * 	<jc>// Section with styling</jc>
  * 	Section <jv>styled2</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Styled Section"</js>),
  * 		<jsm>p</jsm>(<js>"This section has custom styling."</js>)
  * 	).style(<js>"background-color: #f9f9f9; padding: 20px; margin: 10px 0;"</js>);
- * 
+ *
  * 	<jc>// Section with multiple elements</jc>
  * 	Section <jv>multiple</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Documentation"</js>),
@@ -78,7 +78,7 @@ import org.apache.juneau.internal.*;
  * 		),
  * 		<jsm>footer</jsm>(<js>"Last updated: January 2024"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Section with article</jc>
  * 	Section <jv>withArticle</jv> = <jsm>section</jsm>(
  * 		<jsm>h2</jsm>(<js>"Latest News"</js>),

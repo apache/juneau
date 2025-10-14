@@ -334,7 +334,6 @@ public class ReaderObjectSwap_ComboSerializeTest extends ComboSerializeTest_Base
 		}
 	}
 
-
 	public static class BeanWithSwappedField {
 		public PojoToDynamicReader f;
 		public BeanWithSwappedField(String f) {

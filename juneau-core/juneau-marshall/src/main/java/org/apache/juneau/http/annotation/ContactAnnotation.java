@@ -85,7 +85,6 @@ public class ContactAnnotation {
 			return new Impl(this);
 		}
 
-
 		/**
 		 * Sets the {@link Contact#email} property on this annotation.
 		 *

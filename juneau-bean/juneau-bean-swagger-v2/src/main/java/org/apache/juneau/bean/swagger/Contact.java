@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * Contact information for the exposed API.
  *
  * <p>
- * The Contact Object provides contact information for the exposed API in Swagger 2.0. This information can be used 
+ * The Contact Object provides contact information for the exposed API in Swagger 2.0. This information can be used
  * by clients to get in touch with the API maintainers for support, questions, or other inquiries.
  *
  * <h5 class='section'>Swagger Specification:</h5>

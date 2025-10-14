@@ -380,4 +380,3 @@ class Bean_Test extends TestBase {
 		assertEquals("{b:2,d:4}", json);
 	}
 }
-

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple blog post article</jc>
  * 	Article <jv>blogPost</jv> = <jsm>article</jsm>(
  * 		<jsm>header</jsm>(
@@ -45,7 +45,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>address</jsm>(<js>"Contact: john@example.com"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// News article</jc>
  * 	Article <jv>newsArticle</jv> = <jsm>article</jsm>(
  * 		<jsm>header</jsm>(
@@ -58,7 +58,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>p</jsm>(<js>"The technology works by..."</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Forum post</jc>
  * 	Article <jv>forumPost</jv> = <jsm>article</jsm>(
  * 		<jsm>header</jsm>(
@@ -70,7 +70,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>p</jsm>(<js>"Tags: "</js>, <jsm>a</jsm>(<js>"/tag/css"</js>, <js>"CSS"</js>), <js>", "</js>, <jsm>a</jsm>(<js>"/tag/grid"</js>, <js>"Grid"</js>))
  * 		)
  * 	)._class(<js>"forum-post"</js>);
- * 
+ *
  * 	<jc>// Product review</jc>
  * 	Article <jv>review</jv> = <jsm>article</jsm>(
  * 		<jsm>header</jsm>(
@@ -87,7 +87,7 @@ import org.apache.juneau.internal.*;
  * 			)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Article with multiple sections</jc>
  * 	Article <jv>multiSection</jv> = <jsm>article</jsm>(
  * 		<jsm>header</jsm>(<jsm>h1</jsm>(<js>"Complete Guide to Web Development"</js>)),

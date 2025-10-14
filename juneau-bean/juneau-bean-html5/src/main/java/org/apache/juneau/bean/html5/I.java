@@ -33,29 +33,29 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple italic text</jc>
  * 	I <jv>simple</jv> = <jsm>i</jsm>(<js>"This is italic text"</js>);
- * 
+ *
  * 	<jc>// I with styling</jc>
  * 	I <jv>styled</jv> = <jsm>i</jsm>(<js>"Styled italic text"</js>)
  * 		._class(<js>"emphasis"</js>);
- * 
+ *
  * 	<jc>// I with complex content</jc>
  * 	I <jv>complex</jv> = <jsm>i</jsm>(
  * 		<js>"The "</js>,
  * 		<jsm>strong</jsm>(<js>"HMS Victory"</js>),
  * 		<js>" was a famous ship."</js>
  * 	);
- * 
+ *
  * 	<jc>// I with ID</jc>
  * 	I <jv>withId</jv> = <jsm>i</jsm>(<js>"Text with ID"</js>)
  * 		.id(<js>"italic-text"</js>);
- * 
+ *
  * 	<jc>// I with styling</jc>
  * 	I <jv>styled2</jv> = <jsm>i</jsm>(<js>"Custom styled italic text"</js>)
  * 		.style(<js>"color: #666; font-style: italic;"</js>);
- * 
+ *
  * 	<jc>// I with multiple elements</jc>
  * 	I <jv>multiple</jv> = <jsm>i</jsm>(
  * 		<js>"The "</js>,
@@ -64,7 +64,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>i</jsm>(<js>"first-rate"</js>),
  * 		<js>" ship of the line."</js>
  * 	);
- * 
+ *
  * 	<jc>// I with links</jc>
  * 	I <jv>withLinks</jv> = <jsm>i</jsm>(
  * 		<js>"See "</js>,

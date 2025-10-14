@@ -27,7 +27,7 @@ import org.apache.juneau.xml.annotation.*;
  * Represents the content of an Atom entry.
  *
  * <p>
- * The content element contains or links to the complete content of an entry. It supports multiple 
+ * The content element contains or links to the complete content of an entry. It supports multiple
  * content types and delivery methods:
  *
  * <ul class='spaced-list'>
@@ -105,7 +105,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomContent</c> construct in the 
+ * Represents an <c>atomContent</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.3">RFC 4287 - Section 4.1.3</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -116,7 +116,6 @@ import org.apache.juneau.xml.annotation.*;
 public class Content extends Text {
 
 	private URI src;
-
 
 	/**
 	 * Normal content.
@@ -133,7 +132,6 @@ public class Content extends Text {
 	public Content() {
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -145,7 +143,7 @@ public class Content extends Text {
 	 * Returns the URI of externally-hosted content (out-of-line content).
 	 *
 	 * <p>
-	 * When <c>src</c> is present, the content is not embedded in the feed but is instead 
+	 * When <c>src</c> is present, the content is not embedded in the feed but is instead
 	 * referenced by URI. This is useful for large media files or content hosted elsewhere.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -182,7 +180,6 @@ public class Content extends Text {
 		this.src = toURI(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)

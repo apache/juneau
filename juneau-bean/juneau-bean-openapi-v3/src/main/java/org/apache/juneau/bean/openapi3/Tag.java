@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * Allows adding metadata to a single tag that is used by the operation object.
  *
  * <p>
- * The Tag Object allows adding metadata to a single tag that is used by the Operation Object. It is not mandatory 
- * to have a Tag Object per tag used there, but it can be useful for providing additional information about tags 
+ * The Tag Object allows adding metadata to a single tag that is used by the Operation Object. It is not mandatory
+ * to have a Tag Object per tag used there, but it can be useful for providing additional information about tags
  * such as descriptions and external documentation.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -234,5 +234,4 @@ public class Tag extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

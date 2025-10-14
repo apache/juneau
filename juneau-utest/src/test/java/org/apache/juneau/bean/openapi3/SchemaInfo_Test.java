@@ -150,7 +150,7 @@ class SchemaInfo_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
-		
+
 		@Test void a13_collectionSetters() {
 			var x = bean()
 				.setEnum(list("a1", "a2"))
@@ -384,7 +384,7 @@ class SchemaInfo_Test extends TestBase {
 			refStack.add("dummy1");
 			refStack.add("dummy2");
 			refStack.add("dummy3");
-			
+
 			var schema = schemaInfo().setRef("#/components/schemas/MySchema");
 			var result = schema.resolveRefs(openApi, refStack, 3);
 

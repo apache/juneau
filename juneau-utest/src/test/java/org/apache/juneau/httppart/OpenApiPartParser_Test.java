@@ -190,7 +190,6 @@ class OpenApiPartParser_Test extends TestBase {
 		}
 	}
 
-
 	@Test void c01_stringType_simple() throws Exception {
 		var s = T_STRING;
 		assertEquals("foo", parse(s, "foo", String.class));
@@ -729,7 +728,6 @@ class OpenApiPartParser_Test extends TestBase {
 		assertJson("['F4-[1,2]','F4-[3]']", parse(s, "1,2|3", List.class, F4.class));
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = number
 	//-----------------------------------------------------------------------------------------------------------------
@@ -885,7 +883,6 @@ class OpenApiPartParser_Test extends TestBase {
 		assertJson("['G4-[1.0,2.0]','G4-[3.0]']", parse(s, "1,2|3", G4[].class));
 		assertJson("['G4-[1.0,2.0]','G4-[3.0]']", parse(s, "1,2|3", List.class, G4.class));
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = object

@@ -437,7 +437,7 @@ class Items_Test extends TestBase {
 
 			var refStack = new ArrayDeque<String>();
 			refStack.add("#/components/schemas/Item1");
-			
+
 			var item = items()
 				.setType("object")
 				.set("properties", JsonMap.of("prop1", JsonMap.of("$ref", "#/components/schemas/Item1")));
@@ -456,7 +456,7 @@ class Items_Test extends TestBase {
 			refStack.add("dummy1");
 			refStack.add("dummy2");
 			refStack.add("dummy3");
-			
+
 			var item = items()
 				.setType("object")
 				.set("properties", JsonMap.of("prop1", JsonMap.of("$ref", "#/components/schemas/MyItem")));

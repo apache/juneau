@@ -67,7 +67,6 @@ public class UrlPath {
 		return parts;
 	}
 
-
 	/**
 	 * Returns the filename portion of the path if there is one.
 	 *

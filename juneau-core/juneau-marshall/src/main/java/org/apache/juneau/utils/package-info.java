@@ -19,4 +19,3 @@ package org.apache.juneau.utils;
 /**
  * URL-Encoding Annotations
  */
-

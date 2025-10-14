@@ -33,16 +33,16 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Basic CSS styles</jc>
  * 	Style <jv>basic</jv> = <jsm>style</jsm>()
  * 		.text(<js>"body { font-family: Arial, sans-serif; }"</js>);
- * 
+ *
  * 	<jc>// CSS with media query</jc>
  * 	Style <jv>responsive</jv> = <jsm>style</jsm>()
  * 		.media(<js>"screen and (max-width: 600px)"</js>)
  * 		.text(<js>"body { font-size: 14px; }"</js>);
- * 
+ *
  * 	<jc>// Multiple CSS rules</jc>
  * 	Style <jv>multiple</jv> = <jsm>style</jsm>()
  * 		.text(
@@ -50,12 +50,12 @@ import org.apache.juneau.internal.*;
  * 			<js>"p { margin: 10px; }"</js>,
  * 			<js>".highlight { background-color: yellow; }"</js>
  * 		);
- * 
+ *
  * 	<jc>// CSS with type specification</jc>
  * 	Style <jv>typed</jv> = <jsm>style</jsm>()
  * 		.type(<js>"text/css"</js>)
  * 		.text(<js>".button { padding: 10px; background: #007bff; }"</js>);
- * 
+ *
  * 	<jc>// Print-specific styles</jc>
  * 	Style <jv>print</jv> = <jsm>style</jsm>()
  * 		.media(<js>"print"</js>)

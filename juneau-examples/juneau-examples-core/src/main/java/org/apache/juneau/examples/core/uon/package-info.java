@@ -18,7 +18,7 @@ package org.apache.juneau.examples.core.uon;
 
 /**
  * UON Marshalling Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's UON (Universal Object Notation) marshalling capabilities.
  * These examples show various UON serialization and parsing scenarios.

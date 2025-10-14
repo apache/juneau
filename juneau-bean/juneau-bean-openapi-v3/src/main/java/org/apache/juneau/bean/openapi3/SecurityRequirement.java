@@ -99,8 +99,8 @@ public class SecurityRequirement extends OpenApiElement {
 	 * Adds a security requirement for a scheme that doesn't use scopes.
 	 *
 	 * <p>
-	 * This is a convenience method for adding security schemes that don't use scopes, such as API keys, 
-	 * HTTP Basic authentication, or HTTP Bearer tokens. According to the OpenAPI specification, security 
+	 * This is a convenience method for adding security schemes that don't use scopes, such as API keys,
+	 * HTTP Basic authentication, or HTTP Bearer tokens. According to the OpenAPI specification, security
 	 * schemes that don't use scopes should have an empty array as the value.
 	 *
 	 * <p>
@@ -166,5 +166,4 @@ public class SecurityRequirement extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

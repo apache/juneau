@@ -510,7 +510,6 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 	@Swap(value=TemplateSwap.class, mediaTypes={"*/xml+rdf"}, template="RDFXML")
 	public static class TestTemplates {}
 
-
 	public static class TemplateSwap extends ObjectSwap<Object,Object> {
 		@Override
 		public Object swap(BeanSession session, Object o, String template) throws Exception {
@@ -597,7 +596,6 @@ class SwapsAnnotation_ComboSerializeTest extends ComboSerializeTest_Base {
 			return "RDFXML";
 		}
 	}
-
 
 	public static class TestContextSwap {}
 

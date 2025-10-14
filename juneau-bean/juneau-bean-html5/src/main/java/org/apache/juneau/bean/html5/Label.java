@@ -31,22 +31,22 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Label with explicit association</jc>
  * 	Label <jv>label1</jv> = <jsm>label</jsm>(<js>"Username:"</js>)
  * 		._for(<js>"username"</js>);
- * 
+ *
  * 	<jc>// Label wrapping form control</jc>
  * 	Label <jv>label2</jv> = <jsm>label</jsm>(
  * 		<jsm>input</jsm>(<js>"checkbox"</js>).name(<js>"agree"</js>),
  * 		<jsm>span</jsm>(<js>"I agree to the terms and conditions"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Label with form association</jc>
  * 	Label <jv>label3</jv> = <jsm>label</jsm>(<js>"Email Address:"</js>)
  * 		._for(<js>"email"</js>)
  * 		.form(<js>"contactForm"</js>);
- * 
+ *
  * 	<jc>// Label with styling</jc>
  * 	Label <jv>label4</jv> = <jsm>label</jsm>(<js>"Password:"</js>)
  * 		._for(<js>"password"</js>)

@@ -26,13 +26,13 @@ import org.apache.juneau.annotation.*;
  * Represents an individual entry within an Atom feed or as a standalone Atom document.
  *
  * <p>
- * An Atom entry is a discrete item of content within a feed, such as a blog post, news article, 
- * podcast episode, or other individual piece of content. Entries can exist within a feed or be 
+ * An Atom entry is a discrete item of content within a feed, such as a blog post, news article,
+ * podcast episode, or other individual piece of content. Entries can exist within a feed or be
  * published as standalone Atom documents.
  *
  * <p>
- * Each entry contains metadata about the content (title, authors, timestamps) and optionally the 
- * content itself or links to it. Entries are designed to be independently meaningful and may be 
+ * Each entry contains metadata about the content (title, authors, timestamps) and optionally the
+ * content itself or links to it. Entries are designed to be independently meaningful and may be
  * consumed separately from their containing feed.
  *
  * <h5 class='figure'>Schema</h5>
@@ -99,7 +99,7 @@ import org.apache.juneau.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomEntry</c> construct in the 
+ * Represents an <c>atomEntry</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.2">RFC 4287 - Section 4.1.2</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -140,7 +140,6 @@ public class Entry extends CommonEntry {
 	/** Bean constructor. */
 	public Entry() {}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -152,8 +151,8 @@ public class Entry extends CommonEntry {
 	 * Returns the content of this entry, or a link to it.
 	 *
 	 * <p>
-	 * The content element contains or links to the complete content of the entry. It can contain 
-	 * text, HTML, XHTML, or other media types. When not present, the entry must have an alternate 
+	 * The content element contains or links to the complete content of the entry. It can contain
+	 * text, HTML, XHTML, or other media types. When not present, the entry must have an alternate
 	 * link pointing to the content.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -210,8 +209,8 @@ public class Entry extends CommonEntry {
 	 * Returns the time when this entry was first published or made available.
 	 *
 	 * <p>
-	 * This differs from the updated time in that it represents the original publication date, 
-	 * which typically doesn't change even when the entry is modified. The updated timestamp 
+	 * This differs from the updated time in that it represents the original publication date,
+	 * which typically doesn't change even when the entry is modified. The updated timestamp
 	 * reflects the last modification time.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -271,8 +270,8 @@ public class Entry extends CommonEntry {
 	 * Returns metadata about the source feed if this entry was copied from another feed.
 	 *
 	 * <p>
-	 * When an entry is copied or aggregated from another feed, the source element preserves 
-	 * metadata from the original feed. This is useful for attribution and tracking the origin 
+	 * When an entry is copied or aggregated from another feed, the source element preserves
+	 * metadata from the original feed. This is useful for attribution and tracking the origin
 	 * of syndicated content.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -315,8 +314,8 @@ public class Entry extends CommonEntry {
 	 * Returns a short summary, abstract, or excerpt of the entry.
 	 *
 	 * <p>
-	 * The summary is typically used in feed readers to give users a preview of the entry's 
-	 * content without loading the full content. It's especially useful when content is not 
+	 * The summary is typically used in feed readers to give users a preview of the entry's
+	 * content without loading the full content. It's especially useful when content is not
 	 * inline or is very long.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -365,7 +364,6 @@ public class Entry extends CommonEntry {
 		setSummary(new Text(value));
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)

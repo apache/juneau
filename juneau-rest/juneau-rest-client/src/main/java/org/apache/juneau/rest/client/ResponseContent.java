@@ -327,7 +327,6 @@ public class ResponseContent implements HttpEntity {
 		return body;
 	}
 
-
 	/**
 	 * Pipes the contents of the response to the specified output stream.
 	 *

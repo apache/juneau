@@ -18,7 +18,7 @@ package org.apache.juneau.examples.core.html;
 
 /**
  * HTML Marshalling Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's HTML marshalling capabilities.
  * These examples show various HTML serialization and parsing scenarios.

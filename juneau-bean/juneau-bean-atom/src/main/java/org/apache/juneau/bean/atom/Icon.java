@@ -29,8 +29,8 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a small icon image for visual identification of a feed.
  *
  * <p>
- * The icon element contains a URI reference to a small image that provides iconic visual 
- * identification for the feed. Icons are typically small, square images suitable for display 
+ * The icon element contains a URI reference to a small image that provides iconic visual
+ * identification for the feed. Icons are typically small, square images suitable for display
  * in feed readers and aggregators.
  *
  * <p>
@@ -59,7 +59,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomIcon</c> construct in the 
+ * Represents an <c>atomIcon</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.5">RFC 4287 - Section 4.2.5</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -71,7 +71,6 @@ import org.apache.juneau.xml.annotation.*;
 public class Icon extends Common {
 
 	private URI uri;
-
 
 	/**
 	 * Normal constructor.
@@ -91,7 +90,6 @@ public class Icon extends Common {
 
 	/** Bean constructor. */
 	public Icon() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

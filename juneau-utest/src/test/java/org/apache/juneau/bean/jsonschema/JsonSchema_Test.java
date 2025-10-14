@@ -242,7 +242,6 @@ public class JsonSchema_Test extends TestBase {
 		assertEquals(expected, r);
 	}
 
-
 	/** Bean with simple values for each property */
 	public static JsonSchema getTest1() {
 		return new JsonSchema()

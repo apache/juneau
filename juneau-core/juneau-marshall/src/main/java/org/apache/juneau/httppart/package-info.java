@@ -19,4 +19,3 @@ package org.apache.juneau.httppart;
 /**
  * HTTP Part Marshalling Support
  */
-

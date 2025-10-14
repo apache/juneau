@@ -33,7 +33,6 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 class AutoObjectSwapTest extends TestBase {
 
-
 	private static final Map<String,String> STRINGMAP = map("foo","bar");
 	private static final JsonMap JSONMAP = JsonMap.of("foo","bar");
 

@@ -32,30 +32,30 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple header cell</jc>
  * 	Th <jv>simple</jv> = <jsm>th</jsm>(<js>"Name"</js>);
- * 
+ *
  * 	<jc>// Header cell with scope</jc>
  * 	Th <jv>scoped</jv> = <jsm>th</jsm>(<js>"Age"</js>)
  * 		.scope(<js>"col"</js>);
- * 
+ *
  * 	<jc>// Header cell spanning multiple columns</jc>
  * 	Th <jv>colspan</jv> = <jsm>th</jsm>(<js>"Contact Information"</js>)
  * 		.colspan(2);
- * 
+ *
  * 	<jc>// Header cell with abbreviation</jc>
  * 	Th <jv>abbreviated</jv> = <jsm>th</jsm>(<js>"Quantity"</js>)
  * 		.abbr(<js>"Qty"</js>);
- * 
+ *
  * 	<jc>// Header cell with sorting</jc>
  * 	Th <jv>sorted</jv> = <jsm>th</jsm>(<js>"Price"</js>)
  * 		.sorted(<js>"asc"</js>);
- * 
+ *
  * 	<jc>// Header cell with styling</jc>
  * 	Th <jv>styled</jv> = <jsm>th</jsm>(<js>"Status"</js>)
  * 		._class(<js>"header-cell"</js>);
- * 
+ *
  * 	<jc>// Header cell with complex content</jc>
  * 	Th <jv>complex</jv> = <jsm>th</jsm>(
  * 		.children(

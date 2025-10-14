@@ -53,5 +53,4 @@ public class MethodList extends ArrayList<Method> {
 	public MethodList(Collection<Method> methods) {
 		super(methods);
 	}
-
 }

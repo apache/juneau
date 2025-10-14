@@ -33,7 +33,7 @@ import org.apache.juneau.marshaller.*;
  * Allows the definition of a security scheme that can be used by the operations.
  *
  * <p>
- * The Security Scheme Object defines a security scheme that can be used by the operations in Swagger 2.0. 
+ * The Security Scheme Object defines a security scheme that can be used by the operations in Swagger 2.0.
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's
  * common flows (implicit, password, application and access code).
  *
@@ -470,5 +470,4 @@ public class SecurityScheme extends SwaggerElement {
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
-
 }

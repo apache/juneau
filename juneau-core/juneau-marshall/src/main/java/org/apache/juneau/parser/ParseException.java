@@ -121,7 +121,6 @@ public class ParseException extends BasicRuntimeException {
 		super(causedBy, getMessage(session, causedBy.getMessage()));
 	}
 
-
 	private static String getMessage(ParserSession session, String msg, Object... args) {
 		if (args.length != 0)
 			msg = format(msg, args);

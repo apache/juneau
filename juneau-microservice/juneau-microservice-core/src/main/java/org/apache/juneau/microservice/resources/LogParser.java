@@ -225,4 +225,3 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		return s;
 	}
 }
-

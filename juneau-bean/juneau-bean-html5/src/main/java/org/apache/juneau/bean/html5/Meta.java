@@ -32,22 +32,22 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	// Character encoding
  * 	Meta meta1 = meta().charset("utf-8");
- * 
+ *
  * 	// Viewport for responsive design
  * 	Meta meta2 = meta()
  * 		.name("viewport")
  * 		.content("width=device-width, initial-scale=1.0");
- * 
+ *
  * 	// SEO description
  * 	Meta meta3 = meta()
  * 		.name("description")
  * 		.content("This is a sample web page with meta information");
- * 
+ *
  * 	// Open Graph tags for social media
  * 	Meta meta4 = meta()
  * 		.property("og:title")
  * 		.content("My Web Page");
- * 
+ *
  * 	// HTTP-equiv for cache control
  * 	Meta meta5 = meta()
  * 		.httpequiv("Cache-Control")

@@ -19,4 +19,3 @@ package org.apache.juneau.httppart.bean;
 /**
  * HTTP Part Beans
  */
-

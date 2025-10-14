@@ -32,14 +32,14 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple definition</jc>
  * 	Dd <jv>simple</jv> = <jsm>dd</jsm>(<js>"A markup language used to create web pages."</js>);
- * 
+ *
  * 	<jc>// Definition with styling</jc>
  * 	Dd <jv>styled</jv> = <jsm>dd</jsm>(<js>"A programming language for web development."</js>)
  * 		._class(<js>"definition"</js>);
- * 
+ *
  * 	<jc>// Definition with complex content</jc>
  * 	Dd <jv>complex</jv> = <jsm>dd</jsm>(
  * 		<js>"A "</js>,
@@ -48,13 +48,13 @@ import org.apache.juneau.internal.*;
  * 		<jsm>em</jsm>(<js>"web pages"</js>),
  * 		<js>"."</js>
  * 	);
- * 
+ *
  * 	<jc>// Definition with multiple paragraphs</jc>
  * 	Dd <jv>multiple</jv> = <jsm>dd</jsm>(
  * 		<jsm>p</jsm>(<js>"A programming language that runs in web browsers."</js>),
  * 		<jsm>p</jsm>(<js>"It is commonly used for creating interactive web applications."</js>)
  * 	);
- * 
+ *
  * 	<jc>// Definition with links</jc>
  * 	Dd <jv>withLinks</jv> = <jsm>dd</jsm>(
  * 		<js>"A "</js>,
@@ -63,12 +63,12 @@ import org.apache.juneau.internal.*;
  * 		<jsm>a</jsm>(<js>"/html"</js>, <js>"HTML"</js>),
  * 		<js>" documents."</js>
  * 	);
- * 
+ *
  * 	<jc>// Definition with ID</jc>
  * 	Dd <jv>withId</jv> = <jsm>dd</jsm>(<js>"A styling language for web documents."</js>)
  * 		.id(<js>"css-definition"</js>)
  * 		.children(<js>"Cascading Style Sheets - a language for describing the presentation of web pages."</js>);
- * 
+ *
  * 	<jc>// Definition with styling</jc>
  * 	Dd <jv>styled2</jv> = <jsm>dd</jsm>(<js>"A server-side scripting language for web development."</js>)
  * 		.style(<js>"margin-left: 20px; color: #666;"</js>);

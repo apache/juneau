@@ -35,26 +35,26 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple iframe embedding external content</jc>
  * 	Iframe <jv>iframe1</jv> = <jsm>iframe</jsm>()
  * 		.src(<js>"https://example.com/embed"</js>)
  * 		.width(<js>"800"</js>)
  * 		.height(<js>"600"</js>);
- * 
+ *
  * 	<jc>// Iframe with sandbox restrictions</jc>
  * 	Iframe <jv>iframe2</jv> = <jsm>iframe</jsm>()
  * 		.src(<js>"https://example.com/untrusted"</js>)
  * 		.sandbox(<js>"allow-scripts allow-same-origin"</js>)
  * 		.width(<js>"400"</js>)
  * 		.height(<js>"300"</js>);
- * 
+ *
  * 	<jc>// Iframe with inline content</jc>
  * 	Iframe <jv>iframe3</jv> = <jsm>iframe</jsm>()
  * 		.srcdoc(<js>"&lt;h1&gt;Inline Content&lt;/h1&gt;&lt;p&gt;This content is embedded directly.&lt;/p&gt;"</js>)
  * 		.width(<js>"500"</js>)
  * 		.height(<js>"200"</js>);
- * 
+ *
  * 	<jc>// Iframe with name for targeting</jc>
  * 	Iframe <jv>iframe4</jv> = <jsm>iframe</jsm>()
  * 		.name(<js>"contentFrame"</js>)

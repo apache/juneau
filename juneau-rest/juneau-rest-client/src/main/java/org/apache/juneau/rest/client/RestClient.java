@@ -6834,7 +6834,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return request(op("PATCH", uri, NO_BODY));
 	}
 
-
 	/**
 	 * Performs a REST call where the entire call is specified in a simple string.
 	 *
@@ -7274,7 +7273,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 						}
 						rc.headerArg(a.getName(), val, a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
 					});
-	
+
 					RemoteOperationArg ba = rom.getContentArg();
 					if (ba != null) {
 						Object val = args[ba.getIndex()];

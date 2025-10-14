@@ -188,7 +188,6 @@ public class ThrownStore {
 		this.ignoreClasses = u(s);
 	}
 
-
 	/**
 	 * Adds the specified thrown exception to this database.
 	 *

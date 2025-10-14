@@ -32,12 +32,12 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	<jc>// Simple blockquote</jc>
  * 	Blockquote <jv>quote1</jv> = <jsm>blockquote</jsm>().text(<js>"The only way to do great work is to love what you do."</js>);
- * 
+ *
  * 	<jc>// Blockquote with citation</jc>
  * 	Blockquote <jv>quote2</jv> = <jsm>blockquote</jsm>()
  * 		.cite(<js>"https://example.com/source"</js>)
  * 		.text(<js>"Innovation distinguishes between a leader and a follower."</js>);
- * 
+ *
  * 	<jc>// Blockquote with nested content</jc>
  * 	Blockquote <jv>quote3</jv> = <jsm>blockquote</jsm>()
  * 		.cite(<js>"https://example.com/article"</js>)

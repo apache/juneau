@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * License information for the exposed API.
  *
  * <p>
- * The License Object provides license information for the exposed API. This information helps clients understand 
+ * The License Object provides license information for the exposed API. This information helps clients understand
  * the terms under which the API can be used, including any restrictions or requirements.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -200,5 +200,4 @@ public class License extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

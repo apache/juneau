@@ -33,14 +33,14 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple subsection heading</jc>
  * 	H3 <jv>simple</jv> = <jsm>h3</jsm>(<js>"Basic Configuration"</js>);
- * 
+ *
  * 	<jc>// H3 with styling</jc>
  * 	H3 <jv>styled</jv> = <jsm>h3</jsm>(<js>"Advanced Settings"</js>)
  * 		._class(<js>"subsection-title"</js>);
- * 
+ *
  * 	<jc>// H3 with complex content</jc>
  * 	H3 <jv>complex</jv> = <jsm>h3</jsm>(
  * 		<js>"Step 3: "</js>,
@@ -48,15 +48,15 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>em</jsm>(<js>"(Optional)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H3 with ID</jc>
  * 	H3 <jv>withId</jv> = <jsm>h3</jsm>(<js>"Troubleshooting"</js>)
  * 		.id(<js>"troubleshooting"</js>);
- * 
+ *
  * 	<jc>// H3 with styling</jc>
  * 	H3 <jv>styled2</jv> = <jsm>h3</jsm>(<js>"Common Issues"</js>)
  * 		.style(<js>"color: #888; margin-top: 20px;"</js>);
- * 
+ *
  * 	<jc>// H3 with multiple elements</jc>
  * 	H3 <jv>multiple</jv> = <jsm>h3</jsm>(
  * 		<js>"3.1 "</js>,
@@ -64,7 +64,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(5 minutes)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H3 with links</jc>
  * 	H3 <jv>withLinks</jv> = <jsm>h3</jsm>(
  * 		<js>"See also: "</js>,

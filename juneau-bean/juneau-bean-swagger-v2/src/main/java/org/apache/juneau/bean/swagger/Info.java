@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * Provides metadata about the API.
  *
  * <p>
- * The Info Object provides metadata about the API for Swagger 2.0. The metadata can be used by the clients if needed, 
- * and can be presented in the Swagger-UI for convenience. This includes the title, version, description, terms of service, 
+ * The Info Object provides metadata about the API for Swagger 2.0. The metadata can be used by the clients if needed,
+ * and can be presented in the Swagger-UI for convenience. This includes the title, version, description, terms of service,
  * contact information, and license.
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -405,5 +405,4 @@ public class Info extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

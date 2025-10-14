@@ -24,7 +24,7 @@ import org.apache.juneau.xml.annotation.*;
  * Represents human-readable text in an Atom document.
  *
  * <p>
- * Text constructs are used throughout Atom for elements that contain human-readable text 
+ * Text constructs are used throughout Atom for elements that contain human-readable text
  * such as titles, summaries, rights statements, and subtitles. They support three content types:
  *
  * <ul class='spaced-list'>
@@ -80,7 +80,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomTextConstruct</c> in the 
+ * Represents an <c>atomTextConstruct</c> in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-3.1">RFC 4287 - Section 3.1</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -104,7 +104,6 @@ public class Text extends Common {
 
 	/** Bean constructor. */
 	public Text() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

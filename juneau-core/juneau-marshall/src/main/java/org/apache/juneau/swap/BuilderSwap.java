@@ -178,7 +178,6 @@ public class BuilderSwap<T,B> {
 		return new BuilderSwap(objectClass, builderClass, objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createObjectMethod);
 	}
 
-
 	/**
 	 * Creates a BuilderSwap from the specified object class if it has one.
 	 *

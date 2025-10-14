@@ -201,7 +201,6 @@ public class RestOperations {
 		throw new NotFound("Java method matching path ''{0}'' not found on resource ''{1}''.", session.getPathInfo(), className(session.getResource()));
 	}
 
-
 	/**
 	 * Returns the list of method contexts in this object.
 	 *

@@ -33,26 +33,26 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// User comment in Arabic</jc>
  * 	Bdi <jv>arabic</jv> = <jsm>bdi</jsm>(<js>"مرحبا بالعالم"</js>);
- * 
+ *
  * 	<jc>// Hebrew text in English context</jc>
  * 	Bdi <jv>hebrew</jv> = <jsm>bdi</jsm>(<js>"שלום עולם"</js>);
- * 
+ *
  * 	<jc>// Mixed direction text</jc>
  * 	Bdi <jv>mixed</jv> = <jsm>bdi</jsm>(<js>"Hello "</js>, <jsm>bdi</jsm>(<js>"مرحبا"</js>), <js>" World"</js>);
- * 
+ *
  * 	<jc>// User-generated content</jc>
  * 	Bdi <jv>userContent</jv> = <jsm>bdi</jsm>(<js>"This is a comment in Arabic: مرحبا"</js>)
  * 		._class(<js>"user-comment"</js>);
- * 
+ *
  * 	<jc>// Names in different scripts</jc>
  * 	Bdi <jv>name</jv> = <jsm>bdi</jsm>(<js>"محمد أحمد"</js>);
- * 
+ *
  * 	<jc>// Numbers in different scripts</jc>
  * 	Bdi <jv>numbers</jv> = <jsm>bdi</jsm>(<js>"١٢٣٤٥"</js>);
- * 
+ *
  * 	<jc>// Styled bidirectional text</jc>
  * 	Bdi <jv>styled</jv> = <jsm>bdi</jsm>(<js>"نص باللغة العربية"</js>)
  * 		._class(<js>"bidi-text"</js>)

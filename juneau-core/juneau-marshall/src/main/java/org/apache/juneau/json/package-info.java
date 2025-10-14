@@ -19,4 +19,3 @@ package org.apache.juneau.json;
 /**
  * JSON Marshalling Support
  */
-

@@ -33,14 +33,14 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple sub-subsection heading</jc>
  * 	H4 <jv>simple</jv> = <jsm>h4</jsm>(<js>"Configuration Options"</js>);
- * 
+ *
  * 	<jc>// H4 with styling</jc>
  * 	H4 <jv>styled</jv> = <jsm>h4</jsm>(<js>"Environment Variables"</js>)
  * 		._class(<js>"sub-subsection-title"</js>);
- * 
+ *
  * 	<jc>// H4 with complex content</jc>
  * 	H4 <jv>complex</jv> = <jsm>h4</jsm>(
  * 		<js>"4.1 "</js>,
@@ -48,15 +48,15 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>em</jsm>(<js>"(Required)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H4 with ID</jc>
  * 	H4 <jv>withId</jv> = <jsm>h4</jsm>(<js>"Performance Tuning"</js>)
  * 		.id(<js>"performance-tuning"</js>);
- * 
+ *
  * 	<jc>// H4 with styling</jc>
  * 	H4 <jv>styled2</jv> = <jsm>h4</jsm>(<js>"Additional Notes"</js>)
  * 		.style(<js>"color: #999; font-weight: normal;"</js>);
- * 
+ *
  * 	<jc>// H4 with multiple elements</jc>
  * 	H4 <jv>multiple</jv> = <jsm>h4</jsm>(
  * 		<js>"4.1.1 "</js>,
@@ -64,7 +64,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>small</jsm>(<js>"(Advanced)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// H4 with links</jc>
  * 	H4 <jv>withLinks</jv> = <jsm>h4</jsm>(
  * 		<js>"Related: "</js>,

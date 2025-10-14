@@ -19,4 +19,3 @@ package org.apache.juneau.csv.annotation;
 /**
  * CSV Marshalling Annotations
  */
-

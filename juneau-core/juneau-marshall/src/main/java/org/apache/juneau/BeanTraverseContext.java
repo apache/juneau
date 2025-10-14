@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.Utils.*;
 

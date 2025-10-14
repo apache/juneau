@@ -36,7 +36,6 @@ class ConfigInterfaceTest extends TestBase {
 		proxy = cf.getSection("A").asInterface(ConfigInterface.class).orElse(null);
 	}
 
-
 	//====================================================================================================
 	// getSectionAsInterface(String,Class)
 	//====================================================================================================

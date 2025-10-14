@@ -247,7 +247,6 @@ class RestOp_Throws_Test extends TestBase {
 		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates("foo {0}", "bar"); }
 	}
 
-
 	@Test void b01_userSpecifiedMessage() throws Exception {
 		var b = MockRestClient.buildLax(B.class);
 		b.get("/badRequest")

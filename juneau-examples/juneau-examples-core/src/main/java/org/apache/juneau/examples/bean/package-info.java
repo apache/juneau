@@ -18,7 +18,7 @@ package org.apache.juneau.examples.bean;
 
 /**
  * Bean Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's bean marshalling capabilities.
  * These examples show various POJO serialization and parsing scenarios.

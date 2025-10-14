@@ -32,7 +32,6 @@ class UrlEncodingSerializer_Test extends TestBase {
 	static UrlEncodingSerializer s = UrlEncodingSerializer.DEFAULT.copy().addRootType().build();
 	static UrlEncodingSerializer sr = UrlEncodingSerializer.DEFAULT_READABLE.copy().addRootType().build();
 
-
 	//====================================================================================================
 	// Basic test
 	//====================================================================================================

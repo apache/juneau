@@ -52,7 +52,6 @@ class SerializerSet_Test extends TestBase {
 		assertInstanceOf(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
 	}
 
-
 	public static class SA1 extends JsonSerializer {
 		public SA1(JsonSerializer.Builder builder) {
 			super(builder.accept("text/foo+*,text/foo_a+*"));

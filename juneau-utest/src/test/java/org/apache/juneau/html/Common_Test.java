@@ -417,14 +417,14 @@ class Common_Test extends TestBase {
 	//====================================================================================================
 	// @Beanp(format) tests
 	//====================================================================================================
-	
+
 	@Test
 	void a10_beanpFormat() throws Exception {
 		var s = HtmlSerializer.create().sq().sortProperties().addKeyValueTableHeaders().build();
-		
+
 		var bean = new K();
 		var html = s.serialize(bean);
-		
+
 		// Verify all formatted fields are serialized correctly
 		assertTrue(html.contains("<td>doubleField</td><td>2.718</td>"));
 		assertTrue(html.contains("<td>floatField</td><td>3.14</td>"));
@@ -436,34 +436,34 @@ class Common_Test extends TestBase {
 		assertTrue(html.contains("<td>privateField</td><td>9.88</td>"));
 		assertTrue(html.contains("<td>scientificField</td><td>6.022e+23</td>") || html.contains("<td>scientificField</td><td>6.022E+23</td>"));
 	}
-	
+
 	public static class K {
 		@Beanp(format="%.2f")
 		public float floatField = 3.14159f;
-		
+
 		@Beanp(format="$%.2f")
 		public float floatWithCurrency = 19.987f;
-		
+
 		@Beanp(format="%.3f")
 		public double doubleField = 2.71828;
-		
+
 		@Beanp(format="%05d")
 		public int intField = 42;
-		
+
 		@Beanp(format="%016d")
 		public long longField = 1234567890L;
-		
+
 		@Beanp(format="0x%06X")
 		public int hexField = 0xFF00FF;
-		
+
 		@Beanp(format="%.3e")
 		public double scientificField = 6.02214076e23;
-		
+
 		public String name = "Test";
-		
+
 		@Beanp(format="%.2f")
 		private float privateField = 9.876f;
-		
+
 		public float getPrivateField() { return privateField; }
 		public void setPrivateField(float f) { privateField = f; }
 	}

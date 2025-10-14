@@ -24,7 +24,6 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 
-
 /**
  * Describes a single type used in content negotiation between an HTTP client and server, as described in
  * Section 14.1 and 14.7 of RFC2616 (the HTTP/1.1 specification).

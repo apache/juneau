@@ -1155,5 +1155,4 @@ public class Swagger extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

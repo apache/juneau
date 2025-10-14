@@ -111,7 +111,6 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		return readBytes(is);
 	}
 
-
 	/**
 	 * Convert the specified byte array into an input stream.
 	 *

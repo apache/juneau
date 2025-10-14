@@ -442,5 +442,4 @@ public class MsgPackOutputStream extends OutputStream {
 		}
 		return count;
 	}
-
 }

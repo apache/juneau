@@ -199,7 +199,6 @@ public @interface RestInject {
 	 */
 	String name() default "";
 
-
 	/**
 	 * Same as {@link #name()}.
 	 *

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple description list</jc>
  * 	Dl <jv>simple</jv> = <jsm>dl</jsm>(
  * 		<jsm>dt</jsm>(<js>"HTML"</js>),
@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>dt</jsm>(<js>"CSS"</js>),
  * 		<jsm>dd</jsm>(<js>"Cascading Style Sheets"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Description list with styling</jc>
  * 	Dl <jv>styled</jv> = <jsm>dl</jsm>(
  * 		<jsm>dt</jsm>(<js>"API"</js>),
@@ -48,7 +48,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>dt</jsm>(<js>"DOM"</js>),
  * 		<jsm>dd</jsm>(<js>"Document Object Model"</js>)
  * 	)._class(<js>"glossary"</js>);
- * 
+ *
  * 	<jc>// Description list with multiple descriptions</jc>
  * 	Dl <jv>multiple</jv> = <jsm>dl</jsm>(
  * 		<jsm>dt</jsm>(<js>"JavaScript"</js>),
@@ -58,7 +58,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>dd</jsm>(<js>"A high-level programming language."</js>),
  * 		<jsm>dd</jsm>(<js>"Known for its simplicity and readability."</js>)
  * 	);
- * 
+ *
  * 	<jc>// Description list with complex content</jc>
  * 	Dl <jv>complex</jv> = <jsm>dl</jsm>(
  * 		<jsm>dt</jsm>(<js>"Web Standards"</js>),
@@ -74,7 +74,7 @@ import org.apache.juneau.internal.*;
  * 			<js>" and devices."</js>
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Description list with ID</jc>
  * 	Dl <jv>withId</jv> = <jsm>dl</jsm>(
  * 		<jsm>dt</jsm>(<js>"Framework"</js>),
@@ -82,7 +82,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>dt</jsm>(<js>"Library"</js>),
  * 		<jsm>dd</jsm>(<js>"A collection of reusable code modules."</js>)
  * 	).id(<js>"tech-terms"</js>);
- * 
+ *
  * 	<jc>// Description list with styling</jc>
  * 	Dl <jv>styled2</jv> = <jsm>dl</jsm>(
  * 		<jsm>dt</jsm>(<js>"Frontend"</js>),

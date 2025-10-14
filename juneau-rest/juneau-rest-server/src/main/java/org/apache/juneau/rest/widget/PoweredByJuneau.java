@@ -32,7 +32,6 @@ import org.apache.juneau.rest.*;
  */
 public class PoweredByJuneau extends Widget {
 
-
 	/**
 	 * Returns an Apache Juneau image tag hyperlinked to <js>"http://juneau.apache.org"</js>
 	 */

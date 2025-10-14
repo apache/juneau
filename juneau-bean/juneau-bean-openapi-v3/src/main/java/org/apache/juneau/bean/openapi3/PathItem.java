@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * Describes the operations available on a single path.
  *
  * <p>
- * The PathItem Object describes the operations available on a single path. A Path Item may be empty, due to ACL 
- * constraints. The path itself is still exposed to the documentation viewer but they will not know which operations 
+ * The PathItem Object describes the operations available on a single path. A Path Item may be empty, due to ACL
+ * constraints. The path itself is still exposed to the documentation viewer but they will not know which operations
  * and parameters are available.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -435,5 +435,4 @@ public class PathItem extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

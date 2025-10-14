@@ -19,4 +19,3 @@ package org.apache.juneau.msgpack;
 /**
  * MessagePack Marshalling Support
  */
-

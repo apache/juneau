@@ -32,16 +32,16 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple output element</jc>
  * 	Output <jv>output1</jv> = <jsm>output</jsm>(<js>"0"</js>)
  * 		.name(<js>"result"</js>);
- * 
+ *
  * 	<jc>// Output with form association</jc>
  * 	Output <jv>output2</jv> = <jsm>output</jsm>(<js>"0"</js>)
  * 		.name(<js>"sum"</js>)
  * 		._for(<js>"num1 num2"</js>);
- * 
+ *
  * 	<jc>// Output in a calculation form</jc>
  * 	Form <jv>calcForm</jv> = <jsm>form</jsm>(
  * 		<jsm>input</jsm>(<js>"number"</js>).name(<js>"num1"</js>).id(<js>"num1"</js>).value(<js>"0"</js>),
@@ -50,7 +50,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>span</jsm>(<js>" = "</js>),
  * 		<jsm>output</jsm>(<js>"0"</js>).name(<js>"sum"</js>)._for(<js>"num1 num2"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Output with styling</jc>
  * 	Output <jv>output3</jv> = <jsm>output</jsm>(<js>"Ready for calculation"</js>)
  * 		.name(<js>"display"</js>)

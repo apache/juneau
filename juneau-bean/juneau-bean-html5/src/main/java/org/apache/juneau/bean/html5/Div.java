@@ -33,33 +33,33 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple div</jc>
  * 	Div <jv>simple</jv> = <jsm>div</jsm>(<js>"Hello World"</js>);
- * 
+ *
  * 	<jc>// Div with styling</jc>
  * 	Div <jv>styled</jv> = <jsm>div</jsm>()
  * 		._class(<js>"container"</js>)
  * 		.style(<js>"padding: 20px; background-color: #f0f0f0;"</js>);
- * 
+ *
  * 	<jc>// Div with multiple children</jc>
  * 	Div <jv>multiple</jv> = <jsm>div</jsm>(
  * 		<jsm>h1</jsm>(<js>"Title"</js>),
  * 		<jsm>p</jsm>(<js>"Content"</js>),
  * 		<jsm>p</jsm>(<js>"More content"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Div with complex content</jc>
  * 	Div <jv>complex</jv> = <jsm>div</jsm>(
  * 		<jsm>div</jsm>()._class(<js>"card-header"</js>).children(<js>"Card Title"</js>),
  * 		<jsm>div</jsm>()._class(<js>"card-body"</js>).children(<js>"Card content"</js>),
  * 		<jsm>div</jsm>()._class(<js>"card-footer"</js>).children(<js>"Card footer"</js>)
  * 	)._class(<js>"card"</js>);
- * 
+ *
  * 	<jc>// Div with ID</jc>
  * 	Div <jv>withId</jv> = <jsm>div</jsm>(<js>"Main content area"</js>)
  * 		.id(<js>"main-content"</js>);
- * 
+ *
  * 	<jc>// Div with styling</jc>
  * 	Div <jv>styled2</jv> = <jsm>div</jsm>(
  * 		<jsm>div</jsm>()._class(<js>"left-column"</js>).children(<js>"Left content"</js>),

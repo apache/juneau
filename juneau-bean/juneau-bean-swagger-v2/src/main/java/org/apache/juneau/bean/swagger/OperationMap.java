@@ -27,13 +27,13 @@ import org.apache.juneau.common.utils.*;
  * Map meant for method-name/operation mappings.
  *
  * <p>
- * The OperationMap is a specialized TreeMap that represents the operations available on a single path in Swagger 2.0. 
- * It forces entries to be sorted in a specific order to ensure consistent output. This map is used within PathItem 
+ * The OperationMap is a specialized TreeMap that represents the operations available on a single path in Swagger 2.0.
+ * It forces entries to be sorted in a specific order to ensure consistent output. This map is used within PathItem
  * objects to define the HTTP methods and their corresponding operations.
  *
  * <h5 class='section'>Swagger Specification:</h5>
  * <p>
- * The OperationMap represents the operations field in a Path Item Object, where each key is an HTTP method and each 
+ * The OperationMap represents the operations field in a Path Item Object, where each key is an HTTP method and each
  * value is an Operation object. The supported HTTP methods are:
  * <ul class='spaced-list'>
  * 	<li><c>get</c> ({@link Operation}) - A definition of a GET operation

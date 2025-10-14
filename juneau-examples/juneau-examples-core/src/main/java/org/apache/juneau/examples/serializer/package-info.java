@@ -18,10 +18,9 @@ package org.apache.juneau.examples.serializer;
 
 /**
  * Serializer Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's serializer capabilities.
  * These examples show various content serialization scenarios and techniques.
  * </p>
  */
-

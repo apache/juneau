@@ -115,7 +115,6 @@ public class Value<T> {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-
 	private T t;
 	private ValueListener<T> listener;
 

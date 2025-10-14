@@ -46,7 +46,6 @@ public class UonReader extends ParserReader {
 	// Writable properties.
 	private int iCurrent, iEnd;
 
-
 	/**
 	 * Constructor.
 	 *

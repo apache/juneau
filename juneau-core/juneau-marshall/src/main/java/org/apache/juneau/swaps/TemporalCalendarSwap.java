@@ -277,7 +277,6 @@ public class TemporalCalendarSwap extends StringSwap<Calendar> {
 		}
 	}
 
-
 	private final DateTimeFormatter formatter;
 
 	/**

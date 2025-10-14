@@ -493,7 +493,6 @@ class Path_Test extends TestBase {
 	@Rest(children={F.class})
 	public static class G {}
 
-
 	@Test void g01_pathVariablesOnChildClass() throws Exception {
 		var g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		g.get("http://localhost/f/x1/x2")

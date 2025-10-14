@@ -13,7 +13,7 @@
 
 /**
  * ATOM Data Transfer Objects
- * 
+ *
  * <p>
  * This package contains predefined DTOs for working with ATOM feeds and entries.
  * These classes provide a convenient way to serialize and parse ATOM XML content
@@ -29,4 +29,4 @@
 )
 package org.apache.juneau.bean.atom;
 
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.annotation.*;

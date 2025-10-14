@@ -32,34 +32,34 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple term</jc>
  * 	Dt <jv>simple</jv> = <jsm>dt</jsm>(<js>"HTML"</js>);
- * 
+ *
  * 	<jc>// Term with styling</jc>
  * 	Dt <jv>styled</jv> = <jsm>dt</jsm>(<js>"CSS"</js>)
  * 		._class(<js>"term"</js>);
- * 
+ *
  * 	<jc>// Term with complex content</jc>
  * 	Dt <jv>complex</jv> = <jsm>dt</jsm>(
  * 		<js>"JavaScript"</js>,
  * 		<jsm>span</jsm>()._class(<js>"abbrev"</js>).children(<js>" (JS)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Term with links</jc>
  * 	Dt <jv>withLinks</jv> = <jsm>dt</jsm>(
  * 		<js>"Web Standards"</js>,
  * 		<jsm>a</jsm>(<js>"/standards"</js>, <js>" (Learn More)"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Term with ID</jc>
  * 	Dt <jv>withId</jv> = <jsm>dt</jsm>(<js>"HTML"</js>)
  * 		.id(<js>"html-term"</js>);
- * 
+ *
  * 	<jc>// Term with styling</jc>
  * 	Dt <jv>styled2</jv> = <jsm>dt</jsm>(<js>"API"</js>)
  * 		.style(<js>"font-weight: bold; color: blue;"</js>);
- * 
+ *
  * 	<jc>// Term with multiple elements</jc>
  * 	Dt <jv>multiple</jv> = <jsm>dt</jsm>(
  * 		<js>"Responsive Design"</js>,

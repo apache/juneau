@@ -35,28 +35,28 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple video with controls</jc>
  * 	Video <jv>simple</jv> = <jsm>video</jsm>()
  * 		.src(<js>"movie.mp4"</js>)
  * 		.controls(<jk>true</jk>)
  * 		.width(640)
  * 		.height(360);
- * 
+ *
  * 	<jc>// Video with multiple sources</jc>
  * 	Video <jv>multiple</jv> = <jsm>video</jsm>(
  * 		<jsm>source</jsm>().src(<js>"movie.mp4"</js>).type(<js>"video/mp4"</js>),
  * 		<jsm>source</jsm>().src(<js>"movie.webm"</js>).type(<js>"video/webm"</js>),
  * 		<jsm>source</jsm>().src(<js>"movie.ogg"</js>).type(<js>"video/ogg"</js>)
  * 	).controls(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Autoplay video (muted for browser compatibility)</jc>
  * 	Video <jv>autoplay</jv> = <jsm>video</jsm>()
  * 		.src(<js>"intro.mp4"</js>)
  * 		.autoplay(<jk>true</jk>)
  * 		.muted(<jk>true</jk>)
  * 		.loop(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Video with poster image</jc>
  * 	Video <jv>poster</jv> = <jsm>video</jsm>()
  * 		.src(<js>"trailer.mp4"</js>)
@@ -64,14 +64,14 @@ import org.apache.juneau.internal.*;
  * 		.controls(<jk>true</jk>)
  * 		.width(800)
  * 		.height(450);
- * 
+ *
  * 	<jc>// Video with custom styling</jc>
  * 	Video <jv>styled</jv> = <jsm>video</jsm>()
  * 		.src("presentation.mp4")
  * 		.controls(true)
  * 		._class("video-player")
  * 		.style("border: 2px solid #ccc; border-radius: 8px;");
- * 
+ *
  * 	// Video with event handlers
  * 	Video interactive = new Video()
  * 		.src("tutorial.mp4")

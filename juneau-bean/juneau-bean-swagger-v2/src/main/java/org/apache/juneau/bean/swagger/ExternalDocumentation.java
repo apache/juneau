@@ -31,8 +31,8 @@ import org.apache.juneau.internal.*;
  * Allows referencing an external resource for extended documentation.
  *
  * <p>
- * The External Documentation Object allows referencing an external resource for extended documentation in Swagger 2.0. 
- * This can be used to provide additional documentation that is not part of the main Swagger specification, such as 
+ * The External Documentation Object allows referencing an external resource for extended documentation in Swagger 2.0.
+ * This can be used to provide additional documentation that is not part of the main Swagger specification, such as
  * detailed guides, tutorials, or API documentation hosted elsewhere.
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -219,5 +219,4 @@ public class ExternalDocumentation extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

@@ -131,7 +131,6 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 		assertBean(x2, "f3{0,1},f4{0{0,1},1}", "{FOO,<null>},{{FOO,<null>},<null>}");
 	}
 
-
 	/** Normal Enum */
 	public enum AEnum {
 		FOO,BAR,BAZ

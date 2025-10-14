@@ -19,4 +19,3 @@ package org.apache.juneau.oapi;
 /**
  * OpenAPI Marshalling Support
  */
-

@@ -348,7 +348,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 		return new FluentRequestQueryParamAssertion<>(getQueryParam(name), this);
 	}
 
-
 	/**
 	 * Returns a fluent assertion for the specified form parameter.
 	 *
@@ -748,7 +747,6 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public boolean containsQueryParam(String name) {
 		return queryParams.contains(name);
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Form data parameters

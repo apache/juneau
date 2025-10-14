@@ -51,7 +51,6 @@ public class SqlStore extends ConfigStore {
 		SQLSTORE_valueColumn = "SqlStore.valueColumn",
 		SQLSTORE_pollInterval = "SqlStore.pollInterval";
 
-
 	/**
 	 * Instantiates a builder for this object.
 	 *

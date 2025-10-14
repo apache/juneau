@@ -148,7 +148,7 @@ class Operation_Test extends TestBase {
 			assertTrue(bean().strict().isStrict());
 			assertFalse(bean().strict(false).isStrict());
 		}
-		
+
 		@Test void a14_addMethods() {
 			var x = bean()
 				.addTags("a1", "a2")

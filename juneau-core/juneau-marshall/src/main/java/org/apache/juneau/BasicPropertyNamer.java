@@ -42,5 +42,4 @@ public class BasicPropertyNamer implements PropertyNamer {
 	public String getPropertyName(String name) {
 		return Introspector.decapitalize(name);
 	}
-
 }

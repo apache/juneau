@@ -32,8 +32,8 @@ import org.apache.juneau.internal.*;
  * Allows referencing an external resource for extended documentation.
  *
  * <p>
- * The External Documentation Object allows referencing an external resource for extended documentation. This can be 
- * used to provide additional documentation that is not part of the main OpenAPI specification, such as detailed 
+ * The External Documentation Object allows referencing an external resource for extended documentation. This can be
+ * used to provide additional documentation that is not part of the main OpenAPI specification, such as detailed
  * guides, tutorials, or API documentation hosted elsewhere.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -190,5 +190,4 @@ public class ExternalDocumentation extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

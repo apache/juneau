@@ -31,20 +31,20 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple fieldset with legend</jc>
  * 	Fieldset <jv>fieldset1</jv> = <jsm>fieldset</jsm>(
  * 		<jsm>legend</jsm>(<js>"Personal Information"</js>),
  * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"firstName"</js>).placeholder(<js>"First Name"</js>),
  * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"lastName"</js>).placeholder(<js>"Last Name"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Disabled fieldset</jc>
  * 	Fieldset <jv>fieldset2</jv> = <jsm>fieldset</jsm>(
  * 		<jsm>legend</jsm>(<js>"Disabled Section"</js>),
  * 		<jsm>input</jsm>(<js>"text"</js>).name(<js>"disabledField"</js>).value(<js>"Cannot edit"</js>)
  * 	).disabled(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Fieldset with custom styling</jc>
  * 	Fieldset <jv>fieldset3</jv> = <jsm>fieldset</jsm>(
  * 		<jsm>legend</jsm>(<js>"Contact Details"</js>),

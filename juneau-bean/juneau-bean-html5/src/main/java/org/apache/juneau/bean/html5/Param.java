@@ -31,15 +31,15 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple parameter</jc>
  * 	Param <jv>param1</jv> = <jsm>param</jsm>()
  * 		.name(<js>"autoplay"</js>)
  * 		.value(<js>"true"</js>);
- * 
+ *
  * 	<jc>// Parameter with constructor</jc>
  * 	Param <jv>param2</jv> = <jk>new</jk> Param(<js>"quality"</js>, <js>"high"</js>);
- * 
+ *
  * 	<jc>// Parameters in an object</jc>
  * 	Object_ <jv>object1</jv> = <jsm>object_</jsm>()
  * 		.data(<js>"video.swf"</js>)
@@ -49,7 +49,7 @@ import org.apache.juneau.internal.*;
  * 			<jk>new</jk> Param(<js>"loop"</js>, <js>"true"</js>),
  * 			<jk>new</jk> Param(<js>"quality"</js>, <js>"high"</js>)
  * 		);
- * 
+ *
  * 	<jc>// Parameter with special characters</jc>
  * 	Param <jv>param3</jv> = <jsm>param</jsm>()
  * 		.name(<js>"config"</js>)

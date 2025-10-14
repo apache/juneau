@@ -69,5 +69,4 @@ public class SvlExample {
 		 *  NOTE - juneau-marshall.SimpleVariableLanguage supports nested variables well
 		 * */
 	}
-
 }

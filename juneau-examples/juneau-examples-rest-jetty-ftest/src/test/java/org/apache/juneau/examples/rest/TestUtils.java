@@ -42,7 +42,6 @@ public class TestUtils {
 		.keepNullProperties()
 		.build();
 
-
 	private static JsonSerializer js2 = JsonSerializer.create()
 		.json5()
 		.swaps(IteratorSwap.class, EnumerationSwap.class)

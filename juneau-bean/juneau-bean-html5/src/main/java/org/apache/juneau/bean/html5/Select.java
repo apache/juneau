@@ -33,21 +33,21 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple select dropdown</jc>
  * 	Select <jv>select1</jv> = <jsm>select</jsm>(<js>"color"</js>,
  * 		<jsm>option</jsm>(<js>"red"</js>, <js>"Red"</js>),
  * 		<jsm>option</jsm>(<js>"green"</js>, <js>"Green"</js>),
  * 		<jsm>option</jsm>(<js>"blue"</js>, <js>"Blue"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Multiple selection</jc>
  * 	Select <jv>select2</jv> = <jsm>select</jsm>(<js>"hobbies"</js>,
  * 		<jsm>option</jsm>(<js>"reading"</js>, <js>"Reading"</js>),
  * 		<jsm>option</jsm>(<js>"gaming"</js>, <js>"Gaming"</js>),
  * 		<jsm>option</jsm>(<js>"sports"</js>, <js>"Sports"</js>)
  * 	).multiple(<jk>true</jk>).size(4);
- * 
+ *
  * 	<jc>// Select with option groups</jc>
  * 	Select <jv>select3</jv> = <jsm>select</jsm>(<js>"food"</js>,
  * 		<jsm>optgroup</jsm>(<js>"Fruits"</js>,
@@ -59,7 +59,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>option</jsm>(<js>"broccoli"</js>, <js>"Broccoli"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Disabled select</jc>
  * 	Select <jv>select4</jv> = <jsm>select</jsm>(<js>"disabled"</js>)
  * 		.disabled(<jk>true</jk>)

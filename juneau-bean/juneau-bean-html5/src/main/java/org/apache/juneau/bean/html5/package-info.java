@@ -13,7 +13,7 @@
 
 /**
  * HTML5 Data Transfer Objects
- * 
+ *
  * <p>
  * This package contains predefined DTOs for working with HTML5 elements and structures.
  * These classes provide a convenient way to serialize and parse HTML5 content

@@ -41,7 +41,6 @@ public class Namespace {
 
 	private static final ConcurrentHashMap<String,Namespace> CACHE = new ConcurrentHashMap<>();
 
-
 	/**
 	 * Create a {@link Namespace} with the specified name and URI.
 	 *
@@ -157,7 +156,6 @@ public class Namespace {
 
 		throw new BasicRuntimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
 	}
-
 
 	final String key, name, uri;
 

@@ -169,7 +169,6 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		}
 	}
 
-
 	/**
 	 * Copy constructor.
 	 */
@@ -340,7 +339,6 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
-
 
 	/**
 	 * Sets request header values.

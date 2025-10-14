@@ -18,10 +18,9 @@ package org.apache.juneau.examples.core.config.store;
 
 /**
  * Configuration Store Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's configuration store capabilities.
  * These examples show various configuration management and storage scenarios.
  * </p>
  */
-

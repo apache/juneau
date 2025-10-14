@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple table footer with totals</jc>
  * 	Tfoot <jv>simple</jv> = <jsm>tfoot</jsm>(
  * 		<jsm>tr</jsm>(
@@ -41,7 +41,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>td</jsm>(<js>"$2,000"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Table footer with styling</jc>
  * 	Tfoot <jv>styled</jv> = <jsm>tfoot</jsm>(
  * 		<jsm>tr</jsm>(
@@ -49,7 +49,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>td</jsm>(<js>"$3,000"</js>)
  * 		)
  * 	)._class(<js>"table-footer"</js>);
- * 
+ *
  * 	<jc>// Table footer with multiple rows</jc>
  * 	Tfoot <jv>multiple</jv> = <jsm>tfoot</jsm>(
  * 		<jsm>tr</jsm>(
@@ -67,7 +67,7 @@ import org.apache.juneau.internal.*;
  * 					new Td().children("$550")
  * 				)
  * 		);
- * 
+ *
  * 	// Table footer with summary information
  * 	Tfoot summary = new Tfoot()
  * 		.children(

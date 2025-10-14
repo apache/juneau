@@ -19,4 +19,3 @@ package org.apache.juneau.microservice.springboot.template;
 /**
  * Microservice Samples
  */
-

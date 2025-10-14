@@ -185,7 +185,7 @@ public class MediaType extends OpenApiElement{
 	 * Adds one or more values to the <property>variables</property> property.
 	 *
 	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value 
+	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object

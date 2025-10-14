@@ -227,7 +227,6 @@ public class OpenApiParserSession extends UonParserSession {
 		ctx = builder.ctx;
 	}
 
-
 	@SuppressWarnings("unchecked")
 	@Override /* HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {

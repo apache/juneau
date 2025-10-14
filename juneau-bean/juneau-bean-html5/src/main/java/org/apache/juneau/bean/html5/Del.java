@@ -31,16 +31,16 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple deleted text</jc>
  * 	Del <jv>del1</jv> = <jsm>del</jsm>(<js>"This text has been removed."</js>);
- * 
+ *
  * 	<jc>// Deleted text with citation and timestamp</jc>
  * 	Del <jv>del2</jv> = <jsm>del</jsm>()
  * 		.cite(<js>"https://example.com/revision-log"</js>)
  * 		.datetime(<js>"2024-01-15T10:30:00Z"</js>)
  * 		.text(<js>"Outdated information removed"</js>);
- * 
+ *
  * 	<jc>// Deleted text with reason</jc>
  * 	Del <jv>del3</jv> = <jsm>del</jsm>()
  * 		.cite(<js>"https://example.com/corrections"</js>)

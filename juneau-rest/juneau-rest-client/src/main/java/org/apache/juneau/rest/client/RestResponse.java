@@ -66,7 +66,7 @@ import org.apache.juneau.rest.client.assertion.*;
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.
- * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability, 
+ * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability,
  * 		while catching and logging checked exceptions to follow AutoCloseable best practices.
  * </ul>
  *
@@ -873,8 +873,8 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * <ul>
 	 * 	<li>Unchecked exceptions ({@link RuntimeException} and {@link Error}) from interceptors are allowed to propagate.
 	 * 		This ensures programming errors and serious issues are visible during development and testing.
-	 * 	<li>Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown. 
-	 * 		This follows AutoCloseable best practices and prevents close exceptions from interfering with 
+	 * 	<li>Checked exceptions (including {@link RestCallException}) are caught and logged but not thrown.
+	 * 		This follows AutoCloseable best practices and prevents close exceptions from interfering with
 	 * 		try-with-resources cleanup or masking the original exception.
 	 * </ul>
 	 */

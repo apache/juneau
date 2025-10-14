@@ -271,5 +271,4 @@ class BeanConfigAnnotation_Test extends TestBase {
 		check("true", bc.isUseInterfaceProxies());
 		check("false", bc.isUseJavaBeanIntrospector());
 	}
-
 }

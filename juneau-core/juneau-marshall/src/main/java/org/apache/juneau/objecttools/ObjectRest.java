@@ -758,7 +758,6 @@ public class ObjectRest {
 		return url;
 	}
 
-
 	/*
 	 * Workhorse method.
 	 */

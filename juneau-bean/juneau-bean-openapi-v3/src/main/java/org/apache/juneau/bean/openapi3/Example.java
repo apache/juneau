@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * information for Examples object.
  *
  * <p>
- * The Example Object provides an example of a media type. The example object is mutually exclusive of the examples 
- * object. Furthermore, if referencing a schema which contains an example, the example value shall override the example 
+ * The Example Object provides an example of a media type. The example object is mutually exclusive of the examples
+ * object. Furthermore, if referencing a schema which contains an example, the example value shall override the example
  * provided by the schema.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  * 	<li><c>summary</c> (string) - Short description for the example
  * 	<li><c>description</c> (string) - Long description for the example. CommonMark syntax MAY be used for rich text representation
  * 	<li><c>value</c> (any) - Embedded literal example. The value field and externalValue field are mutually exclusive
- * 	<li><c>externalValue</c> (string) - A URI that points to the literal example. This provides the capability to reference 
+ * 	<li><c>externalValue</c> (string) - A URI that points to the literal example. This provides the capability to reference
  * 		examples that cannot easily be included in JSON or YAML documents. The value field and externalValue field are mutually exclusive
  * </ul>
  *
@@ -270,5 +270,4 @@ public class Example extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

@@ -113,12 +113,12 @@ public class SchemaAnnotation {
 			.appendIf(ne, "description", joinnl(a.description(), a.d()))
 			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
 			// Handle exclusiveMaximum with Draft 2020-12 fallback
-			.appendIf(ne, "exclusiveMaximum", 
-				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() : 
+			.appendIf(ne, "exclusiveMaximum",
+				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() :
 				(a.exclusiveMaximum() || a.emax()) ? "true" : null)
 			// Handle exclusiveMinimum with Draft 2020-12 fallback
-			.appendIf(ne, "exclusiveMinimum", 
-				ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() : 
+			.appendIf(ne, "exclusiveMinimum",
+				ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() :
 				(a.exclusiveMinimum() || a.emin()) ? "true" : null)
 			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
 			.appendFirst(ne, "format", a.format(), a.f())

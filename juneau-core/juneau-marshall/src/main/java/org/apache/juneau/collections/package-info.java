@@ -19,4 +19,3 @@ package org.apache.juneau.collections;
 /**
  * Collections classes
  */
-

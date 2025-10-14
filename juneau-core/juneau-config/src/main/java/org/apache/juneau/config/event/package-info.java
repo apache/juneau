@@ -19,4 +19,3 @@ package org.apache.juneau.config.event;
 /**
  * Configuration Event Support
  */
-

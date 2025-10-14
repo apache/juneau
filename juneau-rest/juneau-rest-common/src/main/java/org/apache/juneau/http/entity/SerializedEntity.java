@@ -92,7 +92,6 @@ public class SerializedEntity extends BasicHttpEntity {
 		return new SerializedEntity(this);
 	}
 
-
 	/**
 	 * Copies this bean and sets the serializer and schema on it.
 	 *
@@ -141,8 +140,6 @@ public class SerializedEntity extends BasicHttpEntity {
 		this.schema = value;
 		return this;
 	}
-
-
 
 	@Override
 	public Header getContentType() {

@@ -35,14 +35,14 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	<jc>// Simple audio with single source</jc>
  * 	Audio <jv>audio1</jv> = <jsm>audio</jsm>().src(<js>"audio.mp3"</js>).controls(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Audio with multiple sources for browser compatibility</jc>
  * 	Audio <jv>audio2</jv> = <jsm>audio</jsm>().controls(<jk>true</jk>)
  * 		.children(
  * 			<jsm>source</jsm>().src(<js>"audio.mp3"</js>).type(<js>"audio/mpeg"</js>),
  * 			<jsm>source</jsm>().src(<js>"audio.ogg"</js>).type(<js>"audio/ogg"</js>)
  * 		);
- * 
+ *
  * 	<jc>// Autoplay audio with loop</jc>
  * 	Audio <jv>audio3</jv> = <jsm>audio</jsm>().src(<js>"background.mp3"</js>).autoplay(<jk>true</jk>).loop(<jk>true</jk>).muted(<jk>true</jk>);
  * </p>

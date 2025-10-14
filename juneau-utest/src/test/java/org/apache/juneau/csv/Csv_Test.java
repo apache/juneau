@@ -36,7 +36,6 @@ class Csv_Test extends TestBase {
 		var s = CsvSerializer.DEFAULT;
 		var r = s.serialize(l);
 
-
 		assertEquals("b,c\nb1,1\nb2,2\n", r);
 	}
 

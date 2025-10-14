@@ -277,7 +277,6 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		}
 	}
 
-
 	private final DateTimeFormatter formatter;
 
 	/**

@@ -130,7 +130,6 @@ public class StringMatcherFactory extends MatcherFactory {
 						s = sb.toString();
 					}
 
-
 					int flags = Pattern.DOTALL;
 					if (ignoreCase)
 						flags |= Pattern.CASE_INSENSITIVE;

@@ -77,7 +77,6 @@ public class BasicResource implements HttpResource {
 		this.headers = copyFrom.headers.copy();
 	}
 
-
 	/**
 	 * Constructor.
 	 *
@@ -120,7 +119,6 @@ public class BasicResource implements HttpResource {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
-
 
 	/**
 	 * Specifies whether this bean should be unmodifiable.

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple table body with data rows</jc>
  * 	Tbody <jv>simple</jv> = <jsm>tbody</jsm>(
  * 		<jsm>tr</jsm>(
@@ -46,7 +46,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>td</jsm>(<js>"Los Angeles"</js>)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Table body with styling</jc>
  * 	Tbody <jv>styled</jv> = <jsm>tbody</jsm>(
  * 		<jsm>tr</jsm>(
@@ -55,7 +55,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>td</jsm>(<js>"$10.00"</js>)
  * 		)
  * 	)._class(<js>"data-rows"</js>);
- * 
+ *
  * 	<jc>// Table body with multiple rows</jc>
  * 	Tbody <jv>multiple</jv> = <jsm>tbody</jsm>(
  * 		.children(
@@ -70,7 +70,7 @@ import org.apache.juneau.internal.*;
  * 					new Td().children("Row 2, Col 2")
  * 				)
  * 		);
- * 
+ *
  * 	// Table body with event handlers
  * 	Tbody interactive = new Tbody()
  * 		.onclick("handleRowClick(event)")

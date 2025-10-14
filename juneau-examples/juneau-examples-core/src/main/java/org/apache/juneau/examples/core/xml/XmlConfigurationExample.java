@@ -83,6 +83,5 @@ public class XmlConfigurationExample {
 		// the output will have new default namespace added.
 		System.out.println(dNamsSpace);
 
-
 	}
 }

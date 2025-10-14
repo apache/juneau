@@ -32,14 +32,14 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple table caption</jc>
  * 	Caption <jv>simple</jv> = <jsm>caption</jsm>(<js>"Monthly Sales Report"</js>);
- * 
+ *
  * 	<jc>// Table caption with styling</jc>
  * 	Caption <jv>styled</jv> = <jsm>caption</jsm>(<js>"Employee Directory"</js>)
  * 		._class(<js>"table-title"</js>);
- * 
+ *
  * 	<jc>// Table caption with complex content</jc>
  * 	Caption <jv>complex</jv> = <jsm>caption</jsm>(
  * 		<js>"Sales Data for "</js>,
@@ -47,7 +47,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" - "</js>,
  * 		<jsm>em</jsm>(<js>"Preliminary Results"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Table caption with links</jc>
  * 	Caption <jv>withLinks</jv> = <jsm>caption</jsm>(
  * 		<js>"Product Inventory - "</js>,
@@ -55,7 +55,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" | "</js>,
  * 		<jsm>a</jsm>(<js>"/export/inventory"</js>, <js>"Export"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Table caption with icons</jc>
  * 	Caption <jv>withIcons</jv> = <jsm>caption</jsm>(
  * 		<js>"📊 "</js>,
@@ -63,7 +63,7 @@ import org.apache.juneau.internal.*;
  * 		<js>" "</js>,
  * 		<jsm>span</jsm>()._class(<js>"icon"</js>).children(<js>"💰"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Table caption with multiple lines</jc>
  * 	Caption <jv>multiLine</jv> = <jsm>caption</jsm>(
  * 		<js>"Customer Contact Information"</js>,

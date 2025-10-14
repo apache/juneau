@@ -76,6 +76,5 @@ public class JsonConfigurationExample {
 
 		System.out.println(configurableJson);
 
-
 	}
 }

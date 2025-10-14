@@ -29,8 +29,8 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a larger logo image for visual identification of a feed.
  *
  * <p>
- * The logo element contains a URI reference to an image that provides visual identification 
- * for the feed. Logos are typically larger than icons and are suitable for display in feed 
+ * The logo element contains a URI reference to an image that provides visual identification
+ * for the feed. Logos are typically larger than icons and are suitable for display in feed
  * readers, aggregators, and feed directories.
  *
  * <p>
@@ -59,7 +59,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomLogo</c> construct in the 
+ * Represents an <c>atomLogo</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.8">RFC 4287 - Section 4.2.8</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -71,7 +71,6 @@ import org.apache.juneau.xml.annotation.*;
 public class Logo extends Common {
 
 	private URI uri;
-
 
 	/**
 	 * Normal constructor.
@@ -91,7 +90,6 @@ public class Logo extends Common {
 
 	/** Bean constructor. */
 	public Logo() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

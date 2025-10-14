@@ -32,24 +32,24 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Mathematical formula</jc>
  * 	Sup <jv>math</jv> = <jsm>sup</jsm>(
  * 		<js>"x"</js>, <jsm>sup</jsm>(<js>"2"</js>),
  * 		<js>" + y"</js>, <jsm>sup</jsm>(<js>"2"</js>),
  * 		<js>" = z"</js>, <jsm>sup</jsm>(<js>"2"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Ordinal numbers</jc>
  * 	Sup <jv>ordinal</jv> = <jsm>sup</jsm>(<js>"1st"</js>, <jsm>sup</jsm>(<js>"st"</js>));
- * 
+ *
  * 	<jc>// Footnote reference</jc>
  * 	Sup <jv>footnote</jv> = <jsm>sup</jsm>(<js>"1"</js>);
- * 
+ *
  * 	<jc>// Superscript with styling</jc>
  * 	Sup <jv>styled</jv> = <jsm>sup</jsm>(<js>"n"</js>)
  * 		._class(<js>"superscript"</js>);
- * 
+ *
  * 	<jc>// Multiple superscripts</jc>
  * 	Sup <jv>multiple</jv> = <jsm>sup</jsm>(
  * 		<js>"A"</js>, <jsm>sup</jsm>(<js>"i,j"</js>),

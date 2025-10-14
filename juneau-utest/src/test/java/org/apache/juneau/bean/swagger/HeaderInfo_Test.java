@@ -352,7 +352,7 @@ class HeaderInfo_Test extends TestBase {
 
 			var refStack = new ArrayDeque<String>();
 			refStack.add("#/definitions/Header1"); // Pre-populate the stack to simulate circular reference
-			
+
 			var header = headerInfo().setRef("#/definitions/Header1");
 			var result = header.resolveRefs(swagger, refStack, 10);
 
@@ -371,7 +371,7 @@ class HeaderInfo_Test extends TestBase {
 			refStack.add("dummy1");
 			refStack.add("dummy2");
 			refStack.add("dummy3");
-			
+
 			var header = headerInfo().setRef("#/definitions/MyHeader");
 			var result = header.resolveRefs(swagger, refStack, 3); // maxDepth = 3, refStack.size() = 3
 

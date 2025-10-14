@@ -19,4 +19,3 @@ package org.apache.juneau.rest.springboot;
 /**
  * Spring Boot Integration
  */
-

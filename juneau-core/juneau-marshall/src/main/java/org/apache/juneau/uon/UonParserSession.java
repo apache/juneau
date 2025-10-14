@@ -820,7 +820,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unexpected condition.");
 	}
 
-
 	/*
 	 * Returns true if the next character in the stream is preceded by an escape '~' character.
 	 */
@@ -886,7 +885,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	private static final AsciiSet endCharsParam = AsciiSet.of(""+AMP), endCharsNormal = AsciiSet.of(",)"+AMP);
-
 
 	/*
 	 * Parses a string of the form "'foo'"

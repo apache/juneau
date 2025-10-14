@@ -53,7 +53,6 @@ public class JsonWriter extends SerializerWriter {
 		"true","try","typeof","var","void","while","with","undefined","yield"
 	);
 
-
 	// Characters that represent attribute name characters that don't trigger quoting.
 	// These are actually more strict than the actual Javascript specification, but
 	// can be narrowed in the future if necessary.

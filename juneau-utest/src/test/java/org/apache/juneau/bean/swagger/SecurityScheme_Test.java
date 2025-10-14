@@ -252,5 +252,4 @@ class SecurityScheme_Test extends TestBase {
 	private static SecurityScheme bean() {
 		return securityScheme();
 	}
-
 }

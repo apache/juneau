@@ -18,10 +18,9 @@ package org.apache.juneau.examples.parser;
 
 /**
  * Parser Examples
- * 
+ *
  * <p>
  * Example classes demonstrating how to use Juneau's parser capabilities.
  * These examples show various content parsing scenarios and techniques.
  * </p>
  */
-

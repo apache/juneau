@@ -39,7 +39,7 @@ import org.apache.juneau.internal.*;
  * 		.src(<js>"/media/subtitles-en.vtt"</js>)
  * 		.srclang(<js>"en"</js>)
  * 		.label(<js>"English"</js>);
- * 
+ *
  * 	<jc>// Captions track (for deaf/hard of hearing)</jc>
  * 	Track <jv>captions</jv> = <jsm>track</jsm>()
  * 		.kind(<js>"captions"</js>)
@@ -47,21 +47,21 @@ import org.apache.juneau.internal.*;
  * 		.srclang(<js>"en"</js>)
  * 		.label(<js>"English Captions"</js>)
  * 		._default(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Descriptions track (for audio descriptions)</jc>
  * 	Track <jv>descriptions</jv> = <jsm>track</jsm>()
  * 		.kind(<js>"descriptions"</js>)
  * 		.src(<js>"/media/descriptions-en.vtt"</js>)
  * 		.srclang(<js>"en"</js>)
  * 		.label(<js>"English Descriptions"</js>);
- * 
+ *
  * 	<jc>// Chapters track</jc>
  * 	Track <jv>chapters</jv> = <jsm>track</jsm>()
  * 		.kind(<js>"chapters"</js>)
  * 		.src(<js>"/media/chapters.vtt"</js>)
  * 		.srclang(<js>"en"</js>)
  * 		.label(<js>"Chapters"</js>);
- * 
+ *
  * 	<jc>// Video with multiple tracks</jc>
  * 	Video <jv>video</jv> = <jsm>video</jsm>()
  * 		.src(<js>"/media/movie.mp4"</js>)

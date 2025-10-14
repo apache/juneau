@@ -177,7 +177,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(o -> s(o)).toList(), returns());
 	}
 
-
 	/**
 	 * Returns an integer assertion on the size of this collection.
 	 *

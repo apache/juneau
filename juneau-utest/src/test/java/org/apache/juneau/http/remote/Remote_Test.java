@@ -646,7 +646,6 @@ class Remote_Test extends TestBase {
 		@RemoteOp("OPTIONS a66x") String a66();
 	}
 
-
 	@Test void h01_methodDetection() {
 
 		var x = client(H.class).build().getRemote(H1.class);

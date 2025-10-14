@@ -90,7 +90,6 @@ class Swagger_Test extends TestBase {
 		assertBean(getSwaggerWithFile(new A1()), "swagger,host,basePath,schemes", "0.0,s-host,s-basePath,[s-scheme]");
 	}
 
-
 	@Rest(swagger=@Swagger("{swagger:'3.0',host:'a-host',basePath:'a-basePath',schemes:['a-scheme']}"))
 	public static class A2 {}
 
@@ -564,7 +563,6 @@ class Swagger_Test extends TestBase {
 		assertBean(getSwaggerWithFile(new D1()).getExternalDocs(), "description,url", "s-description,s-url");
 	}
 
-
 	@Rest(
 		swagger=@Swagger("{externalDocs:{description:'a-description',url:'a-url'}}")
 	)
@@ -576,7 +574,6 @@ class Swagger_Test extends TestBase {
 	@Test void d02b_externalDocs_Swagger_value_withFile() throws Exception {
 		assertBean(getSwaggerWithFile(new D2()).getExternalDocs(), "description,url", "a-description,a-url");
 	}
-
 
 	@Rest(
 		swagger=@Swagger(

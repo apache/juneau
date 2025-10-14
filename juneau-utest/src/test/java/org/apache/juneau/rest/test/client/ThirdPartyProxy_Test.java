@@ -264,7 +264,6 @@ class ThirdPartyProxy_Test extends TestBase {
 		assertEquals("OK", r);
 	}
 
-
 	@ParameterizedTest
 	@MethodSource("input")
 	void b04_typedBeanQueries(Input input) {
@@ -416,7 +415,6 @@ class ThirdPartyProxy_Test extends TestBase {
 		);
 		assertEquals("OK", r);
 	}
-
 
 	@ParameterizedTest
 	@MethodSource("input")
@@ -1899,7 +1897,6 @@ class ThirdPartyProxy_Test extends TestBase {
 			@Override public String getB() { return "foo"; }
 		}
 
-
 		@RemoteOp(method="POST", path="/reqBeanPath/{a}/{b}")
 		String reqBeanPath2(
 			@Request ReqBeanPath2 rb
@@ -2013,7 +2010,6 @@ class ThirdPartyProxy_Test extends TestBase {
 			@Override public int getA() { return 1; }
 			@Override public String getB() { return "foo"; }
 		}
-
 
 		@RemoteOp(method="POST", path="/reqBeanFormData")
 		String reqBeanFormData2(

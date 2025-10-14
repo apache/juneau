@@ -446,7 +446,6 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		assertEquals("{f:1}",b.toString());
 	}
 
-
 	@Test void a13_toString() {
 		var s = client().rootUrl("https://foo").build().toString();
 		assertTrue(s.contains("rootUrl: 'https://foo'"));

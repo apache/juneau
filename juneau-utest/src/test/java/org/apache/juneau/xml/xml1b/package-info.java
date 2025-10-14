@@ -21,4 +21,3 @@
 @XmlSchema(prefix="p1",namespace="http://p1")
 package org.apache.juneau.xml.xml1b;
 import org.apache.juneau.xml.annotation.*;
-

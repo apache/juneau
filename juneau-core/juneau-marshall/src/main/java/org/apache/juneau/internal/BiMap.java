@@ -122,7 +122,6 @@ public class BiMap<K,V> implements Map<K,V> {
 		return reverse.get(value);
 	}
 
-
 	@Override /* Map */
 	public int size() {
 		return forward.size();

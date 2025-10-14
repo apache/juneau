@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * Describes a single response from an API operation.
  *
  * <p>
- * The Response Object describes a single response from a Swagger 2.0 API operation, including a description, 
+ * The Response Object describes a single response from a Swagger 2.0 API operation, including a description,
  * schema, headers, and examples. Responses are associated with HTTP status codes (e.g., 200, 404, 500).
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -386,5 +386,4 @@ public class ResponseInfo extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

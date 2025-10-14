@@ -234,7 +234,6 @@ public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public
 			.cp(FileFinder_Test.class, "/files", false)
 			.build();
 
-
 		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
 		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
@@ -274,7 +273,6 @@ public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public
 			assertNull(read(x,p,JAPAN));
 		}
 	}
-
 
 	@Test void c04_classpathRoot_localized_hierarchical() throws Exception {
 		var x = FileFinder
@@ -399,7 +397,6 @@ public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public
 			.create()
 			.cp(FileFinder_Test.class, "files", false)
 			.build();
-
 
 		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
 		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");

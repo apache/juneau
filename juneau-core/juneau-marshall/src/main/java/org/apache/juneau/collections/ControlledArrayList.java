@@ -61,7 +61,6 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
-
 	/**
 	 * Specifies whether this bean should be unmodifiable.
 	 * <p>

@@ -163,7 +163,6 @@ class OperationMap_Test extends TestBase {
 		map.put("Post", operation().setSummary("b"));
 		map.put("DELETE", operation().setSummary("c"));
 
-
 		// Verify that keys are stored in lowercase
 		assertTrue(map.containsKey("get"));
 		assertTrue(map.containsKey("post"));

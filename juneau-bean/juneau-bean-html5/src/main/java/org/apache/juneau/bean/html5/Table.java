@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple table with headers and data</jc>
  * 	Table <jv>simple</jv> = <jsm>table</jsm>(
  * 		<jsm>thead</jsm>(
@@ -50,7 +50,7 @@ import org.apache.juneau.internal.*;
  * 			)
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Table with caption and styling</jc>
  * 	Table <jv>styled</jv> = <jsm>table</jsm>(
  * 		<jsm>caption</jsm>(<js>"Employee Information"</js>),
@@ -62,7 +62,7 @@ import org.apache.juneau.internal.*;
  * 			)
  * 		)
  * 	)._class(<js>"data-table"</js>).border(1);
- * 
+ *
  * 	<jc>// Table with multiple sections</jc>
  * 	Table complex = new Table()
  * 		.children(

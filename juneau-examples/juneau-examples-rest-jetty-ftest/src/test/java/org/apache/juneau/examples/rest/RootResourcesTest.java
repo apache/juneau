@@ -34,7 +34,6 @@ public class RootResourcesTest extends RestTestcase {
 
 	private RestClient jsonClient = SamplesMicroservice.DEFAULT_CLIENT;
 
-
 	//====================================================================================================
 	// text/json
 	//====================================================================================================

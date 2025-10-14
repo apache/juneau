@@ -116,7 +116,6 @@ public class RootContentTest extends ContentComboTestBase {
 		});
 	}
 
-
 	public RootContentTest(ComboInput comboInput) {
 		super(comboInput);
 	}

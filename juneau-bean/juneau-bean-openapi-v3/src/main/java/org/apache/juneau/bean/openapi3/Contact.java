@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * Contact information for the exposed API.
  *
  * <p>
- * The Contact Object provides contact information for the exposed API. This information can be used by clients 
+ * The Contact Object provides contact information for the exposed API. This information can be used by clients
  * to get in touch with the API maintainers for support, questions, or other inquiries.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>

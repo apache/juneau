@@ -31,21 +31,21 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple image map with rectangular areas</jc>
  * 	Map <jv>map1</jv> = <jsm>map</jsm>(<js>"navigation"</js>,
  * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"0,0,100,50"</js>, <js>"https://example.com/home"</js>),
  * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"100,0,200,50"</js>, <js>"https://example.com/about"</js>),
  * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"200,0,300,50"</js>, <js>"https://example.com/contact"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Image map with different area shapes</jc>
  * 	Map <jv>map2</jv> = <jsm>map</jsm>(<js>"shapes"</js>,
  * 		<jsm>area</jsm>(<js>"circle"</js>, <js>"150,75,50"</js>, <js>"https://example.com/circle"</js>),
  * 		<jsm>area</jsm>(<js>"poly"</js>, <js>"0,0,100,0,50,100"</js>, <js>"https://example.com/triangle"</js>),
  * 		<jsm>area</jsm>(<js>"default"</js>, <jk>null</jk>, <js>"https://example.com/default"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Image map with accessibility</jc>
  * 	Map <jv>map3</jv> = <jsm>map</jsm>(<js>"accessible"</js>,
  * 		<jsm>area</jsm>(<js>"rect"</js>, <js>"0,0,100,100"</js>, <js>"https://example.com/region1"</js>)

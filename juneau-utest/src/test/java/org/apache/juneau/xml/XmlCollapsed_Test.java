@@ -288,7 +288,6 @@ class XmlCollapsed_Test extends TestBase {
 		}
 	}
 
-
 	//====================================================================================================
 	// testElementNameOnElementClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,
 	//	but overridden by @Xml.childName on property.
@@ -319,7 +318,6 @@ class XmlCollapsed_Test extends TestBase {
 			return t;
 		}
 	}
-
 
 	//====================================================================================================
 	// testElementNameOnCollectionClass - @Xml.format=COLLAPSED, element name defined on bean class.
@@ -354,7 +352,6 @@ class XmlCollapsed_Test extends TestBase {
 	@Xml(childName="xf1")
 	public static class H1 extends LinkedList<String> {
 	}
-
 
 	//====================================================================================================
 	// testElementNameOnCollectionClassOverridden - @Xml.format=COLLAPSED, element name defined on element class,

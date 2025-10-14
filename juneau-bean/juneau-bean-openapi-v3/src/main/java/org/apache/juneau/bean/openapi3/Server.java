@@ -32,8 +32,8 @@ import org.apache.juneau.internal.*;
  * An object representing a Server.
  *
  * <p>
- * The Server Object represents a server that provides connectivity information to a target server. This can be used 
- * to specify different servers for different environments (e.g., development, staging, production) or to provide 
+ * The Server Object represents a server that provides connectivity information to a target server. This can be used
+ * to specify different servers for different environments (e.g., development, staging, production) or to provide
  * server-specific configuration such as variables for templating.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>

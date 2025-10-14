@@ -887,7 +887,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		return out;
 	}
-	
+
 	/**
 	 * Checks if an object is a text node (String or primitive type).
 	 */

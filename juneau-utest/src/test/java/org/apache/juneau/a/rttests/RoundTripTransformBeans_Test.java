@@ -228,7 +228,6 @@ class RoundTripTransformBeans_Test extends TestBase {
 		}
 	}
 
-
 	//====================================================================================================
 	// testSwapBeans2
 	//====================================================================================================
@@ -368,7 +367,6 @@ class RoundTripTransformBeans_Test extends TestBase {
 		var r = s.serialize(x);
 		assertEquals("{\"_type\":\"C3\",\"f1\":{\"f2\":\"f2\",\"f3\":3}}", r);
 	}
-
 
 	@Bean(dictionary={C3.class})
 	public interface C1<T> extends Serializable {
@@ -713,7 +711,6 @@ class RoundTripTransformBeans_Test extends TestBase {
 		x = t.roundTrip(x);
 		assertBean(x, "f1,f2", "1,2");
 	}
-
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods.

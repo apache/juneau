@@ -28,8 +28,8 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a category or tag associated with a feed or entry.
  *
  * <p>
- * Categories provide a way to classify or tag feeds and entries, enabling better organization 
- * and discovery of content. Each category has a term (required) and optionally a scheme (for 
+ * Categories provide a way to classify or tag feeds and entries, enabling better organization
+ * and discovery of content. Each category has a term (required) and optionally a scheme (for
  * namespacing) and a human-readable label.
  *
  * <p>
@@ -69,7 +69,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomCategory</c> construct in the 
+ * Represents an <c>atomCategory</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.2">RFC 4287 - Section 4.2.2</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -95,7 +95,6 @@ public class Category extends Common {
 
 	/** Bean constructor. */
 	public Category() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

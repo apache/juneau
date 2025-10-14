@@ -38,13 +38,13 @@ import org.apache.juneau.internal.*;
  * 	Link <jv>stylesheet</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"stylesheet"</js>)
  * 		.href(<js>"/css/styles.css"</js>);
- * 
+ *
  * 	<jc>// Favicon link</jc>
  * 	Link <jv>favicon</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"icon"</js>)
  * 		.type(<js>"image/x-icon"</js>)
  * 		.href(<js>"/favicon.ico"</js>);
- * 
+ *
  * 	<jc>// Preload resource</jc>
  * 	Link <jv>preload</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"preload"</js>)
@@ -52,24 +52,24 @@ import org.apache.juneau.internal.*;
  * 		._as(<js>"font"</js>)
  * 		.type(<js>"font/woff2"</js>)
  * 		.crossorigin(<js>"anonymous"</js>);
- * 
+ *
  * 	<jc>// Alternate language version</jc>
  * 	Link <jv>alternate</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"alternate"</js>)
  * 		.href(<js>"/es/page.html"</js>)
  * 		.hreflang(<js>"es"</js>);
- * 
+ *
  * 	<jc>// Responsive stylesheet with media query</jc>
  * 	Link <jv>print</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"stylesheet"</js>)
  * 		.href(<js>"/css/print.css"</js>)
  * 		.media(<js>"print"</js>);
- * 
+ *
  * 	<jc>// Canonical URL for SEO</jc>
  * 	Link <jv>canonical</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"canonical"</js>)
  * 		.href(<js>"https://example.com/page"</js>);
- * 
+ *
  * 	<jc>// DNS prefetch for performance</jc>
  * 	Link <jv>dnsPrefetch</jv> = <jsm>link</jsm>()
  * 		.rel(<js>"dns-prefetch"</js>)

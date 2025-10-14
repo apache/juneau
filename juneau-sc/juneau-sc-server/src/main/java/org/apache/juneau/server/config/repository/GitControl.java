@@ -99,5 +99,4 @@ public class GitControl {
 			InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {
 		git.pull().call();
 	}
-
 }

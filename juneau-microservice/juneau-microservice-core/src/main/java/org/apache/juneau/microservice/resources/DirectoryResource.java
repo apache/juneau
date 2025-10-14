@@ -105,7 +105,6 @@ public class DirectoryResource extends BasicRestServlet {
 	 */
 	public static final String DIRECTORY_RESOURCE_allowUploads = PREFIX + "allowUploads.b";
 
-
 	//-------------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------

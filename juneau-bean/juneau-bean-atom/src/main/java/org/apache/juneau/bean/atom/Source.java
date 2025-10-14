@@ -22,13 +22,13 @@ import java.util.*;
  * Represents metadata from the source feed when an entry is copied from one feed to another.
  *
  * <p>
- * When entries are aggregated, copied, or republished from their original feed, the source 
- * element preserves metadata about the original feed. This is crucial for proper attribution 
+ * When entries are aggregated, copied, or republished from their original feed, the source
+ * element preserves metadata about the original feed. This is crucial for proper attribution
  * and maintaining provenance information.
  *
  * <p>
- * The source element is a child of entry and contains a subset of feed-level metadata that 
- * identifies where the entry originally came from. All child elements are optional, but 
+ * The source element is a child of entry and contains a subset of feed-level metadata that
+ * identifies where the entry originally came from. All child elements are optional, but
  * including at minimum the source feed's ID, title, and updated timestamp is recommended.
  *
  * <p>
@@ -74,7 +74,7 @@ import java.util.*;
  * 			.setTitle(<js>"Original Blog"</js>)
  * 			.setUpdated(<js>"2024-01-15T12:00:00Z"</js>)
  * 			.setLinks(
- * 				<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>, 
+ * 				<jk>new</jk> Link(<js>"self"</js>, <js>"application/atom+xml"</js>,
  * 					<js>"http://originalblog.example.com/feed.atom"</js>)
  * 			)
  * 	);
@@ -82,7 +82,7 @@ import java.util.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomSource</c> construct in the 
+ * Represents an <c>atomSource</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.11">RFC 4287 - Section 4.2.11</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -96,7 +96,6 @@ public class Source extends CommonEntry {
 	private Icon icon;
 	private Logo logo;
 	private Text subtitle;
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
@@ -229,7 +228,6 @@ public class Source extends CommonEntry {
 		setSubtitle(new Text(value));
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)

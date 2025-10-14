@@ -19,4 +19,3 @@ package org.apache.juneau.config.mod;
 /**
  * Configuration Encoding Support
  */
-

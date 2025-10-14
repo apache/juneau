@@ -115,4 +115,3 @@ public class SerializedPojoProcessor implements ResponseProcessor {
 		);
 	}
 }
-

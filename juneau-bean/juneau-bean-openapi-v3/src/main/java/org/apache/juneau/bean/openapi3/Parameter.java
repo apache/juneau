@@ -31,8 +31,8 @@ import org.apache.juneau.marshaller.*;
  * Describes a single operation parameter.
  *
  * <p>
- * The Parameter Object describes a single parameter used in an API operation. Parameters can be passed in various 
- * locations including the path, query string, headers, or cookies. Each parameter has a name, location, and schema 
+ * The Parameter Object describes a single parameter used in an API operation. Parameters can be passed in various
+ * locations including the path, query string, headers, or cookies. Each parameter has a name, location, and schema
  * that defines its type and constraints.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>
@@ -447,5 +447,4 @@ public class Parameter extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

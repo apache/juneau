@@ -31,28 +31,28 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple ordered list</jc>
  * 	Ol <jv>ol1</jv> = <jsm>ol</jsm>(
  * 		<jsm>li</jsm>(<js>"First item"</js>),
  * 		<jsm>li</jsm>(<js>"Second item"</js>),
  * 		<jsm>li</jsm>(<js>"Third item"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Ordered list with custom numbering</jc>
  * 	Ol <jv>ol2</jv> = <jsm>ol</jsm>(
  * 		<jsm>li</jsm>(<js>"Item A"</js>),
  * 		<jsm>li</jsm>(<js>"Item B"</js>),
  * 		<jsm>li</jsm>(<js>"Item C"</js>)
  * 	).type(<js>"A"</js>).start(1);
- * 
+ *
  * 	<jc>// Reversed ordered list</jc>
  * 	Ol <jv>ol3</jv> = <jsm>ol</jsm>(
  * 		<jsm>li</jsm>(<js>"Last item"</js>),
  * 		<jsm>li</jsm>(<js>"Middle item"</js>),
  * 		<jsm>li</jsm>(<js>"First item"</js>)
  * 	).reversed(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Nested ordered list</jc>
  * 	Ol <jv>ol4</jv> = <jsm>ol</jsm>(
  * 		<jsm>li</jsm>(<js>"Main item 1"</js>),

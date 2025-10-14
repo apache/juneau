@@ -19,4 +19,3 @@ package org.apache.juneau.microservice.resources;
 /**
  * Predefined Microservice Resources
  */
-

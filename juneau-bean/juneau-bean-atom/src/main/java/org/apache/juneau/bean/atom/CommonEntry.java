@@ -28,8 +28,8 @@ import org.apache.juneau.xml.annotation.*;
  * Base class for feed-level and entry-level Atom elements.
  *
  * <p>
- * This abstract class contains properties common to {@link Feed}, {@link Entry}, and {@link Source} 
- * elements. These elements share a common set of metadata properties including authors, contributors, 
+ * This abstract class contains properties common to {@link Feed}, {@link Entry}, and {@link Source}
+ * elements. These elements share a common set of metadata properties including authors, contributors,
  * categories, links, and timestamps.
  *
  * <p>
@@ -64,7 +64,6 @@ public class CommonEntry extends Common {
 	private Text title;
 	private Calendar updated;
 
-
 	/**
 	 * Normal constructor.
 	 *
@@ -89,7 +88,6 @@ public class CommonEntry extends Common {
 
 	/** Bean constructor. */
 	public CommonEntry() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

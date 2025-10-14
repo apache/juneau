@@ -35,10 +35,10 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	<jc>// Rectangular clickable area</jc>
  * 	Area <jv>area1</jv> = <jsm>area</jsm>().shape(<js>"rect"</js>).coords(<js>"0,0,100,50"</js>).href(<js>"https://example.com/page1"</js>);
- * 
+ *
  * 	<jc>// Circular clickable area</jc>
  * 	Area <jv>area2</jv> = <jsm>area</jsm>().shape(<js>"circle"</js>).coords(<js>"150,75,50"</js>).href(<js>"https://example.com/page2"</js>);
- * 
+ *
  * 	<jc>// Area with alternative text and target</jc>
  * 	Area <jv>area3</jv> = <jsm>area</jsm>().shape(<js>"rect"</js>).coords(<js>"200,0,300,100"</js>).href(<js>"https://example.com/page3"</js>)
  * 		.alt(<js>"Click here for more info"</js>)

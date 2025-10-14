@@ -284,5 +284,4 @@ public class MockServletResponse implements HttpServletResponse {
 	Map<String,String[]> getHeaders() {
 		return headerMap;
 	}
-
 }

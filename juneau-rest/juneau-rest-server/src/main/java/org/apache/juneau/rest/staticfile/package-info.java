@@ -19,4 +19,3 @@ package org.apache.juneau.rest.staticfile;
 /**
  * REST Static Files Support
  */
-

@@ -164,7 +164,6 @@ public class BasicStringHeader extends BasicHeader {
 		return new FluentStringAssertion<>(value(), this);
 	}
 
-
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *

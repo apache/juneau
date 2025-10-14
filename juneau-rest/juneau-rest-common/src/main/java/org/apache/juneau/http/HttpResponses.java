@@ -302,7 +302,6 @@ public class HttpResponses {
 	 */
 	public static final VariantAlsoNegotiates VARIANT_ALSO_NEGOTIATES = VariantAlsoNegotiates.INSTANCE;
 
-
 	/**
 	 * A shortcut for calling {@link Continue#Continue()}.
 	 *

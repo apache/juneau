@@ -195,7 +195,6 @@ class ObjectRest_Test extends TestBase {
 	@Test void b02_addressBook() {
 		var model = ObjectRest.create(new AddressBook());
 
-
 		// Try adding a person to the address book.
 		var billClinton = new Person("Bill Clinton", 65,
 			new Address("55W. 125th Street", "New York", "NY", 10027, true)
@@ -206,7 +205,6 @@ class ObjectRest_Test extends TestBase {
 		// Make sure we get the original person back.
 		assertSame(billClinton, model.get("/0"));
 	}
-
 
 	public static class AddressBook extends LinkedList<Person> {
 

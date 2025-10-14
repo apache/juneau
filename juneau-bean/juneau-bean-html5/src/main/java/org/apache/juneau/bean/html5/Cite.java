@@ -34,26 +34,26 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple citation</jc>
  * 	Cite <jv>simple</jv> = <jsm>cite</jsm>(<js>"The Great Gatsby"</js>);
- * 
+ *
  * 	<jc>// Citation with styling</jc>
  * 	Cite <jv>styled</jv> = <jsm>cite</jsm>(<js>"To Kill a Mockingbird"</js>)
  * 		._class(<js>"book-title"</js>);
- * 
+ *
  * 	<jc>// Citation in a sentence</jc>
  * 	P <jv>sentence</jv> = <jsm>p</jsm>(
  * 		<js>"As mentioned in "</js>,
  * 		<jsm>cite</jsm>(<js>"The Art of War"</js>),
  * 		<js>", strategy is key to success."</js>
  * 	);
- * 
+ *
  * 	<jc>// Citation with link</jc>
  * 	Cite <jv>withLink</jv> = <jsm>cite</jsm>(
  * 		<jsm>a</jsm>(<js>"/books/1984"</js>, <js>"1984"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Multiple citations</jc>
  * 	P <jv>multiple</jv> = <jsm>p</jsm>(
  * 		<js>"Several works discuss this topic: "</js>,
@@ -64,7 +64,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>cite</jsm>(<js>"Book C"</js>),
  * 		<js>"."</js>
  * 	);
- * 
+ *
  * 	<jc>// Citation with author</jc>
  * 	P <jv>withAuthor</jv> = <jsm>p</jsm>(
  * 		<js>"According to "</js>,

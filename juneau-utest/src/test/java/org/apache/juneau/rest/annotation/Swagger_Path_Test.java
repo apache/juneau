@@ -83,7 +83,6 @@ class Swagger_Path_Test extends TestBase {
 		@RestPost(path="/c/{P}")
 		public void c(A3 f) { /* no-op */ }
 
-
 		@Path("P")
 		public static class A4 {
 			@Override

@@ -73,7 +73,6 @@ public class BasicSwaggerProviderSession {
 	private final JsonSchemaGeneratorSession js;
 	private final Locale locale;
 
-
 	/**
 	 * Constructor.
 	 *
@@ -903,7 +902,6 @@ public class BasicSwaggerProviderSession {
 		if (! examples.isEmpty())
 			piri.put("examples", examples);
 	}
-
 
 	private JsonMap resolveRef(JsonMap m) {
 		if (m == null)

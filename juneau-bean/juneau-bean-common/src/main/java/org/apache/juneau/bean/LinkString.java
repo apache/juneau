@@ -68,7 +68,6 @@ public class LinkString implements Comparable<LinkString> {
 		setUri(uri, uriArgs);
 	}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -170,7 +169,6 @@ public class LinkString implements Comparable<LinkString> {
 		this.uri = java.net.URI.create(format(value, args));
 		return this;
 	}
-
 
 	/**
 	 * Returns the name so that the {@link ObjectSearcher} class can search against it.

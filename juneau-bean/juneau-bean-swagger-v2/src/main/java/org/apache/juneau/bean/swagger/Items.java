@@ -32,8 +32,8 @@ import org.apache.juneau.marshaller.*;
  * A limited subset of JSON-Schema's items object.
  *
  * <p>
- * The Items Object is a limited subset of JSON-Schema's items object for Swagger 2.0. It is used by parameter 
- * definitions that are not located in "body" to describe the type of items in an array. This is particularly useful 
+ * The Items Object is a limited subset of JSON-Schema's items object for Swagger 2.0. It is used by parameter
+ * definitions that are not located in "body" to describe the type of items in an array. This is particularly useful
  * for query parameters, path parameters, and header parameters that accept arrays.
  *
  * <h5 class='section'>Swagger Specification:</h5>

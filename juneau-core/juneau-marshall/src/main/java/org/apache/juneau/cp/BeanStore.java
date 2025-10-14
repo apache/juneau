@@ -627,7 +627,6 @@ public class BeanStore {
 		return true;
 	}
 
-
 	/**
 	 * Returns the corresponding beans in this factory for the specified param types.
 	 *

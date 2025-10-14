@@ -229,5 +229,4 @@ public interface SwaggerProvider {
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
 	Swagger getSwagger(RestContext context, Locale locale) throws Exception;
-
 }

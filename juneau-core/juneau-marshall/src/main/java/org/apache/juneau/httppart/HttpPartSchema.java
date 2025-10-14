@@ -1966,7 +1966,6 @@ public class HttpPartSchema {
 			return this;
 		}
 
-
 		/**
 		 * <mk>collectionFormat</mk> field.
 		 *
@@ -4497,7 +4496,6 @@ public class HttpPartSchema {
 		// RFC 3339 Appendix A duration (ISO 8601)
 		return x.matches("^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$");
 	}
-
 
 	private boolean isValidMinItems(Object x) {
 		return minItems == null || Array.getLength(x) >= minItems;

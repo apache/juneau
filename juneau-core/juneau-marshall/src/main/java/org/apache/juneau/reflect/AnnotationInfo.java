@@ -158,7 +158,6 @@ public class AnnotationInfo<T extends Annotation> {
 		return a.annotationType().getSimpleName();
 	}
 
-
 	/**
 	 * Converts this object to a readable JSON object for debugging purposes.
 	 *

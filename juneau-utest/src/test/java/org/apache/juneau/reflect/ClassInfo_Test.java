@@ -830,7 +830,6 @@ public class ClassInfo_Test extends TestBase {
 		assertFalse(hPrivate.isVisible(Visibility.PUBLIC));
 	}
 
-
 	@Test void isVisible_protected() {
 		assertTrue(hPublic.isVisible(Visibility.PROTECTED));
 		assertTrue(hProtected.isVisible(Visibility.PROTECTED));
@@ -1292,7 +1291,6 @@ public class ClassInfo_Test extends TestBase {
 		assertEquals("ClassInfo_Test$LocalClass", of(LocalClass.class).getShortName());
 	}
 
-
 	@Test void getSimpleName_simple() {
 		assertEquals("AClass", aClass.getSimpleName());
 	}
@@ -1365,7 +1363,6 @@ public class ClassInfo_Test extends TestBase {
 	public static class KC extends KB {}
 
 	static ClassInfo ka=of(KA.class), kb=of(KB.class), kc=of(KC.class);
-
 
 	@Test void isParentOf() {
 		assertTrue(ka.isParentOf(KA.class));
@@ -1512,7 +1509,6 @@ public class ClassInfo_Test extends TestBase {
 		assertTrue(kc.isAny(KC.class));
 	}
 
-
 	@Test void is_type() {
 		assertFalse(aTypeInfo.is(KA.class));
 		assertFalse(pTypeInfo.is(KA.class));
@@ -1627,7 +1623,6 @@ public class ClassInfo_Test extends TestBase {
 		@SuppressWarnings({ "serial"})
 		public class MN extends HashMap<String,MM> {}
 	}
-
 
 	static ClassInfo ma=of(MA.class), mb=of(MB.class), mc=of(MC.class), md=of(MD.class), me=of(ME.class), mf=of(MF.class), mg=of(MG.class), mh=of(MH.class), mi=of(MI.class), mj=of(MJ.class), ml=of(ML.class), mn=of(MM.MN.class);
 

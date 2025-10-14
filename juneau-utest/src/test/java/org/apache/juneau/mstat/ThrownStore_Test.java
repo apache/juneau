@@ -310,7 +310,6 @@ class ThrownStore_Test extends TestBase {
 	public static class D1 {}
 	public static class D2 {}
 
-
 	@Test void d01_ignoreClasses() {
 		var db = ThrownStore.create().ignoreClasses(D1.class,D2.class,ThrownStore_Test.class).build();
 

@@ -19,4 +19,3 @@ package org.apache.juneau.annotation;
 /**
  * Bean and POJO Annotations
  */
-

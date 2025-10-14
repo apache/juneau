@@ -381,7 +381,6 @@ public class TestUtils extends Utils2 {
 		BctAssertions.assertBeans(actual, fields, expected);
 	}
 
-
 	/**
 	 * Asserts that a List contains the expected values using flexible comparison logic.
 	 *
@@ -972,7 +971,6 @@ public class TestUtils extends Utils2 {
 					// Look for attribute in the tag (handle both single and double quotes)
 					String pattern1 = attrName + "=\"" + attrValue + "\"";
 					String pattern2 = attrName + "='" + attrValue + "'";
-
 
 					if (!fullOpenTag.contains(pattern1) && !fullOpenTag.contains(pattern2)) {
 						matches = false;

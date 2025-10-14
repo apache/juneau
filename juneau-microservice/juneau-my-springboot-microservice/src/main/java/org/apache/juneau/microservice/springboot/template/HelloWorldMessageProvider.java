@@ -42,5 +42,4 @@ public class HelloWorldMessageProvider implements Supplier<String> {
 	public String get() {
 		return message;
 	}
-
 }

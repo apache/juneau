@@ -31,20 +31,20 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple option group</jc>
  * 	Optgroup <jv>optgroup1</jv> = <jsm>optgroup</jsm>(<js>"Fruits"</js>,
  * 		<jsm>option</jsm>(<js>"apple"</js>, <js>"Apple"</js>),
  * 		<jsm>option</jsm>(<js>"banana"</js>, <js>"Banana"</js>),
  * 		<jsm>option</jsm>(<js>"orange"</js>, <js>"Orange"</js>)
  * 	);
- * 
+ *
  * 	<jc>// Disabled option group</jc>
  * 	Optgroup <jv>optgroup2</jv> = <jsm>optgroup</jsm>(<js>"Vegetables"</js>,
  * 		<jsm>option</jsm>(<js>"carrot"</js>, <js>"Carrot"</js>),
  * 		<jsm>option</jsm>(<js>"broccoli"</js>, <js>"Broccoli"</js>)
  * 	).disabled(<jk>true</jk>);
- * 
+ *
  * 	<jc>// Multiple option groups in a select</jc>
  * 	Select <jv>select1</jv> = <jsm>select</jsm>(<js>"food"</js>,
  * 		<jsm>optgroup</jsm>(<js>"Fruits"</js>,

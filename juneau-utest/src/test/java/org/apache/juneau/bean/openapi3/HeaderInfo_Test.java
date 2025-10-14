@@ -294,7 +294,7 @@ class HeaderInfo_Test extends TestBase {
 
 			var refStack = new ArrayDeque<String>();
 			refStack.add("#/components/schemas/Header1"); // Pre-populate to simulate circular reference
-			
+
 			var header = headerInfo().setRef("#/components/schemas/Header1");
 			var result = header.resolveRefs(openApi, refStack, 10);
 
@@ -313,7 +313,7 @@ class HeaderInfo_Test extends TestBase {
 			refStack.add("dummy1");
 			refStack.add("dummy2");
 			refStack.add("dummy3");
-			
+
 			var header = headerInfo().setRef("#/components/schemas/MyHeader");
 			var result = header.resolveRefs(openApi, refStack, 3); // maxDepth = 3, refStack.size() = 3
 

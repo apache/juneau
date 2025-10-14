@@ -116,7 +116,6 @@ public class Entry {
 		return isNull() ? def.get() : get();
 	}
 
-
 	/**
 	 * Returns this entry converted to the specified type.
 	 *
@@ -321,7 +320,6 @@ public class Entry {
 	public Optional<Integer> asInteger() {
 		return Utils.opt(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
 	}
-
 
 	/**
 	 * Returns this entry as a parsed boolean.

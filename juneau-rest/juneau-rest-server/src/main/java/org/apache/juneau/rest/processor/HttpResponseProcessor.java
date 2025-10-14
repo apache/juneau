@@ -61,4 +61,3 @@ public class HttpResponseProcessor implements ResponseProcessor {
 		return FINISHED;
 	}
 }
-

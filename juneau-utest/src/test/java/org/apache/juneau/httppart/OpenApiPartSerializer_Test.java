@@ -132,7 +132,6 @@ class OpenApiPartSerializer_Test extends TestBase {
 		}
 	}
 
-
 	@Test void c01_stringType_simple() throws Exception {
 		var ps = T_STRING;
 		assertEquals("foo", serialize(ps, "foo"));
@@ -620,7 +619,6 @@ class OpenApiPartSerializer_Test extends TestBase {
 		assertEquals("1,2|3,null|null", serialize(ps, new F4[]{new F4(1L,2L),new F4(3L,null),null}));
 		assertEquals("1,2|3,null|null", serialize(ps, list(new F4(1L,2L),new F4(3L,null),null)));
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// type = number

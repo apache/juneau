@@ -257,7 +257,6 @@ public class BasicCsvHeader extends BasicHeader {
 		return new FluentListAssertion<>(u(alist(value())), this);
 	}
 
-
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *

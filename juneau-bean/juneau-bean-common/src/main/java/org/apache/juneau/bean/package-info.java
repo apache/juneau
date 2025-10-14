@@ -19,4 +19,3 @@ package org.apache.juneau.bean;
 /**
  * Data Transfer Objects
  */
-

@@ -74,7 +74,7 @@ class HtmlElementMixed_Test extends TestBase {
 	@Test void a09_getChildren() {
 		P x1 = new P();
 		assertNull(x1.getChildren());
-		
+
 		P x2 = p("child1", "child2");
 		assertString("[child1,child2]", x2.getChildren());
 	}
@@ -110,7 +110,7 @@ class HtmlElementMixed_Test extends TestBase {
 			),
 			span("text3")
 		);
-		
+
 		// Navigate to nested elements
 		assertString("text1", x.getChild(0, 0, 0));
 		assertString("text2", x.getChild(0, 1, 0));
@@ -130,7 +130,7 @@ class HtmlElementMixed_Test extends TestBase {
 				span("nested")
 			)
 		);
-		
+
 		assertString("nested", x.getChild(0, 0, 0));
 	}
 

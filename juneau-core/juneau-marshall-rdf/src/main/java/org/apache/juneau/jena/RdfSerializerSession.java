@@ -525,7 +525,6 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		});
 	}
 
-
 	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
 		c.forEach(x -> list.add(serializeAnything(x, false, elementType, null, null, null)));
@@ -559,7 +558,6 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			parentResource.addProperty(p, n2);
 		});
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Common properties

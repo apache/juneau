@@ -176,4 +176,3 @@ public @interface BeanIgnore {
 	 */
 	Class<?>[] onClass() default {};
 }
-

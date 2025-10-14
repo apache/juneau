@@ -54,7 +54,6 @@ public class Version implements Comparable<Version> {
 		return new Version(value);
 	}
 
-
 	/**
 	 * Constructor
 	 *
@@ -139,7 +138,6 @@ public class Version implements Comparable<Version> {
 	public boolean isAtLeast(Version v) {
 		return isAtLeast(v, false);
 	}
-
 
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.

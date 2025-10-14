@@ -24,8 +24,8 @@ import java.net.*;
  * Represents a person, corporation, or similar entity in an Atom document.
  *
  * <p>
- * Person constructs are used to describe authors, contributors, and other people or entities 
- * associated with a feed or entry. Each person construct contains a name and optionally a URI 
+ * Person constructs are used to describe authors, contributors, and other people or entities
+ * associated with a feed or entry. Each person construct contains a name and optionally a URI
  * and email address.
  *
  * <p>
@@ -59,7 +59,7 @@ import java.net.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomPersonConstruct</c> in the 
+ * Represents an <c>atomPersonConstruct</c> in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-3.2">RFC 4287 - Section 3.2</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -73,7 +73,6 @@ public class Person extends Common {
 	private URI uri;
 	private String email;
 
-
 	/**
 	 * Normal constructor.
 	 *
@@ -85,7 +84,6 @@ public class Person extends Common {
 
 	/** Bean constructor. */
 	public Person() {}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties

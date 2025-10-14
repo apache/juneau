@@ -250,7 +250,6 @@ public class XmlWriter extends SerializerWriter {
 		return i(indent).tag(ns, name);
 	}
 
-
 	/**
 	 * Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code>
 	 *
@@ -320,7 +319,6 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter sTag(int indent, String name) {
 		return i(indent).sTag(null, name, false);
 	}
-
 
 	/**
 	 * Writes an end tag to the output:  <code><xt>&lt;/ns:name&gt;</xt></code>
@@ -458,7 +456,6 @@ public class XmlWriter extends SerializerWriter {
 	public XmlWriter attr(String name, Object value) {
 		return attr((String)null, name, value);
 	}
-
 
 	/**
 	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>

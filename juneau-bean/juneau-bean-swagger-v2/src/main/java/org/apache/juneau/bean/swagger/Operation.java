@@ -1049,5 +1049,4 @@ public class Operation extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

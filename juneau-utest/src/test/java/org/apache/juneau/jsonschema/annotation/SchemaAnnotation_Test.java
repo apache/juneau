@@ -450,17 +450,17 @@ class SchemaAnnotation_Test extends TestBase {
 			.maximum("100")
 			.minimum("0")
 			.build();
-		
+
 		assertBean(oldStyle, "exclusiveMaximum,exclusiveMinimum,maximum,minimum", "true,true,100,0");
-		
+
 		// Test that new numeric style takes precedence
 		Schema newStyle = SchemaAnnotation.create()
 			.exclusiveMaximumValue("100")
 			.exclusiveMinimumValue("0")
 			.build();
-		
+
 		assertBean(newStyle, "exclusiveMaximumValue,exclusiveMinimumValue", "100,0");
-		
+
 		// Test that new style takes precedence when both are set
 		Schema mixed = SchemaAnnotation.create()
 			.exclusiveMaximum(false)
@@ -468,7 +468,7 @@ class SchemaAnnotation_Test extends TestBase {
 			.exclusiveMaximumValue("100")
 			.exclusiveMinimumValue("0")
 			.build();
-		
+
 		assertBean(mixed, "exclusiveMaximum,exclusiveMinimum,exclusiveMaximumValue,exclusiveMinimumValue", "false,false,100,0");
 	}
 }

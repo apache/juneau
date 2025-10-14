@@ -143,7 +143,6 @@ public class MethodExecStats {
 		this.thrownStore = builder.thrownStore != null ? builder.thrownStore : new ThrownStore();
 	}
 
-
 	/**
 	 * Call when task is started.
 	 *

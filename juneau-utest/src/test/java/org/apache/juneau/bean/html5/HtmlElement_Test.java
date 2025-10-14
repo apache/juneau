@@ -38,10 +38,10 @@ class HtmlElement_Test extends TestBase {
 	@Test void a03_deminimize() {
 		Button x1 = button().disabled(true);
 		assertString("<button disabled='disabled'></button>", x1);
-		
+
 		Button x2 = button().disabled(false);
 		assertString("<button></button>", x2);
-		
+
 		Button x3 = button().disabled("custom");
 		assertString("<button disabled='custom'></button>", x3);
 	}
@@ -57,11 +57,11 @@ class HtmlElement_Test extends TestBase {
 		A x = a();
 		x.attr("url", "http://example.com");
 		assertString("http://example.com", x.getAttr(String.class, "url"));
-		
+
 		A x2 = a();
 		x2.attr("href", "http://example.com");
 		assertString("http://example.com", x2.getAttr(String.class, "href"));
-		
+
 		Form x3 = form();
 		x3.attr("action", "http://example.com");
 		assertString("http://example.com", x3.getAttr(String.class, "action"));

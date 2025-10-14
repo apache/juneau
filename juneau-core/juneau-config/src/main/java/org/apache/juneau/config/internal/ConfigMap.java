@@ -362,7 +362,6 @@ public class ConfigMap implements ConfigStoreListener {
 		return applyChange(true, ConfigEvent.setEntry(name, section, key, value, modifiers, comment, preLines));
 	}
 
-
 	/**
 	 * Not implemented.
 	 *

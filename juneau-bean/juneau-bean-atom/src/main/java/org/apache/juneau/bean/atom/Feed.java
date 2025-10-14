@@ -27,12 +27,12 @@ import org.apache.juneau.xml.annotation.*;
  * Represents a top-level Atom feed document.
  *
  * <p>
- * An Atom feed is a Web resource that contains metadata and optionally a set of entries. 
- * Feeds are the top-level container element in Atom documents and act as a manifest of metadata 
+ * An Atom feed is a Web resource that contains metadata and optionally a set of entries.
+ * Feeds are the top-level container element in Atom documents and act as a manifest of metadata
  * and data associated with a collection of related resources.
  *
  * <p>
- * The feed is the fundamental unit of syndication in Atom and is used to aggregate entries that 
+ * The feed is the fundamental unit of syndication in Atom and is used to aggregate entries that
  * share a common purpose, such as a blog, podcast channel, or news source.
  *
  * <h5 class='figure'>Schema</h5>
@@ -101,7 +101,7 @@ import org.apache.juneau.xml.annotation.*;
  *
  * <h5 class='section'>Specification:</h5>
  * <p>
- * Represents an <c>atomFeed</c> construct in the 
+ * Represents an <c>atomFeed</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.1">RFC 4287 - Section 4.1.1</a> specification.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -143,7 +143,6 @@ public class Feed extends CommonEntry {
 	/** Bean constructor. */
 	public Feed() {}
 
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
 	//-----------------------------------------------------------------------------------------------------------------
@@ -155,7 +154,7 @@ public class Feed extends CommonEntry {
 	 * Identifies the software agent used to generate the feed.
 	 *
 	 * <p>
-	 * This is useful for debugging and analytics purposes, allowing consumers to identify the 
+	 * This is useful for debugging and analytics purposes, allowing consumers to identify the
 	 * software responsible for producing the feed.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -197,7 +196,7 @@ public class Feed extends CommonEntry {
 	 * Identifies a small image that provides iconic visual identification for the feed.
 	 *
 	 * <p>
-	 * Icons should be square and small (typically 16x16 or similar). The image should have an 
+	 * Icons should be square and small (typically 16x16 or similar). The image should have an
 	 * aspect ratio of 1 (horizontal) to 1 (vertical).
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -272,7 +271,7 @@ public class Feed extends CommonEntry {
 	 * Returns a human-readable description or subtitle for the feed.
 	 *
 	 * <p>
-	 * The subtitle provides additional context about the feed's purpose or content beyond 
+	 * The subtitle provides additional context about the feed's purpose or content beyond
 	 * what is conveyed in the title.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -329,8 +328,8 @@ public class Feed extends CommonEntry {
 	 * Returns the individual entries contained within this feed.
 	 *
 	 * <p>
-	 * Each entry represents a single item in the feed, such as a blog post, news article, 
-	 * podcast episode, or other discrete piece of content. Entries contain their own metadata 
+	 * Each entry represents a single item in the feed, such as a blog post, news article,
+	 * podcast episode, or other discrete piece of content. Entries contain their own metadata
 	 * including title, content, links, and timestamps.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.

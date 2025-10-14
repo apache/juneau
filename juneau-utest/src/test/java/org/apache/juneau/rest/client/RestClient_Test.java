@@ -97,7 +97,6 @@ class RestClient_Test extends TestBase {
 		assertDoesNotThrow(()->RestClient.create().debug().build().closeQuietly());
 	}
 
-
 	@Test void a04_request_whenClosed() {
 		var rc = client().build();
 		rc.closeQuietly();

@@ -420,7 +420,6 @@ public class ObjectSearcher_Test extends TestBase {
 		assertSerialized(run(in, "f=2011-01-01"), ws, "[{f:'2011-01-01T00:00:00'}]");
 	}
 
-
 	@Test void c04_dateSearch_singleDate_ymdh() {
 		var in = B.create("2011-01-01T11:15:59", "2011-01-01T12:00:00", "2011-01-01T12:59:59", "2011-01-01T13:00:00");
 		assertSerialized(run(in, "f=2011-01-01T12"), ws, "[{f:'2011-01-01T12:00:00'},{f:'2011-01-01T12:59:59'}]");
@@ -649,7 +648,6 @@ public class ObjectSearcher_Test extends TestBase {
 		);
 		assertBeans(run(in, "f=foo"), "f", "foo");
 	}
-
 
 	@Test void d03_d2ArrayOfMaps() {
 		Map<?,?>[] in = new Map[]{

@@ -19,4 +19,3 @@ package org.apache.juneau.http.annotation;
 /**
  * HTTP Part Annotations
  */
-

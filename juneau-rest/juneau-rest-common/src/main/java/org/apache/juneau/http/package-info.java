@@ -19,4 +19,3 @@ package org.apache.juneau.http;
 /**
  * RFC2616 HTTP Headers
  */
-

@@ -360,7 +360,6 @@ public class Messages extends ResourceBundle {
 
 	private final Set<String> rbKeys;
 
-
 	/**
 	 * Constructor.
 	 *

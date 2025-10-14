@@ -19,4 +19,3 @@ package org.apache.juneau.html.annotation;
 /**
  * HTML Marshalling Annotations
  */
-

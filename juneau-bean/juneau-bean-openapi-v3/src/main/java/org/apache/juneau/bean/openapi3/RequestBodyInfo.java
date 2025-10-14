@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * Describes a single request body.
  *
  * <p>
- * The Request Body Object describes a single request body that can be sent to an API operation. It includes 
+ * The Request Body Object describes a single request body that can be sent to an API operation. It includes
  * a description, whether the request body is required, and the content (media types) that the request body can contain.
  *
  * <h5 class='section'>OpenAPI Specification:</h5>

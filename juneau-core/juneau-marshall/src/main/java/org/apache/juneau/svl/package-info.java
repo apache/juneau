@@ -19,4 +19,3 @@ package org.apache.juneau.svl;
 /**
  * Simple Variable Language
  */
-

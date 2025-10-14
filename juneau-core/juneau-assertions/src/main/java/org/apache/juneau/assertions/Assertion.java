@@ -194,7 +194,6 @@ public class Assertion {
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-
 	/**
 	 * Creates a new {@link BasicAssertionError}.
 	 *

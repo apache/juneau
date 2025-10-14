@@ -19,4 +19,3 @@ package org.apache.juneau.uon.annotation;
 /**
  * UON Marshalling Annotations
  */
-

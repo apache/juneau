@@ -29,8 +29,8 @@ import org.apache.juneau.internal.*;
  * Allows adding metadata to a single tag that is used by the Operation Object.
  *
  * <p>
- * The Tag Object allows adding metadata to a single tag that is used by the Operation Object in Swagger 2.0. 
- * It is not mandatory to have a Tag Object per tag used there, but it can be useful for providing additional 
+ * The Tag Object allows adding metadata to a single tag that is used by the Operation Object in Swagger 2.0.
+ * It is not mandatory to have a Tag Object per tag used there, but it can be useful for providing additional
  * information about tags such as descriptions and external documentation.
  *
  * <h5 class='section'>Swagger Specification:</h5>
@@ -253,5 +253,4 @@ public class Tag extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

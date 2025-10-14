@@ -621,7 +621,6 @@ public class OpenApi_Test extends TestBase {
 		assertJson(json(in), r);
 	}
 
-
 	public static class F04 {
 		private String[] args;
 
@@ -803,7 +802,6 @@ public class OpenApi_Test extends TestBase {
 		r = parse(ps, s, int[][][].class);
 		assertJson(json(in), r);
 	}
-
 
 	@Test void f10_tArray_complexTypes() throws Exception {
 		int[][][] in =  {{{1,2},{3,4}},{{5,6},{7,8}}};

@@ -57,7 +57,6 @@ class Verify_Test extends TestBase {
 		test(x2.isType(String.class)).is("Expected type 'java.lang.String' but was 'null'.");
 		test(x1.isType(null)).is("Expected type 'null' but was 'java.lang.String'.");
 
-
 		test(verify(true).isTrue()).isNull();
 		test(verify(false).isFalse()).isNull();
 		test(verify(null).isTrue()).is("Expected 'true' but was 'null'.");

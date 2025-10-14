@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Nav with styling</jc>
  * 	Nav <jv>styled</jv> = <jsm>nav</jsm>(
  * 		<jsm>ul</jsm>(
@@ -49,7 +49,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/support"</js>, <js>"Support"</js>))
  * 		)
  * 	)._class(<js>"main-navigation"</js>);
- * 
+ *
  * 	<jc>// Nav with complex content</jc>
  * 	Nav <jv>complex</jv> = <jsm>nav</jsm>(
  * 		<jsm>h3</jsm>(<js>"Site Navigation"</js>),
@@ -59,7 +59,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/contact"</js>, <js>"Contact"</js>))
  * 		)
  * 	);
- * 
+ *
  * 	<jc>// Nav with ID</jc>
  * 	Nav <jv>withId</jv> = <jsm>nav</jsm>(
  * 		<jsm>ul</jsm>(
@@ -67,7 +67,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>))
  * 		)
  * 	).id(<js>"main-nav"</js>);
- * 
+ *
  * 	<jc>// Nav with styling</jc>
  * 	Nav <jv>styled2</jv> = <jsm>nav</jsm>(
  * 		<jsm>ul</jsm>(
@@ -75,7 +75,7 @@ import org.apache.juneau.internal.*;
  * 			<jsm>li</jsm>(<jsm>a</jsm>(<js>"/about"</js>, <js>"About"</js>))
  * 		)
  * 	).style(<js>"background-color: #333; padding: 10px;"</js>);
- * 
+ *
  * 	<jc>// Nav with multiple elements</jc>
  * 	Nav <jv>multiple</jv> = <jsm>nav</jsm>(
  * 		<jsm>h3</jsm>(<js>"Navigation"</js>),
@@ -85,7 +85,7 @@ import org.apache.juneau.internal.*;
  * 		),
  * 		<jsm>p</jsm>(<js>"Use the links above to navigate the site."</js>)
  * 	);
- * 
+ *
  * 	<jc>// Nav with breadcrumbs</jc>
  * 	Nav <jv>breadcrumbs</jv> = <jsm>nav</jsm>(
  * 		<jsm>ul</jsm>(

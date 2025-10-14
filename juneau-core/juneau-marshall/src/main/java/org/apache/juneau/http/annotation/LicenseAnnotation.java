@@ -85,7 +85,6 @@ public class LicenseAnnotation {
 			return new Impl(this);
 		}
 
-
 		/**
 		 * Sets the {@link License#name} property on this annotation.
 		 *

@@ -1247,5 +1247,4 @@ public class SchemaInfo extends SwaggerElement {
 		super.strict(value);
 		return this;
 	}
-
 }

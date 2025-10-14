@@ -5677,7 +5677,6 @@ public class RestContext extends Context {
 		return config;
 	}
 
-
 	/**
 	 * Returns the path for this resource as defined by the {@link Rest#path() @Rest(path)} annotation or
 	 * {@link RestContext.Builder#path(String)} method.
@@ -6676,9 +6675,6 @@ public class RestContext extends Context {
 	public AnnotationWorkList getAnnotations() {
 		return builder.getApplied();
 	}
-
-
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

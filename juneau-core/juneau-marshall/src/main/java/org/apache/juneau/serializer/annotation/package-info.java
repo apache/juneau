@@ -19,4 +19,3 @@ package org.apache.juneau.serializer.annotation;
 /**
  * Serializer Annotations
  */
-

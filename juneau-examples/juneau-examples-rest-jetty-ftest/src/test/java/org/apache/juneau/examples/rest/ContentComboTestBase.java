@@ -95,7 +95,6 @@ public class ContentComboTestBase extends RestTestcase {
 		}
 	}
 
-
 	private final ComboInput comboInput;
 
 	public ContentComboTestBase(ComboInput comboInput) {

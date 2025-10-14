@@ -19,5 +19,4 @@ package org.apache.juneau.cp.test4;
 import org.apache.juneau.cp.test3.*;
 
 public class Test2 extends Test1 {
-
 }

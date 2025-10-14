@@ -496,5 +496,4 @@ public class OpenApi extends OpenApiElement {
 		super.strict(value);
 		return this;
 	}
-
 }

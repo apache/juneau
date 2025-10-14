@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 
-
 /**
  * Represents a parsed <l>Accept-Charset</l> HTTP request header.
  *

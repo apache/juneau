@@ -32,10 +32,10 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Simple line break</jc>
  * 	Br <jv>simple</jv> = <jsm>br</jsm>();
- * 
+ *
  * 	<jc>// Address with line breaks</jc>
  * 	P <jv>address</jv> = <jsm>p</jsm>(
  * 		<js>"John Doe"</js>,
@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>br</jsm>(),
  * 		<js>"Anytown, ST 12345"</js>
  * 	);
- * 
+ *
  * 	<jc>// Poetry with line breaks</jc>
  * 	P <jv>poetry</jv> = <jsm>p</jsm>(
  * 		<js>"Roses are red,"</js>,
@@ -55,7 +55,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>br</jsm>(),
  * 		<js>"And so are you."</js>
  * 	);
- * 
+ *
  * 	<jc>// Contact information</jc>
  * 	P <jv>contact</jv> = <jsm>p</jsm>(
  * 		<js>"Phone: (555) 123-4567"</js>,
@@ -64,12 +64,12 @@ import org.apache.juneau.internal.*;
  * 		<jsm>br</jsm>(),
  * 		<js>"Website: www.example.com"</js>
  * 	);
- * 
+ *
  * 	<jc>// Styled line break</jc>
  * 	Br <jv>styled</jv> = <jsm>br</jsm>()
  * 		._class(<js>"line-break"</js>)
  * 		.style(<js>"margin: 10px 0;"</js>);
- * 
+ *
  * 	<jc>// Multiple line breaks</jc>
  * 	P <jv>multiple</jv> = <jsm>p</jsm>(
  * 		<js>"First line"</js>,
@@ -77,7 +77,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>br</jsm>(),
  * 		<js>"Third line (with extra space)"</js>
  * 	);
- * 
+ *
  * 	<jc>// Line break in a list</jc>
  * 	Li <jv>listItem</jv> = <jsm>li</jsm>(
  * 		<js>"Item 1"</js>,

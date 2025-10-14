@@ -47,7 +47,6 @@ class ParserSet_Test extends TestBase {
 		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz_a"));
 	}
 
-
 	public static class Parser1 extends JsonParser { public Parser1(JsonParser.Builder b) { super(b.consumes("text/foo,text/foo_a")); }}
 	public static class Parser2 extends JsonParser { public Parser2(JsonParser.Builder b) { super(b.consumes("text/foo+bar,text/foo+bar_a")); }}
 	public static class Parser3 extends JsonParser { public Parser3(JsonParser.Builder b) { super(b.consumes("text/baz,text/baz_a")); }}

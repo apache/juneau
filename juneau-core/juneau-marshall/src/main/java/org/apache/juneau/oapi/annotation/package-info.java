@@ -19,4 +19,3 @@ package org.apache.juneau.oapi.annotation;
 /**
  * OpenAPI Marshalling Annotations
  */
-

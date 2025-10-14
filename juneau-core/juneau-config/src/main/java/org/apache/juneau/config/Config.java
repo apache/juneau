@@ -554,7 +554,6 @@ public class Config extends Context implements ConfigEventListener {
 	private final ConfigMap configMap;
 	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
 
-
 	@Override /* Context */
 	public Builder copy() {
 		return new Builder(this);

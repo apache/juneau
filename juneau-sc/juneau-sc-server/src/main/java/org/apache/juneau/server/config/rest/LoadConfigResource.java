@@ -37,5 +37,4 @@ public class LoadConfigResource extends RestServlet {
 
 		return jsonSerializer.serialize(config.get());
 	}
-
 }

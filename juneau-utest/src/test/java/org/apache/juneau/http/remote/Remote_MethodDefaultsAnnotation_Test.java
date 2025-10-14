@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests for method-level default values on remote proxy interfaces.
- * 
+ *
  * @since 9.2.0
  */
 class Remote_MethodDefaultsAnnotation_Test {
@@ -260,8 +260,8 @@ class Remote_MethodDefaultsAnnotation_Test {
 			@Header("HeaderParam") String headerParam,
 			@Content String content
 		) {
-			return "queryParam=" + queryParam 
-				+ ",HeaderParam=" + headerParam 
+			return "queryParam=" + queryParam
+				+ ",HeaderParam=" + headerParam
 				+ ",content=" + content;
 		}
 	}
@@ -425,4 +425,3 @@ class Remote_MethodDefaultsAnnotation_Test {
 		assertEquals("content={paramDefault:true}", x.x1(null));
 	}
 }
-

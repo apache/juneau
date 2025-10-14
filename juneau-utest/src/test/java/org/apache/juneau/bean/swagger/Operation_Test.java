@@ -427,5 +427,4 @@ class Operation_Test extends TestBase {
 	private static Operation bean() {
 		return operation();
 	}
-
 }

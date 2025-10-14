@@ -176,7 +176,6 @@ public class ConverterUtils {
 		return session.convertToType(value, type);
 	}
 
-
 	/**
 	 * Converts the specified object to the specified type.
 	 *

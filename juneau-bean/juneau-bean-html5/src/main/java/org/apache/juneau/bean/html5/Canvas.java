@@ -33,36 +33,36 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Examples:</h5>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
- * 
+ *
  * 	<jc>// Basic canvas</jc>
  * 	Canvas <jv>basic</jv> = <jsm>canvas</jsm>(300, 200);
- * 
+ *
  * 	<jc>// Canvas with ID for JavaScript access</jc>
  * 	Canvas <jv>withId</jv> = <jsm>canvas</jsm>(400, 300)
  * 		.id(<js>"myCanvas"</js>);
- * 
+ *
  * 	<jc>// Canvas with styling</jc>
  * 	Canvas <jv>styled</jv> = <jsm>canvas</jsm>(500, 400)
  * 		.id(<js>"drawingCanvas"</js>)
  * 		._class(<js>"canvas-element"</js>)
  * 		.style(<js>"border: 1px solid #ccc;"</js>);
- * 
+ *
  * 	<jc>// Canvas with event handlers</jc>
  * 	Canvas <jv>interactive</jv> = <jsm>canvas</jsm>(800, 600)
  * 		.id(<js>"gameCanvas"</js>)
  * 		.onclick(<js>"handleCanvasClick(event)"</js>)
  * 		.onmousemove(<js>"handleMouseMove(event)"</js>);
- * 
+ *
  * 	<jc>// Canvas with fallback content</jc>
  * 	Canvas <jv>withFallback</jv> = <jsm>canvas</jsm>(600, 400)
  * 		.id(<js>"chartCanvas"</js>)
  * 		.children(<js>"Your browser does not support the canvas element."</js>);
- * 
+ *
  * 	<jc>// Canvas for data visualization</jc>
  * 	Canvas <jv>chart</jv> = <jsm>canvas</jsm>(800, 500)
  * 		.id(<js>"dataChart"</js>)
  * 		.title(<js>"Interactive Data Chart"</js>);
- * 
+ *
  * 	<jc>// Canvas with accessibility</jc>
  * 	Canvas <jv>accessible</jv> = <jsm>canvas</jsm>(400, 300)
  * 		.id(<js>"accessibleCanvas"</js>)

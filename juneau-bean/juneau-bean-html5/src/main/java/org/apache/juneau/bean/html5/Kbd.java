@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <p class='bcode w800'>
  * 	<jc>// Simple keyboard shortcut</jc>
  * 	Kbd <jv>simple</jv> = <jsm>kbd</jsm>(<js>"Ctrl+S"</js>);
- * 
+ *
  * 	<jc>// Keyboard combination with nested kbd elements</jc>
  * 	P <jv>shortcut</jv> = <jsm>p</jsm>(
  * 		<js>"Press "</js>,
@@ -41,7 +41,7 @@ import org.apache.juneau.internal.*;
  * 		<jsm>kbd</jsm>(<js>"C"</js>),
  * 		<js>" to copy."</js>
  * 	);
- * 
+ *
  * 	<jc>// Menu selection instruction</jc>
  * 	P <jv>menu</jv> = <jsm>p</jsm>(
  * 		<js>"Select "</js>,
@@ -49,19 +49,19 @@ import org.apache.juneau.internal.*;
  * 		<js>" → "</js>,
  * 		<jsm>kbd</jsm>(<js>"Save As..."</js>)
  * 	);
- * 
+ *
  * 	<jc>// Command line input</jc>
  * 	P <jv>command</jv> = <jsm>p</jsm>(
  * 		<js>"Type "</js>,
  * 		<jsm>kbd</jsm>(<js>"npm install"</js>),
  * 		<js>" to install dependencies."</js>
  * 	);
- * 
+ *
  * 	<jc>// With styling</jc>
  * 	Kbd <jv>styled</jv> = <jsm>kbd</jsm>(<js>"Enter"</js>)
  * 		._class(<js>"key-highlight"</js>)
  * 		.title(<js>"Press Enter to submit"</js>);
- * 
+ *
  * 	<jc>// Multiple key sequence</jc>
  * 	P <jv>sequence</jv> = <jsm>p</jsm>(
  * 		<js>"To exit, press "</js>,

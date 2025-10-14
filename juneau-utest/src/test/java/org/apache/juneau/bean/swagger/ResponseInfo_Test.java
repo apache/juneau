@@ -313,7 +313,6 @@ class ResponseInfo_Test extends TestBase {
 		}
 	}
 
-
 	//---------------------------------------------------------------------------------------------
 	// Helper methods
 	//---------------------------------------------------------------------------------------------
@@ -321,5 +320,4 @@ class ResponseInfo_Test extends TestBase {
 	private static ResponseInfo bean() {
 		return responseInfo();
 	}
-
 }
