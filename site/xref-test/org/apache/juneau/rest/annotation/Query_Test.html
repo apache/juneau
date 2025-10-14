@@ -395,7 +395,100 @@
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 			.assertStatus(200)
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 			.assertContent(<span class="jxr_string">"[{a:1,b:'foo'}]"</span>);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> }
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<em class="jxr_comment">// Class-level query defaults</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Rest(
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		queryParams={
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			@Query(name=<span class="jxr_string">"format"</span>, def=<span class="jxr_string">"json"</span>, description=<span class="jxr_string">"Output format"</span>),
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			@Query(name=<span class="jxr_string">"verbose"</span>, def=<span class="jxr_string">"false"</span>, schema=@Schema(type=<span class="jxr_string">"boolean"</span>, description=<span class="jxr_string">"Verbose output"</span>))
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	)
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		@RestGet
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">public</strong> String a(@Query(<span class="jxr_string">"format"</span>) String format, @Query(<span class="jxr_string">"verbose"</span>) <strong class="jxr_keyword">boolean</strong> verbose) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"format="</span>+format+<span class="jxr_string">",verbose="</span>+verbose;
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		@RestGet
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">public</strong> String b(@Query(name=<span class="jxr_string">"format"</span>, def=<span class="jxr_string">"xml"</span>) String format, @Query(<span class="jxr_string">"verbose"</span>) <strong class="jxr_keyword">boolean</strong> verbose) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"format="</span>+format+<span class="jxr_string">",verbose="</span>+verbose;
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Test
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">void</strong> g01_classLevelQueryDefaults() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> g = MockRestClient.build(G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<em class="jxr_comment">// Test default values from class-level @Query</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		g.get(<span class="jxr_string">"/a"</span>).run().assertContent(<span class="jxr_string">"format=json,verbose=false"</span>);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<em class="jxr_comment">// Test overriding with query params</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		g.get(<span class="jxr_string">"/a?format=xml&amp;verbose=true"</span>).run().assertContent(<span class="jxr_string">"format=xml,verbose=true"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// Test method-level override of class-level default</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		g.get(<span class="jxr_string">"/b"</span>).run().assertContent(<span class="jxr_string">"format=xml,verbose=false"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// Test method-level override can still be overridden by query param</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		g.get(<span class="jxr_string">"/b?format=json"</span>).run().assertContent(<span class="jxr_string">"format=json,verbose=false"</span>);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<em class="jxr_comment">// Test class-level parameter defaults for all HTTP part types</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	@Rest(
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		queryParams={
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			@Query(name=<span class="jxr_string">"q"</span>, def=<span class="jxr_string">"defaultQ"</span>)
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		},
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		headerParams={
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			@Header(name=<span class="jxr_string">"X-Custom"</span>, def=<span class="jxr_string">"defaultHeader"</span>)
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		},
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		formDataParams={
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			@FormData(name=<span class="jxr_string">"f"</span>, def=<span class="jxr_string">"defaultForm"</span>)
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	)
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		@RestGet(<span class="jxr_string">"/query"</span>)
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">public</strong> String testQuery(@Query(<span class="jxr_string">"q"</span>) String q) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"q="</span>+q;
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		}
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		@RestGet(<span class="jxr_string">"/header"</span>)
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">public</strong> String testHeader(@Header(<span class="jxr_string">"X-Custom"</span>) String h) {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"h="</span>+h;
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		@RestPost(<span class="jxr_string">"/form"</span>)
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">public</strong> String testForm(@FormData(<span class="jxr_string">"f"</span>) String f) {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"f="</span>+f;
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		@RestGet(<span class="jxr_string">"/override"</span>)
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">public</strong> String testOverride(@Query(name=<span class="jxr_string">"q"</span>, def=<span class="jxr_string">"overrideQ"</span>) String q, @Header(name=<span class="jxr_string">"X-Custom"</span>, def=<span class="jxr_string">"overrideHeader"</span>) String h) {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"q="</span>+q+<span class="jxr_string">",h="</span>+h;
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Test
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">void</strong> h01_classLevelAllParamDefaults() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">var</strong> h = MockRestClient.build(H.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<em class="jxr_comment">// Test query default</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		h.get(<span class="jxr_string">"/query"</span>).run().assertContent(<span class="jxr_string">"q=defaultQ"</span>);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		h.get(<span class="jxr_string">"/query?q=custom"</span>).run().assertContent(<span class="jxr_string">"q=custom"</span>);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<em class="jxr_comment">// Test header default</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		h.get(<span class="jxr_string">"/header"</span>).run().assertContent(<span class="jxr_string">"h=defaultHeader"</span>);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		h.get(<span class="jxr_string">"/header"</span>).header(<span class="jxr_string">"X-Custom"</span>, <span class="jxr_string">"custom"</span>).run().assertContent(<span class="jxr_string">"h=custom"</span>);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<em class="jxr_comment">// Test form data default</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		h.post(<span class="jxr_string">"/form"</span>).contentType(<span class="jxr_string">"application/x-www-form-urlencoded"</span>).run().assertContent(<span class="jxr_string">"f=defaultForm"</span>);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		h.post(<span class="jxr_string">"/form"</span>).contentType(<span class="jxr_string">"application/x-www-form-urlencoded"</span>).formData(<span class="jxr_string">"f"</span>, <span class="jxr_string">"custom"</span>).run().assertContent(<span class="jxr_string">"f=custom"</span>);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<em class="jxr_comment">// Test method-level override</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		h.get(<span class="jxr_string">"/override"</span>).run().assertContent(<span class="jxr_string">"q=overrideQ,h=overrideHeader"</span>);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		h.get(<span class="jxr_string">"/override?q=custom"</span>).header(<span class="jxr_string">"X-Custom"</span>, <span class="jxr_string">"custom"</span>).run().assertContent(<span class="jxr_string">"q=custom,h=custom"</span>);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	}
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
