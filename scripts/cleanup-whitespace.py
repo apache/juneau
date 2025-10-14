@@ -17,6 +17,7 @@
 
 """
 Cleans up whitespace inconsistencies in Java files:
+- Converts leading 4-spaces to tabs
 - Removes consecutive blank lines (max 1 blank line allowed)
 - Removes trailing whitespace from lines
 - Removes blank lines before the final closing brace
@@ -41,10 +42,26 @@ def clean_java_file(file_path):
         original_content = content
         lines = content.splitlines(keepends=True)
         
-        # Step 1: Remove trailing whitespace from each line
+        # Step 1: Convert leading 4-spaces to tabs
+        converted_lines = []
+        for line in lines:
+            if line.strip():  # Only process non-empty lines
+                # Count leading spaces
+                leading_spaces = len(line) - len(line.lstrip(' '))
+                if leading_spaces > 0:
+                    # Calculate number of tabs (groups of 4 spaces)
+                    num_tabs = leading_spaces // 4
+                    remaining_spaces = leading_spaces % 4
+                    # Reconstruct line with tabs
+                    rest_of_line = line[leading_spaces:]
+                    line = '\t' * num_tabs + ' ' * remaining_spaces + rest_of_line
+            converted_lines.append(line)
+        lines = converted_lines
+        
+        # Step 2: Remove trailing whitespace from each line
         lines = [line.rstrip() + ('\n' if line.endswith('\n') else '') for line in lines]
         
-        # Step 2: Remove consecutive blank lines (keep max 1)
+        # Step 3: Remove consecutive blank lines (keep max 1)
         cleaned_lines = []
         prev_blank = False
         for line in lines:
@@ -55,7 +72,7 @@ def clean_java_file(file_path):
             cleaned_lines.append(line)
             prev_blank = is_blank
         
-        # Step 3: Remove blank lines before final closing brace
+        # Step 4: Remove blank lines before final closing brace
         # Find the last non-empty line
         while cleaned_lines and cleaned_lines[-1].strip() == '':
             cleaned_lines.pop()
@@ -72,7 +89,7 @@ def clean_java_file(file_path):
                     cleaned_lines.pop(idx)
                     idx -= 1
         
-        # Step 4: Remove trailing newline after final }
+        # Step 5: Remove trailing newline after final }
         new_content = ''.join(cleaned_lines)
         # Remove any trailing newlines
         new_content = new_content.rstrip('\n')

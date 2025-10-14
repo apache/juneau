@@ -42,8 +42,8 @@ class UriResolution_Test extends TestBase {
 		final Input input;
 		final Results results;
 
-		Tester(String label, Input input, Results results) {
-			this.label = label;
+		Tester(int index, String label, Input input, Results results) {
+			this.label = "[" + index + "] " + label;
 			this.input = input;
 			this.results = results;
 		}
@@ -122,14 +122,14 @@ class UriResolution_Test extends TestBase {
 		return new Results(json, xml, html, uon, urlEncoding, msgPack, rdfXml);
 	}
 
-	private static Tester tester(String label, Input input, Results results) {
-		return new Tester(label, input, results);
+	private static Tester tester(int index, String label, Input input, Results results) {
+		return new Tester(index, label, input, results);
 	}
 
 	private static final Tester[] TESTERS = {
 
 		// Happy cases - All URL parts known.
-		tester(
+		tester(1,
 			"Happy-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "http://foo.com:123","/context","/resource","/path"
@@ -144,7 +144,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='http://foo.com:123/context/resource/f0/x0'>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1g rdf:resource='http://foo.com:123/context/resource/f1g/x'/>\n<jp:f2m rdf:resource='http://foo.com:123/context'/>\n<jp:f2i rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f5 rdf:resource='http://foo.com:123/context/resource/f5/x'/>\n<jp:f1k rdf:resource='http://foo.com:123/context/f1j/x'/>\n<jp:f2f rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f4 rdf:resource='http://foo.com:123/context/resource/test/uri/b'/>\n<jp:f1f rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f1b rdf:resource='http://foo.com:123/f1b'/>\n<jp:f1c rdf:resource='http://foo.com:123/f1c/x/y'/>\n<jp:f1l rdf:resource='http://foo.com:123/context/f1k'/>\n<jp:f2d rdf:resource='http://foo.com:123/context/resource/f2d'/>\n<jp:f1e rdf:resource='http://foo.com:123/context/resource/f1e/x/y'/>\n<jp:f2k rdf:resource='http://foo.com:123/context/f2j/x'/>\n<jp:f2e rdf:resource='http://foo.com:123/context/resource/f2e/x/y'/>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2j rdf:resource='http://foo.com:123/context'/>\n<jp:f2n rdf:resource='http://foo.com:123'/>\n<jp:f2b rdf:resource='http://foo.com:123/f2b'/>\n<jp:f2h rdf:resource='http://foo.com:123/context/resource/f2h'/>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1h rdf:resource='http://foo.com:123/context/resource/f1h'/>\n<jp:f1i rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f1j rdf:resource='http://foo.com:123/context'/>\n<jp:f2g rdf:resource='http://foo.com:123/context/resource/f2g/x'/>\n<jp:f1n rdf:resource='http://foo.com:123'/>\n<jp:f1d rdf:resource='http://foo.com:123/context/resource/f1d'/>\n<jp:f3c rdf:resource='http://foo.com:123/context/resource/&lt;&gt;&amp;&apos;&quot;'/>\n<jp:f2l rdf:resource='http://foo.com:123/context/f2k'/>\n<jp:f2c rdf:resource='http://foo.com:123/f2c/x/y'/>\n<jp:f3b rdf:resource='http://foo.com:123/context/resource/%3C%3E%26%27%22'/>\n<jp:f1m rdf:resource='http://foo.com:123/context'/>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(2,
 			"Happy-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "http://foo.com:123","/context","/resource","/path"
@@ -159,7 +159,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/context/resource/f0/x0'>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f2f>/context/resource</jp:f2f>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f5>/context/resource/f5/x</jp:f5>\n<jp:f1e>/context/resource/f1e/x/y</jp:f1e>\n<jp:f3c>/context/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1j>/context</jp:f1j>\n<jp:f2m>/context</jp:f2m>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f1d>/context/resource/f1d</jp:f1d>\n<jp:f4>/context/resource/test/uri/b</jp:f4>\n<jp:f1n>/</jp:f1n>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2e>/context/resource/f2e/x/y</jp:f2e>\n<jp:f3b>/context/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>/context/resource/f2d</jp:f2d>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2n>/</jp:f2n>\n<jp:f2j>/context</jp:f2j>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1f>/context/resource</jp:f1f>\n<jp:f2l>/context/f2k</jp:f2l>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(3,
 			"Happy-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "http://foo.com:123","/context","/resource","/path"
@@ -174,7 +174,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2l>/context/f2k</jp:f2l>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2f></jp:f2f>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f5>f5/x</jp:f5>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f2n>/</jp:f2n>\n<jp:f2m>/context</jp:f2m>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>f2d</jp:f2d>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1n>/</jp:f1n>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f1d>f1d</jp:f1d>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f2j>/context</jp:f2j>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1j>/context</jp:f1j>\n<jp:f1f></jp:f1f>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f4>test/uri/b</jp:f4>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(4,
 			"Happy-2-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "http://foo.com:123","/c1/c2","/r1/r2","/p1/p2"
@@ -189,7 +189,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='http://foo.com:123/c1/c2/r1/r2/f0/x0'>\n<jp:f2m rdf:resource='http://foo.com:123/c1/c2'/>\n<jp:f1n rdf:resource='http://foo.com:123/c1'/>\n<jp:f2e rdf:resource='http://foo.com:123/c1/c2/r1/r2/f2e/x/y'/>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1j rdf:resource='http://foo.com:123/c1/c2/r1'/>\n<jp:f1c rdf:resource='http://foo.com:123/f1c/x/y'/>\n<jp:f1f rdf:resource='http://foo.com:123/c1/c2/r1/r2'/>\n<jp:f1l rdf:resource='http://foo.com:123/c1/c2/f1k'/>\n<jp:f1k rdf:resource='http://foo.com:123/c1/c2/f1j/x'/>\n<jp:f3b rdf:resource='http://foo.com:123/c1/c2/r1/r2/%3C%3E%26%27%22'/>\n<jp:f1e rdf:resource='http://foo.com:123/c1/c2/r1/r2/f1e/x/y'/>\n<jp:f2n rdf:resource='http://foo.com:123/c1'/>\n<jp:f2k rdf:resource='http://foo.com:123/c1/c2/f2j/x'/>\n<jp:f2c rdf:resource='http://foo.com:123/f2c/x/y'/>\n<jp:f1i rdf:resource='http://foo.com:123/c1/c2/r1/r2'/>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1b rdf:resource='http://foo.com:123/f1b'/>\n<jp:f1g rdf:resource='http://foo.com:123/c1/c2/r1/r2/f1g/x'/>\n<jp:f2i rdf:resource='http://foo.com:123/c1/c2/r1/r2'/>\n<jp:f1h rdf:resource='http://foo.com:123/c1/c2/r1/r2/f1h'/>\n<jp:f2f rdf:resource='http://foo.com:123/c1/c2/r1/r2'/>\n<jp:f1d rdf:resource='http://foo.com:123/c1/c2/r1/r2/f1d'/>\n<jp:f2d rdf:resource='http://foo.com:123/c1/c2/r1/r2/f2d'/>\n<jp:f4 rdf:resource='http://foo.com:123/c1/c2/r1/r2/test/uri/b'/>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f5 rdf:resource='http://foo.com:123/c1/c2/r1/r2/f5/x'/>\n<jp:f2h rdf:resource='http://foo.com:123/c1/c2/r1/r2/f2h'/>\n<jp:f2l rdf:resource='http://foo.com:123/c1/c2/f2k'/>\n<jp:f3c rdf:resource='http://foo.com:123/c1/c2/r1/r2/&lt;&gt;&amp;&apos;&quot;'/>\n<jp:f2b rdf:resource='http://foo.com:123/f2b'/>\n<jp:f2g rdf:resource='http://foo.com:123/c1/c2/r1/r2/f2g/x'/>\n<jp:f1m rdf:resource='http://foo.com:123/c1/c2'/>\n<jp:f2j rdf:resource='http://foo.com:123/c1/c2/r1'/>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(5,
 			"Happy-2-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "http://foo.com:123","/c1/c2","/r1/r2","/p1/p2"
@@ -204,7 +204,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/c1/c2/r1/r2/f0/x0'>\n<jp:f2j>/c1/c2/r1</jp:f2j>\n<jp:f2l>/c1/c2/f2k</jp:f2l>\n<jp:f2m>/c1/c2</jp:f2m>\n<jp:f1i>/c1/c2/r1/r2</jp:f1i>\n<jp:f2h>/c1/c2/r1/r2/f2h</jp:f2h>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1e>/c1/c2/r1/r2/f1e/x/y</jp:f1e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f2d>/c1/c2/r1/r2/f2d</jp:f2d>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1l>/c1/c2/f1k</jp:f1l>\n<jp:f3c>/c1/c2/r1/r2/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1d>/c1/c2/r1/r2/f1d</jp:f1d>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1f>/c1/c2/r1/r2</jp:f1f>\n<jp:f2g>/c1/c2/r1/r2/f2g/x</jp:f2g>\n<jp:f5>/c1/c2/r1/r2/f5/x</jp:f5>\n<jp:f3b>/c1/c2/r1/r2/%3C%3E%26%27%22</jp:f3b>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2i>/c1/c2/r1/r2</jp:f2i>\n<jp:f1n>/c1</jp:f1n>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1h>/c1/c2/r1/r2/f1h</jp:f1h>\n<jp:f4>/c1/c2/r1/r2/test/uri/b</jp:f4>\n<jp:f1j>/c1/c2/r1</jp:f1j>\n<jp:f2f>/c1/c2/r1/r2</jp:f2f>\n<jp:f2n>/c1</jp:f2n>\n<jp:f2k>/c1/c2/f2j/x</jp:f2k>\n<jp:f1m>/c1/c2</jp:f1m>\n<jp:f2e>/c1/c2/r1/r2/f2e/x/y</jp:f2e>\n<jp:f1g>/c1/c2/r1/r2/f1g/x</jp:f1g>\n<jp:f1k>/c1/c2/f1j/x</jp:f1k>\n<jp:f2b>/f2b</jp:f2b>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(6,
 			"Happy-2-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "http://foo.com:123","/c1/c2","/r1/r2","/p1/p2"
@@ -219,7 +219,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2n>/c1</jp:f2n>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2l>/c1/c2/f2k</jp:f2l>\n<jp:f2f></jp:f2f>\n<jp:f1m>/c1/c2</jp:f1m>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2h>/c1/c2/r1/r2/f2h</jp:f2h>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2i>/c1/c2/r1/r2</jp:f2i>\n<jp:f2g>/c1/c2/r1/r2/f2g/x</jp:f2g>\n<jp:f5>f5/x</jp:f5>\n<jp:f2k>/c1/c2/f2j/x</jp:f2k>\n<jp:f1i>/c1/c2/r1/r2</jp:f1i>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f1l>/c1/c2/f1k</jp:f1l>\n<jp:f2d>f2d</jp:f2d>\n<jp:f1k>/c1/c2/f1j/x</jp:f1k>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f2m>/c1/c2</jp:f2m>\n<jp:f2j>/c1/c2/r1</jp:f2j>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1h>/c1/c2/r1/r2/f1h</jp:f1h>\n<jp:f1d>f1d</jp:f1d>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1n>/c1</jp:f1n>\n<jp:f1f></jp:f1f>\n<jp:f1g>/c1/c2/r1/r2/f1g/x</jp:f1g>\n<jp:f4>test/uri/b</jp:f4>\n<jp:f1j>/c1/c2/r1</jp:f1j>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(7,
 			"NoAuthority-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "","/context","/resource","/path"
@@ -234,7 +234,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/context/resource/f0/x0'>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f2f>/context/resource</jp:f2f>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f5>/context/resource/f5/x</jp:f5>\n<jp:f1e>/context/resource/f1e/x/y</jp:f1e>\n<jp:f3c>/context/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1j>/context</jp:f1j>\n<jp:f2m>/context</jp:f2m>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f1d>/context/resource/f1d</jp:f1d>\n<jp:f4>/context/resource/test/uri/b</jp:f4>\n<jp:f1n>/</jp:f1n>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2e>/context/resource/f2e/x/y</jp:f2e>\n<jp:f3b>/context/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>/context/resource/f2d</jp:f2d>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2n>/</jp:f2n>\n<jp:f2j>/context</jp:f2j>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1f>/context/resource</jp:f1f>\n<jp:f2l>/context/f2k</jp:f2l>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(8,
 			"NoAuthority-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "","/context","/resource","/path"
@@ -249,7 +249,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/context/resource/f0/x0'>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f2f>/context/resource</jp:f2f>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f5>/context/resource/f5/x</jp:f5>\n<jp:f1e>/context/resource/f1e/x/y</jp:f1e>\n<jp:f3c>/context/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1j>/context</jp:f1j>\n<jp:f2m>/context</jp:f2m>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f1d>/context/resource/f1d</jp:f1d>\n<jp:f4>/context/resource/test/uri/b</jp:f4>\n<jp:f1n>/</jp:f1n>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2e>/context/resource/f2e/x/y</jp:f2e>\n<jp:f3b>/context/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>/context/resource/f2d</jp:f2d>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2n>/</jp:f2n>\n<jp:f2j>/context</jp:f2j>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1f>/context/resource</jp:f1f>\n<jp:f2l>/context/f2k</jp:f2l>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(9,
 			"NoAuthority-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "","/context","/resource","/path"
@@ -264,7 +264,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2l>/context/f2k</jp:f2l>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2f></jp:f2f>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f5>f5/x</jp:f5>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f2n>/</jp:f2n>\n<jp:f2m>/context</jp:f2m>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>f2d</jp:f2d>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1n>/</jp:f1n>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f1d>f1d</jp:f1d>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f2j>/context</jp:f2j>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1j>/context</jp:f1j>\n<jp:f1f></jp:f1f>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f4>test/uri/b</jp:f4>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(10,
 			"NoContext-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "http://foo.com:123","","/resource","/path"
@@ -279,7 +279,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='http://foo.com:123/resource/f0/x0'>\n<jp:f2i rdf:resource='http://foo.com:123/resource'/>\n<jp:f2j rdf:resource='http://foo.com:123'/>\n<jp:f2h rdf:resource='http://foo.com:123/resource/f2h'/>\n<jp:f1g rdf:resource='http://foo.com:123/resource/f1g/x'/>\n<jp:f1n rdf:resource='http://foo.com:123/..'/>\n<jp:f2b rdf:resource='http://foo.com:123/f2b'/>\n<jp:f1f rdf:resource='http://foo.com:123/resource'/>\n<jp:f2d rdf:resource='http://foo.com:123/resource/f2d'/>\n<jp:f1l rdf:resource='http://foo.com:123/f1k'/>\n<jp:f3b rdf:resource='http://foo.com:123/resource/%3C%3E%26%27%22'/>\n<jp:f4 rdf:resource='http://foo.com:123/resource/test/uri/b'/>\n<jp:f2l rdf:resource='http://foo.com:123/f2k'/>\n<jp:f1d rdf:resource='http://foo.com:123/resource/f1d'/>\n<jp:f1e rdf:resource='http://foo.com:123/resource/f1e/x/y'/>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1j rdf:resource='http://foo.com:123'/>\n<jp:f1k rdf:resource='http://foo.com:123/f1j/x'/>\n<jp:f2m rdf:resource='http://foo.com:123'/>\n<jp:f1i rdf:resource='http://foo.com:123/resource'/>\n<jp:f5 rdf:resource='http://foo.com:123/resource/f5/x'/>\n<jp:f2f rdf:resource='http://foo.com:123/resource'/>\n<jp:f2n rdf:resource='http://foo.com:123/..'/>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1h rdf:resource='http://foo.com:123/resource/f1h'/>\n<jp:f1m rdf:resource='http://foo.com:123'/>\n<jp:f2c rdf:resource='http://foo.com:123/f2c/x/y'/>\n<jp:f2g rdf:resource='http://foo.com:123/resource/f2g/x'/>\n<jp:f2k rdf:resource='http://foo.com:123/f2j/x'/>\n<jp:f1b rdf:resource='http://foo.com:123/f1b'/>\n<jp:f1c rdf:resource='http://foo.com:123/f1c/x/y'/>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f3c rdf:resource='http://foo.com:123/resource/&lt;&gt;&amp;&apos;&quot;'/>\n<jp:f2e rdf:resource='http://foo.com:123/resource/f2e/x/y'/>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(11,
 			"NoContext-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "http://foo.com:123","","/resource","/path"
@@ -294,7 +294,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/resource/f0/x0'>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2e>/resource/f2e/x/y</jp:f2e>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2n>/..</jp:f2n>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f3c>/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2h>/resource/f2h</jp:f2h>\n<jp:f1i>/resource</jp:f1i>\n<jp:f1n>/..</jp:f1n>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1e>/resource/f1e/x/y</jp:f1e>\n<jp:f5>/resource/f5/x</jp:f5>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2d>/resource/f2d</jp:f2d>\n<jp:f2j>/</jp:f2j>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1j>/</jp:f1j>\n<jp:f1d>/resource/f1d</jp:f1d>\n<jp:f2m>/</jp:f2m>\n<jp:f1f>/resource</jp:f1f>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f4>/resource/test/uri/b</jp:f4>\n<jp:f2i>/resource</jp:f2i>\n<jp:f1h>/resource/f1h</jp:f1h>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2g>/resource/f2g/x</jp:f2g>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2f>/resource</jp:f2f>\n<jp:f1g>/resource/f1g/x</jp:f1g>\n<jp:f1m>/</jp:f1m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(12,
 			"NoContext-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "http://foo.com:123","","/resource","/path"
@@ -309,7 +309,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f1n>/..</jp:f1n>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2h>/resource/f2h</jp:f2h>\n<jp:f2n>/..</jp:f2n>\n<jp:f1h>/resource/f1h</jp:f1h>\n<jp:f1i>/resource</jp:f1i>\n<jp:f1g>/resource/f1g/x</jp:f1g>\n<jp:f2f></jp:f2f>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2i>/resource</jp:f2i>\n<jp:f5>f5/x</jp:f5>\n<jp:f1m>/</jp:f1m>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2g>/resource/f2g/x</jp:f2g>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2j>/</jp:f2j>\n<jp:f2d>f2d</jp:f2d>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1d>f1d</jp:f1d>\n<jp:f1j>/</jp:f1j>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1f></jp:f1f>\n<jp:f4>test/uri/b</jp:f4>\n<jp:f2m>/</jp:f2m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(13,
 			"NoResource-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "http://foo.com:123","/context","","/path"
@@ -324,7 +324,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='http://foo.com:123/context/f0/x0'>\n<jp:f1f rdf:resource='http://foo.com:123/context'/>\n<jp:f2c rdf:resource='http://foo.com:123/f2c/x/y'/>\n<jp:f3b rdf:resource='http://foo.com:123/context/%3C%3E%26%27%22'/>\n<jp:f2d rdf:resource='http://foo.com:123/context/f2d'/>\n<jp:f2l rdf:resource='http://foo.com:123/context/f2k'/>\n<jp:f1b rdf:resource='http://foo.com:123/f1b'/>\n<jp:f1c rdf:resource='http://foo.com:123/f1c/x/y'/>\n<jp:f1j rdf:resource='http://foo.com:123'/>\n<jp:f1k rdf:resource='http://foo.com:123/context/f1j/x'/>\n<jp:f2n rdf:resource='http://foo.com:123'/>\n<jp:f2k rdf:resource='http://foo.com:123/context/f2j/x'/>\n<jp:f1g rdf:resource='http://foo.com:123/context/f1g/x'/>\n<jp:f2h rdf:resource='http://foo.com:123/context/f2h'/>\n<jp:f1i rdf:resource='http://foo.com:123/context'/>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f2m rdf:resource='http://foo.com:123/context'/>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1d rdf:resource='http://foo.com:123/context/f1d'/>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2j rdf:resource='http://foo.com:123'/>\n<jp:f2i rdf:resource='http://foo.com:123/context'/>\n<jp:f1h rdf:resource='http://foo.com:123/context/f1h'/>\n<jp:f1n rdf:resource='http://foo.com:123'/>\n<jp:f4 rdf:resource='http://foo.com:123/context/test/uri/b'/>\n<jp:f1e rdf:resource='http://foo.com:123/context/f1e/x/y'/>\n<jp:f3c rdf:resource='http://foo.com:123/context/&lt;&gt;&amp;&apos;&quot;'/>\n<jp:f2b rdf:resource='http://foo.com:123/f2b'/>\n<jp:f2g rdf:resource='http://foo.com:123/context/f2g/x'/>\n<jp:f1l rdf:resource='http://foo.com:123/context/f1k'/>\n<jp:f1m rdf:resource='http://foo.com:123/context'/>\n<jp:f2f rdf:resource='http://foo.com:123/context'/>\n<jp:f5 rdf:resource='http://foo.com:123/context/f5/x'/>\n<jp:f2e rdf:resource='http://foo.com:123/context/f2e/x/y'/>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(14,
 			"NoResource-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "http://foo.com:123","/context","","/path"
@@ -339,7 +339,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/context/f0/x0'>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1f>/context</jp:f1f>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1e>/context/f1e/x/y</jp:f1e>\n<jp:f2i>/context</jp:f2i>\n<jp:f1j>/</jp:f1j>\n<jp:f3b>/context/%3C%3E%26%27%22</jp:f3b>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1h>/context/f1h</jp:f1h>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1i>/context</jp:f1i>\n<jp:f2j>/</jp:f2j>\n<jp:f2l>/context/f2k</jp:f2l>\n<jp:f2g>/context/f2g/x</jp:f2g>\n<jp:f3c>/context/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f2f>/context</jp:f2f>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1m>/context</jp:f1m>\n<jp:f1d>/context/f1d</jp:f1d>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2m>/context</jp:f2m>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1n>/</jp:f1n>\n<jp:f4>/context/test/uri/b</jp:f4>\n<jp:f1g>/context/f1g/x</jp:f1g>\n<jp:f5>/context/f5/x</jp:f5>\n<jp:f2d>/context/f2d</jp:f2d>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f2e>/context/f2e/x/y</jp:f2e>\n<jp:f2n>/</jp:f2n>\n<jp:f2h>/context/f2h</jp:f2h>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(15,
 			"NoResource-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "http://foo.com:123","/context","","/path"
@@ -354,7 +354,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2l>/context/f2k</jp:f2l>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2i>/context</jp:f2i>\n<jp:f1i>/context</jp:f1i>\n<jp:f2f></jp:f2f>\n<jp:f1g>/context/f1g/x</jp:f1g>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f5>f5/x</jp:f5>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2n>/</jp:f2n>\n<jp:f2m>/context</jp:f2m>\n<jp:f2j>/</jp:f2j>\n<jp:f2h>/context/f2h</jp:f2h>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>f2d</jp:f2d>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1h>/context/f1h</jp:f1h>\n<jp:f1n>/</jp:f1n>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1d>f1d</jp:f1d>\n<jp:f1j>/</jp:f1j>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1f></jp:f1f>\n<jp:f4>test/uri/b</jp:f4>\n<jp:f2g>/context/f2g/x</jp:f2g>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(16,
 			"NoPath-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "http://foo.com:123","/context","/resource",""
@@ -369,7 +369,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='http://foo.com:123/context/resource/f0/x0'>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1g rdf:resource='http://foo.com:123/context/resource/f1g/x'/>\n<jp:f2m rdf:resource='http://foo.com:123/context'/>\n<jp:f2i rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f5 rdf:resource='http://foo.com:123/context/resource/f5/x'/>\n<jp:f1k rdf:resource='http://foo.com:123/context/f1j/x'/>\n<jp:f2f rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f4 rdf:resource='http://foo.com:123/context/resource/test/uri/b'/>\n<jp:f1f rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f1b rdf:resource='http://foo.com:123/f1b'/>\n<jp:f1c rdf:resource='http://foo.com:123/f1c/x/y'/>\n<jp:f1l rdf:resource='http://foo.com:123/context/f1k'/>\n<jp:f2d rdf:resource='http://foo.com:123/context/resource/f2d'/>\n<jp:f1e rdf:resource='http://foo.com:123/context/resource/f1e/x/y'/>\n<jp:f2k rdf:resource='http://foo.com:123/context/f2j/x'/>\n<jp:f2e rdf:resource='http://foo.com:123/context/resource/f2e/x/y'/>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2j rdf:resource='http://foo.com:123/context'/>\n<jp:f2n rdf:resource='http://foo.com:123'/>\n<jp:f2b rdf:resource='http://foo.com:123/f2b'/>\n<jp:f2h rdf:resource='http://foo.com:123/context/resource/f2h'/>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1h rdf:resource='http://foo.com:123/context/resource/f1h'/>\n<jp:f1i rdf:resource='http://foo.com:123/context/resource'/>\n<jp:f1j rdf:resource='http://foo.com:123/context'/>\n<jp:f2g rdf:resource='http://foo.com:123/context/resource/f2g/x'/>\n<jp:f1n rdf:resource='http://foo.com:123'/>\n<jp:f1d rdf:resource='http://foo.com:123/context/resource/f1d'/>\n<jp:f3c rdf:resource='http://foo.com:123/context/resource/&lt;&gt;&amp;&apos;&quot;'/>\n<jp:f2l rdf:resource='http://foo.com:123/context/f2k'/>\n<jp:f2c rdf:resource='http://foo.com:123/f2c/x/y'/>\n<jp:f3b rdf:resource='http://foo.com:123/context/resource/%3C%3E%26%27%22'/>\n<jp:f1m rdf:resource='http://foo.com:123/context'/>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(17,
 			"NoPath-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "http://foo.com:123","/context","/resource",""
@@ -384,7 +384,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/context/resource/f0/x0'>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f2f>/context/resource</jp:f2f>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f5>/context/resource/f5/x</jp:f5>\n<jp:f1e>/context/resource/f1e/x/y</jp:f1e>\n<jp:f3c>/context/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1j>/context</jp:f1j>\n<jp:f2m>/context</jp:f2m>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f1d>/context/resource/f1d</jp:f1d>\n<jp:f4>/context/resource/test/uri/b</jp:f4>\n<jp:f1n>/</jp:f1n>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2e>/context/resource/f2e/x/y</jp:f2e>\n<jp:f3b>/context/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>/context/resource/f2d</jp:f2d>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2n>/</jp:f2n>\n<jp:f2j>/context</jp:f2j>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1f>/context/resource</jp:f1f>\n<jp:f2l>/context/f2k</jp:f2l>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(18,
 			"NoPath-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "http://foo.com:123","/context","/resource",""
@@ -399,7 +399,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2l>/context/f2k</jp:f2l>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2g>/context/resource/f2g/x</jp:f2g>\n<jp:f2f></jp:f2f>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f5>f5/x</jp:f5>\n<jp:f2k>/context/f2j/x</jp:f2k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2i>/context/resource</jp:f2i>\n<jp:f2n>/</jp:f2n>\n<jp:f2m>/context</jp:f2m>\n<jp:f1m>/context</jp:f1m>\n<jp:f2d>f2d</jp:f2d>\n<jp:f1l>/context/f1k</jp:f1l>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1n>/</jp:f1n>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1k>/context/f1j/x</jp:f1k>\n<jp:f1h>/context/resource/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2h>/context/resource/f2h</jp:f2h>\n<jp:f1d>f1d</jp:f1d>\n<jp:f1i>/context/resource</jp:f1i>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f2j>/context</jp:f2j>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1j>/context</jp:f1j>\n<jp:f1f></jp:f1f>\n<jp:f1g>/context/resource/f1g/x</jp:f1g>\n<jp:f4>test/uri/b</jp:f4>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(19,
 			"NoAuthorityNoContext-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "","","/resource","/path"
@@ -414,7 +414,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/resource/f0/x0'>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2e>/resource/f2e/x/y</jp:f2e>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2n>/..</jp:f2n>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f3c>/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2h>/resource/f2h</jp:f2h>\n<jp:f1i>/resource</jp:f1i>\n<jp:f1n>/..</jp:f1n>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1e>/resource/f1e/x/y</jp:f1e>\n<jp:f5>/resource/f5/x</jp:f5>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2d>/resource/f2d</jp:f2d>\n<jp:f2j>/</jp:f2j>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1j>/</jp:f1j>\n<jp:f1d>/resource/f1d</jp:f1d>\n<jp:f2m>/</jp:f2m>\n<jp:f1f>/resource</jp:f1f>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f4>/resource/test/uri/b</jp:f4>\n<jp:f2i>/resource</jp:f2i>\n<jp:f1h>/resource/f1h</jp:f1h>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2g>/resource/f2g/x</jp:f2g>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2f>/resource</jp:f2f>\n<jp:f1g>/resource/f1g/x</jp:f1g>\n<jp:f1m>/</jp:f1m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(20,
 			"NoAuthorityNoContext-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "","","/resource","/path"
@@ -429,7 +429,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/resource/f0/x0'>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2e>/resource/f2e/x/y</jp:f2e>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2n>/..</jp:f2n>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f3c>/resource/&lt;&gt;&amp;''</jp:f3c>\n<jp:f2h>/resource/f2h</jp:f2h>\n<jp:f1i>/resource</jp:f1i>\n<jp:f1n>/..</jp:f1n>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1e>/resource/f1e/x/y</jp:f1e>\n<jp:f5>/resource/f5/x</jp:f5>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2d>/resource/f2d</jp:f2d>\n<jp:f2j>/</jp:f2j>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>/resource/%3C%3E%26%27%22</jp:f3b>\n<jp:f1j>/</jp:f1j>\n<jp:f1d>/resource/f1d</jp:f1d>\n<jp:f2m>/</jp:f2m>\n<jp:f1f>/resource</jp:f1f>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f4>/resource/test/uri/b</jp:f4>\n<jp:f2i>/resource</jp:f2i>\n<jp:f1h>/resource/f1h</jp:f1h>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2g>/resource/f2g/x</jp:f2g>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2f>/resource</jp:f2f>\n<jp:f1g>/resource/f1g/x</jp:f1g>\n<jp:f1m>/</jp:f1m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(21,
 			"NoAuthorityNoContext-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "","","/resource","/path"
@@ -444,7 +444,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f1n>/..</jp:f1n>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f2h>/resource/f2h</jp:f2h>\n<jp:f2n>/..</jp:f2n>\n<jp:f1h>/resource/f1h</jp:f1h>\n<jp:f1i>/resource</jp:f1i>\n<jp:f1g>/resource/f1g/x</jp:f1g>\n<jp:f2f></jp:f2f>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f2i>/resource</jp:f2i>\n<jp:f5>f5/x</jp:f5>\n<jp:f1m>/</jp:f1m>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2g>/resource/f2g/x</jp:f2g>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2j>/</jp:f2j>\n<jp:f2d>f2d</jp:f2d>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1d>f1d</jp:f1d>\n<jp:f1j>/</jp:f1j>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1f></jp:f1f>\n<jp:f4>test/uri/b</jp:f4>\n<jp:f2m>/</jp:f2m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(22,
 			"NoContextNoResource-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "http://foo.com:123","","","/path"
@@ -459,7 +459,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='http://foo.com:123/f0/x0'>\n<jp:f2f rdf:resource='http://foo.com:123'/>\n<jp:f4 rdf:resource='http://foo.com:123/test/uri/b'/>\n<jp:f1g rdf:resource='http://foo.com:123/f1g/x'/>\n<jp:f1l rdf:resource='http://foo.com:123/f1k'/>\n<jp:f1c rdf:resource='http://foo.com:123/f1c/x/y'/>\n<jp:f1j rdf:resource='http://foo.com:123/..'/>\n<jp:f1n rdf:resource='http://foo.com:123/..'/>\n<jp:f2c rdf:resource='http://foo.com:123/f2c/x/y'/>\n<jp:f2h rdf:resource='http://foo.com:123/f2h'/>\n<jp:f1f rdf:resource='http://foo.com:123'/>\n<jp:f2m rdf:resource='http://foo.com:123'/>\n<jp:f5 rdf:resource='http://foo.com:123/f5/x'/>\n<jp:f1m rdf:resource='http://foo.com:123'/>\n<jp:f2i rdf:resource='http://foo.com:123'/>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1k rdf:resource='http://foo.com:123/f1j/x'/>\n<jp:f2e rdf:resource='http://foo.com:123/f2e/x/y'/>\n<jp:f2d rdf:resource='http://foo.com:123/f2d'/>\n<jp:f2n rdf:resource='http://foo.com:123/..'/>\n<jp:f2j rdf:resource='http://foo.com:123/..'/>\n<jp:f2k rdf:resource='http://foo.com:123/f2j/x'/>\n<jp:f1d rdf:resource='http://foo.com:123/f1d'/>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1b rdf:resource='http://foo.com:123/f1b'/>\n<jp:f1e rdf:resource='http://foo.com:123/f1e/x/y'/>\n<jp:f2l rdf:resource='http://foo.com:123/f2k'/>\n<jp:f1h rdf:resource='http://foo.com:123/f1h'/>\n<jp:f3b rdf:resource='http://foo.com:123/%3C%3E%26%27%22'/>\n<jp:f3c rdf:resource='http://foo.com:123/&lt;&gt;&amp;&apos;&quot;'/>\n<jp:f1i rdf:resource='http://foo.com:123'/>\n<jp:f2b rdf:resource='http://foo.com:123/f2b'/>\n<jp:f2g rdf:resource='http://foo.com:123/f2g/x'/>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(23,
 			"NoContextNoResource-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "http://foo.com:123","","","/path"
@@ -474,7 +474,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/f0/x0'>\n<jp:f2n>/..</jp:f2n>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1j>/..</jp:f1j>\n<jp:f1n>/..</jp:f1n>\n<jp:f1i>/</jp:f1i>\n<jp:f5>/f5/x</jp:f5>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1m>/</jp:f1m>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2f>/</jp:f2f>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2i>/</jp:f2i>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f4>/test/uri/b</jp:f4>\n<jp:f1f>/</jp:f1f>\n<jp:f3c>/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2e>/f2e/x/y</jp:f2e>\n<jp:f2m>/</jp:f2m>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1e>/f1e/x/y</jp:f1e>\n<jp:f3b>/%3C%3E%26%27%22</jp:f3b>\n<jp:f1d>/f1d</jp:f1d>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2j>/..</jp:f2j>\n<jp:f2d>/f2d</jp:f2d>\n<jp:f2g>/f2g/x</jp:f2g>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(24,
 			"NoContextNoResource-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "http://foo.com:123","","","/path"
@@ -489,7 +489,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2i>/</jp:f2i>\n<jp:f1n>/..</jp:f1n>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2n>/..</jp:f2n>\n<jp:f2j>/..</jp:f2j>\n<jp:f2f></jp:f2f>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1j>/..</jp:f1j>\n<jp:f5>f5/x</jp:f5>\n<jp:f1m>/</jp:f1m>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f1i>/</jp:f1i>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2g>/f2g/x</jp:f2g>\n<jp:f2d>f2d</jp:f2d>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1d>f1d</jp:f1d>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1f></jp:f1f>\n<jp:f4>test/uri/b</jp:f4>\n<jp:f2m>/</jp:f2m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(25,
 			"NoAuthorityNoContextNoResource-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "","","","/path"
@@ -504,7 +504,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/f0/x0'>\n<jp:f2n>/..</jp:f2n>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1j>/..</jp:f1j>\n<jp:f1n>/..</jp:f1n>\n<jp:f1i>/</jp:f1i>\n<jp:f5>/f5/x</jp:f5>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1m>/</jp:f1m>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2f>/</jp:f2f>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2i>/</jp:f2i>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f4>/test/uri/b</jp:f4>\n<jp:f1f>/</jp:f1f>\n<jp:f3c>/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2e>/f2e/x/y</jp:f2e>\n<jp:f2m>/</jp:f2m>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1e>/f1e/x/y</jp:f1e>\n<jp:f3b>/%3C%3E%26%27%22</jp:f3b>\n<jp:f1d>/f1d</jp:f1d>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2j>/..</jp:f2j>\n<jp:f2d>/f2d</jp:f2d>\n<jp:f2g>/f2g/x</jp:f2g>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(26,
 			"NoAuthorityNoContextNoResource-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "","","","/path"
@@ -519,7 +519,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/f0/x0'>\n<jp:f2n>/..</jp:f2n>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1j>/..</jp:f1j>\n<jp:f1n>/..</jp:f1n>\n<jp:f1i>/</jp:f1i>\n<jp:f5>/f5/x</jp:f5>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1m>/</jp:f1m>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2f>/</jp:f2f>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2i>/</jp:f2i>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f4>/test/uri/b</jp:f4>\n<jp:f1f>/</jp:f1f>\n<jp:f3c>/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2e>/f2e/x/y</jp:f2e>\n<jp:f2m>/</jp:f2m>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1e>/f1e/x/y</jp:f1e>\n<jp:f3b>/%3C%3E%26%27%22</jp:f3b>\n<jp:f1d>/f1d</jp:f1d>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2j>/..</jp:f2j>\n<jp:f2d>/f2d</jp:f2d>\n<jp:f2g>/f2g/x</jp:f2g>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(27,
 			"NoAuthorityNoContextNoResource-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "","","","/path"
@@ -534,7 +534,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='f0/x0'>\n<jp:f2i>/</jp:f2i>\n<jp:f1n>/..</jp:f1n>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2n>/..</jp:f2n>\n<jp:f2j>/..</jp:f2j>\n<jp:f2f></jp:f2f>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f3b>%3C%3E%26%27%22</jp:f3b>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1j>/..</jp:f1j>\n<jp:f5>f5/x</jp:f5>\n<jp:f1m>/</jp:f1m>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f1i>/</jp:f1i>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f1e>f1e/x/y</jp:f1e>\n<jp:f2g>/f2g/x</jp:f2g>\n<jp:f2d>f2d</jp:f2d>\n<jp:f3c>&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f1d>f1d</jp:f1d>\n<jp:f2e>f2e/x/y</jp:f2e>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1f></jp:f1f>\n<jp:f4>test/uri/b</jp:f4>\n<jp:f2m>/</jp:f2m>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(28,
 			"Nothing-1-ABSOLUTE",
 			input(
 				UriResolution.ABSOLUTE, UriRelativity.RESOURCE, "","","",""
@@ -549,7 +549,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/f0/x0'>\n<jp:f2n>/..</jp:f2n>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1j>/..</jp:f1j>\n<jp:f1n>/..</jp:f1n>\n<jp:f1i>/</jp:f1i>\n<jp:f5>/f5/x</jp:f5>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1m>/</jp:f1m>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2f>/</jp:f2f>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2i>/</jp:f2i>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f4>/test/uri/b</jp:f4>\n<jp:f1f>/</jp:f1f>\n<jp:f3c>/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2e>/f2e/x/y</jp:f2e>\n<jp:f2m>/</jp:f2m>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1e>/f1e/x/y</jp:f1e>\n<jp:f3b>/%3C%3E%26%27%22</jp:f3b>\n<jp:f1d>/f1d</jp:f1d>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2j>/..</jp:f2j>\n<jp:f2d>/f2d</jp:f2d>\n<jp:f2g>/f2g/x</jp:f2g>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(29,
 			"Nothing-1-ROOT_RELATIVE",
 			input(
 				UriResolution.ROOT_RELATIVE, UriRelativity.RESOURCE, "","","",""
@@ -564,7 +564,7 @@ class UriResolution_Test extends TestBase {
 				"<rdf:RDF>\n<rdf:Description rdf:about='/f0/x0'>\n<jp:f2n>/..</jp:f2n>\n<jp:f2h>/f2h</jp:f2h>\n<jp:f1j>/..</jp:f1j>\n<jp:f1n>/..</jp:f1n>\n<jp:f1i>/</jp:f1i>\n<jp:f5>/f5/x</jp:f5>\n<jp:f3a rdf:resource='http://www.apache.org/f3a/x?label=MY_LABEL&amp;foo=bar'/>\n<jp:f1c>/f1c/x/y</jp:f1c>\n<jp:f1m>/</jp:f1m>\n<jp:f1g>/f1g/x</jp:f1g>\n<jp:f1h>/f1h</jp:f1h>\n<jp:f2b>/f2b</jp:f2b>\n<jp:f2f>/</jp:f2f>\n<jp:f1l>/f1k</jp:f1l>\n<jp:f2i>/</jp:f2i>\n<jp:f1a rdf:resource='http://www.apache.org/f1a'/>\n<jp:f1k>/f1j/x</jp:f1k>\n<jp:f4>/test/uri/b</jp:f4>\n<jp:f1f>/</jp:f1f>\n<jp:f3c>/&lt;&gt;&amp;''</jp:f3c>\n<jp:f1b>/f1b</jp:f1b>\n<jp:f2k>/f2j/x</jp:f2k>\n<jp:f2l>/f2k</jp:f2l>\n<jp:f2e>/f2e/x/y</jp:f2e>\n<jp:f2m>/</jp:f2m>\n<jp:f2c>/f2c/x/y</jp:f2c>\n<jp:f1e>/f1e/x/y</jp:f1e>\n<jp:f3b>/%3C%3E%26%27%22</jp:f3b>\n<jp:f1d>/f1d</jp:f1d>\n<jp:f2a rdf:resource='http://www.apache.org/f2a'/>\n<jp:f2j>/..</jp:f2j>\n<jp:f2d>/f2d</jp:f2d>\n<jp:f2g>/f2g/x</jp:f2g>\n</rdf:Description>\n</rdf:RDF>\n"
 			)
 		),
-		tester(
+		tester(30,
 			"Nothing-1-NONE",
 			input(
 				UriResolution.NONE, UriRelativity.RESOURCE, "","","",""

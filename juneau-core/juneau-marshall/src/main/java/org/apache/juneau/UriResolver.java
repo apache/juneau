@@ -37,7 +37,7 @@ import org.apache.juneau.common.utils.*;
  * <p>
  * Three special protocols are used to represent context-root-relative, servlet-relative, and request-path-relative
  * URIs:
- * 	<js>"context:/"</js>, <js>"servlet:/"</js>, and <js>"request:/"</js>.
+ * 	<js>"context:"</js>, <js>"servlet:"</js>, and <js>"request:"</js>.
  *
  * <p>
  * The following list shows the protocols of URLs that can be resolved with this class:
@@ -45,12 +45,15 @@ import org.apache.juneau.common.utils.*;
  * 	<li><js>"foo://foo"</js> - Absolute URI.
  * 	<li><js>"/foo"</js> - Root-relative URI.
  * 	<li><js>"/"</js> - Root URI.
- * 	<li><js>"context:/foo"</js> - Context-root-relative URI.
+ * 	<li><js>"context:/foo"</js> - Context-root-relative URI with path.
  * 	<li><js>"context:/"</js> - Context-root URI.
- * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+ * 	<li><js>"context:?foo=bar"</js> - Context-root URI with query string.
+ * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI with path.
  * 	<li><js>"servlet:/"</js> - Servlet-path URI.
- * 	<li><js>"request:/foo"</js> - Request-path-relative URI.
+ * 	<li><js>"servlet:?foo=bar"</js> - Servlet-path URI with query string.
+ * 	<li><js>"request:/foo"</js> - Request-path-relative URI with path.
  * 	<li><js>"request:/"</js> - Request-path URI.
+ * 	<li><js>"request:?foo=bar"</js> - Request-path URI with query string.
  * 	<li><js>"foo"</js> - Path-info-relative URI.
  * 	<li><js>""</js> - Path-info URI.
  * </ul>
@@ -109,12 +112,15 @@ public class UriResolver {
 	 * 		<li><js>"foo://foo"</js> - Absolute URI.
 	 * 		<li><js>"/foo"</js> - Root-relative URI.
 	 * 		<li><js>"/"</js> - Root URI.
-	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI with path.
 	 * 		<li><js>"context:/"</js> - Context-root URI.
-	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 * 		<li><js>"context:?foo=bar"</js> - Context-root URI with query string.
+	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI with path.
 	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
-	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 		<li><js>"servlet:?foo=bar"</js> - Servlet-path URI with query string.
+	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI with path.
 	 * 		<li><js>"request:/"</js> - Request-path URI.
+	 * 		<li><js>"request:?foo=bar"</js> - Request-path URI with query string.
 	 * 		<li><js>"foo"</js> - Path-info-relative URI.
 	 * 		<li><js>""</js> - Path-info URI.
 	 * 	</ul>
@@ -193,47 +199,77 @@ public class UriResolver {
 					a2.append('/');
 			}
 
-			// Context-relative path
-			else if (uri != null && uri.startsWith("context:/")) {
-				if (resolution == ABSOLUTE && authority != null)
-					a2.append(authority);
-				if (contextRoot != null)
-					a2.append('/').append(contextRoot);
-				if (uri.length() > 9)
-					a2.append('/').append(uri.substring(9));
-				else if (contextRoot == null && (authority == null || resolution != ABSOLUTE))
-					a2.append('/');
-			}
+		// Context-relative path
+		else if (uri != null && uri.startsWith("context:")) {
+			if (resolution == ABSOLUTE && authority != null)
+				a2.append(authority);
+			boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
+			if (hasContext)
+				a2.append('/').append(contextRoot);
+			if (uri.length() > 8) {
+				String remainder = uri.substring(8);
+				// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
+				if (remainder.equals("/") && (hasContext || (resolution == ABSOLUTE && authority != null))) {
+					// Do nothing
+				} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
+					a2.append('/').append(remainder);
+				} else {
+					a2.append(remainder);
+				}
+			} else if (! hasContext && (authority == null || resolution != ABSOLUTE))
+				a2.append('/');
+		}
 
-			// Resource-relative path
-			else if (uri != null && uri.startsWith("servlet:/")) {
-				if (resolution == ABSOLUTE && authority != null)
-					a2.append(authority);
-				if (contextRoot != null)
-					a2.append('/').append(contextRoot);
-				if (servletPath != null)
-					a2.append('/').append(servletPath);
-				if (uri.length() > 9)
-					a2.append('/').append(uri.substring(9));
-				else if (servletPath == null && contextRoot == null && (authority == null || resolution != ABSOLUTE))
-					a2.append('/');
-			}
+		// Resource-relative path
+		else if (uri != null && uri.startsWith("servlet:")) {
+			if (resolution == ABSOLUTE && authority != null)
+				a2.append(authority);
+			boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
+			boolean hasServlet = servletPath != null && ! servletPath.isEmpty();
+			if (hasContext)
+				a2.append('/').append(contextRoot);
+			if (hasServlet)
+				a2.append('/').append(servletPath);
+			if (uri.length() > 8) {
+				String remainder = uri.substring(8);
+				// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
+				if (remainder.equals("/") && (hasContext || hasServlet || (resolution == ABSOLUTE && authority != null))) {
+					// Do nothing
+				} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
+					a2.append('/').append(remainder);
+				} else {
+					a2.append(remainder);
+				}
+			} else if (! hasServlet && ! hasContext && (authority == null || resolution != ABSOLUTE))
+				a2.append('/');
+		}
 
-			// Request-relative path
-			else if (uri != null && uri.startsWith("request:/")) {
-				if (resolution == ABSOLUTE && authority != null)
-					a2.append(authority);
-				if (contextRoot != null)
-					a2.append('/').append(contextRoot);
-				if (servletPath != null)
-					a2.append('/').append(servletPath);
-				if (pathInfo != null)
-					a2.append('/').append(pathInfo);
-				if (uri.length() > 9)
-					a2.append('/').append(uri.substring(9));
-				else if (servletPath == null && contextRoot == null && pathInfo == null && (authority == null || resolution != ABSOLUTE))
-					a2.append('/');
-			}
+		// Request-relative path
+		else if (uri != null && uri.startsWith("request:")) {
+			if (resolution == ABSOLUTE && authority != null)
+				a2.append(authority);
+			boolean hasContext = contextRoot != null && ! contextRoot.isEmpty();
+			boolean hasServlet = servletPath != null && ! servletPath.isEmpty();
+			boolean hasPath = pathInfo != null && ! pathInfo.isEmpty();
+			if (hasContext)
+				a2.append('/').append(contextRoot);
+			if (hasServlet)
+				a2.append('/').append(servletPath);
+			if (hasPath)
+				a2.append('/').append(pathInfo);
+			if (uri.length() > 8) {
+				String remainder = uri.substring(8);
+				// Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else
+				if (remainder.equals("/") && (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE && authority != null))) {
+					// Do nothing
+				} else if (! remainder.isEmpty() && remainder.charAt(0) != '/' && remainder.charAt(0) != '?' && remainder.charAt(0) != '#') {
+					a2.append('/').append(remainder);
+				} else {
+					a2.append(remainder);
+				}
+			} else if (! hasServlet && ! hasContext && ! hasPath && (authority == null || resolution != ABSOLUTE))
+				a2.append('/');
+		}
 
 			// Relative path
 			else {
@@ -274,7 +310,7 @@ public class UriResolver {
 		char c = s.charAt(0);
 		if (c != 's' && c != 'c' && c != 'r')
 			return false;
-		return s.startsWith("servlet:/") || s.startsWith("context:/") || s.startsWith("request:/");
+		return s.startsWith("servlet:") || s.startsWith("context:") || s.startsWith("request:");
 	}
 
 	private static String normalize(String s) {

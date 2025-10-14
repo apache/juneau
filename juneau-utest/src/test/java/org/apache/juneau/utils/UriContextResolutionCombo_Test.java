@@ -33,7 +33,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 	private static final Tester[] TESTERS = {
 
 		// Happy cases - All URL parts known.
-		tester(	/* 0 */
+		tester(1,
 			"Happy-1a",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -48,7 +48,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123/foobar"
 			)
 		),
-		tester(	/* 1 */
+		tester(2,
 			"Happy-2",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -63,7 +63,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123"
 			)
 		),
-		tester(	/* 2 */
+		tester(3,
 			"Happy-3",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -78,7 +78,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foobar"
 			)
 		),
-		tester(	/* 3 */
+		tester(4,
 			"Happy-4",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -93,7 +93,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 4 */
+		tester(5,
 			"Happy-5",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -108,7 +108,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"foobar"
 			)
 		),
-		tester(	/* 5 */
+		tester(6,
 			"Happy-6",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -123,7 +123,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				""
 			)
 		),
-		tester(	/* 6 */
+		tester(7,
 			"Happy-7",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -138,7 +138,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/context/foo"
 			)
 		),
-		tester(	/* 7 */
+		tester(8,
 			"Happy-8",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -153,7 +153,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/context"
 			)
 		),
-		tester(	/* 8 */
+		tester(9,
 			"Happy-9",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -168,7 +168,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/context/resource/foo"
 			)
 		),
-		tester(	/* 9 */
+		tester(10,
 			"Happy-10",
 			input(
 				"http://host:port","/context","/resource","/path",
@@ -185,7 +185,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 		),
 
 		// Multiple context and resource parts
-		tester(	/* 10 */
+		tester(11,
 			"MultiContextResource-1",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -200,7 +200,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123/foobar"
 			)
 		),
-		tester(	/* 11 */
+		tester(12,
 			"MultiContextResource-2",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -215,7 +215,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123"
 			)
 		),
-		tester(	/* 12 */
+		tester(13,
 			"MultiContextResource-3",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -230,7 +230,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foobar"
 			)
 		),
-		tester(	/* 13 */
+		tester(14,
 			"MultiContextResource-4",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -245,7 +245,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 14 */
+		tester(15,
 			"MultiContextResource-5",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -260,7 +260,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"foobar"
 			)
 		),
-		tester(	/* 15 */
+		tester(16,
 			"MultiContextResource-6",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -275,7 +275,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				""
 			)
 		),
-		tester(	/* 16 */
+		tester(17,
 			"MultiContextResource-7",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -290,7 +290,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/c1/c2/foo"
 			)
 		),
-		tester(	/* 17 */
+		tester(18,
 			"MultiContextResource-8",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -305,7 +305,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/c1/c2"
 			)
 		),
-		tester(	/* 18 */
+		tester(19,
 			"MultiContextResource-9",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -320,7 +320,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/c1/c2/r1/r2/foo"
 			)
 		),
-		tester(	/* 19 */
+		tester(20,
 			"MultiContextResource-10",
 			input(
 				"http://host:port","/c1/c2","/r1/r2","/p1/p2",
@@ -337,7 +337,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 		),
 
 		// No authority given
-		tester(	/* 20 */
+		tester(21,
 			"NoAuthority-1",
 			input(
 				"","/context","/resource","/path",
@@ -352,7 +352,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123/foobar"
 			)
 		),
-		tester(	/* 21 */
+		tester(22,
 			"NoAuthority-2",
 			input(
 				"","/context","/resource","/path",
@@ -367,7 +367,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123"
 			)
 		),
-		tester(	/* 22 */
+		tester(23,
 			"NoAuthority-3",
 			input(
 				"","/context","/resource","/path",
@@ -382,7 +382,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foobar"
 			)
 		),
-		tester(	/* 23 */
+		tester(24,
 			"NoAuthority-4",
 			input(
 				"","/context","/resource","/path",
@@ -397,7 +397,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 24 */
+		tester(25,
 			"NoAuthority-5",
 			input(
 				"","/context","/resource","/path",
@@ -412,7 +412,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"foobar"
 			)
 		),
-		tester(	/* 25 */
+		tester(26,
 			"NoAuthority-6",
 			input(
 				"","/context","/resource","/path",
@@ -427,7 +427,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				""
 			)
 		),
-		tester(	/* 26 */
+		tester(27,
 			"NoAuthority-7",
 			input(
 				"","/context","/resource","/path",
@@ -442,7 +442,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/context/foo"
 			)
 		),
-		tester(	/* 27 */
+		tester(28,
 			"NoAuthority-8",
 			input(
 				"","/context","/resource","/path",
@@ -457,7 +457,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/context"
 			)
 		),
-		tester(	/* 28 */
+		tester(29,
 			"NoAuthority-9",
 			input(
 				"","/context","/resource","/path",
@@ -472,7 +472,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/context/resource/foo"
 			)
 		),
-		tester(	/* 29 */
+		tester(30,
 			"NoAuthority-10",
 			input(
 				"","/context","/resource","/path",
@@ -489,7 +489,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 		),
 
 		// No authority or context given
-		tester(	/* 30 */
+		tester(31,
 			"NoAuthorityOrContext-1",
 			input(
 				"","","/resource","/path",
@@ -504,7 +504,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123/foobar"
 			)
 		),
-		tester(	/* 31 */
+		tester(32,
 			"NoAuthorityOrContext-2",
 			input(
 				"","","/resource","/path",
@@ -519,7 +519,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123"
 			)
 		),
-		tester(	/* 32 */
+		tester(33,
 			"NoAuthorityOrContext-3",
 			input(
 				"","","/resource","/path",
@@ -534,7 +534,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foobar"
 			)
 		),
-		tester(	/* 33 */
+		tester(34,
 			"NoAuthorityOrContext-4",
 			input(
 				"","","/resource","/path",
@@ -549,7 +549,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 34 */
+		tester(35,
 			"NoAuthorityOrContext-5",
 			input(
 				"","","/resource","/path",
@@ -564,7 +564,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"foobar"
 			)
 		),
-		tester(	/* 35 */
+		tester(36,
 			"NoAuthorityOrContext-6",
 			input(
 				"","","/resource","/path",
@@ -579,7 +579,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				""
 			)
 		),
-		tester(	/* 36 */
+		tester(37,
 			"NoAuthorityOrContext-7",
 			input(
 				"","","/resource","/path",
@@ -594,7 +594,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foo"
 			)
 		),
-		tester(	/* 37 */
+		tester(38,
 			"NoAuthorityOrContext-8",
 			input(
 				"","","/resource","/path",
@@ -609,7 +609,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 38 */
+		tester(39,
 			"NoAuthorityOrContext-9",
 			input(
 				"","","/resource","/path",
@@ -624,7 +624,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/resource/foo"
 			)
 		),
-		tester(	/* 39 */
+		tester(40,
 			"NoAuthorityOrContext-10",
 			input(
 				"","","/resource","/path",
@@ -641,7 +641,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 		),
 
 		// No authority or context or resource given
-		tester(	/* 40 */
+		tester(41,
 			"NoAuthorityOrContextOrResource-1",
 			input(
 				"","","","/path",
@@ -656,7 +656,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123/foobar"
 			)
 		),
-		tester(	/* 41 */
+		tester(42,
 			"NoAuthorityOrContextOrResource-2",
 			input(
 				"","","","/path",
@@ -671,7 +671,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123"
 			)
 		),
-		tester(	/* 42 */
+		tester(43,
 			"NoAuthorityOrContextOrResource-3",
 			input(
 				"","","","/path",
@@ -686,7 +686,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foobar"
 			)
 		),
-		tester(	/* 43 */
+		tester(44,
 			"NoAuthorityOrContextOrResource-4",
 			input(
 				"","","","/path",
@@ -701,7 +701,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 44 */
+		tester(45,
 			"NoAuthorityOrContextOrResource-5",
 			input(
 				"","","","/path",
@@ -716,7 +716,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"foobar"
 			)
 		),
-		tester(	/* 45 */
+		tester(46,
 			"NoAuthorityOrContextOrResource-6",
 			input(
 				"","","","/path",
@@ -731,7 +731,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				""
 			)
 		),
-		tester(	/* 46 */
+		tester(47,
 			"NoAuthorityOrContextOrResource-7",
 			input(
 				"","","","/path",
@@ -746,7 +746,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foo"
 			)
 		),
-		tester(	/* 47 */
+		tester(48,
 			"NoAuthorityOrContextOrResource-8",
 			input(
 				"","","","/path",
@@ -761,7 +761,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 48 */
+		tester(49,
 			"NoAuthorityOrContextOrResource-9",
 			input(
 				"","","","/path",
@@ -776,7 +776,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foo"
 			)
 		),
-		tester(	/* 49 */
+		tester(50,
 			"NoAuthorityOrContextOrResource-10",
 			input(
 				"","","","/path",
@@ -793,7 +793,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 		),
 
 		// No context or resource given.
-		tester(	/* 50 */
+		tester(51,
 			"NoContextOrResource-1",
 			input(
 				"http://host:port","","","/path",
@@ -808,7 +808,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123/foobar"
 			)
 		),
-		tester(	/* 51 */
+		tester(52,
 			"NoContextOrResource-2",
 			input(
 				"http://host:port","","","/path",
@@ -823,7 +823,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"http://foo.com:123"
 			)
 		),
-		tester(	/* 52 */
+		tester(53,
 			"NoContextOrResource-3",
 			input(
 				"http://host:port","","","/path",
@@ -838,7 +838,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foobar"
 			)
 		),
-		tester(	/* 53 */
+		tester(54,
 			"NoContextOrResource-4",
 			input(
 				"http://host:port","","","/path",
@@ -853,7 +853,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 54 */
+		tester(55,
 			"NoContextOrResource-5",
 			input(
 				"http://host:port","","","/path",
@@ -868,7 +868,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"foobar"
 			)
 		),
-		tester(	/* 55 */
+		tester(56,
 			"NoContextOrResource-6",
 			input(
 				"http://host:port","","","/path",
@@ -883,7 +883,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				""
 			)
 		),
-		tester(	/* 56 */
+		tester(57,
 			"NoContextOrResource-7",
 			input(
 				"http://host:port","","","/path",
@@ -898,7 +898,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foo"
 			)
 		),
-		tester(	/* 57 */
+		tester(58,
 			"NoContextOrResource-8",
 			input(
 				"http://host:port","","","/path",
@@ -913,7 +913,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/"
 			)
 		),
-		tester(	/* 58 */
+		tester(59,
 			"NoContextOrResource-9",
 			input(
 				"http://host:port","","","/path",
@@ -928,7 +928,7 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/foo"
 			)
 		),
-		tester(	/* 59 */
+		tester(60,
 			"NoContextOrResource-10",
 			input(
 				"http://host:port","","","/path",
@@ -942,6 +942,98 @@ class UriContextResolutionCombo_Test extends TestBase {
 				"/",
 				"/"
 			)
+		),
+
+		// Test query string support (JUNEAU-117)
+		tester(61,
+			"request:?query",
+			input(
+				"http://host:port","/context","/resource","/path",
+				"request:?foo=bar"
+			),
+			results(
+				"http://host:port/context/resource/path?foo=bar",
+				"http://host:port/context/resource/path?foo=bar",
+				"/context/resource/path?foo=bar",
+				"/context/resource/path?foo=bar",
+				"/context/resource/path?foo=bar",
+				"/context/resource/path?foo=bar"
+			)
+		),
+		tester(62,
+			"servlet:?query",
+			input(
+				"http://host:port","/context","/resource","/path",
+				"servlet:?foo=bar"
+			),
+			results(
+				"http://host:port/context/resource?foo=bar",
+				"http://host:port/context/resource?foo=bar",
+				"/context/resource?foo=bar",
+				"/context/resource?foo=bar",
+				"/context/resource?foo=bar",
+				"/context/resource?foo=bar"
+			)
+		),
+		tester(63,
+			"context:?query",
+			input(
+				"http://host:port","/context","/resource","/path",
+				"context:?foo=bar"
+			),
+			results(
+				"http://host:port/context?foo=bar",
+				"http://host:port/context?foo=bar",
+				"/context?foo=bar",
+				"/context?foo=bar",
+				"/context?foo=bar",
+				"/context?foo=bar"
+			)
+		),
+		tester(64,
+			"request:#hash",
+			input(
+				"http://host:port","/context","/resource","/path",
+				"request:#section"
+			),
+			results(
+				"http://host:port/context/resource/path#section",
+				"http://host:port/context/resource/path#section",
+				"/context/resource/path#section",
+				"/context/resource/path#section",
+				"/context/resource/path#section",
+				"/context/resource/path#section"
+			)
+		),
+		tester(65,
+			"request:pathOnly",
+			input(
+				"http://host:port","/context","/resource","/path",
+				"request:foo"
+			),
+			results(
+				"http://host:port/context/resource/path/foo",
+				"http://host:port/context/resource/path/foo",
+				"/context/resource/path/foo",
+				"/context/resource/path/foo",
+				"/context/resource/path/foo",
+				"/context/resource/path/foo"
+			)
+		),
+		tester(66,
+			"request:empty",
+			input(
+				"http://host:port","/context","/resource","/path",
+				"request:"
+			),
+			results(
+				"http://host:port/context/resource/path",
+				"http://host:port/context/resource/path",
+				"/context/resource/path",
+				"/context/resource/path",
+				"/context/resource/path",
+				"/context/resource/path"
+			)
 		)
 	};
 
@@ -950,8 +1042,8 @@ class UriContextResolutionCombo_Test extends TestBase {
 		final Input input;
 		final Results results;
 
-		Tester(String label, Input input, Results results) {
-			this.label = label;
+		Tester(int index, String label, Input input, Results results) {
+			this.label = "[" + index + "] " + label;
 			this.input = input;
 			this.results = results;
 		}
@@ -983,8 +1075,8 @@ class UriContextResolutionCombo_Test extends TestBase {
 		}
 	}
 
-	public static Tester tester(String label, Input input, Results results) {
-		return new Tester(label, input, results);
+	public static Tester tester(int index, String label, Input input, Results results) {
+		return new Tester(index, label, input, results);
 	}
 
 	public static Input input(String authority, String context, String resource, String path, String uri) {
