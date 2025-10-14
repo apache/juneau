@@ -143,15 +143,15 @@ public class StringRanges {
 	 * ascending order, with the <js>"*"</js> type demoted last in that order.
 	 */
 	private static final Comparator<StringRange> RANGE_COMPARATOR = (o1, o2) -> {
-    	// Compare q-values.
-    	int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
-    	if (qCompare != 0)
-    		return qCompare;
+		// Compare q-values.
+		int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
+		if (qCompare != 0)
+			return qCompare;
 
-    	// Compare media-types.
-    	// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
-    	return o2.toString().compareTo(o1.toString());
-    };
+		// Compare media-types.
+		// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
+		return o2.toString().compareTo(o1.toString());
+	};
 
 	/**
 	 * Given a list of media types, returns the best match for this string range header.

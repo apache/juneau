@@ -25,7 +25,6 @@ import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Superclass of all headers defined in this package.

@@ -25,7 +25,6 @@ import java.util.function.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * ContextSession that lives for the duration of a single use of {@link BeanTraverseContext}.

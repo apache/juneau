@@ -33,7 +33,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Basic implementation of the {@link HttpResponse} interface for error responses.

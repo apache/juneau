@@ -101,15 +101,15 @@ import java.lang.annotation.*;
 @Inherited
 public @interface HasQuery {
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
-    /**
+	/**
 	 * URL query parameter name.
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.

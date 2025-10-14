@@ -21,7 +21,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**

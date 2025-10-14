@@ -32,7 +32,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
@@ -375,7 +374,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 					} else if (vt.hasMutaterTo(String[].class)) {
 						String[] ss = toType(value, CM_StringArray);
 						for (String element : ss)
-                            sb.append(serialize(partType, items, element));
+							sb.append(serialize(partType, items, element));
 					} else {
 						throw new SerializeException("Input is not a valid array type: " + type);
 					}

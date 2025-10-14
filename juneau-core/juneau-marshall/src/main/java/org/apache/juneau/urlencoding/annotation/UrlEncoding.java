@@ -48,15 +48,15 @@ import org.apache.juneau.urlencoding.*;
 @ContextApply(UrlEncodingAnnotation.Apply.class)
 public @interface UrlEncoding {
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
-    /**
+	/**
 	 * When true, bean properties of type array or Collection will be expanded into multiple key/value pairings.
 	 *
 	 * <p>

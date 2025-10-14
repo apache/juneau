@@ -19,7 +19,6 @@ package org.apache.juneau.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**

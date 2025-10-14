@@ -213,7 +213,7 @@ public class AnnotationInfo<T extends Annotation> {
 				}
 			}
 			for (Constructor<? extends AnnotationApplier<?, ?>> applyConstructor : applyConstructors)
-                consumer.accept((AnnotationApplier<Annotation,Object>) applyConstructor.newInstance(vrs));
+				consumer.accept((AnnotationApplier<Annotation,Object>) applyConstructor.newInstance(vrs));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}

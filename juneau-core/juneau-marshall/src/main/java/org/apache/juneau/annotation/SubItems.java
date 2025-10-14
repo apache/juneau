@@ -52,13 +52,13 @@ public @interface SubItems {
 	 */
 	String[] _default() default {};
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
 	/**
 	 * <mk>enum</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#itemsObject">Swagger Items Object</a>.

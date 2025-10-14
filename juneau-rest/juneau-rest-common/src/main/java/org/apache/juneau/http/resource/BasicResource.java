@@ -26,7 +26,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A basic {@link org.apache.juneau.http.resource.HttpResource} implementation with additional features.

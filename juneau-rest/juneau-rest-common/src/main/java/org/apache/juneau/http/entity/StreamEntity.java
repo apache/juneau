@@ -25,7 +25,6 @@ import java.util.function.*;
 
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
@@ -78,7 +77,7 @@ public class StreamEntity extends BasicHttpEntity {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings("resource") // Caller closes
-    private InputStream content() {
+	private InputStream content() {
 		return Objects.requireNonNull(contentOrElse((InputStream) null), "Input stream is null.");
 	}
 

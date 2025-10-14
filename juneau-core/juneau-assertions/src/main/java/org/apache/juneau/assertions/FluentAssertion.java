@@ -18,8 +18,6 @@ package org.apache.juneau.assertions;
 
 import java.io.*;
 
-import org.apache.juneau.internal.*;
-
 /**
  * Parent class of all fluent assertion calls.
  *

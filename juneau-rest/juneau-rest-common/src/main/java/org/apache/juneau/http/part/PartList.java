@@ -29,7 +29,6 @@ import org.apache.http.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -320,8 +319,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList append(NameValuePair...values) {
 		if (values != null)
-            for (NameValuePair value : values)
-                append(value);
+			for (NameValuePair value : values)
+				append(value);
 		return this;
 	}
 
@@ -424,7 +423,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList remove(NameValuePair...values) {
 		for (NameValuePair value : values)
-            remove(value);
+			remove(value);
 		return this;
 	}
 
@@ -459,8 +458,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public PartList remove(String...names) {
 		if (names != null)
-            for (String name : names)
-                remove(name);
+			for (String name : names)
+				remove(name);
 		return this;
 	}
 

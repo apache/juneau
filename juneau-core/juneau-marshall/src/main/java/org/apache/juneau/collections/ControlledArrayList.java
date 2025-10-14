@@ -19,8 +19,6 @@ package org.apache.juneau.collections;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.internal.*;
-
 /**
  * An array list that allows you to control whether it's read-only via a constructor parameter.
  *

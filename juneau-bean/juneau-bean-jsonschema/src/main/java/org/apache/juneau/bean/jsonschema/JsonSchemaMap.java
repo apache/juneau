@@ -87,6 +87,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * @return This object.
 	 * @throws RuntimeException If one or more schema objects did not have their ID property set.
 	 */
+	@SuppressWarnings("deprecation")
 	public JsonSchemaMap add(JsonSchema...schemas) {
 		for (var schema : schemas) {
 			if (schema.getId() == null)

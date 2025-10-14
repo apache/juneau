@@ -26,7 +26,6 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
 
 import jakarta.activation.*;

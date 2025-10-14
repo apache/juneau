@@ -32,7 +32,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
@@ -858,6 +857,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	@SuppressWarnings({"rawtypes","unchecked"})
 	private String getStyle(HtmlSerializerSession session, BeanPropertyMeta pMeta, Object value) {
+		// Check for annotation style first
+		if (pMeta != null) {
+			String annotationStyle = getHtmlBeanPropertyMeta(pMeta).getStyle();
+			if (annotationStyle != null)
+				return annotationStyle;
+		}
+		// Fall back to render
 		HtmlRender render = getRender(session, pMeta, value);
 		return render == null ? null : render.getStyle(session, value);
 	}

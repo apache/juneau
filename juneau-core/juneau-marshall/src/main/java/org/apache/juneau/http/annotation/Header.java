@@ -99,13 +99,13 @@ public @interface Header {
 	 */
 	String def() default "";
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
 	/**
 	 * HTTP header name.

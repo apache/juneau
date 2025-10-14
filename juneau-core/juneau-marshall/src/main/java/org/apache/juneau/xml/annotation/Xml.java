@@ -93,15 +93,15 @@ public @interface Xml {
 	 */
 	String childName() default "";
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
-    /**
+	/**
 	 * The {@link XmlFormat} to use for serializing this object type.
 	 *
 	 * <h5 class='section'>Example:</h5>

@@ -57,7 +57,6 @@ import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -1988,9 +1987,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The HTTP status code.
 	 * @throws RestCallException If the executor service was not defined.
 	 */
-    public Future<RestResponse> runFuture() throws RestCallException {
-        return client.getExecutorService().submit(this::run);
-    }
+	public Future<RestResponse> runFuture() throws RestCallException {
+		return client.getExecutorService().submit(this::run);
+	}
 
 	/**
 	 * Same as {@link #run()} but immediately calls {@link RestResponse#consume()} to clean up the response.

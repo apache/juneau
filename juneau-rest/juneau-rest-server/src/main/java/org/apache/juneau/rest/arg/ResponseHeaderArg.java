@@ -87,14 +87,14 @@ public class ResponseHeaderArg implements RestOpArg {
 	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(o -> {
-        	RestRequest req = opSession.getRequest();
-        	RestResponse res = opSession.getResponse();
-        	ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
-        	if (rpm == null)
-        		rpm = ResponseHeaderArg.this.meta;
-        	HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
-        	res.setHeader(new SerializedHeader(name, o, pss, rpm.getSchema(), false));
-        });
+			RestRequest req = opSession.getRequest();
+			RestResponse res = opSession.getResponse();
+			ResponsePartMeta rpm = req.getOpContext().getResponseHeaderMeta(o);
+			if (rpm == null)
+				rpm = ResponseHeaderArg.this.meta;
+			HttpPartSerializerSession pss = rpm.getSerializer() == null ? req.getPartSerializerSession() : rpm.getSerializer().getPartSession();
+			res.setHeader(new SerializedHeader(name, o, pss, rpm.getSchema(), false));
+		});
 		return v;
 	}
 }

@@ -68,15 +68,15 @@ public @interface Html {
 	 */
 	String anchorText() default "";
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
-    /**
+	/**
 	 * Specifies what format to use for the HTML element.
 	 *
 	 * @return The annotation value.
@@ -246,4 +246,25 @@ public @interface Html {
 	 */
 	@SuppressWarnings("rawtypes")
 	Class<? extends HtmlRender> render() default HtmlRender.class;
+
+	/**
+	 * Specifies the CSS style to apply to the HTML element containing the bean property value.
+	 *
+	 * <p>
+	 * This is a simpler alternative to using {@link #render()} when you only need to apply CSS styling
+	 * without custom content transformation.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Apply styling to a bean property</jc>
+	 * 	<ja>@Html</ja>(style=<js>"white-space:normal;min-width:200px"</js>)
+	 * 	<jk>public</jk> String getField() {...}
+	 * </p>
+	 *
+	 * <p>
+	 * If both {@link #style()} and {@link #render()} are specified, the render takes precedence.
+	 *
+	 * @return The annotation value.
+	 */
+	String style() default "";
 }

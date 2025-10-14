@@ -267,30 +267,30 @@ public class Microservice implements ConfigEventListener {
 		 * @return This object.
 		 * @throws IOException Thrown by underlying stream.
 		 */
-        public Builder manifest(Object value) throws IOException {
-            if (value == null)
-                this.manifest = null;
-            else if (value instanceof ManifestFile manifestFile)
-                this.manifest = manifestFile;
-            else if (value instanceof Manifest manifest)
-                this.manifest = new ManifestFile(manifest);
-            else if (value instanceof Reader reader)
-                this.manifest = new ManifestFile(reader);
-            else if (value instanceof InputStream inputStream)
-                this.manifest = new ManifestFile(inputStream);
-            else if (value instanceof File file)
-                this.manifest = new ManifestFile(file);
-            else if (value instanceof Path path)
-                this.manifest = new ManifestFile(path);
-            else if (value instanceof String string)
-                this.manifest = new ManifestFile(resolveFile(string));
-            else if (value instanceof Class clazz)
-                this.manifest = new ManifestFile(clazz);
-            else
-                throw new BasicRuntimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", className(value));
+		public Builder manifest(Object value) throws IOException {
+			if (value == null)
+				this.manifest = null;
+			else if (value instanceof ManifestFile manifestFile)
+				this.manifest = manifestFile;
+			else if (value instanceof Manifest manifest)
+				this.manifest = new ManifestFile(manifest);
+			else if (value instanceof Reader reader)
+				this.manifest = new ManifestFile(reader);
+			else if (value instanceof InputStream inputStream)
+				this.manifest = new ManifestFile(inputStream);
+			else if (value instanceof File file)
+				this.manifest = new ManifestFile(file);
+			else if (value instanceof Path path)
+				this.manifest = new ManifestFile(path);
+			else if (value instanceof String string)
+				this.manifest = new ManifestFile(resolveFile(string));
+			else if (value instanceof Class clazz)
+				this.manifest = new ManifestFile(clazz);
+			else
+				throw new BasicRuntimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", className(value));
 
-            return this;
-        }
+			return this;
+		}
 
 		/**
 		 * Specifies the logger used by the microservice and returned by the {@link Microservice#getLogger()} method.

@@ -25,7 +25,6 @@ import java.util.function.*;
 
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A repeatable entity that obtains its content from a {@link File}.

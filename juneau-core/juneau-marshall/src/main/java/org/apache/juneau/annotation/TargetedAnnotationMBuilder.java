@@ -19,7 +19,6 @@ package org.apache.juneau.annotation;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**

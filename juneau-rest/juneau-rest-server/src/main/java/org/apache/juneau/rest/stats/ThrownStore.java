@@ -27,7 +27,6 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 
 /**
  * An in-memory cache of thrown exceptions.

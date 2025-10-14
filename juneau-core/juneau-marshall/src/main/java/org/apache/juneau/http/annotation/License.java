@@ -49,13 +49,13 @@ import java.lang.annotation.*;
 @Retention(RUNTIME)
 public @interface License {
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
 	/**
 	 * <mk>name</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.

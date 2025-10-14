@@ -22,7 +22,6 @@ import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.message.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A basic implementation of the {@link StatusLine} interface.

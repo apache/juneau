@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.mock;
 
 import org.apache.http.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
 

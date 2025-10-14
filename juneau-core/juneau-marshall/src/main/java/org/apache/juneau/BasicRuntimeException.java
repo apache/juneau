@@ -21,7 +21,6 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 import java.text.*;
 
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Subclass of runtime exceptions that take in a message and zero or more arguments.

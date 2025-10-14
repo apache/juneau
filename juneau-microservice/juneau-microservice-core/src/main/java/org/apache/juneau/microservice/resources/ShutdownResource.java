@@ -45,13 +45,13 @@ public class ShutdownResource extends BasicRestServlet {
 	public String shutdown() {
 		new Thread(
 			() -> {
-            	try {
-            		Thread.sleep(1000);
-            		System.exit(0);
-            	} catch (InterruptedException e) {
-            		e.printStackTrace();
-            	}
-            }
+				try {
+					Thread.sleep(1000);
+					System.exit(0);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		).start();
 		return "OK";
 	}

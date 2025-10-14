@@ -280,9 +280,9 @@ public class LogsResource extends BasicRestServlet {
 		static final FileFilter FILE_FILTER = f -> f.isDirectory() || f.getName().endsWith(".log");
 
 		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
-        	int c = o1.getType().compareTo(o2.getType());
-        	return c != 0 ? c : o1.getName().compareTo(o2.getName());
-        };
+			int c = o1.getType().compareTo(o2.getType());
+			return c != 0 ? c : o1.getName().compareTo(o2.getName());
+		};
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

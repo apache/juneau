@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Base class for bean builders.

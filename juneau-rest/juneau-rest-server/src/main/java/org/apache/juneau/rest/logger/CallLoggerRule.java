@@ -23,8 +23,6 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
-
 import jakarta.servlet.http.*;
 
 /**

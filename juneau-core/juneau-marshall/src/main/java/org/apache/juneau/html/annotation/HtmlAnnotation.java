@@ -108,7 +108,7 @@ public class HtmlAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder<Builder> {
 
-		String anchorText="", link="";
+		String anchorText="", link="", style="";
 		HtmlFormat format=HtmlFormat.HTML;
 		boolean noTableHeaders, noTables;
 		Class<? extends HtmlRender> render=HtmlRender.class;
@@ -195,6 +195,17 @@ public class HtmlAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets the {@link Html#style()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder style(String value) {
+			this.style = value;
+			return this;
+		}
+
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -205,7 +216,7 @@ public class HtmlAnnotation {
 
 		private boolean noTableHeaders, noTables;
 		private Class<? extends HtmlRender> render;
-		private final String anchorText, link;
+		private final String anchorText, link, style;
 		private HtmlFormat format;
 
 		Impl(Builder b) {
@@ -216,6 +227,7 @@ public class HtmlAnnotation {
 			this.noTableHeaders = b.noTableHeaders;
 			this.noTables = b.noTables;
 			this.render = b.render;
+			this.style = b.style;
 			postConstruct();
 		}
 
@@ -247,6 +259,11 @@ public class HtmlAnnotation {
 		@Override /* Html */
 		public Class<? extends HtmlRender> render() {
 			return render;
+		}
+
+		@Override /* Html */
+		public String style() {
+			return style;
 		}
 	}
 

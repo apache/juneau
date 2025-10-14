@@ -28,7 +28,6 @@ import org.apache.http.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.HttpHeaders;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 
 /**
@@ -333,8 +332,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList append(Header...values) {
 		if (values != null)
-            for (Header value : values)
-                if (value != null)
+			for (Header value : values)
+				if (value != null)
 					append(value);
 		return this;
 	}
@@ -438,7 +437,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList remove(Header...values) {
 		for (Header value : values)
-            remove(value);
+			remove(value);
 		return this;
 	}
 
@@ -473,8 +472,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public HeaderList remove(String...names) {
 		if (names != null)
-            for (String name : names)
-                remove(name);
+			for (String name : names)
+				remove(name);
 		return this;
 	}
 

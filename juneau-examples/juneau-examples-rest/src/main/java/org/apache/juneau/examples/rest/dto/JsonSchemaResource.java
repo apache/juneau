@@ -70,6 +70,7 @@ public class JsonSchemaResource extends BasicRestServlet {
 	private JsonSchema schema;     // The schema document
 
 	@Override /* Servlet */
+	@SuppressWarnings("deprecation")
 	public void init() {
 
 		try {

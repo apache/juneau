@@ -18,8 +18,6 @@ package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.internal.*;
-
 /**
  * Builder for {@link AnnotationImpl} objects.
  *
@@ -48,19 +46,19 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 	 * @return this instance typed as {@code B}.
 	 * @since 9.2.0
 	 */
-    @SuppressWarnings("unchecked")
-    protected B asThis() {
-        return (B) this;
-    }
+	@SuppressWarnings("unchecked")
+	protected B asThis() {
+		return (B) this;
+	}
 	/**
-     * Sets the {@link AnnotationImpl#description()} property on the target annotation.
-     *
-     * @param value The new value for this property.
-     * @return This object.
-     * @since 9.2.0
-     */
-    public B description(final String...value) {
-        this.description = value;
-        return asThis();
-    }
+	 * Sets the {@link AnnotationImpl#description()} property on the target annotation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 * @since 9.2.0
+	 */
+	public B description(final String...value) {
+		this.description = value;
+		return asThis();
+	}
 }

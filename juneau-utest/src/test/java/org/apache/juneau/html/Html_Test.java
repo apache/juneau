@@ -417,4 +417,32 @@ class Html_Test extends TestBase {
 		};
 		assertEquals("<table _type='array'><tr><th>f3</th><th>f2</th><th>f1</th></tr><tr><td><null/></td><td><null/></td><td><null/></td></tr><tr><td><null/></td><td><null/></td><td><null/></td></tr></table>", HtmlSerializer.DEFAULT_SQ.toString(ee));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test @Html(style) annotation
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_htmlStyle() throws Exception {
+		var s = HtmlSerializer.DEFAULT_SQ;
+		F[] ff = {
+			new F("foo", "bar"),
+			new F("baz", "qux")
+		};
+		var html = s.serialize(ff);
+		assertTrue(html.contains("style='white-space:normal'"));
+		assertTrue(html.contains("style='min-width:200px'"));
+	}
+
+	public static class F {
+		@Html(style="white-space:normal")
+		public String f1;
+
+		@Html(style="min-width:200px")
+		public String f2;
+
+		public F(String f1, String f2) {
+			this.f1 = f1;
+			this.f2 = f2;
+		}
+	}
 }

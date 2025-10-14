@@ -43,37 +43,37 @@ public class ManifestFile extends JsonMap {
 
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Create an instance of this class from a manifest file on the file system.
-     *
-     * @param f The manifest file.
-     * @throws IOException If a problem occurred while trying to read the manifest file.
-     */
-    public ManifestFile(File f) throws IOException {
-        Manifest mf = new Manifest();
-        try (FileInputStream fis = new FileInputStream(f)) {
-            mf.read(fis);
-            load(mf);
-        } catch (IOException e) {
-            throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
-        }
-    }
+	/**
+	 * Create an instance of this class from a manifest file on the file system.
+	 *
+	 * @param f The manifest file.
+	 * @throws IOException If a problem occurred while trying to read the manifest file.
+	 */
+	public ManifestFile(File f) throws IOException {
+		Manifest mf = new Manifest();
+		try (FileInputStream fis = new FileInputStream(f)) {
+			mf.read(fis);
+			load(mf);
+		} catch (IOException e) {
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
+		}
+	}
 
-    /**
-     * Create an instance of this class from a manifest path on the file system.
-     *
-     * @param path The manifest path.
-     * @throws IOException If a problem occurred while trying to read the manifest path.
-     */
-    public ManifestFile(Path path) throws IOException {
-        Manifest mf = new Manifest();
-        try (InputStream fis = Files.newInputStream(path)) {
-            mf.read(fis);
-            load(mf);
-        } catch (IOException e) {
-            throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(path), e);
-        }
-    }
+	/**
+	 * Create an instance of this class from a manifest path on the file system.
+	 *
+	 * @param path The manifest path.
+	 * @throws IOException If a problem occurred while trying to read the manifest path.
+	 */
+	public ManifestFile(Path path) throws IOException {
+		Manifest mf = new Manifest();
+		try (InputStream fis = Files.newInputStream(path)) {
+			mf.read(fis);
+			load(mf);
+		} catch (IOException e) {
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(path), e);
+		}
+	}
 
 	/**
 	 * Create an instance of this class from a {@link Manifest} object.

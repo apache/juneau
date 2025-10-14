@@ -153,13 +153,13 @@ public class StringMatcherFactory extends MatcherFactory {
 		public boolean matches(ClassMeta<?> cm, Object o) {
 			String s = (String)o;
 			for (Pattern andPattern : andPatterns)
-                if (! andPattern.matcher(s).matches())
+				if (! andPattern.matcher(s).matches())
 					return false;
 			for (Pattern notPattern : notPatterns)
-                if (notPattern.matcher(s).matches())
+				if (notPattern.matcher(s).matches())
 					return false;
 			for (Pattern orPattern : orPatterns)
-                if (orPattern.matcher(s).matches())
+				if (orPattern.matcher(s).matches())
 					return true;
 			return orPatterns.length == 0;
 		}

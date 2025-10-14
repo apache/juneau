@@ -59,49 +59,49 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 	@Override /* TemporalAccessor */
 	@SuppressWarnings("unchecked")
 	public <R> R query(TemporalQuery<R> query) {
-    	R r = inner.query(query);
+		R r = inner.query(query);
 
-    	if (r != null)
-    		return r;
+		if (r != null)
+			return r;
 
-    	if (query == zone() || query == zoneId())
-    		return (R)zoneId;
+		if (query == zone() || query == zoneId())
+			return (R)zoneId;
 
-    	if (query == localTime()) {
+		if (query == localTime()) {
 
-    		if (isSupported(INSTANT_SECONDS))
-    			return (R)zdt().toLocalTime();
+			if (isSupported(INSTANT_SECONDS))
+				return (R)zdt().toLocalTime();
 
-    		int hour = 0;
-    		if (isSupported(HOUR_OF_DAY))
-    			hour = iget(HOUR_OF_DAY);
-    		else if (isSupported(HOUR_OF_AMPM))
-    			hour = iget(HOUR_OF_AMPM) + 12 * iget(AMPM_OF_DAY);
+			int hour = 0;
+			if (isSupported(HOUR_OF_DAY))
+				hour = iget(HOUR_OF_DAY);
+			else if (isSupported(HOUR_OF_AMPM))
+				hour = iget(HOUR_OF_AMPM) + 12 * iget(AMPM_OF_DAY);
 
-    		int minute = isSupported(MINUTE_OF_HOUR) ? iget(MINUTE_OF_HOUR) : 0;
-    		int second = isSupported(SECOND_OF_MINUTE) ? iget(SECOND_OF_MINUTE) : 0;
-    		int nano = isSupported(NANO_OF_SECOND) ? iget(NANO_OF_SECOND) : 0;
+			int minute = isSupported(MINUTE_OF_HOUR) ? iget(MINUTE_OF_HOUR) : 0;
+			int second = isSupported(SECOND_OF_MINUTE) ? iget(SECOND_OF_MINUTE) : 0;
+			int nano = isSupported(NANO_OF_SECOND) ? iget(NANO_OF_SECOND) : 0;
 
-    		return (R)LocalTime.of(hour, minute, second, nano);
-    	}
+			return (R)LocalTime.of(hour, minute, second, nano);
+		}
 
-    	if (query == localDate()) {
+		if (query == localDate()) {
 
-    		if (isSupported(INSTANT_SECONDS))
-    			return (R)zdt().toLocalDate();
+			if (isSupported(INSTANT_SECONDS))
+				return (R)zdt().toLocalDate();
 
-    		int year = isSupported(YEAR) ? iget(ChronoField.YEAR) : 1970;
-    		int month = isSupported(MONTH_OF_YEAR) ? iget(MONTH_OF_YEAR) : 1;
-    		int dayOfMonth = isSupported(DAY_OF_MONTH) ? iget(DAY_OF_MONTH) : 1;
+			int year = isSupported(YEAR) ? iget(ChronoField.YEAR) : 1970;
+			int month = isSupported(MONTH_OF_YEAR) ? iget(MONTH_OF_YEAR) : 1;
+			int dayOfMonth = isSupported(DAY_OF_MONTH) ? iget(DAY_OF_MONTH) : 1;
 
-    		return (R)LocalDate.of(year, Month.of(month), dayOfMonth);
-    	}
+			return (R)LocalDate.of(year, Month.of(month), dayOfMonth);
+		}
 
-    	if (query == offset()) {
-    		return (R)zoneId.getRules().getOffset(zdt().toInstant());
-    	}
+		if (query == offset()) {
+			return (R)zoneId.getRules().getOffset(zdt().toInstant());
+		}
 
-    	return null;
+		return null;
 	}
 
 	@Override /* TemporalAccessor */

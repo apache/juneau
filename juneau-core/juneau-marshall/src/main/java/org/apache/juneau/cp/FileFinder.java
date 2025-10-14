@@ -25,7 +25,6 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for finding regular or localized files on the classpath and file system.

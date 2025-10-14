@@ -364,7 +364,7 @@ public class TimeMatcherFactory extends MatcherFactory {
 				c.setTime((Date)o);
 			}
 			for (TimestampRange range : ranges)
-                if (range.matches(c))
+				if (range.matches(c))
 					return true;
 			return false;
 		}

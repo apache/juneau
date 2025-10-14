@@ -21,7 +21,6 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Simple wrapper around a standard {@link Writer} with additional methods.

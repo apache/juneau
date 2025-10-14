@@ -71,7 +71,7 @@ public class JettyMicroservice extends Microservice {
 
 	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
 
-    private static volatile JettyMicroservice INSTANCE;
+	private static volatile JettyMicroservice INSTANCE;
 
 	private static void setInstance(JettyMicroservice m) {
 		synchronized(JettyMicroservice.class) {
@@ -160,58 +160,58 @@ public class JettyMicroservice extends Microservice {
 			return new Builder(this);
 		}
 
-        /**
-         * Specifies the contents or location of the <c>jetty.xml</c> file used by the Jetty server.
-         *
-         * <p>
-         * If you do not specify this value, it is pulled from the following in the specified order:
-         * <ul class='spaced-list'>
-         *   <li>
-         *         <c>Jetty/config</c> setting in the config file.
-         *         <c>Jetty-Config</c> setting in the manifest file.
-         * </ul>
-         *
-         * <p>
-         * By default, we look for the <c>jetty.xml</c> file in the following locations:
-         * <ul class='spaced-list'>
-         *     <li><c>jetty.xml</c> in home directory.
-         *     <li><c>files/jetty.xml</c> in home directory.
-         *     <li><c>/jetty.xml</c> in classpath.
-         *     <li><c>/files/jetty.xml</c> in classpath.
-         * </ul>
-         *
-         * @param jettyXml
-         *     The contents or location of the file.
-         *     <br>Can be any of the following:
-         *     <ul>
-         *      <li>{@link String} - Relative path to file on file system or classpath.
-         *      <li>{@link File} - File on file system.
-         *      <li>{@link Path} - Path on file system.
-         *      <li>{@link InputStream} - Raw contents as <c>UTF-8</c> encoded stream.
-         *      <li>{@link Reader} - Raw contents.
-         *     </ul>
-         *
-         * @param resolveVars
-         *     If <jk>true</jk>, SVL variables in the file will automatically be resolved.
-         * @return This object.
-         * @throws IOException Thrown by underlying stream.
-         */
-        public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
-            if (jettyXml instanceof String)
-                this.jettyXml = read(resolveFile(jettyXml.toString()));
-            else if (jettyXml instanceof File file)
-                this.jettyXml = read(file);
-            else if (jettyXml instanceof Path path)
-                this.jettyXml = read(path);
-            else if (jettyXml instanceof InputStream inputStream)
-                this.jettyXml = read(inputStream);
-            else if (jettyXml instanceof Reader reader)
-                this.jettyXml = read(reader);
-            else
-                throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", className(jettyXml));
-            this.jettyXmlResolveVars = resolveVars;
-            return this;
-        }
+		/**
+		 * Specifies the contents or location of the <c>jetty.xml</c> file used by the Jetty server.
+		 *
+		 * <p>
+		 * If you do not specify this value, it is pulled from the following in the specified order:
+		 * <ul class='spaced-list'>
+		 *   <li>
+		 *         <c>Jetty/config</c> setting in the config file.
+		 *         <c>Jetty-Config</c> setting in the manifest file.
+		 * </ul>
+		 *
+		 * <p>
+		 * By default, we look for the <c>jetty.xml</c> file in the following locations:
+		 * <ul class='spaced-list'>
+		 *     <li><c>jetty.xml</c> in home directory.
+		 *     <li><c>files/jetty.xml</c> in home directory.
+		 *     <li><c>/jetty.xml</c> in classpath.
+		 *     <li><c>/files/jetty.xml</c> in classpath.
+		 * </ul>
+		 *
+		 * @param jettyXml
+		 *     The contents or location of the file.
+		 *     <br>Can be any of the following:
+		 *     <ul>
+		 *      <li>{@link String} - Relative path to file on file system or classpath.
+		 *      <li>{@link File} - File on file system.
+		 *      <li>{@link Path} - Path on file system.
+		 *      <li>{@link InputStream} - Raw contents as <c>UTF-8</c> encoded stream.
+		 *      <li>{@link Reader} - Raw contents.
+		 *     </ul>
+		 *
+		 * @param resolveVars
+		 *     If <jk>true</jk>, SVL variables in the file will automatically be resolved.
+		 * @return This object.
+		 * @throws IOException Thrown by underlying stream.
+		 */
+		public Builder jettyXml(Object jettyXml, boolean resolveVars) throws IOException {
+			if (jettyXml instanceof String)
+				this.jettyXml = read(resolveFile(jettyXml.toString()));
+			else if (jettyXml instanceof File file)
+				this.jettyXml = read(file);
+			else if (jettyXml instanceof Path path)
+				this.jettyXml = read(path);
+			else if (jettyXml instanceof InputStream inputStream)
+				this.jettyXml = read(inputStream);
+			else if (jettyXml instanceof Reader reader)
+				this.jettyXml = read(reader);
+			else
+				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", className(jettyXml));
+			this.jettyXmlResolveVars = resolveVars;
+			return this;
+		}
 
 		/**
 		 * Specifies the ports to use for the web server.
@@ -573,8 +573,8 @@ public class JettyMicroservice extends Microservice {
 	 *
 	 * @return The context path that this microservice is using.
 	 */
-    public String getContextPath() {
-        return getServletContextHandler().getContextPath();
+	public String getContextPath() {
+		return getServletContextHandler().getContextPath();
 //        for (Handler h : getServer().getHandlers()) {
 //            if (h instanceof HandlerCollection)
 //                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
@@ -584,7 +584,7 @@ public class JettyMicroservice extends Microservice {
 //                return ((ServletContextHandler) h).getContextPath();
 //        }
 //        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
-    }
+	}
 
 	/**
 	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.

@@ -48,15 +48,15 @@ import org.apache.juneau.*;
 @ContextApply(MarshalledAnnotation.Applier.class)
 public @interface Marshalled {
 
-    /**
-     * Optional description for the exposed API.
-     *
-     * @return The annotation value.
-     * @since 9.2.0
-     */
-    String[] description() default {};
+	/**
+	 * Optional description for the exposed API.
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	String[] description() default {};
 
-    /**
+	/**
 	 * POJO example.
 	 *
 	 * <p>

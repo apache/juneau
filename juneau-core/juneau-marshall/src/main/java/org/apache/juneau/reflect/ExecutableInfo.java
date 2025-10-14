@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Contains common methods between {@link ConstructorInfo} and {@link MethodInfo}.

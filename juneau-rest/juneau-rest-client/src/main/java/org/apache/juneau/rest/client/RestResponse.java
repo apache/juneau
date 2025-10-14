@@ -33,7 +33,6 @@ import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.assertion.*;
 
@@ -468,18 +467,18 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			c.getClassLoader(),
 			new Class[] { c },
 			(InvocationHandler) (proxy, method, args) -> {
-            	ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-            	HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
-            	HttpPartSchema schema = pm.getSchema();
-            	HttpPartType pt = pm.getPartType();
-            	String name = pm.getPartName().orElse(null);
-            	ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
-            	if (pt == RESPONSE_HEADER)
-            		return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
-            	if (pt == RESPONSE_STATUS)
-            		return getStatusCode();
-            	return getContent().schema(schema).as(type);
-            });
+				ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
+				HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
+				HttpPartSchema schema = pm.getSchema();
+				HttpPartType pt = pm.getPartType();
+				String name = pm.getPartName().orElse(null);
+				ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+				if (pt == RESPONSE_HEADER)
+					return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
+				if (pt == RESPONSE_STATUS)
+					return getStatusCode();
+				return getContent().schema(schema).as(type);
+			});
 	}
 
 	/**

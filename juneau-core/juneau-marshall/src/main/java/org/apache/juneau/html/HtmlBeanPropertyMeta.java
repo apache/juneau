@@ -40,7 +40,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	private final boolean noTables, noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender render;
-	private final String link, anchorText;
+	private final String link, anchorText, style;
 
 	/**
 	 * Constructor.
@@ -65,6 +65,7 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		this.render = b.render.orElse(null);
 		this.link = b.link;
 		this.anchorText = b.anchorText;
+		this.style = b.style;
 	}
 
 	private HtmlBeanPropertyMeta() {
@@ -75,13 +76,14 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		this.render = null;
 		this.link = null;
 		this.anchorText = null;
+		this.style = null;
 	}
 
 	static class Builder {
 		boolean noTables, noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
 		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);
-		String link, anchorText;
+		String link, anchorText, style;
 
 		void findHtmlInfo(Html html) {
 			if (html == null)
@@ -97,6 +99,8 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 				link = html.link();
 			if (! html.anchorText().isEmpty())
 				anchorText = html.anchorText();
+			if (! html.style().isEmpty())
+				style = html.style();
 		}
 	}
 
@@ -210,5 +214,17 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public String getAnchorText() {
 		return anchorText;
+	}
+
+	/**
+	 * Returns the CSS style string for this property.
+	 *
+	 * <p>
+	 * This value is specified via the {@link Html#style() @Html(style)} annotation.
+	 *
+	 * @return The CSS style string, or <jk>null</jk> if not specified.
+	 */
+	public String getStyle() {
+		return style;
 	}
 }

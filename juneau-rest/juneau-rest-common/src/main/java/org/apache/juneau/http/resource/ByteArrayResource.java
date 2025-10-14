@@ -21,7 +21,6 @@ import java.util.function.*;
 
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A repeatable resource that obtains its content from a byte array.
