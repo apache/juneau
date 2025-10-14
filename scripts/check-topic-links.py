@@ -139,10 +139,10 @@ def check_links(links, topics):
     return warnings
 
 def main():
-    # Get the script directory (should be /juneau)
+    # Get the script directory (should be /juneau/scripts)
     script_dir = Path(__file__).parent
-    juneau_root = script_dir
-    docs_dir = script_dir / "juneau-docs"
+    juneau_root = script_dir.parent
+    docs_dir = juneau_root / "juneau-docs"
     
     print("Juneau Topic Link Checker")
     print("=" * 50)
