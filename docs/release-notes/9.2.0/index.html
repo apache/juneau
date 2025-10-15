@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.8.1">
 <title data-rh="true">Release 9.2.0 | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://juneau.apache.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://juneau.apache.org/docs/release-notes/9.2.0"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Release 9.2.0 | Apache Juneau"><meta data-rh="true" name="description" content="Date: TBD"><meta data-rh="true" property="og:description" content="Date: TBD"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://juneau.apache.org/docs/release-notes/9.2.0"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.apache.org/docs/release-notes/9.2.0" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.c21a577c.css">
-<script src="/assets/js/runtime~main.15383be8.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.dd489b9c.js" defer="defer"></script>
 <script src="/assets/js/main.c9b090f0.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -326,10 +326,40 @@ Features and release date are subject to change.</p></div></div>
 <p><strong>Enhanced OpenAPI Compatibility</strong>: Jakarta Validation constraints are now seamlessly translated to OpenAPI schema properties, enabling automatic documentation generation and client-side validation in tools like Swagger UI.</p>
 </li>
 </ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="pathremainder-annotation">@PathRemainder Annotation<a href="#pathremainder-annotation" class="hash-link" aria-label="Direct link to @PathRemainder Annotation" title="Direct link to @PathRemainder Annotation">​</a></h4>
+<ul>
+<li>
+<p><strong>New Annotation</strong>: Added <code>@PathRemainder</code> as an intuitive shortcut for <code>@Path(&quot;/*&quot;)</code> to capture the path remainder in REST endpoints.</p>
+<p><strong>Features</strong>:</p>
+<ul>
+<li>More explicit and self-documenting than <code>@Path(&quot;/*&quot;)</code></li>
+<li>Works seamlessly in both server-side REST methods and client-side remote proxies</li>
+<li>Supports all <code>@Path</code> features: default values, custom parsers/serializers, schema validation, OpenAPI documentation</li>
+<li>Automatically configured with <code>required=false</code> and <code>allowEmptyValue=true</code> (path remainder is optional)</li>
+</ul>
+<p><strong>Usage Example - Server Side</strong>:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token annotation punctuation">@RestGet</span><span class="token punctuation">(</span><span class="token string">&quot;/files/*&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token class-name">File</span><span class="token plain"> </span><span class="token function">getFile</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathRemainder</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> path</span><span class="token punctuation">)</span><span class="token plain"> </span><span class="token punctuation">{</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token keyword">return</span><span class="token plain"> </span><span class="token keyword">new</span><span class="token plain"> </span><span class="token class-name">File</span><span class="token punctuation">(</span><span class="token plain">path</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">}</span><br></span></code></pre></div></div>
+<p><strong>Usage Example - Client Side</strong>:</p>
+<div class="language-java codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-java codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line"><span class="token annotation punctuation">@Remote</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token keyword">public</span><span class="token plain"> </span><span class="token keyword">interface</span><span class="token plain"> </span><span class="token class-name">FileService</span><span class="token plain"> </span><span class="token punctuation">{</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token annotation punctuation">@RemoteGet</span><span class="token punctuation">(</span><span class="token string">&quot;/files/{+remainder}&quot;</span><span class="token punctuation">)</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain">    </span><span class="token class-name">File</span><span class="token plain"> </span><span class="token function">getFile</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathRemainder</span><span class="token plain"> </span><span class="token class-name">String</span><span class="token plain"> remainder</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token plain"></span><br></span><span class="token-line"><span class="token plain"></span><span class="token punctuation">}</span><br></span></code></pre></div></div>
+<p><strong>Implementation Details</strong>:</p>
+<ul>
+<li>Created <code>PathRemainderArg</code> resolver for server-side parameter resolution</li>
+<li>Added support in <code>RemoteOperationArg</code> for client-side remote proxies</li>
+<li>Extended <code>HttpPartSchema.Builder</code> with <code>apply(PathRemainder)</code> method</li>
+<li>Comprehensive unit tests for server-side, including default values and mixed parameters</li>
+</ul>
+<p><strong>Documentation</strong>:</p>
+<ul>
+<li>Updated <code>/docs/topics/09.03.04.PathVariables.md</code> with path remainder examples</li>
+<li>Updated <code>/docs/topics/11.10.08.Path.md</code> for remote proxy usage</li>
+</ul>
+</li>
+</ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="csv-serializer---object-swap-support">CSV Serializer - Object Swap Support<a href="#csv-serializer---object-swap-support" class="hash-link" aria-label="Direct link to CSV Serializer - Object Swap Support" title="Direct link to CSV Serializer - Object Swap Support">​</a></h4>
 <ul>
 <li>
 <p><strong>Full Object Swap Support</strong>: The <code>CsvSerializer</code> now supports object swaps, bringing it to feature parity with other Juneau serializers like JSON, XML, and UON.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>The <code>CsvParser</code> is not yet implemented. CSV parsing support will be added in a future release, at which point swap support will be included.</p></div></div>
 <p><strong>Key Features</strong>:</p>
 <ul>
 <li><strong>Bean Property Swaps</strong>: Automatically applies swaps registered via <code>.swaps()</code> to bean property values</li>
