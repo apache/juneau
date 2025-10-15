@@ -3198,6 +3198,7 @@ public class RestContext extends Context {
 						MethodArg.class,
 						ParserArg.class,
 						PathArg.class,
+						PathRemainderArg.class,
 						QueryArg.class,
 						ReaderParserArg.class,
 						RequestBeanArg.class,

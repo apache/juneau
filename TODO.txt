@@ -1,41 +1,12 @@
-ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).Re-add @PathRemainder annotation.
+ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
+Re-add @PathRemainder annotation.
 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
 
-Replace @Bean(findFluentSetters) with @FluentSetters.
 HttpResponse should use list of Headers and have a headers(Header...) method.
 HttpResponse should allow you to set code.
 HttpException subclasses can set status, but does it use code?
 HttpException should use list of Headers and have a headers(Header...) method.
 
-JsonSchema should have fluent getters and setters.
 
 @ResponseBody and @ResponseHeaders shouldn't be required on HttpResponse objects.
 
-This has to be easier:
-	@Enumerated(STRING)
-	@Schema(description="Routing types that this directive applies to.")
-	@NotEmpty(message="At least one copy type is required")
-	@Fetched(primary=true, fetcher=CopyTypes.class)
-	@SortNatural
-	@Beanp(type=TreeSet.class, params=CopyType.class)
-	protected Set<CopyType> copyTypes;
-
-	public Set<CopyType> getCopyTypes() {
-		return copyTypes;
-	}
-
-	public Directive setCopyTypes(Set<CopyType> value) {
-		this.copyTypes = value;
-		return this;
-	}
-	
-assertBodyMatches should tell you at which position it differs and make it obvious in the error.
-
-
-            .extracting(Directive::getLabel, Directive::getStatus, Directive::getStart, Directive::getEnd)
-            .containsOnly(d.getLabel(), DirectiveStatus.ACTIVE, d.getStart(), d.getEnd());
-            
-        assertThat(releaseService.sortReleases(Arrays.asList(sb0_224, sb0_226, sb0_222))).containsExactly(sb0_222, sb0_224, sb0_226);
-            
-
-Better support for SortedSet properties.

@@ -132,4 +132,158 @@ class PathRemainder_Test extends TestBase {
 			.assertStatus(200)
 			.assertContent("[{a:1,b:'foo'}]");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// @PathRemainder annotation tests
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class C {
+		@RestOp(path="/a/*")
+		public String a(@PathRemainder String remainder) {
+			return ""+remainder;
+		}
+		@RestGet(path="/b/*")
+		public String b(@PathRemainder String remainder) {
+			return ""+remainder;
+		}
+		@RestPut(path="/c/*")
+		public String c(@PathRemainder String remainder) {
+			return ""+remainder;
+		}
+		@RestPost(path="/d/*")
+		public String d(@PathRemainder String remainder) {
+			return ""+remainder;
+		}
+		@RestDelete(path="/e/*")
+		public String e(@PathRemainder String remainder) {
+			return ""+remainder;
+		}
+	}
+
+	@Test void c01_pathRemainderAnnotation() throws Exception {
+		var c = MockRestClient.build(C.class);
+
+		// Test that @PathRemainder works identically to @Path("/*")
+		c.get("/a").run().assertContent("null");
+		c.get("/a/").run().assertContent("");
+		c.get("/a/foo").run().assertContent("foo");
+		c.get("/a/foo/bar").run().assertContent("foo/bar");
+
+		c.get("/b").run().assertContent("null");
+		c.get("/b/").run().assertContent("");
+		c.get("/b/foo").run().assertContent("foo");
+		c.get("/b/foo/bar").run().assertContent("foo/bar");
+
+		c.put("/c").run().assertContent("null");
+		c.put("/c/").run().assertContent("");
+		c.put("/c/foo").run().assertContent("foo");
+		c.put("/c/foo/bar").run().assertContent("foo/bar");
+
+		c.post("/d").run().assertContent("null");
+		c.post("/d/").run().assertContent("");
+		c.post("/d/foo").run().assertContent("foo");
+		c.post("/d/foo/bar").run().assertContent("foo/bar");
+
+		c.delete("/e").run().assertContent("null");
+		c.delete("/e/").run().assertContent("");
+		c.delete("/e/foo").run().assertContent("foo");
+		c.delete("/e/foo/bar").run().assertContent("foo/bar");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// @PathRemainder with Optional and complex types
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers=Json5Serializer.class)
+	public static class D {
+		@RestGet(path="/a/*")
+		public Object a(@PathRemainder Optional<Integer> f1) {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPut(path="/b/*")
+		public Object b(@PathRemainder Optional<ABean> f1) {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost(path="/c/*")
+		public Object c(@PathRemainder Optional<List<ABean>> f1) {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestDelete(path="/d/*")
+		public Object d(@PathRemainder List<Optional<ABean>> f1) {
+			return f1;
+		}
+	}
+
+	@Test void d01_pathRemainderWithOptional() throws Exception {
+		var d = MockRestClient.buildJson(D.class);
+		d.get("/a/123")
+			.run()
+			.assertStatus(200)
+			.assertContent("123");
+		d.put("/b/a=1,b=foo")
+			.run()
+			.assertStatus(200)
+			.assertContent("{a:1,b:'foo'}");
+		d.post("/c/@((a=1,b=foo))")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
+		d.delete("/d/@((a=1,b=foo))")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// @PathRemainder with mixed path parameters
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class E {
+		@RestGet(path="/a/{foo}/{bar}/*")
+		public String a(@Path("foo") String foo, @Path("bar") int bar, @PathRemainder String remainder) {
+			return "foo="+foo+",bar="+bar+",remainder="+remainder;
+		}
+		@RestPost(path="/b/{id}/*")
+		public String b(@Path("id") String id, @PathRemainder String remainder) {
+			return "id="+id+",remainder="+remainder;
+		}
+	}
+
+	@Test void e01_pathRemainderWithOtherPathParams() throws Exception {
+		var e = MockRestClient.build(E.class);
+		e.get("/a/x/123/extra/path")
+			.run()
+			.assertContent("foo=x,bar=123,remainder=extra/path");
+		e.get("/a/hello/456")
+			.run()
+			.assertContent("foo=hello,bar=456,remainder=null");
+		e.post("/b/myId/more/stuff")
+			.run()
+			.assertContent("id=myId,remainder=more/stuff");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// @PathRemainder with default values
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class F {
+		@RestGet(path="/a/*")
+		public String a(@PathRemainder(def="defaultValue") String remainder) {
+			return ""+remainder;
+		}
+	}
+
+	@Test void f01_pathRemainderWithDefault() throws Exception {
+		var f = MockRestClient.build(F.class);
+		f.get("/a").run().assertContent("defaultValue");
+		f.get("/a/").run().assertContent("");
+		f.get("/a/custom").run().assertContent("custom");
+	}
+
 }

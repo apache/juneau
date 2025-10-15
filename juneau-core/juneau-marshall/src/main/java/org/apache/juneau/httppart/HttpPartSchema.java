@@ -746,6 +746,8 @@ public class HttpPartSchema {
 				apply((Query)a);
 			else if (a instanceof Path)
 				apply((Path)a);
+			else if (a instanceof PathRemainder)
+				apply((PathRemainder)a);
 			else if (a instanceof Response)
 				apply((Response)a);
 			else if (a instanceof StatusCode)
@@ -815,6 +817,22 @@ public class HttpPartSchema {
 			} else if (required == null) {
 				required(true);
 			}
+
+			return this;
+		}
+
+		Builder apply(PathRemainder a) {
+			if (! SchemaAnnotation.empty(a.schema()))
+				apply(a.schema());
+			// PathRemainder is always "/*"
+			name("/*");
+			_default(a.def());
+			parser(a.parser());
+			serializer(a.serializer());
+
+			// Path remainder always allows empty value.
+			allowEmptyValue();
+			required(false);
 
 			return this;
 		}

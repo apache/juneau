@@ -47,6 +47,14 @@ public class RemoteOperationArg {
 		this.schema = schema;
 	}
 
+	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema, String overrideName) {
+		this.index = index;
+		this.partType = partType;
+		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
+		// Create a new schema with the overridden name
+		this.schema = HttpPartSchema.create().name(overrideName).build();
+	}
+
 	/**
 	 * Returns the name of the HTTP part.
 	 *
@@ -109,6 +117,11 @@ public class RemoteOperationArg {
 			return new RemoteOperationArg(i, QUERY, HttpPartSchema.create(Query.class, mpi));
 		} else if (mpi.hasAnnotation(FormData.class)) {
 			return new RemoteOperationArg(i, FORMDATA, HttpPartSchema.create(FormData.class, mpi));
+		} else if (mpi.hasAnnotation(PathRemainder.class)) {
+			// PathRemainder is equivalent to @Path("/*")
+			// Create with schema properties but override name to "/*"
+			HttpPartSchema schema = HttpPartSchema.create(PathRemainder.class, mpi);
+			return new RemoteOperationArg(i, PATH, schema, "/*");
 		} else if (mpi.hasAnnotation(Path.class)) {
 			return new RemoteOperationArg(i, PATH, HttpPartSchema.create(Path.class, mpi));
 		} else if (mpi.hasAnnotation(Content.class)) {
