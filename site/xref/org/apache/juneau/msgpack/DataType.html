@@ -34,56 +34,56 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  enum <a name="DataType" href="../../../../org/apache/juneau/msgpack/DataType.html#DataType">DataType</a> {
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  	NULL, BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING, BIN, EXT, ARRAY, MAP, INVALID;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">boolean</strong> isOneOf(DataType...dataTypes) {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">for</strong> (<a name="DataType" href="../../../../org/apache/juneau/msgpack/DataType.html#DataType">DataType</a> dt : dataTypes)
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == dt)
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	}
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		POSFIXINT_L  = 0x00,  <em class="jxr_comment">//   pos fixint     0xxxxxxx     0x00 - 0x7f</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		POSFIXINT_U  = 0x7F,
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		FIXMAP_L     = 0x80,  <em class="jxr_comment">//   fixmap         1000xxxx     0x80 - 0x8f</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		FIXMAP_U     = 0x8F,
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		FIXARRAY_L   = 0x90,  <em class="jxr_comment">//   fixarray       1001xxxx     0x90 - 0x9f</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		FIXARRAY_U   = 0x9F,
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		FIXSTR_L     = 0xA0,  <em class="jxr_comment">//   fixstr         101xxxxx     0xa0 - 0xbf</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		FIXSTR_U     = 0xBF,
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		NIL          = 0xC0,  <em class="jxr_comment">//   nil            11000000     0xc0</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		NU           = 0xC1,  <em class="jxr_comment">//   (never used)   11000001     0xc1</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		FALSE        = 0xC2,  <em class="jxr_comment">//   false          11000010     0xc2</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		TRUE         = 0xC3,  <em class="jxr_comment">//   true           11000011     0xc3</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		BIN8         = 0xC4,  <em class="jxr_comment">//   bin 8          11000100     0xc4</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		BIN16        = 0xC5,  <em class="jxr_comment">//   bin 16         11000101     0xc5</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		BIN32        = 0xC6,  <em class="jxr_comment">//   bin 32         11000110     0xc6</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		EXT8         = 0xC7,  <em class="jxr_comment">//   ext 8          11000111     0xc7</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		EXT16        = 0xC8,  <em class="jxr_comment">//   ext 16         11001000     0xc8</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		EXT32        = 0xC9,  <em class="jxr_comment">//   ext 32         11001001     0xc9</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		FLOAT32      = 0xCA,  <em class="jxr_comment">//   float 32       11001010     0xca</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		FLOAT64      = 0xCB,  <em class="jxr_comment">//   float 64       11001011     0xcb</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		UINT8        = 0xCC,  <em class="jxr_comment">//   uint 8         11001100     0xcc</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		UINT16       = 0xCD,  <em class="jxr_comment">//   uint 16        11001101     0xcd</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		UINT32       = 0xCE,  <em class="jxr_comment">//   uint 32        11001110     0xce</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		UINT64       = 0xCF,  <em class="jxr_comment">//   uint 64        11001111     0xcf</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		INT8         = 0xD0,  <em class="jxr_comment">//   int 8          11010000     0xd0</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		INT16        = 0xD1,  <em class="jxr_comment">//   int 16         11010001     0xd1</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		INT32        = 0xD2,  <em class="jxr_comment">//   int 32         11010010     0xd2</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		INT64        = 0xD3,  <em class="jxr_comment">//   int 64         11010011     0xd3</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		FIXEXT1      = 0xD4,  <em class="jxr_comment">//   fixext 1       11010100     0xd4</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		FIXEXT2      = 0xD5,  <em class="jxr_comment">//   fixext 2       11010101     0xd5</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		FIXEXT4      = 0xD6,  <em class="jxr_comment">//   fixext 4       11010110     0xd6</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		FIXEXT8      = 0xD7,  <em class="jxr_comment">//   fixext 8       11010111     0xd7</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		FIXEXT16     = 0xD8,  <em class="jxr_comment">//   fixext 16      11011000     0xd8</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		STR8         = 0xD9,  <em class="jxr_comment">//   str 8          11011001     0xd9</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		STR16        = 0xDA,  <em class="jxr_comment">//   str 16         11011010     0xda</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		STR32        = 0xDB,  <em class="jxr_comment">//   str 32         11011011     0xdb</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		ARRAY16      = 0xDC,  <em class="jxr_comment">//   array 16       11011100     0xdc</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		ARRAY32      = 0xDD,  <em class="jxr_comment">//   array 32       11011101     0xdd</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		MAP16        = 0xDE,  <em class="jxr_comment">//   map 16         11011110     0xde</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		MAP32        = 0xDF,  <em class="jxr_comment">//   map 32         11011111     0xdf</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		NEGFIXINT_L  = 0xE0,  <em class="jxr_comment">//   neg fixint     111xxxxx     0xe0 - 0xff</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		NEGFIXINT_U  = 0xFF;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		POSFIXINT_L  = 0x00,  <em class="jxr_comment">//   pos fixint     0xxxxxxx     0x00 - 0x7f</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		POSFIXINT_U  = 0x7F,
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		FIXMAP_L     = 0x80,  <em class="jxr_comment">//   fixmap         1000xxxx     0x80 - 0x8f</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		FIXMAP_U     = 0x8F,
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		FIXARRAY_L   = 0x90,  <em class="jxr_comment">//   fixarray       1001xxxx     0x90 - 0x9f</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		FIXARRAY_U   = 0x9F,
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		FIXSTR_L     = 0xA0,  <em class="jxr_comment">//   fixstr         101xxxxx     0xa0 - 0xbf</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		FIXSTR_U     = 0xBF,
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		NIL          = 0xC0,  <em class="jxr_comment">//   nil            11000000     0xc0</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		NU           = 0xC1,  <em class="jxr_comment">//   (never used)   11000001     0xc1</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		FALSE        = 0xC2,  <em class="jxr_comment">//   false          11000010     0xc2</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		TRUE         = 0xC3,  <em class="jxr_comment">//   true           11000011     0xc3</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		BIN8         = 0xC4,  <em class="jxr_comment">//   bin 8          11000100     0xc4</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		BIN16        = 0xC5,  <em class="jxr_comment">//   bin 16         11000101     0xc5</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		BIN32        = 0xC6,  <em class="jxr_comment">//   bin 32         11000110     0xc6</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		EXT8         = 0xC7,  <em class="jxr_comment">//   ext 8          11000111     0xc7</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		EXT16        = 0xC8,  <em class="jxr_comment">//   ext 16         11001000     0xc8</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		EXT32        = 0xC9,  <em class="jxr_comment">//   ext 32         11001001     0xc9</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		FLOAT32      = 0xCA,  <em class="jxr_comment">//   float 32       11001010     0xca</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		FLOAT64      = 0xCB,  <em class="jxr_comment">//   float 64       11001011     0xcb</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		UINT8        = 0xCC,  <em class="jxr_comment">//   uint 8         11001100     0xcc</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		UINT16       = 0xCD,  <em class="jxr_comment">//   uint 16        11001101     0xcd</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		UINT32       = 0xCE,  <em class="jxr_comment">//   uint 32        11001110     0xce</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		UINT64       = 0xCF,  <em class="jxr_comment">//   uint 64        11001111     0xcf</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		INT8         = 0xD0,  <em class="jxr_comment">//   int 8          11010000     0xd0</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		INT16        = 0xD1,  <em class="jxr_comment">//   int 16         11010001     0xd1</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		INT32        = 0xD2,  <em class="jxr_comment">//   int 32         11010010     0xd2</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		INT64        = 0xD3,  <em class="jxr_comment">//   int 64         11010011     0xd3</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		FIXEXT1      = 0xD4,  <em class="jxr_comment">//   fixext 1       11010100     0xd4</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		FIXEXT2      = 0xD5,  <em class="jxr_comment">//   fixext 2       11010101     0xd5</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		FIXEXT4      = 0xD6,  <em class="jxr_comment">//   fixext 4       11010110     0xd6</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		FIXEXT8      = 0xD7,  <em class="jxr_comment">//   fixext 8       11010111     0xd7</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		FIXEXT16     = 0xD8,  <em class="jxr_comment">//   fixext 16      11011000     0xd8</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		STR8         = 0xD9,  <em class="jxr_comment">//   str 8          11011001     0xd9</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		STR16        = 0xDA,  <em class="jxr_comment">//   str 16         11011010     0xda</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		STR32        = 0xDB,  <em class="jxr_comment">//   str 32         11011011     0xdb</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		ARRAY16      = 0xDC,  <em class="jxr_comment">//   array 16       11011100     0xdc</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		ARRAY32      = 0xDD,  <em class="jxr_comment">//   array 32       11011101     0xdd</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		MAP16        = 0xDE,  <em class="jxr_comment">//   map 16         11011110     0xde</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		MAP32        = 0xDF,  <em class="jxr_comment">//   map 32         11011111     0xdf</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		NEGFIXINT_L  = 0xE0,  <em class="jxr_comment">//   neg fixint     111xxxxx     0xe0 - 0xff</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		NEGFIXINT_U  = 0xFF;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">boolean</strong> isOneOf(DataType...dataTypes) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">for</strong> (<a name="DataType" href="../../../../org/apache/juneau/msgpack/DataType.html#DataType">DataType</a> dt : dataTypes)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == dt)
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  }
 </pre>
 <hr/>

@@ -57,35 +57,30 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  @Rest
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="BasicRestServlet" href="../../../../../org/apache/juneau/rest/servlet/BasicRestServlet.html#BasicRestServlet">BasicRestServlet</a> <strong class="jxr_keyword">extends</strong> <a name="RestServlet" href="../../../../../org/apache/juneau/rest/servlet/RestServlet.html#RestServlet">RestServlet</a> <strong class="jxr_keyword">implements</strong> BasicRestOperations, BasicUniversalConfig {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<em class="jxr_comment">// BasicRestConfig methods</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">public</strong> <a name="Swagger" href="../../../../../org/apache/juneau/bean/swagger/Swagger.html#Swagger">Swagger</a> getSwagger(RestRequest req) {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">return</strong> req.getSwagger().orElseThrow(NotFound::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/resource/HttpResource.html#HttpResource">HttpResource</a> getHtdoc(@Path(<span class="jxr_string">"/*"</span>) String path, Locale locale) <strong class="jxr_keyword">throws</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/resource/HttpResource.html#HttpResource">HttpResource</a> getFavIcon() {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		String favIcon = getContext().getConfig().get(<span class="jxr_string">"REST/favicon"</span>).orElse(<span class="jxr_string">"images/juneau.png"</span>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> getHtdoc(favIcon, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> error() {}
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">public</strong> <a name="RestContextStats" href="../../../../../org/apache/juneau/rest/stats/RestContextStats.html#RestContextStats">RestContextStats</a> getStats(RestRequest req) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">return</strong> req.getContext().getStats();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  }
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> error() {}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/resource/HttpResource.html#HttpResource">HttpResource</a> getFavIcon() {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		String favIcon = getContext().getConfig().get(<span class="jxr_string">"REST/favicon"</span>).orElse(<span class="jxr_string">"images/juneau.png"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">return</strong> getHtdoc(favIcon, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/resource/HttpResource.html#HttpResource">HttpResource</a> getHtdoc(@Path(<span class="jxr_string">"/*"</span>) String path, Locale locale) <strong class="jxr_keyword">throws</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a> {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="RestContextStats" href="../../../../../org/apache/juneau/rest/stats/RestContextStats.html#RestContextStats">RestContextStats</a> getStats(RestRequest req) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">return</strong> req.getContext().getStats();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	@Override <em class="jxr_comment">/* Overridden from BasicRestOperations */</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <a name="Swagger" href="../../../../../org/apache/juneau/bean/swagger/Swagger.html#Swagger">Swagger</a> getSwagger(RestRequest req) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">return</strong> req.getSwagger().orElseThrow(NotFound::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -43,32 +43,32 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">void</strong> onCreateServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 * Called before the Jetty server is started.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 * Called after the Jetty server is started.</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 * @param microservice Reference to microservice.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">void</strong> onStartServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">void</strong> onPostStartServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * Called after the Jetty server is started.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * Called after the Jetty server is stopped.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * @param microservice Reference to microservice.</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">void</strong> onPostStartServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">void</strong> onPostStopServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * Called before the Jetty server is stopped.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * Called before the Jetty server is started.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * @param microservice Reference to microservice.</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">void</strong> onStopServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">void</strong> onStartServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * Called after the Jetty server is stopped.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * Called before the Jetty server is stopped.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @param microservice Reference to microservice.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">void</strong> onPostStopServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">void</strong> onStopServer(<a name="JettyMicroservice" href="../../../../../org/apache/juneau/microservice/jetty/JettyMicroservice.html#JettyMicroservice">JettyMicroservice</a> microservice);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  }
 </pre>
 <hr/>

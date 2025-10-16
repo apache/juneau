@@ -62,57 +62,57 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="BasicTestCallLogger" href="../../../../../org/apache/juneau/rest/logger/BasicTestCallLogger.html#BasicTestCallLogger">BasicTestCallLogger</a> <strong class="jxr_keyword">extends</strong> <a name="CallLogger" href="../../../../../org/apache/juneau/rest/logger/CallLogger.html#CallLogger">CallLogger</a> {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @param beanStore The bean store containing injectable beans for this logger.</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicTestCallLogger" href="../../../../../org/apache/juneau/rest/logger/BasicTestCallLogger.html#BasicTestCallLogger">BasicTestCallLogger</a>(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">super</strong>(beanStore);
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">protected</strong> Builder init(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.init(beanStore)
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			.normalRules(  <em class="jxr_comment">// Rules when debugging is not enabled.</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				CallLoggerRule.create(beanStore)  <em class="jxr_comment">// Log 500+ errors with status-line and header information.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					.statusFilter(x -&gt; x &gt;= 400)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  					.level(SEVERE)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  					.requestDetail(HEADER)
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					.responseDetail(HEADER)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  					.enabled(CONDITIONAL)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					.enabledPredicate(x -&gt; ! isNoTrace(x))  <em class="jxr_comment">// Only log if it's not a no-trace request.</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					.logStackTrace()
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					.build(),
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  				CallLoggerRule.create(beanStore)  <em class="jxr_comment">// Log 400-500 errors with just status-line information.</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  					.statusFilter(x -&gt; x &gt;= 400)
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  					.level(WARNING)
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  					.requestDetail(STATUS_LINE)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  					.responseDetail(STATUS_LINE)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					.enabled(CONDITIONAL)
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					.enabledPredicate(x -&gt; ! isNoTrace(x))  <em class="jxr_comment">// Only log if it's not a no-trace request.</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  					.logStackTrace()
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  					.build()
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			)
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			.debugRules(  <em class="jxr_comment">// Rules when debugging is enabled.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				CallLoggerRule.create(beanStore)  <em class="jxr_comment">// Log everything with full details.</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					.level(SEVERE)
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					.requestDetail(ENTITY)
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					.responseDetail(ENTITY)
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					.logStackTrace()
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					.build()
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			)
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNoTrace(HttpServletRequest req) {
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		Object o = req.getAttribute(<span class="jxr_string">"NoTrace"</span>);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">if</strong> (o != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>.equalsIgnoreCase(o.toString());
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		String s = req.getHeader(<span class="jxr_string">"No-Trace"</span>);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>.equalsIgnoreCase(s);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">return</strong> emptyIfNull(req.getQueryString()).contains(<span class="jxr_string">"noTrace=true"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNoTrace(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		Object o = req.getAttribute(<span class="jxr_string">"NoTrace"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">if</strong> (o != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>.equalsIgnoreCase(o.toString());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		String s = req.getHeader(<span class="jxr_string">"No-Trace"</span>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"true"</span>.equalsIgnoreCase(s);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> emptyIfNull(req.getQueryString()).contains(<span class="jxr_string">"noTrace=true"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * @param beanStore The bean store containing injectable beans for this logger.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">public</strong> <a name="BasicTestCallLogger" href="../../../../../org/apache/juneau/rest/logger/BasicTestCallLogger.html#BasicTestCallLogger">BasicTestCallLogger</a>(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">super</strong>(beanStore);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Override
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">protected</strong> Builder init(<a name="BeanStore" href="../../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.init(beanStore)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.normalRules(  <em class="jxr_comment">// Rules when debugging is not enabled.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  				CallLoggerRule.create(beanStore)  <em class="jxr_comment">// Log 500+ errors with status-line and header information.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  					.statusFilter(x -&gt; x &gt;= 400)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  					.level(SEVERE)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  					.requestDetail(HEADER)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					.responseDetail(HEADER)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					.enabled(CONDITIONAL)
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  					.enabledPredicate(x -&gt; ! isNoTrace(x))  <em class="jxr_comment">// Only log if it's not a no-trace request.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  					.logStackTrace()
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					.build(),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				CallLoggerRule.create(beanStore)  <em class="jxr_comment">// Log 400-500 errors with just status-line information.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					.statusFilter(x -&gt; x &gt;= 400)
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					.level(WARNING)
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					.requestDetail(STATUS_LINE)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					.responseDetail(STATUS_LINE)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					.enabled(CONDITIONAL)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					.enabledPredicate(x -&gt; ! isNoTrace(x))  <em class="jxr_comment">// Only log if it's not a no-trace request.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					.logStackTrace()
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					.build()
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.debugRules(  <em class="jxr_comment">// Rules when debugging is enabled.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				CallLoggerRule.create(beanStore)  <em class="jxr_comment">// Log everything with full details.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					.level(SEVERE)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					.requestDetail(ENTITY)
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					.responseDetail(ENTITY)
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					.logStackTrace()
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					.build()
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> }
 </pre>

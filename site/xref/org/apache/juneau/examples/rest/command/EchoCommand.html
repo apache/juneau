@@ -39,24 +39,24 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="EchoCommand" href="../../../../../../org/apache/juneau/examples/rest/command/EchoCommand.html#EchoCommand">EchoCommand</a> <strong class="jxr_keyword">extends</strong> <a name="ConsoleCommand" href="../../../../../../org/apache/juneau/microservice/console/ConsoleCommand.html#ConsoleCommand">ConsoleCommand</a> {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> String getName() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"echo"</span>;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> String getInfo() {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Echo command"</span>;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> String getDescription() {
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Simple prints the args of the command as a serialized JsonMap."</span>;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> execute(Scanner in, PrintWriter out, <a name="Args" href="../../../../../../org/apache/juneau/collections/Args.html#Args">Args</a> args) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		out.println(args);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> execute(Scanner in, PrintWriter out, <a name="Args" href="../../../../../../org/apache/juneau/collections/Args.html#Args">Args</a> args) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		out.println(args);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">public</strong> String getDescription() {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Simple prints the args of the command as a serialized JsonMap."</span>;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">public</strong> String getInfo() {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"Echo command"</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Override <em class="jxr_comment">/* ConsoleCommand */</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">public</strong> String getName() {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"echo"</span>;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
 </pre>
