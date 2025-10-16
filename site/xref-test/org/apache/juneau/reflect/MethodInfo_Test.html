@@ -420,7 +420,19 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(Arrays.asList(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		check(<span class="jxr_string">"[a1(), a1(int), a1(String), a1(int,int), a2(), a3()]"</span>, s);
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> }
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Test <strong class="jxr_keyword">void</strong> forEachParam_fluentChaining() {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<em class="jxr_comment">// Test that forEachParam returns MethodInfo for fluent chaining</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		MethodInfo result = g_a1b.forEachParam(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; {});
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertSame(g_a1b, result);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertInstanceOf(MethodInfo.<strong class="jxr_keyword">class</strong>, result);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// Test fluent chaining works</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">int</strong>[] count = {0};
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		g_a1c.forEachParam(x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; count[0]++);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertEquals(2, count[0]);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	}
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

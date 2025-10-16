@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">this</strong>.ctx = builder.ctx;
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Override <em class="jxr_comment">/* SerializerSesssion */</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSesssion */</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		serializeAnything(getJsonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), <span class="jxr_string">"root"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}

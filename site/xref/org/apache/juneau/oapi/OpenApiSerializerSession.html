@@ -249,7 +249,7 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		ctx = builder.ctx;
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	@Override <em class="jxr_comment">/* Serializer */</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	@Override <em class="jxr_comment">/* Overridden from Serializer */</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
@@ -259,7 +259,7 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 	@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@Override <em class="jxr_comment">/* PartSerializer */</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@Override <em class="jxr_comment">/* Overridden from PartSerializer */</em>
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> String serialize(<a name="HttpPartType" href="../../../../org/apache/juneau/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType, <a name="HttpPartSchema" href="../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema, Object value) <strong class="jxr_keyword">throws</strong> SerializeException, <a name="SchemaValidationException" href="../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		ClassMeta&lt;?&gt; type = getClassMetaForObject(value);

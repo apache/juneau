@@ -159,7 +159,7 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<em class="jxr_comment">// Transform methods</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@Override <em class="jxr_comment">/* FluentObjectAssertion */</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	@Override <em class="jxr_comment">/* Overridden from FluentObjectAssertion */</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">public</strong> FluentComparableAssertion&lt;T,R&gt; asTransformed(Function&lt;T,T&gt; function) {  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentComparableAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, function.apply(orElse(<strong class="jxr_keyword">null</strong>)), returns());
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}

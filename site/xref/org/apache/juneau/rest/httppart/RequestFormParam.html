@@ -133,7 +133,7 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_comment">// Retrievers</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Override <em class="jxr_comment">/* RequestHttpPart */</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Override <em class="jxr_comment">/* Overridden from RequestHttpPart */</em>
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">public</strong> String getValue() {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> &amp;&amp; part != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">try</strong> {
@@ -218,17 +218,24 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> part.getSubmittedFileName();
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Override <em class="jxr_comment">/* GENERATED */</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestFormParam" href="../../../../../org/apache/juneau/rest/httppart/RequestFormParam.html#RequestFormParam">RequestFormParam</a> schema(<a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">super</strong>.schema(value);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Override <em class="jxr_comment">/* Overridden from RequestHttpPart */</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestFormParam" href="../../../../../org/apache/juneau/rest/httppart/RequestFormParam.html#RequestFormParam">RequestFormParam</a> def(String def) {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">super</strong>.def(def);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@Override <em class="jxr_comment">/* GENERATED */</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestFormParam" href="../../../../../org/apache/juneau/rest/httppart/RequestFormParam.html#RequestFormParam">RequestFormParam</a> parser(<a name="HttpPartParserSession" href="../../../../../org/apache/juneau/httppart/HttpPartParserSession.html#HttpPartParserSession">HttpPartParserSession</a> value) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">super</strong>.parser(value);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> }
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	@Override <em class="jxr_comment">/* Overridden from RequestHttpPart */</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestFormParam" href="../../../../../org/apache/juneau/rest/httppart/RequestFormParam.html#RequestFormParam">RequestFormParam</a> schema(<a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> value) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">super</strong>.schema(value);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Override <em class="jxr_comment">/* Overridden from RequestHttpPart */</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">public</strong> <a name="RequestFormParam" href="../../../../../org/apache/juneau/rest/httppart/RequestFormParam.html#RequestFormParam">RequestFormParam</a> parser(<a name="HttpPartParserSession" href="../../../../../org/apache/juneau/httppart/HttpPartParserSession.html#HttpPartParserSession">HttpPartParserSession</a> value) {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">super</strong>.parser(value);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -919,14 +919,14 @@
 <a class="jxr_linenumber" name="L911" href="#L911">911</a> 	<em class="jxr_comment">// MetaProvider methods</em>
 <a class="jxr_linenumber" name="L912" href="#L912">912</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L916" href="#L916">916</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> 				consume(filter, action, a);
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 	}
 <a class="jxr_linenumber" name="L920" href="#L920">920</a> 
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onClass))
@@ -935,7 +935,7 @@
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 	}
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L932" href="#L932">932</a> 		A x = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
@@ -945,14 +945,14 @@
 <a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L938" href="#L938">938</a> 	}
 <a class="jxr_linenumber" name="L939" href="#L939">939</a> 
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L941" href="#L941">941</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L943" href="#L943">943</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
 <a class="jxr_linenumber" name="L944" href="#L944">944</a> 				consume(filter, action, a);
 <a class="jxr_linenumber" name="L945" href="#L945">945</a> 	}
 <a class="jxr_linenumber" name="L946" href="#L946">946</a> 
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 			<strong class="jxr_keyword">for</strong> (A a : declaredAnnotations(type, onClass))
@@ -961,7 +961,7 @@
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> 	}
 <a class="jxr_linenumber" name="L955" href="#L955">955</a> 
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastDeclaredAnnotation(Class&lt;A&gt; type, Class&lt;?&gt; onClass, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> 		A x = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L959" href="#L959">959</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onClass != <strong class="jxr_keyword">null</strong>)
@@ -971,14 +971,14 @@
 <a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L964" href="#L964">964</a> 	}
 <a class="jxr_linenumber" name="L965" href="#L965">965</a> 
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L967" href="#L967">967</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L969" href="#L969">969</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
 <a class="jxr_linenumber" name="L970" href="#L970">970</a> 				consume(filter, action, a);
 <a class="jxr_linenumber" name="L971" href="#L971">971</a> 	}
 <a class="jxr_linenumber" name="L972" href="#L972">972</a> 
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L976" href="#L976">976</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onMethod))
@@ -987,7 +987,7 @@
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L980" href="#L980">980</a> 	}
 <a class="jxr_linenumber" name="L981" href="#L981">981</a> 
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Method onMethod, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 		A x = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onMethod != <strong class="jxr_keyword">null</strong>)
@@ -997,14 +997,14 @@
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 	}
 <a class="jxr_linenumber" name="L991" href="#L991">991</a> 
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L995" href="#L995">995</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 				consume(filter, action, a);
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 	}
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onField))
@@ -1013,7 +1013,7 @@
 <a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 	}
 <a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Field onField, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		A x = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onField != <strong class="jxr_keyword">null</strong>)
@@ -1023,14 +1023,14 @@
 <a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 	}
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; <strong class="jxr_keyword">void</strong> forEachAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter, Consumer&lt;A&gt; action) {
 <a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 				consume(filter, action, a);
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	}
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A firstAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 			<strong class="jxr_keyword">for</strong> (A a : annotations(type, onConstructor))
@@ -1039,7 +1039,7 @@
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	}
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	@Override <em class="jxr_comment">/* MetaProvider */</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 	@Override <em class="jxr_comment">/* Overridden from MetaProvider */</em>
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 	<strong class="jxr_keyword">public</strong> &lt;A <strong class="jxr_keyword">extends</strong> Annotation&gt; A lastAnnotation(Class&lt;A&gt; type, Constructor&lt;?&gt; onConstructor, Predicate&lt;A&gt; filter) {
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		A x = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		<strong class="jxr_keyword">if</strong> (type != <strong class="jxr_keyword">null</strong> &amp;&amp; onConstructor != <strong class="jxr_keyword">null</strong>)
@@ -1135,7 +1135,7 @@
 <a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"annotations"</span>, annotations, <span class="jxr_string">"debug"</span>, debug);
 <a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 	}
 <a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 
-<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 		<strong class="jxr_keyword">return</strong> Utils2.toPropertyMap(<strong class="jxr_keyword">this</strong>).asReadableString();
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 	}

@@ -663,7 +663,19 @@
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">super</strong>.translate(value);
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 	}
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> }
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	<strong class="jxr_keyword">public</strong> <a name="Link" href="../../../../../org/apache/juneau/bean/html5/Link.html#Link">Link</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<strong class="jxr_keyword">public</strong> <a name="Link" href="../../../../../org/apache/juneau/bean/html5/Link.html#Link">Link</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">this</strong>.client = client;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Override <em class="jxr_comment">/* RestCallHandler */</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Override <em class="jxr_comment">/* Overridden from RestCallHandler */</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">return</strong> target == <strong class="jxr_keyword">null</strong> ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}

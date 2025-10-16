@@ -683,7 +683,7 @@
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 				}
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 			}
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 			consoleThread = <strong class="jxr_keyword">new</strong> Thread(<span class="jxr_string">"ConsoleThread"</span>) {
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 				@Override <em class="jxr_comment">/* Thread */</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 				@Override <em class="jxr_comment">/* Overridden from Thread */</em>
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 					Scanner in = getConsoleReader();
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 					PrintWriter out = getConsoleWriter();
@@ -845,7 +845,7 @@
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 		Runtime.getRuntime().addShutdownHook(
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 			<strong class="jxr_keyword">new</strong> Thread(<span class="jxr_string">"ShutdownHookThread"</span>) {
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 				@Override <em class="jxr_comment">/* Thread */</em>
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> 				@Override <em class="jxr_comment">/* Overridden from Thread */</em>
 <a class="jxr_linenumber" name="L841" href="#L841">841</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() {
 <a class="jxr_linenumber" name="L842" href="#L842">842</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 						Microservice.<strong class="jxr_keyword">this</strong>.stop();
@@ -1231,7 +1231,7 @@
 <a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		getLogger().log(level, msg);
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 	}
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 
-<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 	@Override <em class="jxr_comment">/* ConfigChangeListener */</em>
+<a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigChangeListener */</em>
 <a class="jxr_linenumber" name="L1227" href="#L1227">1227</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onConfigChange(<a name="ConfigEvents" href="../../../../org/apache/juneau/config/event/ConfigEvents.html#ConfigEvents">ConfigEvents</a> events) {
 <a class="jxr_linenumber" name="L1228" href="#L1228">1228</a> 		listener.onConfigChange(<strong class="jxr_keyword">this</strong>, events);
 <a class="jxr_linenumber" name="L1229" href="#L1229">1229</a> 	}

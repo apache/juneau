@@ -567,7 +567,19 @@
 <a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">super</strong>.children(value);
 <a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> }
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<strong class="jxr_keyword">public</strong> <a name="Body" href="../../../../../org/apache/juneau/bean/html5/Body.html#Body">Body</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	}
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">public</strong> <a name="Body" href="../../../../../org/apache/juneau/bean/html5/Body.html#Body">Body</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

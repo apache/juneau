@@ -65,7 +65,7 @@
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * Returns an Apache image tag hyperlinked to &lt;js&gt;"<a href="http://apache.org" target="alexandria_uri">http://apache.org</a>"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Override <em class="jxr_comment">/* Widget */</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Override <em class="jxr_comment">/* Overridden from Widget */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> String getHtml(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		UriResolver r = req.getUriResolver();
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;a href='http://apache.org'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='"</span>+r.resolve(<span class="jxr_string">"servlet:/htdocs/asf.png"</span>)+<span class="jxr_string">"'&gt;"</span>;

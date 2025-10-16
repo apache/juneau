@@ -411,7 +411,19 @@
 <a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">super</strong>.translate(value);
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> }
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlElementVoid" href="../../../../../org/apache/juneau/bean/html5/HtmlElementVoid.html#HtmlElementVoid">HtmlElementVoid</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">public</strong> <a name="HtmlElementVoid" href="../../../../../org/apache/juneau/bean/html5/HtmlElementVoid.html#HtmlElementVoid">HtmlElementVoid</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

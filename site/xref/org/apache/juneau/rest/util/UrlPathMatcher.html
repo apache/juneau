@@ -78,7 +78,7 @@
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">this</strong>.comparator = pattern.replaceAll(<span class="jxr_string">"&#92;&#92;w+"</span>, <span class="jxr_string">"X"</span>).replace(<span class="jxr_string">"*"</span>, <span class="jxr_string">"W"</span>);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@Override <em class="jxr_comment">/* UrlPathMatcher */</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@Override <em class="jxr_comment">/* Overridden from UrlPathMatcher */</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">public</strong> <a name="UrlPathMatch" href="../../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> match(<a name="UrlPath" href="../../../../../org/apache/juneau/rest/util/UrlPath.html#UrlPath">UrlPath</a> pathInfo) {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			Optional&lt;String&gt; fileName = pathInfo.getFileName();
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">if</strong> (fileName.isPresent()) {
@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		@Override <em class="jxr_comment">/* UrlPathMatcher */</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		@Override <em class="jxr_comment">/* Overridden from UrlPathMatcher */</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">public</strong> String getComparator() {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">return</strong> comparator;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}
@@ -248,12 +248,12 @@
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;c&gt;/foo/*&lt;/c&gt;</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	@Override <em class="jxr_comment">/* Comparable */</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	@Override <em class="jxr_comment">/* Overridden from Comparable */</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> o) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">return</strong> o.getComparator().compareTo(getComparator());
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">return</strong> pattern;
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}

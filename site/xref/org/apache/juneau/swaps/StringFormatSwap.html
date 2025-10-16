@@ -48,12 +48,12 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">this</strong>.format = format;
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">return</strong> String.format(format, o);
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">public</strong> Object unswap(BeanSession session, String f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> session.convertToType(f, hint);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}

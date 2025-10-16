@@ -216,12 +216,12 @@
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Override <em class="jxr_comment">/* Headerable */</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Override <em class="jxr_comment">/* Overridden from Headerable */</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> <a name="SerializedHeader" href="../../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a> asHeader() {
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="SerializedHeader" href="../../../../../org/apache/juneau/http/header/SerializedHeader.html#SerializedHeader">SerializedHeader</a>(getName(), value, serializer, schema, skipIfEmpty);
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Override <em class="jxr_comment">/* NameValuePair */</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Override <em class="jxr_comment">/* Overridden from NameValuePair */</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">public</strong> String getValue() {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			Object v = unwrap(value);

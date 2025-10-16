@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">protected</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> strict() {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">super</strong>.strict();
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -684,7 +684,7 @@
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
@@ -710,7 +710,7 @@
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 		};
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 	}
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<strong class="jxr_keyword">public</strong> <a name="Items" href="../../../../../org/apache/juneau/bean/openapi3/Items.html#Items">Items</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
@@ -739,7 +739,7 @@
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 		};
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 	}
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 			.addIf(ref != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"$ref"</span>)

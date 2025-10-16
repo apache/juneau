@@ -1826,7 +1826,7 @@
 <a class="jxr_linenumber" name="L1818" href="#L1818">1818</a> 		<strong class="jxr_keyword">return</strong> (isPrimitive() &amp;&amp; cc == cm.cc);
 <a class="jxr_linenumber" name="L1819" href="#L1819">1819</a> 	}
 <a class="jxr_linenumber" name="L1820" href="#L1820">1820</a> 
-<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L1821" href="#L1821">1821</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L1822" href="#L1822">1822</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L1823" href="#L1823">1823</a> 		<strong class="jxr_keyword">return</strong> toString(false);
 <a class="jxr_linenumber" name="L1824" href="#L1824">1824</a> 	}
@@ -2215,12 +2215,12 @@
 <a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.innerClass.<strong class="jxr_keyword">cast</strong>(o);
 <a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> 	}
 <a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 
-<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L2210" href="#L2210">2210</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L2211" href="#L2211">2211</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
 <a class="jxr_linenumber" name="L2212" href="#L2212">2212</a> 		<strong class="jxr_keyword">return</strong> innerClass.hashCode();
 <a class="jxr_linenumber" name="L2213" href="#L2213">2213</a> 	}
 <a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> 
-<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
 <a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="ClassMeta" href="../../../org/apache/juneau/ClassMeta.html#ClassMeta">ClassMeta</a>) &amp;&amp; Utils.eq(<strong class="jxr_keyword">this</strong>, (ClassMeta&lt;?&gt;)o, (x,y)-&gt;Utils.eq(x.innerClass, y.innerClass));
 <a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 	}

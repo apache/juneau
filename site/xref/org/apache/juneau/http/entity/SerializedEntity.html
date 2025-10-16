@@ -157,7 +157,7 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	}
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(OutputStream os) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			os = <strong class="jxr_keyword">new</strong> <a name="NoCloseOutputStream" href="../../../../../org/apache/juneau/internal/NoCloseOutputStream.html#NoCloseOutputStream">NoCloseOutputStream</a>(os);
@@ -177,17 +177,17 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		}
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Override <em class="jxr_comment">/* BasicHttpEntity */</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Override <em class="jxr_comment">/* Overridden from BasicHttpEntity */</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRepeatable() {
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Override <em class="jxr_comment">/* BasicHttpEntity */</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Override <em class="jxr_comment">/* Overridden from BasicHttpEntity */</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getContentLength() {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> -1;
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Override <em class="jxr_comment">/* BasicHttpEntity */</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Override <em class="jxr_comment">/* Overridden from BasicHttpEntity */</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">public</strong> InputStream getContent() {
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">try</strong> {

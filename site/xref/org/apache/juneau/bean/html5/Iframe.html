@@ -607,7 +607,19 @@
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">super</strong>.children(value);
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 	}
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> }
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	<strong class="jxr_keyword">public</strong> <a name="Iframe" href="../../../../../org/apache/juneau/bean/html5/Iframe.html#Iframe">Iframe</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	}
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<strong class="jxr_keyword">public</strong> <a name="Iframe" href="../../../../../org/apache/juneau/bean/html5/Iframe.html#Iframe">Iframe</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	}
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

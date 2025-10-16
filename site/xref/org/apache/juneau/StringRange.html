@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if object is equivalent.</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="StringRange" href="../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a>) &amp;&amp; eq(<strong class="jxr_keyword">this</strong>, (<a name="StringRange" href="../../../org/apache/juneau/StringRange.html#StringRange">StringRange</a>)o, (x,y)-&gt;eq(x.string, y.string));
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
@@ -177,7 +177,7 @@
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 * @return A hash based on this instance's &lt;c&gt;media-type&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> string.hashCode();
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
@@ -204,7 +204,7 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> (elements.length &gt; 0 ? elements[0] : <strong class="jxr_keyword">new</strong> BasicHeaderElement(<span class="jxr_string">"*"</span>, <span class="jxr_string">""</span>));
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">return</strong> string;
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}

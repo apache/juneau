@@ -760,7 +760,13 @@
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">super</strong>.accessible();
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 	}
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> }
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	@Override <em class="jxr_comment">/* Overridden from ExecutableInfo */</em>
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 	<strong class="jxr_keyword">public</strong> <a name="MethodInfo" href="../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> forEachParam(Predicate&lt;ParamInfo&gt; filter, Consumer&lt;ParamInfo&gt; action) {
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">super</strong>.forEachParam(filter, action);
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	}
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

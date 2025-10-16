@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">this</strong>.unswapConstructor = unswapConstructor == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : bc.getBeanConstructorVisibility().transform(unswapConstructor.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">public</strong> Object swap(BeanSession session, Object o) <strong class="jxr_keyword">throws</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">return</strong> swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
@@ -188,7 +188,7 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">public</strong> T unswap(BeanSession session, Object f, ClassMeta&lt;?&gt; hint) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">if</strong> (unswapMethod != <strong class="jxr_keyword">null</strong>)

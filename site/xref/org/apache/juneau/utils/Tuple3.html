@@ -98,12 +98,12 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">return</strong> c;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">return</strong> HashCode.of(a,b,c);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> o instanceof <a name="Tuple3" href="../../../../org/apache/juneau/utils/Tuple3.html#Tuple3">Tuple3</a> &amp;&amp; Utils.eq(<strong class="jxr_keyword">this</strong>, (Tuple3&lt;?,?,?&gt;)o, (x,y)-&gt;Utils.eq(x.a,y.a) &amp;&amp; Utils.eq(x.b,y.b) &amp;&amp; Utils.eq(x.c,y.c));
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}

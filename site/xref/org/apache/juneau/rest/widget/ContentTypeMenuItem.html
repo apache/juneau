@@ -69,12 +69,12 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="ContentTypeMenuItem" href="../../../../../org/apache/juneau/rest/widget/ContentTypeMenuItem.html#ContentTypeMenuItem">ContentTypeMenuItem</a> <strong class="jxr_keyword">extends</strong> <a name="MenuItemWidget" href="../../../../../org/apache/juneau/rest/widget/MenuItemWidget.html#MenuItemWidget">MenuItemWidget</a> {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Override <em class="jxr_comment">/* MenuItemWidget */</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Override <em class="jxr_comment">/* Overridden from MenuItemWidget */</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> String getLabel(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"content-type"</span>;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Override <em class="jxr_comment">/* MenuItemWidget */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Override <em class="jxr_comment">/* Overridden from MenuItemWidget */</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <a name="Div" href="../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> getContent(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		Div div = div();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		Set&lt;MediaType&gt; l = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;();

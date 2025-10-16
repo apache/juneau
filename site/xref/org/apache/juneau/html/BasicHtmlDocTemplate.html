@@ -41,7 +41,7 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="BasicHtmlDocTemplate" href="../../../../org/apache/juneau/html/BasicHtmlDocTemplate.html#BasicHtmlDocTemplate">BasicHtmlDocTemplate</a> <strong class="jxr_keyword">implements</strong> <a name="HtmlDocTemplate" href="../../../../org/apache/juneau/html/HtmlDocTemplate.html#HtmlDocTemplate">HtmlDocTemplate</a> {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@Override <em class="jxr_comment">/* HtmlDocTemplate */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@Override <em class="jxr_comment">/* Overridden from HtmlDocTemplate */</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  		w.sTag(<span class="jxr_string">"html"</span>).nl(0);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		w.sTag(1, <span class="jxr_string">"head"</span>).nl(1);

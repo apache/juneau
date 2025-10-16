@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">this</strong>.pName = pName;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Override <em class="jxr_comment">/* Map.Entry */</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Override <em class="jxr_comment">/* Overridden from Map.Entry */</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> String getKey() {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">return</strong> meta.getName();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * {@link Swap#value() @Swap(value)} annotation, this method will return a String containing an</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * ISO8601 date-time string value.</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Override <em class="jxr_comment">/* Map.Entry */</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Override <em class="jxr_comment">/* Overridden from Map.Entry */</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> Object getValue() {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> meta.get(<strong class="jxr_keyword">this</strong>.beanMap, pName);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * @return  The set value after it's been converted.</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Override <em class="jxr_comment">/* Map.Entry */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Override <em class="jxr_comment">/* Overridden from Map.Entry */</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> Object setValue(Object value) {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">return</strong> meta.set(<strong class="jxr_keyword">this</strong>.beanMap, pName, value);
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
@@ -139,7 +139,7 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.meta;
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.getKey() + <span class="jxr_string">"="</span> + <strong class="jxr_keyword">this</strong>.getValue();
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}

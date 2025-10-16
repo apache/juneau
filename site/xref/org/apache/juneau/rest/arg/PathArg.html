@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ArgException" href="../../../../../org/apache/juneau/rest/arg/ArgException.html#ArgException">ArgException</a>(pi, <span class="jxr_string">"@Path used without name or value"</span>);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Override <em class="jxr_comment">/* RestOpArg */</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">public</strong> Object resolve(<a name="RestOpSession" href="../../../../../org/apache/juneau/rest/RestOpSession.html#RestOpSession">RestOpSession</a> opSession) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		RestRequest req = opSession.getRequest();
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">if</strong> (name.equals(<span class="jxr_string">"*"</span>)) {

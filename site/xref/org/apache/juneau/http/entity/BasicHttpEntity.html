@@ -439,45 +439,45 @@
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">return</strong> contentSupplier != <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getContentLength() {
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">return</strong> contentLength;
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 	}
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRepeatable() {
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isChunked() {
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> chunked;
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">public</strong> Header getContentType() {
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">return</strong> contentType;
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<strong class="jxr_keyword">public</strong> Header getContentEncoding() {
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">return</strong> contentEncoding;
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isStreaming() {
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> consumeContent() <strong class="jxr_keyword">throws</strong> IOException {}
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> InputStream getContent() <strong class="jxr_keyword">throws</strong> IOException, UnsupportedOperationException {
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">return</strong> IOUtils.EMPTY_INPUT_STREAM;
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 	}
 <a class="jxr_linenumber" name="L471" href="#L471">471</a> 
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(OutputStream outStream) <strong class="jxr_keyword">throws</strong> IOException {}
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> }
 </pre>

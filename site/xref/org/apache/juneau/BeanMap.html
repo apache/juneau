@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;An exception occurred inside the setter method.</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Override <em class="jxr_comment">/* Map */</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Override <em class="jxr_comment">/* Overridden from Map */</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">public</strong> Object put(String property, Object value) {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		BeanPropertyMeta p = getPropertyMeta(property);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">if</strong> (p == <strong class="jxr_keyword">null</strong>) {
@@ -267,7 +267,7 @@
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">return</strong> p.set(<strong class="jxr_keyword">this</strong>, property, value);
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Override <em class="jxr_comment">/* Map */</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Override <em class="jxr_comment">/* Overridden from Map */</em>
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> containsKey(Object property) {
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<em class="jxr_comment">// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		String key = emptyIfNull(property);
@@ -339,7 +339,7 @@
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * 		&lt;li&gt;An exception occurred inside the getter method.</em>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * 	&lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	@Override <em class="jxr_comment">/* Map */</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	@Override <em class="jxr_comment">/* Overridden from Map */</em>
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">public</strong> Object get(Object property) {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		String pName = s(property);
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 		BeanPropertyMeta p = getPropertyMeta(pName);
@@ -439,7 +439,7 @@
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * The returned set is unmodifiable.</em>
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Override <em class="jxr_comment">/* Map */</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Override <em class="jxr_comment">/* Overridden from Map */</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">if</strong> (meta.dynaProperty == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">return</strong> meta.properties.keySet();
@@ -491,7 +491,7 @@
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * @return The class type of the wrapped bean.</em>
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	@Override <em class="jxr_comment">/* Delegate */</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	@Override <em class="jxr_comment">/* Overridden from Delegate */</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 	<strong class="jxr_keyword">public</strong> ClassMeta&lt;T&gt; getClassMeta() {
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.meta.getClassMeta();
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 	}
@@ -640,7 +640,7 @@
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> 			<em class="jxr_comment">// map never changes.</em>
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> 			<strong class="jxr_keyword">final</strong> Collection&lt;BeanPropertyMeta&gt; pSet = getProperties();
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> 
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 			@Override <em class="jxr_comment">/* Set */</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
 <a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<strong class="jxr_keyword">public</strong> Iterator&lt;java.util.Map.Entry&lt;String, Object&gt;&gt; iterator() {
 <a class="jxr_linenumber" name="L637" href="#L637">637</a> 
 <a class="jxr_linenumber" name="L638" href="#L638">638</a> 				<em class="jxr_comment">// Construct our own anonymous iterator that uses iterators against the meta.properties</em>
@@ -650,24 +650,24 @@
 <a class="jxr_linenumber" name="L642" href="#L642">642</a> 
 <a class="jxr_linenumber" name="L643" href="#L643">643</a> 					<strong class="jxr_keyword">final</strong> Iterator&lt;BeanPropertyMeta&gt; pIterator = pSet.iterator();
 <a class="jxr_linenumber" name="L644" href="#L644">644</a> 
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 					@Override <em class="jxr_comment">/* Iterator */</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
 <a class="jxr_linenumber" name="L646" href="#L646">646</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasNext() {
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 						<strong class="jxr_keyword">return</strong> pIterator.hasNext();
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 					}
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 					@Override <em class="jxr_comment">/* Iterator */</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 					<strong class="jxr_keyword">public</strong> Map.Entry&lt;String, Object&gt; next() {
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BeanMapEntry" href="../../../org/apache/juneau/BeanMapEntry.html#BeanMapEntry">BeanMapEntry</a>(BeanMap.<strong class="jxr_keyword">this</strong>, pIterator.next(), <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 					}
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 					@Override <em class="jxr_comment">/* Iterator */</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 					@Override <em class="jxr_comment">/* Overridden from Iterator */</em>
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 					<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> remove() {
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Cannot remove item from iterator."</span>);
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 					}
 <a class="jxr_linenumber" name="L659" href="#L659">659</a> 				};
 <a class="jxr_linenumber" name="L660" href="#L660">660</a> 			}
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			@Override <em class="jxr_comment">/* Set */</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			@Override <em class="jxr_comment">/* Overridden from Set */</em>
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> size() {
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 				<strong class="jxr_keyword">return</strong> pSet.size();
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 			}

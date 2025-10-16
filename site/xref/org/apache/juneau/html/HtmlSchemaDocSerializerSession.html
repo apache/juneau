@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		genSession = builder.ctx.getGenerator().getSession();
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Override <em class="jxr_comment">/* SerializerSession */</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSession */</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">super</strong>.doSerialize(out, genSession.getSchema(o));

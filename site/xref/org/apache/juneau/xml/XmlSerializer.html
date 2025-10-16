@@ -317,17 +317,17 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		textNodeDelimiter = copyFrom.textNodeDelimiter;
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		}
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">public</strong> <a name="XmlSerializer" href="../../../../org/apache/juneau/xml/XmlSerializer.html#XmlSerializer">XmlSerializer</a> build() {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">return</strong> cache(CACHE).build(XmlSerializer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		}
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">public</strong> <a name="HashKey" href="../../../../org/apache/juneau/utils/HashKey.html#HashKey">HashKey</a> hashKey() {
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">return</strong> HashKey.of(
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">super</strong>.hashKey(),
@@ -1265,17 +1265,17 @@
 <a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 		addBeanTypes = addBeanTypesXml || <strong class="jxr_keyword">super</strong>.isAddBeanTypes();
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 	}
 <a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 	}
 <a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 	<strong class="jxr_keyword">public</strong> XmlSerializerSession.Builder createSession() {
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 		<strong class="jxr_keyword">return</strong> XmlSerializerSession.create(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	}
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 	<strong class="jxr_keyword">public</strong> XmlSerializerSession getSession() {
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		<strong class="jxr_keyword">return</strong> createSession().build();
 <a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 	}
@@ -1284,7 +1284,7 @@
 <a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 	<em class="jxr_comment">// Extended metadata</em>
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	@Override <em class="jxr_comment">/* XmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlClassMeta" href="../../../../org/apache/juneau/xml/XmlClassMeta.html#XmlClassMeta">XmlClassMeta</a> getXmlClassMeta(ClassMeta&lt;?&gt; cm) {
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		XmlClassMeta m = xmlClassMetas.get(cm);
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -1294,7 +1294,7 @@
 <a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 	}
 <a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	@Override <em class="jxr_comment">/* XmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlBeanMeta" href="../../../../org/apache/juneau/xml/XmlBeanMeta.html#XmlBeanMeta">XmlBeanMeta</a> getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {
 <a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 		XmlBeanMeta m = xmlBeanMetas.get(bm);
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -1304,7 +1304,7 @@
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	}
 <a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 
-<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 	@Override <em class="jxr_comment">/* XmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlBeanPropertyMeta" href="../../../../org/apache/juneau/xml/XmlBeanPropertyMeta.html#XmlBeanPropertyMeta">XmlBeanPropertyMeta</a> getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 <a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
 <a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -1390,7 +1390,7 @@
 <a class="jxr_linenumber" name="L1382" href="#L1382">1382</a> 	<em class="jxr_comment">// Other methods</em>
 <a class="jxr_linenumber" name="L1383" href="#L1383">1383</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1384" href="#L1384">1384</a> 
-<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1385" href="#L1385">1385</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1386" href="#L1386">1386</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
 <a class="jxr_linenumber" name="L1387" href="#L1387">1387</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
 <a class="jxr_linenumber" name="L1388" href="#L1388">1388</a> 			.append(<span class="jxr_string">"autoDetectNamespaces"</span>, autoDetectNamespaces)

@@ -498,7 +498,19 @@
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">super</strong>.children(value);
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 	}
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> }
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<strong class="jxr_keyword">public</strong> <a name="H2" href="../../../../../org/apache/juneau/bean/html5/H2.html#H2">H2</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">public</strong> <a name="H2" href="../../../../../org/apache/juneau/bean/html5/H2.html#H2">H2</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	}
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -429,7 +429,7 @@
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> 			connectionManager(<strong class="jxr_keyword">new</strong> <a name="MockHttpClientConnectionManager" href="../../../../../org/apache/juneau/rest/mock/MockHttpClientConnectionManager.html#MockHttpClientConnectionManager">MockHttpClientConnectionManager</a>());
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		}
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchMethodError(<span class="jxr_string">"Not implemented."</span>);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
@@ -581,14 +581,14 @@
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 			<strong class="jxr_keyword">return</strong> logRequests(DetailLevel.NONE, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 		}
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">public</strong> Builder debug() {
 <a class="jxr_linenumber" name="L578" href="#L578">578</a> 			header(<span class="jxr_string">"Debug"</span>, <span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="L579" href="#L579">579</a> 			<strong class="jxr_keyword">super</strong>.debug();
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 		}
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">public</strong> <a name="MockRestClient" href="../../../../../org/apache/juneau/rest/mock/MockRestClient.html#MockRestClient">MockRestClient</a> build() {
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 			<strong class="jxr_keyword">return</strong> build(MockRestClient.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 		}
@@ -1907,112 +1907,112 @@
 <a class="jxr_linenumber" name="L1899" href="#L1899">1899</a> 	<em class="jxr_comment">// Entry point methods.</em>
 <a class="jxr_linenumber" name="L1900" href="#L1900">1900</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1901" href="#L1901">1901</a> 
-<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1902" href="#L1902">1902</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1903" href="#L1903">1903</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> request(<a name="RestOperation" href="../../../../../org/apache/juneau/rest/client/RestOperation.html#RestOperation">RestOperation</a> op) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1904" href="#L1904">1904</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.request(op);
 <a class="jxr_linenumber" name="L1905" href="#L1905">1905</a> 	}
 <a class="jxr_linenumber" name="L1906" href="#L1906">1906</a> 
-<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1907" href="#L1907">1907</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1908" href="#L1908">1908</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> get(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1909" href="#L1909">1909</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.get(url);
 <a class="jxr_linenumber" name="L1910" href="#L1910">1910</a> 	}
 <a class="jxr_linenumber" name="L1911" href="#L1911">1911</a> 
-<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1912" href="#L1912">1912</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1913" href="#L1913">1913</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> get() <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1914" href="#L1914">1914</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.get();
 <a class="jxr_linenumber" name="L1915" href="#L1915">1915</a> 	}
 <a class="jxr_linenumber" name="L1916" href="#L1916">1916</a> 
-<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1917" href="#L1917">1917</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1918" href="#L1918">1918</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> put(Object url, Object body) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1919" href="#L1919">1919</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.put(url, body);
 <a class="jxr_linenumber" name="L1920" href="#L1920">1920</a> 	}
 <a class="jxr_linenumber" name="L1921" href="#L1921">1921</a> 
-<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1922" href="#L1922">1922</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1923" href="#L1923">1923</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> put(Object url, String body, <a name="ContentType" href="../../../../../org/apache/juneau/http/header/ContentType.html#ContentType">ContentType</a> contentType) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1924" href="#L1924">1924</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.put(url, body, contentType);
 <a class="jxr_linenumber" name="L1925" href="#L1925">1925</a> 	}
 <a class="jxr_linenumber" name="L1926" href="#L1926">1926</a> 
-<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1927" href="#L1927">1927</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1928" href="#L1928">1928</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> put(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1929" href="#L1929">1929</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.put(url);
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 	}
 <a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 
-<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> post(Object url, Object body) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.post(url, body);
 <a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 	}
 <a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 
-<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1937" href="#L1937">1937</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1938" href="#L1938">1938</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> post(Object url, String body, <a name="ContentType" href="../../../../../org/apache/juneau/http/header/ContentType.html#ContentType">ContentType</a> contentType) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1939" href="#L1939">1939</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.post(url, body, contentType);
 <a class="jxr_linenumber" name="L1940" href="#L1940">1940</a> 	}
 <a class="jxr_linenumber" name="L1941" href="#L1941">1941</a> 
-<a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1942" href="#L1942">1942</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1943" href="#L1943">1943</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> post(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1944" href="#L1944">1944</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.post(url);
 <a class="jxr_linenumber" name="L1945" href="#L1945">1945</a> 	}
 <a class="jxr_linenumber" name="L1946" href="#L1946">1946</a> 
-<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1947" href="#L1947">1947</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1948" href="#L1948">1948</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> delete(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1949" href="#L1949">1949</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.delete(url);
 <a class="jxr_linenumber" name="L1950" href="#L1950">1950</a> 	}
 <a class="jxr_linenumber" name="L1951" href="#L1951">1951</a> 
-<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1952" href="#L1952">1952</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1953" href="#L1953">1953</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> options(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.options(url);
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 	}
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 
-<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> head(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.head(url);
 <a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 	}
 <a class="jxr_linenumber" name="L1961" href="#L1961">1961</a> 
-<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1962" href="#L1962">1962</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1963" href="#L1963">1963</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> formPost(Object url, Object body) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1964" href="#L1964">1964</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.formPost(url, body);
 <a class="jxr_linenumber" name="L1965" href="#L1965">1965</a> 	}
 <a class="jxr_linenumber" name="L1966" href="#L1966">1966</a> 
-<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1967" href="#L1967">1967</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1968" href="#L1968">1968</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> formPost(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1969" href="#L1969">1969</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.formPost(url);
 <a class="jxr_linenumber" name="L1970" href="#L1970">1970</a> 	}
 <a class="jxr_linenumber" name="L1971" href="#L1971">1971</a> 
-<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1972" href="#L1972">1972</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1973" href="#L1973">1973</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> formPostPairs(Object url, String...parameters) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1974" href="#L1974">1974</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.formPostPairs(url, parameters);
 <a class="jxr_linenumber" name="L1975" href="#L1975">1975</a> 	}
 <a class="jxr_linenumber" name="L1976" href="#L1976">1976</a> 
-<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1977" href="#L1977">1977</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1978" href="#L1978">1978</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> patch(Object url, Object body) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1979" href="#L1979">1979</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.patch(url, body);
 <a class="jxr_linenumber" name="L1980" href="#L1980">1980</a> 	}
 <a class="jxr_linenumber" name="L1981" href="#L1981">1981</a> 
-<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1982" href="#L1982">1982</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1983" href="#L1983">1983</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> patch(Object url, String body, <a name="ContentType" href="../../../../../org/apache/juneau/http/header/ContentType.html#ContentType">ContentType</a> contentType) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1984" href="#L1984">1984</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.patch(url, body, contentType);
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 	}
 <a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 
-<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> patch(Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.patch(url);
 <a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 	}
 <a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 
-<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1992" href="#L1992">1992</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1993" href="#L1993">1993</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> callback(String callString) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1994" href="#L1994">1994</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.callback(callString);
 <a class="jxr_linenumber" name="L1995" href="#L1995">1995</a> 	}
 <a class="jxr_linenumber" name="L1996" href="#L1996">1996</a> 
-<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L1997" href="#L1997">1997</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L1998" href="#L1998">1998</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> request(String method, Object url, Object body) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L1999" href="#L1999">1999</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.request(method, url, body);
 <a class="jxr_linenumber" name="L2000" href="#L2000">2000</a> 	}
 <a class="jxr_linenumber" name="L2001" href="#L2001">2001</a> 
-<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L2002" href="#L2002">2002</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L2003" href="#L2003">2003</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> request(String method, Object url) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L2004" href="#L2004">2004</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.request(method, url);
 <a class="jxr_linenumber" name="L2005" href="#L2005">2005</a> 	}
 <a class="jxr_linenumber" name="L2006" href="#L2006">2006</a> 
-<a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L2007" href="#L2007">2007</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L2008" href="#L2008">2008</a> 	<strong class="jxr_keyword">public</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> request(String method, Object url, <strong class="jxr_keyword">boolean</strong> hasBody) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L2009" href="#L2009">2009</a> 		<strong class="jxr_keyword">return</strong> (<a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>)<strong class="jxr_keyword">super</strong>.request(method, url, hasBody);
 <a class="jxr_linenumber" name="L2010" href="#L2010">2010</a> 	}
@@ -2082,12 +2082,12 @@
 <a class="jxr_linenumber" name="L2074" href="#L2074">2074</a> 	<em class="jxr_comment">// RestClient methods.</em>
 <a class="jxr_linenumber" name="L2075" href="#L2075">2075</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L2076" href="#L2076">2076</a> 
-<a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L2077" href="#L2077">2077</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L2078" href="#L2078">2078</a> 	<strong class="jxr_keyword">protected</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a> createRequest(URI uri, String method, <strong class="jxr_keyword">boolean</strong> hasBody) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L2079" href="#L2079">2079</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MockRestRequest" href="../../../../../org/apache/juneau/rest/mock/MockRestRequest.html#MockRestRequest">MockRestRequest</a>(<strong class="jxr_keyword">this</strong>, uri, method, hasBody);
 <a class="jxr_linenumber" name="L2080" href="#L2080">2080</a> 	}
 <a class="jxr_linenumber" name="L2081" href="#L2081">2081</a> 
-<a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 	@Override <em class="jxr_comment">/* RestClient */</em>
+<a class="jxr_linenumber" name="L2082" href="#L2082">2082</a> 	@Override <em class="jxr_comment">/* Overridden from RestClient */</em>
 <a class="jxr_linenumber" name="L2083" href="#L2083">2083</a> 	<strong class="jxr_keyword">protected</strong> <a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a> createResponse(<a name="RestRequest" href="../../../../../org/apache/juneau/rest/client/RestRequest.html#RestRequest">RestRequest</a> req, HttpResponse httpResponse, <a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> parser) <strong class="jxr_keyword">throws</strong> <a name="RestCallException" href="../../../../../org/apache/juneau/rest/client/RestCallException.html#RestCallException">RestCallException</a> {
 <a class="jxr_linenumber" name="L2084" href="#L2084">2084</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MockRestResponse" href="../../../../../org/apache/juneau/rest/mock/MockRestResponse.html#MockRestResponse">MockRestResponse</a>(<strong class="jxr_keyword">this</strong>, req, httpResponse, parser);
 <a class="jxr_linenumber" name="L2085" href="#L2085">2085</a> 	}
@@ -2096,7 +2096,7 @@
 <a class="jxr_linenumber" name="L2088" href="#L2088">2088</a> 	<em class="jxr_comment">// HttpClientConnection methods.</em>
 <a class="jxr_linenumber" name="L2089" href="#L2089">2089</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L2090" href="#L2090">2090</a> 
-<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2091" href="#L2091">2091</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2092" href="#L2092">2092</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L2093" href="#L2093">2093</a> 		<em class="jxr_comment">// Don't call super.close() because it will close the client.</em>
 <a class="jxr_linenumber" name="L2094" href="#L2094">2094</a> 		rreq.remove();
@@ -2105,38 +2105,38 @@
 <a class="jxr_linenumber" name="L2097" href="#L2097">2097</a> 		sres.remove();
 <a class="jxr_linenumber" name="L2098" href="#L2098">2098</a> 	}
 <a class="jxr_linenumber" name="L2099" href="#L2099">2099</a> 
-<a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2100" href="#L2100">2100</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2101" href="#L2101">2101</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isOpen() {
 <a class="jxr_linenumber" name="L2102" href="#L2102">2102</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L2103" href="#L2103">2103</a> 	}
 <a class="jxr_linenumber" name="L2104" href="#L2104">2104</a> 
-<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2105" href="#L2105">2105</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2106" href="#L2106">2106</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isStale() {
 <a class="jxr_linenumber" name="L2107" href="#L2107">2107</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L2108" href="#L2108">2108</a> 	}
 <a class="jxr_linenumber" name="L2109" href="#L2109">2109</a> 
-<a class="jxr_linenumber" name="L2110" href="#L2110">2110</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2110" href="#L2110">2110</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2111" href="#L2111">2111</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setSocketTimeout(<strong class="jxr_keyword">int</strong> timeout) {}
 <a class="jxr_linenumber" name="L2112" href="#L2112">2112</a> 
-<a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2113" href="#L2113">2113</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2114" href="#L2114">2114</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getSocketTimeout() {
 <a class="jxr_linenumber" name="L2115" href="#L2115">2115</a> 		<strong class="jxr_keyword">return</strong> Integer.MAX_VALUE;
 <a class="jxr_linenumber" name="L2116" href="#L2116">2116</a> 	}
 <a class="jxr_linenumber" name="L2117" href="#L2117">2117</a> 
-<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2118" href="#L2118">2118</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2119" href="#L2119">2119</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> shutdown() <strong class="jxr_keyword">throws</strong> IOException {}
 <a class="jxr_linenumber" name="L2120" href="#L2120">2120</a> 
-<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2121" href="#L2121">2121</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> 	<strong class="jxr_keyword">public</strong> HttpConnectionMetrics getMetrics() {
 <a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> 	}
 <a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 
-<a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isResponseAvailable(<strong class="jxr_keyword">int</strong> timeout) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L2129" href="#L2129">2129</a> 	}
 <a class="jxr_linenumber" name="L2130" href="#L2130">2130</a> 
-<a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2131" href="#L2131">2131</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2132" href="#L2132">2132</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRequestHeader(HttpRequest request) <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2133" href="#L2133">2133</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L2134" href="#L2134">2134</a> 			RequestLine rl = request.getRequestLine();
@@ -2193,7 +2193,7 @@
 <a class="jxr_linenumber" name="L2185" href="#L2185">2185</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://localhost"</span>;
 <a class="jxr_linenumber" name="L2186" href="#L2186">2186</a> 	}
 <a class="jxr_linenumber" name="L2187" href="#L2187">2187</a> 
-<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2188" href="#L2188">2188</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sendRequestEntity(HttpEntityEnclosingRequest request) <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> 		byte[] body = {};
 <a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> 		HttpEntity entity = request.getEntity();
@@ -2209,7 +2209,7 @@
 <a class="jxr_linenumber" name="L2201" href="#L2201">2201</a> 		sreq.get().content(body);
 <a class="jxr_linenumber" name="L2202" href="#L2202">2202</a> 	}
 <a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> 
-<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> 	<strong class="jxr_keyword">public</strong> HttpResponse receiveResponseHeader() <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 			MockServletResponse res = MockServletResponse.create();
@@ -2238,7 +2238,7 @@
 <a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> 		}
 <a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> 	}
 <a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 
-<a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> receiveResponseEntity(HttpResponse response) <strong class="jxr_keyword">throws</strong> HttpException, IOException {
 <a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 		InputStream is = <strong class="jxr_keyword">new</strong> ByteArrayInputStream(sres.get().getContent());
 <a class="jxr_linenumber" name="L2236" href="#L2236">2236</a> 		Header contentEncoding = response.getLastHeader(<span class="jxr_string">"Content-Encoding"</span>);
@@ -2247,7 +2247,7 @@
 <a class="jxr_linenumber" name="L2239" href="#L2239">2239</a> 		response.setEntity(<strong class="jxr_keyword">new</strong> InputStreamEntity(is));
 <a class="jxr_linenumber" name="L2240" href="#L2240">2240</a> 	}
 <a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> 
-<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> 	@Override <em class="jxr_comment">/* HttpClientConnection */</em>
+<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> 	@Override <em class="jxr_comment">/* Overridden from HttpClientConnection */</em>
 <a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() <strong class="jxr_keyword">throws</strong> IOException {}
 <a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> }
 </pre>

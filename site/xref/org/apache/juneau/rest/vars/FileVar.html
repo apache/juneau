@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">super</strong>(NAME);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Override <em class="jxr_comment">/* Var */</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Override <em class="jxr_comment">/* Overridden from Var */</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">public</strong> String resolve(<a name="VarResolverSession" href="../../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> session, String key) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		RestRequest req = session.getBean(RestRequest.<strong class="jxr_keyword">class</strong>).orElseThrow(InternalServerError::<strong class="jxr_keyword">new</strong>);
@@ -97,7 +97,7 @@
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Override <em class="jxr_comment">/* Var */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	@Override <em class="jxr_comment">/* Overridden from Var */</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canResolve(<a name="VarResolverSession" href="../../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> session) {
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> session.getBean(RestRequest.<strong class="jxr_keyword">class</strong>).isPresent();
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}

@@ -183,14 +183,67 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertNull(x2.getContentEncoding());
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_comment">// Utility methods</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> BasicHeader header(String name, Object val) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BasicHeader(name, val);
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> }
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	@Test <strong class="jxr_keyword">void</strong> a10_setHeader_String_String() {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> x = stringResource(<span class="jxr_string">"foo"</span>).setHeader(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>).setHeader(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"baz"</span>).setHeader(<strong class="jxr_keyword">null</strong>,<span class="jxr_string">"bar"</span>).setHeader(<span class="jxr_string">"foo"</span>,<strong class="jxr_keyword">null</strong>).getHeaders();
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertEquals(<span class="jxr_string">"Foo: baz"</span>, x.getFirst(<span class="jxr_string">"Foo"</span>).get().toString());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertEquals(<span class="jxr_string">"Foo: baz"</span>, x.getLast(<span class="jxr_string">"Foo"</span>).get().toString());
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEmpty(x.getFirst(<span class="jxr_string">"Bar"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEmpty(x.getLast(<span class="jxr_string">"Bar"</span>));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertList(x.getAll(), <span class="jxr_string">"Foo: baz"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> a11_setHeaders_array() {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<em class="jxr_comment">// setHeaders() replaces headers, so last value wins for duplicate names</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> x = stringResource(<span class="jxr_string">"foo"</span>).setHeaders(header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"bar"</span>),header(<span class="jxr_string">"Foo"</span>,<span class="jxr_string">"baz"</span>),header(<span class="jxr_string">"Bar"</span>,<strong class="jxr_keyword">null</strong>),<strong class="jxr_keyword">null</strong>).getHeaders();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(<span class="jxr_string">"Foo: baz"</span>, x.getFirst(<span class="jxr_string">"Foo"</span>).get().toString());
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(<span class="jxr_string">"Foo: baz"</span>, x.getLast(<span class="jxr_string">"Foo"</span>).get().toString());
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertNull(x.getFirst(<span class="jxr_string">"Bar"</span>).get().getValue());
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertNull(x.getLast(<span class="jxr_string">"Bar"</span>).get().getValue());
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertList(x.getAll(), <span class="jxr_string">"Foo: baz"</span>, <span class="jxr_string">"Bar: null"</span>);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	@Test <strong class="jxr_keyword">void</strong> a12_fluentSetters() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<em class="jxr_comment">// Test that all resource types return correct type for fluent chaining</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> s = stringResource(<span class="jxr_string">"foo"</span>);
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertSame(s, s.setHeader(<span class="jxr_string">"X-Test"</span>, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertSame(s, s.addHeader(<span class="jxr_string">"X-Test2"</span>, <span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertSame(s, s.setHeaders(header(<span class="jxr_string">"X-Test3"</span>, <span class="jxr_string">"value3"</span>)));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertSame(s, s.addHeaders(header(<span class="jxr_string">"X-Test4"</span>, <span class="jxr_string">"value4"</span>)));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> ba = byteArrayResource(<span class="jxr_string">"foo"</span>.getBytes());
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertSame(ba, ba.setHeader(<span class="jxr_string">"X-Test"</span>, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertSame(ba, ba.addHeader(<span class="jxr_string">"X-Test2"</span>, <span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertSame(ba, ba.setHeaders(header(<span class="jxr_string">"X-Test3"</span>, <span class="jxr_string">"value3"</span>)));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertSame(ba, ba.addHeaders(header(<span class="jxr_string">"X-Test4"</span>, <span class="jxr_string">"value4"</span>)));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> r = readerResource(reader(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertSame(r, r.setHeader(<span class="jxr_string">"X-Test"</span>, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertSame(r, r.addHeader(<span class="jxr_string">"X-Test2"</span>, <span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertSame(r, r.setHeaders(header(<span class="jxr_string">"X-Test3"</span>, <span class="jxr_string">"value3"</span>)));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertSame(r, r.addHeaders(header(<span class="jxr_string">"X-Test4"</span>, <span class="jxr_string">"value4"</span>)));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">var</strong> st = streamResource(inputStream(<span class="jxr_string">"foo"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertSame(st, st.setHeader(<span class="jxr_string">"X-Test"</span>, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertSame(st, st.addHeader(<span class="jxr_string">"X-Test2"</span>, <span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertSame(st, st.setHeaders(header(<span class="jxr_string">"X-Test3"</span>, <span class="jxr_string">"value3"</span>)));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertSame(st, st.addHeaders(header(<span class="jxr_string">"X-Test4"</span>, <span class="jxr_string">"value4"</span>)));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> f = Files.createTempFile(<span class="jxr_string">"test"</span>,<span class="jxr_string">"txt"</span>).toFile();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> fr = fileResource(f);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertSame(fr, fr.setHeader(<span class="jxr_string">"X-Test"</span>, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertSame(fr, fr.addHeader(<span class="jxr_string">"X-Test2"</span>, <span class="jxr_string">"value2"</span>));
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertSame(fr, fr.setHeaders(header(<span class="jxr_string">"X-Test3"</span>, <span class="jxr_string">"value3"</span>)));
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertSame(fr, fr.addHeaders(header(<span class="jxr_string">"X-Test4"</span>, <span class="jxr_string">"value4"</span>)));
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_comment">// Utility methods</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">private</strong> BasicHeader header(String name, Object val) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BasicHeader(name, val);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

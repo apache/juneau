@@ -181,22 +181,22 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * Returns the name so that the {@link ObjectSearcher} class can search against it.</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">return</strong> name;
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@Override <em class="jxr_comment">/* Comparable */</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@Override <em class="jxr_comment">/* Overridden from Comparable */</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(<a name="LinkString" href="../../../../org/apache/juneau/bean/LinkString.html#LinkString">LinkString</a> o) {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">return</strong> name.compareTo(o.name);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> (o instanceof <a name="LinkString" href="../../../../org/apache/juneau/bean/LinkString.html#LinkString">LinkString</a> o2) &amp;&amp; Utils.eq(<strong class="jxr_keyword">this</strong>, o2, (x,y)-&gt;x.name.equals(y.name));
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.hashCode();
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}

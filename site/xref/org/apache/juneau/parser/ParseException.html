@@ -173,7 +173,13 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			t = (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>)t.getCause();
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> }
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Override <em class="jxr_comment">/* Overridden from BasicRuntimeException */</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">public</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> setMessage(String message, Object...args) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">super</strong>.setMessage(message, args);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

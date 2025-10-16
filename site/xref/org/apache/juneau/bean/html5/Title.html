@@ -461,7 +461,19 @@
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">super</strong>.text(value);
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> }
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<strong class="jxr_keyword">public</strong> <a name="Title" href="../../../../../org/apache/juneau/bean/html5/Title.html#Title">Title</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> <a name="Title" href="../../../../../org/apache/juneau/bean/html5/Title.html#Title">Title</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

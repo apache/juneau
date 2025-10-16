@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@SuppressWarnings(<span class="jxr_string">"rawtypes"</span>)
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	@Override <em class="jxr_comment">/* SerializerSession */</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSession */</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> pipe, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">try</strong> (<a name="CsvWriter" href="../../../../org/apache/juneau/csv/CsvWriter.html#CsvWriter">CsvWriter</a> w = getCsvWriter(pipe)) {
@@ -303,7 +303,7 @@
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || type == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">if</strong> (swap != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 				<strong class="jxr_keyword">return</strong> swap(swap, value);

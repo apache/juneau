@@ -1209,7 +1209,7 @@
 <a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the entity is repeatable, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
 <a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRepeatable() {
 <a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> 		<strong class="jxr_keyword">return</strong> cached || entity.isRepeatable();
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> 	}
@@ -1226,7 +1226,7 @@
 <a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if chunked encoding is preferred for this entity, or &lt;jk&gt;false&lt;/jk&gt; if it is not.</em>
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isChunked() {
 <a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 		<strong class="jxr_keyword">return</strong> entity.isChunked();
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 	}
@@ -1238,7 +1238,7 @@
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> <em class="jxr_javadoccomment">	 * 	The number of bytes of the content, or a negative number if unknown.</em>
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;If the content length is known but exceeds {@link Long#MAX_VALUE}, a negative number is returned.</em>
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getContentLength() {
 <a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 		<strong class="jxr_keyword">return</strong> body != <strong class="jxr_keyword">null</strong> ? body.length : entity.getContentLength();
 <a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 	}
@@ -1252,7 +1252,7 @@
 <a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> <em class="jxr_javadoccomment">	 * @return The &lt;c&gt;Content-Type&lt;/c&gt; header for this entity, or &lt;jk&gt;null&lt;/jk&gt; if the content type is unknown.</em>
 <a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseHeader" href="../../../../../org/apache/juneau/rest/client/ResponseHeader.html#ResponseHeader">ResponseHeader</a> getContentType() {
 <a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ResponseHeader" href="../../../../../org/apache/juneau/rest/client/ResponseHeader.html#ResponseHeader">ResponseHeader</a>(<span class="jxr_string">"Content-Type"</span>, request, response, entity.getContentType());
 <a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 	}
@@ -1266,7 +1266,7 @@
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> <em class="jxr_javadoccomment">	 * @return The &lt;c&gt;Content-Encoding&lt;/c&gt; header for this entity, or &lt;jk&gt;null&lt;/jk&gt; if the content encoding is unknown.</em>
 <a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseHeader" href="../../../../../org/apache/juneau/rest/client/ResponseHeader.html#ResponseHeader">ResponseHeader</a> getContentEncoding() {
 <a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ResponseHeader" href="../../../../../org/apache/juneau/rest/client/ResponseHeader.html#ResponseHeader">ResponseHeader</a>(<span class="jxr_string">"Content-Encoding"</span>, request, response, entity.getContentEncoding());
 <a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 	}
@@ -1285,7 +1285,7 @@
 <a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> <em class="jxr_javadoccomment">	 * @return Content stream of the entity.</em>
 <a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 	<strong class="jxr_keyword">public</strong> InputStream getContent() <strong class="jxr_keyword">throws</strong> IOException, UnsupportedOperationException {
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 		<strong class="jxr_keyword">return</strong> asInputStream();
 <a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 	}
@@ -1299,7 +1299,7 @@
 <a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> <em class="jxr_javadoccomment">	 * @param outstream The output stream to write entity content to.</em>
 <a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(OutputStream outstream) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 		pipeTo(outstream);
 <a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	}
@@ -1313,7 +1313,7 @@
 <a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the entity content is streamed, &lt;jk&gt;false&lt;/jk&gt; otherwise.</em>
 <a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isStreaming() {
 <a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 		<strong class="jxr_keyword">return</strong> cached ? false : entity.isStreaming();
 <a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 	}
@@ -1329,7 +1329,7 @@
 <a class="jxr_linenumber" name="L1321" href="#L1321">1321</a> <em class="jxr_javadoccomment">	 * @deprecated Use standard java convention to ensure resource deallocation by calling {@link InputStream#close()} on</em>
 <a class="jxr_linenumber" name="L1322" href="#L1322">1322</a> <em class="jxr_javadoccomment">	 * the input stream returned by {@link #getContent()}</em>
 <a class="jxr_linenumber" name="L1323" href="#L1323">1323</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L1324" href="#L1324">1324</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L1325" href="#L1325">1325</a> 	@Deprecated
 <a class="jxr_linenumber" name="L1326" href="#L1326">1326</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> consumeContent() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L1327" href="#L1327">1327</a> 		entity.consumeContent();

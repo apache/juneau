@@ -136,17 +136,17 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			resolver = copyFrom.resolver;
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		}
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">public</strong> <a name="XmlParser" href="../../../../org/apache/juneau/xml/XmlParser.html#XmlParser">XmlParser</a> build() {
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<strong class="jxr_keyword">return</strong> cache(CACHE).build(XmlParser.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">public</strong> <a name="HashKey" href="../../../../org/apache/juneau/utils/HashKey.html#HashKey">HashKey</a> hashKey() {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">return</strong> HashKey.of(
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<strong class="jxr_keyword">super</strong>.hashKey(),
@@ -811,17 +811,17 @@
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 		eventAllocatorImpl = eventAllocator != <strong class="jxr_keyword">null</strong> ? newInstance(eventAllocator) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 	}
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 	<strong class="jxr_keyword">public</strong> XmlParserSession.Builder createSession() {
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">return</strong> XmlParserSession.create(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 	}
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<strong class="jxr_keyword">public</strong> XmlParserSession getSession() {
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">return</strong> createSession().build();
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 	}
@@ -830,7 +830,7 @@
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 	<em class="jxr_comment">// Extended metadata</em>
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 	@Override <em class="jxr_comment">/* XmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlClassMeta" href="../../../../org/apache/juneau/xml/XmlClassMeta.html#XmlClassMeta">XmlClassMeta</a> getXmlClassMeta(ClassMeta&lt;?&gt; cm) {
 <a class="jxr_linenumber" name="L827" href="#L827">827</a> 		XmlClassMeta m = xmlClassMetas.get(cm);
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -840,7 +840,7 @@
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L833" href="#L833">833</a> 	}
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 	@Override <em class="jxr_comment">/* XmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlBeanMeta" href="../../../../org/apache/juneau/xml/XmlBeanMeta.html#XmlBeanMeta">XmlBeanMeta</a> getXmlBeanMeta(BeanMeta&lt;?&gt; bm) {
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 		XmlBeanMeta m = xmlBeanMetas.get(bm);
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -850,7 +850,7 @@
 <a class="jxr_linenumber" name="L842" href="#L842">842</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L843" href="#L843">843</a> 	}
 <a class="jxr_linenumber" name="L844" href="#L844">844</a> 
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 	@Override <em class="jxr_comment">/* XmlMetaProvider */</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 	@Override <em class="jxr_comment">/* Overridden from XmlMetaProvider */</em>
 <a class="jxr_linenumber" name="L846" href="#L846">846</a> 	<strong class="jxr_keyword">public</strong> <a name="XmlBeanPropertyMeta" href="../../../../org/apache/juneau/xml/XmlBeanPropertyMeta.html#XmlBeanPropertyMeta">XmlBeanPropertyMeta</a> getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 <a class="jxr_linenumber" name="L847" href="#L847">847</a> 		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
 <a class="jxr_linenumber" name="L848" href="#L848">848</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -933,7 +933,7 @@
 <a class="jxr_linenumber" name="L925" href="#L925">925</a> 		}
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 	}
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 			.append(<span class="jxr_string">"validating"</span>, validating)

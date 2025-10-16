@@ -575,7 +575,19 @@
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">super</strong>.translate(value);
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 	}
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> }
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	<strong class="jxr_keyword">public</strong> <a name="Keygen" href="../../../../../org/apache/juneau/bean/html5/Keygen.html#Keygen">Keygen</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	}
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	<strong class="jxr_keyword">public</strong> <a name="Keygen" href="../../../../../org/apache/juneau/bean/html5/Keygen.html#Keygen">Keygen</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	}
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

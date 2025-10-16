@@ -168,17 +168,17 @@
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentStringAssertion&lt;&gt;(getValue(), <strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Override <em class="jxr_comment">/* Headerable */</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Override <em class="jxr_comment">/* Overridden from Headerable */</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">public</strong> <a name="BasicHeader" href="../../../../../org/apache/juneau/http/header/BasicHeader.html#BasicHeader">BasicHeader</a> asHeader() {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> BasicHeader.of(name, Utils.s(value));
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Override <em class="jxr_comment">/* NameValuePair */</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Override <em class="jxr_comment">/* Overridden from NameValuePair */</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">public</strong> String getName() {
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">return</strong> name;
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Override <em class="jxr_comment">/* NameValuePair */</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Override <em class="jxr_comment">/* Overridden from NameValuePair */</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">public</strong> String getValue() {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> Utils.s(unwrap(value));
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
@@ -192,7 +192,7 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">return</strong> unwrap(value);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> getName() + <span class="jxr_string">"="</span> + getValue();
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}

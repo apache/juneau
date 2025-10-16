@@ -773,7 +773,19 @@
 <a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<strong class="jxr_keyword">super</strong>.text(value);
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 	}
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> }
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<strong class="jxr_keyword">public</strong> <a name="Textarea" href="../../../../../org/apache/juneau/bean/html5/Textarea.html#Textarea">Textarea</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 	}
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 	<strong class="jxr_keyword">public</strong> <a name="Textarea" href="../../../../../org/apache/juneau/bean/html5/Textarea.html#Textarea">Textarea</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 	}
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

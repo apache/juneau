@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="OAuthFlows" href="../../../../../org/apache/juneau/bean/openapi3/OAuthFlows.html#OAuthFlows">OAuthFlows</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">protected</strong> <a name="OAuthFlows" href="../../../../../org/apache/juneau/bean/openapi3/OAuthFlows.html#OAuthFlows">OAuthFlows</a> strict() {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">super</strong>.strict();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
@@ -255,7 +255,7 @@
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		};
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<strong class="jxr_keyword">public</strong> <a name="OAuthFlows" href="../../../../../org/apache/juneau/bean/openapi3/OAuthFlows.html#OAuthFlows">OAuthFlows</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
@@ -270,7 +270,7 @@
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		};
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 			.addIf(authorizationCode != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"authorizationCode"</span>)

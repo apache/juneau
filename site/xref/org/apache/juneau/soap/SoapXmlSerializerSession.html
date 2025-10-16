@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">// Overridden methods</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	@Override <em class="jxr_comment">/* SerializerSession */</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	@Override <em class="jxr_comment">/* Overridden from SerializerSession */</em>
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doSerialize(<a name="SerializerPipe" href="../../../../org/apache/juneau/serializer/SerializerPipe.html#SerializerPipe">SerializerPipe</a> out, Object o) <strong class="jxr_keyword">throws</strong> IOException, <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">try</strong> (<a name="XmlWriter" href="../../../../org/apache/juneau/xml/XmlWriter.html#XmlWriter">XmlWriter</a> w = getXmlWriter(out)) {
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 			w.append(<span class="jxr_string">"&lt;?xml"</span>)
@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Override <em class="jxr_comment">/* Serializer */</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Override <em class="jxr_comment">/* Overridden from Serializer */</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,String&gt; getResponseHeaders() {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> map(<span class="jxr_string">"SOAPAction"</span>,getSoapAction());
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}

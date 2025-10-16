@@ -598,7 +598,19 @@
 <a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">super</strong>.children(value);
 <a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L592" href="#L592">592</a> 	}
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> }
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<strong class="jxr_keyword">public</strong> <a name="Meter" href="../../../../../org/apache/juneau/bean/html5/Meter.html#Meter">Meter</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	}
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">public</strong> <a name="Meter" href="../../../../../org/apache/juneau/bean/html5/Meter.html#Meter">Meter</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 	}
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

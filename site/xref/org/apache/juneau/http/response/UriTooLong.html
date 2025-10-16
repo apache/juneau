@@ -201,7 +201,24 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">super</strong>.setStatusLine(value);
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Override <em class="jxr_comment">/* Overridden from BasicHttpException */</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<strong class="jxr_keyword">public</strong> <a name="UriTooLong" href="../../../../../org/apache/juneau/http/response/UriTooLong.html#UriTooLong">UriTooLong</a> setHeaders(List&lt;Header&gt; values) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">super</strong>.setHeaders(values);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	@Override <em class="jxr_comment">/* Overridden from BasicHttpException */</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<strong class="jxr_keyword">public</strong> <a name="UriTooLong" href="../../../../../org/apache/juneau/http/response/UriTooLong.html#UriTooLong">UriTooLong</a> setContent(String value) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">super</strong>.setContent(value);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@Override <em class="jxr_comment">/* Overridden from BasicHttpException */</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">public</strong> <a name="UriTooLong" href="../../../../../org/apache/juneau/http/response/UriTooLong.html#UriTooLong">UriTooLong</a> setContent(HttpEntity value) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">super</strong>.setContent(value);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

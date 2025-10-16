@@ -46,12 +46,12 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 * Converts the specified {@link Enumeration} to a {@link List}.</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> String swap(BeanSession session, StackTraceElement o) {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">return</strong> o.toString();
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Override <em class="jxr_comment">/* ObjectSwap */</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Override <em class="jxr_comment">/* Overridden from ObjectSwap */</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> StackTraceElement unswap(BeanSession session, String in, ClassMeta&lt;?&gt; hint) {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		String methodName = <span class="jxr_string">""</span>, fileName = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">int</strong> lineNumber = -1;

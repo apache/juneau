@@ -1184,7 +1184,7 @@
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 	}
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 
-<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {  <em class="jxr_comment">// NOSONAR</em>
@@ -1228,7 +1228,7 @@
 <a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> 		};
 <a class="jxr_linenumber" name="L1221" href="#L1221">1221</a> 	}
 <a class="jxr_linenumber" name="L1222" href="#L1222">1222</a> 
-<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L1223" href="#L1223">1223</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L1224" href="#L1224">1224</a> 	<strong class="jxr_keyword">public</strong> <a name="SchemaInfo" href="../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L1225" href="#L1225">1225</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L1226" href="#L1226">1226</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {  <em class="jxr_comment">// NOSONAR</em>
@@ -1275,7 +1275,7 @@
 <a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 		};
 <a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 	}
 <a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 			.addIf(ref != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"$ref"</span>)

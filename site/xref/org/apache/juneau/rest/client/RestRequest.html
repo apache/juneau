@@ -2197,7 +2197,7 @@
 <a class="jxr_linenumber" name="L2189" href="#L2189">2189</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2190" href="#L2190">2190</a> <em class="jxr_javadoccomment">	 * @return The HTTP method this request uses, such as GET, PUT, POST, or other.</em>
 <a class="jxr_linenumber" name="L2191" href="#L2191">2191</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 	@Override <em class="jxr_comment">/* HttpUriRequest */</em>
+<a class="jxr_linenumber" name="L2192" href="#L2192">2192</a> 	@Override <em class="jxr_comment">/* Overridden from HttpUriRequest */</em>
 <a class="jxr_linenumber" name="L2193" href="#L2193">2193</a> 	<strong class="jxr_keyword">public</strong> String getMethod() {
 <a class="jxr_linenumber" name="L2194" href="#L2194">2194</a> 		<strong class="jxr_keyword">return</strong> request.getMethod();
 <a class="jxr_linenumber" name="L2195" href="#L2195">2195</a> 	}
@@ -2211,7 +2211,7 @@
 <a class="jxr_linenumber" name="L2203" href="#L2203">2203</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2204" href="#L2204">2204</a> <em class="jxr_javadoccomment">	 * @return The original request URI.</em>
 <a class="jxr_linenumber" name="L2205" href="#L2205">2205</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 	@Override <em class="jxr_comment">/* HttpUriRequest */</em>
+<a class="jxr_linenumber" name="L2206" href="#L2206">2206</a> 	@Override <em class="jxr_comment">/* Overridden from HttpUriRequest */</em>
 <a class="jxr_linenumber" name="L2207" href="#L2207">2207</a> 	<strong class="jxr_keyword">public</strong> URI getURI() {
 <a class="jxr_linenumber" name="L2208" href="#L2208">2208</a> 		<strong class="jxr_keyword">return</strong> request.getURI();
 <a class="jxr_linenumber" name="L2209" href="#L2209">2209</a> 	}
@@ -2222,12 +2222,12 @@
 <a class="jxr_linenumber" name="L2214" href="#L2214">2214</a> <em class="jxr_javadoccomment">	 * If the request has not started, it will abort after the next execution.</em>
 <a class="jxr_linenumber" name="L2215" href="#L2215">2215</a> <em class="jxr_javadoccomment">	 * &lt;br&gt;Aborting this request will cause all subsequent executions with this request to fail.</em>
 <a class="jxr_linenumber" name="L2216" href="#L2216">2216</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 	@Override <em class="jxr_comment">/* HttpUriRequest */</em>
+<a class="jxr_linenumber" name="L2217" href="#L2217">2217</a> 	@Override <em class="jxr_comment">/* Overridden from HttpUriRequest */</em>
 <a class="jxr_linenumber" name="L2218" href="#L2218">2218</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> abort() <strong class="jxr_keyword">throws</strong> UnsupportedOperationException {
 <a class="jxr_linenumber" name="L2219" href="#L2219">2219</a> 		request.abort();
 <a class="jxr_linenumber" name="L2220" href="#L2220">2220</a> 	}
 <a class="jxr_linenumber" name="L2221" href="#L2221">2221</a> 
-<a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 	@Override <em class="jxr_comment">/* HttpUriRequest */</em>
+<a class="jxr_linenumber" name="L2222" href="#L2222">2222</a> 	@Override <em class="jxr_comment">/* Overridden from HttpUriRequest */</em>
 <a class="jxr_linenumber" name="L2223" href="#L2223">2223</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isAborted() {
 <a class="jxr_linenumber" name="L2224" href="#L2224">2224</a> 		<strong class="jxr_keyword">return</strong> request.isAborted();
 <a class="jxr_linenumber" name="L2225" href="#L2225">2225</a> 	}
@@ -2237,7 +2237,7 @@
 <a class="jxr_linenumber" name="L2229" href="#L2229">2229</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2230" href="#L2230">2230</a> <em class="jxr_javadoccomment">	 * @return The request line.</em>
 <a class="jxr_linenumber" name="L2231" href="#L2231">2231</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 	@Override <em class="jxr_comment">/* HttpRequest */</em>
+<a class="jxr_linenumber" name="L2232" href="#L2232">2232</a> 	@Override <em class="jxr_comment">/* Overridden from HttpRequest */</em>
 <a class="jxr_linenumber" name="L2233" href="#L2233">2233</a> 	<strong class="jxr_keyword">public</strong> RequestLine getRequestLine() {
 <a class="jxr_linenumber" name="L2234" href="#L2234">2234</a> 		<strong class="jxr_keyword">return</strong> request.getRequestLine();
 <a class="jxr_linenumber" name="L2235" href="#L2235">2235</a> 	}
@@ -2247,7 +2247,7 @@
 <a class="jxr_linenumber" name="L2239" href="#L2239">2239</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2240" href="#L2240">2240</a> <em class="jxr_javadoccomment">	 * @return The protocol version.</em>
 <a class="jxr_linenumber" name="L2241" href="#L2241">2241</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2242" href="#L2242">2242</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2243" href="#L2243">2243</a> 	<strong class="jxr_keyword">public</strong> ProtocolVersion getProtocolVersion() {
 <a class="jxr_linenumber" name="L2244" href="#L2244">2244</a> 		<strong class="jxr_keyword">return</strong> request.getProtocolVersion();
 <a class="jxr_linenumber" name="L2245" href="#L2245">2245</a> 	}
@@ -2260,7 +2260,7 @@
 <a class="jxr_linenumber" name="L2252" href="#L2252">2252</a> <em class="jxr_javadoccomment">	 * @param name The header name to check for.</em>
 <a class="jxr_linenumber" name="L2253" href="#L2253">2253</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if at least one header with this name is present.</em>
 <a class="jxr_linenumber" name="L2254" href="#L2254">2254</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2255" href="#L2255">2255</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2256" href="#L2256">2256</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> containsHeader(String name) {
 <a class="jxr_linenumber" name="L2257" href="#L2257">2257</a> 		<strong class="jxr_keyword">return</strong> headerData.contains(name);
 <a class="jxr_linenumber" name="L2258" href="#L2258">2258</a> 	}
@@ -2274,7 +2274,7 @@
 <a class="jxr_linenumber" name="L2266" href="#L2266">2266</a> <em class="jxr_javadoccomment">	 * @param name The name of the headers to return.</em>
 <a class="jxr_linenumber" name="L2267" href="#L2267">2267</a> <em class="jxr_javadoccomment">	 * @return The headers whose name property equals name.</em>
 <a class="jxr_linenumber" name="L2268" href="#L2268">2268</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2269" href="#L2269">2269</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2270" href="#L2270">2270</a> 	<strong class="jxr_keyword">public</strong> Header[] getHeaders(String name) {
 <a class="jxr_linenumber" name="L2271" href="#L2271">2271</a> 		<strong class="jxr_keyword">return</strong> headerData.getAll(name);
 <a class="jxr_linenumber" name="L2272" href="#L2272">2272</a> 	}
@@ -2289,7 +2289,7 @@
 <a class="jxr_linenumber" name="L2281" href="#L2281">2281</a> <em class="jxr_javadoccomment">	 * @param name The name of the header to return.</em>
 <a class="jxr_linenumber" name="L2282" href="#L2282">2282</a> <em class="jxr_javadoccomment">	 * @return The first header whose name property equals name or &lt;jk&gt;null&lt;/jk&gt; if no such header could be found.</em>
 <a class="jxr_linenumber" name="L2283" href="#L2283">2283</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2284" href="#L2284">2284</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2285" href="#L2285">2285</a> 	<strong class="jxr_keyword">public</strong> Header getFirstHeader(String name) {
 <a class="jxr_linenumber" name="L2286" href="#L2286">2286</a> 		<strong class="jxr_keyword">return</strong> headerData.getFirst(name).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2287" href="#L2287">2287</a> 	}
@@ -2304,7 +2304,7 @@
 <a class="jxr_linenumber" name="L2296" href="#L2296">2296</a> <em class="jxr_javadoccomment">	 * @param name The name of the header to return.</em>
 <a class="jxr_linenumber" name="L2297" href="#L2297">2297</a> <em class="jxr_javadoccomment">	 * @return The last header whose name property equals name or &lt;jk&gt;null&lt;/jk&gt; if no such header could be found.</em>
 <a class="jxr_linenumber" name="L2298" href="#L2298">2298</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2299" href="#L2299">2299</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2300" href="#L2300">2300</a> 	<strong class="jxr_keyword">public</strong> Header getLastHeader(String name) {
 <a class="jxr_linenumber" name="L2301" href="#L2301">2301</a> 		<strong class="jxr_keyword">return</strong> headerData.getLast(name).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L2302" href="#L2302">2302</a> 	}
@@ -2316,7 +2316,7 @@
 <a class="jxr_linenumber" name="L2308" href="#L2308">2308</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2309" href="#L2309">2309</a> <em class="jxr_javadoccomment">	 * @return All the headers of this message</em>
 <a class="jxr_linenumber" name="L2310" href="#L2310">2310</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2311" href="#L2311">2311</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2312" href="#L2312">2312</a> 	<strong class="jxr_keyword">public</strong> Header[] getAllHeaders() {
 <a class="jxr_linenumber" name="L2313" href="#L2313">2313</a> 		<strong class="jxr_keyword">return</strong> headerData.getAll();
 <a class="jxr_linenumber" name="L2314" href="#L2314">2314</a> 	}
@@ -2332,7 +2332,7 @@
 <a class="jxr_linenumber" name="L2324" href="#L2324">2324</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2325" href="#L2325">2325</a> <em class="jxr_javadoccomment">	 * @param header The header to append.</em>
 <a class="jxr_linenumber" name="L2326" href="#L2326">2326</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2327" href="#L2327">2327</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2327" href="#L2327">2327</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2328" href="#L2328">2328</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addHeader(Header header) {
 <a class="jxr_linenumber" name="L2329" href="#L2329">2329</a> 		headerData.append(header);
 <a class="jxr_linenumber" name="L2330" href="#L2330">2330</a> 	}
@@ -2349,7 +2349,7 @@
 <a class="jxr_linenumber" name="L2341" href="#L2341">2341</a> <em class="jxr_javadoccomment">	 * @param name The name of the header.</em>
 <a class="jxr_linenumber" name="L2342" href="#L2342">2342</a> <em class="jxr_javadoccomment">	 * @param value The value of the header.</em>
 <a class="jxr_linenumber" name="L2343" href="#L2343">2343</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2344" href="#L2344">2344</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2345" href="#L2345">2345</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addHeader(String name, String value) {
 <a class="jxr_linenumber" name="L2346" href="#L2346">2346</a> 		headerData.append(stringHeader(name, value));
 <a class="jxr_linenumber" name="L2347" href="#L2347">2347</a> 	}
@@ -2361,7 +2361,7 @@
 <a class="jxr_linenumber" name="L2353" href="#L2353">2353</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2354" href="#L2354">2354</a> <em class="jxr_javadoccomment">	 * @param header The header to set.</em>
 <a class="jxr_linenumber" name="L2355" href="#L2355">2355</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2356" href="#L2356">2356</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2357" href="#L2357">2357</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader(Header header) {
 <a class="jxr_linenumber" name="L2358" href="#L2358">2358</a> 		headerData.set(header);
 <a class="jxr_linenumber" name="L2359" href="#L2359">2359</a> 	}
@@ -2374,7 +2374,7 @@
 <a class="jxr_linenumber" name="L2366" href="#L2366">2366</a> <em class="jxr_javadoccomment">	 * @param name The name of the header.</em>
 <a class="jxr_linenumber" name="L2367" href="#L2367">2367</a> <em class="jxr_javadoccomment">	 * @param value The value of the header.</em>
 <a class="jxr_linenumber" name="L2368" href="#L2368">2368</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2369" href="#L2369">2369</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2370" href="#L2370">2370</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeader(String name, String value) {
 <a class="jxr_linenumber" name="L2371" href="#L2371">2371</a> 		headerData.set(stringHeader(name, value));
 <a class="jxr_linenumber" name="L2372" href="#L2372">2372</a> 	}
@@ -2384,7 +2384,7 @@
 <a class="jxr_linenumber" name="L2376" href="#L2376">2376</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2377" href="#L2377">2377</a> <em class="jxr_javadoccomment">	 * @param headers The array of headers to set.</em>
 <a class="jxr_linenumber" name="L2378" href="#L2378">2378</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2379" href="#L2379">2379</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2380" href="#L2380">2380</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setHeaders(Header[] headers) {
 <a class="jxr_linenumber" name="L2381" href="#L2381">2381</a> 		headerData.set(headers);
 <a class="jxr_linenumber" name="L2382" href="#L2382">2382</a> 	}
@@ -2394,7 +2394,7 @@
 <a class="jxr_linenumber" name="L2386" href="#L2386">2386</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2387" href="#L2387">2387</a> <em class="jxr_javadoccomment">	 * @param header The header to remove.</em>
 <a class="jxr_linenumber" name="L2388" href="#L2388">2388</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2389" href="#L2389">2389</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2390" href="#L2390">2390</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeHeader(Header header) {
 <a class="jxr_linenumber" name="L2391" href="#L2391">2391</a> 		headerData.remove(header);
 <a class="jxr_linenumber" name="L2392" href="#L2392">2392</a> 	}
@@ -2404,7 +2404,7 @@
 <a class="jxr_linenumber" name="L2396" href="#L2396">2396</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2397" href="#L2397">2397</a> <em class="jxr_javadoccomment">	 * @param name The name of the headers to remove.</em>
 <a class="jxr_linenumber" name="L2398" href="#L2398">2398</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2399" href="#L2399">2399</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2400" href="#L2400">2400</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeHeaders(String name) {
 <a class="jxr_linenumber" name="L2401" href="#L2401">2401</a> 		headerData.remove(name);
 <a class="jxr_linenumber" name="L2402" href="#L2402">2402</a> 	}
@@ -2414,7 +2414,7 @@
 <a class="jxr_linenumber" name="L2406" href="#L2406">2406</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2407" href="#L2407">2407</a> <em class="jxr_javadoccomment">	 * @return Iterator that returns {@link Header} objects in the sequence they are sent over a connection.</em>
 <a class="jxr_linenumber" name="L2408" href="#L2408">2408</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2409" href="#L2409">2409</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2410" href="#L2410">2410</a> 	<strong class="jxr_keyword">public</strong> HeaderIterator headerIterator() {
 <a class="jxr_linenumber" name="L2411" href="#L2411">2411</a> 		<strong class="jxr_keyword">return</strong> headerData.headerIterator();
 <a class="jxr_linenumber" name="L2412" href="#L2412">2412</a> 	}
@@ -2425,7 +2425,7 @@
 <a class="jxr_linenumber" name="L2417" href="#L2417">2417</a> <em class="jxr_javadoccomment">	 * @param name the name of the headers over which to iterate, or &lt;jk&gt;null&lt;/jk&gt; for all headers.</em>
 <a class="jxr_linenumber" name="L2418" href="#L2418">2418</a> <em class="jxr_javadoccomment">	 * @return Iterator that returns {@link Header} objects with the argument name in the sequence they are sent over a connection.</em>
 <a class="jxr_linenumber" name="L2419" href="#L2419">2419</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2420" href="#L2420">2420</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2420" href="#L2420">2420</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2421" href="#L2421">2421</a> 	<strong class="jxr_keyword">public</strong> HeaderIterator headerIterator(String name) {
 <a class="jxr_linenumber" name="L2422" href="#L2422">2422</a> 		<strong class="jxr_keyword">return</strong> headerData.headerIterator(name);
 <a class="jxr_linenumber" name="L2423" href="#L2423">2423</a> 	}
@@ -2436,7 +2436,7 @@
 <a class="jxr_linenumber" name="L2428" href="#L2428">2428</a> <em class="jxr_javadoccomment">	 * @return The parameters effective for this message as set by {@link #setParams(HttpParams)}.</em>
 <a class="jxr_linenumber" name="L2429" href="#L2429">2429</a> <em class="jxr_javadoccomment">	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.</em>
 <a class="jxr_linenumber" name="L2430" href="#L2430">2430</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2431" href="#L2431">2431</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2432" href="#L2432">2432</a> 	@Deprecated
 <a class="jxr_linenumber" name="L2433" href="#L2433">2433</a> 	<strong class="jxr_keyword">public</strong> HttpParams getParams() {
 <a class="jxr_linenumber" name="L2434" href="#L2434">2434</a> 		<strong class="jxr_keyword">return</strong> request.getParams();
@@ -2448,7 +2448,7 @@
 <a class="jxr_linenumber" name="L2440" href="#L2440">2440</a> <em class="jxr_javadoccomment">	 * @param params The parameters.</em>
 <a class="jxr_linenumber" name="L2441" href="#L2441">2441</a> <em class="jxr_javadoccomment">	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.</em>
 <a class="jxr_linenumber" name="L2442" href="#L2442">2442</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> 	@Override <em class="jxr_comment">/* HttpMessage */</em>
+<a class="jxr_linenumber" name="L2443" href="#L2443">2443</a> 	@Override <em class="jxr_comment">/* Overridden from HttpMessage */</em>
 <a class="jxr_linenumber" name="L2444" href="#L2444">2444</a> 	@Deprecated
 <a class="jxr_linenumber" name="L2445" href="#L2445">2445</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setParams(HttpParams params) {
 <a class="jxr_linenumber" name="L2446" href="#L2446">2446</a> 		request.setParams(params);
@@ -2459,7 +2459,7 @@
 <a class="jxr_linenumber" name="L2451" href="#L2451">2451</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L2452" href="#L2452">2452</a> <em class="jxr_javadoccomment">	 * @return The actual request configuration.</em>
 <a class="jxr_linenumber" name="L2453" href="#L2453">2453</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2454" href="#L2454">2454</a> 	@Override <em class="jxr_comment">/* Configurable */</em>
+<a class="jxr_linenumber" name="L2454" href="#L2454">2454</a> 	@Override <em class="jxr_comment">/* Overridden from Configurable */</em>
 <a class="jxr_linenumber" name="L2455" href="#L2455">2455</a> 	<strong class="jxr_keyword">public</strong> RequestConfig getConfig() {
 <a class="jxr_linenumber" name="L2456" href="#L2456">2456</a> 		<strong class="jxr_keyword">return</strong> request.getConfig();
 <a class="jxr_linenumber" name="L2457" href="#L2457">2457</a> 	}
@@ -2662,7 +2662,7 @@
 <a class="jxr_linenumber" name="L2654" href="#L2654">2654</a> <em class="jxr_javadoccomment">	 * 		try-with-resources cleanup or masking the original exception.</em>
 <a class="jxr_linenumber" name="L2655" href="#L2655">2655</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L2656" href="#L2656">2656</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2657" href="#L2657">2657</a> 	@Override <em class="jxr_comment">/* AutoCloseable */</em>
+<a class="jxr_linenumber" name="L2657" href="#L2657">2657</a> 	@Override <em class="jxr_comment">/* Overridden from AutoCloseable */</em>
 <a class="jxr_linenumber" name="L2658" href="#L2658">2658</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
 <a class="jxr_linenumber" name="L2659" href="#L2659">2659</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L2660" href="#L2660">2660</a> 			<strong class="jxr_keyword">if</strong> (response != <strong class="jxr_keyword">null</strong>) {
@@ -2677,7 +2677,7 @@
 <a class="jxr_linenumber" name="L2669" href="#L2669">2669</a> 		}
 <a class="jxr_linenumber" name="L2670" href="#L2670">2670</a> 	}
 <a class="jxr_linenumber" name="L2671" href="#L2671">2671</a> 
-<a class="jxr_linenumber" name="L2672" href="#L2672">2672</a> 	@Override <em class="jxr_comment">/* ContextSession */</em>
+<a class="jxr_linenumber" name="L2672" href="#L2672">2672</a> 	@Override <em class="jxr_comment">/* Overridden from ContextSession */</em>
 <a class="jxr_linenumber" name="L2673" href="#L2673">2673</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
 <a class="jxr_linenumber" name="L2674" href="#L2674">2674</a> 		<strong class="jxr_keyword">return</strong> filteredMap()
 <a class="jxr_linenumber" name="L2675" href="#L2675">2675</a> 			.append(<span class="jxr_string">"client"</span>, client.properties())

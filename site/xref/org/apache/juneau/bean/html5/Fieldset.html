@@ -538,7 +538,19 @@
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">super</strong>.children(value);
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 	}
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> }
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	<strong class="jxr_keyword">public</strong> <a name="Fieldset" href="../../../../../org/apache/juneau/bean/html5/Fieldset.html#Fieldset">Fieldset</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">public</strong> <a name="Fieldset" href="../../../../../org/apache/juneau/bean/html5/Fieldset.html#Fieldset">Fieldset</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	}
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

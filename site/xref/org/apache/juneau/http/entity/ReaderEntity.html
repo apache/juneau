@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">return</strong> Objects.requireNonNull(contentOrElse((Reader) <strong class="jxr_keyword">null</strong>), <span class="jxr_string">"Reader is null."</span>);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Override <em class="jxr_comment">/* AbstractHttpEntity */</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Override <em class="jxr_comment">/* Overridden from AbstractHttpEntity */</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> String asString() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">if</strong> (isCached() &amp;&amp; stringCache == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			stringCache = read(content(), getMaxLength());
@@ -99,7 +99,7 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">return</strong> read(content());
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Override <em class="jxr_comment">/* AbstractHttpEntity */</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Override <em class="jxr_comment">/* Overridden from AbstractHttpEntity */</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> byte[] asBytes() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">if</strong> (isCached() &amp;&amp; byteCache == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			byteCache = readBytes(content());
@@ -108,19 +108,19 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> readBytes(content());
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isRepeatable() {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> isCached();
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> getContentLength() {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (isCached())
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">return</strong> asSafeBytes().length;
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.getContentLength();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">public</strong> InputStream getContent() <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">if</strong> (isCached())
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ByteArrayInputStream(asBytes());
@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		out.flush();
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Override <em class="jxr_comment">/* HttpEntity */</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Override <em class="jxr_comment">/* Overridden from HttpEntity */</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isStreaming() {
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> ! isCached();
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}

@@ -437,7 +437,7 @@
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; (T)getDescription();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"description"</span> -&gt; toType(getDescription(), type);
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"required"</span> -&gt; toType(getRequired(), type);
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"explode"</span> -&gt; toType(getExplode(), type);
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"deprecated"</span> -&gt; toType(getDeprecated(), type);
@@ -472,7 +472,7 @@
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 		};
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 	}
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L470" href="#L470">470</a> 			.addIf(ref != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"$ref"</span>)

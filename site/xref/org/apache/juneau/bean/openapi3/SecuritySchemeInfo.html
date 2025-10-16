@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="SecuritySchemeInfo" href="../../../../../org/apache/juneau/bean/openapi3/SecuritySchemeInfo.html#SecuritySchemeInfo">SecuritySchemeInfo</a>(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">protected</strong> <a name="SecuritySchemeInfo" href="../../../../../org/apache/juneau/bean/openapi3/SecuritySchemeInfo.html#SecuritySchemeInfo">SecuritySchemeInfo</a> strict() {
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">super</strong>.strict();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -433,7 +433,7 @@
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	}
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T get(String property, Class&lt;T&gt; type) {
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 		};
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> <a name="SecuritySchemeInfo" href="../../../../../org/apache/juneau/bean/openapi3/SecuritySchemeInfo.html#SecuritySchemeInfo">SecuritySchemeInfo</a> set(String property, Object value) {
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 		assertArgNotNull(<span class="jxr_string">"property"</span>, property);
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (property) {
@@ -468,7 +468,7 @@
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		};
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 	}
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Override <em class="jxr_comment">/* SwaggerElement */</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	@Override <em class="jxr_comment">/* Overridden from SwaggerElement */</em>
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; keySet() {
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">var</strong> s = setBuilder(String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 			.addIf(bearerFormat != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"bearerFormat"</span>)

@@ -523,7 +523,19 @@
 <a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">super</strong>.children(value);
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 	}
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> }
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<strong class="jxr_keyword">public</strong> <a name="Nav" href="../../../../../org/apache/juneau/bean/html5/Nav.html#Nav">Nav</a> attr(String key, Object val) {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">super</strong>.attr(key, val);
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Override <em class="jxr_comment">/* Overridden from HtmlElement */</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">public</strong> <a name="Nav" href="../../../../../org/apache/juneau/bean/html5/Nav.html#Nav">Nav</a> attrUri(String key, Object val) {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">super</strong>.attrUri(key, val);
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	}
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

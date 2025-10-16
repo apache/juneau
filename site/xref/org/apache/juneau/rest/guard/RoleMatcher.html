@@ -90,7 +90,7 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">return</strong> roles != <strong class="jxr_keyword">null</strong> &amp;&amp; exp.matches(roles);
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">return</strong> exp.toString();
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
@@ -256,7 +256,7 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		}
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"(NEVER)"</span>;
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		}
@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">this</strong>.clauses = clauses.toArray(<strong class="jxr_keyword">new</strong> Exp[clauses.size()]);
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">boolean</strong> matches(Set&lt;String&gt; roles) {
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">for</strong> (Exp e : clauses)
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 				<strong class="jxr_keyword">if</strong> (! e.matches(roles))
@@ -277,13 +277,13 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		}
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">void</strong> appendTokens(Set&lt;String&gt; set) {
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">for</strong> (Exp clause : clauses)
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 				clause.appendTokens(set);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		}
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"(&amp; "</span> + Utils.join(clauses, <span class="jxr_string">" "</span>) + ')';
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		}
@@ -304,13 +304,13 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">void</strong> appendTokens(Set&lt;String&gt; set) {
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">for</strong> (Exp clause : clauses)
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 				clause.appendTokens(set);
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"(| "</span> + Utils.join(clauses, <span class="jxr_string">" "</span>) + ')';
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		}
@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">this</strong>.operand = operand;
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		}
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">boolean</strong> matches(Set&lt;String&gt; roles) {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">for</strong> (String role : roles)
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<strong class="jxr_keyword">if</strong> (operand.equals(role))
@@ -331,12 +331,12 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 		}
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">void</strong> appendTokens(Set&lt;String&gt; set) {
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 			set.add(operand);
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		}
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"[= "</span> + operand + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		}
@@ -351,7 +351,7 @@
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			p = Utils.getMatchPattern3(operand);
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		}
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">boolean</strong> matches(Set&lt;String&gt; roles) {
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">for</strong> (String role : roles)
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 				<strong class="jxr_keyword">if</strong> (p.matcher(role).matches())
@@ -359,12 +359,12 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		}
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		@Override <em class="jxr_comment">/* Exp */</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">void</strong> appendTokens(Set&lt;String&gt; set) {
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			set.add(operand);
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 		}
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"[* "</span> + p.pattern().replaceAll(<span class="jxr_string">"&#92;&#92;&#92;&#92;[QE]"</span>, <span class="jxr_string">""</span>) + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		}

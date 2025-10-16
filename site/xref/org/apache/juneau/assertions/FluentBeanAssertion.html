@@ -147,7 +147,7 @@
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_comment">// Transform methods</em>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Override <em class="jxr_comment">/* FluentObjectAssertion */</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	@Override <em class="jxr_comment">/* Overridden from FluentObjectAssertion */</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">public</strong> FluentBeanAssertion&lt;T,R&gt; asTransformed(Function&lt;T,T&gt; function) {  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentBeanAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, function.apply(orElse(<strong class="jxr_keyword">null</strong>)), returns());
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}

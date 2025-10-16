@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_comment">// Transform methods</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Override <em class="jxr_comment">/* FluentObjectAssertion */</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Override <em class="jxr_comment">/* Overridden from FluentObjectAssertion */</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> FluentMapAssertion&lt;K,V,R&gt; asTransformed(Function&lt;Map&lt;K,V&gt;,Map&lt;K,V&gt;&gt; function) {  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FluentMapAssertion&lt;&gt;(<strong class="jxr_keyword">this</strong>, function.apply(orElse(<strong class="jxr_keyword">null</strong>)), returns());
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}

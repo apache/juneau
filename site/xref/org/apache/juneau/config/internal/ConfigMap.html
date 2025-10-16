@@ -588,7 +588,7 @@
 <a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">return</strong> u(listeners);
 <a class="jxr_linenumber" name="L581" href="#L581">581</a> 	}
 <a class="jxr_linenumber" name="L582" href="#L582">582</a> 
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	@Override <em class="jxr_comment">/* ConfigStoreListener */</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	@Override <em class="jxr_comment">/* Overridden from ConfigStoreListener */</em>
 <a class="jxr_linenumber" name="L584" href="#L584">584</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onChange(String newContents) {
 <a class="jxr_linenumber" name="L585" href="#L585">585</a> 		ConfigEvents changes2 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.write()) {
@@ -606,7 +606,7 @@
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> 			signal(changes2);
 <a class="jxr_linenumber" name="L599" href="#L599">599</a> 	}
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<strong class="jxr_keyword">public</strong> String toString() {
 <a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> x = lock.read()) {
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">return</strong> asString();

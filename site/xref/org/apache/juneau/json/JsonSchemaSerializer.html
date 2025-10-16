@@ -172,17 +172,17 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			generatorBuilder = copyFrom.generatorBuilder.copy().beanContext(beanContext());
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		}
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		}
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">public</strong> <a name="JsonSchemaSerializer" href="../../../../org/apache/juneau/json/JsonSchemaSerializer.html#JsonSchemaSerializer">JsonSchemaSerializer</a> build() {
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">return</strong> cache(CACHE).build(JsonSchemaSerializer.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		}
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		@Override <em class="jxr_comment">/* Context.Builder */</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		@Override <em class="jxr_comment">/* Overridden from Context.Builder */</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">public</strong> <a name="HashKey" href="../../../../org/apache/juneau/utils/HashKey.html#HashKey">HashKey</a> hashKey() {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">return</strong> HashKey.of(
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">super</strong>.hashKey(),
@@ -1024,17 +1024,17 @@
 <a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		generator = builder.generatorBuilder.build();
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	}
 <a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
 <a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 	}
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	<strong class="jxr_keyword">public</strong> JsonSchemaSerializerSession.Builder createSession() {
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">return</strong> JsonSchemaSerializerSession.create(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	}
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaSerializerSession" href="../../../../org/apache/juneau/json/JsonSchemaSerializerSession.html#JsonSchemaSerializerSession">JsonSchemaSerializerSession</a> getSession() {
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">return</strong> createSession().build();
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	}
@@ -1047,7 +1047,7 @@
 <a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	<em class="jxr_comment">// Extended metadata</em>
 <a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	@Override <em class="jxr_comment">/* JsonSchemaMetaProvider */</em>
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	@Override <em class="jxr_comment">/* Overridden from JsonSchemaMetaProvider */</em>
 <a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaClassMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaClassMeta.html#JsonSchemaClassMeta">JsonSchemaClassMeta</a> getJsonSchemaClassMeta(ClassMeta&lt;?&gt; cm) {
 <a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
 <a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -1057,7 +1057,7 @@
 <a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 	}
 <a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	@Override <em class="jxr_comment">/* JsonSchemaMetaProvider */</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	@Override <em class="jxr_comment">/* Overridden from JsonSchemaMetaProvider */</em>
 <a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 	<strong class="jxr_keyword">public</strong> <a name="JsonSchemaBeanPropertyMeta" href="../../../../org/apache/juneau/jsonschema/JsonSchemaBeanPropertyMeta.html#JsonSchemaBeanPropertyMeta">JsonSchemaBeanPropertyMeta</a> getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
 <a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
 <a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>) {
@@ -1071,7 +1071,7 @@
 <a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	<em class="jxr_comment">// Other methods</em>
 <a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	@Override <em class="jxr_comment">/* Context */</em>
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 	@Override <em class="jxr_comment">/* Overridden from Context */</em>
 <a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 	<strong class="jxr_keyword">protected</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> properties() {
 <a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		<strong class="jxr_keyword">return</strong> filteredMap(<span class="jxr_string">"generator"</span>, generator);
 <a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 	}
