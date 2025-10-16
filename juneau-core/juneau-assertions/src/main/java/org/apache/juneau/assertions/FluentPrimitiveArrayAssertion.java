@@ -110,9 +110,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
 	static {
@@ -138,9 +135,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
 		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -183,9 +177,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an object assertion on the item specified at the specified index.
@@ -224,9 +215,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -355,9 +343,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -387,9 +372,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public String toString() {

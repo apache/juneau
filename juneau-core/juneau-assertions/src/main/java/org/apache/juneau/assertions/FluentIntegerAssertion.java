@@ -102,9 +102,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -142,9 +139,6 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentIntegerAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

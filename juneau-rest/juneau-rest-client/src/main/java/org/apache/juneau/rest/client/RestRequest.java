@@ -119,9 +119,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return null;
 		}
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
 	private class SimplePart implements NameValuePair {
 		final String name;
 		final String value;

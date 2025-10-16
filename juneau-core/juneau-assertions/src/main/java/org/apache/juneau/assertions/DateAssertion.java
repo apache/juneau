@@ -112,9 +112,6 @@ import org.apache.juneau.serializer.*;
  */
 public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -128,9 +125,6 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 		return new DateAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -143,9 +137,6 @@ public class DateAssertion extends FluentDateAssertion<DateAssertion> {
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public DateAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

@@ -91,9 +91,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<T>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -108,9 +105,6 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 		return new ObjectAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -123,9 +117,6 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public ObjectAssertion<T> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

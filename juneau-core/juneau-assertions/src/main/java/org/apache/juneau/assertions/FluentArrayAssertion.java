@@ -115,9 +115,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
 	private static final String
@@ -130,9 +127,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		MSG_arrayDidntContainAnyMatchingValue = MESSAGES.getString("arrayDidntContainAnyMatchingValue"),
 		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -170,9 +164,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this assertion into a {@link FluentBeanListAssertion}.
@@ -276,9 +267,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -407,9 +395,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentArrayAssertion<E,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -439,9 +424,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public String toString() {

@@ -122,9 +122,6 @@ import org.apache.juneau.serializer.*;
  */
 public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -138,9 +135,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 		return new StringAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -159,9 +153,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public StringAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

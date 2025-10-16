@@ -108,9 +108,6 @@ import org.apache.juneau.serializer.*;
  */
 public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -126,9 +123,6 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 		return new MapAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -141,9 +135,6 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public MapAssertion<K,V> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

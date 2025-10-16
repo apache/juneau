@@ -3580,9 +3580,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// InputStreamParser Properties
-		//-----------------------------------------------------------------------------------------------------------------
 		/**
 		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default OpenAPI format for HTTP parts.
 		 *
@@ -5754,9 +5751,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::ws);
 			return this;
 		}
-		//-----------------------------------------------------------------------------------------------------------------
-		// Parser Properties
-		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Convenience method for specifying XML as the marshalling transmission media type.

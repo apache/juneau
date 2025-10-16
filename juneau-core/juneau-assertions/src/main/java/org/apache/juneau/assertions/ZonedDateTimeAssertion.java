@@ -108,9 +108,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDateTimeAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -124,9 +121,6 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 		return new ZonedDateTimeAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -139,9 +133,6 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public ZonedDateTimeAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

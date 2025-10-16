@@ -96,9 +96,6 @@ import org.apache.juneau.serializer.*;
 @SuppressWarnings("rawtypes")
 public class FluentComparableAssertion<T extends Comparable,R> extends FluentObjectAssertion<T,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentComparableAssertion.class, "Messages");
 	private static final String
@@ -107,9 +104,6 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		MSG_valueWasNotLessThanExpected = MESSAGES.getString("valueWasNotLessThanExpected"),
 		MSG_valueWasNotLessOrEqualsToExpected = MESSAGES.getString("valueWasNotLessOrEqualsToExpected");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -147,18 +141,12 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from FluentObjectAssertion */
 	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value is between (inclusive) the specified upper and lower values.
@@ -233,9 +221,6 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentComparableAssertion<T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

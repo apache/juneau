@@ -67,9 +67,6 @@ public @interface OpenApiConfig {
 	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
-	//-------------------------------------------------------------------------------------------------------------------
-	// OpenApiParser
-	//-------------------------------------------------------------------------------------------------------------------
 	/**
 	 * Default format for HTTP parts.
 	 *

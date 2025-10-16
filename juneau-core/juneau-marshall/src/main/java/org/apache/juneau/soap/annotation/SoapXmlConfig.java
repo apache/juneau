@@ -48,9 +48,6 @@ public @interface SoapXmlConfig {
 	 * @return The annotation value.
 	 */
 	int rank() default 0;
-	//-------------------------------------------------------------------------------------------------------------------
-	// SoapXmlSerializer
-	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * The <c>SOAPAction</c> HTTP header value to set on responses.

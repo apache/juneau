@@ -95,9 +95,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentObjectAssertion.class, "Messages");
 	private static final String
@@ -123,9 +120,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		.sortMaps()
 		.build();
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private final T value;
 
@@ -166,9 +160,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this assertion into an {@link FluentAnyAssertion} so that it can be converted to other assertion types.
@@ -291,9 +282,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value passes the specified predicate test.
@@ -532,9 +520,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentObjectAssertion<T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -564,9 +549,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the string form of the inner object.

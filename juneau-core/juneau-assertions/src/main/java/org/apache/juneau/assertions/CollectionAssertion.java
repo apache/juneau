@@ -106,9 +106,6 @@ import org.apache.juneau.serializer.*;
  */
 public class CollectionAssertion<E> extends FluentCollectionAssertion<E,CollectionAssertion<E>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -123,9 +120,6 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 		return new CollectionAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -138,9 +132,6 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public CollectionAssertion<E> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

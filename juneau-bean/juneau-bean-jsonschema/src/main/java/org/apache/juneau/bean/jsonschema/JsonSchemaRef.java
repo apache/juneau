@@ -49,9 +49,6 @@ public class JsonSchemaRef extends JsonSchema {
 		this.setRef(uri);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaRef setName(String name) {

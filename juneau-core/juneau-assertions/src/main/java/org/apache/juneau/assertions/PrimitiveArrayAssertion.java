@@ -109,9 +109,6 @@ import org.apache.juneau.serializer.*;
  */
 public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<E,T,PrimitiveArrayAssertion<E,T>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -127,9 +124,6 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 		return new PrimitiveArrayAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -142,9 +136,6 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public PrimitiveArrayAssertion<E,T> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

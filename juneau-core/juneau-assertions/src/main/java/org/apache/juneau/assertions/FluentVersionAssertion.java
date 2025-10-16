@@ -110,9 +110,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -150,9 +147,6 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Extracts the maintenance part of the version string (index position 2).
@@ -191,9 +185,6 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().getPart(index).orElse(null), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentVersionAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

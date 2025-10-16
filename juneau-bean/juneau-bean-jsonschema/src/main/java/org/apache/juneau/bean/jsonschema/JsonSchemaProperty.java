@@ -48,9 +48,6 @@ public class JsonSchemaProperty extends JsonSchema {
 		setType(type);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from JsonSchema */
 	public JsonSchemaProperty setName(String name) {

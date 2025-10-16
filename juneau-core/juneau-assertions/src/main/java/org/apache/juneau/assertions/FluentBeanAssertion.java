@@ -95,9 +95,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -135,9 +132,6 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Extracts the specified property as an {@link FluentListAssertion}.
@@ -176,9 +170,6 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentBeanAssertion<T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -208,9 +199,6 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private BeanMap<T> toBeanMap() {
 		return BeanMap.of(value());

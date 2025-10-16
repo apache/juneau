@@ -120,9 +120,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentDateAssertion.class, "Messages");
 	private static final String
@@ -130,9 +127,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
 		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -170,9 +164,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an long assertion on the epoch milliseconds of this date.
@@ -200,9 +191,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		return new FluentLongAssertion<>(this, valueIsNull() ? null : value().getTime() / 1000, returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value equals the specified value at the specified precision.
@@ -283,9 +271,6 @@ public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentDateAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

@@ -113,9 +113,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<Byte,byte[],R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -153,9 +150,6 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this byte array to a base-64 encoded string and returns it as a new assertion.
@@ -234,9 +228,6 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 		return new FluentStringAssertion<>(this, valueIsNull() ? null : new String(value(), cs), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentByteArrayAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

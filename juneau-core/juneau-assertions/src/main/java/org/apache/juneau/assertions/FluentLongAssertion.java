@@ -106,9 +106,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -146,9 +143,6 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this long into an integer and then returns it as an integer assertion.
@@ -159,9 +153,6 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 		return new FluentIntegerAssertion<>(this, map(Long::intValue).orElse(null), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentLongAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

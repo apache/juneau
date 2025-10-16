@@ -105,9 +105,6 @@ import org.apache.juneau.serializer.*;
  */
 public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -121,9 +118,6 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 		return new VersionAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -136,9 +130,6 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public VersionAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

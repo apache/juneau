@@ -125,9 +125,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -165,9 +162,6 @@ public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> 
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Concatenates this list of strings into a {@link FluentStringAssertion}.
@@ -209,9 +203,6 @@ public class FluentStringListAssertion<R> extends FluentListAssertion<String,R> 
 		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(StringUtils::trim).toList(), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentStringListAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

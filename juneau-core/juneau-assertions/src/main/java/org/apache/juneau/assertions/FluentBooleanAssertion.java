@@ -98,18 +98,12 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentBooleanAssertion.class, "Messages");
 	private static final String
 		MSG_valueWasFalse = MESSAGES.getString("valueWasFalse"),
 		MSG_valueWasTrue = MESSAGES.getString("valueWasTrue");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -147,9 +141,6 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value is false.
@@ -175,9 +166,6 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentBooleanAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

@@ -123,9 +123,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -153,9 +150,6 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 		return new ListAssertion<>(value == null ? null : value.toList());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -168,9 +162,6 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public ListAssertion<E> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

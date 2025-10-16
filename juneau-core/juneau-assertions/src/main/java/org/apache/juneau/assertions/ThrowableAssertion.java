@@ -102,9 +102,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAssertion<T,ThrowableAssertion<T>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -119,9 +116,6 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 		return new ThrowableAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -134,9 +128,6 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public ThrowableAssertion<T> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

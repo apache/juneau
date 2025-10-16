@@ -132,9 +132,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentStringAssertion.class, "Messages");
 	private static final String
@@ -151,9 +148,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		MSG_stringDidNotStartWithExpected = MESSAGES.getString("stringDidNotStartWithExpected"),
 		MSG_stringDidNotEndWithExpected = MESSAGES.getString("stringDidNotEndWithExpected");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private boolean javaStrings;
 
@@ -193,9 +187,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Config methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * When enabled, text in the message is converted to valid Java strings.
@@ -211,9 +202,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts the text to lowercase.
@@ -320,9 +308,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		return asTransformed(StringUtils::urlDecode);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the text equals the specified value.
@@ -627,9 +612,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		return is(value == null ? null : toString());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentStringAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -659,9 +641,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//------------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//------------------------------------------------------------------------------------------------------------------
 
 	private String fix(String text) {
 		if (javaStrings)

@@ -103,9 +103,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
 	private static final String
@@ -113,9 +110,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		MSG_exceptionWasNotThrown = MESSAGES.getString("exceptionWasNotThrown"),
 		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -153,9 +147,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an assertion against the caused-by throwable.
@@ -349,9 +340,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that this throwable is exactly the specified type.
@@ -413,9 +401,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentThrowableAssertion<T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -445,9 +430,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override
 	protected boolean equals(Object o1, Object o2) {

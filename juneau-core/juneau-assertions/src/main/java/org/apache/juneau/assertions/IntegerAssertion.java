@@ -96,9 +96,6 @@ import org.apache.juneau.serializer.*;
  */
 public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -112,9 +109,6 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 		return new IntegerAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -127,9 +121,6 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public IntegerAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

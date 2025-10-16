@@ -137,17 +137,11 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentAnyAssertion.class, "Messages");
 	private static final String
 		MSG_objectWasNotType = MESSAGES.getString("objectWasNotType");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -185,9 +179,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts this object assertion into an array assertion.
@@ -477,9 +468,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		return new FluentZonedDateTimeAssertion<>(this, cast(ZonedDateTime.class), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentAnyAssertion<T,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -509,9 +497,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private <T2> T2 cast(Class<T2> c) throws AssertionError {
 		Object o = orElse(null);

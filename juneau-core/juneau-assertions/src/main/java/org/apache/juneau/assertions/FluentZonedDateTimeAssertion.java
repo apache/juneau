@@ -115,9 +115,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentZonedDateTimeAssertion.class, "Messages");
 	private static final String
@@ -125,9 +122,6 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		MSG_valueWasNotAfterExpected = MESSAGES.getString("valueWasNotAfterExpected"),
 		MSG_valueWasNotBeforeExpected = MESSAGES.getString("valueWasNotBeforeExpected");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -165,9 +159,6 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the value equals the specified value at the specified precision.
@@ -255,9 +246,6 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentZonedDateTimeAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

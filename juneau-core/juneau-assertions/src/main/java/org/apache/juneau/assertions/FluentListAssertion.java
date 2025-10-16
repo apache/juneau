@@ -121,17 +121,11 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentListAssertion.class, "Messages");
 	private static final String
 		MSG_listDidNotContainExpectedValueAt = MESSAGES.getString("listDidNotContainExpectedValueAt");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -169,9 +163,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Applies a transform on the inner object and returns a new inner object.
@@ -296,9 +287,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(start, end), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -333,9 +321,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
  		return isEach(p);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentListAssertion<E,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -365,9 +350,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private E at(int index) throws AssertionError {
 		return valueIsNull() || index < 0 || index >= getSize() ? null : value().get(index);

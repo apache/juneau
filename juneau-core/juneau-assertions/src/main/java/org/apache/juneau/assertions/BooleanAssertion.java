@@ -95,9 +95,6 @@ import org.apache.juneau.serializer.*;
  */
 public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -111,9 +108,6 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 		return new BooleanAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -126,9 +120,6 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public BooleanAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

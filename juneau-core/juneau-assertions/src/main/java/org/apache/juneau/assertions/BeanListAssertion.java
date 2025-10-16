@@ -129,9 +129,6 @@ import org.apache.juneau.serializer.*;
  */
 public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAssertion<E>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -146,9 +143,6 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 		return new BeanListAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -161,9 +155,6 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public BeanListAssertion<E> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

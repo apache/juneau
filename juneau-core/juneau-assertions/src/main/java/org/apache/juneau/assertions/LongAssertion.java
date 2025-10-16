@@ -101,9 +101,6 @@ import org.apache.juneau.serializer.*;
  */
 public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -117,9 +114,6 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 		return new LongAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -132,9 +126,6 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public LongAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

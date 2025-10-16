@@ -105,9 +105,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");
 	private static final String
@@ -118,9 +115,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		MSG_collectionWasEmpty = MESSAGES.getString("collectionWasEmpty"),
 		MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Chained constructor.
@@ -158,9 +152,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		this(null, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns an integer assertion on the size of this collection.
@@ -189,9 +180,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that all values in the collection pass the specified test.
@@ -292,9 +280,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return returns();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentCollectionAssertion<E,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -324,9 +309,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the size of this collection if it is not <jk>null</jk>.

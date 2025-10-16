@@ -123,9 +123,6 @@ import org.apache.juneau.serializer.*;
  */
 public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static BeanMap<?> beanMap(Object o) {
 		return BeanMap.of(o);
@@ -152,9 +149,6 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 		super(creator, value, returns);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -193,9 +187,6 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).toList(), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentBeanListAssertion<E,R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -225,7 +216,4 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 }

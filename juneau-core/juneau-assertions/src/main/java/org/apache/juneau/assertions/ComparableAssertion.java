@@ -92,9 +92,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ComparableAssertion<T extends Comparable<T>> extends FluentComparableAssertion<T,ComparableAssertion<T>> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -109,9 +106,6 @@ public class ComparableAssertion<T extends Comparable<T>> extends FluentComparab
 		return new ComparableAssertion<>(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -124,9 +118,6 @@ public class ComparableAssertion<T extends Comparable<T>> extends FluentComparab
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public ComparableAssertion<T> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

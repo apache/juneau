@@ -48,9 +48,6 @@ public class JsonSchemaPropertySimpleArray extends JsonSchemaProperty {
 		);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from JsonSchemaProperty */
 	public JsonSchemaPropertySimpleArray setName(String name) {

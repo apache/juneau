@@ -115,9 +115,6 @@ import org.apache.juneau.serializer.*;
  */
 public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssertion> {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
@@ -131,9 +128,6 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 		return new ByteArrayAssertion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.
@@ -146,9 +140,6 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 		super(value, null);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public ByteArrayAssertion setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

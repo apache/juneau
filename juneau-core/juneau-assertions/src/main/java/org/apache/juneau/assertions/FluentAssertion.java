@@ -84,9 +84,6 @@ import java.io.*;
  */
 public abstract class FluentAssertion<R> extends Assertion {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private final R returns;
 
@@ -106,9 +103,6 @@ public abstract class FluentAssertion<R> extends Assertion {
 		this.returns = returns;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from Assertion */
 	public FluentAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -138,9 +132,6 @@ public abstract class FluentAssertion<R> extends Assertion {
 		super.setThrowable(value);
 		return this;
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the object that the fluent methods on this class should return.
