@@ -41,16 +41,6 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 	}
 
 	/**
-	 * Returns this instance typed as {@code B}.
-	 *
-	 * @return this instance typed as {@code B}.
-	 * @since 9.2.0
-	 */
-	@SuppressWarnings("unchecked")
-	protected B asThis() {
-		return (B) this;
-	}
-	/**
 	 * Sets the {@link AnnotationImpl#description()} property on the target annotation.
 	 *
 	 * @param value The new value for this property.
@@ -60,5 +50,15 @@ public class AnnotationBuilder<B extends AnnotationBuilder<B>> {
 	public B description(final String...value) {
 		this.description = value;
 		return asThis();
+	}
+	/**
+	 * Returns this instance typed as {@code B}.
+	 *
+	 * @return this instance typed as {@code B}.
+	 * @since 9.2.0
+	 */
+	@SuppressWarnings("unchecked")
+	protected B asThis() {
+		return (B) this;
 	}
 }

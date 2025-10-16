@@ -106,10 +106,6 @@ public class Br extends HtmlElementVoid {
 	 * Creates an empty {@link Br} element.
 	 */
 	public Br() { /* Empty constructor. */ }
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Br _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -119,6 +115,18 @@ public class Br extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Br accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Br attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Br attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -479,18 +487,6 @@ public class Br extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Br translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Br attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Br attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

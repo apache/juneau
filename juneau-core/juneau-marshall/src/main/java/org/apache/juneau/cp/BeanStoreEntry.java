@@ -39,11 +39,6 @@ import org.apache.juneau.internal.*;
  * @param <T> The bean type.
  */
 public class BeanStoreEntry<T> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -56,11 +51,6 @@ public class BeanStoreEntry<T> {
 	public static <T> BeanStoreEntry<T> create(Class<T> type, Supplier<T> bean, String name) {
 		return new BeanStoreEntry<>(type, bean, name);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	final Supplier<T> bean;
 	final Class<T> type;
 	final String name;
@@ -76,6 +66,33 @@ public class BeanStoreEntry<T> {
 		this.bean = Utils.assertArgNotNull("bean", bean);
 		this.type = Utils.assertArgNotNull("type", type);
 		this.name = Utils.nullIfEmpty3(name);
+	}
+
+	/**
+	 * Returns the bean associated with this entry.
+	 *
+	 * @return The bean associated with this entry.
+	 */
+	public T get() {
+		return bean.get();
+	}
+
+	/**
+	 * Returns the name associated with this entry.
+	 *
+	 * @return the name associated with this entry.  <jk>null</jk> if no name is associated.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the type this bean is associated with.
+	 *
+	 * @return The type this bean is associated with.
+	 */
+	public Class<T> getType() {
+		return type;
 	}
 
 	/**
@@ -98,33 +115,6 @@ public class BeanStoreEntry<T> {
 	public boolean matches(Class<?> type, String name) {
 		name = Utils.nullIfEmpty3(name);
 		return matches(type) && Utils.eq(this.name, name);
-	}
-
-	/**
-	 * Returns the bean associated with this entry.
-	 *
-	 * @return The bean associated with this entry.
-	 */
-	public T get() {
-		return bean.get();
-	}
-
-	/**
-	 * Returns the type this bean is associated with.
-	 *
-	 * @return The type this bean is associated with.
-	 */
-	public Class<T> getType() {
-		return type;
-	}
-
-	/**
-	 * Returns the name associated with this entry.
-	 *
-	 * @return the name associated with this entry.  <jk>null</jk> if no name is associated.
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**

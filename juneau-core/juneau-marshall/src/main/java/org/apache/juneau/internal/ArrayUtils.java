@@ -55,34 +55,6 @@ public class ArrayUtils {
 	}
 
 	/**
-	 * Combine an arbitrary number of arrays into a single array.
-	 *
-	 * @param <E> The element type.
-	 * @param arrays Collection of arrays to combine.
-	 * @return A new combined array, or <jk>null</jk> if all arrays are <jk>null</jk>.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <E> E[] combine(E[]...arrays) {
-		Utils.assertArgNotNull("arrays", arrays);
-		int l = 0;
-		E[] a1 = null;
-		for (E[] a : arrays) {
-			if (a1 == null && a != null)
-				a1 = a;
-			l += (a == null ? 0 : a.length);
-		}
-		if (a1 == null)
-			return null;
-		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
-		int i = 0;
-		for (E[] aa : arrays)
-			if (aa != null)
-				for (E t : aa)
-					a[i++] = t;
-		return a;
-	}
-
-	/**
 	 * Converts the specified array to a <c>Set</c>.
 	 *
 	 * <p>
@@ -127,6 +99,160 @@ public class ArrayUtils {
 				return array.length;
 			}
 		};
+	}
+
+	/**
+	 * Combine an arbitrary number of arrays into a single array.
+	 *
+	 * @param <E> The element type.
+	 * @param arrays Collection of arrays to combine.
+	 * @return A new combined array, or <jk>null</jk> if all arrays are <jk>null</jk>.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <E> E[] combine(E[]...arrays) {
+		Utils.assertArgNotNull("arrays", arrays);
+		int l = 0;
+		E[] a1 = null;
+		for (E[] a : arrays) {
+			if (a1 == null && a != null)
+				a1 = a;
+			l += (a == null ? 0 : a.length);
+		}
+		if (a1 == null)
+			return null;
+		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
+		int i = 0;
+		for (E[] aa : arrays)
+			if (aa != null)
+				for (E t : aa)
+					a[i++] = t;
+		return a;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified array contains the specified element using the {@link String#equals(Object)}
+	 * method.
+	 *
+	 * @param element The element to check for.
+	 * @param array The array to check.
+	 * @return
+	 * 	<jk>true</jk> if the specified array contains the specified element,
+	 * 	<jk>false</jk> if the array or element is <jk>null</jk>.
+	 */
+	public static boolean contains(String element, String[] array) {
+		return indexOf(element, array) != -1;
+	}
+
+	/**
+	 * Makes a copy of the specified array.
+	 *
+	 * @param array The array to copy.
+	 * @param <T> The element type.
+	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.s
+	 */
+	public static <T> T[] copyOf(T[] array) {
+		return array == null ? null : Arrays.copyOf(array, array.length);
+	}
+
+	/**
+	 * Copies the specified array into the specified list.
+	 *
+	 * <p>
+	 * Works on both object and primitive arrays.
+	 *
+	 * @param array The array to copy into a list.
+	 * @param list The list to copy the values into.
+	 * @return The same list passed in.
+	 */
+	@SuppressWarnings({"unchecked","rawtypes"})
+	public static List copyToList(Object array, List list) {
+		if (array != null) {
+			int length = Array.getLength(array);
+			for (int i = 0; i < length; i++)
+				list.add(Array.get(array, i));
+		}
+		return list;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the following sorted arrays are equals.
+	 *
+	 * @param a1 Array #1.
+	 * @param a2 Array #2.
+	 * @return <jk>true</jk> if the following sorted arrays are equals.
+	 */
+	public static boolean equals(String[] a1, String[] a2) {
+		if (a1.length != a2.length)
+			return false;
+		for (int i = 0; i < a1.length; i++)
+			if (! Utils.eq(a1[i], a2[i]))
+				return false;
+		return true;
+	}
+
+	/**
+	 * Returns the index position of the element in the specified array using the {@link String#equals(Object)} method.
+	 *
+	 * @param element The element to check for.
+	 * @param array The array to check.
+	 * @return
+	 * 	The index position of the element in the specified array, or
+	 * 	<c>-1</c> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
+	 */
+	public static int indexOf(String element, String[] array) {
+		if (element == null || array == null)
+			return -1;
+		for (int i = 0; i < array.length; i++)
+			if (element.equals(array[i]))
+				return i;
+		return -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified array is null or has a length of zero.
+	 *
+	 * @param array The array to check.
+	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
+	 */
+	public static boolean isEmptyArray(Object[] array) {
+		return array == null || array.length == 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if both specified arrays are null or have a length of zero.
+	 *
+	 * @param array1 The array to check.
+	 * @param array2 The array to check.
+	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
+	 */
+	public static boolean isEmptyArray(Object[] array1, Object[] array2) {
+		return isEmptyArray(array1) && isEmptyArray(array2);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified array is not null and has a length greater than zero.
+	 *
+	 * @param array The array to check.
+	 * @return <jk>true</jk> if the specified array is not null and has a length greater than zero.
+	 */
+	public static boolean isNotEmptyArray(Object[] array) {
+		return array != null && array.length > 0;
+	}
+
+	/**
+	 * Reverses the entries in an array.
+	 *
+	 * @param <E> The element type.
+	 * @param array The array to reverse.
+	 * @return The same array.
+	 */
+	public static <E> E[] reverse(E[] array) {
+		for (int i = 0; i < array.length / 2; i++) {
+			E temp = array[i];
+			array[i] = array[array.length - i - 1];
+			array[array.length - i - 1] = temp;
+		}
+		return array;
 	}
 
 	/**
@@ -185,58 +311,6 @@ public class ArrayUtils {
 	}
 
 	/**
-	 * Copies the specified array into the specified list.
-	 *
-	 * <p>
-	 * Works on both object and primitive arrays.
-	 *
-	 * @param array The array to copy into a list.
-	 * @param list The list to copy the values into.
-	 * @return The same list passed in.
-	 */
-	@SuppressWarnings({"unchecked","rawtypes"})
-	public static List copyToList(Object array, List list) {
-		if (array != null) {
-			int length = Array.getLength(array);
-			for (int i = 0; i < length; i++)
-				list.add(Array.get(array, i));
-		}
-		return list;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified array contains the specified element using the {@link String#equals(Object)}
-	 * method.
-	 *
-	 * @param element The element to check for.
-	 * @param array The array to check.
-	 * @return
-	 * 	<jk>true</jk> if the specified array contains the specified element,
-	 * 	<jk>false</jk> if the array or element is <jk>null</jk>.
-	 */
-	public static boolean contains(String element, String[] array) {
-		return indexOf(element, array) != -1;
-	}
-
-	/**
-	 * Returns the index position of the element in the specified array using the {@link String#equals(Object)} method.
-	 *
-	 * @param element The element to check for.
-	 * @param array The array to check.
-	 * @return
-	 * 	The index position of the element in the specified array, or
-	 * 	<c>-1</c> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
-	 */
-	public static int indexOf(String element, String[] array) {
-		if (element == null || array == null)
-			return -1;
-		for (int i = 0; i < array.length; i++)
-			if (element.equals(array[i]))
-				return i;
-		return -1;
-	}
-
-	/**
 	 * Converts the specified collection to an array of strings.
 	 *
 	 * <p>
@@ -252,79 +326,5 @@ public class ArrayUtils {
 		for (Object o : c)
 			r[i++] = Utils.s(o);
 		return r;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the following sorted arrays are equals.
-	 *
-	 * @param a1 Array #1.
-	 * @param a2 Array #2.
-	 * @return <jk>true</jk> if the following sorted arrays are equals.
-	 */
-	public static boolean equals(String[] a1, String[] a2) {
-		if (a1.length != a2.length)
-			return false;
-		for (int i = 0; i < a1.length; i++)
-			if (! Utils.eq(a1[i], a2[i]))
-				return false;
-		return true;
-	}
-
-	/**
-	 * Makes a copy of the specified array.
-	 *
-	 * @param array The array to copy.
-	 * @param <T> The element type.
-	 * @return A new copy of the array, or <jk>null</jk> if the array was <jk>null</jk>.s
-	 */
-	public static <T> T[] copyOf(T[] array) {
-		return array == null ? null : Arrays.copyOf(array, array.length);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified array is not null and has a length greater than zero.
-	 *
-	 * @param array The array to check.
-	 * @return <jk>true</jk> if the specified array is not null and has a length greater than zero.
-	 */
-	public static boolean isNotEmptyArray(Object[] array) {
-		return array != null && array.length > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified array is null or has a length of zero.
-	 *
-	 * @param array The array to check.
-	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
-	 */
-	public static boolean isEmptyArray(Object[] array) {
-		return array == null || array.length == 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if both specified arrays are null or have a length of zero.
-	 *
-	 * @param array1 The array to check.
-	 * @param array2 The array to check.
-	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
-	 */
-	public static boolean isEmptyArray(Object[] array1, Object[] array2) {
-		return isEmptyArray(array1) && isEmptyArray(array2);
-	}
-
-	/**
-	 * Reverses the entries in an array.
-	 *
-	 * @param <E> The element type.
-	 * @param array The array to reverse.
-	 * @return The same array.
-	 */
-	public static <E> E[] reverse(E[] array) {
-		for (int i = 0; i < array.length / 2; i++) {
-			E temp = array[i];
-			array[i] = array[array.length - i - 1];
-			array[array.length - i - 1] = temp;
-		}
-		return array;
 	}
 }

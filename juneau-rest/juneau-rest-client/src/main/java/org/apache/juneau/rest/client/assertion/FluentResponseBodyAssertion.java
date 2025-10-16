@@ -103,26 +103,6 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<ResponseContent,R> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentResponseBodyAssertion(ResponseContent value, R returns) {
-		this(null, value, returns);
-	}
-
 	/**
 	 * Chained constructor.
 	 *
@@ -145,9 +125,89 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		setThrowable(BadRequest.class);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentResponseBodyAssertion(ResponseContent value, R returns) {
+		this(null, value, returns);
+	}
+	/**
+	 * Converts the body to a type using {@link ResponseContent#as(Class)} and then returns the value as an object assertion.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<js>"/myBean"</js>)
+	 * 		.run()
+	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).is(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
+	 * </p>
+	 *
+	 * @param <T> The object type to create.
+	 * @param type The object type to create.
+	 * @return A new fluent assertion object.
+	 */
+	public <T> FluentAnyAssertion<T,R> as(Class<T> type) {
+		return new FluentAnyAssertion<>(valueAsType(type), returns());
+	}
+
+	/**
+	 * Converts the body to a type using {@link ResponseContent#as(Type,Type...)} and then returns the value as an object assertion.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<js>"/myBean"</js>)
+	 * 		.run()
+	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).is(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
+	 * </p>
+	 *
+	 * <p>
+	 * See <a class="doclink" href="https://juneau.apache.org/docs/topics/ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
+	 *
+	 * @param type The object type to create.
+	 * @param args Optional type arguments.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentAnyAssertion<Object,R> as(Type type, Type...args) {
+		return new FluentAnyAssertion<>(valueAsType(type, args), returns());
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the response body equals the text "foo".</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li class='note'>
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseContent#cache()}.
+	 * 	<li class='note'>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentByteArrayAssertion<R> asBytes() {
+		return new FluentByteArrayAssertion<>(valueAsBytes(), returns());
+	}
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
@@ -219,81 +279,6 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(valueAsString(), returns());
 	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates the response body equals the text "foo".</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseContent#cache()}.
-	 * 	<li class='note'>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentByteArrayAssertion<R> asBytes() {
-		return new FluentByteArrayAssertion<>(valueAsBytes(), returns());
-	}
-
-	/**
-	 * Converts the body to a type using {@link ResponseContent#as(Class)} and then returns the value as an object assertion.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<js>"/myBean"</js>)
-	 * 		.run()
-	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).is(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
-	 * </p>
-	 *
-	 * @param <T> The object type to create.
-	 * @param type The object type to create.
-	 * @return A new fluent assertion object.
-	 */
-	public <T> FluentAnyAssertion<T,R> as(Class<T> type) {
-		return new FluentAnyAssertion<>(valueAsType(type), returns());
-	}
-
-	/**
-	 * Converts the body to a type using {@link ResponseContent#as(Type,Type...)} and then returns the value as an object assertion.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<js>"/myBean"</js>)
-	 * 		.run()
-	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).is(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
-	 * </p>
-	 *
-	 * <p>
-	 * See <a class="doclink" href="https://juneau.apache.org/docs/topics/ComplexDataTypes">Complex Data Types</a> for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
-	 *
-	 * @param type The object type to create.
-	 * @param args Optional type arguments.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentAnyAssertion<Object,R> as(Type type, Type...args) {
-		return new FluentAnyAssertion<>(valueAsType(type, args), returns());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Asserts that the body contains the specified value.
 	 *
@@ -317,6 +302,16 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
+	 * Asserts that the body is empty.
+	 *
+	 * @return This object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEmpty() {
+		return asString().isEmpty();
+	}
+
+	/**
 	 * Asserts that the body doesn't contain any of the specified substrings.
 	 *
 	 * @param values The values to check against.
@@ -328,16 +323,6 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
-	 * Asserts that the body is empty.
-	 *
-	 * @return This object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEmpty() {
-		return asString().isEmpty();
-	}
-
-	/**
 	 * Asserts that the body is not empty.
 	 *
 	 * @return This object.
@@ -346,18 +331,33 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	public R isNotEmpty() {
 		return asString().isNotEmpty();
 	}
+	@Override /* Overridden from Assertion */
+	public FluentResponseBodyAssertion<R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
+		return this;
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from Assertion */
+	public FluentResponseBodyAssertion<R> setOut(PrintStream value) {
+		super.setOut(value);
+		return this;
+	}
 
-	@Override
-	protected String valueAsString() throws AssertionError {
-		try {
-			return value().cache().asString();
-		} catch (RestCallException e) {
-			throw error(e, "Exception occurred during call.");
-		}
+	@Override /* Overridden from Assertion */
+	public FluentResponseBodyAssertion<R> setSilent() {
+		super.setSilent();
+		return this;
+	}
+	@Override /* Overridden from Assertion */
+	public FluentResponseBodyAssertion<R> setStdOut() {
+		super.setStdOut();
+		return this;
+	}
+
+	@Override /* Overridden from Assertion */
+	public FluentResponseBodyAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
+		return this;
 	}
 
 	private byte[] valueAsBytes() throws AssertionError {
@@ -376,36 +376,12 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from Assertion */
-	public FluentResponseBodyAssertion<R> setMsg(String msg, Object...args) {
-		super.setMsg(msg, args);
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentResponseBodyAssertion<R> setOut(PrintStream value) {
-		super.setOut(value);
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentResponseBodyAssertion<R> setSilent() {
-		super.setSilent();
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentResponseBodyAssertion<R> setStdOut() {
-		super.setStdOut();
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentResponseBodyAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
-		super.setThrowable(value);
-		return this;
+	@Override
+	protected String valueAsString() throws AssertionError {
+		try {
+			return value().cache().asString();
+		} catch (RestCallException e) {
+			throw error(e, "Exception occurred during call.");
+		}
 	}
 }

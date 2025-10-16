@@ -80,10 +80,6 @@ public class Span extends HtmlElementMixed {
 	public Span(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Span _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -93,6 +89,30 @@ public class Span extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Span accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Span attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Span attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Span child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Span children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -453,30 +473,6 @@ public class Span extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Span translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Span child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Span children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Span attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Span attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

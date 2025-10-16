@@ -34,12 +34,8 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class ReaderEntity extends BasicHttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private byte[] byteCache;
 	private String stringCache;
 
@@ -68,20 +64,14 @@ public class ReaderEntity extends BasicHttpEntity {
 		super(copyFrom);
 	}
 
-	@Override
-	public ReaderEntity copy() {
-		return new ReaderEntity(this);
+	@Override /* Overridden from AbstractHttpEntity */
+	public byte[] asBytes() throws IOException {
+		if (isCached() && byteCache == null)
+			byteCache = readBytes(content());
+		if (byteCache != null)
+			return byteCache;
+		return readBytes(content());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@SuppressWarnings("resource") // Caller closes
-	private Reader content() {
-		return Objects.requireNonNull(contentOrElse((Reader) null), "Reader is null.");
-	}
-
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
@@ -91,18 +81,16 @@ public class ReaderEntity extends BasicHttpEntity {
 		return read(content());
 	}
 
-	@Override /* Overridden from AbstractHttpEntity */
-	public byte[] asBytes() throws IOException {
-		if (isCached() && byteCache == null)
-			byteCache = readBytes(content());
-		if (byteCache != null)
-			return byteCache;
-		return readBytes(content());
+	@Override
+	public ReaderEntity copy() {
+		return new ReaderEntity(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return isCached();
+	public InputStream getContent() throws IOException {
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return new ReaderInputStream(content(), getCharset());
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -113,36 +101,15 @@ public class ReaderEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException {
-		if (isCached())
-			return new ByteArrayInputStream(asBytes());
-		return new ReaderInputStream(content(), getCharset());
-	}
-
-	/**
-	 * Writes bytes from the {@code InputStream} this entity was constructed
-	 * with to an {@code OutputStream}.  The content length
-	 * determines how many bytes are written.  If the length is unknown ({@code -1}), the
-	 * stream will be completely consumed (to the end of the stream).
-	 */
-	@Override
-	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
-
-		if (isCached()) {
-			out.write(asBytes());
-		} else {
-			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
-			pipe(content(), osw);
-			osw.flush();
-		}
-		out.flush();
+	public boolean isRepeatable() {
+		return isCached();
 	}
 
 	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return ! isCached();
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public ReaderEntity setCached() throws IOException{
 		super.setCached();
@@ -154,7 +121,6 @@ public class ReaderEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpEntity */
 	public ReaderEntity setChunked() {
 		super.setChunked();
@@ -180,13 +146,13 @@ public class ReaderEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ReaderEntity setContentEncoding(String value) {
+	public ReaderEntity setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ReaderEntity setContentEncoding(ContentEncoding value) {
+	public ReaderEntity setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -198,13 +164,13 @@ public class ReaderEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ReaderEntity setContentType(String value) {
+	public ReaderEntity setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ReaderEntity setContentType(ContentType value) {
+	public ReaderEntity setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
@@ -219,5 +185,30 @@ public class ReaderEntity extends BasicHttpEntity {
 	public ReaderEntity setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
+	}
+
+	/**
+	 * Writes bytes from the {@code InputStream} this entity was constructed
+	 * with to an {@code OutputStream}.  The content length
+	 * determines how many bytes are written.  If the length is unknown ({@code -1}), the
+	 * stream will be completely consumed (to the end of the stream).
+	 */
+	@Override
+	public void writeTo(OutputStream out) throws IOException {
+		Utils.assertArgNotNull("out", out);
+
+		if (isCached()) {
+			out.write(asBytes());
+		} else {
+			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
+			pipe(content(), osw);
+			osw.flush();
+		}
+		out.flush();
+	}
+
+	@SuppressWarnings("resource") // Caller closes
+	private Reader content() {
+		return Objects.requireNonNull(contentOrElse((Reader) null), "Reader is null.");
 	}
 }

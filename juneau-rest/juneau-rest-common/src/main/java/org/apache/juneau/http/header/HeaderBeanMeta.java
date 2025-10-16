@@ -68,10 +68,6 @@ public class HeaderBeanMeta<T> {
 
 	private static final ConcurrentHashMap<Class<?>,HeaderBeanMeta<?>> CACHE = new ConcurrentHashMap<>();
 
-	private final Class<T> type;
-	private final Constructor<T> constructor;
-	private final HttpPartSchema schema;
-
 	/**
 	 * Finds the header bean meta for the specified type.
 	 *
@@ -88,6 +84,10 @@ public class HeaderBeanMeta<T> {
 		}
 		return (HeaderBeanMeta<T>)m;
 	}
+	private final Class<T> type;
+	private final Constructor<T> constructor;
+
+	private final HttpPartSchema schema;
 
 	private HeaderBeanMeta(Class<T> type) {
 		this.type = type;
@@ -104,18 +104,6 @@ public class HeaderBeanMeta<T> {
 		constructor = cci == null ? null : cci.inner();
 
 		this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
-	}
-
-	/**
-	 * Returns schema information about this header.
-	 *
-	 * <p>
-	 * This is information pulled from {@link org.apache.juneau.http.annotation.Header @Header} annotation on the class.
-	 *
-	 * @return The schema information.
-	 */
-	public HttpPartSchema getSchema() {
-		return schema;
 	}
 
 	/**
@@ -168,5 +156,17 @@ public class HeaderBeanMeta<T> {
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}
+	}
+
+	/**
+	 * Returns schema information about this header.
+	 *
+	 * <p>
+	 * This is information pulled from {@link org.apache.juneau.http.annotation.Header @Header} annotation on the class.
+	 *
+	 * @return The schema information.
+	 */
+	public HttpPartSchema getSchema() {
+		return schema;
 	}
 }

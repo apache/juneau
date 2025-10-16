@@ -36,16 +36,6 @@ public class AsciiMap {
 	}
 
 	/**
-	 * Returns the value for the specified key.
-	 *
-	 * @param c The key.
-	 * @return The value.
-	 */
-	public String get(char c) {
-		return store[c];
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified character is in this store.
 	 *
 	 * @param c The character to check.
@@ -53,18 +43,6 @@ public class AsciiMap {
 	 */
 	public boolean contains(char c) {
 		if (c > 127)
-			return false;
-		return store[c] != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified character is in this store.
-	 *
-	 * @param c The character to check.
-	 * @return <jk>true</jk> if the specified character is in this store.
-	 */
-	public boolean contains(int c) {
-		if (c < 0 || c > 127)
 			return false;
 		return store[c] != null;
 	}
@@ -82,5 +60,27 @@ public class AsciiMap {
 			if (contains(s.charAt(i)))
 				return true;
 		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified character is in this store.
+	 *
+	 * @param c The character to check.
+	 * @return <jk>true</jk> if the specified character is in this store.
+	 */
+	public boolean contains(int c) {
+		if (c < 0 || c > 127)
+			return false;
+		return store[c] != null;
+	}
+
+	/**
+	 * Returns the value for the specified key.
+	 *
+	 * @param c The key.
+	 * @return The value.
+	 */
+	public String get(char c) {
+		return store[c];
 	}
 }

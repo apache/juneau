@@ -89,26 +89,6 @@ public class Callback extends OpenApiElement {
 	}
 
 	/**
-	 * Returns the callbacks map.
-	 *
-	 * @return The callbacks map.
-	 */
-	public Map<String,PathItem> getCallbacks() {
-		return callbacks;
-	}
-
-	/**
-	 * Sets the callbacks map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Callback setCallbacks(Map<String,PathItem> value) {
-		this.callbacks = value;
-		return this;
-	}
-
-	/**
 	 * Adds a callback.
 	 *
 	 * @param expression The callback expression.  Must not be <jk>null</jk>.
@@ -142,6 +122,23 @@ public class Callback extends OpenApiElement {
 		};
 	}
 
+	/**
+	 * Returns the callbacks map.
+	 *
+	 * @return The callbacks map.
+	 */
+	public Map<String,PathItem> getCallbacks() {
+		return callbacks;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(callbacks != null, "callbacks")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
 	@Override /* Overridden from OpenApiElement */
 	public Callback set(String property, Object value) {
 		assertArgNotNull("property", property);
@@ -154,12 +151,15 @@ public class Callback extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(callbacks != null, "callbacks")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets the callbacks map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Callback setCallbacks(Map<String,PathItem> value) {
+		this.callbacks = value;
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */

@@ -130,21 +130,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	private final T value;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentObjectAssertion(T value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -166,65 +151,32 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		this.value = value;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentObjectAssertion(T value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Converts this object to a string using {@link Object#toString} and returns it as a new assertion.
+	 * Converts this assertion into an {@link FluentAnyAssertion} so that it can be converted to other assertion types.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
-	 * 		.asString()
-	 * 		.is(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent string assertion.
+	 * @return This object.
 	 */
-	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, valueAsString(), returns());
-	}
-
-	/**
-	 * Converts this object to text using the specified serializer and returns it as a new assertion.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
-	 * 		.asString(XmlSerializer.<jsf>DEFAULT</jsf>)
-	 * 		.is(<js>"&lt;object&gt;&lt;foo&gt;bar&lt;/foo&gt;&lt;baz&gt;qux&lt;/baz&gt;&lt;/object&gt;"</js>);
-	 * </p>
-	 *
-	 * @param ws The serializer to use to convert the object to text.
-	 * @return A new fluent string assertion.
-	 */
-	public FluentStringAssertion<R> asString(WriterSerializer ws) {
-		try {
-			return new FluentStringAssertion<>(this, ws.serialize(value), returns());
-		} catch (SerializeException e) {
-			throw asRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Converts this object to a string using the specified function and returns it as a new assertion.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
-	 * 		.asString(<jv>x</jv>-&gt;<jv>x</jv>.toString())
-	 * 		.is(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @param function The conversion function.
-	 * @return A new fluent string assertion.
-	 */
-	public FluentStringAssertion<R> asString(Function<T,String> function) {
-		return new FluentStringAssertion<>(this, function.apply(value), returns());
+	public FluentAnyAssertion<T,R> asAny() {
+		return new FluentAnyAssertion<>(this, orElse(null), returns());
 	}
 
 	/**
@@ -262,6 +214,63 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Converts this object to a string using {@link Object#toString} and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asString()
+	 * 		.is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, valueAsString(), returns());
+	}
+
+	/**
+	 * Converts this object to a string using the specified function and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asString(<jv>x</jv>-&gt;<jv>x</jv>.toString())
+	 * 		.is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param function The conversion function.
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> asString(Function<T,String> function) {
+		return new FluentStringAssertion<>(this, function.apply(value), returns());
+	}
+
+	/**
+	 * Converts this object to text using the specified serializer and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asString(XmlSerializer.<jsf>DEFAULT</jsf>)
+	 * 		.is(<js>"&lt;object&gt;&lt;foo&gt;bar&lt;/foo&gt;&lt;baz&gt;qux&lt;/baz&gt;&lt;/object&gt;"</js>);
+	 * </p>
+	 *
+	 * @param ws The serializer to use to convert the object to text.
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> asString(WriterSerializer ws) {
+		try {
+			return new FluentStringAssertion<>(this, ws.serialize(value), returns());
+		} catch (SerializeException e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	/**
 	 * Applies a transform on the inner object and returns a new inner object.
 	 *
 	 * @param function The function to apply.
@@ -282,59 +291,20 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	/**
-	 * Converts this assertion into an {@link FluentAnyAssertion} so that it can be converted to other assertion types.
-	 *
-	 * @return This object.
-	 */
-	public FluentAnyAssertion<T,R> asAny() {
-		return new FluentAnyAssertion<>(this, orElse(null), returns());
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the object is not null.
+	 * Asserts that the value passes the specified predicate test.
 	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
+	 * @param test The predicate to use to test the value.
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isExists() throws AssertionError {
-		return isNotNull();
-	}
-
-	/**
-	 * Asserts that the object i null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNull() throws AssertionError {
-		if (value != null)
-			throw error(MSG_valueWasNotNull);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the object is not null.
-	 *
-	 * <p>
-	 * Equivalent to {@link #isNotNull()}.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotNull() throws AssertionError {
-		if (value == null)
-			throw error(MSG_valueWasNull);
+	public R is(Predicate<T> test) throws AssertionError {
+		if (test != null && ! test.test(value))
+			throw error(getFailureMessage(test, value));
 		return returns();
 	}
 
@@ -354,14 +324,69 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the value converted to a string equals the specified value.
+	 * Asserts that the value is one of the specified values.
 	 *
-	 * @param value The value to check against.
+	 * @param values The values to check against.
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isString(String value) {
-		return asString().is(value);
+	@SafeVarargs
+	public final R isAny(T...values) throws AssertionError {
+		for (var v : values)
+			if (equals(orElse(null), v))
+				return returns();
+		throw error(MSG_expectedValueNotFound, values, value);
+	}
+
+	/**
+	 * Asserts that the object is an instance of the specified class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isExactType(MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param type The value to check against.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isExactType(Class<?> type) throws AssertionError {
+		Utils.assertArgNotNull("parent", type);
+		if (value().getClass() != type)
+			throw error(MSG_unexpectedType, className(type), className(value));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isExists() throws AssertionError {
+		return isNotNull();
+	}
+
+	/**
+	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asJson()
+	 * 		.is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * </p>
+	 *
+	 * @param value The expected string value.
+	 * @return The fluent return object.
+	 */
+	public R isJson(String value) {
+		return asJson().is(value);
 	}
 
 	/**
@@ -378,21 +403,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the value is one of the specified values.
-	 *
-	 * @param values The values to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	@SafeVarargs
-	public final R isAny(T...values) throws AssertionError {
-		for (var v : values)
-			if (equals(orElse(null), v))
-				return returns();
-		throw error(MSG_expectedValueNotFound, values, value);
-	}
-
-	/**
 	 * Asserts that the value is not one of the specified values.
 	 *
 	 * @param values The values to check against.
@@ -404,6 +414,36 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		for (var v : values)
 			if (equals(orElse(null), v))
 				throw error(MSG_unexpectedValueFound, v, value);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object is not null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotNull() throws AssertionError {
+		if (value == null)
+			throw error(MSG_valueWasNull);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the object i null.
+	 *
+	 * <p>
+	 * Equivalent to {@link #isNotNull()}.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNull() throws AssertionError {
+		if (value != null)
+			throw error(MSG_valueWasNotNull);
 		return returns();
 	}
 
@@ -432,6 +472,22 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
+	 * Asserts that the specified object is the same as this object after converting both to strings using the specified serializer.
+	 *
+	 * @param o The object to compare against.
+	 * @param serializer The serializer to use to serialize this object.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
+		var s1 = serializer.toString(value);
+		var s2 = serializer.toString(o);
+		if (Utils.ne(s1, s2))
+			throw error(MSG_unexpectedComparison, s2, s1);
+		return returns();
+	}
+
+	/**
 	 * Verifies that two objects are equivalent after converting them both to sorted JSON.
 	 *
 	 * <p>
@@ -446,19 +502,14 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Asserts that the specified object is the same as this object after converting both to strings using the specified serializer.
+	 * Asserts that the value converted to a string equals the specified value.
 	 *
-	 * @param o The object to compare against.
-	 * @param serializer The serializer to use to serialize this object.
+	 * @param value The value to check against.
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R isSameSerializedAs(Object o, WriterSerializer serializer) {
-		var s1 = serializer.toString(value);
-		var s2 = serializer.toString(o);
-		if (Utils.ne(s1, s2))
-			throw error(MSG_unexpectedComparison, s2, s1);
-		return returns();
+	public R isString(String value) {
+		return asString().is(value);
 	}
 
 	/**
@@ -479,57 +530,6 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 		if (! ClassInfo.of(value()).isChildOf(parent))
 			throw error(MSG_unexpectedType, className(parent), className(value));
 		return returns();
-	}
-
-	/**
-	 * Asserts that the object is an instance of the specified class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isExactType(MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param type The value to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isExactType(Class<?> type) throws AssertionError {
-		Utils.assertArgNotNull("parent", type);
-		if (value().getClass() != type)
-			throw error(MSG_unexpectedType, className(type), className(value));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value passes the specified predicate test.
-	 *
-	 * @param test The predicate to use to test the value.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R is(Predicate<T> test) throws AssertionError {
-		if (test != null && ! test.test(value))
-			throw error(getFailureMessage(test, value));
-		return returns();
-	}
-
-	/**
-	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
-	 * 		.asJson()
-	 * 		.is(<js>"{foo:'bar',baz:'qux'}"</js>);
-	 * </p>
-	 *
-	 * @param value The expected string value.
-	 * @return The fluent return object.
-	 */
-	public R isJson(String value) {
-		return asJson().is(value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -569,88 +569,12 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the inner value after asserting it is not <jk>null</jk>.
-	 *
-	 * @return The inner value.
-	 * @throws AssertionError If inner value was <jk>null</jk>.
+	 * Returns the string form of the inner object.
+	 * Subclasses can override this method to affect the {@link #asString()} method (and related).
 	 */
-	protected T value() throws AssertionError {
-		isExists();
-		return value;
-	}
-
-	/**
-	 * Returns the inner value as a string.
-	 *
-	 * @return The inner value as a string, or <jk>null</jk> if the value was null.
-	 */
-	protected String valueAsString() {
-		return Utils.s(value);
-	}
-
-	/**
-	 * Returns the inner value or the other value if the value is <jk>null</jk>.
-	 *
-	 * @param other The other value.
-	 * @return The inner value.
-	 */
-	protected T orElse(T other) {
-		return value == null ? other : value;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the inner value is null.
-	 *
-	 * @return <jk>true</jk> if the inner value is null.
-	 */
-	protected boolean valueIsNull() {
-		return value == null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the inner value is not null.
-	 *
-	 * @return <jk>true</jk> if the inner value is not null.
-	 */
-	protected boolean valueIsNotNull() {
-		return value != null;
-	}
-
-	/**
-	 * Returns the value wrapped in an {@link Optional}.
-	 *
-	 * @return The value wrapped in an {@link Optional}.
-	 */
-	protected Optional<T> opt() {
-		return Utils.opt(value);
-	}
-
-	/**
-	 * Returns the result of running the specified function against the value and returns the result.
-	 *
-	 * @param <T2> The mapper-to type.
-	 * @param mapper The function to run against the value.
-	 * @return The result, never <jk>null</jk>.
-	 */
-	protected <T2> Optional<T2> map(Function<? super T, ? extends T2> mapper) {
-		return opt().map(mapper);
-	}
-
-	/**
-	 * Returns the predicate failure message.
-	 *
-	 * <p>
-	 * If the predicate extends from {@link AssertionPredicate}, then the message comes from {@link AssertionPredicate#getFailureMessage()}.
-	 * Otherwise, returns a generic <js>"Unexpected value: x"</js> message.
-	 *
-	 * @param p The function to run against the value.
-	 * @param value The value that failed the test.
-	 * @return The result, never <jk>null</jk>.
-	 */
-	protected String getFailureMessage(Predicate<?> p, Object value) {
-		if (p instanceof AssertionPredicate)
-			return ((AssertionPredicate<?>)p).getFailureMessage();
-		return format(MSG_unexpectedValue2, value);
+	@Override /* Overridden from Object */
+	public String toString() {
+		return valueAsString();
 	}
 
 	/**
@@ -673,11 +597,87 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	/**
-	 * Returns the string form of the inner object.
-	 * Subclasses can override this method to affect the {@link #asString()} method (and related).
+	 * Returns the predicate failure message.
+	 *
+	 * <p>
+	 * If the predicate extends from {@link AssertionPredicate}, then the message comes from {@link AssertionPredicate#getFailureMessage()}.
+	 * Otherwise, returns a generic <js>"Unexpected value: x"</js> message.
+	 *
+	 * @param p The function to run against the value.
+	 * @param value The value that failed the test.
+	 * @return The result, never <jk>null</jk>.
 	 */
-	@Override /* Overridden from Object */
-	public String toString() {
-		return valueAsString();
+	protected String getFailureMessage(Predicate<?> p, Object value) {
+		if (p instanceof AssertionPredicate)
+			return ((AssertionPredicate<?>)p).getFailureMessage();
+		return format(MSG_unexpectedValue2, value);
+	}
+
+	/**
+	 * Returns the result of running the specified function against the value and returns the result.
+	 *
+	 * @param <T2> The mapper-to type.
+	 * @param mapper The function to run against the value.
+	 * @return The result, never <jk>null</jk>.
+	 */
+	protected <T2> Optional<T2> map(Function<? super T, ? extends T2> mapper) {
+		return opt().map(mapper);
+	}
+
+	/**
+	 * Returns the value wrapped in an {@link Optional}.
+	 *
+	 * @return The value wrapped in an {@link Optional}.
+	 */
+	protected Optional<T> opt() {
+		return Utils.opt(value);
+	}
+
+	/**
+	 * Returns the inner value or the other value if the value is <jk>null</jk>.
+	 *
+	 * @param other The other value.
+	 * @return The inner value.
+	 */
+	protected T orElse(T other) {
+		return value == null ? other : value;
+	}
+
+	/**
+	 * Returns the inner value after asserting it is not <jk>null</jk>.
+	 *
+	 * @return The inner value.
+	 * @throws AssertionError If inner value was <jk>null</jk>.
+	 */
+	protected T value() throws AssertionError {
+		isExists();
+		return value;
+	}
+
+	/**
+	 * Returns the inner value as a string.
+	 *
+	 * @return The inner value as a string, or <jk>null</jk> if the value was null.
+	 */
+	protected String valueAsString() {
+		return Utils.s(value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the inner value is not null.
+	 *
+	 * @return <jk>true</jk> if the inner value is not null.
+	 */
+	protected boolean valueIsNotNull() {
+		return value != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the inner value is null.
+	 *
+	 * @return <jk>true</jk> if the inner value is null.
+	 */
+	protected boolean valueIsNull() {
+		return value == null;
 	}
 }

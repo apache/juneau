@@ -52,11 +52,6 @@ import org.apache.juneau.*;
  * </ul>
  */
 public class ObjectPaginator implements ObjectTool<PageArgs> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 * @return A new {@link ObjectPaginator} object.
@@ -64,29 +59,6 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 	public static ObjectPaginator create() {
 		return new ObjectPaginator();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Convenience method for executing the paginator.
-	 *
-	 * @param <R> The collection element type.
-	 * @param input The input.  Must be a collection or array of objects.
-	 * @param pos The zero-index position to start from.
-	 * @param limit The max number of entries to retrieve.
-	 * @return A sublist of representing the entries from the position with the specified limit.
-	 */
-	@SuppressWarnings("unchecked")
-	public <R> List<R> run(Object input, int pos, int limit) {
-		BeanSession bs = BeanContext.DEFAULT_SESSION;
-		Object r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
-		if (r instanceof List)
-			return (List<R>)r;
-		return bs.convertToType(r, List.class);
-	}
-
 	@Override /* Overridden from ObjectTool */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object run(BeanSession session, Object input, PageArgs args) {
@@ -130,5 +102,23 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		int end = (limit+pos >= l.size()) ? l.size() : limit + pos;
 		pos = Math.min(pos, l.size());
 		return l.subList(pos, end);
+	}
+
+	/**
+	 * Convenience method for executing the paginator.
+	 *
+	 * @param <R> The collection element type.
+	 * @param input The input.  Must be a collection or array of objects.
+	 * @param pos The zero-index position to start from.
+	 * @param limit The max number of entries to retrieve.
+	 * @return A sublist of representing the entries from the position with the specified limit.
+	 */
+	@SuppressWarnings("unchecked")
+	public <R> List<R> run(Object input, int pos, int limit) {
+		BeanSession bs = BeanContext.DEFAULT_SESSION;
+		Object r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
+		if (r instanceof List)
+			return (List<R>)r;
+		return bs.convertToType(r, List.class);
 	}
 }

@@ -27,37 +27,6 @@ import java.lang.annotation.*;
  * </ul>
  */
 public class ItemsAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Items DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(org.apache.juneau.annotation.Items a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -78,15 +47,6 @@ public class ItemsAnnotation {
 		 */
 		protected Builder() {
 			super(Items.class);
-		}
-
-		/**
-		 * Instantiates a new {@link Items @Items} object initialized with this builder.
-		 *
-		 * @return A new {@link Items @Items} object.
-		 */
-		public Items build() {
-			return new Impl(this);
 		}
 
 		/**
@@ -120,6 +80,15 @@ public class ItemsAnnotation {
 		public Builder $ref(String value) {
 			this.$ref = value;
 			return this;
+		}
+
+		/**
+		 * Instantiates a new {@link Items @Items} object initialized with this builder.
+		 *
+		 * @return A new {@link Items @Items} object.
+		 */
+		public Items build() {
+			return new Impl(this);
 		}
 
 		/**
@@ -465,10 +434,6 @@ public class ItemsAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements Items {
 
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -685,5 +650,25 @@ public class ItemsAnnotation {
 		public boolean uniqueItems() {
 			return uniqueItems;
 		}
+	}
+
+	/** Default value */
+	public static final Items DEFAULT = create().build();
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(org.apache.juneau.annotation.Items a) {
+		return a == null || DEFAULT.equals(a);
 	}
 }

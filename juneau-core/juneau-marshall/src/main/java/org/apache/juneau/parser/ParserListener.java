@@ -36,26 +36,6 @@ public class ParserListener {
 	public static final class Void extends ParserListener {}
 
 	/**
-	 * Gets called when an unknown bean property is detected in a document.
-	 *
-	 * <p>
-	 * This method only gets called if {@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()} setting is <jk>true</jk>.
-	 * Otherwise, the parser will throw a {@link ParseException}.
-	 *
-	 * @param <T> The class type of the bean.
-	 * @param session The parser session.
-	 * @param propertyName The property name encountered in the document.
-	 * @param beanClass The bean class.
-	 * @param bean The bean.
-	 */
-	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
-		onError(session, null,
-			format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at location {2}",
-				propertyName, beanClass, session.getPosition())
-		);
-	}
-
-	/**
 	 * Called when an exception is thrown when trying to call a bean setter method.
 	 *
 	 * @param session The serializer session.
@@ -76,5 +56,25 @@ public class ParserListener {
 	 */
 	public void onError(ParserSession session, Throwable t, String msg) {
 		// Do something with this information.
+	}
+
+	/**
+	 * Gets called when an unknown bean property is detected in a document.
+	 *
+	 * <p>
+	 * This method only gets called if {@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()} setting is <jk>true</jk>.
+	 * Otherwise, the parser will throw a {@link ParseException}.
+	 *
+	 * @param <T> The class type of the bean.
+	 * @param session The parser session.
+	 * @param propertyName The property name encountered in the document.
+	 * @param beanClass The bean class.
+	 * @param bean The bean.
+	 */
+	public <T> void onUnknownBeanProperty(ParserSession session, String propertyName, Class<T> beanClass, T bean) {
+		onError(session, null,
+			format("Unknown property ''{0}'' encountered while trying to parse into class ''{1}'' at location {2}",
+				propertyName, beanClass, session.getPosition())
+		);
 	}
 }

@@ -18,8 +18,16 @@ package org.apache.juneau.junit.bct;
 
 /**
  * A supplier that throws an exception.
+ * @param <T> The supplier type.
  */
 @FunctionalInterface
 public interface ThrowingSupplier<T> {
+
+	/**
+	 * Gets a result.
+	 *
+	 * @return A result.
+	 * @throws Exception If an error occurs.
+	 */
 	T get() throws Exception;
 }

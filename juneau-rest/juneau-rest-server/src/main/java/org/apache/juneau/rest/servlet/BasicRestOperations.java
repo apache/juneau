@@ -90,6 +90,71 @@ import org.apache.juneau.rest.stats.*;
 public interface BasicRestOperations {
 
 	/**
+	 * [* /error] - Error occurred.
+	 */
+	@RestOp(
+		method=ANY,
+		path="/error",
+		summary="Error occurred",
+		description={
+			"An error occurred during handling of the request.  ",
+			"Servlet chains will often automatically redirect to '/error' when any sort of error condition occurs ",
+			"(such as failed authentication) and will set appropriate response parameters ",
+			"(such as an WWW-Authenticate response header)."
+		}
+	) void error();
+
+	/**
+	 * [GET favicon.ico] - Retrieve favorites icon image.
+	 *
+	 * @return A bean containing the contents for the OPTIONS page.
+	 */
+	@RestGet(
+		path="favicon.ico",
+		summary="Favorites icon.",
+		description="Favorites icon."
+	) HttpResource getFavIcon();
+
+	/**
+	 * [GET /htdocs/*] - Retrieve static file.
+	 *
+	 * @param path The path to retrieve.
+	 * @param locale The locale of the HTTP request.
+	 * @return An HTTP resource representing the static file.
+	 */
+	@RestGet(
+		path="/htdocs/*",
+		summary="Static files",
+		description="Static file retrieval."
+	) HttpResource getHtdoc(@Path String path, Locale locale);
+
+	/**
+	 * [GET /stats] - Timing statistics.
+	 *
+	 * <p>
+	 * Timing statistics for method invocations on this resource.
+	 *
+	 * @param req The HTTP request.
+	 * @return A collection of timing statistics for each annotated method on this resource.
+	 */
+	@RestGet(
+		path="/stats",
+		summary="Timing statistics",
+		description="Timing statistics for method invocations on this resource."
+	)
+	@HtmlDocConfig(
+		// Should override config annotations defined on class.
+		rank=10,
+		// Override the nav links for the swagger page.
+		navlinks={
+			"back: servlet:/",
+			"json: servlet:/stats?Accept=text/json&plainText=true"
+		},
+		// Never show aside contents of page inherited from class.
+		aside="NONE"
+	) RestContextStats getStats(RestRequest req);
+
+	/**
 	 * [GET /api] - Show resource options.
 	 *
 	 * @param req The HTTP request.
@@ -119,69 +184,4 @@ public interface BasicRestOperations {
 			SwaggerUI.class
 		}
 	) Swagger getSwagger(RestRequest req);
-
-	/**
-	 * [GET /htdocs/*] - Retrieve static file.
-	 *
-	 * @param path The path to retrieve.
-	 * @param locale The locale of the HTTP request.
-	 * @return An HTTP resource representing the static file.
-	 */
-	@RestGet(
-		path="/htdocs/*",
-		summary="Static files",
-		description="Static file retrieval."
-	) HttpResource getHtdoc(@Path String path, Locale locale);
-
-	/**
-	 * [GET favicon.ico] - Retrieve favorites icon image.
-	 *
-	 * @return A bean containing the contents for the OPTIONS page.
-	 */
-	@RestGet(
-		path="favicon.ico",
-		summary="Favorites icon.",
-		description="Favorites icon."
-	) HttpResource getFavIcon();
-
-	/**
-	 * [* /error] - Error occurred.
-	 */
-	@RestOp(
-		method=ANY,
-		path="/error",
-		summary="Error occurred",
-		description={
-			"An error occurred during handling of the request.  ",
-			"Servlet chains will often automatically redirect to '/error' when any sort of error condition occurs ",
-			"(such as failed authentication) and will set appropriate response parameters ",
-			"(such as an WWW-Authenticate response header)."
-		}
-	) void error();
-
-	/**
-	 * [GET /stats] - Timing statistics.
-	 *
-	 * <p>
-	 * Timing statistics for method invocations on this resource.
-	 *
-	 * @param req The HTTP request.
-	 * @return A collection of timing statistics for each annotated method on this resource.
-	 */
-	@RestGet(
-		path="/stats",
-		summary="Timing statistics",
-		description="Timing statistics for method invocations on this resource."
-	)
-	@HtmlDocConfig(
-		// Should override config annotations defined on class.
-		rank=10,
-		// Override the nav links for the swagger page.
-		navlinks={
-			"back: servlet:/",
-			"json: servlet:/stats?Accept=text/json&plainText=true"
-		},
-		// Never show aside contents of page inherited from class.
-		aside="NONE"
-	) RestContextStats getStats(RestRequest req);
 }

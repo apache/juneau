@@ -38,12 +38,6 @@ import org.apache.juneau.parser.*;
  */
 public class MsgPackInputStream extends ParserInputStream {
 
-	private DataType currentDataType;
-	private long length;
-	private int lastByte;
-	private int extType;
-	int pos = 0;
-
 	// Data type quick-lookup table.
 	private static final DataType[] TYPES = {
 		/*0x0?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
@@ -63,6 +57,12 @@ public class MsgPackInputStream extends ParserInputStream {
 		/*0xE?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,
 		/*0xF?*/ INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT,INT
 	};
+	private DataType currentDataType;
+	private long length;
+	private int lastByte;
+	private int extType;
+
+	int pos = 0;
 
 	/**
 	 * Constructor.
@@ -72,6 +72,52 @@ public class MsgPackInputStream extends ParserInputStream {
 	 */
 	protected MsgPackInputStream(ParserPipe pipe) throws IOException {
 		super(pipe);
+	}
+
+	/**
+	 * Read one byte from the stream.
+	 */
+	private int readUInt1() throws IOException {
+		return read();
+	}
+
+	/**
+	 * Read two bytes from the stream.
+	 */
+	private int readUInt2() throws IOException {
+		return (read() << 8) | read();
+	}
+
+	/**
+	 * Read four bytes from the stream.
+	 */
+	private long readUInt4() throws IOException {
+		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
+		return l;
+	}
+
+	/**
+	 * Return the extended-format type.
+	 * Currently not used.
+	 */
+	int getExtType() {
+		return extType;
+	}
+
+	/**
+	 * Read a binary field from the stream.
+	 */
+	byte[] readBinary() throws IOException {
+		byte[] b = new byte[(int)length];
+		read(b);
+		return b;
+	}
+
+	/**
+	 * Read a boolean from the stream.
+	 */
+	boolean readBoolean() {
+		return lastByte == TRUE;
 	}
 
 	/**
@@ -380,38 +426,17 @@ public class MsgPackInputStream extends ParserInputStream {
 	}
 
 	/**
-	 * Returns the length value for the field.
-	 *
-	 * <p>
-	 * For ints/floats/bins/strings, this is the number of bytes that the field takes up (minus the data-type flag).
-	 * For arrays, it's the number of array entries.
-	 * For maps, it's the number of map entries.
+	 * Read a double from the stream.
 	 */
-	long readLength() {
-		return length;
+	double readDouble() throws IOException {
+		return Double.longBitsToDouble(readLong());
 	}
 
 	/**
-	 * Read a boolean from the stream.
+	 * Read a float from the stream.
 	 */
-	boolean readBoolean() {
-		return lastByte == TRUE;
-	}
-
-	/**
-	 * Read a string from the stream.
-	 */
-	String readString() throws IOException {
-		return new String(readBinary(), UTF8);
-	}
-
-	/**
-	 * Read a binary field from the stream.
-	 */
-	byte[] readBinary() throws IOException {
-		byte[] b = new byte[(int)length];
-		read(b);
-		return b;
+	float readFloat() throws IOException {
+		return Float.intBitsToFloat(readInt());
 	}
 
 	/**
@@ -429,17 +454,15 @@ public class MsgPackInputStream extends ParserInputStream {
 	}
 
 	/**
-	 * Read a float from the stream.
+	 * Returns the length value for the field.
+	 *
+	 * <p>
+	 * For ints/floats/bins/strings, this is the number of bytes that the field takes up (minus the data-type flag).
+	 * For arrays, it's the number of array entries.
+	 * For maps, it's the number of map entries.
 	 */
-	float readFloat() throws IOException {
-		return Float.intBitsToFloat(readInt());
-	}
-
-	/**
-	 * Read a double from the stream.
-	 */
-	double readDouble() throws IOException {
-		return Double.longBitsToDouble(readLong());
+	long readLength() {
+		return length;
 	}
 
 	/**
@@ -453,32 +476,9 @@ public class MsgPackInputStream extends ParserInputStream {
 	}
 
 	/**
-	 * Return the extended-format type.
-	 * Currently not used.
+	 * Read a string from the stream.
 	 */
-	int getExtType() {
-		return extType;
-	}
-
-	/**
-	 * Read one byte from the stream.
-	 */
-	private int readUInt1() throws IOException {
-		return read();
-	}
-
-	/**
-	 * Read two bytes from the stream.
-	 */
-	private int readUInt2() throws IOException {
-		return (read() << 8) | read();
-	}
-
-	/**
-	 * Read four bytes from the stream.
-	 */
-	private long readUInt4() throws IOException {
-		long l = read(); l <<= 8; l |= read(); l <<= 8; l |= read(); l <<= 8; l |= read();
-		return l;
+	String readString() throws IOException {
+		return new String(readBinary(), UTF8);
 	}
 }

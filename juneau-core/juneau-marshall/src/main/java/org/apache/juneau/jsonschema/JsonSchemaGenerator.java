@@ -48,27 +48,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSchemaMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, all default settings.*/
-	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -104,26 +83,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(JsonSchemaGenerator copyFrom) {
-			super(copyFrom);
-			BeanContext.Builder bc = beanContext();
-			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
-			jsonParserBuilder = copyFrom.jsonParser.copy().beanContext(bc);
-			registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
-			addDescriptionsTo = copyFrom.addDescriptionsTo.isEmpty() ? null : new TreeSet<>(copyFrom.addDescriptionsTo);
-			addExamplesTo = copyFrom.addExamplesTo.isEmpty() ? null : new TreeSet<>(copyFrom.addExamplesTo);
-			allowNestedDescriptions = copyFrom.allowNestedDescriptions;
-			allowNestedExamples = copyFrom.allowNestedExamples;
-			useBeanDefs = copyFrom.useBeanDefs;
-			beanDefMapper = copyFrom.beanDefMapper;
-			ignoreTypes = copyFrom.ignoreTypes.isEmpty() ? null : new TreeSet<>(copyFrom.ignoreTypes);
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -141,35 +100,25 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			ignoreTypes = copyFrom.ignoreTypes == null ? null : new TreeSet<>(copyFrom.ignoreTypes);
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(JsonSchemaGenerator copyFrom) {
+			super(copyFrom);
+			BeanContext.Builder bc = beanContext();
+			jsonSerializerBuilder = copyFrom.jsonSerializer.copy().beanContext(bc);
+			jsonParserBuilder = copyFrom.jsonParser.copy().beanContext(bc);
+			registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
+			addDescriptionsTo = copyFrom.addDescriptionsTo.isEmpty() ? null : new TreeSet<>(copyFrom.addDescriptionsTo);
+			addExamplesTo = copyFrom.addExamplesTo.isEmpty() ? null : new TreeSet<>(copyFrom.addExamplesTo);
+			allowNestedDescriptions = copyFrom.allowNestedDescriptions;
+			allowNestedExamples = copyFrom.allowNestedExamples;
+			useBeanDefs = copyFrom.useBeanDefs;
+			beanDefMapper = copyFrom.beanDefMapper;
+			ignoreTypes = copyFrom.ignoreTypes.isEmpty() ? null : new TreeSet<>(copyFrom.ignoreTypes);
 		}
-
-		@Override /* Overridden from Context.Builder */
-		public JsonSchemaGenerator build() {
-			return cache(CACHE).build(JsonSchemaGenerator.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				jsonSerializerBuilder.hashKey(),
-				jsonParserBuilder.hashKey(),
-				addDescriptionsTo,
-				addExamplesTo,
-				allowNestedDescriptions,
-				allowNestedExamples,
-				useBeanDefs,
-				beanDefMapper,
-				ignoreTypes
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Add descriptions.
@@ -250,7 +199,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		public Builder allowNestedDescriptions() {
 			return allowNestedDescriptions(true);
 		}
-
 		/**
 		 * Same as {@link #allowNestedDescriptions()} but allows you to explicitly specify the value.
 		 *
@@ -285,103 +233,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			return this;
 		}
 
-		/**
-		 * Schema definition mapper.
-		 *
-		 * <p>
-		 * Interface to use for converting Bean classes to definition IDs and URIs.
-		 * <p>
-		 * Used primarily for defining common definition sections for beans in Swagger JSON.
-		 * <p>
-		 * This setting is ignored if {@link JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
-		 * @return This object.
-		 */
-		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
-			beanDefMapper = value;
-			return this;
-		}
-
-		/**
-		 * Ignore types from schema definitions.
-		 *
-		 * <h5 class='section'>Description:</h5>
-		 * <p>
-		 * Defines class name patterns that should be ignored when generating schema definitions in the generated
-		 * Swagger documentation.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
-		 * 	<ja>@JsonSchemaConfig</ja>(
-		 * 		ignoreTypes=<js>"Swagger,*.proto.*"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource {...}
-		 * </p>
-		 *
-		 * @param values
-		 * 	The values to add.
-		 * @return This object.
-		 */
-		public Builder ignoreTypes(String...values) {
-			ignoreTypes = addAll(ignoreTypes, values);
-			return this;
-		}
-
-		/**
-		 * Use bean definitions.
-		 *
-		 * <p>
-		 * When enabled, schemas on beans will be serialized as the following:
-		 * <p class='bjson'>
-		 * 	{
-		 * 		type: <js>'object'</js>,
-		 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-		 * 	}
-		 * </p>
-		 *
-		 * <p>
-		 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
-		 * <p>
-		 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
-		 *
-		 * @return This object.
-		 */
-		public Builder useBeanDefs() {
-			return useBeanDefs(true);
-		}
-
-		/**
-		 * Same as {@link #useBeanDefs()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder useBeanDefs(boolean value) {
-			useBeanDefs = value;
-			return this;
-		}
-
-		/**
-		 * Gives access to the inner JSON serializer builder if you want to modify the serializer settings.
-		 *
-		 * @return The JSON serializer builder.
-		 */
-		public JsonSerializer.Builder getJsonSerializerBuilder() {
-			return jsonSerializerBuilder;
-		}
-
-		/**
-		 * Gives access to the inner JSON parser builder if you want to modify the parser settings.
-		 *
-		 * @return The JSON serializer builder.
-		 */
-		public JsonParser.Builder getJsonParserBuilder() {
-			return jsonParserBuilder;
-		}
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -395,44 +246,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -460,6 +281,25 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			return this;
 		}
 
+		/**
+		 * Schema definition mapper.
+		 *
+		 * <p>
+		 * Interface to use for converting Bean classes to definition IDs and URIs.
+		 * <p>
+		 * Used primarily for defining common definition sections for beans in Swagger JSON.
+		 * <p>
+		 * This setting is ignored if {@link JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
+		 * @return This object.
+		 */
+		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
+			beanDefMapper = value;
+			return this;
+		}
 		@Override /* Overridden from Builder */
 		public Builder beanDictionary(java.lang.Class<?>...values) {
 			super.beanDictionary(values);
@@ -491,14 +331,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -509,14 +349,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -527,14 +367,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -545,14 +385,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -577,6 +417,46 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public JsonSchemaGenerator build() {
+			return cache(CACHE).build(JsonSchemaGenerator.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
 			return this;
 		}
 
@@ -617,14 +497,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
 			return this;
 		}
 
@@ -640,6 +520,40 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			return this;
 		}
 
+		/**
+		 * Gives access to the inner JSON parser builder if you want to modify the parser settings.
+		 *
+		 * @return The JSON serializer builder.
+		 */
+		public JsonParser.Builder getJsonParserBuilder() {
+			return jsonParserBuilder;
+		}
+
+		/**
+		 * Gives access to the inner JSON serializer builder if you want to modify the serializer settings.
+		 *
+		 * @return The JSON serializer builder.
+		 */
+		public JsonSerializer.Builder getJsonSerializerBuilder() {
+			return jsonSerializerBuilder;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				jsonSerializerBuilder.hashKey(),
+				jsonParserBuilder.hashKey(),
+				addDescriptionsTo,
+				addExamplesTo,
+				allowNestedDescriptions,
+				allowNestedExamples,
+				useBeanDefs,
+				beanDefMapper,
+				ignoreTypes
+			);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
@@ -649,6 +563,44 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions(boolean value) {
+			super.ignoreRecursions(value);
+			return this;
+		}
+
+		/**
+		 * Ignore types from schema definitions.
+		 *
+		 * <h5 class='section'>Description:</h5>
+		 * <p>
+		 * Defines class name patterns that should be ignored when generating schema definitions in the generated
+		 * Swagger documentation.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
+		 * 	<ja>@JsonSchemaConfig</ja>(
+		 * 		ignoreTypes=<js>"Swagger,*.proto.*"</js>
+		 * 	)
+		 * 	<jk>public class</jk> MyResource {...}
+		 * </p>
+		 *
+		 * @param values
+		 * 	The values to add.
+		 * @return This object.
+		 */
+		public Builder ignoreTypes(String...values) {
+			ignoreTypes = addAll(ignoreTypes, values);
 			return this;
 		}
 
@@ -665,6 +617,12 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
@@ -673,6 +631,12 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		@Override /* Overridden from Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
 			return this;
 		}
 
@@ -695,6 +659,12 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
 			super.mediaType(value);
 			return this;
@@ -713,14 +683,14 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -755,13 +725,13 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
+		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -773,8 +743,20 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder typeName(Class<?> on, String value) {
 			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
 			return this;
 		}
 
@@ -784,9 +766,37 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
+		/**
+		 * Use bean definitions.
+		 *
+		 * <p>
+		 * When enabled, schemas on beans will be serialized as the following:
+		 * <p class='bjson'>
+		 * 	{
+		 * 		type: <js>'object'</js>,
+		 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+		 * 	}
+		 * </p>
+		 *
+		 * <p>
+		 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
+		 * <p>
+		 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
+		 *
+		 * @return This object.
+		 */
+		public Builder useBeanDefs() {
+			return useBeanDefs(true);
+		}
+
+		/**
+		 * Same as {@link #useBeanDefs()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder useBeanDefs(boolean value) {
+			useBeanDefs = value;
 			return this;
 		}
 
@@ -801,48 +811,18 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			super.useJavaBeanIntrospector();
 			return this;
 		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions() {
-			super.ignoreRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions(boolean value) {
-			super.ignoreRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder initialDepth(int value) {
-			super.initialDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
-			return this;
-		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/** Default serializer, all default settings.*/
+	public static final JsonSchemaGenerator DEFAULT = new JsonSchemaGenerator(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final boolean useBeanDefs, allowNestedExamples, allowNestedDescriptions;
 	final Set<TypeCategory> addExamplesTo, addDescriptionsTo;
 	final Class<? extends BeanDefMapper> beanDefMapper;
@@ -895,22 +875,57 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		return JsonSchemaGeneratorSession.create(this);
 	}
 
+	/**
+	 * Ignore types from schema definitions.
+	 *
+	 * @see Builder#ignoreTypes(String...)
+	 * @return
+	 * 	Custom schema information for particular class types.
+	 */
+	public List<Pattern> getIgnoreTypes() {
+		return Utils.alist(ignoreTypePatterns);
+	}
+
+	@Override
+	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new JsonSchemaBeanPropertyMeta(bpm, this);
+			jsonSchemaBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
+	}
+
+	@Override
+	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
+		if (m == null) {
+			m = new JsonSchemaClassMeta(cm, this);
+			jsonSchemaClassMetas.put(cm, m);
+		}
+		return m;
+	}
 	@Override /* Overridden from Context */
 	public JsonSchemaGeneratorSession getSession() {
 		return createSession().build();
 	}
 
-	JsonSerializer getJsonSerializer() {
-		return jsonSerializer;
+	/**
+	 * Returns <jk>true</jk> if the specified type is ignored.
+	 *
+	 * <p>
+	 * The type is ignored if it's specified in the {@link Builder#ignoreTypes(String...)} setting.
+	 * <br>Ignored types return <jk>null</jk> on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.
+	 *
+	 * @param cm The type to check.
+	 * @return <jk>true</jk> if the specified type is ignored.
+	 */
+	public boolean isIgnoredType(ClassMeta<?> cm) {
+		for (Pattern p : ignoreTypePatterns)
+			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
+				return true;
+		return false;
 	}
-
-	JsonParser getJsonParser() {
-		return jsonParser;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Add descriptions to types.
@@ -935,6 +950,17 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	}
 
 	/**
+	 * Bean schema definition mapper.
+	 *
+	 * @see Builder#beanDefMapper(Class)
+	 * @return
+	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
+	 */
+	protected final BeanDefMapper getBeanDefMapper() {
+		return beanDefMapperBean;
+	}
+
+	/**
 	 * Allow nested descriptions.
 	 *
 	 * @see Builder#allowNestedDescriptions()
@@ -955,29 +981,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	protected final boolean isAllowNestedExamples() {
 		return allowNestedExamples;
 	}
-
-	/**
-	 * Bean schema definition mapper.
-	 *
-	 * @see Builder#beanDefMapper(Class)
-	 * @return
-	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
-	 */
-	protected final BeanDefMapper getBeanDefMapper() {
-		return beanDefMapperBean;
-	}
-
-	/**
-	 * Ignore types from schema definitions.
-	 *
-	 * @see Builder#ignoreTypes(String...)
-	 * @return
-	 * 	Custom schema information for particular class types.
-	 */
-	public List<Pattern> getIgnoreTypes() {
-		return Utils.alist(ignoreTypePatterns);
-	}
-
 	/**
 	 * Use bean definitions.
 	 *
@@ -989,55 +992,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		return useBeanDefs;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
-		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
-		if (m == null) {
-			m = new JsonSchemaClassMeta(cm, this);
-			jsonSchemaClassMetas.put(cm, m);
-		}
-		return m;
-	}
-
-	@Override
-	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
-		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new JsonSchemaBeanPropertyMeta(bpm, this);
-			jsonSchemaBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if the specified type is ignored.
-	 *
-	 * <p>
-	 * The type is ignored if it's specified in the {@link Builder#ignoreTypes(String...)} setting.
-	 * <br>Ignored types return <jk>null</jk> on the call to {@link JsonSchemaGeneratorSession#getSchema(ClassMeta)}.
-	 *
-	 * @param cm The type to check.
-	 * @return <jk>true</jk> if the specified type is ignored.
-	 */
-	public boolean isIgnoredType(ClassMeta<?> cm) {
-		for (Pattern p : ignoreTypePatterns)
-			if (p.matcher(cm.getSimpleName()).matches() || p.matcher(cm.getName()).matches())
-				return true;
-		return false;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
@@ -1048,5 +1002,11 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			.append("addExamplesTo", addExamplesTo)
 			.append("addDescriptionsTo", addDescriptionsTo)
 			.append("ignoreTypes", ignoreTypes);
+	}
+	JsonParser getJsonParser() {
+		return jsonParser;
+	}
+	JsonSerializer getJsonSerializer() {
+		return jsonSerializer;
 	}
 }

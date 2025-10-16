@@ -39,11 +39,6 @@ public enum RestPartType {
 
 	/** Request body */
 	BODY("body"),
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// The following are additional parameter types not defined in Swagger
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Response value */
 	RESPONSE("response"),
 

@@ -31,11 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicStatusLine implements StatusLine {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Instantiates a new instance of this bean.
 	 *
@@ -55,11 +50,6 @@ public class BasicStatusLine implements StatusLine {
 	public static BasicStatusLine create(int statusCode, String reasonPhrase) {
 		return new BasicStatusLine().setStatusCode(statusCode).setReasonPhrase(reasonPhrase);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private ProtocolVersion DEFAULT_PROTOCOL_VERSION = new ProtocolVersion("HTTP", 1, 1);
 
 	private ProtocolVersion protocolVersion = DEFAULT_PROTOCOL_VERSION;
@@ -95,34 +85,47 @@ public class BasicStatusLine implements StatusLine {
 	public BasicStatusLine copy() {
 		return new BasicStatusLine(this);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns the locale of this status line.
 	 *
-	 * @return This object.
+	 * @return The locale of this status line.
 	 */
-	public BasicStatusLine setUnmodifiable() {
-		unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+	public Locale getLocale() {
+		return locale;
 	}
 
 	@Override /* Overridden from StatusLine */
 	public ProtocolVersion getProtocolVersion() {
 		return protocolVersion;
+	}
+
+	@Override /* Overridden from StatusLine */
+	public String getReasonPhrase() {
+		if (reasonPhrase == null) {
+			ReasonPhraseCatalog rfc = Utils.firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
+			return rfc.getReason(statusCode, locale);
+		}
+		return reasonPhrase;
+	}
+
+	@Override /* Overridden from StatusLine */
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+	/**
+	 * Sets the locale used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link Locale#getDefault()}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicStatusLine setLocale(Locale value) {
+		assertModifiable();
+		this.locale = value;
+		return this;
 	}
 
 	/**
@@ -138,35 +141,6 @@ public class BasicStatusLine implements StatusLine {
 		assertModifiable();
 		this.protocolVersion = value;
 		return this;
-	}
-
-	@Override /* Overridden from StatusLine */
-	public int getStatusCode() {
-		return statusCode;
-	}
-
-	/**
-	 * Sets the status code on the status line.
-	 *
-	 * <p>
-	 * If not specified, <c>0</c> will be used.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicStatusLine setStatusCode(int value) {
-		assertModifiable();
-		this.statusCode = value;
-		return this;
-	}
-
-	@Override /* Overridden from StatusLine */
-	public String getReasonPhrase() {
-		if (reasonPhrase == null) {
-			ReasonPhraseCatalog rfc = Utils.firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
-			return rfc.getReason(statusCode, locale);
-		}
-		return reasonPhrase;
 	}
 
 	/**
@@ -201,31 +175,42 @@ public class BasicStatusLine implements StatusLine {
 	}
 
 	/**
-	 * Returns the locale of this status line.
-	 *
-	 * @return The locale of this status line.
-	 */
-	public Locale getLocale() {
-		return locale;
-	}
-
-	/**
-	 * Sets the locale used to retrieve reason phrases.
+	 * Sets the status code on the status line.
 	 *
 	 * <p>
-	 * If not specified, uses {@link Locale#getDefault()}.
+	 * If not specified, <c>0</c> will be used.
 	 *
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	public BasicStatusLine setLocale(Locale value) {
+	public BasicStatusLine setStatusCode(int value) {
 		assertModifiable();
-		this.locale = value;
+		this.statusCode = value;
+		return this;
+	}
+
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	public BasicStatusLine setUnmodifiable() {
+		unmodifiable = true;
 		return this;
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
 		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
 	}
 }

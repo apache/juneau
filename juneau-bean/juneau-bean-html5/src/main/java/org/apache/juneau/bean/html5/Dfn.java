@@ -71,7 +71,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#dfn() dfn()}
- * 		<li class='jm'>{@link HtmlBuilder#dfn(Object, Object...) dfn(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#dfn(Object...) dfn(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -96,10 +96,6 @@ public class Dfn extends HtmlElementMixed {
 	public Dfn(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Dfn _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -109,6 +105,30 @@ public class Dfn extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Dfn accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dfn attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dfn attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Dfn child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Dfn children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -469,30 +489,6 @@ public class Dfn extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Dfn translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Dfn child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Dfn children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Dfn attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Dfn attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

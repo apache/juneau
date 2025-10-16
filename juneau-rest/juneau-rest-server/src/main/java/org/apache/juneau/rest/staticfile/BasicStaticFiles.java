@@ -45,12 +45,8 @@ import jakarta.activation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class BasicStaticFiles implements StaticFiles {
-
-	private final Header[] headers;
-	private final MimetypesFileTypeMap mimeTypes;
-	private final int hashCode;
-	private final FileFinder fileFinder;
 
 	/**
 	 * Creates a new builder for this object.
@@ -61,6 +57,11 @@ public class BasicStaticFiles implements StaticFiles {
 	public static StaticFiles.Builder create(BeanStore beanStore) {
 		return new StaticFiles.Builder(beanStore);
 	}
+	private final Header[] headers;
+	private final MimetypesFileTypeMap mimeTypes;
+	private final int hashCode;
+
+	private final FileFinder fileFinder;
 
 	/**
 	 * Constructor.
@@ -106,6 +107,26 @@ public class BasicStaticFiles implements StaticFiles {
 		this.fileFinder = null;
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->Utils.eq(x.headers, y.headers));
+	}
+
+	@Override /* Overridden from FileFinder */
+	public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
+		return fileFinder.getStream(name, locale);
+	}
+
+	@Override /* Overridden from FileFinder */
+	public Optional<String> getString(String name, Locale locale) throws IOException {
+		return fileFinder.getString(name, locale);
+	}
+
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+
 	/**
 	 * Resolve the specified path.
 	 *
@@ -128,26 +149,6 @@ public class BasicStaticFiles implements StaticFiles {
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}
-	}
-
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->Utils.eq(x.headers, y.headers));
-	}
-
-	@Override /* Overridden from FileFinder */
-	public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
-		return fileFinder.getStream(name, locale);
-	}
-
-	@Override /* Overridden from FileFinder */
-	public Optional<String> getString(String name, Locale locale) throws IOException {
-		return fileFinder.getString(name, locale);
 	}
 
 	@Override /* Overridden from Object */

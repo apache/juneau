@@ -30,12 +30,14 @@ import org.apache.juneau.common.utils.*;
  * This is a read-only object.
  */
 public class ConfigMapEntry {
+	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
+	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
 	final String rawLine;
 	final String key, value, comment;
-	final String modifiers;
-	final List<String> preLines;
 
-	static final ConfigMapEntry NULL = new ConfigMapEntry(null, null, null, null, null);
+	final String modifiers;
+
+	final List<String> preLines;
 
 	ConfigMapEntry(String line, List<String> preLines) {
 		this.rawLine = line;
@@ -78,6 +80,15 @@ public class ConfigMapEntry {
 	}
 
 	/**
+	 * Returns the same-line comment of this entry.
+	 *
+	 * @return The same-line comment of this entry.
+	 */
+	public String getComment() {
+		return comment;
+	}
+
+	/**
 	 * Returns the name of this entry.
 	 *
 	 * @return The name of this entry.
@@ -87,21 +98,12 @@ public class ConfigMapEntry {
 	}
 
 	/**
-	 * Returns the raw value of this entry.
+	 * Returns the modifiers for this entry.
 	 *
-	 * @return The raw value of this entry.
+	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
 	 */
-	public String getValue() {
-		return value;
-	}
-
-	/**
-	 * Returns the same-line comment of this entry.
-	 *
-	 * @return The same-line comment of this entry.
-	 */
-	public String getComment() {
-		return comment;
+	public String getModifiers() {
+		return modifiers;
 	}
 
 	/**
@@ -114,12 +116,12 @@ public class ConfigMapEntry {
 	}
 
 	/**
-	 * Returns the modifiers for this entry.
+	 * Returns the raw value of this entry.
 	 *
-	 * @return The modifiers for this entry, or <jk>null</jk> if it has no modifiers.
+	 * @return The raw value of this entry.
 	 */
-	public String getModifiers() {
-		return modifiers;
+	public String getValue() {
+		return value;
 	}
 
 	Writer writeTo(Writer w) throws IOException {
@@ -163,6 +165,4 @@ public class ConfigMapEntry {
 		}
 		return w;
 	}
-
-	private static final AsciiSet REPLACE_CHARS = AsciiSet.of("\\#");
 }

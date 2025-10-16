@@ -70,6 +70,16 @@ public class LocalDir {
 		this.hashCode = path.hashCode();
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof LocalDir && Utils.eq(this, (LocalDir)o, (x,y)->Utils.eq(x.clazz, y.clazz) && Utils.eq(x.clazzPath, y.clazzPath) && Utils.eq(x.path, y.path));
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return hashCode;
+	}
+
 	/**
 	 * Resolves the specified path.
 	 *
@@ -92,6 +102,13 @@ public class LocalDir {
 		return null;
 	}
 
+	@Override /* Overridden from Object */
+	public String toString() {
+		if (clazz == null)
+			return path.toString();
+		return clazz.getName() + ":" + clazzPath;
+	}
+
 	/**
 	 * Validates that the specified classpath resource exists and is a file.
 	 * Note that the behavior of Class.getResource(path) is different when pointing to directories on the classpath.
@@ -112,22 +129,5 @@ public class LocalDir {
 			return false;
 		}
 		return true;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return o instanceof LocalDir && Utils.eq(this, (LocalDir)o, (x,y)->Utils.eq(x.clazz, y.clazz) && Utils.eq(x.clazzPath, y.clazzPath) && Utils.eq(x.path, y.path));
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		if (clazz == null)
-			return path.toString();
-		return clazz.getName() + ":" + clazzPath;
 	}
 }

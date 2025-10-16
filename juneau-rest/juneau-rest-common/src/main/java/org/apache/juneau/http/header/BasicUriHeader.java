@@ -39,11 +39,6 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicUriHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -58,20 +53,6 @@ public class BasicUriHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicUriHeader of(String name, String value) {
-		return value == null ? null : new BasicUriHeader(name, value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicUriHeader of(String name, URI value) {
 		return value == null ? null : new BasicUriHeader(name, value);
 	}
 
@@ -92,10 +73,19 @@ public class BasicUriHeader extends BasicHeader {
 		return value == null ? null : new BasicUriHeader(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicUriHeader of(String name, URI value) {
+		return value == null ? null : new BasicUriHeader(name, value);
+	}
 	private final URI value;
 	private final Supplier<URI> supplier;
 
@@ -112,21 +102,6 @@ public class BasicUriHeader extends BasicHeader {
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
 		this.value = Utils.isEmpty(value) ? null :  URI.create(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicUriHeader(String name, URI value) {
-		super(name, Utils.s(value));
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -148,9 +123,19 @@ public class BasicUriHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicUriHeader(String name, URI value) {
+		super(name, Utils.s(value));
+		this.value = value;
+		this.supplier = null;
 	}
 
 	/**
@@ -162,13 +147,9 @@ public class BasicUriHeader extends BasicHeader {
 		return Utils.opt(value());
 	}
 
-	/**
-	 * Returns the header value as a {@link URI} wrapped in an {@link Optional}.
-	 *
-	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public URI toUri() {
-		return value();
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
 	}
 
 	/**
@@ -183,6 +164,15 @@ public class BasicUriHeader extends BasicHeader {
 	public URI orElse(URI other) {
 		URI x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link URI} wrapped in an {@link Optional}.
+	 *
+	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public URI toUri() {
+		return value();
 	}
 
 	private URI value() {

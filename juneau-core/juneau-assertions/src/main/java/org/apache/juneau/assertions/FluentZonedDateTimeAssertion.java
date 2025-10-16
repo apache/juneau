@@ -130,21 +130,6 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentZonedDateTimeAssertion(ZonedDateTime value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -163,6 +148,21 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	 */
 	public FluentZonedDateTimeAssertion(Assertion creator, ZonedDateTime value, R returns) {
 		super(creator, value, returns);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentZonedDateTimeAssertion(ZonedDateTime value, R returns) {
+		this(null, value, returns);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

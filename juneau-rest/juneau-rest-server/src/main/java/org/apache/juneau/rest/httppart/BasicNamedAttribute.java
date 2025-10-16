@@ -35,11 +35,6 @@ import org.apache.juneau.http.part.*;
  */
 @BeanIgnore
 public class BasicNamedAttribute implements NamedAttribute {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -48,6 +43,20 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 * @return A new {@link BasicPart} object.
 	 */
 	public static BasicNamedAttribute of(String name, Object value) {
+		return new BasicNamedAttribute(name, value);
+	}
+
+	/**
+	 * Static creator with delayed value.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The parameter name.
+	 * @param value The parameter value supplier.
+	 * @return A new {@link BasicPart} object.
+	 */
+	public static BasicNamedAttribute of(String name, Supplier<?> value) {
 		return new BasicNamedAttribute(name, value);
 	}
 
@@ -67,25 +76,6 @@ public class BasicNamedAttribute implements NamedAttribute {
 			return of(pair, "");
 		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
 	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param name The parameter name.
-	 * @param value The parameter value supplier.
-	 * @return A new {@link BasicPart} object.
-	 */
-	public static BasicNamedAttribute of(String name, Supplier<?> value) {
-		return new BasicNamedAttribute(name, value);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String name;
 	private final Object value;
 
@@ -128,6 +118,21 @@ public class BasicNamedAttribute implements NamedAttribute {
 		return new FluentObjectAssertion<>(getValue(), this);
 	}
 
+	/**
+	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
+	 *
+	 * <p>
+	 * This is a shortcut for calling <c>asString().get()</c>.
+	 *
+	 * @return The value if present.
+	 */
+	public Object get() {
+		Object o = getValue();
+		if (o == null)
+			throw new NoSuchElementException();
+		return o;
+	}
+
 	@Override /* Overridden from NameValuePair */
 	public String getName() {
 		return name;
@@ -148,21 +153,6 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 */
 	public boolean isPresent() {
 		return getValue() != null;
-	}
-
-	/**
-	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <c>asString().get()</c>.
-	 *
-	 * @return The value if present.
-	 */
-	public Object get() {
-		Object o = getValue();
-		if (o == null)
-			throw new NoSuchElementException();
-		return o;
 	}
 
 	/**

@@ -34,17 +34,6 @@ public class ContextRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ContextRuntimeException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param message The error message.
 	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
@@ -59,6 +48,17 @@ public class ContextRuntimeException extends BasicRuntimeException {
 	 */
 	public ContextRuntimeException(Throwable cause) {
 		super(cause);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ContextRuntimeException(Throwable cause, String message, Object... args) {
+		super(cause, message, args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

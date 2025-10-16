@@ -32,29 +32,6 @@ import org.apache.juneau.svl.*;
 public class OpenApiConfigAnnotation {
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.oapi.OpenApiSerializer.Builder}.
-	 */
-	public static class SerializerApply extends AnnotationApplier<OpenApiConfig,OpenApiSerializer.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public SerializerApply(VarResolverSession vr) {
-			super(OpenApiConfig.class, OpenApiSerializer.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiSerializer.Builder b) {
-			OpenApiConfig a = ai.inner();
-
-			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
-			string(a.collectionFormat()).map(HttpPartCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
-		}
-	}
-
-	/**
 	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.oapi.OpenApiParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<OpenApiConfig,OpenApiParser.Builder> {
@@ -70,6 +47,29 @@ public class OpenApiConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiParser.Builder b) {
+			OpenApiConfig a = ai.inner();
+
+			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
+			string(a.collectionFormat()).map(HttpPartCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
+		}
+	}
+
+	/**
+	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.oapi.OpenApiSerializer.Builder}.
+	 */
+	public static class SerializerApply extends AnnotationApplier<OpenApiConfig,OpenApiSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public SerializerApply(VarResolverSession vr) {
+			super(OpenApiConfig.class, OpenApiSerializer.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiSerializer.Builder b) {
 			OpenApiConfig a = ai.inner();
 
 			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));

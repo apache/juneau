@@ -31,37 +31,6 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 public class SwaggerAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Swagger DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(Swagger a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -184,10 +153,6 @@ public class SwaggerAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements Swagger {
 
 		private final Contact contact;
@@ -249,5 +214,25 @@ public class SwaggerAnnotation {
 		public String version() {
 			return version;
 		}
+	}
+
+	/** Default value */
+	public static final Swagger DEFAULT = create().build();
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Swagger a) {
+		return a == null || DEFAULT.equals(a);
 	}
 }

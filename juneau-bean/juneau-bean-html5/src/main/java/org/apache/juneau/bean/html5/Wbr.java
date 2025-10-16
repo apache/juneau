@@ -96,10 +96,6 @@ public class Wbr extends HtmlElementVoid {
 	 * Creates an empty {@link Wbr} element.
 	 */
 	public Wbr() { /* Empty constructor. */ }
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Wbr _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -109,6 +105,18 @@ public class Wbr extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Wbr accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Wbr attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Wbr attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -469,18 +477,6 @@ public class Wbr extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Wbr translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Wbr attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Wbr attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

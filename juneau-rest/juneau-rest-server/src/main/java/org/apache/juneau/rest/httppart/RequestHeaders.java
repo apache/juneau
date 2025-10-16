@@ -171,31 +171,51 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
-	 * Sets the parser to use for part values.
+	 * Adds request header values.
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * Headers are added to the end.
+	 * <br>Existing headers with the same name are not changed.
+	 *
+	 * @param headers The header objects.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders parser(HttpPartParserSession value) {
-		this.parser = value;
-		forEach(x -> x.parser(parser));
+	public RequestHeaders add(Header...headers) {
+		Utils.assertArgNotNull("headers", headers);
+		for (Header h : headers)
+			if (h != null)
+				add(h.getName(), h.getValue());
 		return this;
 	}
 
 	/**
-	 * Sets case sensitivity for names in this list.
+	 * Adds a request header value.
 	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * <p>
+	 * Header is added to the end.
+	 * <br>Existing headers with the same name are not changed.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk>.
+	 * @return This object.
 	 */
-	public RequestHeaders caseSensitive(boolean value) {
-		this.caseSensitive = value;
+	public RequestHeaders add(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		add(new RequestHeader(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Basic operations.
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Adds default entries to these headers.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs The default entries.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaders addDefault(Header...pairs) {
+		return addDefault(alist(pairs));
+	}
 
 	/**
 	 * Adds default entries to these headers.
@@ -221,19 +241,6 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
-	 * Adds default entries to these headers.
-	 *
-	 * <p>
-	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
-	 *
-	 * @param pairs The default entries.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestHeaders addDefault(Header...pairs) {
-		return addDefault(alist(pairs));
-	}
-
-	/**
 	 * Adds a default entry to the request headers.
 	 *
 	 * @param name The name.
@@ -245,104 +252,15 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
-	 * Adds a request header value.
+	 * Sets case sensitivity for names in this list.
 	 *
-	 * <p>
-	 * Header is added to the end.
-	 * <br>Existing headers with the same name are not changed.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @param value The header value.  Can be <jk>null</jk>.
-	 * @return This object.
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
 	 */
-	public RequestHeaders add(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		add(new RequestHeader(req, name, Utils.s(value)).parser(parser));
+	public RequestHeaders caseSensitive(boolean value) {
+		this.caseSensitive = value;
 		return this;
 	}
-
-	/**
-	 * Adds request header values.
-	 *
-	 * <p>
-	 * Headers are added to the end.
-	 * <br>Existing headers with the same name are not changed.
-	 *
-	 * @param headers The header objects.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestHeaders add(Header...headers) {
-		Utils.assertArgNotNull("headers", headers);
-		for (Header h : headers)
-			if (h != null)
-				add(h.getName(), h.getValue());
-		return this;
-	}
-
-	/**
-	 * Sets a request header value.
-	 *
-	 * <p>
-	 * Header is added to the end.
-	 * <br>Any previous headers with the same name are removed.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Converted to a string using {@link Object#toString()}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestHeaders set(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		set(new RequestHeader(req, name, Utils.s(value)).parser(parser));
-		return this;
-	}
-
-	/**
-	 * Sets request header values.
-	 *
-	 * <p>
-	 * Headers are added to the end.
-	 * <br>Any previous headers with the same name are removed.
-	 *
-	 * @param headers The header to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestHeaders set(Header...headers) {
-		Utils.assertArgNotNull("headers", headers);
-		for (Header h : headers)
-			remove(h);
-		for (Header h : headers)
-			add(h);
-		return this;
-	}
-
-	/**
-	 * Remove header by name.
-	 *
-	 * @param name The header names.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestHeaders remove(String name) {
-		Utils.assertArgNotNull("name", name);
-		removeIf(x -> eq(x.getName(), name));
-		return this;
-	}
-
-	/**
-	 * Returns a copy of this object but only with the specified header names copied.
-	 *
-	 * @param names The list to include in the copy.
-	 * @return A new list object.
-	 */
-	public RequestHeaders subset(String...names) {
-		return new RequestHeaders(this, names);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Convenience getters.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns <jk>true</jk> if the header with the specified name is present.
@@ -369,6 +287,55 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
+	 * Makes a copy of these parameters.
+	 *
+	 * @return A new parameters object.
+	 */
+	public RequestHeaders copy() {
+		return new RequestHeaders(this);
+	}
+
+	/**
+	 * Returns the header as the specified bean type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Header} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param type The bean type to create.
+	 * @return The bean, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
+		String name = HttpParts.getName(HEADER, cm).orElseThrow(()->new BasicRuntimeException("@Header(name) not found on class {0}", className(type)));
+		return get(name).as(type);
+	}
+
+	/**
+	 * Returns the condensed header with the specified name.
+	 *
+	 * <p>
+	 * If multiple headers are present, they will be combined into a single comma-delimited list.
+	 *
+	 * @param name The header name.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	public RequestHeader get(String name) {
+		List<RequestHeader> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestHeader(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0, j = l.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestHeader(req, name, sb.toString()).parser(parser);
+	}
+	/**
 	 * Returns all headers with the specified name.
 	 *
 	 * @param name The header name.
@@ -376,38 +343,6 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public List<RequestHeader> getAll(String name) {
 		return stream(name).collect(toList());
-	}
-
-	/**
-	 * Returns all headers with the specified name.
-	 *
-	 * @param name The header name.
-	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
-	 */
-	public Stream<RequestHeader> stream(String name) {
-		return stream().filter(x -> eq(x.getName(), name));
-	}
-
-	/**
-	 * Returns all headers in sorted order.
-	 *
-	 * @return The stream of all headers in sorted order.
-	 */
-	public Stream<RequestHeader> getSorted() {
-		Comparator<RequestHeader> x;
-		if (caseSensitive)
-			x = Comparator.comparing(RequestHeader::getName);
-		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
-		return stream().sorted(x);
-	}
-
-	/**
-	 * Returns all the unique header names in this list.
-	 * @return The list of all unique header names in this list.
-	 */
-	public List<String> getNames() {
-		return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**
@@ -443,67 +378,107 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
-	 * Returns the condensed header with the specified name.
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
+	 */
+	public List<String> getNames() {
+		return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
+	}
+
+	/**
+	 * Returns all headers in sorted order.
+	 *
+	 * @return The stream of all headers in sorted order.
+	 */
+	public Stream<RequestHeader> getSorted() {
+		Comparator<RequestHeader> x;
+		if (caseSensitive)
+			x = Comparator.comparing(RequestHeader::getName);
+		else
+			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
+	}
+
+	/**
+	 * Sets the parser to use for part values.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestHeaders parser(HttpPartParserSession value) {
+		this.parser = value;
+		forEach(x -> x.parser(parser));
+		return this;
+	}
+
+	/**
+	 * Remove header by name.
+	 *
+	 * @param name The header names.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaders remove(String name) {
+		Utils.assertArgNotNull("name", name);
+		removeIf(x -> eq(x.getName(), name));
+		return this;
+	}
+
+	/**
+	 * Sets request header values.
 	 *
 	 * <p>
-	 * If multiple headers are present, they will be combined into a single comma-delimited list.
+	 * Headers are added to the end.
+	 * <br>Any previous headers with the same name are removed.
+	 *
+	 * @param headers The header to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaders set(Header...headers) {
+		Utils.assertArgNotNull("headers", headers);
+		for (Header h : headers)
+			remove(h);
+		for (Header h : headers)
+			add(h);
+		return this;
+	}
+
+	/**
+	 * Sets a request header value.
+	 *
+	 * <p>
+	 * Header is added to the end.
+	 * <br>Any previous headers with the same name are removed.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Converted to a string using {@link Object#toString()}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaders set(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		set(new RequestHeader(req, name, Utils.s(value)).parser(parser));
+		return this;
+	}
+
+	/**
+	 * Returns all headers with the specified name.
 	 *
 	 * @param name The header name.
-	 * @return The header, never <jk>null</jk>.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
 	 */
-	public RequestHeader get(String name) {
-		List<RequestHeader> l = getAll(name);
-		if (l.isEmpty())
-			return new RequestHeader(req, name, null).parser(parser);
-		if (l.size() == 1)
-			return l.get(0);
-		StringBuilder sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(", ");
-			sb.append(l.get(i).getValue());
-		}
-		return new RequestHeader(req, name, sb.toString()).parser(parser);
+	public Stream<RequestHeader> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
 	}
-
 	/**
-	 * Returns the header as the specified bean type.
+	 * Returns a copy of this object but only with the specified header names copied.
 	 *
-	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Header} annotation
-	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
-	 *
-	 * @param <T> The bean type to create.
-	 * @param type The bean type to create.
-	 * @return The bean, never <jk>null</jk>.
+	 * @param names The list to include in the copy.
+	 * @return A new list object.
 	 */
-	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(HEADER, cm).orElseThrow(()->new BasicRuntimeException("@Header(name) not found on class {0}", className(type)));
-		return get(name).as(type);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Makes a copy of these parameters.
-	 *
-	 * @return A new parameters object.
-	 */
-	public RequestHeaders copy() {
-		return new RequestHeaders(this);
-	}
-
-	private String key(String name) {
-		return caseSensitive ? name : name.toLowerCase();
-	}
-
-	private boolean eq(String s1, String s2) {
-		if (caseSensitive)
-			return Utils.eq(s1, s2);
-		return Utils.eqic(s1, s2);
+	public RequestHeaders subset(String...names) {
+		return new RequestHeaders(this, names);
 	}
 
 	@Override /* Overridden from Object */
@@ -512,5 +487,15 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		for (String n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
+	}
+
+	private boolean eq(String s1, String s2) {
+		if (caseSensitive)
+			return Utils.eq(s1, s2);
+		return Utils.eqic(s1, s2);
+	}
+
+	private String key(String name) {
+		return caseSensitive ? name : name.toLowerCase();
 	}
 }

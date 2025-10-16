@@ -32,11 +32,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Forwarded")
 public class Forwarded extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Forwarded";
 
@@ -66,11 +61,6 @@ public class Forwarded extends BasicStringHeader {
 	public static Forwarded of(Supplier<String> value) {
 		return value == null ? null : new Forwarded(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

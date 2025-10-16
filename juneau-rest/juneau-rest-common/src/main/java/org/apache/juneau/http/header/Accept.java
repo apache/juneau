@@ -149,11 +149,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Accept")
 public class Accept extends BasicMediaRangesHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept";
 
@@ -189,19 +184,6 @@ public class Accept extends BasicMediaRangesHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Accept of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new Accept(value));
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
@@ -222,6 +204,19 @@ public class Accept extends BasicMediaRangesHeader {
 	}
 
 	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Accept of(String value) {
+		return value == null ? null : CACHE.get(value, ()->new Accept(value));
+	}
+
+	/**
 	 * Static creator with delayed value.
 	 *
 	 * <p>
@@ -235,10 +230,16 @@ public class Accept extends BasicMediaRangesHeader {
 	public static Accept of(Supplier<MediaRanges> value) {
 		return value == null ? null : new Accept(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Accept(MediaRanges value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -249,17 +250,6 @@ public class Accept extends BasicMediaRangesHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Accept(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Accept(MediaRanges value) {
 		super(NAME, value);
 	}
 

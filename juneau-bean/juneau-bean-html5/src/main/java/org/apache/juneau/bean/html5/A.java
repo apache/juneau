@@ -78,19 +78,73 @@ public class A extends HtmlElementMixed {
 		href(href).children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public A _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public A accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public A attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public A attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public A child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public A children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public A contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public A dir(String value) {
+		super.dir(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-download">download</a> attribute.
 	 *
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
 	 *
-	 * @param download
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public A download(Object value) {
 		attr("download", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public A hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
@@ -107,7 +161,7 @@ public class A extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param href
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
@@ -134,123 +188,11 @@ public class A extends HtmlElementMixed {
 	 * 	<li><js>"ja"</js> - Japanese</li>
 	 * </ul>
 	 *
-	 * @param hreflang The language code of the linked resource.
+	 * @param value The language code of the linked resource.
 	 * @return This object.
 	 */
 	public A hreflang(String value) {
 		attr("hreflang", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the relationship between the current document and the linked resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"alternate"</js> - Alternative version of the page</li>
-	 * 	<li><js>"author"</js> - Link to the author of the page</li>
-	 * 	<li><js>"bookmark"</js> - Permalink for bookmarking</li>
-	 * 	<li><js>"external"</js> - External link</li>
-	 * 	<li><js>"help"</js> - Link to help documentation</li>
-	 * 	<li><js>"license"</js> - Link to license information</li>
-	 * 	<li><js>"next"</js> - Next page in a sequence</li>
-	 * 	<li><js>"nofollow"</js> - Don't follow this link for SEO</li>
-	 * 	<li><js>"noreferrer"</js> - Don't send referrer information</li>
-	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
-	 * 	<li><js>"search"</js> - Link to search functionality</li>
-	 * 	<li><js>"tag"</js> - Tag for the current page</li>
-	 * </ul>
-	 *
-	 * @param rel The relationship between the document and linked resource.
-	 * @return This object.
-	 */
-	public A rel(String value) {
-		attr("rel", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
-	 *
-	 * <p>
-	 * Specifies where to open the linked resource when the link is clicked.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"_blank"</js> - Open in a new window/tab</li>
-	 * 	<li><js>"_self"</js> - Open in the same frame (default)</li>
-	 * 	<li><js>"_parent"</js> - Open in the parent frame</li>
-	 * 	<li><js>"_top"</js> - Open in the full body of the window</li>
-	 * 	<li><js>"framename"</js> - Open in a named frame</li>
-	 * </ul>
-	 *
-	 * @param target Where to open the linked resource.
-	 * @return This object.
-	 */
-	public A target(String value) {
-		attr("target", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"text/html"</js> - HTML document</li>
-	 * 	<li><js>"text/css"</js> - CSS stylesheet</li>
-	 * 	<li><js>"application/pdf"</js> - PDF document</li>
-	 * 	<li><js>"image/png"</js> - PNG image</li>
-	 * 	<li><js>"application/zip"</js> - ZIP archive</li>
-	 * </ul>
-	 *
-	 * @param type The MIME type of the linked resource.
-	 * @return This object.
-	 */
-	public A type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public A _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public A accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public A contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public A dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public A hidden(Object value) {
-		super.hidden(value);
 		return this;
 	}
 
@@ -566,6 +508,37 @@ public class A extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the relationship between the current document and the linked resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"alternate"</js> - Alternative version of the page</li>
+	 * 	<li><js>"author"</js> - Link to the author of the page</li>
+	 * 	<li><js>"bookmark"</js> - Permalink for bookmarking</li>
+	 * 	<li><js>"external"</js> - External link</li>
+	 * 	<li><js>"help"</js> - Link to help documentation</li>
+	 * 	<li><js>"license"</js> - Link to license information</li>
+	 * 	<li><js>"next"</js> - Next page in a sequence</li>
+	 * 	<li><js>"nofollow"</js> - Don't follow this link for SEO</li>
+	 * 	<li><js>"noreferrer"</js> - Don't send referrer information</li>
+	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
+	 * 	<li><js>"search"</js> - Link to search functionality</li>
+	 * 	<li><js>"tag"</js> - Tag for the current page</li>
+	 * </ul>
+	 *
+	 * @param value The relationship between the document and linked resource.
+	 * @return This object.
+	 */
+	public A rel(String value) {
+		attr("rel", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public A spellcheck(Object value) {
 		super.spellcheck(value);
@@ -584,6 +557,30 @@ public class A extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
+	 *
+	 * <p>
+	 * Specifies where to open the linked resource when the link is clicked.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 * 	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 * 	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 * 	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 * 	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param value Where to open the linked resource.
+	 * @return This object.
+	 */
+	public A target(String value) {
+		attr("target", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public A title(String value) {
 		super.title(value);
@@ -596,27 +593,27 @@ public class A extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public A child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public A children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public A attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public A attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"text/html"</js> - HTML document</li>
+	 * 	<li><js>"text/css"</js> - CSS stylesheet</li>
+	 * 	<li><js>"application/pdf"</js> - PDF document</li>
+	 * 	<li><js>"image/png"</js> - PNG image</li>
+	 * 	<li><js>"application/zip"</js> - ZIP archive</li>
+	 * </ul>
+	 *
+	 * @param value The MIME type of the linked resource.
+	 * @return This object.
+	 */
+	public A type(String value) {
+		attr("type", value);
 		return this;
 	}
 }

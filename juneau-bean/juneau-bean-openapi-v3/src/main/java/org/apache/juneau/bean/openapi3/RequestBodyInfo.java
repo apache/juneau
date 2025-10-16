@@ -90,6 +90,23 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	/**
+	 * Adds one or more values to the <property>content</property> property.
+	 *
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object
+	 */
+	public RequestBodyInfo addContent(String key, MediaType value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
+		content = mapBuilder(content).sparse().add(key, value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -99,15 +116,23 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	protected RequestBodyInfo strict() {
-		super.strict();
-		return this;
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "content" -> toType(getContent(), type);
+			case "required" -> toType(getRequired(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public RequestBodyInfo strict(Object value) {
-		super.strict(value);
-		return this;
+	/**
+	 * Bean property getter:  <property>content</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, MediaType> getContent() {
+		return content;
 	}
 
 	/**
@@ -120,6 +145,55 @@ public class RequestBodyInfo extends OpenApiElement{
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(content != null, "content")
+			.addIf(description != null, "description")
+			.addIf(required != null, "required")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public RequestBodyInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "description" -> setDescription(Utils.s(value));
+			case "required" -> setRequired(toBoolean(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>content</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public RequestBodyInfo setContent(Map<String, MediaType> value) {
+		content = copyOf(value);
+		return this;
 	}
 
 	/**
@@ -143,57 +217,6 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property getter:  <property>content</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String, MediaType> getContent() {
-		return content;
-	}
-
-	/**
-	 * Bean property setter:  <property>content</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public RequestBodyInfo setContent(Map<String, MediaType> value) {
-		content = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>content</property> property.
-	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
-	 */
-	public RequestBodyInfo addContent(String key, MediaType value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
-		content = mapBuilder(content).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
 	 * Bean property setter:  <property>explode</property>.
 	 *
 	 * <p>
@@ -211,37 +234,14 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "content" -> toType(getContent(), type);
-			case "required" -> toType(getRequired(), type);
-			default -> super.get(property, type);
-		};
+	public RequestBodyInfo strict(Object value) {
+		super.strict(value);
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public RequestBodyInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "content" -> setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
-			case "description" -> setDescription(Utils.s(value));
-			case "required" -> setRequired(toBoolean(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(content != null, "content")
-			.addIf(description != null, "description")
-			.addIf(required != null, "required")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected RequestBodyInfo strict() {
+		super.strict();
+		return this;
 	}
 }

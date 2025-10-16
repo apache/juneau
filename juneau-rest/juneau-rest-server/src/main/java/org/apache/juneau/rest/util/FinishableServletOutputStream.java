@@ -46,23 +46,25 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	}
 
 	@Override /* Overridden from OutputStream */
-	public final void write(byte[] b, int off, int len) throws IOException {
-		os.write(b, off, len);
+	public final void close() throws IOException {
+		os.close();
 	}
 
-	@Override /* Overridden from OutputStream */
-	public final void write(int b) throws IOException {
-		os.write(b);
+	/**
+	 * Calls {@link Finishable#finish()} on the underlying output stream.
+	 *
+	 * <p>
+	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
+	 */
+	@Override /* Overridden from Finishable */
+	public void finish() throws IOException {
+		if (f != null)
+			f.finish();
 	}
 
 	@Override /* Overridden from OutputStream */
 	public final void flush() throws IOException {
 		os.flush();
-	}
-
-	@Override /* Overridden from OutputStream */
-	public final void close() throws IOException {
-		os.close();
 	}
 
 	@Override /* Overridden from ServletOutputStream */
@@ -76,15 +78,13 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 			sos.setWriteListener(arg0);
 	}
 
-	/**
-	 * Calls {@link Finishable#finish()} on the underlying output stream.
-	 *
-	 * <p>
-	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
-	 */
-	@Override /* Overridden from Finishable */
-	public void finish() throws IOException {
-		if (f != null)
-			f.finish();
+	@Override /* Overridden from OutputStream */
+	public final void write(byte[] b, int off, int len) throws IOException {
+		os.write(b, off, len);
+	}
+
+	@Override /* Overridden from OutputStream */
+	public final void write(int b) throws IOException {
+		os.write(b);
 	}
 }

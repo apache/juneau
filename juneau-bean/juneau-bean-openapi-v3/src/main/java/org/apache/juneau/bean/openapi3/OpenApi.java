@@ -115,95 +115,6 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
-	 * Make a deep copy of this object.
-	 *
-	 * @return A deep copy of this object.
-	 */
-	public OpenApi copy() {
-		return new OpenApi(this);
-	}
-
-	/**
-	 * Returns the OpenAPI version.
-	 *
-	 * @return The OpenAPI version.
-	 */
-	public String getOpenapi() {
-		return openapi;
-	}
-
-	/**
-	 * Sets the OpenAPI version.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public OpenApi setOpenapi(String value) {
-		this.openapi = value;
-		return this;
-	}
-
-	/**
-	 * Returns the info object.
-	 *
-	 * @return The info object.
-	 */
-	public Info getInfo() {
-		return info;
-	}
-
-	/**
-	 * Sets the info object.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public OpenApi setInfo(Info value) {
-		this.info = value;
-		return this;
-	}
-
-	/**
-	 * Returns the servers list.
-	 *
-	 * @return The servers list.
-	 */
-	public List<Server> getServers() {
-		return servers;
-	}
-
-	/**
-	 * Sets the servers list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public OpenApi setServers(List<Server> value) {
-		this.servers = value;
-		return this;
-	}
-
-	/**
-	 * Returns the paths map.
-	 *
-	 * @return The paths map.
-	 */
-	public Map<String,PathItem> getPaths() {
-		return paths;
-	}
-
-	/**
-	 * Sets the paths map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public OpenApi setPaths(Map<String,PathItem> value) {
-		this.paths = mapBuilder(String.class,PathItem.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
-		return this;
-	}
-
-	/**
 	 * Adds a path to this OpenAPI document.
 	 *
 	 * @param path The path string.  Must not be <jk>null</jk>.
@@ -220,12 +131,249 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security mechanisms can be used across the API.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addSecurity(Collection<SecurityRequirement> values) {
+		security = listBuilder(security).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security mechanisms can be used across the API.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addSecurity(SecurityRequirement...values) {
+		security = listBuilder(security).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>servers</property>.
+	 *
+	 * <p>
+	 * An array of Server Objects, which provide connectivity information to a target server.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addServers(Collection<Server> values) {
+		servers = listBuilder(servers).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>servers</property>.
+	 *
+	 * <p>
+	 * An array of Server Objects, which provide connectivity information to a target server.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addServers(Server...values) {
+		servers = listBuilder(servers).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addTags(Collection<Tag> values) {
+		tags = listBuilder(tags).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags used by the specification with additional metadata.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public OpenApi addTags(Tag...values) {
+		tags = listBuilder(tags).sparse().add(values).build();
+		return this;
+	}
+
+	/**
+	 * Make a deep copy of this object.
+	 *
+	 * @return A deep copy of this object.
+	 */
+	public OpenApi copy() {
+		return new OpenApi(this);
+	}
+
+	/**
+	 * Finds a reference within this OpenAPI document.
+	 *
+	 * @param ref The reference string (e.g., <js>"#/components/schemas/User"</js>).  Must not be <jk>null</jk> or blank.
+	 * @param c The expected class type.  Must not be <jk>null</jk>.
+	 * @return The referenced node, or <jk>null</jk> if not found.
+	 */
+	public <T> T findRef(String ref, Class<T> c) {
+		assertArgNotNullOrBlank("ref", ref);
+		assertArgNotNull("c", c);
+		if (! ref.startsWith("#/"))
+			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);
+		try {
+			return new ObjectRest(this).get(ref.substring(1), c);
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));
+		}
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "openapi" -> toType(getOpenapi(), type);
+			case "info" -> toType(getInfo(), type);
+			case "servers" -> toType(getServers(), type);
+			case "paths" -> toType(getPaths(), type);
+			case "components" -> toType(getComponents(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "tags" -> toType(getTags(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
 	 * Returns the components object.
 	 *
 	 * @return The components object.
 	 */
 	public Components getComponents() {
 		return components;
+	}
+
+	/**
+	 * Returns the external documentation.
+	 *
+	 * @return The external documentation.
+	 */
+	public ExternalDocumentation getExternalDocs() {
+		return externalDocs;
+	}
+
+	/**
+	 * Returns the info object.
+	 *
+	 * @return The info object.
+	 */
+	public Info getInfo() {
+		return info;
+	}
+
+	/**
+	 * Returns the OpenAPI version.
+	 *
+	 * @return The OpenAPI version.
+	 */
+	public String getOpenapi() {
+		return openapi;
+	}
+
+	/**
+	 * Returns the paths map.
+	 *
+	 * @return The paths map.
+	 */
+	public Map<String,PathItem> getPaths() {
+		return paths;
+	}
+
+	/**
+	 * Returns the security requirements list.
+	 *
+	 * @return The security requirements list.
+	 */
+	public List<SecurityRequirement> getSecurity() {
+		return security;
+	}
+
+	/**
+	 * Returns the servers list.
+	 *
+	 * @return The servers list.
+	 */
+	public List<Server> getServers() {
+		return servers;
+	}
+
+	/**
+	 * Returns the tags list.
+	 *
+	 * @return The tags list.
+	 */
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(components != null, "components")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(info != null, "info")
+			.addIf(openapi != null, "openapi")
+			.addIf(paths != null, "paths")
+			.addIf(security != null, "security")
+			.addIf(servers != null, "servers")
+			.addIf(tags != null, "tags")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public OpenApi set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "components" -> setComponents(toType(value, Components.class));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "info" -> setInfo(toType(value, Info.class));
+			case "openapi" -> setOpenapi(Utils.s(value));
+			case "paths" -> setPaths(mapBuilder(String.class, PathItem.class).sparse().addAny(value).build());
+			case "security" -> setSecurity(listBuilder(SecurityRequirement.class).sparse().addAny(value).build());
+			case "servers" -> setServers(listBuilder(Server.class).sparse().addAny(value).build());
+			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -240,12 +388,47 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
-	 * Returns the security requirements list.
+	 * Sets the external documentation.
 	 *
-	 * @return The security requirements list.
+	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public List<SecurityRequirement> getSecurity() {
-		return security;
+	public OpenApi setExternalDocs(ExternalDocumentation value) {
+		this.externalDocs = value;
+		return this;
+	}
+
+	/**
+	 * Sets the info object.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public OpenApi setInfo(Info value) {
+		this.info = value;
+		return this;
+	}
+
+	/**
+	 * Sets the OpenAPI version.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public OpenApi setOpenapi(String value) {
+		this.openapi = value;
+		return this;
+	}
+
+	/**
+	 * Sets the paths map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public OpenApi setPaths(Map<String,PathItem> value) {
+		this.paths = mapBuilder(String.class,PathItem.class).sparse().sorted(PATH_COMPARATOR).addAll(value).build();
+		return this;
 	}
 
 	/**
@@ -260,12 +443,14 @@ public class OpenApi extends OpenApiElement {
 	}
 
 	/**
-	 * Returns the tags list.
+	 * Sets the servers list.
 	 *
-	 * @return The tags list.
+	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public List<Tag> getTags() {
-		return tags;
+	public OpenApi setServers(List<Server> value) {
+		this.servers = value;
+		return this;
 	}
 
 	/**
@@ -295,196 +480,6 @@ public class OpenApi extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Bean property appender:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags used by the specification with additional metadata.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OpenApi addTags(Tag...values) {
-		tags = listBuilder(tags).sparse().add(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags used by the specification with additional metadata.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OpenApi addTags(Collection<Tag> values) {
-		tags = listBuilder(tags).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>servers</property>.
-	 *
-	 * <p>
-	 * An array of Server Objects, which provide connectivity information to a target server.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OpenApi addServers(Server...values) {
-		servers = listBuilder(servers).sparse().add(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>servers</property>.
-	 *
-	 * <p>
-	 * An array of Server Objects, which provide connectivity information to a target server.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OpenApi addServers(Collection<Server> values) {
-		servers = listBuilder(servers).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security mechanisms can be used across the API.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OpenApi addSecurity(SecurityRequirement...values) {
-		security = listBuilder(security).sparse().add(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security mechanisms can be used across the API.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OpenApi addSecurity(Collection<SecurityRequirement> values) {
-		security = listBuilder(security).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Returns the external documentation.
-	 *
-	 * @return The external documentation.
-	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
-
-	/**
-	 * Sets the external documentation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public OpenApi setExternalDocs(ExternalDocumentation value) {
-		this.externalDocs = value;
-		return this;
-	}
-
-	/**
-	 * Finds a reference within this OpenAPI document.
-	 *
-	 * @param ref The reference string (e.g., <js>"#/components/schemas/User"</js>).  Must not be <jk>null</jk> or blank.
-	 * @param c The expected class type.  Must not be <jk>null</jk>.
-	 * @return The referenced node, or <jk>null</jk> if not found.
-	 */
-	public <T> T findRef(String ref, Class<T> c) {
-		assertArgNotNullOrBlank("ref", ref);
-		assertArgNotNull("c", c);
-		if (! ref.startsWith("#/"))
-			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);
-		try {
-			return new ObjectRest(this).get(ref.substring(1), c);
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));
-		}
-	}
-
-	@Override
-	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "openapi" -> toType(getOpenapi(), type);
-			case "info" -> toType(getInfo(), type);
-			case "servers" -> toType(getServers(), type);
-			case "paths" -> toType(getPaths(), type);
-			case "components" -> toType(getComponents(), type);
-			case "security" -> toType(getSecurity(), type);
-			case "tags" -> toType(getTags(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public OpenApi set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "components" -> setComponents(toType(value, Components.class));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "info" -> setInfo(toType(value, Info.class));
-			case "openapi" -> setOpenapi(Utils.s(value));
-			case "paths" -> setPaths(mapBuilder(String.class, PathItem.class).sparse().addAny(value).build());
-			case "security" -> setSecurity(listBuilder(SecurityRequirement.class).sparse().addAny(value).build());
-			case "servers" -> setServers(listBuilder(Server.class).sparse().addAny(value).build());
-			case "tags" -> setTags(listBuilder(Tag.class).sparse().addAny(value).build());
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(components != null, "components")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(info != null, "info")
-			.addIf(openapi != null, "openapi")
-			.addIf(paths != null, "paths")
-			.addIf(security != null, "security")
-			.addIf(servers != null, "servers")
-			.addIf(tags != null, "tags")
-			.build();
-		return new MultiSet<>(s, super.keySet());
-	}
-
 	@Override /* Overridden from OpenApiElement */
 	public OpenApi strict() {
 		super.strict();
@@ -495,5 +490,10 @@ public class OpenApi extends OpenApiElement {
 	public OpenApi strict(Object value) {
 		super.strict(value);
 		return this;
+	}
+
+	@Override
+	public String toString() {
+		return JsonSerializer.DEFAULT.toString(this);
 	}
 }

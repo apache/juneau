@@ -40,6 +40,7 @@ import org.apache.juneau.internal.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class ParserReader extends Reader implements Positionable {
 
 	/** Wrapped reader */
@@ -78,6 +79,156 @@ public class ParserReader extends Reader implements Positionable {
 	}
 
 	/**
+	 * No-op.
+	 *
+	 * <p>
+	 * Input readers are closed in the {@link ParserPipe} class.
+	 *
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	@Override /* Overridden from Reader */
+	public void close() throws IOException {
+		// No-op
+	}
+
+	/**
+	 * Trims off the last character in the marking buffer.
+	 *
+	 * <p>
+	 * Useful for removing escape characters from sequences.
+	 *
+	 * @return This object.
+	 */
+	public final ParserReader delete() {
+		return delete(1);
+	}
+
+	/**
+	 * Trims off the specified number of last characters in the marking buffer.
+	 * Useful for removing escape characters from sequences.
+	 *
+	 * @param count The number of characters to delete.
+	 * @return This object.
+	 */
+	public final ParserReader delete(int count) {
+		for (int i = 0; i < count; i++)
+			buff[iCurrent-i-1] = 127;
+		holesExist = true;
+		return this;
+	}
+
+	/**
+	 * Returns the contents of the reusable character buffer as a string, and resets the buffer for next usage.
+	 *
+	 * @return The contents of the reusable character buffer as a string.
+	 */
+	public final String getMarked() {
+		return getMarked(0, 0);
+	}
+
+	/**
+	 * Same as {@link #getMarked()} except allows you to specify offsets into the buffer.
+	 *
+	 * <p>
+	 * For example, to return the marked string, but trim the first and last characters, call the following:
+	 * <p class='bjava'>
+	 * 	getFromMarked(1, -1);
+	 * </p>
+	 *
+	 * @param offsetStart The offset of the start position.
+	 * @param offsetEnd The offset of the end position.
+	 * @return The contents of the reusable character buffer as a string.
+	 */
+	public final String getMarked(int offsetStart, int offsetEnd) {
+		int offset = 0;
+
+		// Holes are \u00FF 'delete' characters that we need to get rid of now.
+		if (holesExist) {
+			for (int i = iMark; i < iCurrent; i++) {
+				char c = buff[i];
+				if (c == 127)
+					offset++;
+				else
+					buff[i-offset] = c;
+			}
+			holesExist = false;
+		}
+		int start = iMark + offsetStart, len = iCurrent - iMark + offsetEnd - offsetStart - offset;
+		String s = new String(buff, start, len);
+		iMark = -1;
+		return s;
+	}
+
+	@Override /* Overridden from Positionable */
+	public Position getPosition() {
+		return new Position(line, column);
+	}
+
+	/**
+	 * Start buffering the calls to read() so that the text can be gathered from the mark point on calling {@code getFromMarked()}.
+	 */
+	public final void mark() {
+		iMark = iCurrent;
+	}
+
+	/**
+	 * Reads a numeric string from the specified reader.
+	 *
+	 * @return The parsed number string.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public String parseNumberString() throws IOException {
+		mark();
+		int c = 0;
+		while (true) {
+			c = read();
+			if (c == -1)
+				break;
+			if (! StringUtils.isNumberChar((char)c)) {
+				unread();
+				break;
+			}
+		}
+		return getMarked();
+	}
+
+	/**
+	 * Peeks the next character in the stream.
+	 *
+	 * <p>
+	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
+	 *
+	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public final int peek() throws IOException {
+		int c = read();
+		if (c != -1)
+			unread();
+		return c;
+	}
+
+	/**
+	 * Same as {@link #peek()} but skips over any whitespace characters.
+	 *
+	 * <p>
+	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
+	 *
+	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public final int peekSkipWs() throws IOException {
+		while(true) {
+			int c = read();
+			boolean isWs = Character.isWhitespace(c);
+			if (c != -1 && ! isWs)
+				unread();
+			if (! isWs)
+				return c;
+		}
+	}
+
+	/**
 	 * Reads a single character.
 	 *
 	 * <p>
@@ -103,17 +254,32 @@ public class ParserReader extends Reader implements Positionable {
 	}
 
 	/**
-	 * Same as {@link #read()} but skips over any whitespace characters.
+	 * Subclasses can override this method to provide additional filtering.
 	 *
-	 * @return The first non-whitespace character, or -1 if the end of stream reached.
-	 * @throws IOException Thrown by underlying stream.
+	 * <p>
+	 * Default implementation simply calls the same method on the underlying reader.
 	 */
-	public final int readSkipWs() throws IOException {
-		while (true) {
-			int c = read();
-			if (c == -1 || ! Character.isWhitespace(c))
-				return c;
+	@Override /* Overridden from Reader */
+	public int read(char[] cbuf, int off, int len) throws IOException {
+		return unbuffered ? r.read(cbuf, off, 1) : r.read(cbuf, off, len);
+	}
+
+	/**
+	 * Read the specified number of characters off the stream.
+	 *
+	 * @param num The number of characters to read.
+	 * @return The characters packaged as a String.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public final String read(int num) throws IOException {
+		char[] c = new char[num];
+		for (int i = 0; i < num; i++) {
+			int c2 = read();
+			if (c2 == -1)
+				return new String(c, 0, i);
+			c[i] = (char)c2;
 		}
+		return new String(c);
 	}
 
 	/**
@@ -133,6 +299,79 @@ public class ParserReader extends Reader implements Positionable {
 		}
 
 		return c;
+	}
+
+	/**
+	 * Same as {@link #read()} but skips over any whitespace characters.
+	 *
+	 * @return The first non-whitespace character, or -1 if the end of stream reached.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public final int readSkipWs() throws IOException {
+		while (true) {
+			int c = read();
+			if (c == -1 || ! Character.isWhitespace(c))
+				return c;
+		}
+	}
+
+	/**
+	 * Replace the last read character in the buffer with the specified character.
+	 *
+	 * @param c The new character.
+	 * @return This object.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public final ParserReader replace(char c) throws IOException {
+		return replace(c, 1);
+	}
+	/**
+	 * Replaces the last character in the marking buffer with the specified character.
+	 *
+	 * <p>
+	 * <c>offset</c> must be at least <c>1</c> for normal characters, and <c>2</c> for extended
+	 * unicode characters in order for the replacement to fit into the buffer.
+	 *
+	 * @param c The new character.
+	 * @param offset The offset.
+	 * @return This object.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public final ParserReader replace(int c, int offset) throws IOException {
+		if (c < 0x10000) {
+			if (offset < 1)
+				throw new IOException("Buffer underflow.");
+			buff[iCurrent-offset] = (char)c;
+		} else {
+			if (offset < 2)
+				throw new IOException("Buffer underflow.");
+			c -= 0x10000;
+			buff[iCurrent-offset] = (char)(0xd800 + (c >> 10));
+			buff[iCurrent-offset+1] = (char)(0xdc00 + (c & 0x3ff));
+			offset--;
+		}
+		// Fill in the gap with DEL characters.
+		for (int i = 1; i < offset; i++)
+			buff[iCurrent-i] = 127;
+		holesExist |= (offset > 1);
+		return this;
+	}
+
+	/**
+	 * Pushes the last read character back into the stream.
+	 *
+	 * @return This object.
+	 * @throws IOException If a problem occurred trying to read from the reader.
+	 */
+	public ParserReader unread() throws IOException {
+		if (iCurrent <= 0)
+			throw new IOException("Buffer underflow.");
+		iCurrent--;
+		if (column == 0)
+			line--;
+		else
+			column--;
+		return this;
 	}
 
 	private final int readFromBuff() throws IOException {
@@ -198,243 +437,5 @@ public class ParserReader extends Reader implements Positionable {
 			}
 		}
 		return buff[iCurrent++];
-	}
-
-	/**
-	 * Start buffering the calls to read() so that the text can be gathered from the mark point on calling {@code getFromMarked()}.
-	 */
-	public final void mark() {
-		iMark = iCurrent;
-	}
-
-	/**
-	 * Peeks the next character in the stream.
-	 *
-	 * <p>
-	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
-	 *
-	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public final int peek() throws IOException {
-		int c = read();
-		if (c != -1)
-			unread();
-		return c;
-	}
-
-	/**
-	 * Same as {@link #peek()} but skips over any whitespace characters.
-	 *
-	 * <p>
-	 * This is equivalent to doing a {@code read()} followed by an {@code unread()}.
-	 *
-	 * @return The peeked character, or (char)-1 if the end of the stream has been reached.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public final int peekSkipWs() throws IOException {
-		while(true) {
-			int c = read();
-			boolean isWs = Character.isWhitespace(c);
-			if (c != -1 && ! isWs)
-				unread();
-			if (! isWs)
-				return c;
-		}
-	}
-
-	/**
-	 * Read the specified number of characters off the stream.
-	 *
-	 * @param num The number of characters to read.
-	 * @return The characters packaged as a String.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public final String read(int num) throws IOException {
-		char[] c = new char[num];
-		for (int i = 0; i < num; i++) {
-			int c2 = read();
-			if (c2 == -1)
-				return new String(c, 0, i);
-			c[i] = (char)c2;
-		}
-		return new String(c);
-	}
-
-	/**
-	 * Pushes the last read character back into the stream.
-	 *
-	 * @return This object.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	public ParserReader unread() throws IOException {
-		if (iCurrent <= 0)
-			throw new IOException("Buffer underflow.");
-		iCurrent--;
-		if (column == 0)
-			line--;
-		else
-			column--;
-		return this;
-	}
-
-	/**
-	 * No-op.
-	 *
-	 * <p>
-	 * Input readers are closed in the {@link ParserPipe} class.
-	 *
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
-	@Override /* Overridden from Reader */
-	public void close() throws IOException {
-		// No-op
-	}
-
-	/**
-	 * Returns the contents of the reusable character buffer as a string, and resets the buffer for next usage.
-	 *
-	 * @return The contents of the reusable character buffer as a string.
-	 */
-	public final String getMarked() {
-		return getMarked(0, 0);
-	}
-
-	/**
-	 * Same as {@link #getMarked()} except allows you to specify offsets into the buffer.
-	 *
-	 * <p>
-	 * For example, to return the marked string, but trim the first and last characters, call the following:
-	 * <p class='bjava'>
-	 * 	getFromMarked(1, -1);
-	 * </p>
-	 *
-	 * @param offsetStart The offset of the start position.
-	 * @param offsetEnd The offset of the end position.
-	 * @return The contents of the reusable character buffer as a string.
-	 */
-	public final String getMarked(int offsetStart, int offsetEnd) {
-		int offset = 0;
-
-		// Holes are \u00FF 'delete' characters that we need to get rid of now.
-		if (holesExist) {
-			for (int i = iMark; i < iCurrent; i++) {
-				char c = buff[i];
-				if (c == 127)
-					offset++;
-				else
-					buff[i-offset] = c;
-			}
-			holesExist = false;
-		}
-		int start = iMark + offsetStart, len = iCurrent - iMark + offsetEnd - offsetStart - offset;
-		String s = new String(buff, start, len);
-		iMark = -1;
-		return s;
-	}
-
-	/**
-	 * Trims off the last character in the marking buffer.
-	 *
-	 * <p>
-	 * Useful for removing escape characters from sequences.
-	 *
-	 * @return This object.
-	 */
-	public final ParserReader delete() {
-		return delete(1);
-	}
-
-	/**
-	 * Trims off the specified number of last characters in the marking buffer.
-	 * Useful for removing escape characters from sequences.
-	 *
-	 * @param count The number of characters to delete.
-	 * @return This object.
-	 */
-	public final ParserReader delete(int count) {
-		for (int i = 0; i < count; i++)
-			buff[iCurrent-i-1] = 127;
-		holesExist = true;
-		return this;
-	}
-
-	/**
-	 * Replaces the last character in the marking buffer with the specified character.
-	 *
-	 * <p>
-	 * <c>offset</c> must be at least <c>1</c> for normal characters, and <c>2</c> for extended
-	 * unicode characters in order for the replacement to fit into the buffer.
-	 *
-	 * @param c The new character.
-	 * @param offset The offset.
-	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public final ParserReader replace(int c, int offset) throws IOException {
-		if (c < 0x10000) {
-			if (offset < 1)
-				throw new IOException("Buffer underflow.");
-			buff[iCurrent-offset] = (char)c;
-		} else {
-			if (offset < 2)
-				throw new IOException("Buffer underflow.");
-			c -= 0x10000;
-			buff[iCurrent-offset] = (char)(0xd800 + (c >> 10));
-			buff[iCurrent-offset+1] = (char)(0xdc00 + (c & 0x3ff));
-			offset--;
-		}
-		// Fill in the gap with DEL characters.
-		for (int i = 1; i < offset; i++)
-			buff[iCurrent-i] = 127;
-		holesExist |= (offset > 1);
-		return this;
-	}
-
-	/**
-	 * Replace the last read character in the buffer with the specified character.
-	 *
-	 * @param c The new character.
-	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public final ParserReader replace(char c) throws IOException {
-		return replace(c, 1);
-	}
-	/**
-	 * Reads a numeric string from the specified reader.
-	 *
-	 * @return The parsed number string.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public String parseNumberString() throws IOException {
-		mark();
-		int c = 0;
-		while (true) {
-			c = read();
-			if (c == -1)
-				break;
-			if (! StringUtils.isNumberChar((char)c)) {
-				unread();
-				break;
-			}
-		}
-		return getMarked();
-	}
-
-	/**
-	 * Subclasses can override this method to provide additional filtering.
-	 *
-	 * <p>
-	 * Default implementation simply calls the same method on the underlying reader.
-	 */
-	@Override /* Overridden from Reader */
-	public int read(char[] cbuf, int off, int len) throws IOException {
-		return unbuffered ? r.read(cbuf, off, 1) : r.read(cbuf, off, len);
-	}
-
-	@Override /* Overridden from Positionable */
-	public Position getPosition() {
-		return new Position(line, column);
 	}
 }

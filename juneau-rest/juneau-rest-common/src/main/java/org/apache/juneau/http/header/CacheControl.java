@@ -104,11 +104,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Cache-Control")
 public class CacheControl extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Cache-Control";
 
@@ -138,11 +133,6 @@ public class CacheControl extends BasicStringHeader {
 	public static CacheControl of(Supplier<String> value) {
 		return value == null ? null : new CacheControl(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

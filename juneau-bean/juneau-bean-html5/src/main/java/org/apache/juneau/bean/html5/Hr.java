@@ -86,10 +86,6 @@ public class Hr extends HtmlElementVoid {
 	 * Creates an empty {@link Hr} element.
 	 */
 	public Hr() { /* Empty constructor. */ }
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Hr _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -99,6 +95,18 @@ public class Hr extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Hr accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Hr attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Hr attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -459,18 +467,6 @@ public class Hr extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Hr translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Hr attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Hr attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

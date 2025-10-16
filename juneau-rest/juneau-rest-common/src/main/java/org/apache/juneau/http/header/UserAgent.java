@@ -60,11 +60,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("User-Agent")
 public class UserAgent extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "User-Agent";
 
@@ -94,11 +89,6 @@ public class UserAgent extends BasicStringHeader {
 	public static UserAgent of(Supplier<String> value) {
 		return value == null ? null : new UserAgent(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

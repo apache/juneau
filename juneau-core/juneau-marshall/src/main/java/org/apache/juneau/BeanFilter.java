@@ -44,26 +44,6 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 public class BeanFilter {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Create a new builder for this object.
-	 *
-	 * @param <T> The bean class being filtered.
-	 * @param beanClass The bean class being filtered.
-	 * @return A new builder.
-	 */
-	public static <T> Builder create(Class<T> beanClass) {
-		return new Builder(beanClass);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -120,39 +100,147 @@ public class BeanFilter {
 		}
 
 		/**
-		 * Bean dictionary type name.
+		 * Creates a {@link BeanFilter} with settings in this builder class.
+		 *
+		 * @return A new {@link BeanFilter} instance.
+		 */
+		public BeanFilter build() {
+			return new BeanFilter(this);
+		}
+
+		/**
+		 * Bean dictionary.
 		 *
 		 * <p>
-		 * Specifies the dictionary type name for this bean.
+		 * Adds to the list of classes that make up the bean dictionary for this bean.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
-		 * 			typeName(<js>"mybean"</js>);
+		 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
+		 * 			beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>);
 		 * 		}
 		 * 	}
 		 *
-		 * 	<jc>// Register it with a serializer or parser.</jc>
-		 * 	WriterSerializer <jv>serializer<jv> = JsonSerializer
+		 * 	<jc>// Register it with a parser.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
-		 * 	<jc>// Produces:  "{_type:'mybean', ...}"</jc>
+		 * 	<jc>// Instantiate our bean.</jc>
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#dictionary()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
+		 * </ul>
+		 *
+		 * @param values
+		 * 	The values to add to this property.
+		 * @return This object.
+		 */
+		public Builder dictionary(Class<?>...values) {
+			if (dictionary == null)
+				dictionary = list(values);
+			else for (Class<?> cc : values)
+				dictionary.add(cc);
+			return this;
+		}
+
+		/**
+		 * Example.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * @return This object.
+		 */
+		public Builder example(String value) {
+			this.example = value;
+			return this;
+		}
+
+		/**
+		 * Bean property excludes.
+		 *
+		 * <p>
+		 * Specifies properties to exclude from the bean class.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			excludeProperties(<js>"foo,bar"</js>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Register it with a serializer.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beanFilters(MyFilter.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#typeName()}
+		 * 	<li class='ja'>{@link Bean#excludeProperties()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(Class, String)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(String, String)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(Map)}
 		 * </ul>
 		 *
-		 * @param value The new value for this setting.
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>Values can contain comma-delimited list of property names.
 		 * @return This object.
 		 */
-		public Builder typeName(String value) {
-			this.typeName = value;
+		public Builder excludeProperties(String...value) {
+			this.excludeProperties = set();
+			for (String v : value)
+				Utils.split(v, x -> excludeProperties.add(x));
+			return this;
+		}
+
+		/**
+		 * Find fluent setters.
+		 *
+		 * <p>
+		 * When enabled, fluent setters are detected on beans.
+		 *
+		 * <p>
+		 * Fluent setters must have the following attributes:
+		 * <ul>
+		 * 	<li>Public.
+		 * 	<li>Not static.
+		 * 	<li>Take in one parameter.
+		 * 	<li>Return the bean itself.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			findFluentSetters();
+		 * 		}
+		 * 	}
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder findFluentSetters() {
+			this.fluentSetters = true;
 			return this;
 		}
 
@@ -164,6 +252,44 @@ public class BeanFilter {
 		 */
 		public Builder implClass(Class<?> value) {
 			this.implClass = value;
+			return this;
+		}
+
+		/**
+		 * Bean interceptor.
+		 *
+		 * <p>
+		 * The interceptor to use for intercepting and altering getter and setter calls.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
+		 * 			interceptor(AddressInterceptor.<jk>class</jk>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Register it with a serializer or parser.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beanFilters(MyFilter.<jk>class</jk>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#interceptor()}
+		 * 	<li class='jc'>{@link BeanInterceptor}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link BeanInterceptor}.
+		 * @return This object.
+		 */
+		public Builder interceptor(Class<?> value) {
+			this.interceptor.type(value);
 			return this;
 		}
 
@@ -219,6 +345,198 @@ public class BeanFilter {
 		 */
 		public Builder interfaceClass(Class<?> value) {
 			this.interfaceClass = value;
+			return this;
+		}
+
+		/**
+		 * Bean property includes.
+		 *
+		 * <p>
+		 * Specifies the set and order of names of properties associated with the bean class.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			properties(<js>"foo,bar,baz"</js>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Register it with a serializer.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beanFilters(MyFilter.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Only serializes the properties 'foo', 'bar', and 'baz'.</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#properties()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(Class, String)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(String, String)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(Map)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>Values can contain comma-delimited list of property names.
+		 * @return This object.
+		 */
+		public Builder properties(String...value) {
+			this.properties = set();
+			for (String v : value)
+				Utils.split(v, x -> properties.add(x));
+			return this;
+		}
+
+		/**
+		 * Bean property namer
+		 *
+		 * <p>
+		 * The class to use for calculating bean property names.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			<jc>// Use Dashed-Lower-Case property names.</jc>
+		 * 			<jc>// (e.g. "foo-bar-url" instead of "fooBarURL")</jc>
+		 * 			propertyNamer(PropertyNamerDLC.<jk>class</jk>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Register it with a serializer or parser.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beanFilters(MyFilter.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Properties names will be Dashed-Lower-Case.</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#propertyNamer()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
+		 * 	<li class='jc'>{@link PropertyNamer}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link BasicPropertyNamer}.
+		 * @return This object.
+		 */
+		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
+			this.propertyNamer.type(value);
+			return this;
+		}
+
+		/**
+		 * Read-only bean properties.
+		 *
+		 * <p>
+		 * Specifies one or more properties on a bean that are read-only despite having valid getters.
+		 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			readOnlyProperties(<js>"foo,bar"</js>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Register it with a parser.</jc>
+		 *  ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.beanFilters(MyFilter.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Parsers all properties except for 'foo' and 'bar'.</jc>
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#readOnlyProperties()}
+		 * 	<li class='ja'>{@link Beanp#ro()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(String, String)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Map)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>Values can contain comma-delimited list of property names.
+		 * @return This object.
+		 */
+		public Builder readOnlyProperties(String...value) {
+			this.readOnlyProperties = set();
+			for (String v : value)
+				Utils.split(v, x -> readOnlyProperties.add(x));
+			return this;
+		}
+
+		/**
+		 * Sort bean properties.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#sort()}
+		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder sortProperties() {
+			this.sortProperties = true;
+			return this;
+		}
+
+		/**
+		 * Sort bean properties.
+		 *
+		 * <p>
+		 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
+		 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Define our filter.</jc>
+		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
+		 * 		<jk>public</jk> MyFilter() {
+		 * 			sortProperties();
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Register it with a serializer.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beanFilters(MyFilter.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Properties will be sorted alphabetically.</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#sort()}
+		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <jk>false</jk>.
+		 * @return This object.
+		 */
+		public Builder sortProperties(boolean value) {
+			this.sortProperties = value;
 			return this;
 		}
 
@@ -280,275 +598,39 @@ public class BeanFilter {
 		}
 
 		/**
-		 * Sort bean properties.
+		 * Bean dictionary type name.
 		 *
 		 * <p>
-		 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
-		 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
+		 * Specifies the dictionary type name for this bean.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
-		 * 			sortProperties();
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Properties will be sorted alphabetically.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#sort()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is <jk>false</jk>.
-		 * @return This object.
-		 */
-		public Builder sortProperties(boolean value) {
-			this.sortProperties = value;
-			return this;
-		}
-
-		/**
-		 * Sort bean properties.
-		 *
-		 * <p>
-		 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#sort()}
-		 * 	<li class='jf'>{@link BeanContext.Builder#sortProperties()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder sortProperties() {
-			this.sortProperties = true;
-			return this;
-		}
-
-		/**
-		 * Find fluent setters.
-		 *
-		 * <p>
-		 * When enabled, fluent setters are detected on beans.
-		 *
-		 * <p>
-		 * Fluent setters must have the following attributes:
-		 * <ul>
-		 * 	<li>Public.
-		 * 	<li>Not static.
-		 * 	<li>Take in one parameter.
-		 * 	<li>Return the bean itself.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			findFluentSetters();
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#findFluentSetters()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder findFluentSetters() {
-			this.fluentSetters = true;
-			return this;
-		}
-
-		/**
-		 * Bean property namer
-		 *
-		 * <p>
-		 * The class to use for calculating bean property names.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			<jc>// Use Dashed-Lower-Case property names.</jc>
-		 * 			<jc>// (e.g. "foo-bar-url" instead of "fooBarURL")</jc>
-		 * 			propertyNamer(PropertyNamerDLC.<jk>class</jk>);
+		 * 			typeName(<js>"mybean"</js>);
 		 * 		}
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer or parser.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 	WriterSerializer <jv>serializer<jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
-		 * 	<jc>// Properties names will be Dashed-Lower-Case.</jc>
+		 * 	<jc>// Produces:  "{_type:'mybean', ...}"</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#propertyNamer()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
-		 * 	<li class='jc'>{@link PropertyNamer}
+		 * 	<li class='ja'>{@link Bean#typeName()}
 		 * </ul>
 		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link BasicPropertyNamer}.
+		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
-			this.propertyNamer.type(value);
-			return this;
-		}
-
-		/**
-		 * Bean property includes.
-		 *
-		 * <p>
-		 * Specifies the set and order of names of properties associated with the bean class.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			properties(<js>"foo,bar,baz"</js>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Only serializes the properties 'foo', 'bar', and 'baz'.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#properties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanProperties(Map)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object.
-		 */
-		public Builder properties(String...value) {
-			this.properties = set();
-			for (String v : value)
-				Utils.split(v, x -> properties.add(x));
-			return this;
-		}
-
-		/**
-		 * Bean property excludes.
-		 *
-		 * <p>
-		 * Specifies properties to exclude from the bean class.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			excludeProperties(<js>"foo,bar"</js>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#excludeProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesExcludes(Map)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object.
-		 */
-		public Builder excludeProperties(String...value) {
-			this.excludeProperties = set();
-			for (String v : value)
-				Utils.split(v, x -> excludeProperties.add(x));
-			return this;
-		}
-
-		/**
-		 * Read-only bean properties.
-		 *
-		 * <p>
-		 * Specifies one or more properties on a bean that are read-only despite having valid getters.
-		 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			readOnlyProperties(<js>"foo,bar"</js>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a parser.</jc>
-		 *  ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Parsers all properties except for 'foo' and 'bar'.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#readOnlyProperties()}
-		 * 	<li class='ja'>{@link Beanp#ro()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Class, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(String, String)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanPropertiesReadOnly(Map)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>Values can contain comma-delimited list of property names.
-		 * @return This object.
-		 */
-		public Builder readOnlyProperties(String...value) {
-			this.readOnlyProperties = set();
-			for (String v : value)
-				Utils.split(v, x -> readOnlyProperties.add(x));
+		public Builder typeName(String value) {
+			this.typeName = value;
 			return this;
 		}
 
@@ -597,114 +679,17 @@ public class BeanFilter {
 				Utils.split(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}
-
-		/**
-		 * Bean dictionary.
-		 *
-		 * <p>
-		 * Adds to the list of classes that make up the bean dictionary for this bean.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
-		 * 			beanDictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a parser.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Instantiate our bean.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#dictionary()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beanDictionary(Class...)}
-		 * </ul>
-		 *
-		 * @param values
-		 * 	The values to add to this property.
-		 * @return This object.
-		 */
-		public Builder dictionary(Class<?>...values) {
-			if (dictionary == null)
-				dictionary = list(values);
-			else for (Class<?> cc : values)
-				dictionary.add(cc);
-			return this;
-		}
-
-		/**
-		 * Example.
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * @return This object.
-		 */
-		public Builder example(String value) {
-			this.example = value;
-			return this;
-		}
-
-		/**
-		 * Bean interceptor.
-		 *
-		 * <p>
-		 * The interceptor to use for intercepting and altering getter and setter calls.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Define our filter.</jc>
-		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
-		 * 		<jk>public</jk> MyFilter() {
-		 * 			<jc>// Our bean contains generic collections of Foo and Bar objects.</jc>
-		 * 			interceptor(AddressInterceptor.<jk>class</jk>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Register it with a serializer or parser.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beanFilters(MyFilter.<jk>class</jk>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#interceptor()}
-		 * 	<li class='jc'>{@link BeanInterceptor}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link BeanInterceptor}.
-		 * @return This object.
-		 */
-		public Builder interceptor(Class<?> value) {
-			this.interceptor.type(value);
-			return this;
-		}
-
-		/**
-		 * Creates a {@link BeanFilter} with settings in this builder class.
-		 *
-		 * @return A new {@link BeanFilter} instance.
-		 */
-		public BeanFilter build() {
-			return new BeanFilter(this);
-		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create a new builder for this object.
+	 *
+	 * @param <T> The bean class being filtered.
+	 * @param beanClass The bean class being filtered.
+	 * @return A new builder.
+	 */
+	public static <T> Builder create(Class<T> beanClass) {
+		return new Builder(beanClass);
+	}
 	private final Class<?> beanClass;
 	private final Set<String> properties, excludeProperties, readOnlyProperties, writeOnlyProperties;
 	private final PropertyNamer propertyNamer;
@@ -749,15 +734,6 @@ public class BeanFilter {
 	}
 
 	/**
-	 * Returns the dictionary name associated with this bean.
-	 *
-	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.
-	 */
-	public String getTypeName() {
-		return typeName;
-	}
-
-	/**
 	 * Returns the bean dictionary defined on this bean.
 	 *
 	 * @return The bean dictionary defined on this bean, or <jk>null</jk> if no bean dictionary is defined.
@@ -767,14 +743,12 @@ public class BeanFilter {
 	}
 
 	/**
-	 * Returns the set and order of names of properties associated with a bean class.
+	 * Returns the example associated with this class.
 	 *
-	 * @return
-	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
-	 * 	be used.
+	 * @return The example associated with this class, or <jk>null</jk> if no example is associated.
 	 */
-	public Set<String> getProperties() {
-		return properties;
+	public String getExample() {
+		return example;
 	}
 
 	/**
@@ -784,55 +758,6 @@ public class BeanFilter {
 	 */
 	public Set<String> getExcludeProperties() {
 		return excludeProperties;
-	}
-
-	/**
-	 * Returns the list of read-only properties on a bean.
-	 *
-	 * @return The names of the read-only properties on a bean, or an empty set to not have any read-only properties.
-	 */
-	public Set<String> getReadOnlyProperties() {
-		return readOnlyProperties;
-	}
-
-	/**
-	 * Returns the list of write-only properties on a bean.
-	 *
-	 * @return The names of the write-only properties on a bean, or an empty set to not have any write-only properties.
-	 */
-	public Set<String> getWriteOnlyProperties() {
-		return writeOnlyProperties;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
-	 *
-	 * <p>
-	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
-	 * Otherwise, the ordering of the properties in the returned value is used.
-	 *
-	 * @return <jk>true</jk> if bean properties should be sorted.
-	 */
-	public boolean isSortProperties() {
-		return sortProperties;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if we should find fluent setters.
-	 *
-	 * @return <jk>true</jk> if fluent setters should be found.
-	 */
-	public boolean isFluentSetters() {
-		return fluentSetters;
-	}
-
-	/**
-	 * Returns the {@link PropertyNamer} associated with the bean to tailor the names of bean properties.
-	 *
-	 * @return The property namer class, or <jk>null</jk> if no property namer is associated with this bean property.
-	 */
-	public PropertyNamer getPropertyNamer() {
-		return propertyNamer;
 	}
 
 	/**
@@ -854,6 +779,35 @@ public class BeanFilter {
 	}
 
 	/**
+	 * Returns the set and order of names of properties associated with a bean class.
+	 *
+	 * @return
+	 * 	The names of the properties associated with a bean class, or and empty set if all bean properties should
+	 * 	be used.
+	 */
+	public Set<String> getProperties() {
+		return properties;
+	}
+
+	/**
+	 * Returns the {@link PropertyNamer} associated with the bean to tailor the names of bean properties.
+	 *
+	 * @return The property namer class, or <jk>null</jk> if no property namer is associated with this bean property.
+	 */
+	public PropertyNamer getPropertyNamer() {
+		return propertyNamer;
+	}
+
+	/**
+	 * Returns the list of read-only properties on a bean.
+	 *
+	 * @return The names of the read-only properties on a bean, or an empty set to not have any read-only properties.
+	 */
+	public Set<String> getReadOnlyProperties() {
+		return readOnlyProperties;
+	}
+
+	/**
 	 * Returns the stop class associated with this class.
 	 *
 	 * @return The stop class associated with this class, or <jk>null</jk> if no stop class is associated.
@@ -863,12 +817,43 @@ public class BeanFilter {
 	}
 
 	/**
-	 * Returns the example associated with this class.
+	 * Returns the dictionary name associated with this bean.
 	 *
-	 * @return The example associated with this class, or <jk>null</jk> if no example is associated.
+	 * @return The dictionary name associated with this bean, or <jk>null</jk> if no name is defined.
 	 */
-	public String getExample() {
-		return example;
+	public String getTypeName() {
+		return typeName;
+	}
+
+	/**
+	 * Returns the list of write-only properties on a bean.
+	 *
+	 * @return The names of the write-only properties on a bean, or an empty set to not have any write-only properties.
+	 */
+	public Set<String> getWriteOnlyProperties() {
+		return writeOnlyProperties;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if we should find fluent setters.
+	 *
+	 * @return <jk>true</jk> if fluent setters should be found.
+	 */
+	public boolean isFluentSetters() {
+		return fluentSetters;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the properties defined on this bean class should be ordered alphabetically.
+	 *
+	 * <p>
+	 * This method is only used when the {@link #getProperties()} method returns <jk>null</jk>.
+	 * Otherwise, the ordering of the properties in the returned value is used.
+	 *
+	 * @return <jk>true</jk> if bean properties should be sorted.
+	 */
+	public boolean isSortProperties() {
+		return sortProperties;
 	}
 
 	/**

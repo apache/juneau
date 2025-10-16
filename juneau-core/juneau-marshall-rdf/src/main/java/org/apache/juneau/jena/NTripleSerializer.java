@@ -28,11 +28,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class NTripleSerializer extends RdfSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default N-Triple serializer, all default settings.*/
 	public static final NTripleSerializer DEFAULT = new NTripleSerializer(create());
 
@@ -44,11 +39,6 @@ public class NTripleSerializer extends RdfSerializer {
 	public static RdfSerializer.Builder create() {
 		return RdfSerializer.create().ntriple();
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

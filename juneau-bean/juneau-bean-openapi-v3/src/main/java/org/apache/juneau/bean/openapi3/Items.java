@@ -142,454 +142,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Make a deep copy of this object.
-	 *
-	 * @return A deep copy of this object.
-	 */
-	public Items copy() {
-		return new Items(this);
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	protected Items strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Items strict(Object value) {
-		super.strict(value);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The internal type of the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * Bean property setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The internal type of the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setType(String value) {
-		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new IllegalArgumentException(
-				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
-				+ Json5Serializer.DEFAULT.toString(VALID_TYPES));
-		type = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Bean property setter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned <code>type</code>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setFormat(String value) {
-		format = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Items getItems() {
-		return items;
-	}
-
-	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setItems(Items value) {
-		items = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getCollectionFormat() {
-		return collectionFormat;
-	}
-
-	/**
-	 * Bean property setter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
-	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
-	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setCollectionFormat(String value) {
-		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, VALID_COLLECTION_FORMATS
-			);
-		collectionFormat = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Declares the value of the item that the server will use if none is provided.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"default"</js> has no meaning for required items.
-	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getDefault() {
-		return _default;
-	}
-
-	/**
-	 * Bean property setter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Declares the value of the item that the server will use if none is provided.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"default"</js> has no meaning for required items.
-	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setDefault(Object value) {
-		_default = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maximum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMaximum() {
-		return maximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>maximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMaximum(Number value) {
-		maximum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setExclusiveMaximum(Boolean value) {
-		exclusiveMaximum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minimum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMinimum() {
-		return minimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>minimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMinimum(Number value) {
-		minimum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setExclusiveMinimum(Boolean value) {
-		exclusiveMinimum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxLength</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMaxLength(Integer value) {
-		maxLength = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minLength</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>minLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMinLength(Integer value) {
-		minLength = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>pattern</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * Bean property setter:  <property>pattern</property>.
-	 *
-	 * <p>
-	 * This string SHOULD be a valid regular expression.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setPattern(String value) {
-		pattern = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMaxItems(Integer value) {
-		maxItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>minItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMinItems(Integer value) {
-		minItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>uniqueItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setUniqueItems(Boolean value) {
-		uniqueItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>enum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
-
-	/**
-	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setEnum(Collection<Object> value) {
-		_enum = listFrom(value);
-		return this;
-	}
-
-	/**
 	 * Adds one or more values to the <property>enum</property> property.
 	 *
 	 * @param values
@@ -603,77 +155,12 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>enum</property> property.
+	 * Make a deep copy of this object.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Object</code>
-	 * 		<li><code>Collection&lt;Object&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	_enum(<js>"['foo','bar']"</js>);
-	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
+	 * @return A deep copy of this object.
 	 */
-	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
-		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>multipleOf</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>multipleOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Items setMultipleOf(Number value) {
-		multipleOf = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>$ref</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Beanp("$ref")
-	public String getRef() {
-		return ref;
-	}
-
-	/**
-	 * Bean property setter:  <property>$ref</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	@Beanp("$ref")
-	public Items setRef(Object value) {
-		ref = Utils.s(value);
-		return this;
+	public Items copy() {
+		return new Items(this);
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -702,33 +189,190 @@ public class Items extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from SwaggerElement */
-	public Items set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "$ref" -> setRef(value);
-			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
-			case "default" -> setDefault(value);
-			case "enum" -> setEnum(value);
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(Utils.s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "pattern" -> setPattern(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
+	/**
+	 * Bean property getter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getCollectionFormat() {
+		return collectionFormat;
+	}
+
+	/**
+	 * Bean property getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the item that the server will use if none is provided.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"default"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * </ul>
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getDefault() {
+		return _default;
+	}
+
+	/**
+	 * Bean property getter:  <property>enum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getEnum() {
+		return _enum;
+	}
+
+	/**
+	 * Bean property getter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMaximum() {
+		return exclusiveMaximum;
+	}
+
+	/**
+	 * Bean property getter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMinimum() {
+		return exclusiveMinimum;
+	}
+
+	/**
+	 * Bean property getter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned <code>type</code>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * Bean property getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Items getItems() {
+		return items;
+	}
+
+	/**
+	 * Bean property getter:  <property>maximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxItems() {
+		return maxItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Bean property getter:  <property>minimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * Bean property getter:  <property>minItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinItems() {
+		return minItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>minLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinLength() {
+		return minLength;
+	}
+
+	/**
+	 * Bean property getter:  <property>multipleOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMultipleOf() {
+		return multipleOf;
+	}
+
+	/**
+	 * Bean property getter:  <property>pattern</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * Bean property getter:  <property>$ref</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("$ref")
+	public String getRef() {
+		return ref;
+	}
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The internal type of the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -791,6 +435,356 @@ public class Items extends OpenApiElement {
 		return this;
 	}
 
+	@Override /* Overridden from SwaggerElement */
+	public Items set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "$ref" -> setRef(value);
+			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
+			case "default" -> setDefault(value);
+			case "enum" -> setEnum(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "format" -> setFormat(Utils.s(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "pattern" -> setPattern(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
+	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
+	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setCollectionFormat(String value) {
+		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
+				value, VALID_COLLECTION_FORMATS
+			);
+		collectionFormat = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the item that the server will use if none is provided.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"default"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setDefault(Object value) {
+		_default = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setEnum(Collection<Object> value) {
+		_enum = listFrom(value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>enum</property> property.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Object</code>
+	 * 		<li><code>Collection&lt;Object&gt;</code>
+	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	_enum(<js>"['foo','bar']"</js>);
+	 * 			</p>
+	 * 		<li><code>String</code> - Individual values
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object
+	 */
+	public Items setEnum(Object...values) {  // NOSONAR - Intentional naming.
+		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setExclusiveMaximum(Boolean value) {
+		exclusiveMaximum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setExclusiveMinimum(Boolean value) {
+		exclusiveMinimum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned <code>type</code>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setFormat(String value) {
+		format = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setItems(Items value) {
+		items = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMaximum(Number value) {
+		maximum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMaxItems(Integer value) {
+		maxItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMaxLength(Integer value) {
+		maxLength = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMinimum(Number value) {
+		minimum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMinItems(Integer value) {
+		minItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMinLength(Integer value) {
+		minLength = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>multipleOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setMultipleOf(Number value) {
+		multipleOf = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>pattern</property>.
+	 *
+	 * <p>
+	 * This string SHOULD be a valid regular expression.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setPattern(String value) {
+		pattern = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>$ref</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	@Beanp("$ref")
+	public Items setRef(Object value) {
+		ref = Utils.s(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The internal type of the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setType(String value) {
+		if (isStrict() && ! contains(value, VALID_TYPES))
+			throw new IllegalArgumentException(
+				"Invalid value passed in to setType(String).  Value='"+value+"', valid values="
+				+ Json5Serializer.DEFAULT.toString(VALID_TYPES));
+		type = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Items setUniqueItems(Boolean value) {
+		uniqueItems = value;
+		return this;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Items strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, OpenApi openApi, Deque<String> refStack, int maxDepth) {
 		if (o instanceof JsonMap om) {
@@ -812,5 +806,11 @@ public class Items extends OpenApiElement {
 			for (var li = x.listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), openApi, refStack, maxDepth));
 		return o;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	protected Items strict() {
+		super.strict();
+		return this;
 	}
 }

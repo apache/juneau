@@ -57,7 +57,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#body() body()}
- * 		<li class='jm'>{@link HtmlBuilder#body(Object, Object...) body(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#body(Object...) body(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -83,99 +83,6 @@ public class Body extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Event handler for when the document has finished printing.
-	 *
-	 * @param onafterprint JavaScript code to execute when the afterprint event occurs.
-	 * @return This object.
-	 */
-	public Body onafterprint(String value) {
-		attr("onafterprint", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Event handler for when the document is about to be unloaded (page refresh, navigation, etc.).
-	 *
-	 * @param onbeforeunload JavaScript code to execute when the beforeunload event occurs.
-	 * @return This object.
-	 */
-	public Body onbeforeunload(String value) {
-		attr("onbeforeunload", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Event handler for when a message is received from another window or worker.
-	 *
-	 * @param onmessage JavaScript code to execute when the message event occurs.
-	 * @return This object.
-	 */
-	public Body onmessage(String value) {
-		attr("onmessage", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Event handler for when the browser has gone online.
-	 *
-	 * @param ononline JavaScript code to execute when the online event occurs.
-	 * @return This object.
-	 */
-	public Body ononline(String value) {
-		attr("ononline", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Event handler for when the page is displayed (including when returning from back/forward cache).
-	 *
-	 * @param onpageshow JavaScript code to execute when the pageshow event occurs.
-	 * @return This object.
-	 */
-	public Body onpageshow(String value) {
-		attr("onpageshow", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Event handler for when the storage area (localStorage or sessionStorage) is modified.
-	 *
-	 * @param onstorage JavaScript code to execute when the storage event occurs.
-	 * @return This object.
-	 */
-	public Body onstorage(String value) {
-		attr("onstorage", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Body _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -188,6 +95,29 @@ public class Body extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Body attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Body attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Body child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Body children(Object...value) {
+		super.children(value);
+		return this;
+	}
 	@Override /* Overridden from HtmlElement */
 	public Body contenteditable(Object value) {
 		super.contenteditable(value);
@@ -221,6 +151,36 @@ public class Body extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Body onabort(String value) {
 		super.onabort(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onafterprint">onafterprint</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Event handler for when the document has finished printing.
+	 *
+	 * @param value JavaScript code to execute when the afterprint event occurs.
+	 * @return This object.
+	 */
+	public Body onafterprint(String value) {
+		attr("onafterprint", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onbeforeunload">onbeforeunload</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Event handler for when the document is about to be unloaded (page refresh, navigation, etc.).
+	 *
+	 * @param value JavaScript code to execute when the beforeunload event occurs.
+	 * @return This object.
+	 */
+	public Body onbeforeunload(String value) {
+		attr("onbeforeunload", value);
 		return this;
 	}
 
@@ -356,6 +316,21 @@ public class Body extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onmessage">onmessage</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Event handler for when a message is received from another window or worker.
+	 *
+	 * @param value JavaScript code to execute when the message event occurs.
+	 * @return This object.
+	 */
+	public Body onmessage(String value) {
+		attr("onmessage", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Body onmousedown(String value) {
 		super.onmousedown(value);
@@ -401,6 +376,36 @@ public class Body extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Body onmousewheel(String value) {
 		super.onmousewheel(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-ononline">ononline</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Event handler for when the browser has gone online.
+	 *
+	 * @param value JavaScript code to execute when the online event occurs.
+	 * @return This object.
+	 */
+	public Body ononline(String value) {
+		attr("ononline", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onpageshow">onpageshow</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Event handler for when the page is displayed (including when returning from back/forward cache).
+	 *
+	 * @param value JavaScript code to execute when the pageshow event occurs.
+	 * @return This object.
+	 */
+	public Body onpageshow(String value) {
+		attr("onpageshow", value);
 		return this;
 	}
 
@@ -482,6 +487,21 @@ public class Body extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/webappapis.html#handler-window-onstorage">onstorage</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Event handler for when the storage area (localStorage or sessionStorage) is modified.
+	 *
+	 * @param value JavaScript code to execute when the storage event occurs.
+	 * @return This object.
+	 */
+	public Body onstorage(String value) {
+		attr("onstorage", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Body onsubmit(String value) {
 		super.onsubmit(value);
@@ -545,30 +565,6 @@ public class Body extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Body translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Body child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Body children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Body attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Body attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

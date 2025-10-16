@@ -110,14 +110,14 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	}
 
 	@Override /* Overridden from RequestHttpPart */
-	public RequestQueryParam schema(HttpPartSchema value) {
-		super.schema(value);
+	public RequestQueryParam parser(HttpPartParserSession value) {
+		super.parser(value);
 		return this;
 	}
 
 	@Override /* Overridden from RequestHttpPart */
-	public RequestQueryParam parser(HttpPartParserSession value) {
-		super.parser(value);
+	public RequestQueryParam schema(HttpPartSchema value) {
+		super.schema(value);
 		return this;
 	}
 }

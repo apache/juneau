@@ -74,6 +74,11 @@ public class FileVar extends DefaultingVar {
 	}
 
 	@Override /* Overridden from Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(RestRequest.class).isPresent();
+	}
+
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
@@ -87,10 +92,5 @@ public class FileVar extends DefaultingVar {
 		else if ("json".equals(subType) || "javascript".equals(subType) || "css".equals(subType))
 			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 		return s;
-	}
-
-	@Override /* Overridden from Var */
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(RestRequest.class).isPresent();
 	}
 }

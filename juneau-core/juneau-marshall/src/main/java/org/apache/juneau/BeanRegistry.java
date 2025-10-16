@@ -68,63 +68,6 @@ public class BeanRegistry {
 		isEmpty = map.isEmpty();
 	}
 
-	private void addClass(Class<?> c) {
-		try {
-			if (c != null) {
-				ClassInfo ci = ClassInfo.of(c);
-				if (ci.isChildOf(Collection.class)) {
-					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();
-					cc.forEach(x -> {
-						if (x instanceof Class)
-							addClass((Class<?>)x);
-						else
-							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", className(c));
-					});
-				} else if (ci.isChildOf(Map.class)) {
-					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
-					m.forEach((k,v) -> {
-						String typeName = Utils.s(k);
-						ClassMeta<?> val = null;
-						if (v instanceof Type)
-							val = beanContext.getClassMeta((Type)v);
-						else if (isArray(v))
-							val = getTypedClassMeta(v);
-						else
-							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", className(c), className(v));
-						addToMap(typeName, val);
-					});
-				} else {
-					Value<String> typeName = Value.empty();
-					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
-					addToMap(
-						typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))),
-						beanContext.getClassMeta(c)
-					);
-				}
-			}
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	private ClassMeta<?> getTypedClassMeta(Object array) {
-		int len = Array.getLength(array);
-		if (len == 0)
-			throw new BeanRuntimeException("Map entry had an empty array value.");
-		Type type = (Type)Array.get(array, 0);
-		Type[] args = new Type[len-1];
-		for (int i = 1; i < len; i++)
-			args[i-1] = (Type)Array.get(array, i);
-		return beanContext.getClassMeta(type, args);
-	}
-
-	private void addToMap(String typeName, ClassMeta<?> cm) {
-		map.put(typeName, cm);
-		reverseMap.put(cm.innerClass, typeName);
-	}
-
 	/**
 	 * Gets the class metadata for the specified bean type name.
 	 *
@@ -179,5 +122,62 @@ public class BeanRegistry {
 		map.forEach((k,v) -> sb.append(k).append(":").append(v.toString(true)).append(", "));
 		sb.append('}');
 		return sb.toString();
+	}
+
+	private void addClass(Class<?> c) {
+		try {
+			if (c != null) {
+				ClassInfo ci = ClassInfo.of(c);
+				if (ci.isChildOf(Collection.class)) {
+					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();
+					cc.forEach(x -> {
+						if (x instanceof Class)
+							addClass((Class<?>)x);
+						else
+							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", className(c));
+					});
+				} else if (ci.isChildOf(Map.class)) {
+					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
+					m.forEach((k,v) -> {
+						String typeName = Utils.s(k);
+						ClassMeta<?> val = null;
+						if (v instanceof Type)
+							val = beanContext.getClassMeta((Type)v);
+						else if (isArray(v))
+							val = getTypedClassMeta(v);
+						else
+							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", className(c), className(v));
+						addToMap(typeName, val);
+					});
+				} else {
+					Value<String> typeName = Value.empty();
+					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
+					addToMap(
+						typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))),
+						beanContext.getClassMeta(c)
+					);
+				}
+			}
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+	}
+
+	private void addToMap(String typeName, ClassMeta<?> cm) {
+		map.put(typeName, cm);
+		reverseMap.put(cm.innerClass, typeName);
+	}
+
+	private ClassMeta<?> getTypedClassMeta(Object array) {
+		int len = Array.getLength(array);
+		if (len == 0)
+			throw new BeanRuntimeException("Map entry had an empty array value.");
+		Type type = (Type)Array.get(array, 0);
+		Type[] args = new Type[len-1];
+		for (int i = 1; i < len; i++)
+			args[i-1] = (Type)Array.get(array, i);
+		return beanContext.getClassMeta(type, args);
 	}
 }

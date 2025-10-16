@@ -100,11 +100,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Accept-Encoding")
 public class AcceptEncoding extends BasicStringRangesHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept-Encoding";
 
@@ -149,11 +144,6 @@ public class AcceptEncoding extends BasicStringRangesHeader {
 	public static AcceptEncoding of(Supplier<StringRanges> value) {
 		return value == null ? null : new AcceptEncoding(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

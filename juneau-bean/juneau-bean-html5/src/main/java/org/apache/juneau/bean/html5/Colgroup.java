@@ -77,7 +77,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#colgroup() colgroup()}
- * 		<li class='jm'>{@link HtmlBuilder#colgroup(Object, Object...) colgroup(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#colgroup(Object...) colgroup(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -103,34 +103,38 @@ public class Colgroup extends HtmlElementContainer {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span">span</a> attribute.
-	 *
-	 * <p>
-	 * Number of columns spanned by the element.
-	 *
-	 * @param span
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Colgroup span(Object value) {
-		attr("span", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Colgroup _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Colgroup accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Colgroup attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Colgroup attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Colgroup child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Colgroup children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -464,6 +468,28 @@ public class Colgroup extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Colgroup setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-colgroup-span">span</a> attribute.
+	 *
+	 * <p>
+	 * Number of columns spanned by the element.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Colgroup span(Object value) {
+		attr("span", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Colgroup spellcheck(Object value) {
 		super.spellcheck(value);
@@ -491,36 +517,6 @@ public class Colgroup extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Colgroup translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Colgroup child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Colgroup children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Colgroup setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Colgroup attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Colgroup attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

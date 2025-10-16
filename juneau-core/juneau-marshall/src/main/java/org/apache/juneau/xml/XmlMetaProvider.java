@@ -28,14 +28,6 @@ import org.apache.juneau.*;
 public interface XmlMetaProvider extends AnnotationProvider  {
 
 	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	XmlClassMeta getXmlClassMeta(ClassMeta<?> cm);
-
-	/**
 	 * Returns the language-specific metadata on the specified bean.
 	 *
 	 * @param bm The bean to return the metadata on.
@@ -50,4 +42,12 @@ public interface XmlMetaProvider extends AnnotationProvider  {
 	 * @return The metadata.
 	 */
 	XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm);
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	XmlClassMeta getXmlClassMeta(ClassMeta<?> cm);
 }

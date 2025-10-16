@@ -41,27 +41,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Reusable instance of {@link OpenApiParser}. */
-	public static final OpenApiParser DEFAULT = new OpenApiParser(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,17 +63,6 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(OpenApiParser copyFrom) {
-			super(copyFrom);
-			format = copyFrom.format;
-			collectionFormat = copyFrom.collectionFormat;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -103,127 +71,17 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 			collectionFormat = copyFrom.collectionFormat;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public OpenApiParser build() {
-			return cache(CACHE).build(OpenApiParser.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				format,
-				collectionFormat
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default format for HTTP parts.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a plain-text parser.</jc>
-		 * 	OpenApiParser <jv>parser1</jv> = OpenApiParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.build();
-		 *
-		 * 	<jc>// Create a UON parser.</jc>
-		 * 	OpenApiParser <jv>parser2</jv> = OpenApiParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.format(<jsf>UON</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Parse a plain-text string.</jc>
-		 * 	String <jv>value1</jv> = <jv>parser1</jv>.parse(<js>"foo bar"</js>);
-		 *
-		 * 	<jc>// Parse a UON string.</jc>
-		 * 	String <jv>value2</jv> = <jv>parser1</jv>.parse(<js>"'foo bar'"</js>);
-		 * </p>
-		 *
-		 * <ul class='values javatree'>
-		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
-		 * 	<ul>
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT32 INT32} - Signed 32 bits.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT64 INT64} - Signed 64 bits.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
-		 * 	</ul>
-		 * </ul>
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder format(HttpPartFormat value) {
-			format = value;
-			return this;
+		protected Builder(OpenApiParser copyFrom) {
+			super(copyFrom);
+			format = copyFrom.format;
+			collectionFormat = copyFrom.collectionFormat;
 		}
 
-		/**
-		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
-		 *
-		 * <p>
-		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser using CSV for collections.</jc>
-		 * 	OpenApiParser <jv>parser1</jv> = OpenApiParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.collectionFormat(<jsf>CSV</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Create a serializer using UON for collections.</jc>
-		 * 	OpenApiParser <jv>parser2</jv> = OpenApiParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.collectionFormat(<jsf>UON</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Parse CSV.</jc>
-		 * 	JsonList <jv>list1</jv> = <jv>parser1</jv>.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, JsonList.<jk>class</jk>)
-		 *
-		 * 	<jc>// Parse UON.</jc>
-		 * 	JsonList <jv>list2</jv> = <jv>parser2</jv>.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, JsonList.<jk>class</jk>)
-		 * </p>
-		 *
-		 * <ul class='values javatree'>
-		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
-		 * 	<ul>
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
-		 * 	</ul>
-		 * </ul>
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder collectionFormat(HttpPartCollectionFormat value) {
-			collectionFormat = value;
-			return this;
-		}
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -237,44 +95,24 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
+		public Builder autoCloseStreams() {
+			super.autoCloseStreams();
 			return this;
 		}
-
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder autoCloseStreams(boolean value) {
+			super.autoCloseStreams(value);
 			return this;
 		}
 
@@ -333,14 +171,14 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -351,14 +189,14 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -369,14 +207,14 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -387,14 +225,14 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -419,6 +257,105 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public OpenApiParser build() {
+			return cache(CACHE).build(OpenApiParser.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		/**
+		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
+		 *
+		 * <p>
+		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a parser using CSV for collections.</jc>
+		 * 	OpenApiParser <jv>parser1</jv> = OpenApiParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.collectionFormat(<jsf>CSV</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a serializer using UON for collections.</jc>
+		 * 	OpenApiParser <jv>parser2</jv> = OpenApiParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.collectionFormat(<jsf>UON</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Parse CSV.</jc>
+		 * 	JsonList <jv>list1</jv> = <jv>parser1</jv>.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, JsonList.<jk>class</jk>)
+		 *
+		 * 	<jc>// Parse UON.</jc>
+		 * 	JsonList <jv>list2</jv> = <jv>parser2</jv>.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, JsonList.<jk>class</jk>)
+		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+		 * 	<ul>
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder collectionFormat(HttpPartCollectionFormat value) {
+			collectionFormat = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder consumes(String value) {
+			super.consumes(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debugOutputLines(int value) {
+			super.debugOutputLines(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder decoding() {
+			super.decoding();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder decoding(boolean value) {
+			super.decoding(value);
 			return this;
 		}
 
@@ -459,14 +396,20 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
@@ -480,6 +423,67 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
+		}
+
+		/**
+		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default format for HTTP parts.
+		 *
+		 * <p>
+		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a plain-text parser.</jc>
+		 * 	OpenApiParser <jv>parser1</jv> = OpenApiParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a UON parser.</jc>
+		 * 	OpenApiParser <jv>parser2</jv> = OpenApiParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.format(<jsf>UON</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Parse a plain-text string.</jc>
+		 * 	String <jv>value1</jv> = <jv>parser1</jv>.parse(<js>"foo bar"</js>);
+		 *
+		 * 	<jc>// Parse a UON string.</jc>
+		 * 	String <jv>value2</jv> = <jv>parser1</jv>.parse(<js>"'foo bar'"</js>);
+		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+		 * 	<ul>
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT32 INT32} - Signed 32 bits.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT64 INT64} - Signed 64 bits.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder format(HttpPartFormat value) {
+			format = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				format,
+				collectionFormat
+			);
 		}
 
 		@Override /* Overridden from Builder */
@@ -503,6 +507,12 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -531,6 +541,12 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
@@ -555,14 +571,14 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -585,92 +601,8 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-			super.listener(value);
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
 			return this;
 		}
 
@@ -687,6 +619,36 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
@@ -695,6 +657,30 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -711,26 +697,14 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder decoding() {
-			super.decoding();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder decoding(boolean value) {
-			super.decoding(value);
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
 			return this;
 		}
 
@@ -747,10 +721,16 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/** Reusable instance of {@link OpenApiParser}. */
+	public static final OpenApiParser DEFAULT = new OpenApiParser(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final HttpPartFormat format;
 	final HttpPartCollectionFormat collectionFormat;
 
@@ -778,30 +758,6 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		return OpenApiParserSession.create(this);
 	}
 
-	@Override /* Overridden from Context */
-	public OpenApiParserSession getSession() {
-		return createSession().build();
-	}
-
-	@Override /* Overridden from HttpPartParser */
-	public OpenApiParserSession getPartSession() {
-		return OpenApiParserSession.create(this).build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from OpenApiMetaProvider */
-	public OpenApiClassMeta getOpenApiClassMeta(ClassMeta<?> cm) {
-		OpenApiClassMeta m = openApiClassMetas.get(cm);
-		if (m == null) {
-			m = new OpenApiClassMeta(cm, this);
-			openApiClassMetas.put(cm, m);
-		}
-		return m;
-	}
-
 	@Override /* Overridden from OpenApiMetaProvider */
 	public OpenApiBeanPropertyMeta getOpenApiBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
@@ -814,9 +770,32 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		return m;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from OpenApiMetaProvider */
+	public OpenApiClassMeta getOpenApiClassMeta(ClassMeta<?> cm) {
+		OpenApiClassMeta m = openApiClassMetas.get(cm);
+		if (m == null) {
+			m = new OpenApiClassMeta(cm, this);
+			openApiClassMetas.put(cm, m);
+		}
+		return m;
+	}
+	@Override /* Overridden from HttpPartParser */
+	public OpenApiParserSession getPartSession() {
+		return OpenApiParserSession.create(this).build();
+	}
+
+	@Override /* Overridden from Context */
+	public OpenApiParserSession getSession() {
+		return createSession().build();
+	}
+	/**
+	 * Returns the default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
+	 *
+	 * @return The default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
+	 */
+	protected final HttpPartCollectionFormat getCollectionFormat() {
+		return collectionFormat;
+	}
 
 	/**
 	 * Returns the default format to use when not otherwise specified via {@link Schema#format()}
@@ -825,14 +804,5 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 	 */
 	protected final HttpPartFormat getFormat() {
 		return format;
-	}
-
-	/**
-	 * Returns the default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
-	 *
-	 * @return The default collection format to use when not otherwise specified via {@link Schema#collectionFormat()}
-	 */
-	protected final HttpPartCollectionFormat getCollectionFormat() {
-		return collectionFormat;
 	}
 }

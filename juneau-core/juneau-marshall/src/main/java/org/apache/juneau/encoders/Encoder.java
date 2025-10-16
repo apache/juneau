@@ -40,6 +40,14 @@ import java.io.*;
 public abstract class Encoder {
 
 	/**
+	 * Returns the codings in <c>Content-Encoding</c> and <c>Accept-Encoding</c> headers that this encoder
+	 * handles (e.g. <js>"gzip"</js>).
+	 *
+	 * @return The codings that this encoder handles.
+	 */
+	public abstract String[] getCodings();
+
+	/**
 	 * Converts the specified compressed input stream into an uncompressed stream.
 	 *
 	 * @param is The compressed stream.
@@ -56,12 +64,4 @@ public abstract class Encoder {
 	 * @throws IOException If any errors occur.
 	 */
 	public abstract OutputStream getOutputStream(OutputStream os) throws IOException;
-
-	/**
-	 * Returns the codings in <c>Content-Encoding</c> and <c>Accept-Encoding</c> headers that this encoder
-	 * handles (e.g. <js>"gzip"</js>).
-	 *
-	 * @return The codings that this encoder handles.
-	 */
-	public abstract String[] getCodings();
 }

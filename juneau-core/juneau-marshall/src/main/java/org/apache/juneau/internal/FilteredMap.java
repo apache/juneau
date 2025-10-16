@@ -33,8 +33,30 @@ import org.apache.juneau.common.utils.*;
  */
 public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K,V>> {
 
+	/**
+	 * A set with ordered entries (a List with a Set API).
+	 */
+	private static class ListSet<E> extends AbstractSet<E> {
+
+		private List<E> entries;
+
+		public ListSet(List<E> entries) {
+			this.entries = entries;
+		}
+
+		@Override /* Overridden from Set */
+		public Iterator<E> iterator() {
+			return entries.iterator();
+		}
+
+		@Override /* Overridden from Set */
+		public int size() {
+			return entries.size();
+		}
+	}
 	final Map<K,V> innerMap;
 	final Set<Map.Entry<K,V>> entries;
+
 	final ClassMeta<Map<K,V>> classMeta;
 
 	/**
@@ -57,6 +79,16 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 			entries = new ListSet<>(l);
 		}
 
+	@Override /* Overridden from Map */
+	public Set<Map.Entry<K,V>> entrySet() {
+		return entries;
+	}
+
+	@Override /* Overridden from Delegate */
+	public ClassMeta<Map<K,V>> getClassMeta() {
+		return classMeta;
+	}
+
 	private Map.Entry<K,V> createEntry(final K key) {
 		return new Map.Entry<>() {
 
@@ -75,37 +107,5 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 				return innerMap.put(key, v);
 			}
 		};
-	}
-
-	@Override /* Overridden from Map */
-	public Set<Map.Entry<K,V>> entrySet() {
-		return entries;
-	}
-
-	/**
-	 * A set with ordered entries (a List with a Set API).
-	 */
-	private static class ListSet<E> extends AbstractSet<E> {
-
-		private List<E> entries;
-
-		public ListSet(List<E> entries) {
-			this.entries = entries;
-		}
-
-		@Override /* Overridden from Set */
-		public Iterator<E> iterator() {
-			return entries.iterator();
-		}
-
-		@Override /* Overridden from Set */
-		public int size() {
-			return entries.size();
-		}
-	}
-
-	@Override /* Overridden from Delegate */
-	public ClassMeta<Map<K,V>> getClassMeta() {
-		return classMeta;
 	}
 }

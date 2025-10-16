@@ -65,15 +65,6 @@ public class Processing extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public Processing(Processing copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -88,6 +79,15 @@ public class Processing extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public Processing(Processing copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -96,13 +96,13 @@ public class Processing extends BasicHttpResponse {
 		return new Processing(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public Processing setContent(String value) {
+	public Processing setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Processing setContent(HttpEntity value) {
+	public Processing setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -120,14 +120,14 @@ public class Processing extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public Processing setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Processing setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public Processing setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

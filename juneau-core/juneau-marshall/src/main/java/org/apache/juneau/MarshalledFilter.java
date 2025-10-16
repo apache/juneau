@@ -38,26 +38,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class MarshalledFilter {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Create a new instance of this POJO filter.
-	 *
-	 * @param <T> The POJO class being filtered.
-	 * @param marshalledClass The POJO class being filtered.
-	 * @return A new {@link Builder} object.
-	 */
-	public static <T> Builder create(Class<T> marshalledClass) {
-		return new Builder(marshalledClass);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -95,14 +75,12 @@ public class MarshalledFilter {
 		}
 
 		/**
-		 * Implementation class.
+		 * Creates a {@link MarshalledFilter} with settings in this builder class.
 		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
+		 * @return A new {@link MarshalledFilter} instance.
 		 */
-		public Builder implClass(Class<?> value) {
-			this.implClass = value;
-			return this;
+		public MarshalledFilter build() {
+			return new MarshalledFilter(this);
 		}
 
 		/**
@@ -117,19 +95,26 @@ public class MarshalledFilter {
 		}
 
 		/**
-		 * Creates a {@link MarshalledFilter} with settings in this builder class.
+		 * Implementation class.
 		 *
-		 * @return A new {@link MarshalledFilter} instance.
+		 * @param value The new value for this setting.
+		 * @return This object.
 		 */
-		public MarshalledFilter build() {
-			return new MarshalledFilter(this);
+		public Builder implClass(Class<?> value) {
+			this.implClass = value;
+			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create a new instance of this POJO filter.
+	 *
+	 * @param <T> The POJO class being filtered.
+	 * @param marshalledClass The POJO class being filtered.
+	 * @return A new {@link Builder} object.
+	 */
+	public static <T> Builder create(Class<T> marshalledClass) {
+		return new Builder(marshalledClass);
+	}
 	private final Class<?> marshalledClass;
 	private final Class<?> implClass;
 	private final String example;
@@ -146,12 +131,12 @@ public class MarshalledFilter {
 	}
 
 	/**
-	 * Returns the class that this filter applies to.
+	 * Returns the example string with this class.
 	 *
-	 * @return The class that this filter applies to.
+	 * @return The example string associated with this class, or <jk>null</jk> if no example string is associated.
 	 */
-	public Class<?> getMarshalledClass() {
-		return marshalledClass;
+	public String getExample() {
+		return example;
 	}
 
 	/**
@@ -164,11 +149,11 @@ public class MarshalledFilter {
 	}
 
 	/**
-	 * Returns the example string with this class.
+	 * Returns the class that this filter applies to.
 	 *
-	 * @return The example string associated with this class, or <jk>null</jk> if no example string is associated.
+	 * @return The class that this filter applies to.
 	 */
-	public String getExample() {
-		return example;
+	public Class<?> getMarshalledClass() {
+		return marshalledClass;
 	}
 }

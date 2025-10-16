@@ -65,7 +65,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#abbr() abbr()}
- * 		<li class='jm'>{@link HtmlBuilder#abbr(Object, Object...) abbr(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#abbr(String, Object...) abbr(Object, Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -92,10 +92,6 @@ public class Abbr extends HtmlElementMixed {
 	public Abbr(String title, Object...children) {
 		title(title).children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Abbr _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -105,6 +101,30 @@ public class Abbr extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Abbr accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Abbr attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Abbr attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Abbr child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Abbr children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -465,30 +485,6 @@ public class Abbr extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Abbr translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Abbr child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Abbr children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Abbr attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Abbr attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -153,6 +153,12 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 		super(Utils.s(value), null);
 	}
 
+	@Override /* Overridden from FluentStringAssertion */
+	public StringAssertion asJavaStrings() {
+		super.asJavaStrings();
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent setters
 	//-----------------------------------------------------------------------------------------------------------------
@@ -183,12 +189,6 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	@Override /* Overridden from Assertion */
 	public StringAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
-		return this;
-	}
-
-	@Override /* Overridden from FluentStringAssertion */
-	public StringAssertion asJavaStrings() {
-		super.asJavaStrings();
 		return this;
 	}
 }

@@ -72,11 +72,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("If-Unmodified-Since")
 public class IfUnmodifiedSince extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Unmodified-Since";
 
@@ -90,18 +85,6 @@ public class IfUnmodifiedSince extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfUnmodifiedSince of(String value) {
-		return value == null ? null : new IfUnmodifiedSince(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static IfUnmodifiedSince of(ZonedDateTime value) {
 		return value == null ? null : new IfUnmodifiedSince(value);
 	}
 
@@ -120,10 +103,17 @@ public class IfUnmodifiedSince extends BasicDateHeader {
 		return value == null ? null : new IfUnmodifiedSince(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfUnmodifiedSince of(ZonedDateTime value) {
+		return value == null ? null : new IfUnmodifiedSince(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -133,17 +123,6 @@ public class IfUnmodifiedSince extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public IfUnmodifiedSince(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public IfUnmodifiedSince(ZonedDateTime value) {
 		super(NAME, value);
 	}
 
@@ -158,6 +137,17 @@ public class IfUnmodifiedSince extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public IfUnmodifiedSince(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfUnmodifiedSince(ZonedDateTime value) {
 		super(NAME, value);
 	}
 }

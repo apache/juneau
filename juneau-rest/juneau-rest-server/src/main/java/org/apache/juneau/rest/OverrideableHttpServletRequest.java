@@ -36,6 +36,17 @@ class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 		super(request);
 	}
 
+	@Override /* Overridden from HttpServletRequest */
+	public String getPathInfo() {
+		// Note that pathInfo can never be empty.
+		return pathInfo == null ? super.getPathInfo() : pathInfo.charAt(0) == (char)0 ? null : pathInfo;
+	}
+
+	@Override /* Overridden from HttpServletRequest */
+	public String getServletPath() {
+		return servletPath == null ? super.getServletPath() : servletPath;
+	}
+
 	public OverrideableHttpServletRequest pathInfo(String value) {
 		validatePathInfo(value);
 		if (value == null)
@@ -48,16 +59,5 @@ class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 		validateServletPath(value);
 		this.servletPath = value;
 		return this;
-	}
-
-	@Override /* Overridden from HttpServletRequest */
-	public String getPathInfo() {
-		// Note that pathInfo can never be empty.
-		return pathInfo == null ? super.getPathInfo() : pathInfo.charAt(0) == (char)0 ? null : pathInfo;
-	}
-
-	@Override /* Overridden from HttpServletRequest */
-	public String getServletPath() {
-		return servletPath == null ? super.getServletPath() : servletPath;
 	}
 }

@@ -36,84 +36,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class PathAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Path DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link Path} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Applier extends AnnotationApplier<Path,BeanContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Applier(VarResolverSession vr) {
+			super(Path.class, BeanContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Path> ai, BeanContext.Builder b) {
+			Path a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(a);
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link Path @Path annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Path[] value();
 	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(Path a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Finds the name from the specified lists of annotations.
-	 *
-	 * <p>
-	 * The last matching name found is returned.
-	 *
-	 * @param pi The parameter.
-	 * @return The last matching name, or {@link Value#empty()} if not found.
-	 */
-	public static Value<String> findName(ParamInfo pi) {
-		Value<String> n = Value.empty();
-		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.value()) , x -> n.set(x.value()));
-		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.name()) , x -> n.set(x.name()));
-		return n;
-	}
-
-	/**
-	 * Finds the default value from the specified list of annotations.
-	 *
-	 * @param pi The parameter.
-	 * @return The last matching default value, or {@link Value#empty()} if not found.
-	 */
-	public static Value<String> findDef(ParamInfo pi) {
-		Value<String> n = Value.empty();
-		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
-		return n;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -151,8 +112,8 @@ public class PathAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder name(String value) {
-			this.name = value;
+		public Builder def(String value) {
+			this.def = value;
 			return this;
 		}
 
@@ -162,8 +123,8 @@ public class PathAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder def(String value) {
-			this.def = value;
+		public Builder name(String value) {
+			this.name = value;
 			return this;
 		}
 
@@ -213,10 +174,6 @@ public class PathAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationTImpl implements Path {
 
 		private final Class<? extends HttpPartParser> parser;
@@ -236,13 +193,13 @@ public class PathAnnotation {
 		}
 
 		@Override /* Overridden from Path */
-		public String name() {
-			return name;
+		public String def() {
+			return def;
 		}
 
 		@Override /* Overridden from Path */
-		public String def() {
-			return def;
+		public String name() {
+			return name;
 		}
 
 		@Override /* Overridden from Path */
@@ -266,51 +223,69 @@ public class PathAnnotation {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
+	/** Default value */
+	public static final Path DEFAULT = create().build();
 
 	/**
-	 * Applies targeted {@link Path} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class Applier extends AnnotationApplier<Path,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(Path.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Path> ai, BeanContext.Builder b) {
-			Path a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(a);
-		}
+	public static Builder create() {
+		return new Builder();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link Path @Path annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Path[] value();
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Path a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	/**
+	 * Finds the default value from the specified list of annotations.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching default value, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findDef(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
+		return n;
+	}
+	/**
+	 * Finds the name from the specified lists of annotations.
+	 *
+	 * <p>
+	 * The last matching name found is returned.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching name, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findName(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.value()) , x -> n.set(x.value()));
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.name()) , x -> n.set(x.name()));
+		return n;
 	}
 }

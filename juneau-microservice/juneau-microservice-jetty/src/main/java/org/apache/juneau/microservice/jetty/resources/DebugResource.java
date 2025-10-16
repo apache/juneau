@@ -54,6 +54,23 @@ public class DebugResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.
+	 *
+	 * @param req The request.
+	 * @param res The response.
+	 * @throws Exception Gets converted to 500 response.
+	 * @return The thread dump contents.
+	 */
+	@RestPost(path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
+	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
+		String dump = JettyMicroservice.getInstance().getServer().dump();
+		try (FileWriter fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
+			fw.write(dump);
+		}
+		return Ok.OK;
+	}
+
+	/**
 	 * [GET /] - Shows child utilities.
 	 *
 	 * @return Child utility links.
@@ -77,22 +94,5 @@ public class DebugResource extends BasicRestServlet {
 	public Reader getJettyDump(RestRequest req, RestResponse res) {
 		res.setContentType("text/plain");
 		return new StringReader(JettyMicroservice.getInstance().getServer().dump());
-	}
-
-	/**
-	 * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.
-	 *
-	 * @param req The request.
-	 * @param res The response.
-	 * @throws Exception Gets converted to 500 response.
-	 * @return The thread dump contents.
-	 */
-	@RestPost(path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
-	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
-		String dump = JettyMicroservice.getInstance().getServer().dump();
-		try (FileWriter fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
-			fw.write(dump);
-		}
-		return Ok.OK;
 	}
 }

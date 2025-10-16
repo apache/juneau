@@ -42,30 +42,6 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class RestSession extends ContextSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Request attribute name for passing path variables from parent to child.
-	 */
-	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
-
-	/**
-	 * Creates a builder of this object.
-	 *
-	 * @param ctx The context creating this builder.
-	 * @return A new builder.
-	 */
-	public static Builder create(RestContext ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -89,73 +65,20 @@ public class RestSession extends ContextSession {
 			this.ctx = ctx;
 		}
 
-		/**
-		 * Specifies the servlet implementation bean.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder resource(Object value) {
-			resource = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the HTTP servlet request object on this call.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder req(HttpServletRequest value) {
-			req = value;
-			return this;
-		}
-
-		/**
-		 * Returns the HTTP servlet request object on this call.
-		 *
-		 * @return The HTTP servlet request object on this call.
-		 */
-		public HttpServletRequest req() {
-			urlPath = null;
-			pathInfoUndecoded = null;
-			return req;
-		}
-
-		/**
-		 * Specifies the HTTP servlet response object on this call.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder res(HttpServletResponse value) {
-			res = value;
-			return this;
-		}
-
-		/**
-		 * Returns the HTTP servlet response object on this call.
-		 *
-		 * @return The HTTP servlet response object on this call.
-		 */
-		public HttpServletResponse res() {
-			return res;
-		}
-
-		/**
-		 * Specifies the logger to use for this session.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder logger(CallLogger value) {
-			logger = value;
-			return this;
-		}
-
 		@Override /* Overridden from Session.Builder */
 		public RestSession build() {
 			return new RestSession(this);
+		}
+
+		/**
+		 * Returns the request path info as a {@link UrlPath} bean.
+		 *
+		 * @return The request path info as a {@link UrlPath} bean.
+		 */
+		public String getPathInfoUndecoded() {
+			if (pathInfoUndecoded == null)
+				pathInfoUndecoded = RestUtils.getPathInfoUndecoded(req);
+			return pathInfoUndecoded;
 		}
 
 		/**
@@ -170,14 +93,14 @@ public class RestSession extends ContextSession {
 		}
 
 		/**
-		 * Returns the request path info as a {@link UrlPath} bean.
+		 * Specifies the logger to use for this session.
 		 *
-		 * @return The request path info as a {@link UrlPath} bean.
+		 * @param value The value for this setting.
+		 * @return This object.
 		 */
-		public String getPathInfoUndecoded() {
-			if (pathInfoUndecoded == null)
-				pathInfoUndecoded = RestUtils.getPathInfoUndecoded(req);
-			return pathInfoUndecoded;
+		public Builder logger(CallLogger value) {
+			logger = value;
+			return this;
 		}
 
 		/**
@@ -198,12 +121,74 @@ public class RestSession extends ContextSession {
 			}
 			return this;
 		}
+
+		/**
+		 * Returns the HTTP servlet request object on this call.
+		 *
+		 * @return The HTTP servlet request object on this call.
+		 */
+		public HttpServletRequest req() {
+			urlPath = null;
+			pathInfoUndecoded = null;
+			return req;
+		}
+
+		/**
+		 * Specifies the HTTP servlet request object on this call.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder req(HttpServletRequest value) {
+			req = value;
+			return this;
+		}
+
+		/**
+		 * Returns the HTTP servlet response object on this call.
+		 *
+		 * @return The HTTP servlet response object on this call.
+		 */
+		public HttpServletResponse res() {
+			return res;
+		}
+
+		/**
+		 * Specifies the HTTP servlet response object on this call.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder res(HttpServletResponse value) {
+			res = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the servlet implementation bean.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder resource(Object value) {
+			resource = value;
+			return this;
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Request attribute name for passing path variables from parent to child.
+	 */
+	private static final String REST_PATHVARS_ATTR = "juneau.pathVars";
+	/**
+	 * Creates a builder of this object.
+	 *
+	 * @param ctx The context creating this builder.
+	 * @return A new builder.
+	 */
+	public static Builder create(RestContext ctx) {
+		return new Builder(ctx);
+	}
 	private final Object resource;
 	private final RestContext context;
 	private HttpServletRequest req;
@@ -237,22 +222,6 @@ public class RestSession extends ContextSession {
 		urlPath = beanStore.add(UrlPath.class, builder.urlPath);
 		pathInfoUndecoded = builder.pathInfoUndecoded;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Fluent setters.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Sets the logger to use when logging this call.
-	 *
-	 * @param value The new value for this setting.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RestSession logger(CallLogger value) {
-		logger = beanStore.add(CallLogger.class, value);
-		return this;
-	}
-
 	/**
 	 * Enables or disabled debug mode on this call.
 	 *
@@ -272,29 +241,6 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
-	 * Sets the HTTP status on this call.
-	 *
-	 * @param value The status code.
-	 * @return This object.
-	 */
-	public RestSession status(int value) {
-		res.setStatus(value);
-		return this;
-	}
-
-	/**
-	 * Sets the HTTP status on this call.
-	 *
-	 * @param value The status code.
-	 * @return This object.
-	 */
-	public RestSession status(StatusLine value) {
-		if (value != null)
-			res.setStatus(value.getStatusCode());
-		return this;
-	}
-
-	/**
 	 * Identifies that an exception occurred during this call.
 	 *
 	 * @param value The thrown exception.
@@ -305,81 +251,6 @@ public class RestSession extends ContextSession {
 		beanStore.addBean(Throwable.class, value);
 		return this;
 	}
-
-	/**
-	 * Sets the URL path pattern match on this call.
-	 *
-	 * @param value The match pattern.
-	 * @return This object.
-	 */
-	public RestSession urlPathMatch(UrlPathMatch value) {
-		urlPathMatch = beanStore.add(UrlPathMatch.class, value);
-		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Getters
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the HTTP servlet request of this REST call.
-	 *
-	 * @return the HTTP servlet request of this REST call.
-	 */
-	public HttpServletRequest getRequest() {
-		return req;
-	}
-
-	/**
-	 * Returns the HTTP servlet response of this REST call.
-	 *
-	 * @return the HTTP servlet response of this REST call.
-	 */
-	public HttpServletResponse getResponse() {
-		return res;
-	}
-
-	/**
-	 * Returns the bean store of this call.
-	 *
-	 * @return The bean store of this call.
-	 */
-	public BeanStore getBeanStore() {
-		return beanStore;
-	}
-
-	/**
-	 * Returns resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
-	 *
-	 * @return Resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
-	 */
-	@SuppressWarnings("unchecked")
-	public Map<String,String> getPathVars() {
-		Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-		return m == null ? Collections.emptyMap() : m;
-	}
-
-	/**
-	 * Returns the URL path pattern match on this call.
-	 *
-	 * @return The URL path pattern match on this call.
-	 */
-	public UrlPathMatch getUrlPathMatch() {
-		return urlPathMatch;
-	}
-
-	/**
-	 * Returns the exception that occurred during this call.
-	 *
-	 * @return The exception that occurred during this call.
-	 */
-	public Throwable getException() {
-		return (Throwable)req.getAttribute("Exception");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Lifecycle methods.
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
@@ -402,68 +273,33 @@ public class RestSession extends ContextSession {
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Pass-through convenience methods.
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Shortcut for calling <c>getRequest().getServletPath()</c>.
+	 * Returns the bean store of this call.
 	 *
-	 * @return The request servlet path.
+	 * @return The bean store of this call.
 	 */
-	public String getServletPath() {
-		return req.getServletPath();
+	public BeanStore getBeanStore() {
+		return beanStore;
 	}
 
 	/**
-	 * Returns the request path info as a {@link UrlPath} bean.
+	 * Returns the context that created this call.
 	 *
-	 * @return The request path info as a {@link UrlPath} bean.
+	 * @return The context that created this call.
 	 */
-	public UrlPath getUrlPath() {
-		if (urlPath == null)
-			urlPath = UrlPath.of(getPathInfoUndecoded());
-		return urlPath;
+	@Override
+	public RestContext getContext() {
+		return context;
 	}
 
 	/**
-	 * Shortcut for calling <c>getRequest().getPathInfo()</c>.
+	 * Returns the exception that occurred during this call.
 	 *
-	 * @return The request servlet path info.
+	 * @return The exception that occurred during this call.
 	 */
-	public String getPathInfo() {
-		return req.getPathInfo();
+	public Throwable getException() {
+		return (Throwable)req.getAttribute("Exception");
 	}
-
-	/**
-	 * Same as {@link #getPathInfo()} but doesn't decode encoded characters.
-	 *
-	 * @return The undecoded request servlet path info.
-	 */
-	public String getPathInfoUndecoded() {
-		if (pathInfoUndecoded == null)
-			pathInfoUndecoded = RestUtils.getPathInfoUndecoded(req);
-		return pathInfoUndecoded;
-	}
-
-	/**
-	 * Returns the query parameters on the request.
-	 *
-	 * <p>
-	 * Unlike {@link HttpServletRequest#getParameterMap()}, this doesn't parse the content if it's a POST.
-	 *
-	 * @return The query parameters on the request.
-	 */
-	public Map<String,String[]> getQueryParams() {
-		if (queryParams == null) {
-			if (req.getMethod().equalsIgnoreCase("POST"))
-				queryParams = RestUtils.parseQuery(req.getQueryString(), map());
-			else
-				queryParams = req.getParameterMap();
-		}
-		return queryParams;
-	}
-
 	/**
 	 * Returns the HTTP method name.
 	 *
@@ -497,34 +333,6 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
-	 * Shortcut for calling <c>getRequest().getStatus()</c>.
-	 *
-	 * @return The response status code.
-	 */
-	public int getStatus() {
-		return res.getStatus();
-	}
-
-	/**
-	 * Returns the context that created this call.
-	 *
-	 * @return The context that created this call.
-	 */
-	@Override
-	public RestContext getContext() {
-		return context;
-	}
-
-	/**
-	 * Returns the REST object.
-	 *
-	 * @return The rest object.
-	 */
-	public Object getResource() {
-		return resource;
-	}
-
-	/**
 	 * Returns the operation session of this REST session.
 	 *
 	 * <p>
@@ -537,6 +345,129 @@ public class RestSession extends ContextSession {
 		if (opSession == null)
 			throw new InternalServerError("Op Session not created.");
 		return opSession;
+	}
+
+	/**
+	 * Shortcut for calling <c>getRequest().getPathInfo()</c>.
+	 *
+	 * @return The request servlet path info.
+	 */
+	public String getPathInfo() {
+		return req.getPathInfo();
+	}
+
+	/**
+	 * Same as {@link #getPathInfo()} but doesn't decode encoded characters.
+	 *
+	 * @return The undecoded request servlet path info.
+	 */
+	public String getPathInfoUndecoded() {
+		if (pathInfoUndecoded == null)
+			pathInfoUndecoded = RestUtils.getPathInfoUndecoded(req);
+		return pathInfoUndecoded;
+	}
+
+	/**
+	 * Returns resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
+	 *
+	 * @return Resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.
+	 */
+	@SuppressWarnings("unchecked")
+	public Map<String,String> getPathVars() {
+		Map<String,String> m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
+		return m == null ? Collections.emptyMap() : m;
+	}
+
+	/**
+	 * Returns the query parameters on the request.
+	 *
+	 * <p>
+	 * Unlike {@link HttpServletRequest#getParameterMap()}, this doesn't parse the content if it's a POST.
+	 *
+	 * @return The query parameters on the request.
+	 */
+	public Map<String,String[]> getQueryParams() {
+		if (queryParams == null) {
+			if (req.getMethod().equalsIgnoreCase("POST"))
+				queryParams = RestUtils.parseQuery(req.getQueryString(), map());
+			else
+				queryParams = req.getParameterMap();
+		}
+		return queryParams;
+	}
+	/**
+	 * Returns the HTTP servlet request of this REST call.
+	 *
+	 * @return the HTTP servlet request of this REST call.
+	 */
+	public HttpServletRequest getRequest() {
+		return req;
+	}
+	/**
+	 * Returns the REST object.
+	 *
+	 * @return The rest object.
+	 */
+	public Object getResource() {
+		return resource;
+	}
+
+	/**
+	 * Returns the HTTP servlet response of this REST call.
+	 *
+	 * @return the HTTP servlet response of this REST call.
+	 */
+	public HttpServletResponse getResponse() {
+		return res;
+	}
+
+	/**
+	 * Shortcut for calling <c>getRequest().getServletPath()</c>.
+	 *
+	 * @return The request servlet path.
+	 */
+	public String getServletPath() {
+		return req.getServletPath();
+	}
+
+	/**
+	 * Shortcut for calling <c>getRequest().getStatus()</c>.
+	 *
+	 * @return The response status code.
+	 */
+	public int getStatus() {
+		return res.getStatus();
+	}
+
+	/**
+	 * Returns the request path info as a {@link UrlPath} bean.
+	 *
+	 * @return The request path info as a {@link UrlPath} bean.
+	 */
+	public UrlPath getUrlPath() {
+		if (urlPath == null)
+			urlPath = UrlPath.of(getPathInfoUndecoded());
+		return urlPath;
+	}
+
+	/**
+	 * Returns the URL path pattern match on this call.
+	 *
+	 * @return The URL path pattern match on this call.
+	 */
+	public UrlPathMatch getUrlPathMatch() {
+		return urlPathMatch;
+	}
+
+	/**
+	 * Sets the logger to use when logging this call.
+	 *
+	 * @param value The new value for this setting.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RestSession logger(CallLogger value) {
+		logger = beanStore.add(CallLogger.class, value);
+		return this;
 	}
 
 	/**
@@ -574,5 +505,39 @@ public class RestSession extends ContextSession {
 			exception(e);
 			context.handleNotFound(this);
 		}
+	}
+
+	/**
+	 * Sets the HTTP status on this call.
+	 *
+	 * @param value The status code.
+	 * @return This object.
+	 */
+	public RestSession status(int value) {
+		res.setStatus(value);
+		return this;
+	}
+
+	/**
+	 * Sets the HTTP status on this call.
+	 *
+	 * @param value The status code.
+	 * @return This object.
+	 */
+	public RestSession status(StatusLine value) {
+		if (value != null)
+			res.setStatus(value.getStatusCode());
+		return this;
+	}
+
+	/**
+	 * Sets the URL path pattern match on this call.
+	 *
+	 * @param value The match pattern.
+	 * @return This object.
+	 */
+	public RestSession urlPathMatch(UrlPathMatch value) {
+		urlPathMatch = beanStore.add(UrlPathMatch.class, value);
+		return this;
 	}
 }

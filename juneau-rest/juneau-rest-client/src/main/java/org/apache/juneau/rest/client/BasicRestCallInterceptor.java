@@ -28,11 +28,11 @@ package org.apache.juneau.rest.client;
 public abstract class BasicRestCallInterceptor implements RestCallInterceptor {
 
 	@Override /* Overridden from RestCallInterceptor */
-	public void onInit(RestRequest req) throws Exception {}
+	public void onClose(RestRequest req, RestResponse res) throws Exception {}
 
 	@Override /* Overridden from RestCallInterceptor */
 	public void onConnect(RestRequest req, RestResponse res) throws Exception {}
 
 	@Override /* Overridden from RestCallInterceptor */
-	public void onClose(RestRequest req, RestResponse res) throws Exception {}
+	public void onInit(RestRequest req) throws Exception {}
 }

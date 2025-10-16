@@ -31,11 +31,6 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from PartSerializer */
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 		return Mutaters.toString(value);

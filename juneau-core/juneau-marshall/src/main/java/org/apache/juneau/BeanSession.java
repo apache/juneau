@@ -56,27 +56,6 @@ import jakarta.xml.bind.*;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanSession extends ContextSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
-
-	/**
-	 * Creates a builder of this object.
-	 *
-	 * @param ctx The context creating this builder.
-	 * @return A new builder.
-	 */
-	public static Builder create(BeanContext ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -100,6 +79,12 @@ public class BeanSession extends ContextSession {
 			mediaType = ctx.mediaType;
 		}
 
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
 		/**
 		 * Build the object.
 		 *
@@ -108,6 +93,12 @@ public class BeanSession extends ContextSession {
 		@Override
 		public BeanSession build() {
 			return new BeanSession(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
 		}
 
 		/**
@@ -187,6 +178,17 @@ public class BeanSession extends ContextSession {
 				mediaType = value;
 			return this;
 		}
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
 
 		/**
 		 * The session timezone.
@@ -226,29 +228,6 @@ public class BeanSession extends ContextSession {
 				timeZone = value;
 			return this;
 		}
-		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder unmodifiable() {
@@ -257,13 +236,37 @@ public class BeanSession extends ContextSession {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	private static Logger LOG = Logger.getLogger(BeanSession.class.getName());
+	/**
+	 * Creates a builder of this object.
+	 *
+	 * @param ctx The context creating this builder.
+	 * @return A new builder.
+	 */
+	public static Builder create(BeanContext ctx) {
+		return new Builder(ctx);
+	}
+	private static int getMultiplier(String s) {
+		if (s.endsWith("G"))
+			return 1024*1024*1024;
+		if (s.endsWith("M"))
+			return 1024*1024;
+		if (s.endsWith("K"))
+			return 1024;
+		return 1;
+	}
+	private static boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
+		return to.hasMutaterFrom(from) || from.hasMutaterTo(to);
+	}
+	private static final boolean isNullOrEmpty(Object o) {
+		return o == null || o.toString().isEmpty() || o.toString().equals("null");
+	}
 	private final BeanContext ctx;
+
 	private final Locale locale;
+
 	private final TimeZone timeZone;
+
 	private final MediaType mediaType;
 
 	/**
@@ -277,6 +280,52 @@ public class BeanSession extends ContextSession {
 		locale = builder.locale;
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
+	}
+
+	/**
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
+	 *
+	 * <p>
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
+	 *
+	 * <p>
+	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
+	 * avoid a hashmap lookup.
+	 *
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
+	 */
+	public final ClassMeta<Class> _class() {
+		return ctx._class();
+	}
+
+	/**
+	 * Logs a warning message.
+	 *
+	 * @param msg The warning message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	@Override
+	public void addWarning(String msg, Object... args) {
+		if (isDebug())
+			LOG.log(Level.WARNING, ()->args.length == 0 ? msg : MessageFormat.format(msg, args));
+		super.addWarning(msg, args);
+	}
+
+	/**
+	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
+	 * be instantiated within another class instance.
+	 *
+	 * @param <T> The class type to convert the value to.
+	 * @param outer
+	 * 	If class is a member class, this is the instance of the containing class.
+	 * 	Should be <jk>null</jk> if not a member class.
+	 * @param value The value to convert.
+	 * @param type The class type to convert the value to.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 * @return The converted value.
+	 */
+	public final <T> T convertToMemberType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
+		return convertToMemberType(outer, value, getClassMeta(type));
 	}
 
 	/**
@@ -296,23 +345,6 @@ public class BeanSession extends ContextSession {
 		if (value != null && value.getClass() == type)
 			return (T)value;
 		return convertToMemberType(null, value, getClassMeta(type));
-	}
-
-	/**
-	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
-	 * be instantiated within another class instance.
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param outer
-	 * 	If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 */
-	public final <T> T convertToMemberType(Object outer, Object value, Class<T> type) throws InvalidDataConversionException {
-		return convertToMemberType(outer, value, getClassMeta(type));
 	}
 
 	/**
@@ -466,6 +498,704 @@ public class BeanSession extends ContextSession {
 	 */
 	public final <T> T convertToType(Object value, Type type, Type...args) throws InvalidDataConversionException {
 		return (T)convertToMemberType(null, value, getClassMeta(type, args));
+	}
+
+	/**
+	 * Minimum bean class visibility.
+	 *
+	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
+	 * @return
+	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
+	 */
+	public final Visibility getBeanClassVisibility() {
+		return ctx.getBeanClassVisibility();
+	}
+
+	/**
+	 * Minimum bean constructor visibility.
+	 *
+	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
+	 * @return
+	 * 	Only look for constructors with this specified minimum visibility.
+	 */
+	public final Visibility getBeanConstructorVisibility() {
+		return ctx.getBeanConstructorVisibility();
+	}
+
+	/**
+	 * Bean dictionary.
+	 *
+	 * @see BeanContext.Builder#beanDictionary(Class...)
+	 * @return
+	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 */
+	public final List<Class<?>> getBeanDictionary() {
+		return ctx.getBeanDictionary();
+	}
+
+	/**
+	 * Minimum bean field visibility.
+	 *
+	 *
+	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	public final Visibility getBeanFieldVisibility() {
+		return ctx.getBeanFieldVisibility();
+	}
+
+	/**
+	 * Returns the {@link BeanMeta} class for the specified class.
+	 *
+	 * @param <T> The class type to get the meta-data on.
+	 * @param c The class to get the meta-data on.
+	 * @return
+	 * 	The {@link BeanMeta} for the specified class, or <jk>null</jk> if the class
+	 * 	is not a bean per the settings on this context.
+	 */
+	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
+		if (c == null)
+			return null;
+		return getClassMeta(c).getBeanMeta();
+	}
+
+	/**
+	 * Minimum bean method visibility.
+	 *
+	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
+	 * @return
+	 * 	Only look for bean methods with this specified minimum visibility.
+	 */
+	public final Visibility getBeanMethodVisibility() {
+		return ctx.getBeanMethodVisibility();
+	}
+
+	/**
+	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(Class...)}.
+	 *
+	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
+	 */
+	public final BeanRegistry getBeanRegistry() {
+		return ctx.getBeanRegistry();
+	}
+
+	/**
+	 * Bean type property name.
+	 *
+	 * @see BeanContext.Builder#typePropertyName(String)
+	 * @return
+	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
+	 */
+	public final String getBeanTypePropertyName() {
+		return ctx.getBeanTypePropertyName();
+	}
+
+	/**
+	 * Returns the type property name as defined by {@link BeanContext.Builder#typePropertyName(String)}.
+	 *
+	 * @param cm
+	 * 	The class meta of the type we're trying to resolve the type name for.
+	 * 	Can be <jk>null</jk>.
+	 * @return The type property name.  Never <jk>null</jk>.
+	 */
+	public final String getBeanTypePropertyName(ClassMeta cm) {
+		String s = cm == null ? null : cm.getBeanTypePropertyName();
+		return s == null ? getBeanTypePropertyName() : s;
+	}
+
+	/**
+	 * Returns a {@code ClassMeta} wrapper around a {@link Class} object.
+	 *
+	 * @param <T> The class type being wrapped.
+	 * @param c The class being wrapped.
+	 * @return The class meta object containing information about the class.
+	 */
+	public final <T> ClassMeta<T> getClassMeta(Class<T> c) {
+		return ctx.getClassMeta(c);
+	}
+
+	/**
+	 * Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
+	 * <c>ClassMeta</c> values that themselves could be collections or maps.
+	 *
+	 * <p>
+	 * <c>Collection</c> meta objects are assumed to be followed by zero or one meta objects indicating the
+	 * element type.
+	 *
+	 * <p>
+	 * <c>Map</c> meta objects are assumed to be followed by zero or two meta objects indicating the key and value
+	 * types.
+	 *
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
+	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
+	 * 	<li><code>getClassMeta(List.<jk>class</jk>, String.<jk>class</jk>);</code> - A list containing strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing
+	 * 		strings.
+	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> -
+	 * 		A linked-list containing linked-lists of strings.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>);</code> - A map containing object keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map
+	 * 		containing string keys/values.
+	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> -
+	 * 		A map containing string keys and values of lists containing beans.
+	 * </ul>
+	 *
+	 * @param <T>
+	 * 	The class to resolve.
+	 * @param type
+	 * 	The class to resolve.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The class meta.
+	 */
+	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
+		return ctx.getClassMeta(type, args);
+	}
+
+	/**
+	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
+	 *
+	 * @param <T> The class of the object being passed in.
+	 * @param o The class to find the class type for.
+	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
+	 */
+	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
+		return (ClassMeta<T>)getClassMetaForObject(o, null);
+	}
+
+	/**
+	 * Locale.
+	 *
+	 * <p>
+	 * The locale is determined in the following order:
+	 * <ol>
+	 * 	<li><c>locale</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext.Builder#locale(Locale)} setting on bean context.
+	 * 	<li>Locale returned by {@link Locale#getDefault()}.
+	 * </ol>
+	 *
+	 * @see BeanContext.Builder#locale(Locale)
+	 * @return The session locale.
+	 */
+	public Locale getLocale() {
+		return locale;
+	}
+
+	/**
+	 * Media type.
+	 *
+	 * <p>
+	 * For example, <js>"application/json"</js>.
+	 *
+	 * @see BeanContext.Builder#mediaType(MediaType)
+	 * @return The media type for this session, or <jk>null</jk> if not specified.
+	 */
+	public final MediaType getMediaType() {
+		return mediaType;
+	}
+
+	/**
+	 * Returns the name property name.
+	 *
+	 * <p>
+	 * Currently this always returns <js>"_name"</js>.
+	 *
+	 * @return The name property name.  Never <jk>null</jk>.
+	 */
+	public final String getNamePropertyName() {
+		return "_name";
+	}
+
+	/**
+	 * Bean class exclusions.
+	 *
+	 * @see BeanContext.Builder#notBeanClasses(Class...)
+	 * @return
+	 * 	The list of classes that are explicitly not beans.
+	 */
+	public final Class<?>[] getNotBeanClasses() {
+		return ctx.getNotBeanClasses();
+	}
+
+	/**
+	 * Bean package exclusions.
+	 *
+	 * @see BeanContext.Builder#notBeanPackages(String...)
+	 * @return
+	 * 	The list of fully-qualified package names to exclude from being classified as beans.
+	 */
+	public final String[] getNotBeanPackagesNames() {
+		return ctx.getNotBeanPackagesNames();
+	}
+
+	/**
+	 * Bean property namer.
+	 *
+	 * @see BeanContext.Builder#propertyNamer(Class)
+	 * @return
+	 * 	The interface used to calculate bean property names.
+	 */
+	public final PropertyNamer getPropertyNamer() {
+		return ctx.getPropertyNamer();
+	}
+
+	/**
+	 * Java object swaps.
+	 *
+	 * @see BeanContext.Builder#swaps(Class...)
+	 * @return
+	 * 	The list POJO swaps defined.
+	 */
+	public final ObjectSwap<?,?>[] getSwaps() {
+		return ctx.getSwaps();
+	}
+
+	/**
+	 * Time zone.
+	 *
+	 * <p>
+	 * The timezone is determined in the following order:
+	 * <ol>
+	 * 	<li><c>timeZone</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
+	 * </ol>
+	 *
+	 * @see BeanContext.Builder#timeZone(TimeZone)
+	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
+	 */
+	public final TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * Time zone.
+	 *
+	 * <p>
+	 * The timezone is determined in the following order:
+	 * <ol>
+	 * 	<li><c>timeZone</c> parameter passed in through constructor.
+	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
+	 * </ol>
+	 *
+	 * @see BeanContext.Builder#timeZone(TimeZone)
+	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
+	 */
+	public final ZoneId getTimeZoneId() {
+		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
+	}
+
+	/**
+	 * Determines whether the specified class matches the requirements on this context of being a bean.
+	 *
+	 * @param c The class being tested.
+	 * @return <jk>true</jk> if the specified class is considered a bean.
+	 */
+	public final boolean isBean(Class<?> c) {
+		return getBeanMeta(c) != null;
+	}
+
+	/**
+	 * Determines whether the specified object matches the requirements on this context of being a bean.
+	 *
+	 * @param o The object being tested.
+	 * @return <jk>true</jk> if the specified object is considered a bean.
+	 */
+	public final boolean isBean(Object o) {
+		if (o == null)
+			return false;
+		return isBean(o.getClass());
+	}
+
+	/**
+	 * BeanMap.put() returns old property value.
+	 *
+	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
+	 * @return
+	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 */
+	public final boolean isBeanMapPutReturnsOldValue() {
+		return ctx.isBeanMapPutReturnsOldValue();
+	}
+
+	/**
+	 * Beans require no-arg constructors.
+	 *
+	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
+	 * @return
+	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
+	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 */
+	public final boolean isBeansRequireDefaultConstructor() {
+		return ctx.isBeansRequireDefaultConstructor();
+	}
+	/**
+	 * Beans require Serializable interface.
+	 *
+	 * @see BeanContext.Builder#beansRequireSerializable()
+	 * @return
+	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
+	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 */
+	public final boolean isBeansRequireSerializable() {
+		return ctx.isBeansRequireSerializable();
+	}
+
+	/**
+	 * Beans require setters for getters.
+	 *
+	 * @see BeanContext.Builder#beansRequireSettersForGetters()
+	 * @return
+	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
+	 * 	<br>Otherwise, they are ignored.
+	 */
+	public final boolean isBeansRequireSettersForGetters() {
+		return ctx.isBeansRequireSettersForGetters();
+	}
+
+	/**
+	 * Beans require at least one property.
+	 *
+	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
+	 * @return
+	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
+	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
+	 */
+	public final boolean isBeansRequireSomeProperties() {
+		return ctx.isBeansRequireSomeProperties();
+	}
+
+	/**
+	 * Find fluent setters.
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 *
+	 * @see BeanContext.Builder#findFluentSetters()
+	 * @return
+	 * 	<jk>true</jk> if fluent setters are detected on beans.
+	 */
+	public final boolean isFindFluentSetters() {
+		return ctx.isFindFluentSetters();
+	}
+
+	/**
+	 * Ignore invocation errors on getters.
+	 *
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 */
+	public final boolean isIgnoreInvocationExceptionsOnGetters() {
+		return ctx.isIgnoreInvocationExceptionsOnGetters();
+	}
+
+	/**
+	 * Ignore invocation errors on setters.
+	 *
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
+	 */
+	public final boolean isIgnoreInvocationExceptionsOnSetters() {
+		return ctx.isIgnoreInvocationExceptionsOnSetters();
+	}
+
+	/**
+	 * Silently ignore missing setters.
+	 *
+	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
+	 */
+	public final boolean isIgnoreMissingSetters() {
+		return ctx.isIgnoreMissingSetters();
+	}
+
+	/**
+	 * Ignore unknown properties.
+	 *
+	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
+	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
+	 */
+	public final boolean isIgnoreUnknownBeanProperties() {
+		return ctx.isIgnoreUnknownBeanProperties();
+	}
+
+	/**
+	 * Ignore unknown properties with null values.
+	 *
+	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @return
+	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
+	 */
+	public final boolean isIgnoreUnknownNullBeanProperties() {
+		return ctx.isIgnoreUnknownNullBeanProperties();
+	}
+
+	/**
+	 * Sort bean properties.
+	 *
+	 * @see BeanContext.Builder#sortProperties()
+	 * @return
+	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
+	 */
+	public final boolean isSortProperties() {
+		return ctx.isSortProperties();
+	}
+
+	/**
+	 * Use enum names.
+	 *
+	 * @see BeanContext.Builder#useEnumNames()
+	 * @return
+	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
+	 */
+	public final boolean isUseEnumNames() {
+		return ctx.isUseEnumNames();
+	}
+
+	/**
+	 * Use interface proxies.
+	 *
+	 * @see BeanContext.Builder#disableInterfaceProxies()
+	 * @return
+	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 */
+	public final boolean isUseInterfaceProxies() {
+		return ctx.isUseInterfaceProxies();
+	}
+
+	/**
+	 * Use Java Introspector.
+	 *
+	 * @see BeanContext.Builder#useJavaBeanIntrospector()
+	 * @return
+	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
+	 */
+	public final boolean isUseJavaBeanIntrospector() {
+		return ctx.isUseJavaBeanIntrospector();
+	}
+
+	/**
+	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
+	 * be instantiated within another class instance.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a new instance of the specified bean class</jc>
+	 * 	Person <jv>person</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the bean being created.
+	 * @param c The class type of the bean being created.
+	 * @return A new bean object.
+	 * @throws BeanRuntimeException If the specified class is not a valid bean.
+	 */
+	public final <T> T newBean(Class<T> c) throws BeanRuntimeException {
+		return newBean(null, c);
+	}
+
+	/**
+	 * Same as {@link #newBean(Class)}, except used for instantiating inner member classes that must be instantiated
+	 * within another class instance.
+	 *
+	 * @param <T> The class type of the bean being created.
+	 * @param c The class type of the bean being created.
+	 * @param outer
+	 * 	If class is a member class, this is the instance of the containing class.
+	 * 	Should be <jk>null</jk> if not a member class.
+	 * @return A new bean object.
+	 * @throws BeanRuntimeException If the specified class is not a valid bean.
+	 */
+	public final <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
+		ClassMeta<T> cm = getClassMeta(c);
+		BeanMeta m = cm.getBeanMeta();
+		if (m == null)
+			return null;
+		try {
+			T o = (T)m.newBean(outer);
+			if (o == null)
+				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
+			return o;
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Creates a new {@link BeanMap} object (a modifiable {@link Map}) of the given class with uninitialized
+	 * property values.
+	 *
+	 * <p>
+	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
+	 * bean.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param c The name of the class to create a new instance of.
+	 * @return A new instance of the class.
+	 */
+	public final <T> BeanMap<T> newBeanMap(Class<T> c) {
+		return newBeanMap(null, c);
+	}
+
+	/**
+	 * Same as {@link #newBeanMap(Class)}, except used for instantiating inner member classes that must be instantiated
+	 * within another class instance.
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param c The name of the class to create a new instance of.
+	 * @param outer
+	 * 	If class is a member class, this is the instance of the containing class.
+	 * 	Should be <jk>null</jk> if not a member class.
+	 * @return A new instance of the class.
+	 */
+	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
+		BeanMeta m = getBeanMeta(c);
+		if (m == null)
+			return null;
+		T bean = null;
+		if (m.constructorArgs.length == 0)
+			bean = newBean(outer, c);
+		return new BeanMap<>(this, bean, m);
+	}
+
+	/**
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
+	 *
+	 * <p>
+	 * This <c>ClassMeta</c> is often used to represent "any object type" when an object type is not known.
+	 *
+	 * <p>
+	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
+	 * avoid a hashmap lookup.
+	 *
+	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
+	 */
+	public final ClassMeta<Object> object() {
+		return ctx.object();
+	}
+
+	/**
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>String</c>.
+	 *
+	 * <p>
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
+	 *
+	 * <p>
+	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
+	 * avoid a hashmap lookup.
+	 *
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
+	 */
+	public final ClassMeta<String> string() {
+		return ctx.string();
+	}
+
+	/**
+	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
+	 *
+	 * <p>
+	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
+	 * bean.
+	 *
+	 * <p>
+	 * If object is already a {@link BeanMap}, simply returns the same object.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a bean map around a bean instance</jc>
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param o The object to wrap in a map interface.  Must not be null.
+	 * @return The wrapped object.
+	 */
+	public final <T> BeanMap<T> toBeanMap(T o) {
+		if (o instanceof BeanMap)
+			return (BeanMap<T>)o;
+		return this.toBeanMap(o, (Class<T>)o.getClass());
+	}
+
+	/**
+	 * Wraps an object inside a {@link BeanMap} object (i.e.: a modifiable {@link Map}) defined as a bean for one of its
+	 * class, a super class, or an implemented interface.
+	 *
+	 * <p>
+	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
+	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
+	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param o The object to wrap in a bean interface.  Must not be null.
+	 * @param c The superclass to narrow the bean properties to.  Must not be null.
+	 * @return The bean representation, or <jk>null</jk> if the object is not a true bean.
+	 * @throws NullPointerException If either parameter is null.
+	 * @throws IllegalArgumentException If the specified object is not an an instance of the specified class.
+	 * @throws
+	 * 	BeanRuntimeException If specified object is not a bean according to the bean rules specified in this context
+	 * class.
+	 */
+	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
+		Utils.assertArgNotNull("o", o);
+		Utils.assertArgNotNull("c", c);
+		Utils.assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", className(c), className(o), 0);
+
+		ClassMeta cm = getClassMeta(c);
+
+		BeanMeta m = cm.getBeanMeta();
+		if (m == null)
+			throw new BeanRuntimeException(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
+		return new BeanMap<>(this, o, m);
+	}
+
+	/**
+	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
+	 *
+	 * <p>
+	 * Same as {@link #toBeanMap(Object)} but allows you to specify a property namer instance.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a bean map around a bean instance</jc>
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param o The object to wrap in a map interface.  Must not be null.
+	 * @param propertyNamer The property namer to use.
+	 * @return The wrapped object.
+	 */
+	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
+		return this.toBeanMap(o, (Class<T>)o.getClass());
 	}
 
 	/**
@@ -907,22 +1637,57 @@ public class BeanSession extends ContextSession {
 		throw new InvalidDataConversionException(value, to, null);
 	}
 
-	private static boolean hasMutater(ClassMeta<?> from, ClassMeta<?> to) {
-		return to.hasMutaterFrom(from) || from.hasMutaterTo(to);
+	/**
+	 * Given an array of {@link Type} objects, returns a {@link ClassMeta} representing those arguments.
+	 *
+	 * <p>
+	 * Constructs a new meta on each call.
+	 *
+	 * @param classes The array of classes to get class metas for.
+	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
+	 */
+	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
+		Utils.assertArgNotNull("classes", classes);
+		ClassMeta[] cm = new ClassMeta<?>[classes.length];
+		for (int i = 0; i < classes.length; i++)
+			cm[i] = getClassMeta(classes[i]);
+		return new ClassMeta(cm);
 	}
 
-	private static final boolean isNullOrEmpty(Object o) {
-		return o == null || o.toString().isEmpty() || o.toString().equals("null");
+	/**
+	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is <jk>null</jk>.
+	 *
+	 * @param o The class to find the class type for.
+	 * @param def The default {@link ClassMeta} if the object is null.
+	 * @return The ClassMeta object, or the default value if {@code o} is <jk>null</jk>.
+	 */
+	protected final ClassMeta<?> getClassMetaForObject(Object o, ClassMeta<?> def) {
+		if (o == null)
+			return def;
+		return getClassMeta(o.getClass());
 	}
 
-	private static int getMultiplier(String s) {
-		if (s.endsWith("G"))
-			return 1024*1024*1024;
-		if (s.endsWith("M"))
-			return 1024*1024;
-		if (s.endsWith("K"))
-			return 1024;
-		return 1;
+	/**
+	 * Bean package exclusions.
+	 *
+	 * @see BeanContext.Builder#notBeanPackages(String...)
+	 * @return
+	 * 	The list of package name prefixes to exclude from being classified as beans.
+	 */
+	protected final String[] getNotBeanPackagesPrefixes() {
+		return ctx.getNotBeanPackagesPrefixes();
+	}
+
+	/**
+	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is
+	 * String or something else.
+	 *
+	 * @param mapMeta The metadata of the map to create.
+	 * @return A new map.
+	 */
+	protected Map newGenericMap(ClassMeta mapMeta) {
+		ClassMeta<?> k = mapMeta.getKeyType();
+		return (k == null || k.isString()) ? new JsonMap(this) : map();
 	}
 
 	/**
@@ -963,790 +1728,5 @@ public class BeanSession extends ContextSession {
 			}
 		});
 		return array;
-	}
-
-	/**
-	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
-	 *
-	 * <p>
-	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
-	 * bean.
-	 *
-	 * <p>
-	 * If object is already a {@link BeanMap}, simply returns the same object.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param o The object to wrap in a map interface.  Must not be null.
-	 * @return The wrapped object.
-	 */
-	public final <T> BeanMap<T> toBeanMap(T o) {
-		if (o instanceof BeanMap)
-			return (BeanMap<T>)o;
-		return this.toBeanMap(o, (Class<T>)o.getClass());
-	}
-
-	/**
-	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
-	 *
-	 * <p>
-	 * Same as {@link #toBeanMap(Object)} but allows you to specify a property namer instance.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param o The object to wrap in a map interface.  Must not be null.
-	 * @param propertyNamer The property namer to use.
-	 * @return The wrapped object.
-	 */
-	public final <T> BeanMap<T> toBeanMap(T o, PropertyNamer propertyNamer) {
-		return this.toBeanMap(o, (Class<T>)o.getClass());
-	}
-
-	/**
-	 * Determines whether the specified object matches the requirements on this context of being a bean.
-	 *
-	 * @param o The object being tested.
-	 * @return <jk>true</jk> if the specified object is considered a bean.
-	 */
-	public final boolean isBean(Object o) {
-		if (o == null)
-			return false;
-		return isBean(o.getClass());
-	}
-
-	/**
-	 * Determines whether the specified class matches the requirements on this context of being a bean.
-	 *
-	 * @param c The class being tested.
-	 * @return <jk>true</jk> if the specified class is considered a bean.
-	 */
-	public final boolean isBean(Class<?> c) {
-		return getBeanMeta(c) != null;
-	}
-
-	/**
-	 * Wraps an object inside a {@link BeanMap} object (i.e.: a modifiable {@link Map}) defined as a bean for one of its
-	 * class, a super class, or an implemented interface.
-	 *
-	 * <p>
-	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
-	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
-	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param o The object to wrap in a bean interface.  Must not be null.
-	 * @param c The superclass to narrow the bean properties to.  Must not be null.
-	 * @return The bean representation, or <jk>null</jk> if the object is not a true bean.
-	 * @throws NullPointerException If either parameter is null.
-	 * @throws IllegalArgumentException If the specified object is not an an instance of the specified class.
-	 * @throws
-	 * 	BeanRuntimeException If specified object is not a bean according to the bean rules specified in this context
-	 * class.
-	 */
-	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
-		Utils.assertArgNotNull("o", o);
-		Utils.assertArgNotNull("c", c);
-		Utils.assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", className(c), className(o), 0);
-
-		ClassMeta cm = getClassMeta(c);
-
-		BeanMeta m = cm.getBeanMeta();
-		if (m == null)
-			throw new BeanRuntimeException(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
-		return new BeanMap<>(this, o, m);
-	}
-
-	/**
-	 * Creates a new {@link BeanMap} object (a modifiable {@link Map}) of the given class with uninitialized
-	 * property values.
-	 *
-	 * <p>
-	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
-	 * bean.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param c The name of the class to create a new instance of.
-	 * @return A new instance of the class.
-	 */
-	public final <T> BeanMap<T> newBeanMap(Class<T> c) {
-		return newBeanMap(null, c);
-	}
-
-	/**
-	 * Same as {@link #newBeanMap(Class)}, except used for instantiating inner member classes that must be instantiated
-	 * within another class instance.
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param c The name of the class to create a new instance of.
-	 * @param outer
-	 * 	If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @return A new instance of the class.
-	 */
-	public final <T> BeanMap<T> newBeanMap(Object outer, Class<T> c) {
-		BeanMeta m = getBeanMeta(c);
-		if (m == null)
-			return null;
-		T bean = null;
-		if (m.constructorArgs.length == 0)
-			bean = newBean(outer, c);
-		return new BeanMap<>(this, bean, m);
-	}
-
-	/**
-	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
-	 * be instantiated within another class instance.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a new instance of the specified bean class</jc>
-	 * 	Person <jv>person</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the bean being created.
-	 * @param c The class type of the bean being created.
-	 * @return A new bean object.
-	 * @throws BeanRuntimeException If the specified class is not a valid bean.
-	 */
-	public final <T> T newBean(Class<T> c) throws BeanRuntimeException {
-		return newBean(null, c);
-	}
-
-	/**
-	 * Same as {@link #newBean(Class)}, except used for instantiating inner member classes that must be instantiated
-	 * within another class instance.
-	 *
-	 * @param <T> The class type of the bean being created.
-	 * @param c The class type of the bean being created.
-	 * @param outer
-	 * 	If class is a member class, this is the instance of the containing class.
-	 * 	Should be <jk>null</jk> if not a member class.
-	 * @return A new bean object.
-	 * @throws BeanRuntimeException If the specified class is not a valid bean.
-	 */
-	public final <T> T newBean(Object outer, Class<T> c) throws BeanRuntimeException {
-		ClassMeta<T> cm = getClassMeta(c);
-		BeanMeta m = cm.getBeanMeta();
-		if (m == null)
-			return null;
-		try {
-			T o = (T)m.newBean(outer);
-			if (o == null)
-				throw new BeanRuntimeException(c, "Class does not have a no-arg constructor.");
-			return o;
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Returns the {@link BeanMeta} class for the specified class.
-	 *
-	 * @param <T> The class type to get the meta-data on.
-	 * @param c The class to get the meta-data on.
-	 * @return
-	 * 	The {@link BeanMeta} for the specified class, or <jk>null</jk> if the class
-	 * 	is not a bean per the settings on this context.
-	 */
-	public final <T> BeanMeta<T> getBeanMeta(Class<T> c) {
-		if (c == null)
-			return null;
-		return getClassMeta(c).getBeanMeta();
-	}
-
-	/**
-	 * Returns a {@code ClassMeta} wrapper around a {@link Class} object.
-	 *
-	 * @param <T> The class type being wrapped.
-	 * @param c The class being wrapped.
-	 * @return The class meta object containing information about the class.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Class<T> c) {
-		return ctx.getClassMeta(c);
-	}
-
-	/**
-	 * Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
-	 * <c>ClassMeta</c> values that themselves could be collections or maps.
-	 *
-	 * <p>
-	 * <c>Collection</c> meta objects are assumed to be followed by zero or one meta objects indicating the
-	 * element type.
-	 *
-	 * <p>
-	 * <c>Map</c> meta objects are assumed to be followed by zero or two meta objects indicating the key and value
-	 * types.
-	 *
-	 * <p>
-	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <ul>
-	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
-	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
-	 * 	<li><code>getClassMeta(List.<jk>class</jk>, String.<jk>class</jk>);</code> - A list containing strings.
-	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> - A linked-list containing
-	 * 		strings.
-	 * 	<li><code>getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);</code> -
-	 * 		A linked-list containing linked-lists of strings.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>);</code> - A map containing object keys/values.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);</code> - A map
-	 * 		containing string keys/values.
-	 * 	<li><code>getClassMeta(Map.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);</code> -
-	 * 		A map containing string keys and values of lists containing beans.
-	 * </ul>
-	 *
-	 * @param <T>
-	 * 	The class to resolve.
-	 * @param type
-	 * 	The class to resolve.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The class meta.
-	 */
-	public final <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return ctx.getClassMeta(type, args);
-	}
-
-	/**
-	 * Given an array of {@link Type} objects, returns a {@link ClassMeta} representing those arguments.
-	 *
-	 * <p>
-	 * Constructs a new meta on each call.
-	 *
-	 * @param classes The array of classes to get class metas for.
-	 * @return The args {@link ClassMeta} object corresponding to the classes.  Never <jk>null</jk>.
-	 */
-	protected final ClassMeta<Object[]> getArgsClassMeta(Type[] classes) {
-		Utils.assertArgNotNull("classes", classes);
-		ClassMeta[] cm = new ClassMeta<?>[classes.length];
-		for (int i = 0; i < classes.length; i++)
-			cm[i] = getClassMeta(classes[i]);
-		return new ClassMeta(cm);
-	}
-
-	/**
-	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
-	 *
-	 * @param <T> The class of the object being passed in.
-	 * @param o The class to find the class type for.
-	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
-	 */
-	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
-		return (ClassMeta<T>)getClassMetaForObject(o, null);
-	}
-
-	/**
-	 * Shortcut for calling {@code getClassMeta(o.getClass())} but returns a default value if object is <jk>null</jk>.
-	 *
-	 * @param o The class to find the class type for.
-	 * @param def The default {@link ClassMeta} if the object is null.
-	 * @return The ClassMeta object, or the default value if {@code o} is <jk>null</jk>.
-	 */
-	protected final ClassMeta<?> getClassMetaForObject(Object o, ClassMeta<?> def) {
-		if (o == null)
-			return def;
-		return getClassMeta(o.getClass());
-	}
-
-	/**
-	 * Locale.
-	 *
-	 * <p>
-	 * The locale is determined in the following order:
-	 * <ol>
-	 * 	<li><c>locale</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext.Builder#locale(Locale)} setting on bean context.
-	 * 	<li>Locale returned by {@link Locale#getDefault()}.
-	 * </ol>
-	 *
-	 * @see BeanContext.Builder#locale(Locale)
-	 * @return The session locale.
-	 */
-	public Locale getLocale() {
-		return locale;
-	}
-
-	/**
-	 * Media type.
-	 *
-	 * <p>
-	 * For example, <js>"application/json"</js>.
-	 *
-	 * @see BeanContext.Builder#mediaType(MediaType)
-	 * @return The media type for this session, or <jk>null</jk> if not specified.
-	 */
-	public final MediaType getMediaType() {
-		return mediaType;
-	}
-
-	/**
-	 * Returns the type property name as defined by {@link BeanContext.Builder#typePropertyName(String)}.
-	 *
-	 * @param cm
-	 * 	The class meta of the type we're trying to resolve the type name for.
-	 * 	Can be <jk>null</jk>.
-	 * @return The type property name.  Never <jk>null</jk>.
-	 */
-	public final String getBeanTypePropertyName(ClassMeta cm) {
-		String s = cm == null ? null : cm.getBeanTypePropertyName();
-		return s == null ? getBeanTypePropertyName() : s;
-	}
-
-	/**
-	 * Returns the name property name.
-	 *
-	 * <p>
-	 * Currently this always returns <js>"_name"</js>.
-	 *
-	 * @return The name property name.  Never <jk>null</jk>.
-	 */
-	public final String getNamePropertyName() {
-		return "_name";
-	}
-
-	/**
-	 * Returns the bean registry defined in this bean context defined by {@link BeanContext.Builder#beanDictionary(Class...)}.
-	 *
-	 * @return The bean registry defined in this bean context.  Never <jk>null</jk>.
-	 */
-	public final BeanRegistry getBeanRegistry() {
-		return ctx.getBeanRegistry();
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent "any object type" when an object type is not known.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
-	 */
-	public final ClassMeta<Object> object() {
-		return ctx.object();
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>String</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent key types in maps.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
-	 */
-	public final ClassMeta<String> string() {
-		return ctx.string();
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent key types in maps.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
-	 */
-	public final ClassMeta<Class> _class() {
-		return ctx._class();
-	}
-
-	/**
-	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is
-	 * String or something else.
-	 *
-	 * @param mapMeta The metadata of the map to create.
-	 * @return A new map.
-	 */
-	protected Map newGenericMap(ClassMeta mapMeta) {
-		ClassMeta<?> k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new JsonMap(this) : map();
-	}
-
-	/**
-	 * Logs a warning message.
-	 *
-	 * @param msg The warning message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	@Override
-	public void addWarning(String msg, Object... args) {
-		if (isDebug())
-			LOG.log(Level.WARNING, ()->args.length == 0 ? msg : MessageFormat.format(msg, args));
-		super.addWarning(msg, args);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Minimum bean class visibility.
-	 *
-	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
-	 * @return
-	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
-	 */
-	public final Visibility getBeanClassVisibility() {
-		return ctx.getBeanClassVisibility();
-	}
-
-	/**
-	 * Minimum bean constructor visibility.
-	 *
-	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
-	 * @return
-	 * 	Only look for constructors with this specified minimum visibility.
-	 */
-	public final Visibility getBeanConstructorVisibility() {
-		return ctx.getBeanConstructorVisibility();
-	}
-
-	/**
-	 * Bean dictionary.
-	 *
-	 * @see BeanContext.Builder#beanDictionary(Class...)
-	 * @return
-	 * 	The list of classes that make up the bean dictionary in this bean context.
-	 */
-	public final List<Class<?>> getBeanDictionary() {
-		return ctx.getBeanDictionary();
-	}
-
-	/**
-	 * Minimum bean field visibility.
-	 *
-	 *
-	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
-	 * @return
-	 * 	Only look for bean fields with this specified minimum visibility.
-	 */
-	public final Visibility getBeanFieldVisibility() {
-		return ctx.getBeanFieldVisibility();
-	}
-
-	/**
-	 * BeanMap.put() returns old property value.
-	 *
-	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
-	 * @return
-	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
-	 * 	<br>Otherwise, it returns <jk>null</jk>.
-	 */
-	public final boolean isBeanMapPutReturnsOldValue() {
-		return ctx.isBeanMapPutReturnsOldValue();
-	}
-
-	/**
-	 * Minimum bean method visibility.
-	 *
-	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
-	 * @return
-	 * 	Only look for bean methods with this specified minimum visibility.
-	 */
-	public final Visibility getBeanMethodVisibility() {
-		return ctx.getBeanMethodVisibility();
-	}
-
-	/**
-	 * Beans require no-arg constructors.
-	 *
-	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
-	 * @return
-	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
-	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 */
-	public final boolean isBeansRequireDefaultConstructor() {
-		return ctx.isBeansRequireDefaultConstructor();
-	}
-
-	/**
-	 * Beans require Serializable interface.
-	 *
-	 * @see BeanContext.Builder#beansRequireSerializable()
-	 * @return
-	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
-	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 */
-	public final boolean isBeansRequireSerializable() {
-		return ctx.isBeansRequireSerializable();
-	}
-
-	/**
-	 * Beans require setters for getters.
-	 *
-	 * @see BeanContext.Builder#beansRequireSettersForGetters()
-	 * @return
-	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
-	 * 	<br>Otherwise, they are ignored.
-	 */
-	public final boolean isBeansRequireSettersForGetters() {
-		return ctx.isBeansRequireSettersForGetters();
-	}
-
-	/**
-	 * Beans require at least one property.
-	 *
-	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
-	 * @return
-	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
-	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
-	 */
-	public final boolean isBeansRequireSomeProperties() {
-		return ctx.isBeansRequireSomeProperties();
-	}
-
-	/**
-	 * Bean type property name.
-	 *
-	 * @see BeanContext.Builder#typePropertyName(String)
-	 * @return
-	 * 	The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
-	 */
-	public final String getBeanTypePropertyName() {
-		return ctx.getBeanTypePropertyName();
-	}
-
-	/**
-	 * Find fluent setters.
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 *
-	 * @see BeanContext.Builder#findFluentSetters()
-	 * @return
-	 * 	<jk>true</jk> if fluent setters are detected on beans.
-	 */
-	public final boolean isFindFluentSetters() {
-		return ctx.isFindFluentSetters();
-	}
-
-	/**
-	 * Ignore invocation errors on getters.
-	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
-	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
-	 */
-	public final boolean isIgnoreInvocationExceptionsOnGetters() {
-		return ctx.isIgnoreInvocationExceptionsOnGetters();
-	}
-
-	/**
-	 * Ignore invocation errors on setters.
-	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
-	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
-	 */
-	public final boolean isIgnoreInvocationExceptionsOnSetters() {
-		return ctx.isIgnoreInvocationExceptionsOnSetters();
-	}
-
-	/**
-	 * Silently ignore missing setters.
-	 *
-	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
-	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
-	 */
-	public final boolean isIgnoreMissingSetters() {
-		return ctx.isIgnoreMissingSetters();
-	}
-
-	/**
-	 * Ignore unknown properties.
-	 *
-	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
-	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
-	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
-	 */
-	public final boolean isIgnoreUnknownBeanProperties() {
-		return ctx.isIgnoreUnknownBeanProperties();
-	}
-
-	/**
-	 * Ignore unknown properties with null values.
-	 *
-	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
-	 * @return
-	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should not throw a {@link BeanRuntimeException}.
-	 */
-	public final boolean isIgnoreUnknownNullBeanProperties() {
-		return ctx.isIgnoreUnknownNullBeanProperties();
-	}
-
-	/**
-	 * Bean class exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanClasses(Class...)
-	 * @return
-	 * 	The list of classes that are explicitly not beans.
-	 */
-	public final Class<?>[] getNotBeanClasses() {
-		return ctx.getNotBeanClasses();
-	}
-
-	/**
-	 * Bean package exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
-	 * @return
-	 * 	The list of fully-qualified package names to exclude from being classified as beans.
-	 */
-	public final String[] getNotBeanPackagesNames() {
-		return ctx.getNotBeanPackagesNames();
-	}
-
-	/**
-	 * Bean package exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
-	 * @return
-	 * 	The list of package name prefixes to exclude from being classified as beans.
-	 */
-	protected final String[] getNotBeanPackagesPrefixes() {
-		return ctx.getNotBeanPackagesPrefixes();
-	}
-
-	/**
-	 * Bean property namer.
-	 *
-	 * @see BeanContext.Builder#propertyNamer(Class)
-	 * @return
-	 * 	The interface used to calculate bean property names.
-	 */
-	public final PropertyNamer getPropertyNamer() {
-		return ctx.getPropertyNamer();
-	}
-
-	/**
-	 * Sort bean properties.
-	 *
-	 * @see BeanContext.Builder#sortProperties()
-	 * @return
-	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
-	 */
-	public final boolean isSortProperties() {
-		return ctx.isSortProperties();
-	}
-
-	/**
-	 * Java object swaps.
-	 *
-	 * @see BeanContext.Builder#swaps(Class...)
-	 * @return
-	 * 	The list POJO swaps defined.
-	 */
-	public final ObjectSwap<?,?>[] getSwaps() {
-		return ctx.getSwaps();
-	}
-
-	/**
-	 * Time zone.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
-	 * </ol>
-	 *
-	 * @see BeanContext.Builder#timeZone(TimeZone)
-	 * @return The session timezone, or <jk>null</jk> if timezone not specified.
-	 */
-	public final TimeZone getTimeZone() {
-		return timeZone;
-	}
-
-	/**
-	 * Time zone.
-	 *
-	 * <p>
-	 * The timezone is determined in the following order:
-	 * <ol>
-	 * 	<li><c>timeZone</c> parameter passed in through constructor.
-	 * 	<li>{@link BeanContext.Builder#timeZone(TimeZone)} setting on bean context.
-	 * </ol>
-	 *
-	 * @see BeanContext.Builder#timeZone(TimeZone)
-	 * @return The session timezone, or the system timezone if not specified.  Never <jk>null</jk>.
-	 */
-	public final ZoneId getTimeZoneId() {
-		return timeZone == null ? ZoneId.systemDefault() : timeZone.toZoneId();
-	}
-
-	/**
-	 * Use enum names.
-	 *
-	 * @see BeanContext.Builder#useEnumNames()
-	 * @return
-	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
-	 */
-	public final boolean isUseEnumNames() {
-		return ctx.isUseEnumNames();
-	}
-
-	/**
-	 * Use interface proxies.
-	 *
-	 * @see BeanContext.Builder#disableInterfaceProxies()
-	 * @return
-	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
-	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
-	 */
-	public final boolean isUseInterfaceProxies() {
-		return ctx.isUseInterfaceProxies();
-	}
-
-	/**
-	 * Use Java Introspector.
-	 *
-	 * @see BeanContext.Builder#useJavaBeanIntrospector()
-	 * @return
-	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
-	 */
-	public final boolean isUseJavaBeanIntrospector() {
-		return ctx.isUseJavaBeanIntrospector();
 	}
 }

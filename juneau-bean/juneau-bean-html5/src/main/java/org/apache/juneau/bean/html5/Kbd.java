@@ -78,7 +78,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#kbd() kbd()}
- * 		<li class='jm'>{@link HtmlBuilder#kbd(Object, Object...) kbd(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#kbd(Object...) kbd(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -103,10 +103,6 @@ public class Kbd extends HtmlElementMixed {
 	public Kbd(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Kbd _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -116,6 +112,30 @@ public class Kbd extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Kbd accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Kbd attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Kbd attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Kbd child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Kbd children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -476,30 +496,6 @@ public class Kbd extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Kbd translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Kbd child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Kbd children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Kbd attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Kbd attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

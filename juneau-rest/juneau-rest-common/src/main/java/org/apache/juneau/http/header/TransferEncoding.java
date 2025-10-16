@@ -67,11 +67,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Transfer-Encoding")
 public class TransferEncoding extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Transfer-Encoding";
 
@@ -101,11 +96,6 @@ public class TransferEncoding extends BasicStringHeader {
 	public static TransferEncoding of(Supplier<String> value) {
 		return value == null ? null : new TransferEncoding(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

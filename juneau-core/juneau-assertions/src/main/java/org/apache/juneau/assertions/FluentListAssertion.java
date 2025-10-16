@@ -134,21 +134,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentListAssertion(List<E> value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -169,6 +154,21 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentListAssertion(List<E> value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -181,99 +181,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 */
 	public FluentListAssertion<E,R> asApplied2(Function<List<E>,List<E>> function) {  // NOSONAR - Intentional.
 		return new FluentListAssertion<>(this, function.apply((List<E>)orElse(null)), returns());
-	}
-
-	/**
-	 * Returns an object assertion on the item specified at the specified index.
-	 *
-	 * <p>
-	 * If the list is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
-	 * (meaning {@link FluentAnyAssertion#isExists()} returns <jk>false</jk>).
-	 *
-	 * @param index The index of the item to retrieve from the list.
-	 * @return A new assertion.
-	 */
-	public FluentAnyAssertion<E,R> asItem(int index) {
-		return new FluentAnyAssertion<>(this, at(index), returns());
-	}
-
-	/**
-	 * Sorts the entries in this list.
-	 *
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> asSorted() {
-		return new FluentListAssertion<>(this, toSortedList(null), returns());
-	}
-
-	/**
-	 * Sorts the entries in this list using the specified comparator.
-	 *
-	 * @param comparator The comparator to use to sort the list.
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> asSorted(Comparator<E> comparator) {
-		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
-	}
-
-	/**
-	 * Returns the first entry from this list.
-	 *
-	 * @return A new list assertion.
-	 */
-	public FluentAnyAssertion<E,R> asFirst() {
-		return asItem(0);
-	}
-
-	/**
-	 * Returns the last entry from this list.
-	 *
-	 * @return A new list assertion.
-	 */
-	public FluentAnyAssertion<E,R> asLast() {
-		return asItem(getSize()-1);
-	}
-
-	/**
-	 * Returns the first X number of entries from this list.
-	 *
-	 * @param count The number of entries in the list to retrieve.
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> asFirst(int count) {
-		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(0, count), returns());
-	}
-
-	/**
-	 * Returns the first X number of entries from this list.
-	 *
-	 * @param count The number of entries in the list to retrieve.
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> asLast(int count) {
-		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(getSize()-count, getSize()), returns());
-	}
-
-	/**
-	 * Returns a sublist of the entries in this list.
-	 *
-	 * @param start The start index (inclusive).
-	 * @param end The end index (exclusive).
-	 * @return A new list assertion.  The contents of the original list remain unchanged.
-	 */
-	public FluentListAssertion<E,R> asSublist(int start, int end) {
-		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(start, end), returns());
-	}
-
-	/**
-	 * Runs the stringify function against all values in this list and returns it as a fluent string list assertion.
-	 *
-	 * @param function The function to apply to all values in this list.
-	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
-	 */
-	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
-		List<String> l = valueIsNull() ? null : value().stream().map(function::apply).toList();
-		return new FluentStringListAssertion<>(this, l, returns());
 	}
 
 	/**
@@ -296,21 +203,102 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return new FluentStringAssertion<>(this, Utils.join(l, ','), returns());
 	}
 
+	/**
+	 * Returns the first entry from this list.
+	 *
+	 * @return A new list assertion.
+	 */
+	public FluentAnyAssertion<E,R> asFirst() {
+		return asItem(0);
+	}
+
+	/**
+	 * Returns the first X number of entries from this list.
+	 *
+	 * @param count The number of entries in the list to retrieve.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> asFirst(int count) {
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(0, count), returns());
+	}
+
+	/**
+	 * Returns an object assertion on the item specified at the specified index.
+	 *
+	 * <p>
+	 * If the list is <jk>null</jk> or the index is out-of-bounds, the returned assertion is a null assertion
+	 * (meaning {@link FluentAnyAssertion#isExists()} returns <jk>false</jk>).
+	 *
+	 * @param index The index of the item to retrieve from the list.
+	 * @return A new assertion.
+	 */
+	public FluentAnyAssertion<E,R> asItem(int index) {
+		return new FluentAnyAssertion<>(this, at(index), returns());
+	}
+
+	/**
+	 * Returns the last entry from this list.
+	 *
+	 * @return A new list assertion.
+	 */
+	public FluentAnyAssertion<E,R> asLast() {
+		return asItem(getSize()-1);
+	}
+
+	/**
+	 * Returns the first X number of entries from this list.
+	 *
+	 * @param count The number of entries in the list to retrieve.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> asLast(int count) {
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(getSize()-count, getSize()), returns());
+	}
+
+	/**
+	 * Sorts the entries in this list.
+	 *
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> asSorted() {
+		return new FluentListAssertion<>(this, toSortedList(null), returns());
+	}
+
+	/**
+	 * Sorts the entries in this list using the specified comparator.
+	 *
+	 * @param comparator The comparator to use to sort the list.
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> asSorted(Comparator<E> comparator) {
+		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
+	}
+
+	/**
+	 * Runs the stringify function against all values in this list and returns it as a fluent string list assertion.
+	 *
+	 * @param function The function to apply to all values in this list.
+	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
+		List<String> l = valueIsNull() ? null : value().stream().map(function::apply).toList();
+		return new FluentStringListAssertion<>(this, l, returns());
+	}
+
+	/**
+	 * Returns a sublist of the entries in this list.
+	 *
+	 * @param start The start index (inclusive).
+	 * @param end The end index (exclusive).
+	 * @return A new list assertion.  The contents of the original list remain unchanged.
+	 */
+	public FluentListAssertion<E,R> asSublist(int start, int end) {
+		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(start, end), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Asserts that the contents of this list contain the specified values.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isHas(E...entries) throws AssertionError {
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return isEach(p);
-	}
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -330,6 +318,19 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 				throw error(MSG_listDidNotContainExpectedValueAt, i, getFailureMessage(t, at(i)));
 		}
 		return returns();
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R isHas(E...entries) throws AssertionError {
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return isEach(p);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -368,16 +369,16 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override
-	protected List<E> value() throws AssertionError {
-		return (List<E>)super.value();
-	}
-
 	private E at(int index) throws AssertionError {
 		return valueIsNull() || index < 0 || index >= getSize() ? null : value().get(index);
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {
 		return valueIsNull() ? null : sortedList(comparator, value());
+	}
+
+	@Override
+	protected List<E> value() throws AssertionError {
+		return (List<E>)super.value();
 	}
 }

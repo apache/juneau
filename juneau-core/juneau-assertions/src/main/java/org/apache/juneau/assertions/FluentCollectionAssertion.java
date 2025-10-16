@@ -123,21 +123,6 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentCollectionAssertion(Collection<E> value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -158,23 +143,24 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentCollectionAssertion(Collection<E> value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from FluentObjectAssertion */
-	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {  // NOSONAR - Intentional.
-		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
-	/**
-	 * Converts this assertion into a {@link FluentListAssertion} of strings.
-	 *
-	 * @return A new fluent string assertion.
-	 */
-	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(o -> s(o)).toList(), returns());
-	}
 
 	/**
 	 * Returns an integer assertion on the size of this collection.
@@ -189,59 +175,37 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
+	/**
+	 * Converts this assertion into a {@link FluentListAssertion} of strings.
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringListAssertion<R> asStrings() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(o -> s(o)).toList(), returns());
+	}
+
+	@Override /* Overridden from FluentObjectAssertion */
+	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {  // NOSONAR - Intentional.
+		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the collection exists and is empty.
+	 * Asserts that all values in the collection pass the specified test.
 	 *
+	 * @param test The predicate test.
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R isEmpty() throws AssertionError {
-		if (! value().isEmpty())
-			throw error(MSG_collectionWasNotEmpty);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the collection exists and is not empty.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isNotEmpty() throws AssertionError {
-		if (value().isEmpty())
-			throw error(MSG_collectionWasEmpty);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the collection contains the expected value.
-	 *
-	 * @param entry The value to check for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isContains(E entry) throws AssertionError {
-		for (var v : value())
-			if (Utils.eq(v, entry))
-				return returns();
-		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
-	}
-
-	/**
-	 * Asserts that the collection contains the expected value.
-	 *
-	 * @param entry The value to check for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isNotContains(E entry) throws AssertionError {
+	public R isAll(Predicate<E> test) throws AssertionError {
+		if (test == null)
+			return returns();
 		value().forEach(x -> {
-			if (Utils.eq(x, entry))
-				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
+			if (! test.test(x))
+				throw error(MSG_collectionDidNotContainTestedValue, value());
 		});
 		return returns();
 	}
@@ -263,19 +227,55 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	}
 
 	/**
-	 * Asserts that all values in the collection pass the specified test.
+	 * Asserts that the collection contains the expected value.
 	 *
-	 * @param test The predicate test.
+	 * @param entry The value to check for.
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R isAll(Predicate<E> test) throws AssertionError {
-		if (test == null)
-			return returns();
+	public R isContains(E entry) throws AssertionError {
+		for (var v : value())
+			if (Utils.eq(v, entry))
+				return returns();
+		throw error(MSG_collectionDidNotContainExpectedValue, entry, value());
+	}
+
+	/**
+	 * Asserts that the collection exists and is empty.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isEmpty() throws AssertionError {
+		if (! value().isEmpty())
+			throw error(MSG_collectionWasNotEmpty);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection contains the expected value.
+	 *
+	 * @param entry The value to check for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isNotContains(E entry) throws AssertionError {
 		value().forEach(x -> {
-			if (! test.test(x))
-				throw error(MSG_collectionDidNotContainTestedValue, value());
+			if (Utils.eq(x, entry))
+				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
 		});
+		return returns();
+	}
+
+	/**
+	 * Asserts that the collection exists and is not empty.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		if (value().isEmpty())
+			throw error(MSG_collectionWasEmpty);
 		return returns();
 	}
 

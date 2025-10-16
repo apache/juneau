@@ -63,15 +63,6 @@ public class IMUsed extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public IMUsed(IMUsed copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class IMUsed extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public IMUsed(IMUsed copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class IMUsed extends BasicHttpResponse {
 		return new IMUsed(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public IMUsed setContent(String value) {
+	public IMUsed setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public IMUsed setContent(HttpEntity value) {
+	public IMUsed setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class IMUsed extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public IMUsed setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public IMUsed setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public IMUsed setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public IMUsed setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

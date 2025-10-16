@@ -38,11 +38,6 @@ public class RestOperation {
 	 */
 	public static final Object NO_BODY = "NO_BODY";
 
-	private final Object url;
-	private final String method;
-	private final Object content;
-	private boolean hasContent;
-
 	/**
 	 * Creator.
 	 *
@@ -62,7 +57,6 @@ public class RestOperation {
 	public static RestOperation of(String method, Object url) {
 		return new RestOperation(method, url, NO_BODY);
 	}
-
 	/**
 	 * Creator.
 	 *
@@ -83,6 +77,12 @@ public class RestOperation {
 	public static RestOperation of(String method, Object url, Object body) {
 		return new RestOperation(method, url, body);
 	}
+	private final Object url;
+	private final String method;
+
+	private final Object content;
+
+	private boolean hasContent;
 
 	/**
 	 * Constructor.
@@ -108,12 +108,15 @@ public class RestOperation {
 	}
 
 	/**
-	 * Bean property getter:  <property>url</property>.
+	 * Bean property getter:  <property>content</property>.
 	 *
-	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
+	 * @return
+	 * 	The value of the <property>content</property> property on this bean.
+	 * 	<br>Returns {@link #NO_BODY} if the request does not have a body set.
+	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response.
 	 */
-	public Object getUri() {
-		return url;
+	public Object getContent() {
+		return content;
 	}
 
 	/**
@@ -126,15 +129,12 @@ public class RestOperation {
 	}
 
 	/**
-	 * Bean property getter:  <property>content</property>.
+	 * Bean property getter:  <property>url</property>.
 	 *
-	 * @return
-	 * 	The value of the <property>content</property> property on this bean.
-	 * 	<br>Returns {@link #NO_BODY} if the request does not have a body set.
-	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response.
+	 * @return The value of the <property>url</property> property on this bean, or <jk>null</jk> if it is not set.
 	 */
-	public Object getContent() {
-		return content;
+	public Object getUri() {
+		return url;
 	}
 
 	/**

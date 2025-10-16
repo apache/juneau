@@ -27,27 +27,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class HasQueryAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final HasQuery DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -99,10 +78,6 @@ public class HasQueryAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements HasQuery {
 
 		private final String name, value;
@@ -123,5 +98,15 @@ public class HasQueryAnnotation {
 		public String value() {
 			return value;
 		}
+	}
+	/** Default value */
+	public static final HasQuery DEFAULT = create().build();
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
 }

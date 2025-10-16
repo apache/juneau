@@ -79,11 +79,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Last-Modified")
 public class LastModified extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Last-Modified";
 
@@ -97,18 +92,6 @@ public class LastModified extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static LastModified of(String value) {
-		return value == null ? null : new LastModified(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static LastModified of(ZonedDateTime value) {
 		return value == null ? null : new LastModified(value);
 	}
 
@@ -127,10 +110,17 @@ public class LastModified extends BasicDateHeader {
 		return value == null ? null : new LastModified(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static LastModified of(ZonedDateTime value) {
+		return value == null ? null : new LastModified(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -140,17 +130,6 @@ public class LastModified extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public LastModified(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public LastModified(ZonedDateTime value) {
 		super(NAME, value);
 	}
 
@@ -165,6 +144,17 @@ public class LastModified extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public LastModified(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public LastModified(ZonedDateTime value) {
 		super(NAME, value);
 	}
 }

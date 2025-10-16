@@ -35,61 +35,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class OpenApiAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final OpenApi DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link OpenApi} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Apply extends AnnotationApplier<OpenApi,Context.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Apply(VarResolverSession vr) {
+			super(OpenApi.class, Context.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<OpenApi> ai, Context.Builder b) {
+			OpenApi a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link OpenApi @OpenApi annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return new Builder().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		OpenApi[] value();
 	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static OpenApi copy(OpenApi a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -118,10 +102,6 @@ public class OpenApiAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationTImpl implements OpenApi {
 
 		Impl(Builder b) {
@@ -130,51 +110,46 @@ public class OpenApiAnnotation {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final OpenApi DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link OpenApi} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
 	 */
-	public static class Apply extends AnnotationApplier<OpenApi,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(OpenApi.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<OpenApi> ai, Context.Builder b) {
-			OpenApi a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static OpenApi copy(OpenApi a, VarResolverSession r) {
+		return
+			create()
+			.on(r.resolve(a.on()))
+			.onClass(a.onClass())
+			.build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link OpenApi @OpenApi annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		OpenApi[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return new Builder().on(on);
 	}
 }

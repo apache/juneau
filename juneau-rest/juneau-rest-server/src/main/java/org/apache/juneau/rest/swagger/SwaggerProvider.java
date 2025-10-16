@@ -36,34 +36,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public interface SwaggerProvider {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Represents no SwaggerProvider.
-	 *
-	 * <p>
-	 * Used on annotation to indicate that the value should be inherited from the parent class, and
-	 * ultimately {@link BasicSwaggerProvider} if not specified at any level.
-	 */
-	public abstract class Void implements SwaggerProvider {}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -105,92 +77,12 @@ public interface SwaggerProvider {
 		}
 
 		/**
-		 * Returns the var resolver in this builder if it's been specified.
-		 *
-		 * @return The var resolver.
-		 */
-		public Optional<VarResolver> varResolver() {
-			return Utils.opt(varResolver).map(Supplier::get);
-		}
-
-		/**
-		 * Returns the JSON schema generator in this builder if it's been specified.
-		 *
-		 * @return The JSON schema generator.
-		 */
-		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
-			return Utils.opt(jsonSchemaGenerator).map(Supplier::get);
-		}
-
-		/**
-		 * Returns the messages in this builder if it's been specified.
-		 *
-		 * @return The messages.
-		 */
-		public Optional<Messages> messages() {
-			return Utils.opt(messages).map(Supplier::get);
-		}
-
-		/**
 		 * Returns the file finder in this builder if it's been specified.
 		 *
 		 * @return The file finder.
 		 */
 		public Optional<FileFinder> fileFinder() {
 			return Utils.opt(fileFinder).map(Supplier::get);
-		}
-
-		/**
-		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
-		 *
-		 * @return The default implementation class if not specified via {@link #type(Class)}.
-		 */
-		protected Class<? extends SwaggerProvider> getDefaultType() {
-			return BasicSwaggerProvider.class;
-		}
-
-		/**
-		 * Specifies a subclass of {@link SwaggerProvider} to create when the {@link #build()} method is called.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder type(Class<? extends SwaggerProvider> value) {
-			creator.type(value == null ? BasicSwaggerProvider.class : value);
-			return this;
-		}
-
-		/**
-		 * Specifies the variable resolver to use for the {@link SwaggerProvider} object.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder varResolver(Supplier<VarResolver> value) {
-			varResolver = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the JSON-schema generator to use for the {@link SwaggerProvider} object.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder jsonSchemaGenerator(Supplier<JsonSchemaGenerator> value) {
-			jsonSchemaGenerator = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the messages to use for the {@link SwaggerProvider} object.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder messages(Supplier<Messages> value) {
-			messages = value;
-			return this;
 		}
 
 		/**
@@ -214,12 +106,105 @@ public interface SwaggerProvider {
 			creator.impl(value);
 			return this;
 		}
+
+		/**
+		 * Returns the JSON schema generator in this builder if it's been specified.
+		 *
+		 * @return The JSON schema generator.
+		 */
+		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
+			return Utils.opt(jsonSchemaGenerator).map(Supplier::get);
+		}
+
+		/**
+		 * Specifies the JSON-schema generator to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder jsonSchemaGenerator(Supplier<JsonSchemaGenerator> value) {
+			jsonSchemaGenerator = value;
+			return this;
+		}
+
+		/**
+		 * Returns the messages in this builder if it's been specified.
+		 *
+		 * @return The messages.
+		 */
+		public Optional<Messages> messages() {
+			return Utils.opt(messages).map(Supplier::get);
+		}
+
+		/**
+		 * Specifies the messages to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder messages(Supplier<Messages> value) {
+			messages = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link SwaggerProvider} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder type(Class<? extends SwaggerProvider> value) {
+			creator.type(value == null ? BasicSwaggerProvider.class : value);
+			return this;
+		}
+
+		/**
+		 * Returns the var resolver in this builder if it's been specified.
+		 *
+		 * @return The var resolver.
+		 */
+		public Optional<VarResolver> varResolver() {
+			return Utils.opt(varResolver).map(Supplier::get);
+		}
+
+		/**
+		 * Specifies the variable resolver to use for the {@link SwaggerProvider} object.
+		 *
+		 * @param value The new value for this setting.
+		 * @return  This object.
+		 */
+		public Builder varResolver(Supplier<VarResolver> value) {
+			varResolver = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
+		 *
+		 * @return The default implementation class if not specified via {@link #type(Class)}.
+		 */
+		protected Class<? extends SwaggerProvider> getDefaultType() {
+			return BasicSwaggerProvider.class;
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Represents no SwaggerProvider.
+	 *
+	 * <p>
+	 * Used on annotation to indicate that the value should be inherited from the parent class, and
+	 * ultimately {@link BasicSwaggerProvider} if not specified at any level.
+	 */
+	public abstract class Void implements SwaggerProvider {}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	/**
 	 * Returns the Swagger associated with the specified {@link Rest}-annotated class.
 	 *

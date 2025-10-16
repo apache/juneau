@@ -31,6 +31,7 @@ import org.apache.juneau.common.utils.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class LocalFile {
 
 	private final Class<?> clazz;
@@ -66,6 +67,28 @@ public class LocalFile {
 	}
 
 	/**
+	 * Caches the contents of this file into an internal byte array for quick future retrieval.
+	 *
+	 * @return This object.
+	 * @throws IOException If file could not be read.
+	 */
+	public LocalFile cache() throws IOException {
+		synchronized(this) {
+			this.cache = readBytes(read());
+		}
+		return this;
+	}
+
+	/**
+	 * Returns the name of this file.
+	 *
+	 * @return The name of this file.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
 	 * Returns the contents of this file.
 	 *
 	 * @return An input stream of the contents of this file.
@@ -89,27 +112,5 @@ public class LocalFile {
 	 */
 	public long size() throws IOException {
 		return (path == null ? -1 : Files.size(path));
-	}
-
-	/**
-	 * Caches the contents of this file into an internal byte array for quick future retrieval.
-	 *
-	 * @return This object.
-	 * @throws IOException If file could not be read.
-	 */
-	public LocalFile cache() throws IOException {
-		synchronized(this) {
-			this.cache = readBytes(read());
-		}
-		return this;
-	}
-
-	/**
-	 * Returns the name of this file.
-	 *
-	 * @return The name of this file.
-	 */
-	public String getName() {
-		return name;
 	}
 }

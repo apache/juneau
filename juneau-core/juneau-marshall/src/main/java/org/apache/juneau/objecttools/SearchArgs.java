@@ -31,22 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class SearchArgs {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param args Comma-delimited list of search arguments.
-	 * @return A new {@link SearchArgs} object.
-	 */
-	public static SearchArgs create(String args) {
-		if (args == null) return null;
-		return new SearchArgs(args);
-	}
-
 	/**
 	 * Static creator.
 	 *
@@ -58,20 +42,17 @@ public class SearchArgs {
 		return new SearchArgs(args);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final Map<String,String> search = map();
-
 	/**
-	 * Constructor.
+	 * Static creator.
 	 *
-	 * @param searchArgs Search arguments.
+	 * @param args Comma-delimited list of search arguments.
+	 * @return A new {@link SearchArgs} object.
 	 */
-	public SearchArgs(String searchArgs) {
-		this(alist(splita(searchArgs)));
+	public static SearchArgs create(String args) {
+		if (args == null) return null;
+		return new SearchArgs(args);
 	}
+	private final Map<String,String> search = map();
 
 	/**
 	 * Constructor.
@@ -86,6 +67,15 @@ public class SearchArgs {
 			char c = s.charAt(i);
 			append(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
 		});
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param searchArgs Search arguments.
+	 */
+	public SearchArgs(String searchArgs) {
+		this(alist(splita(searchArgs)));
 	}
 
 	/**

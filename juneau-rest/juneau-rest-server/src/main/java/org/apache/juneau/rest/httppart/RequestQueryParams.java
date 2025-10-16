@@ -185,32 +185,39 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	/**
-	 * Sets the parser to use for part values.
+	 * Adds request parameter values.
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * Parameters are added to the end.
+	 * <br>Existing parameters with the same name are not changed.
+	 *
+	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestQueryParams parser(HttpPartParserSession value) {
-		this.parser = value;
-		forEach(x -> x.parser(parser));
+	public RequestQueryParams add(NameValuePair...parameters) {
+		Utils.assertArgNotNull("parameters", parameters);
+		for (NameValuePair p : parameters)
+			if (p != null)
+				add(p.getName(), p.getValue());
 		return this;
 	}
 
 	/**
-	 * Sets case sensitivity for names in this list.
+	 * Adds a parameter value.
 	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Existing parameter with the same name are not changed.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param value The parameter value.
+	 * @return This object.
 	 */
-	public RequestQueryParams caseSensitive(boolean value) {
-		this.caseSensitive = value;
+	public RequestQueryParams add(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		add(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Basic operations.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Adds default entries to these parameters.
 	 *
@@ -262,104 +269,33 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	/**
-	 * Adds a parameter value.
+	 * Converts this object to a query string.
 	 *
 	 * <p>
-	 * Parameter is added to the end.
-	 * <br>Existing parameter with the same name are not changed.
+	 * Returned query string does not start with <js>'?'</js>.
 	 *
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @param value The parameter value.
-	 * @return This object.
+	 * @return A new query string, or an empty string if this object is empty.
 	 */
-	public RequestQueryParams add(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		add(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
-		return this;
+	public String asQueryString() {
+		StringBuilder sb = new StringBuilder();
+		for (RequestQueryParam e : this) {
+			if (sb.length() > 0)
+				sb.append("&");
+			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
+		}
+		return sb.toString();
 	}
 
 	/**
-	 * Adds request parameter values.
+	 * Sets case sensitivity for names in this list.
 	 *
-	 * <p>
-	 * Parameters are added to the end.
-	 * <br>Existing parameters with the same name are not changed.
-	 *
-	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
-	 * @return This object.
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
 	 */
-	public RequestQueryParams add(NameValuePair...parameters) {
-		Utils.assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters)
-			if (p != null)
-				add(p.getName(), p.getValue());
+	public RequestQueryParams caseSensitive(boolean value) {
+		this.caseSensitive = value;
 		return this;
 	}
-
-	/**
-	 * Sets a parameter value.
-	 *
-	 * <p>
-	 * Parameter is added to the end.
-	 * <br>Any previous parameters with the same name are removed.
-	 *
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The parameter value.
-	 * 	<br>Converted to a string using {@link Object#toString()}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestQueryParams set(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		set(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
-		return this;
-	}
-
-	/**
-	 * Sets request header values.
-	 *
-	 * <p>
-	 * Parameters are added to the end of the headers.
-	 * <br>Any previous parameters with the same name are removed.
-	 *
-	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestQueryParams set(NameValuePair...parameters) {
-		Utils.assertArgNotNull("headers", parameters);
-		for (NameValuePair p : parameters)
-			remove(p);
-		for (NameValuePair p : parameters)
-			add(p);
-		return this;
-	}
-
-	/**
-	 * Remove parameters.
-	 *
-	 * @param name The parameter names.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestQueryParams remove(String name) {
-		Utils.assertArgNotNull("name", name);
-		removeIf(x -> eq(x.getName(), name));
-		return this;
-	}
-
-	/**
-	 * Returns a copy of this object but only with the specified param names copied.
-	 *
-	 * @param names The list to include in the copy.
-	 * @return A new list object.
-	 */
-	public RequestQueryParams subset(String...names) {
-		return new RequestQueryParams(this, names);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Convenience getters.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns <jk>true</jk> if the parameters with the specified name is present.
@@ -386,6 +322,55 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	/**
+	 * Makes a copy of these parameters.
+	 *
+	 * @return A new parameters object.
+	 */
+	public RequestQueryParams copy() {
+		return new RequestQueryParams(this);
+	}
+
+	/**
+	 * Returns the query parameter as the specified bean type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param type The bean type to create.
+	 * @return The bean, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
+		String name = HttpParts.getName(QUERY, cm).orElseThrow(()->new BasicRuntimeException("@Query(name) not found on class {0}", className(type)));
+		return get(name).as(type);
+	}
+	/**
+	 * Returns the condensed header with the specified name.
+	 *
+	 * <p>
+	 * If multiple headers are present, they will be combined into a single comma-delimited list.
+	 *
+	 * @param name The header name.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	public RequestQueryParam get(String name) {
+		List<RequestQueryParam> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestQueryParam(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0, j = l.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestQueryParam(req, name, sb.toString()).parser(parser);
+	}
+
+	/**
 	 * Returns all the parameters with the specified name.
 	 *
 	 * @param name The parameter name.
@@ -393,38 +378,6 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	 */
 	public List<RequestQueryParam> getAll(String name) {
 		return stream(name).collect(toList());
-	}
-
-	/**
-	 * Returns all headers with the specified name.
-	 *
-	 * @param name The header name.
-	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
-	 */
-	public Stream<RequestQueryParam> stream(String name) {
-		return stream().filter(x -> eq(x.getName(), name));
-	}
-
-	/**
-	 * Returns all headers in sorted order.
-	 *
-	 * @return The stream of all headers in sorted order.
-	 */
-	public Stream<RequestQueryParam> getSorted() {
-		Comparator<RequestQueryParam> x;
-		if (caseSensitive)
-			x = Comparator.comparing(RequestQueryParam::getName);
-		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
-		return stream().sorted(x);
-	}
-
-	/**
-	 * Returns all the unique header names in this list.
-	 * @return The list of all unique header names in this list.
-	 */
-	public List<String> getNames() {
-		return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**
@@ -460,75 +413,21 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	/**
-	 * Returns the condensed header with the specified name.
-	 *
-	 * <p>
-	 * If multiple headers are present, they will be combined into a single comma-delimited list.
-	 *
-	 * @param name The header name.
-	 * @return The header, never <jk>null</jk>.
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
 	 */
-	public RequestQueryParam get(String name) {
-		List<RequestQueryParam> l = getAll(name);
-		if (l.isEmpty())
-			return new RequestQueryParam(req, name, null).parser(parser);
-		if (l.size() == 1)
-			return l.get(0);
-		StringBuilder sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(", ");
-			sb.append(l.get(i).getValue());
-		}
-		return new RequestQueryParam(req, name, sb.toString()).parser(parser);
+	public List<String> getNames() {
+		return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**
-	 * Returns the query parameter as the specified bean type.
+	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.
 	 *
-	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
-	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
-	 *
-	 * @param <T> The bean type to create.
-	 * @param type The bean type to create.
-	 * @return The bean, never <jk>null</jk>.
+	 * @return
+	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(QUERY, cm).orElseThrow(()->new BasicRuntimeException("@Query(name) not found on class {0}", className(type)));
-		return get(name).as(type);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Converts this object to a query string.
-	 *
-	 * <p>
-	 * Returned query string does not start with <js>'?'</js>.
-	 *
-	 * @return A new query string, or an empty string if this object is empty.
-	 */
-	public String asQueryString() {
-		StringBuilder sb = new StringBuilder();
-		for (RequestQueryParam e : this) {
-			if (sb.length() > 0)
-				sb.append("&");
-			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Makes a copy of these parameters.
-	 *
-	 * @return A new parameters object.
-	 */
-	public RequestQueryParams copy() {
-		return new RequestQueryParams(this);
+	public Optional<PageArgs> getPageArgs() {
+		return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null)));
 	}
 
 	/**
@@ -542,16 +441,6 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	/**
-	 * Locates the view query argument ({@code &amp;v=}) in the query string and returns them as a {@link ViewArgs} object.
-	 *
-	 * @return
-	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<ViewArgs> getViewArgs() {
-		return ofNullable(ViewArgs.create(get("v").asString().orElse(null)));
-	}
-
-	/**
 	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
 	 *
 	 * @return
@@ -562,19 +451,109 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 	}
 
 	/**
-	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.
+	 * Returns all headers in sorted order.
 	 *
-	 * @return
-	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 * @return The stream of all headers in sorted order.
 	 */
-	public Optional<PageArgs> getPageArgs() {
-		return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null)));
+	public Stream<RequestQueryParam> getSorted() {
+		Comparator<RequestQueryParam> x;
+		if (caseSensitive)
+			x = Comparator.comparing(RequestQueryParam::getName);
+		else
+			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
 	}
 
-	private boolean eq(String s1, String s2) {
-		if (caseSensitive)
-			return Utils.eq(s1, s2);
-		return Utils.eqic(s1, s2);
+	/**
+	 * Locates the view query argument ({@code &amp;v=}) in the query string and returns them as a {@link ViewArgs} object.
+	 *
+	 * @return
+	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<ViewArgs> getViewArgs() {
+		return ofNullable(ViewArgs.create(get("v").asString().orElse(null)));
+	}
+	/**
+	 * Sets the parser to use for part values.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestQueryParams parser(HttpPartParserSession value) {
+		this.parser = value;
+		forEach(x -> x.parser(parser));
+		return this;
+	}
+
+	/**
+	 * Remove parameters.
+	 *
+	 * @param name The parameter names.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestQueryParams remove(String name) {
+		Utils.assertArgNotNull("name", name);
+		removeIf(x -> eq(x.getName(), name));
+		return this;
+	}
+
+	/**
+	 * Sets request header values.
+	 *
+	 * <p>
+	 * Parameters are added to the end of the headers.
+	 * <br>Any previous parameters with the same name are removed.
+	 *
+	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestQueryParams set(NameValuePair...parameters) {
+		Utils.assertArgNotNull("headers", parameters);
+		for (NameValuePair p : parameters)
+			remove(p);
+		for (NameValuePair p : parameters)
+			add(p);
+		return this;
+	}
+
+	/**
+	 * Sets a parameter value.
+	 *
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Any previous parameters with the same name are removed.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The parameter value.
+	 * 	<br>Converted to a string using {@link Object#toString()}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestQueryParams set(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		set(new RequestQueryParam(req, name, Utils.s(value)).parser(parser));
+		return this;
+	}
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public Stream<RequestQueryParam> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
+	}
+
+	/**
+	 * Returns a copy of this object but only with the specified param names copied.
+	 *
+	 * @param names The list to include in the copy.
+	 * @return A new list object.
+	 */
+	public RequestQueryParams subset(String...names) {
+		return new RequestQueryParams(this, names);
 	}
 
 	@Override /* Overridden from Object */
@@ -583,5 +562,11 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		for (String n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
+	}
+
+	private boolean eq(String s1, String s2) {
+		if (caseSensitive)
+			return Utils.eq(s1, s2);
+		return Utils.eqic(s1, s2);
 	}
 }

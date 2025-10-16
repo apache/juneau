@@ -42,45 +42,6 @@ public class Namespace {
 	private static final ConcurrentHashMap<String,Namespace> CACHE = new ConcurrentHashMap<>();
 
 	/**
-	 * Create a {@link Namespace} with the specified name and URI.
-	 *
-	 * <p>
-	 * Previously-encountered name/uri pairs return a cached copy.
-	 *
-	 * @param name The namespace name.  See {@link Namespace#getName()}.
-	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.
-	 * @return The namespace object.
-	 */
-	public static Namespace of(String name, String uri) {
-		String key = name + ":" + uri;
-		Namespace n = CACHE.get(key);
-		if (n == null) {
-			n = new Namespace(key, name, uri);
-			Namespace n2 = CACHE.putIfAbsent(key, n);
-			return (n2 == null ? n : n2);
-		}
-		return n;
-	}
-
-	/**
-	 * Create a {@link Namespace} from a <js>"name:uri"</js> string pair.
-	 *
-	 * @param key The key/pair string.
-	 * @return The namespace object.
-	 */
-	public static Namespace of(String key) {
-		Namespace n = CACHE.get(key);
-		if (n != null)
-			return n;
-		int i = key.indexOf(':');
-		if (i == -1)
-			return of(key, null);
-		if (key.startsWith("http://") || key.startsWith("https://"))
-			return of(null, key);
-		return of(key.substring(0, i).trim(), key.substring(i+1).trim());
-	}
-
-	/**
 	 * Converts the specified object into a {@link Namespace} object.
 	 *
 	 * <p>
@@ -155,6 +116,45 @@ public class Namespace {
 		}
 
 		throw new BasicRuntimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
+	}
+
+	/**
+	 * Create a {@link Namespace} from a <js>"name:uri"</js> string pair.
+	 *
+	 * @param key The key/pair string.
+	 * @return The namespace object.
+	 */
+	public static Namespace of(String key) {
+		Namespace n = CACHE.get(key);
+		if (n != null)
+			return n;
+		int i = key.indexOf(':');
+		if (i == -1)
+			return of(key, null);
+		if (key.startsWith("http://") || key.startsWith("https://"))
+			return of(null, key);
+		return of(key.substring(0, i).trim(), key.substring(i+1).trim());
+	}
+
+	/**
+	 * Create a {@link Namespace} with the specified name and URI.
+	 *
+	 * <p>
+	 * Previously-encountered name/uri pairs return a cached copy.
+	 *
+	 * @param name The namespace name.  See {@link Namespace#getName()}.
+	 * @param uri The namespace URI.  See {@link Namespace#getUri()}.
+	 * @return The namespace object.
+	 */
+	public static Namespace of(String name, String uri) {
+		String key = name + ":" + uri;
+		Namespace n = CACHE.get(key);
+		if (n == null) {
+			n = new Namespace(key, name, uri);
+			Namespace n2 = CACHE.putIfAbsent(key, n);
+			return (n2 == null ? n : n2);
+		}
+		return n;
 	}
 
 	final String key, name, uri;

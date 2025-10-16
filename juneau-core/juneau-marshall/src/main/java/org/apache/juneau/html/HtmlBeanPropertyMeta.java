@@ -32,14 +32,39 @@ import org.apache.juneau.html.annotation.*;
 @SuppressWarnings("rawtypes")
 public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
+	static class Builder {
+		boolean noTables, noTableHeaders;
+		HtmlFormat format = HtmlFormat.HTML;
+		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);
+		String link, anchorText, style;
+
+		void findHtmlInfo(Html html) {
+			if (html == null)
+				return;
+			format = html.format();
+			if (html.noTables())
+				noTables = html.noTables();
+			if (html.noTableHeaders())
+				noTableHeaders = html.noTableHeaders();
+			if (html.render() != HtmlRender.class)
+				render.type(html.render());
+			if (! html.link().isEmpty())
+				link = html.link();
+			if (! html.anchorText().isEmpty())
+				anchorText = html.anchorText();
+			if (! html.style().isEmpty())
+				style = html.style();
+		}
+	}
+
 	/**
 	 * Default instance.
 	 */
 	public static final HtmlBeanPropertyMeta DEFAULT = new HtmlBeanPropertyMeta();
-
 	private final boolean noTables, noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender render;
+
 	private final String link, anchorText, style;
 
 	/**
@@ -79,29 +104,63 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		this.style = null;
 	}
 
-	static class Builder {
-		boolean noTables, noTableHeaders;
-		HtmlFormat format = HtmlFormat.HTML;
-		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);
-		String link, anchorText, style;
+	/**
+	 * Specifies the anchor text for this property.
+	 *
+	 * <p>
+	 * This value is specified via the {@link Html#anchorText() @Html(anchorText)} annotation.
+	 *
+	 * @return The link string, or <jk>null</jk> if not specified.
+	 */
+	public String getAnchorText() {
+		return anchorText;
+	}
 
-		void findHtmlInfo(Html html) {
-			if (html == null)
-				return;
-			format = html.format();
-			if (html.noTables())
-				noTables = html.noTables();
-			if (html.noTableHeaders())
-				noTableHeaders = html.noTableHeaders();
-			if (html.render() != HtmlRender.class)
-				render.type(html.render());
-			if (! html.link().isEmpty())
-				link = html.link();
-			if (! html.anchorText().isEmpty())
-				anchorText = html.anchorText();
-			if (! html.style().isEmpty())
-				style = html.style();
-		}
+	/**
+	 * Adds a hyperlink to this value in HTML.
+	 *
+	 * <p>
+	 * This value is specified via the {@link Html#link() @Html(link)} annotation.
+	 *
+	 * @return The link string, or <jk>null</jk> if not specified.
+	 */
+	public String getLink() {
+		return link;
+	}
+
+	/**
+	 * Returns the render class for rendering the style and contents of this property value in HTML.
+	 *
+	 * <p>
+	 * This value is specified via the {@link Html#render() @Html(render)} annotation.
+	 *
+	 * @return The render class, never <jk>null</jk>.
+	 */
+	public HtmlRender getRender() {
+		return render;
+	}
+
+	/**
+	 * Returns the CSS style string for this property.
+	 *
+	 * <p>
+	 * This value is specified via the {@link Html#style() @Html(style)} annotation.
+	 *
+	 * @return The CSS style string, or <jk>null</jk> if not specified.
+	 */
+	public String getStyle() {
+		return style;
+	}
+
+	/**
+	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
+	 *
+	 * @return
+	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html(noTableHeaders)} is
+	 * 	<jk>true</jk>.
+	 */
+	public boolean isNoTableHeaders() {
+		return noTableHeaders;
 	}
 
 	/**
@@ -111,24 +170,6 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	protected HtmlFormat getFormat() {
 		return format;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
-	 *
-	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
-	 */
-	protected boolean isXml() {
-		return format == HtmlFormat.XML;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
-	 *
-	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
-	 */
-	protected boolean isPlainText() {
-		return format == HtmlFormat.PLAIN_TEXT;
 	}
 
 	/**
@@ -170,61 +211,20 @@ public class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	}
 
 	/**
-	 * Returns whether this bean property should not include table headers when serialized as an HTML table.
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 *
-	 * @return
-	 * 	<jk>true</jk> if the the {@link Html @Html} annotation is specified, and {@link Html#noTableHeaders() @Html(noTableHeaders)} is
-	 * 	<jk>true</jk>.
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 */
-	public boolean isNoTableHeaders() {
-		return noTableHeaders;
+	protected boolean isPlainText() {
+		return format == HtmlFormat.PLAIN_TEXT;
 	}
 
 	/**
-	 * Returns the render class for rendering the style and contents of this property value in HTML.
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 *
-	 * <p>
-	 * This value is specified via the {@link Html#render() @Html(render)} annotation.
-	 *
-	 * @return The render class, never <jk>null</jk>.
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
-	public HtmlRender getRender() {
-		return render;
-	}
-
-	/**
-	 * Adds a hyperlink to this value in HTML.
-	 *
-	 * <p>
-	 * This value is specified via the {@link Html#link() @Html(link)} annotation.
-	 *
-	 * @return The link string, or <jk>null</jk> if not specified.
-	 */
-	public String getLink() {
-		return link;
-	}
-
-	/**
-	 * Specifies the anchor text for this property.
-	 *
-	 * <p>
-	 * This value is specified via the {@link Html#anchorText() @Html(anchorText)} annotation.
-	 *
-	 * @return The link string, or <jk>null</jk> if not specified.
-	 */
-	public String getAnchorText() {
-		return anchorText;
-	}
-
-	/**
-	 * Returns the CSS style string for this property.
-	 *
-	 * <p>
-	 * This value is specified via the {@link Html#style() @Html(style)} annotation.
-	 *
-	 * @return The CSS style string, or <jk>null</jk> if not specified.
-	 */
-	public String getStyle() {
-		return style;
+	protected boolean isXml() {
+		return format == HtmlFormat.XML;
 	}
 }

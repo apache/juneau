@@ -30,8 +30,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class SwaggerBuilder {
 
-	private SwaggerBuilder() {}
-
 	/**
 	 * Creates an empty {@link Contact} element.
 	 *
@@ -417,4 +415,6 @@ public class SwaggerBuilder {
 	public static final Xml xml() {
 		return new Xml();
 	}
+
+	private SwaggerBuilder() {}
 }

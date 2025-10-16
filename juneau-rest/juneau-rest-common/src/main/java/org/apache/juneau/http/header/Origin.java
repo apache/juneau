@@ -32,11 +32,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Origin")
 public class Origin extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Origin";
 
@@ -66,11 +61,6 @@ public class Origin extends BasicStringHeader {
 	public static Origin of(Supplier<String> value) {
 		return value == null ? null : new Origin(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -60,7 +60,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#option() option()}
- * 		<li class='jm'>{@link HtmlBuilder#option(Object, Object...) option(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#option(Object) option(Object)}
  * 	</ul>
  * </ul>
  * </p>
@@ -97,6 +97,41 @@ public class Option extends HtmlElementText {
 		value(value).text(text);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Option _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Option contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option dir(String value) {
+		super.dir(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-disabled">disabled</a> attribute.
 	 *
@@ -111,13 +146,25 @@ public class Option extends HtmlElementText {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Option disabled(Object value) {
 		attr("disabled", deminimize(value, "disabled"));
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option id(String value) {
+		super.id(value);
 		return this;
 	}
 
@@ -131,90 +178,11 @@ public class Option extends HtmlElementText {
 	 * <p>
 	 * The label should be user-friendly and descriptive of what the option represents.
 	 *
-	 * @param label The user-visible label for the option.
+	 * @param value The user-visible label for the option.
 	 * @return This object.
 	 */
 	public Option label(String value) {
 		attr("label", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-selected">selected</a> attribute.
-	 *
-	 * <p>
-	 * Whether the option is selected by default.
-	 *
-	 * <p>
-	 * This attribute uses deminimized values:
-	 * <ul>
-	 * 	<li><jk>false</jk> - Attribute is not added</li>
-	 * 	<li><jk>true</jk> - Attribute is added as <js>"selected"</js></li>
-	 * 	<li>Other values - Passed through as-is</li>
-	 * </ul>
-	 *
-	 * @param selected
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Option selected(Object value) {
-		attr("selected", deminimize(value, "selected"));
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-value">value</a> attribute.
-	 *
-	 * <p>
-	 * Value to be used for form submission.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Option value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Option _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option id(String value) {
-		super.id(value);
 		return this;
 	}
 
@@ -524,6 +492,30 @@ public class Option extends HtmlElementText {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-selected">selected</a> attribute.
+	 *
+	 * <p>
+	 * Whether the option is selected by default.
+	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"selected"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Option selected(Object value) {
+		attr("selected", deminimize(value, "selected"));
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Option spellcheck(Object value) {
 		super.spellcheck(value);
@@ -542,6 +534,12 @@ public class Option extends HtmlElementText {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementText */
+	public Option text(Object value) {
+		super.text(value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Option title(String value) {
 		super.title(value);
@@ -554,21 +552,19 @@ public class Option extends HtmlElementText {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementText */
-	public Option text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Option attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-option-value">value</a> attribute.
+	 *
+	 * <p>
+	 * Value to be used for form submission.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Option value(Object value) {
+		attr("value", value);
 		return this;
 	}
 }

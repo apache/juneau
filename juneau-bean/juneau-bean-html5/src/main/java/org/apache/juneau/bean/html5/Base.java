@@ -67,63 +67,12 @@ public class Base extends HtmlElementVoid {
 	/**
 	 * Creates a {@link Base} element with the specified {@link Base#href(Object)} attribute.
 	 *
-	 * @param href The {@link Base#href(Object)} attribute.
+	 * @param value The {@link Base#href(Object)} attribute.
 	 */
-	public Base(Object href) {
-		href(href);
+	public Base(Object value) {
+		href(value);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
-	 *
-	 * <p>
-	 * Document base URL.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param href
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Base href(Object value) {
-		attrUri("href", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies the default target for all links and forms in the document.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"_blank"</js> - Open in a new window/tab</li>
-	 * 	<li><js>"_self"</js> - Open in the same frame (default)</li>
-	 * 	<li><js>"_parent"</js> - Open in the parent frame</li>
-	 * 	<li><js>"_top"</js> - Open in the full body of the window</li>
-	 * 	<li><js>"framename"</js> - Open in a named frame</li>
-	 * </ul>
-	 *
-	 * @param target The default target for links and forms.
-	 * @return This object.
-	 */
-	public Base target(String value) {
-		attr("target", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Base _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -133,6 +82,17 @@ public class Base extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Base accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Base attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Base attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -151,6 +111,29 @@ public class Base extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Base hidden(Object value) {
 		super.hidden(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-href">href</a> attribute.
+	 *
+	 * <p>
+	 * Document base URL.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Base href(Object value) {
+		attrUri("href", value);
 		return this;
 	}
 
@@ -484,6 +467,31 @@ public class Base extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-base-target">target</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies the default target for all links and forms in the document.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 * 	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 * 	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 * 	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 * 	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param value The default target for links and forms.
+	 * @return This object.
+	 */
+	public Base target(String value) {
+		attr("target", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Base title(String value) {
 		super.title(value);
@@ -493,18 +501,6 @@ public class Base extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Base translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Base attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Base attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

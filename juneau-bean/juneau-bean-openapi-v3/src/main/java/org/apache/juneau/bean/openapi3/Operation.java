@@ -129,81 +129,23 @@ public class Operation extends OpenApiElement {
 	}
 
 	/**
-	 * Returns the tags list.
-	 *
-	 * @return The tags list.
-	 */
-	public List<String> getTags() {
-		return tags;
-	}
-
-	/**
-	 * Sets the tags list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setTags(List<String> value) {
-		this.tags = value;
-		return this;
-	}
-
-	/**
-	 * Sets the tags list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setTags(String...value) {
-		setTags(listBuilder(String.class).sparse().add(value).build());
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>tags</property>.
+	 * Bean property fluent setter:  <property>callbacks</property>.
 	 *
 	 * <p>
-	 * A list of tags for API documentation control.
+	 * A map of possible out-of band callbacks related to the parent operation.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
+	 * @param name
+	 * 	The name of the callback.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param callback
+	 * 	The callback object.
+	 * 	<br>Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Operation addTags(String...values) {
-		tags = listBuilder(tags).sparse().add(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags for API documentation control.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addTags(Collection<String> values) {
-		tags = listBuilder(tags).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addParameters(Parameter...values) {
-		parameters = listBuilder(parameters).sparse().add(values).build();
+	public Operation addCallback(String name, Callback callback) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("callback", callback);
+		callbacks = mapBuilder(callbacks).sparse().add(name, callback).build();
 		return this;
 	}
 
@@ -220,6 +162,22 @@ public class Operation extends OpenApiElement {
 	 */
 	public Operation addParameters(Collection<Parameter> values) {
 		parameters = listBuilder(parameters).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addParameters(Parameter...values) {
+		parameters = listBuilder(parameters).sparse().add(values).build();
 		return this;
 	}
 
@@ -245,23 +203,18 @@ public class Operation extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>callbacks</property>.
+	 * Bean property fluent setter:  <property>security</property>.
 	 *
 	 * <p>
-	 * A map of possible out-of band callbacks related to the parent operation.
+	 * A declaration of which security mechanisms can be used for this operation.
 	 *
-	 * @param name
-	 * 	The name of the callback.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param callback
-	 * 	The callback object.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Operation addCallback(String name, Callback callback) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("callback", callback);
-		callbacks = mapBuilder(callbacks).sparse().add(name, callback).build();
+	public Operation addSecurity(Collection<SecurityRequirement> values) {
+		security = listBuilder(security).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -282,18 +235,18 @@ public class Operation extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>security</property>.
+	 * Bean property fluent setter:  <property>servers</property>.
 	 *
 	 * <p>
-	 * A declaration of which security mechanisms can be used for this operation.
+	 * An alternative server array to service this operation.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Operation addSecurity(Collection<SecurityRequirement> values) {
-		security = listBuilder(security).sparse().addAll(values).build();
+	public Operation addServers(Collection<Server> values) {
+		servers = listBuilder(servers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -314,309 +267,34 @@ public class Operation extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>servers</property>.
+	 * Bean property appender:  <property>tags</property>.
 	 *
 	 * <p>
-	 * An alternative server array to service this operation.
+	 * A list of tags for API documentation control.
 	 *
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Operation addServers(Collection<Server> values) {
-		servers = listBuilder(servers).sparse().addAll(values).build();
+	public Operation addTags(Collection<String> values) {
+		tags = listBuilder(tags).sparse().addAll(values).build();
 		return this;
 	}
 
 	/**
-	 * Returns the summary.
+	 * Bean property appender:  <property>tags</property>.
 	 *
-	 * @return The summary.
-	 */
-	public String getSummary() {
-		return summary;
-	}
-
-	/**
-	 * Sets the summary.
+	 * <p>
+	 * A list of tags for API documentation control.
 	 *
-	 * @param value The new value for this property.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Operation setSummary(String value) {
-		this.summary = value;
-		return this;
-	}
-
-	/**
-	 * Returns the description.
-	 *
-	 * @return The description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Sets the description.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setDescription(String value) {
-		this.description = value;
-		return this;
-	}
-
-	/**
-	 * Returns the operation ID.
-	 *
-	 * @return The operation ID.
-	 */
-	public String getOperationId() {
-		return operationId;
-	}
-
-	/**
-	 * Sets the operation ID.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setOperationId(String value) {
-		this.operationId = value;
-		return this;
-	}
-
-	/**
-	 * Returns the external documentation.
-	 *
-	 * @return The external documentation.
-	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
-
-	/**
-	 * Sets the external documentation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setExternalDocs(ExternalDocumentation value) {
-		this.externalDocs = value;
-		return this;
-	}
-
-	/**
-	 * Returns the parameters list.
-	 *
-	 * @return The parameters list.
-	 */
-	public List<Parameter> getParameters() {
-		return parameters;
-	}
-
-	/**
-	 * Returns the parameter with the specified type and name.
-	 *
-	 * @param in The parameter in.  Must not be <jk>null</jk>.
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @return The matching parameter, or <jk>null</jk> if not found.
-	 */
-	public Parameter getParameter(String in, String name) {
-		assertArgNotNull("in", in);
-		assertArgNotNull("name", name);
-		if (parameters != null)
-			for (var p : parameters)
-				if (eq(p.getIn(), in) && eq(p.getName(), name))
-					return p;
-		return null;
-	}
-
-	/**
-	 * Sets the parameters list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setParameters(List<Parameter> value) {
-		this.parameters = value;
-		return this;
-	}
-
-	/**
-	 * Sets the parameters list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setParameters(Parameter...value) {
-		setParameters(listBuilder(Parameter.class).sparse().add(value).build());
-		return this;
-	}
-
-	/**
-	 * Returns the request body.
-	 *
-	 * @return The request body.
-	 */
-	public RequestBodyInfo getRequestBody() {
-		return requestBody;
-	}
-
-	/**
-	 * Sets the request body.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setRequestBody(RequestBodyInfo value) {
-		this.requestBody = value;
-		return this;
-	}
-
-	/**
-	 * Returns the responses map.
-	 *
-	 * @return The responses map.
-	 */
-	public Map<String,Response> getResponses() {
-		return responses;
-	}
-
-	/**
-	 * Returns the response with the given status code.
-	 *
-	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
-	 * @return The response, or <jk>null</jk> if not found.
-	 */
-	public Response getResponse(String status) {
-		assertArgNotNull("status", status);
-		return responses == null ? null : responses.get(status);
-	}
-
-	/**
-	 * Returns the response with the given status code.
-	 *
-	 * @param status The HTTP status code.
-	 * @return The response, or <jk>null</jk> if not found.
-	 */
-	public Response getResponse(int status) {
-		return getResponse(String.valueOf(status));
-	}
-
-	/**
-	 * Sets the responses map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setResponses(Map<String,Response> value) {
-		this.responses = value;
-		return this;
-	}
-
-	/**
-	 * Returns the callbacks map.
-	 *
-	 * @return The callbacks map.
-	 */
-	public Map<String,Callback> getCallbacks() {
-		return callbacks;
-	}
-
-	/**
-	 * Sets the callbacks map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setCallbacks(Map<String,Callback> value) {
-		this.callbacks = value;
-		return this;
-	}
-
-	/**
-	 * Returns the deprecated flag.
-	 *
-	 * @return The deprecated flag.
-	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
-
-	/**
-	 * Sets the deprecated flag.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setDeprecated(Boolean value) {
-		this.deprecated = value;
-		return this;
-	}
-
-	/**
-	 * Returns the security requirements list.
-	 *
-	 * @return The security requirements list.
-	 */
-	public List<SecurityRequirement> getSecurity() {
-		return security;
-	}
-
-	/**
-	 * Sets the security requirements list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setSecurity(List<SecurityRequirement> value) {
-		this.security = value;
-		return this;
-	}
-
-	/**
-	 * Sets the security requirements list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setSecurity(SecurityRequirement...value) {
-		setSecurity(listBuilder(SecurityRequirement.class).sparse().add(value).build());
-		return this;
-	}
-
-	/**
-	 * Returns the servers list.
-	 *
-	 * @return The servers list.
-	 */
-	public List<Server> getServers() {
-		return servers;
-	}
-
-	/**
-	 * Sets the servers list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setServers(List<Server> value) {
-		this.servers = value;
-		return this;
-	}
-
-	/**
-	 * Sets the servers list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Operation setServers(Server...value) {
-		setServers(listBuilder(Server.class).sparse().add(value).build());
+	public Operation addTags(String...values) {
+		tags = listBuilder(tags).sparse().add(values).build();
 		return this;
 	}
 
@@ -649,6 +327,171 @@ public class Operation extends OpenApiElement {
 		};
 	}
 
+	/**
+	 * Returns the callbacks map.
+	 *
+	 * @return The callbacks map.
+	 */
+	public Map<String,Callback> getCallbacks() {
+		return callbacks;
+	}
+
+	/**
+	 * Returns the deprecated flag.
+	 *
+	 * @return The deprecated flag.
+	 */
+	public Boolean getDeprecated() {
+		return deprecated;
+	}
+
+	/**
+	 * Returns the description.
+	 *
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Returns the external documentation.
+	 *
+	 * @return The external documentation.
+	 */
+	public ExternalDocumentation getExternalDocs() {
+		return externalDocs;
+	}
+
+	/**
+	 * Returns the operation ID.
+	 *
+	 * @return The operation ID.
+	 */
+	public String getOperationId() {
+		return operationId;
+	}
+
+	/**
+	 * Returns the parameter with the specified type and name.
+	 *
+	 * @param in The parameter in.  Must not be <jk>null</jk>.
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @return The matching parameter, or <jk>null</jk> if not found.
+	 */
+	public Parameter getParameter(String in, String name) {
+		assertArgNotNull("in", in);
+		assertArgNotNull("name", name);
+		if (parameters != null)
+			for (var p : parameters)
+				if (eq(p.getIn(), in) && eq(p.getName(), name))
+					return p;
+		return null;
+	}
+
+	/**
+	 * Returns the parameters list.
+	 *
+	 * @return The parameters list.
+	 */
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * Returns the request body.
+	 *
+	 * @return The request body.
+	 */
+	public RequestBodyInfo getRequestBody() {
+		return requestBody;
+	}
+
+	/**
+	 * Returns the response with the given status code.
+	 *
+	 * @param status The HTTP status code.
+	 * @return The response, or <jk>null</jk> if not found.
+	 */
+	public Response getResponse(int status) {
+		return getResponse(String.valueOf(status));
+	}
+
+	/**
+	 * Returns the response with the given status code.
+	 *
+	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
+	 * @return The response, or <jk>null</jk> if not found.
+	 */
+	public Response getResponse(String status) {
+		assertArgNotNull("status", status);
+		return responses == null ? null : responses.get(status);
+	}
+
+	/**
+	 * Returns the responses map.
+	 *
+	 * @return The responses map.
+	 */
+	public Map<String,Response> getResponses() {
+		return responses;
+	}
+
+	/**
+	 * Returns the security requirements list.
+	 *
+	 * @return The security requirements list.
+	 */
+	public List<SecurityRequirement> getSecurity() {
+		return security;
+	}
+
+	/**
+	 * Returns the servers list.
+	 *
+	 * @return The servers list.
+	 */
+	public List<Server> getServers() {
+		return servers;
+	}
+
+	/**
+	 * Returns the summary.
+	 *
+	 * @return The summary.
+	 */
+	public String getSummary() {
+		return summary;
+	}
+
+	/**
+	 * Returns the tags list.
+	 *
+	 * @return The tags list.
+	 */
+	public List<String> getTags() {
+		return tags;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(callbacks != null, "callbacks")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(description != null, "description")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(operationId != null, "operationId")
+			.addIf(parameters != null, "parameters")
+			.addIf(requestBody != null, "requestBody")
+			.addIf(responses != null, "responses")
+			.addIf(security != null, "security")
+			.addIf(servers != null, "servers")
+			.addIf(summary != null, "summary")
+			.addIf(tags != null, "tags")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
 	@Override /* Overridden from OpenApiElement */
 	public Operation set(String property, Object value) {
 		assertArgNotNull("property", property);
@@ -672,23 +515,180 @@ public class Operation extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(callbacks != null, "callbacks")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(operationId != null, "operationId")
-			.addIf(parameters != null, "parameters")
-			.addIf(requestBody != null, "requestBody")
-			.addIf(responses != null, "responses")
-			.addIf(security != null, "security")
-			.addIf(servers != null, "servers")
-			.addIf(summary != null, "summary")
-			.addIf(tags != null, "tags")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets the callbacks map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setCallbacks(Map<String,Callback> value) {
+		this.callbacks = value;
+		return this;
+	}
+
+	/**
+	 * Sets the deprecated flag.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setDeprecated(Boolean value) {
+		this.deprecated = value;
+		return this;
+	}
+
+	/**
+	 * Sets the description.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setDescription(String value) {
+		this.description = value;
+		return this;
+	}
+
+	/**
+	 * Sets the external documentation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setExternalDocs(ExternalDocumentation value) {
+		this.externalDocs = value;
+		return this;
+	}
+
+	/**
+	 * Sets the operation ID.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setOperationId(String value) {
+		this.operationId = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parameters list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setParameters(List<Parameter> value) {
+		this.parameters = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parameters list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setParameters(Parameter...value) {
+		setParameters(listBuilder(Parameter.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Sets the request body.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setRequestBody(RequestBodyInfo value) {
+		this.requestBody = value;
+		return this;
+	}
+
+	/**
+	 * Sets the responses map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setResponses(Map<String,Response> value) {
+		this.responses = value;
+		return this;
+	}
+
+	/**
+	 * Sets the security requirements list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setSecurity(List<SecurityRequirement> value) {
+		this.security = value;
+		return this;
+	}
+
+	/**
+	 * Sets the security requirements list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setSecurity(SecurityRequirement...value) {
+		setSecurity(listBuilder(SecurityRequirement.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Sets the servers list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setServers(List<Server> value) {
+		this.servers = value;
+		return this;
+	}
+
+	/**
+	 * Sets the servers list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setServers(Server...value) {
+		setServers(listBuilder(Server.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Sets the summary.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setSummary(String value) {
+		this.summary = value;
+		return this;
+	}
+
+	/**
+	 * Sets the tags list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setTags(List<String> value) {
+		this.tags = value;
+		return this;
+	}
+
+	/**
+	 * Sets the tags list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setTags(String...value) {
+		setTags(listBuilder(String.class).sparse().add(value).build());
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */

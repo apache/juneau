@@ -35,46 +35,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RequestAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Request DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link Request} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Applier extends AnnotationApplier<Request,BeanContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Applier(VarResolverSession vr) {
+			super(Request.class, BeanContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Request> ai, BeanContext.Builder b) {
+			Request a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(a);
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link Request @Request annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Request[] value();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -128,10 +127,6 @@ public class RequestAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationTImpl implements Request {
 
 		private final Class<? extends HttpPartParser> parser;
@@ -154,52 +149,32 @@ public class RequestAnnotation {
 			return serializer;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final Request DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link Request} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class Applier extends AnnotationApplier<Request,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(Request.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Request> ai, BeanContext.Builder b) {
-			Request a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(a);
-		}
+	public static Builder create() {
+		return new Builder();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link Request @Request annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Request[] value();
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

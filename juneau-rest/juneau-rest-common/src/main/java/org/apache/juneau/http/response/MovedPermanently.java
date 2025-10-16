@@ -63,15 +63,6 @@ public class MovedPermanently extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public MovedPermanently(MovedPermanently copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class MovedPermanently extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public MovedPermanently(MovedPermanently copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class MovedPermanently extends BasicHttpResponse {
 		return new MovedPermanently(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setContent(String value) {
+	public MovedPermanently setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setContent(HttpEntity value) {
+	public MovedPermanently setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class MovedPermanently extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public MovedPermanently setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MovedPermanently setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public MovedPermanently setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

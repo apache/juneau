@@ -43,64 +43,6 @@ import jakarta.xml.bind.*;
 public class DateUtils {
 
 	/**
-	 * Date format pattern used to parse HTTP date headers in RFC 1123 format.
-	 */
-	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
-
-	/**
-	 * Date format pattern used to parse HTTP date headers in RFC 1036 format.
-	 */
-	public static final String PATTERN_RFC1036 = "EEE, dd-MMM-yy HH:mm:ss zzz";
-
-	/**
-	 * Date format pattern used to parse HTTP date headers in ANSI C <c>asctime()</c> format.
-	 */
-	public static final String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
-	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
-	static {
-		final Calendar calendar = Calendar.getInstance();
-		calendar.setTimeZone(GMT);
-		calendar.set(2000, Calendar.JANUARY, 1, 0, 0, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
-	}
-
-	/**
-	 * Parses an ISO8601 string and converts it to a {@link Calendar}.
-	 *
-	 * @param s The string to parse.
-	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
-	 */
-	public static Calendar parseISO8601Calendar(String s) {
-		if (Utils.isEmpty(s))
-			return null;
-		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
-	}
-
-	/**
-	 * Formats the given date according to the specified pattern.
-	 *
-	 * <p>
-	 * The pattern must conform to that used by the {@link SimpleDateFormat simple date format} class.
-	 *
-	 * @param date The date to format.
-	 * @param pattern The pattern to use for formatting the date.
-	 * @return A formatted date string.
-	 * @throws IllegalArgumentException If the given date pattern is invalid.
-	 * @see SimpleDateFormat
-	 */
-	public static String formatDate(final Date date, final String pattern) {
-		final SimpleDateFormat formatter = DateFormatHolder.formatFor(pattern);
-		return formatter.format(date);
-	}
-
-	/**
-	 * Clears thread-local variable containing {@link java.text.DateFormat} cache.
-	 */
-	public static void clearThreadLocal() {
-		DateFormatHolder.clearThreadLocal();
-	}
-
-	/**
 	 * A factory for {@link SimpleDateFormat}s.
 	 *
 	 * <p>
@@ -116,6 +58,10 @@ public class DateUtils {
 				return new SoftReference<>(m);
 			}
 		};
+
+		public static void clearThreadLocal() {
+			THREADLOCAL_FORMATS.remove();
+		}
 
 		/**
 		 * Creates a {@link SimpleDateFormat} for the requested format string.
@@ -143,10 +89,83 @@ public class DateUtils {
 			}
 			return format;
 		}
+	}
 
-		public static void clearThreadLocal() {
-			THREADLOCAL_FORMATS.remove();
+	/**
+	 * Date format pattern used to parse HTTP date headers in RFC 1123 format.
+	 */
+	public static final String PATTERN_RFC1123 = "EEE, dd MMM yyyy HH:mm:ss zzz";
+
+	/**
+	 * Date format pattern used to parse HTTP date headers in RFC 1036 format.
+	 */
+	public static final String PATTERN_RFC1036 = "EEE, dd-MMM-yy HH:mm:ss zzz";
+	/**
+	 * Date format pattern used to parse HTTP date headers in ANSI C <c>asctime()</c> format.
+	 */
+	public static final String PATTERN_ASCTIME = "EEE MMM d HH:mm:ss yyyy";
+	private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
+
+	static {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTimeZone(GMT);
+		calendar.set(2000, Calendar.JANUARY, 1, 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	}
+
+	/**
+	 * Clears thread-local variable containing {@link java.text.DateFormat} cache.
+	 */
+	public static void clearThreadLocal() {
+		DateFormatHolder.clearThreadLocal();
+	}
+
+	/**
+	 * Formats the given date according to the specified pattern.
+	 *
+	 * <p>
+	 * The pattern must conform to that used by the {@link SimpleDateFormat simple date format} class.
+	 *
+	 * @param date The date to format.
+	 * @param pattern The pattern to use for formatting the date.
+	 * @return A formatted date string.
+	 * @throws IllegalArgumentException If the given date pattern is invalid.
+	 * @see SimpleDateFormat
+	 */
+	public static String formatDate(final Date date, final String pattern) {
+		final SimpleDateFormat formatter = DateFormatHolder.formatFor(pattern);
+		return formatter.format(date);
+	}
+
+	/**
+	 * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.
+	 *
+	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
+	 * @return The formatter.
+	 */
+	public static DateTimeFormatter getFormatter(String pattern) {
+		if (Utils.isEmpty(pattern))
+			return DateTimeFormatter.ISO_INSTANT;
+		try {
+			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getPublicField(x -> x.isStatic() && x.hasName(pattern));
+			if (fi != null)
+				return (DateTimeFormatter)fi.inner().get(null);
+			return DateTimeFormatter.ofPattern(pattern);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			throw asRuntimeException(e);
 		}
+	}
+
+	/**
+	 * Parses an ISO8601 string and converts it to a {@link Calendar}.
+	 *
+	 * @param s The string to parse.
+	 * @return The parsed value, or <jk>null</jk> if the string was <jk>null</jk> or empty.
+	 */
+	public static Calendar parseISO8601Calendar(String s) {
+		if (Utils.isEmpty(s))
+			return null;
+		return DatatypeConverter.parseDateTime(toValidISO8601DT(s));
 	}
 
 	/**
@@ -212,25 +231,6 @@ public class DateUtils {
 			case S4: return in + ":00:00";
 			case S5: return in + ":00";
 			default: return in;
-		}
-	}
-
-	/**
-	 * Returns a {@link DateTimeFormatter} using either a pattern or predefined pattern name.
-	 *
-	 * @param pattern The pattern (e.g. <js>"yyyy-MM-dd"</js>) or pattern name (e.g. <js>"ISO_INSTANT"</js>).
-	 * @return The formatter.
-	 */
-	public static DateTimeFormatter getFormatter(String pattern) {
-		if (Utils.isEmpty(pattern))
-			return DateTimeFormatter.ISO_INSTANT;
-		try {
-			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getPublicField(x -> x.isStatic() && x.hasName(pattern));
-			if (fi != null)
-				return (DateTimeFormatter)fi.inner().get(null);
-			return DateTimeFormatter.ofPattern(pattern);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw asRuntimeException(e);
 		}
 	}
 }

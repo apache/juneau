@@ -75,6 +75,29 @@ public class Meta extends HtmlElementVoid {
 	 */
 	public Meta() { /* Empty constructor. */ }
 
+	@Override /* Overridden from HtmlElement */
+	public Meta _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-meta-charset">charset</a>
 	 * attribute.
@@ -90,7 +113,7 @@ public class Meta extends HtmlElementVoid {
 	 * 	<li><js>"windows-1252"</js> - Windows-1252 encoding</li>
 	 * </ul>
 	 *
-	 * @param charset The character encoding for the document.
+	 * @param value The character encoding for the document.
 	 * @return This object.
 	 */
 	public Meta charset(String value) {
@@ -106,11 +129,29 @@ public class Meta extends HtmlElementVoid {
 	 * Specifies the value associated with the name or http-equiv attribute.
 	 * The content varies depending on the type of metadata being defined.
 	 *
-	 * @param content The metadata value (e.g., description text, viewport settings, etc.).
+	 * @param value The metadata value (e.g., description text, viewport settings, etc.).
 	 * @return This object.
 	 */
 	public Meta content(String value) {
 		attr("content", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta dir(String value) {
+		super.dir(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
@@ -133,11 +174,23 @@ public class Meta extends HtmlElementVoid {
 	 * 	<li><js>"x-ua-compatible"</js> - Browser compatibility mode</li>
 	 * </ul>
 	 *
-	 * @param httpequiv The HTTP header name to simulate.
+	 * @param value The HTTP header name to simulate.
 	 * @return This object.
 	 */
 	public Meta httpequiv(String value) {
 		attr("http-equiv", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta id(String value) {
+		super.id(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
@@ -157,56 +210,11 @@ public class Meta extends HtmlElementVoid {
 	 * 	<li><js>"robots"</js> - Instructions for search engine crawlers</li>
 	 * </ul>
 	 *
-	 * @param name The name of the metadata property.
+	 * @param value The name of the metadata property.
 	 * @return This object.
 	 */
 	public Meta name(String value) {
 		attr("name", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Meta _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -537,18 +545,6 @@ public class Meta extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Meta translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meta attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

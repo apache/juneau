@@ -31,16 +31,23 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	private static String getMessage(Throwable cause, Class<?> c, String msg) {
+		if (msg != null)
+			return (c == null ? "" : c.getName() + ": ") + msg;
+		if (cause != null)
+			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
+		return null;
+	}
+
 	/**
-	 * Constructor.
+	 * Shortcut for calling <code><jk>new</jk> ClassMetaRuntimeException(String.format(c.getName() + <js>": "</js> + message, args));</code>
 	 *
-	 * @param cause The cause of this exception.
 	 * @param c The class name of the bean that caused the exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The error message.
+	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
-	public ClassMetaRuntimeException(Throwable cause, Class<?> c, String message, Object... args) {
-		super(cause, getMessage(cause, c, message), args);
+	public ClassMetaRuntimeException(Class<?> c, String message, Object... args) {
+		this(null, c, message, args);
 	}
 
 	/**
@@ -63,17 +70,6 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 	}
 
 	/**
-	 * Shortcut for calling <code><jk>new</jk> ClassMetaRuntimeException(String.format(c.getName() + <js>": "</js> + message, args));</code>
-	 *
-	 * @param c The class name of the bean that caused the exception.
-	 * @param message The error message.
-	 * @param args Arguments passed in to the {@code String.format()} method.
-	 */
-	public ClassMetaRuntimeException(Class<?> c, String message, Object... args) {
-		this(null, c, message, args);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * @param cause The initial cause of the exception.
@@ -82,12 +78,16 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 		this(cause, null, null);
 	}
 
-	private static String getMessage(Throwable cause, Class<?> c, String msg) {
-		if (msg != null)
-			return (c == null ? "" : c.getName() + ": ") + msg;
-		if (cause != null)
-			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
-		return null;
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The cause of this exception.
+	 * @param c The class name of the bean that caused the exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ClassMetaRuntimeException(Throwable cause, Class<?> c, String message, Object... args) {
+		super(cause, getMessage(cause, c, message), args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

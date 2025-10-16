@@ -59,14 +59,19 @@ public class ArgException extends InternalServerError {
 	}
 
 	@Override /* Overridden from InternalServerError */
-	public ArgException setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	public ArgException copy() {
+		return new ArgException(this);
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setContent(HttpEntity value) {
+		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from InternalServerError */
-	public ArgException setUnmodifiable() {
-		super.setUnmodifiable();
+	public ArgException setContent(String value) {
+		super.setContent(value);
 		return this;
 	}
 
@@ -83,6 +88,12 @@ public class ArgException extends InternalServerError {
 	}
 
 	@Override /* Overridden from InternalServerError */
+	public ArgException setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
 	public ArgException setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
@@ -91,6 +102,12 @@ public class ArgException extends InternalServerError {
 	@Override /* Overridden from InternalServerError */
 	public ArgException setLocale2(Locale value) {
 		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 
@@ -119,25 +136,8 @@ public class ArgException extends InternalServerError {
 	}
 
 	@Override /* Overridden from InternalServerError */
-	public ArgException setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public ArgException setUnmodifiable() {
+		super.setUnmodifiable();
 		return this;
-	}
-
-	@Override /* Overridden from InternalServerError */
-	public ArgException setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from InternalServerError */
-	public ArgException setContent(HttpEntity value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from InternalServerError */
-	public ArgException copy() {
-		return new ArgException(this);
 	}
 }

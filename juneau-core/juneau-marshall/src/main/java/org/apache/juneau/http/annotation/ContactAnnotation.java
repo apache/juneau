@@ -27,37 +27,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class ContactAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Contact DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(Contact a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -120,10 +89,6 @@ public class ContactAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements Contact {
 
 		private final String email, name, url;
@@ -150,5 +115,25 @@ public class ContactAnnotation {
 		public String url() {
 			return url;
 		}
+	}
+
+	/** Default value */
+	public static final Contact DEFAULT = create().build();
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Contact a) {
+		return a == null || DEFAULT.equals(a);
 	}
 }

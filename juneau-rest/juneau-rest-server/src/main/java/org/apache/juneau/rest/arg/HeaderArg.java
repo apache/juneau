@@ -98,12 +98,6 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class HeaderArg implements RestOpArg {
-	private final HttpPartParser partParser;
-	private final HttpPartSchema schema;
-	private final boolean multi;
-	private final String name, def;
-	private final ClassInfo type;
-
 	/**
 	 * Static creator.
 	 *
@@ -116,32 +110,6 @@ public class HeaderArg implements RestOpArg {
 			return new HeaderArg(paramInfo, annotations);
 		return null;
 	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param pi The Java method parameter being resolved.
-	 * @param annotations The annotations to apply to any new part parsers.
-	 */
-	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
-		// Get the header name from the parameter
-		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
-
-		// Check for class-level defaults and merge if found
-		Header mergedHeader = getMergedHeader(pi, name);
-
-		// Use merged header annotation for all lookups
-		this.def = mergedHeader != null && !mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
-		this.type = pi.getParameterType();
-		this.schema = mergedHeader != null ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
-		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
-		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
-
-		if (multi && ! type.isCollectionOrArray())
-			throw new ArgException(pi, "Use of multipart flag on @Header parameter that is not an array or Collection");
-	}
-
 	/**
 	 * Gets the merged @Header annotation combining class-level and parameter-level values.
 	 *
@@ -186,7 +154,6 @@ public class HeaderArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelHeader, paramHeader);
 	}
-
 	/**
 	 * Merges two @Header annotations, with param-level taking precedence over class-level.
 	 *
@@ -205,7 +172,6 @@ public class HeaderArg implements RestOpArg {
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
 	}
-
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -218,6 +184,40 @@ public class HeaderArg implements RestOpArg {
 		if (!SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
+	}
+	private final HttpPartParser partParser;
+
+	private final HttpPartSchema schema;
+
+	private final boolean multi;
+
+	private final String name, def;
+
+	private final ClassInfo type;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param pi The Java method parameter being resolved.
+	 * @param annotations The annotations to apply to any new part parsers.
+	 */
+	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
+		// Get the header name from the parameter
+		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
+
+		// Check for class-level defaults and merge if found
+		Header mergedHeader = getMergedHeader(pi, name);
+
+		// Use merged header annotation for all lookups
+		this.def = mergedHeader != null && !mergedHeader.def().isEmpty() ? mergedHeader.def() : findDef(pi).orElse(null);
+		this.type = pi.getParameterType();
+		this.schema = mergedHeader != null ? HttpPartSchema.create(mergedHeader) : HttpPartSchema.create(Header.class, pi);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
+
+		if (multi && ! type.isCollectionOrArray())
+			throw new ArgException(pi, "Use of multipart flag on @Header parameter that is not an array or Collection");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

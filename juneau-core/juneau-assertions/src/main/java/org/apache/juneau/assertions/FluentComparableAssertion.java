@@ -112,21 +112,6 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentComparableAssertion(T value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -147,6 +132,21 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentComparableAssertion(T value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -159,6 +159,23 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Asserts that the value is between (inclusive) the specified upper and lower values.
+	 *
+	 * @param lower The lower value to check against.
+	 * @param upper The upper value to check against.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {
+		isExists();
+		Utils.assertArgNotNull("lower", lower);
+		Utils.assertArgNotNull("upper", upper);
+		isLte(upper);
+		isGte(lower);
+		return returns();
+	}
 
 	/**
 	 * Asserts that the value is greater than the specified value.
@@ -213,23 +230,6 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 		Utils.assertArgNotNull("value", value);
 		if (value().compareTo(value) > 0)
 				throw error(MSG_valueWasNotLessOrEqualsToExpected, value, value());
-		return returns();
-	}
-
-	/**
-	 * Asserts that the value is between (inclusive) the specified upper and lower values.
-	 *
-	 * @param lower The lower value to check against.
-	 * @param upper The upper value to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isBetween(Comparable lower, Comparable upper) throws AssertionError {
-		isExists();
-		Utils.assertArgNotNull("lower", lower);
-		Utils.assertArgNotNull("upper", upper);
-		isLte(upper);
-		isGte(lower);
 		return returns();
 	}
 

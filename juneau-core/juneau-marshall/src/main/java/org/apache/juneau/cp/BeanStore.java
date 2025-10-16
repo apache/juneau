@@ -86,55 +86,6 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 public class BeanStore {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Non-existent bean store.
-	 */
-	public static final class Void extends BeanStore {}
-
-	/**
-	 * Static read-only reusable instance.
-	 */
-	public static final BeanStore INSTANCE = create().readOnly().build();
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new {@link Builder} object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
-	 * @return A new {@link BeanStore} object.
-	 */
-	public static BeanStore of(BeanStore parent) {
-		return create().parent(parent).build();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
-	 * @param outer The outer bean used when instantiating inner classes.  Can be <jk>null</jk>.
-	 * @return A new {@link BeanStore} object.
-	 */
-	public static BeanStore of(BeanStore parent, Object outer) {
-		return create().parent(parent).outer(outer).build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -183,10 +134,30 @@ public class BeanStore {
 
 			throw new BasicRuntimeException("Could not find a way to instantiate class {0}", type);
 		}
+		/**
+		 * Overrides the bean to return from the {@link #build()} method.
+		 *
+		 * @param value The bean to return from the {@link #build()} method.
+		 * @return This object.
+		 */
+		public Builder impl(BeanStore value) {
+			this.impl = value;
+			return this;
+		}
 
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
+		/**
+		 * Specifies the outer bean context.
+		 *
+		 * <p>
+		 * The outer context bean to use when calling constructors on inner classes.
+		 *
+		 * @param value The outer bean context.  Can be <jk>null</jk>.
+		 * @return  This object.
+		 */
+		public Builder outer(Object value) {
+			this.outer = value;
+			return this;
+		}
 
 		/**
 		 * Specifies the parent bean store.
@@ -226,31 +197,6 @@ public class BeanStore {
 		}
 
 		/**
-		 * Specifies the outer bean context.
-		 *
-		 * <p>
-		 * The outer context bean to use when calling constructors on inner classes.
-		 *
-		 * @param value The outer bean context.  Can be <jk>null</jk>.
-		 * @return  This object.
-		 */
-		public Builder outer(Object value) {
-			this.outer = value;
-			return this;
-		}
-
-		/**
-		 * Overrides the bean to return from the {@link #build()} method.
-		 *
-		 * @param value The bean to return from the {@link #build()} method.
-		 * @return This object.
-		 */
-		public Builder impl(BeanStore value) {
-			this.impl = value;
-			return this;
-		}
-
-		/**
 		 * Overrides the bean store type.
 		 *
 		 * <p>
@@ -270,10 +216,44 @@ public class BeanStore {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Non-existent bean store.
+	 */
+	public static final class Void extends BeanStore {}
 
+	/**
+	 * Static read-only reusable instance.
+	 */
+	public static final BeanStore INSTANCE = create().readOnly().build();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new {@link Builder} object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
+	 * @return A new {@link BeanStore} object.
+	 */
+	public static BeanStore of(BeanStore parent) {
+		return create().parent(parent).build();
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param parent Parent bean store.  Can be <jk>null</jk> if this is the root resource.
+	 * @param outer The outer bean used when instantiating inner classes.  Can be <jk>null</jk>.
+	 * @return A new {@link BeanStore} object.
+	 */
+	public static BeanStore of(BeanStore parent, Object outer) {
+		return create().parent(parent).outer(outer).build();
+	}
 	private final Deque<BeanStoreEntry<?>> entries;
 	private final Map<Class<?>,BeanStoreEntry<?>> unnamedEntries;
 
@@ -281,10 +261,6 @@ public class BeanStore {
 	final Optional<Object> outer;
 	final boolean readOnly, threadSafe;
 	final SimpleReadWriteLock lock;
-
-	BeanStore() {
-		this(create());
-	}
 
 	/**
 	 * Constructor.
@@ -299,6 +275,37 @@ public class BeanStore {
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
 		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
 		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
+	}
+
+	BeanStore() {
+		this(create());
+	}
+
+	/**
+	 * Same as {@link #addBean(Class,Object)} but returns the bean instead of this object for fluent calls.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.
+	 * @param bean The bean.  Can be <jk>null</jk>.
+	 * @return The bean.
+	 */
+	public <T> T add(Class<T> beanType, T bean) {
+		add(beanType, bean, null);
+		return bean;
+	}
+
+	/**
+	 * Same as {@link #addBean(Class,Object,String)} but returns the bean instead of this object for fluent calls.
+	 *
+	 * @param <T> The class to associate this bean with.
+	 * @param beanType The class to associate this bean with.
+	 * @param bean The bean.  Can be <jk>null</jk>.
+	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+	 * @return The bean.
+	 */
+	public <T> T add(Class<T> beanType, T bean, String name) {
+		addBean(beanType, bean, name);
+		return bean;
 	}
 
 	/**
@@ -359,33 +366,6 @@ public class BeanStore {
 	}
 
 	/**
-	 * Same as {@link #addBean(Class,Object)} but returns the bean instead of this object for fluent calls.
-	 *
-	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
-	 * @param bean The bean.  Can be <jk>null</jk>.
-	 * @return The bean.
-	 */
-	public <T> T add(Class<T> beanType, T bean) {
-		add(beanType, bean, null);
-		return bean;
-	}
-
-	/**
-	 * Same as {@link #addBean(Class,Object,String)} but returns the bean instead of this object for fluent calls.
-	 *
-	 * @param <T> The class to associate this bean with.
-	 * @param beanType The class to associate this bean with.
-	 * @param bean The bean.  Can be <jk>null</jk>.
-	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
-	 * @return The bean.
-	 */
-	public <T> T add(Class<T> beanType, T bean, String name) {
-		addBean(beanType, bean, name);
-		return bean;
-	}
-
-	/**
 	 * Clears out all bean in this bean store.
 	 *
 	 * <p>
@@ -400,6 +380,75 @@ public class BeanStore {
 			entries.clear();
 		}
 		return this;
+	}
+
+	/**
+	 * Instantiates a bean creator.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link BeanCreator} for usage.
+	 * </ul>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @return A new bean creator.
+	 */
+	public <T> BeanCreator<T> createBean(Class<T> beanType) {
+		return new BeanCreator<>(beanType, this);
+	}
+
+	/**
+	 * Create a method finder for finding bean creation methods.
+	 *
+	 * <p>
+	 * Same as {@link #createMethodFinder(Class,Object)} but uses {@link Builder#outer(Object)} as the resource bean.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
+	 * </ul>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @return The method finder.  Never <jk>null</jk>.
+	 */
+	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType) {
+		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(() -> new IllegalArgumentException("Method cannot be used without outer bean definition.")), this);
+	}
+
+	/**
+	 * Create a method finder for finding bean creation methods.
+	 *
+	 * <p>
+	 * Same as {@link #createMethodFinder(Class,Class)} but looks for only static methods on the specified resource class
+	 * and not also instance methods within the context of a bean.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
+	 * </ul>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @param resourceClass The class containing the bean creator method.
+	 * @return The method finder.  Never <jk>null</jk>.
+	 */
+	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Class<?> resourceClass) {
+		return new BeanCreateMethodFinder<>(beanType, resourceClass , this);
+	}
+
+	/**
+	 * Create a method finder for finding bean creation methods.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
+	 * </ul>
+	 *
+	 * @param <T> The bean type to create.
+	 * @param beanType The bean type to create.
+	 * @param resource The class containing the bean creator method.
+	 * @return The method finder.  Never <jk>null</jk>.
+	 */
+	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Object resource) {
+		return new BeanCreateMethodFinder<>(beanType, resource, this);
 	}
 
 	/**
@@ -442,24 +491,97 @@ public class BeanStore {
 	}
 
 	/**
-	 * Returns all the beans in this store of the specified type.
+	 * Given an executable, returns a list of types that are missing from this factory.
 	 *
-	 * <p>
-	 * Returns both named and unnamed beans.
-	 *
-	 * <p>
-	 * The results from the parent bean store are appended to the list of beans from this beans store.
-	 *
-	 * @param <T> The bean type to return.
-	 * @param beanType The bean type to return.
-	 * @return The bean entries.  Never <jk>null</jk>.
+	 * @param executable The constructor or method to get the params for.
+	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
 	 */
-	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> beanType)  {
-		@SuppressWarnings("unchecked")
-		Stream<BeanStoreEntry<T>> s = entries.stream().filter(x -> x.matches(beanType)).map(x -> (BeanStoreEntry<T>)x);
-		if (parent.isPresent())
-			s = Stream.concat(s, parent.get().stream(beanType));
-		return s;
+	public String getMissingParams(ExecutableInfo executable) {
+		List<ParamInfo> params = executable.getParams();
+		List<String> l = list();
+		loop: for (int i = 0; i < params.size(); i++) {
+			ParamInfo pi = params.get(i);
+			ClassInfo pt = pi.getParameterType();
+			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
+				continue loop;
+			if (pt.is(Optional.class) || pt.is(BeanStore.class))
+				continue loop;
+			String beanName = findBeanName(pi);
+			Class<?> ptc = pt.inner();
+			if (beanName == null && !hasBean(ptc))
+				l.add(pt.getSimpleName());
+			if (beanName != null && !hasBean(ptc, beanName))
+				l.add(pt.getSimpleName() + '@' + beanName);
+		}
+		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
+	}
+
+	/**
+	 * Returns the corresponding beans in this factory for the specified param types.
+	 *
+	 * @param executable The constructor or method to get the params for.
+	 * @return The corresponding beans in this factory for the specified param types.
+	 */
+	public Object[] getParams(ExecutableInfo executable) {
+		Object[] o = new Object[executable.getParamCount()];
+		for (int i = 0; i < executable.getParamCount(); i++) {
+			ParamInfo pi = executable.getParam(i);
+			ClassInfo pt = pi.getParameterType();
+			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
+				o[i] = outer.get();
+			} else if (pt.is(BeanStore.class)) {
+				o[i] = this;
+			} else {
+				String beanName = findBeanName(pi);
+				Class<?> ptc = pt.unwrap(Optional.class).inner();
+				Optional<?> o2 = beanName == null ? getBean(ptc) : getBean(ptc, beanName);
+				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
+			}
+		}
+		return o;
+	}
+
+	/**
+	 * Given the list of param types, returns <jk>true</jk> if this factory has all the parameters for the specified executable.
+	 *
+	 * @param executable The constructor or method to get the params for.
+	 * @return A comma-delimited list of types that are missing from this factory.
+	 */
+	public boolean hasAllParams(ExecutableInfo executable) {
+		loop: for (int i = 0; i < executable.getParamCount(); i++) {
+			ParamInfo pi = executable.getParam(i);
+			ClassInfo pt = pi.getParameterType();
+			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
+				continue loop;
+			if (pt.is(Optional.class) || pt.is(BeanStore.class))
+				continue loop;
+			String beanName = findBeanName(pi);
+			Class<?> ptc = pt.inner();
+			if ((beanName == null && !hasBean(ptc)) || (beanName != null && !hasBean(ptc, beanName)))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this store contains the specified unnamed bean type.
+	 *
+	 * @param beanType The bean type to check.
+	 * @return <jk>true</jk> if this store contains the specified unnamed bean type.
+	 */
+	public boolean hasBean(Class<?> beanType) {
+		return unnamedEntries.containsKey(beanType) || parent.map(x -> x.hasBean(beanType)).orElse(false);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this store contains the specified named bean type.
+	 *
+	 * @param beanType The bean type to check.
+	 * @param name The bean name.
+	 * @return <jk>true</jk> if this store contains the specified named bean type.
+	 */
+	public boolean hasBean(Class<?> beanType, String name) {
+		return entries.stream().anyMatch(x -> x.matches(beanType, name)) || parent.map(x -> x.hasBean(beanType, name)).orElse(false);
 	}
 
 	/**
@@ -490,176 +612,52 @@ public class BeanStore {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this store contains the specified unnamed bean type.
-	 *
-	 * @param beanType The bean type to check.
-	 * @return <jk>true</jk> if this store contains the specified unnamed bean type.
-	 */
-	public boolean hasBean(Class<?> beanType) {
-		return unnamedEntries.containsKey(beanType) || parent.map(x -> x.hasBean(beanType)).orElse(false);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this store contains the specified named bean type.
-	 *
-	 * @param beanType The bean type to check.
-	 * @param name The bean name.
-	 * @return <jk>true</jk> if this store contains the specified named bean type.
-	 */
-	public boolean hasBean(Class<?> beanType, String name) {
-		return entries.stream().anyMatch(x -> x.matches(beanType, name)) || parent.map(x -> x.hasBean(beanType, name)).orElse(false);
-	}
-
-	/**
-	 * Instantiates a bean creator.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreator} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @return A new bean creator.
-	 */
-	public <T> BeanCreator<T> createBean(Class<T> beanType) {
-		return new BeanCreator<>(beanType, this);
-	}
-
-	/**
-	 * Create a method finder for finding bean creation methods.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @param resource The class containing the bean creator method.
-	 * @return The method finder.  Never <jk>null</jk>.
-	 */
-	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Object resource) {
-		return new BeanCreateMethodFinder<>(beanType, resource, this);
-	}
-
-	/**
-	 * Create a method finder for finding bean creation methods.
+	 * Returns all the beans in this store of the specified type.
 	 *
 	 * <p>
-	 * Same as {@link #createMethodFinder(Class,Class)} but looks for only static methods on the specified resource class
-	 * and not also instance methods within the context of a bean.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @param resourceClass The class containing the bean creator method.
-	 * @return The method finder.  Never <jk>null</jk>.
-	 */
-	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType, Class<?> resourceClass) {
-		return new BeanCreateMethodFinder<>(beanType, resourceClass , this);
-	}
-
-	/**
-	 * Create a method finder for finding bean creation methods.
+	 * Returns both named and unnamed beans.
 	 *
 	 * <p>
-	 * Same as {@link #createMethodFinder(Class,Object)} but uses {@link Builder#outer(Object)} as the resource bean.
+	 * The results from the parent bean store are appended to the list of beans from this beans store.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
-	 * </ul>
-	 *
-	 * @param <T> The bean type to create.
-	 * @param beanType The bean type to create.
-	 * @return The method finder.  Never <jk>null</jk>.
+	 * @param <T> The bean type to return.
+	 * @param beanType The bean type to return.
+	 * @return The bean entries.  Never <jk>null</jk>.
 	 */
-	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType) {
-		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(() -> new IllegalArgumentException("Method cannot be used without outer bean definition.")), this);
-	}
-
-	/**
-	 * Given an executable, returns a list of types that are missing from this factory.
-	 *
-	 * @param executable The constructor or method to get the params for.
-	 * @return A comma-delimited list of types that are missing from this factory, or <jk>null</jk> if none are missing.
-	 */
-	public String getMissingParams(ExecutableInfo executable) {
-		List<ParamInfo> params = executable.getParams();
-		List<String> l = list();
-		loop: for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
-			ClassInfo pt = pi.getParameterType();
-			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
-				continue loop;
-			if (pt.is(Optional.class) || pt.is(BeanStore.class))
-				continue loop;
-			String beanName = findBeanName(pi);
-			Class<?> ptc = pt.inner();
-			if (beanName == null && !hasBean(ptc))
-				l.add(pt.getSimpleName());
-			if (beanName != null && !hasBean(ptc, beanName))
-				l.add(pt.getSimpleName() + '@' + beanName);
-		}
-		return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));
-	}
-
-	/**
-	 * Given the list of param types, returns <jk>true</jk> if this factory has all the parameters for the specified executable.
-	 *
-	 * @param executable The constructor or method to get the params for.
-	 * @return A comma-delimited list of types that are missing from this factory.
-	 */
-	public boolean hasAllParams(ExecutableInfo executable) {
-		loop: for (int i = 0; i < executable.getParamCount(); i++) {
-			ParamInfo pi = executable.getParam(i);
-			ClassInfo pt = pi.getParameterType();
-			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
-				continue loop;
-			if (pt.is(Optional.class) || pt.is(BeanStore.class))
-				continue loop;
-			String beanName = findBeanName(pi);
-			Class<?> ptc = pt.inner();
-			if ((beanName == null && !hasBean(ptc)) || (beanName != null && !hasBean(ptc, beanName)))
-				return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Returns the corresponding beans in this factory for the specified param types.
-	 *
-	 * @param executable The constructor or method to get the params for.
-	 * @return The corresponding beans in this factory for the specified param types.
-	 */
-	public Object[] getParams(ExecutableInfo executable) {
-		Object[] o = new Object[executable.getParamCount()];
-		for (int i = 0; i < executable.getParamCount(); i++) {
-			ParamInfo pi = executable.getParam(i);
-			ClassInfo pt = pi.getParameterType();
-			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
-				o[i] = outer.get();
-			} else if (pt.is(BeanStore.class)) {
-				o[i] = this;
-			} else {
-				String beanName = findBeanName(pi);
-				Class<?> ptc = pt.unwrap(Optional.class).inner();
-				Optional<?> o2 = beanName == null ? getBean(ptc) : getBean(ptc, beanName);
-				o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);
-			}
-		}
-		return o;
+	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> beanType)  {
+		@SuppressWarnings("unchecked")
+		Stream<BeanStoreEntry<T>> s = entries.stream().filter(x -> x.matches(beanType)).map(x -> (BeanStoreEntry<T>)x);
+		if (parent.isPresent())
+			s = Stream.concat(s, parent.get().stream(beanType));
+		return s;
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(properties());
 	}
+	private void assertCanWrite() {
+		if (readOnly)
+			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
+	}
+	private String findBeanName(ParamInfo pi) {
+		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
+		if (n != null)
+			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
+		return null;
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extension methods
-	//-----------------------------------------------------------------------------------------------------------------
+	private JsonMap properties() {
+		Predicate<Boolean> nf = Utils::isTrue;
+		return filteredMap()
+			.append("identity", Utils2.identity(this))
+			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
+			.append("outer", Utils2.identity(outer.orElse(null)))
+			.append("parent", parent.map(BeanStore::properties).orElse(null))
+			.appendIf(nf, "readOnly", readOnly)
+			.appendIf(nf, "threadSafe", threadSafe)
+		;
+	}
 
 	/**
 	 * Creates an entry in this store for the specified bean.
@@ -675,31 +673,5 @@ public class BeanStore {
 	 */
 	protected <T> BeanStoreEntry<T> createEntry(Class<T> type, Supplier<T> bean, String name) {
 		return BeanStoreEntry.create(type, bean, name);
-	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
-	private String findBeanName(ParamInfo pi) {
-		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
-		if (n != null)
-			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
-		return null;
-	}
-
-	private void assertCanWrite() {
-		if (readOnly)
-			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
-	}
-
-	private JsonMap properties() {
-		Predicate<Boolean> nf = Utils::isTrue;
-		return filteredMap()
-			.append("identity", Utils2.identity(this))
-			.append("entries", entries.stream().map(BeanStoreEntry::properties).collect(toList()))
-			.append("outer", Utils2.identity(outer.orElse(null)))
-			.append("parent", parent.map(BeanStore::properties).orElse(null))
-			.appendIf(nf, "readOnly", readOnly)
-			.appendIf(nf, "threadSafe", threadSafe)
-		;
 	}
 }

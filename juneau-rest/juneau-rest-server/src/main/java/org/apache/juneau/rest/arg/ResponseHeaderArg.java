@@ -46,10 +46,6 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class ResponseHeaderArg implements RestOpArg {
-	final ResponsePartMeta meta;
-	final String name;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -62,6 +58,10 @@ public class ResponseHeaderArg implements RestOpArg {
 			return new ResponseHeaderArg(paramInfo, annotations);
 		return null;
 	}
+	final ResponsePartMeta meta;
+	final String name;
+
+	private final Type type;
 
 	/**
 	 * Constructor.

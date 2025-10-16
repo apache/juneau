@@ -49,9 +49,80 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class VarResolverSession {
 
+	private static final AsciiSet
+		AS1 = AsciiSet.of("\\{"),
+		AS2 = AsciiSet.of("\\${}")
+	;
+	private static boolean containsVars(Collection<?> c) {
+		Flag f = Flag.create();
+		c.forEach(x -> {
+			if (x instanceof CharSequence && x.toString().contains("$"))
+				f.set();
+		});
+		return f.isSet();
+	}
+
+	private static boolean containsVars(Map<?,?> m) {
+		Flag f = Flag.create();
+		m.forEach((k,v) -> {
+			if (v instanceof CharSequence && v.toString().contains("$"))
+				f.set();
+		});
+		return f.isSet();
+	}
+
+	private static boolean containsVars(Object array) {
+		for (int i = 0; i < Array.getLength(array); i++) {
+			Object o = Array.get(array, i);
+			if (o instanceof CharSequence && o.toString().contains("$"))
+				return true;
+		}
+		return false;
+	}
+
+	/*
+	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
+	 * This is a common case, and we can avoid using StringWriters.
+	 */
+	private static boolean isSimpleVar(String s) {
+		int S1 = 1;	   // Not in variable, looking for $
+		int S2 = 2;    // Found $, Looking for {
+		int S3 = 3;    // Found {, Looking for }
+		int S4 = 4;    // Found }
+
+		int length = s.length();
+		int state = S1;
+		for (int i = 0; i < length; i++) {
+			char c = s.charAt(i);
+			if (state == S1) {
+				if (c == '$') {
+					state = S2;
+				} else {
+					return false;
+				}
+			} else if (state == S2) {
+				if (c == '{') {
+					state = S3;
+				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {   // False trigger "$X "
+					return false;
+				}
+			} else if (state == S3) {
+				if (c == '}')
+					state = S4;
+				else if (c == '{' || c == '$')
+					return false;
+			} else if (state == S4) {
+				return false;
+			}
+		}
+		return state == S4;
+	}
+
 	private final VarResolver context;
+
 	private final BeanStore beanStore;
 
 	/**
@@ -66,6 +137,35 @@ public class VarResolverSession {
 	public VarResolverSession(VarResolver context, BeanStore beanStore) {
 		this.context = context;
 		this.beanStore = BeanStore.of(beanStore);
+	}
+
+	/**
+	 * Adds a bean to this session.
+	 *
+	 * @param <T> The bean type.
+	 * @param c The bean type.
+	 * @param value The bean.
+	 * @return This object.
+	 */
+	public <T> VarResolverSession bean(Class<T> c, T value) {
+		beanStore.addBean(c, value);
+		return this;
+	}
+
+	/**
+	 * Returns the bean from the registered bean store.
+	 *
+	 * @param <T> The value type.
+	 * @param c The bean type.
+	 * @return
+	 * 	The bean.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public <T> Optional<T> getBean(Class<T> c) {
+		Optional<T> t = beanStore.getBean(c);
+		if (! t.isPresent())
+			t = context.beanStore.getBean(c);
+		return t;
 	}
 
 	/**
@@ -113,6 +213,19 @@ public class VarResolverSession {
 		} catch (IOException e) {
 			throw asRuntimeException(e); // Never happens.
 		}
+	}
+
+	/**
+	 * Resolves the specified strings in the string array.
+	 *
+	 * @param in The string array containing variables to resolve.
+	 * @return An array with resolved strings.
+	 */
+	public String[] resolve(String[] in) {
+		String[] out = new String[in.length];
+		for (int i = 0; i < in.length; i++)
+			out[i] = resolve(in[i]);
+		return out;
 	}
 
 	/**
@@ -177,71 +290,6 @@ public class VarResolverSession {
 			}
 		}
 		return o;
-	}
-
-	private static boolean containsVars(Object array) {
-		for (int i = 0; i < Array.getLength(array); i++) {
-			Object o = Array.get(array, i);
-			if (o instanceof CharSequence && o.toString().contains("$"))
-				return true;
-		}
-		return false;
-	}
-
-	private static boolean containsVars(Collection<?> c) {
-		Flag f = Flag.create();
-		c.forEach(x -> {
-			if (x instanceof CharSequence && x.toString().contains("$"))
-				f.set();
-		});
-		return f.isSet();
-	}
-
-	private static boolean containsVars(Map<?,?> m) {
-		Flag f = Flag.create();
-		m.forEach((k,v) -> {
-			if (v instanceof CharSequence && v.toString().contains("$"))
-				f.set();
-		});
-		return f.isSet();
-	}
-
-	/*
-	 * Checks to see if string is of the simple form "$X{...}" with no embedded variables.
-	 * This is a common case, and we can avoid using StringWriters.
-	 */
-	private static boolean isSimpleVar(String s) {
-		int S1 = 1;	   // Not in variable, looking for $
-		int S2 = 2;    // Found $, Looking for {
-		int S3 = 3;    // Found {, Looking for }
-		int S4 = 4;    // Found }
-
-		int length = s.length();
-		int state = S1;
-		for (int i = 0; i < length; i++) {
-			char c = s.charAt(i);
-			if (state == S1) {
-				if (c == '$') {
-					state = S2;
-				} else {
-					return false;
-				}
-			} else if (state == S2) {
-				if (c == '{') {
-					state = S3;
-				} else if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a')) {   // False trigger "$X "
-					return false;
-				}
-			} else if (state == S3) {
-				if (c == '}')
-					state = S4;
-				else if (c == '{' || c == '$')
-					return false;
-			} else if (state == S4) {
-				return false;
-			}
-		}
-		return state == S4;
 	}
 
 	/**
@@ -366,25 +414,9 @@ public class VarResolverSession {
 		return out;
 	}
 
-	private static final AsciiSet
-		AS1 = AsciiSet.of("\\{"),
-		AS2 = AsciiSet.of("\\${}")
-	;
-
-	/**
-	 * Returns the bean from the registered bean store.
-	 *
-	 * @param <T> The value type.
-	 * @param c The bean type.
-	 * @return
-	 * 	The bean.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public <T> Optional<T> getBean(Class<T> c) {
-		Optional<T> t = beanStore.getBean(c);
-		if (! t.isPresent())
-			t = context.beanStore.getBean(c);
-		return t;
+	@Override /* Overridden from Object */
+	public String toString() {
+		return "var=" + this.context.getVarMap().keySet() + ", context.beanStore=" + this.context.beanStore + ", session.beanStore=" + beanStore;
 	}
 
 	/**
@@ -396,36 +428,5 @@ public class VarResolverSession {
 	protected Var getVar(String name) {
 		Var v = this.context.getVarMap().get(name);
 		return v != null && v.canResolve(this) ? v : null;
-	}
-
-	/**
-	 * Resolves the specified strings in the string array.
-	 *
-	 * @param in The string array containing variables to resolve.
-	 * @return An array with resolved strings.
-	 */
-	public String[] resolve(String[] in) {
-		String[] out = new String[in.length];
-		for (int i = 0; i < in.length; i++)
-			out[i] = resolve(in[i]);
-		return out;
-	}
-
-	/**
-	 * Adds a bean to this session.
-	 *
-	 * @param <T> The bean type.
-	 * @param c The bean type.
-	 * @param value The bean.
-	 * @return This object.
-	 */
-	public <T> VarResolverSession bean(Class<T> c, T value) {
-		beanStore.addBean(c, value);
-		return this;
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return "var=" + this.context.getVarMap().keySet() + ", context.beanStore=" + this.context.beanStore + ", session.beanStore=" + beanStore;
 	}
 }

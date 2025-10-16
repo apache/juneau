@@ -42,27 +42,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestPatchAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final RestPatch DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -178,28 +157,6 @@ public class RestPatchAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestPatch#defaultRequestFormData()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder defaultRequestFormData(String...value) {
-			this.defaultRequestFormData = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestPatch#defaultRequestQueryData()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder defaultRequestQueryData(String...value) {
-			this.defaultRequestQueryData = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestPatch#defaultRequestAttributes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -211,6 +168,17 @@ public class RestPatchAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestPatch#defaultRequestFormData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestFormData(String...value) {
+			this.defaultRequestFormData = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestPatch#defaultRequestHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -218,6 +186,17 @@ public class RestPatchAnnotation {
 		 */
 		public Builder defaultRequestHeaders(String...value) {
 			this.defaultRequestHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestPatch#defaultRequestQueryData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestQueryData(String...value) {
+			this.defaultRequestQueryData = value;
 			return this;
 		}
 
@@ -381,10 +360,51 @@ public class RestPatchAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Applies {@link RestPatch} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 */
+	public static class RestOpContextApply extends AnnotationApplier<RestPatch,RestOpContext.Builder> {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public RestOpContextApply(VarResolverSession vr) {
+			super(RestPatch.class, RestOpContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<RestPatch> ai, RestOpContext.Builder b) {
+			RestPatch a = ai.inner();
+
+			b.httpMethod("patch");
+
+			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
+			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
+			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
+			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
+			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
+			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
+			stream(a.defaultRequestFormData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestFormData().setDefault(x));
+			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
+			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
+			b.converters().append(a.converters());
+			b.guards().append(a.guards());
+			b.matchers().append(a.matchers());
+			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
+			stream(a.path()).forEach(x -> b.path(x));
+			string(a.value()).ifPresent(x -> b.path(x));
+			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+		}
+	}
 	private static class Impl extends TargetedAnnotationImpl implements RestPatch {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -463,23 +483,23 @@ public class RestPatchAnnotation {
 		}
 
 		@Override /* Overridden from RestPatch */
-		public String[] defaultRequestFormData() {
-			return defaultRequestFormData;
-		}
-
-		@Override /* Overridden from RestPatch */
-		public String[] defaultRequestQueryData() {
-			return defaultRequestQueryData;
-		}
-
-		@Override /* Overridden from RestPatch */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
 		@Override /* Overridden from RestPatch */
+		public String[] defaultRequestFormData() {
+			return defaultRequestFormData;
+		}
+
+		@Override /* Overridden from RestPatch */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
+		}
+
+		@Override /* Overridden from RestPatch */
+		public String[] defaultRequestQueryData() {
+			return defaultRequestQueryData;
 		}
 
 		@Override /* Overridden from RestPatch */
@@ -552,54 +572,14 @@ public class RestPatchAnnotation {
 			return value;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final RestPatch DEFAULT = create().build();
 	/**
-	 * Applies {@link RestPatch} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestPatch,RestOpContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestOpContextApply(VarResolverSession vr) {
-			super(RestPatch.class, RestOpContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<RestPatch> ai, RestOpContext.Builder b) {
-			RestPatch a = ai.inner();
-
-			b.httpMethod("patch");
-
-			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
-			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
-			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
-			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
-			stream(a.defaultRequestFormData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestFormData().setDefault(x));
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
-			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
-			b.converters().append(a.converters());
-			b.guards().append(a.guards());
-			b.matchers().append(a.matchers());
-			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			stream(a.path()).forEach(x -> b.path(x));
-			string(a.value()).ifPresent(x -> b.path(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
-		}
+	public static Builder create() {
+		return new Builder();
 	}
 }

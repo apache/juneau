@@ -61,21 +61,23 @@ public class NotImplemented extends BasicHttpException {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
 	 */
-	public NotImplemented(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public NotImplemented() {
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public NotImplemented() {
-		this((Throwable)null, REASON_PHRASE);
+	public NotImplemented(HttpResponse response) {
+		super(response);
+		assertStatusCode(response);
 	}
 
 	/**
@@ -100,15 +102,13 @@ public class NotImplemented extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public NotImplemented(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public NotImplemented(Throwable cause, String msg, Object...args) {
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
@@ -128,15 +128,15 @@ public class NotImplemented extends BasicHttpException {
 	public NotImplemented copy() {
 		return new NotImplemented(this);
 	}
-	@Override /* Overridden from BasicRuntimeException */
-	public NotImplemented setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	@Override /* Overridden from BasicHttpException */
+	public NotImplemented setContent(HttpEntity value) {
+		super.setContent(value);
 		return this;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public NotImplemented setUnmodifiable() {
-		super.setUnmodifiable();
+	@Override /* Overridden from BasicHttpException */
+	public NotImplemented setContent(String value) {
+		super.setContent(value);
 		return this;
 	}
 
@@ -153,6 +153,12 @@ public class NotImplemented extends BasicHttpException {
 	}
 
 	@Override /* Overridden from BasicHttpException */
+	public NotImplemented setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
 	public NotImplemented setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
@@ -161,6 +167,12 @@ public class NotImplemented extends BasicHttpException {
 	@Override /* Overridden from BasicHttpException */
 	public NotImplemented setLocale2(Locale value) {
 		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public NotImplemented setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 
@@ -181,7 +193,6 @@ public class NotImplemented extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpException */
 	public NotImplemented setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
@@ -193,21 +204,10 @@ public class NotImplemented extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
-	@Override /* Overridden from BasicHttpException */
-	public NotImplemented setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
 
-	@Override /* Overridden from BasicHttpException */
-	public NotImplemented setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public NotImplemented setContent(HttpEntity value) {
-		super.setContent(value);
+	@Override /* Overridden from BasicRuntimeException */
+	public NotImplemented setUnmodifiable() {
+		super.setUnmodifiable();
 		return this;
 	}
 }

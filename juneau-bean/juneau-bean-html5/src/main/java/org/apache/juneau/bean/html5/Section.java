@@ -108,10 +108,6 @@ public class Section extends HtmlElementMixed {
 	public Section(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Section _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -121,6 +117,30 @@ public class Section extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Section accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Section attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Section attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Section child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Section children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -481,30 +501,6 @@ public class Section extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Section translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Section child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Section children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Section attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Section attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -27,6 +27,7 @@ import org.apache.juneau.rest.client.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
  * </ul>
 */
+@SuppressWarnings("resource")
 public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse {
 
 	/**

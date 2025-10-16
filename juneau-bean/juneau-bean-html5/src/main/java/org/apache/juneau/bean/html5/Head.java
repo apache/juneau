@@ -95,7 +95,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#head() head()}
- * 		<li class='jm'>{@link HtmlBuilder#head(Object, Object...) head(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#head(Object...) head(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -120,10 +120,6 @@ public class Head extends HtmlElementContainer {
 	public Head(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Head _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -133,6 +129,30 @@ public class Head extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Head accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Head attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Head attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Head child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Head children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -466,6 +486,12 @@ public class Head extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Head setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Head spellcheck(Object value) {
 		super.spellcheck(value);
@@ -493,36 +519,6 @@ public class Head extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Head translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Head child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Head children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Head setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Head attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Head attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

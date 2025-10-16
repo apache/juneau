@@ -100,41 +100,6 @@ public class Progress extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-max">max</a> attribute.
-	 *
-	 * <p>
-	 * Upper bound of range.
-	 *
-	 * @param max
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Progress max(Object value) {
-		attr("max", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-value">value</a> attribute.
-	 *
-	 * <p>
-	 * Current value of the element.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Progress value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Progress _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -144,6 +109,29 @@ public class Progress extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Progress accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Progress attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Progress attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Progress child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Progress children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -174,6 +162,22 @@ public class Progress extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Progress lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-max">max</a> attribute.
+	 *
+	 * <p>
+	 * Upper bound of range.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Progress max(Object value) {
+		attr("max", value);
 		return this;
 	}
 
@@ -507,27 +511,19 @@ public class Progress extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Progress child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Progress children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Progress attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Progress attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-progress-value">value</a> attribute.
+	 *
+	 * <p>
+	 * Current value of the element.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Progress value(Object value) {
+		attr("value", value);
 		return this;
 	}
 }

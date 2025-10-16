@@ -42,11 +42,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public abstract class BeanTraverseContext extends BeanContextable {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -91,23 +86,192 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			maxDepth = copyFrom.maxDepth;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext.Builder value) {
+			super.beanContext(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanDictionary(java.lang.Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
 		@Override /* Overridden from Context.Builder */
 		public abstract Builder copy();
 
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				detectRecursions,
-				ignoreRecursions,
-				initialDepth,
-				maxDepth
-			);
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
 
 		/**
 		 * Automatically detect POJO recursions.
@@ -158,6 +322,89 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 */
 		public Builder detectRecursions(boolean value) {
 			detectRecursions = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				detectRecursions,
+				ignoreRecursions,
+				initialDepth,
+				maxDepth
+			);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
 			return this;
 		}
 
@@ -216,6 +463,36 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
 		/**
 		 * Initial depth.
 		 *
@@ -245,6 +522,24 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 */
 		public Builder initialDepth(int value) {
 			initialDepth = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
 			return this;
 		}
 
@@ -282,317 +577,6 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			maxDepth = value;
 			return this;
 		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder mediaType(MediaType value) {
@@ -613,14 +597,14 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -655,13 +639,13 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
+		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -673,20 +657,26 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder typeName(Class<?> on, String value) {
 			super.typeName(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -702,11 +692,6 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			return this;
 		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	final int initialDepth, maxDepth;
 	final boolean
 		detectRecursions,
@@ -732,34 +717,6 @@ public abstract class BeanTraverseContext extends BeanContextable {
 
 	@Override /* Overridden from Context */
 	public abstract Builder copy();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Automatically detect POJO recursions.
-	 *
-	 * @see Builder#detectRecursions()
-	 * @return
-	 * 	<jk>true</jk> if recursions should be checked for during traversal.
-	 */
-	public final boolean isDetectRecursions() {
-		return actualDetectRecursions;
-	}
-
-	/**
-	 * Ignore recursion errors.
-	 *
-	 * @see Builder#ignoreRecursions()
-	 * @return
-	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 */
-	public final boolean isIgnoreRecursions() {
-		return ignoreRecursions;
-	}
-
 	/**
 	 * Initial depth.
 	 *
@@ -783,10 +740,28 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		return maxDepth;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Automatically detect POJO recursions.
+	 *
+	 * @see Builder#detectRecursions()
+	 * @return
+	 * 	<jk>true</jk> if recursions should be checked for during traversal.
+	 */
+	public final boolean isDetectRecursions() {
+		return actualDetectRecursions;
+	}
 
+	/**
+	 * Ignore recursion errors.
+	 *
+	 * @see Builder#ignoreRecursions()
+	 * @return
+	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 * 	<br>Otherwise, an exception is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 */
+	public final boolean isIgnoreRecursions() {
+		return ignoreRecursions;
+	}
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("detectRecursions", detectRecursions, "maxDepth", maxDepth, "ignoreRecursions", ignoreRecursions, "initialDepth", initialDepth);

@@ -43,9 +43,6 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class AttributeArg implements RestOpArg {
 
-	private final String name;
-	private final Class<?> type;
-
 	/**
 	 * Static creator.
 	 *
@@ -57,6 +54,9 @@ public class AttributeArg implements RestOpArg {
 			return new AttributeArg(paramInfo);
 		return null;
 	}
+	private final String name;
+
+	private final Class<?> type;
 
 	/**
 	 * Constructor.
@@ -68,6 +68,11 @@ public class AttributeArg implements RestOpArg {
 		this.type = paramInfo.getParameterType().inner();
 	}
 
+	@Override /* Overridden from RestOpArg */
+	public Object resolve(RestOpSession opSession) throws Exception {
+		return opSession.getRequest().getAttribute(name).as(type).orElse(null);
+	}
+
 	private String getName(ParamInfo paramInfo) {
 		Value<String> n = Value.empty();
 		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
@@ -75,10 +80,5 @@ public class AttributeArg implements RestOpArg {
 		if (n.isEmpty())
 			throw new ArgException(paramInfo, "@Attr used without name or value");
 		return n.get();
-	}
-
-	@Override /* Overridden from RestOpArg */
-	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getRequest().getAttribute(name).as(type).orElse(null);
 	}
 }

@@ -33,21 +33,7 @@ import org.apache.juneau.reflect.*;
  */
 public class Utils2 extends Utils {
 
-	/**
-	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
-	 *
-	 * @param o The object to unwrap.
-	 * @return The unwrapped object.
-	 */
-	public static Object unwrap(Object o) {
-		if (o instanceof Supplier)
-			o = unwrap(((Supplier<?>)o).get());
-		if (o instanceof Value)
-			o = unwrap(((Value<?>)o).get());
-		if (o instanceof Optional)
-			o = unwrap(((Optional<?>)o).orElse(null));
-		return o;
-	}
+	private static final ConcurrentHashMap<Class<?>,Map<String,MethodInfo>> PROPERTIES_METHODS = new ConcurrentHashMap<>();
 
 	/**
 	 * Converts the specified object into an identifiable string of the form "Class[identityHashCode]"
@@ -61,8 +47,6 @@ public class Utils2 extends Utils {
 			return null;
 		return ClassInfo.of(o).getShortName() + "@" + System.identityHashCode(o);
 	}
-
-	private static final ConcurrentHashMap<Class<?>,Map<String,MethodInfo>> PROPERTIES_METHODS = new ConcurrentHashMap<>();
 
 	/**
 	 * Searches for all <c>properties()</c> methods on the specified object and creates a combine map of them.
@@ -90,5 +74,21 @@ public class Utils2 extends Utils {
 		JsonMap m = JsonMap.create().append("id", identity(o));
 		methods.forEach((k,v) -> m.put(k, v.invoke(o)));
 		return m;
+	}
+
+	/**
+	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
+	 *
+	 * @param o The object to unwrap.
+	 * @return The unwrapped object.
+	 */
+	public static Object unwrap(Object o) {
+		if (o instanceof Supplier)
+			o = unwrap(((Supplier<?>)o).get());
+		if (o instanceof Value)
+			o = unwrap(((Value<?>)o).get());
+		if (o instanceof Optional)
+			o = unwrap(((Optional<?>)o).orElse(null));
+		return o;
 	}
 }

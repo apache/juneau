@@ -24,11 +24,6 @@ import java.util.concurrent.locks.*;
  */
 public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	private static final long serialVersionUID = 1L;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * A no-op lock.
 	 */
@@ -36,19 +31,14 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		public SimpleLock write() {
-			return SimpleLock.NO_OP;
-		}
-		@Override
 		public SimpleLock read(){
 			return SimpleLock.NO_OP;
 		}
+		@Override
+		public SimpleLock write() {
+			return SimpleLock.NO_OP;
+		}
 	};
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -65,20 +55,20 @@ public class SimpleReadWriteLock extends ReentrantReadWriteLock {
 	}
 
 	/**
-	 * Construct a write lock.
-	 *
-	 * @return A new closeable write lock.
-	 */
-	public SimpleLock write(){
-		return new SimpleLock(writeLock());
-	}
-
-	/**
 	 * Construct a read lock.
 	 *
 	 * @return A new closeable read lock.
 	 */
 	public SimpleLock read(){
 		return new SimpleLock(readLock());
+	}
+
+	/**
+	 * Construct a write lock.
+	 *
+	 * @return A new closeable write lock.
+	 */
+	public SimpleLock write(){
+		return new SimpleLock(writeLock());
 	}
 }

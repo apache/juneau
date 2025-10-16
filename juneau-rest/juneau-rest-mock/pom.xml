@@ -58,6 +58,15 @@
 						<Automatic-Module-Name>org.apache.juneau.rest.mock</Automatic-Module-Name>
 					</instructions>
 				</configuration>
+				<executions>
+				<execution>
+					<id>bundle-manifest</id>
+					<phase>process-classes</phase>
+					<goals>
+						<goal>manifest</goal>
+					</goals>
+				</execution>
+			</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

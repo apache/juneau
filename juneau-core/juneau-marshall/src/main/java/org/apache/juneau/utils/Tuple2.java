@@ -57,6 +57,11 @@ public class Tuple2<A,B> {
 		this.b = b;
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b));
+	}
+
 	/**
 	 * Returns the first object in this tuple.
 	 *
@@ -78,10 +83,5 @@ public class Tuple2<A,B> {
 	@Override /* Overridden from Object */
 	public int hashCode() {
 		return HashCode.of(a,b);
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return o instanceof Tuple2 && Utils.eq(this, (Tuple2<?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b));
 	}
 }

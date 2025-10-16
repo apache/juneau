@@ -34,11 +34,6 @@ import org.springframework.stereotype.Controller;
 @SpringBootApplication
 @Controller
 public class App {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Entry point
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Entry point method.
 	 * @param args Command-line arguments.
@@ -52,10 +47,25 @@ public class App {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Optionally return an injectable message provider for the {@link HelloWorldResource} class.
+	 *
+	 * @return The message provider for the hello-world REST bean.
+	 */
+	@Bean
+	public HelloWorldMessageProvider getHelloWorldMessageProvider() {
+		return new HelloWorldMessageProvider("Hello Spring injection user!");
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Beans
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Optionally return the {@link HelloWorldResource} object as an injectable bean.
+	 *
+	 * @return The hello-world REST bean.
+	 */
+	@Bean
+	public HelloWorldResource getHelloWorldResource() {
+		return new HelloWorldResource();
+	}
 
 	/**
 	 * Our root REST bean.
@@ -70,26 +80,6 @@ public class App {
 	@Bean
 	public RootResources getRootResources() {
 		return new RootResources();
-	}
-
-	/**
-	 * Optionally return the {@link HelloWorldResource} object as an injectable bean.
-	 *
-	 * @return The hello-world REST bean.
-	 */
-	@Bean
-	public HelloWorldResource getHelloWorldResource() {
-		return new HelloWorldResource();
-	}
-
-	/**
-	 * Optionally return an injectable message provider for the {@link HelloWorldResource} class.
-	 *
-	 * @return The message provider for the hello-world REST bean.
-	 */
-	@Bean
-	public HelloWorldMessageProvider getHelloWorldMessageProvider() {
-		return new HelloWorldMessageProvider("Hello Spring injection user!");
 	}
 
 	/**

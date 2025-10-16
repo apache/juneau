@@ -31,26 +31,22 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class RestEndCallAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final RestEndCall DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * A collection of {@link RestEndCall @RestEndCall annotations}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		RestEndCall[] value();
+	}
 
 	/**
 	 * Builder class.
@@ -78,11 +74,6 @@ public class RestEndCallAnnotation {
 		}
 
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationImpl implements RestEndCall {
 
 		Impl(Builder b) {
@@ -90,25 +81,14 @@ public class RestEndCallAnnotation {
 			postConstruct();
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final RestEndCall DEFAULT = create().build();
 	/**
-	 * A collection of {@link RestEndCall @RestEndCall annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		RestEndCall[] value();
+	public static Builder create() {
+		return new Builder();
 	}
 }

@@ -37,14 +37,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class EntityTag {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final String value;
-	private final boolean isWeak, isAny;
-
 	/**
 	 * Static creator.
 	 *
@@ -56,11 +48,9 @@ public class EntityTag {
 		Object o = unwrap(value);
 		return o == null ? null : new EntityTag(o.toString());
 	}
+	private final String value;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	private final boolean isWeak, isAny;
 	/**
 	 * Constructor.
 	 *
@@ -96,21 +86,21 @@ public class EntityTag {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the weak flag is present in the value.
-	 *
-	 * @return <jk>true</jk> if the weak flag is present in the value.
-	 */
-	public boolean isWeak() {
-		return isWeak;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the validator string value is <c>*</c>.
 	 *
 	 * @return <jk>true</jk> if the validator string value is <c>*</c>.
 	 */
 	public boolean isAny() {
 		return isAny;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the weak flag is present in the value.
+	 *
+	 * @return <jk>true</jk> if the weak flag is present in the value.
+	 */
+	public boolean isWeak() {
+		return isWeak;
 	}
 
 	@Override

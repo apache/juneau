@@ -42,27 +42,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestOptionsAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final RestOptions DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -155,17 +134,6 @@ public class RestOptionsAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestOptions#defaultRequestQueryData()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder defaultRequestQueryData(String...value) {
-			this.defaultRequestQueryData = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestOptions#defaultRequestAttributes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -184,6 +152,17 @@ public class RestOptionsAnnotation {
 		 */
 		public Builder defaultRequestHeaders(String...value) {
 			this.defaultRequestHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOptions#defaultRequestQueryData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestQueryData(String...value) {
+			this.defaultRequestQueryData = value;
 			return this;
 		}
 
@@ -325,10 +304,46 @@ public class RestOptionsAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Applies {@link RestOptions} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 */
+	public static class RestOpContextApply extends AnnotationApplier<RestOptions,RestOpContext.Builder> {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public RestOpContextApply(VarResolverSession vr) {
+			super(RestOptions.class, RestOpContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<RestOptions> ai, RestOpContext.Builder b) {
+			RestOptions a = ai.inner();
+
+			b.httpMethod("options");
+
+			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
+			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
+			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
+			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
+			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
+			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
+			b.converters().append(a.converters());
+			b.guards().append(a.guards());
+			b.matchers().append(a.matchers());
+			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			stream(a.path()).forEach(x -> b.path(x));
+			string(a.value()).ifPresent(x -> b.path(x));
+			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+		}
+	}
 	private static class Impl extends TargetedAnnotationImpl implements RestOptions {
 
 		private final Class<? extends RestConverter>[] converters;
@@ -391,11 +406,6 @@ public class RestOptionsAnnotation {
 		}
 
 		@Override /* Overridden from RestOptions */
-		public String[] defaultRequestQueryData() {
-			return defaultRequestQueryData;
-		}
-
-		@Override /* Overridden from RestOptions */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
@@ -403,6 +413,11 @@ public class RestOptionsAnnotation {
 		@Override /* Overridden from RestOptions */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
+		}
+
+		@Override /* Overridden from RestOptions */
+		public String[] defaultRequestQueryData() {
+			return defaultRequestQueryData;
 		}
 
 		@Override /* Overridden from RestOptions */
@@ -465,49 +480,14 @@ public class RestOptionsAnnotation {
 			return value;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final RestOptions DEFAULT = create().build();
 	/**
-	 * Applies {@link RestOptions} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestOptions,RestOpContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestOpContextApply(VarResolverSession vr) {
-			super(RestOptions.class, RestOpContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<RestOptions> ai, RestOpContext.Builder b) {
-			RestOptions a = ai.inner();
-
-			b.httpMethod("options");
-
-			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
-			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
-			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
-			b.converters().append(a.converters());
-			b.guards().append(a.guards());
-			b.matchers().append(a.matchers());
-			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			stream(a.path()).forEach(x -> b.path(x));
-			string(a.value()).ifPresent(x -> b.path(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
-		}
+	public static Builder create() {
+		return new Builder();
 	}
 }

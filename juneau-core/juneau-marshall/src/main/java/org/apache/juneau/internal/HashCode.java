@@ -30,8 +30,6 @@ package org.apache.juneau.internal;
  */
 public class HashCode {
 
-	private int hashCode = 1;
-
 	/**
 	 * Create a new HashCode object.
 	 *
@@ -54,17 +52,7 @@ public class HashCode {
 		return x.get();
 	}
 
-	/**
-	 * Hashes the hashcode of the specified object into this object.
-	 *
-	 * @param o The object whose hashcode will be hashed with this object.
-	 * @return This object.
-	 */
-	public HashCode add(Object o) {
-		o = unswap(o);
-		add(o == null ? 0 : o.hashCode());
-		return this;
-	}
+	private int hashCode = 1;
 
 	/**
 	 * Hashes the hashcode into this object.
@@ -77,6 +65,18 @@ public class HashCode {
 	 */
 	public HashCode add(int i) {
 		hashCode = 31*hashCode + i;
+		return this;
+	}
+
+	/**
+	 * Hashes the hashcode of the specified object into this object.
+	 *
+	 * @param o The object whose hashcode will be hashed with this object.
+	 * @return This object.
+	 */
+	public HashCode add(Object o) {
+		o = unswap(o);
+		add(o == null ? 0 : o.hashCode());
 		return this;
 	}
 

@@ -53,6 +53,11 @@ public class HtmlWidgetVar extends SimpleVar {
 		super(NAME);
 	}
 
+	@Override
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(HtmlWidgetMap.class).isPresent();
+	}
+
 	@Override /* Overridden from Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		HtmlWidgetMap m = session.getBean(HtmlWidgetMap.class).orElseThrow(RuntimeException::new);
@@ -62,10 +67,5 @@ public class HtmlWidgetVar extends SimpleVar {
 			return "unknown-widget-"+key;
 
 		return w.getHtml(session);
-	}
-
-	@Override
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(HtmlWidgetMap.class).isPresent();
 	}
 }

@@ -56,38 +56,6 @@ import org.apache.juneau.rest.widget.*;
 )
 public class UtilityBeansResource extends BasicRestObject {
 
-	@SuppressWarnings("unused")
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * [HTTP GET /utilitybeans]
-	 * @return Descriptive links to the child endpoints.
-	 */
-	@RestGet("/")
-	public ResourceDescriptions getChildDescriptions() {
-		return ResourceDescriptions
-			.create()
-			.append("BeanDescription", "Example of BeanDescription bean")
-			.append("Hyperlink", "Example of Hyperlink bean")
-			.append("SeeOtherRoot", "Example of SeeOtherRoot bean");
-	}
-
-	/**
-	 * [HTTP GET /utilitybeans/BeanDescription]
-	 * @return Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
-	 */
-	@RestGet("/BeanDescription")
-	@HtmlDocConfig(
-		aside={
-			"<div class='text'>",
-			"	<p>Example of serialized ResourceDescriptions bean.</p>",
-			"</div>"
-		}
-	)
-	public BeanDescription aBeanDescription() {
-		return BeanDescription.of(Address.class);
-	}
-
 	/**
 	 * Sample address bean used for demonstrating utility bean functionality.
 	 */
@@ -111,6 +79,25 @@ public class UtilityBeansResource extends BasicRestObject {
 
 		/** Default constructor. */
 		public Address() {}
+	}
+
+	@SuppressWarnings("unused")
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * [HTTP GET /utilitybeans/BeanDescription]
+	 * @return Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
+	 */
+	@RestGet("/BeanDescription")
+	@HtmlDocConfig(
+		aside={
+			"<div class='text'>",
+			"	<p>Example of serialized ResourceDescriptions bean.</p>",
+			"</div>"
+		}
+	)
+	public BeanDescription aBeanDescription() {
+		return BeanDescription.of(Address.class);
 	}
 
 	/**
@@ -144,5 +131,18 @@ public class UtilityBeansResource extends BasicRestObject {
 	)
 	public SeeOtherRoot aSeeOtherRoot() {
 		return SeeOtherRoot.INSTANCE;
+	}
+
+	/**
+	 * [HTTP GET /utilitybeans]
+	 * @return Descriptive links to the child endpoints.
+	 */
+	@RestGet("/")
+	public ResourceDescriptions getChildDescriptions() {
+		return ResourceDescriptions
+			.create()
+			.append("BeanDescription", "Example of BeanDescription bean")
+			.append("Hyperlink", "Example of Hyperlink bean")
+			.append("SeeOtherRoot", "Example of SeeOtherRoot bean");
 	}
 }

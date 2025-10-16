@@ -32,32 +32,6 @@ import org.apache.juneau.svl.*;
  */
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private static final long serialVersionUID = 1L;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param annotations The annotations to create work from.
-	 * @param vrs The variable resolver.
-	 * @return A new list.
-	 */
-	public static AnnotationWorkList of(VarResolverSession vrs, AnnotationList annotations) {
-		return create(vrs).add(annotations);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param annotations The annotations to create work from.
-	 * @return A new list.
-	 */
-	public static AnnotationWorkList of(AnnotationList annotations) {
-		return create().add(annotations);
-	}
-
 	/**
 	 * Static creator.
 	 *
@@ -77,10 +51,26 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 		return new AnnotationWorkList(vrs);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Static creator.
+	 *
+	 * @param annotations The annotations to create work from.
+	 * @return A new list.
+	 */
+	public static AnnotationWorkList of(AnnotationList annotations) {
+		return create().add(annotations);
+	}
 
+	/**
+	 * Static creator.
+	 *
+	 * @param annotations The annotations to create work from.
+	 * @param vrs The variable resolver.
+	 * @return A new list.
+	 */
+	public static AnnotationWorkList of(VarResolverSession vrs, AnnotationList annotations) {
+		return create(vrs).add(annotations);
+	}
 	private final VarResolverSession vrs;
 
 	private AnnotationWorkList(VarResolverSession vrs) {

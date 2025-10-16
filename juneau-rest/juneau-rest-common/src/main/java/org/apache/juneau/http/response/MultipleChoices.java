@@ -64,15 +64,6 @@ public class MultipleChoices extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public MultipleChoices(MultipleChoices copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -87,6 +78,15 @@ public class MultipleChoices extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public MultipleChoices(MultipleChoices copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -95,13 +95,13 @@ public class MultipleChoices extends BasicHttpResponse {
 		return new MultipleChoices(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public MultipleChoices setContent(String value) {
+	public MultipleChoices setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MultipleChoices setContent(HttpEntity value) {
+	public MultipleChoices setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -119,14 +119,14 @@ public class MultipleChoices extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MultipleChoices setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public MultipleChoices setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MultipleChoices setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public MultipleChoices setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

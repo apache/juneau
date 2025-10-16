@@ -21,8 +21,6 @@ package org.apache.juneau.internal;
  */
 public class IntValue {
 
-	private int value;
-
 	/**
 	 * Creates a new integer value initialized to <code>0</code>.
 	 *
@@ -42,19 +40,10 @@ public class IntValue {
 		return new IntValue(value);
 	}
 
+	private int value;
+
 	private IntValue(int value) {
 		this.value = value;
-	}
-
-	/**
-	 * Sets the value.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public IntValue set(int value) {
-		this.value = value;
-		return this;
 	}
 
 	/**
@@ -75,5 +64,16 @@ public class IntValue {
 		int v = value;
 		value++;
 		return v;
+	}
+
+	/**
+	 * Sets the value.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public IntValue set(int value) {
+		this.value = value;
+		return this;
 	}
 }

@@ -102,26 +102,6 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<RequestContent,R> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentRequestContentAssertion(RequestContent value, R returns) {
-		this(null, value, returns);
-	}
-
 	/**
 	 * Chained constructor.
 	 *
@@ -144,35 +124,20 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		setThrowable(BadRequest.class);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Provides the ability to perform fluent-style assertions on the bytes of the request content.
+	 * Constructor.
 	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates the request content equals the text "foo".</jc>
-	 * 	<jv>request</jv>
-	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
-	 *  <li class='note'>
-	 *		When using this method, the content is automatically cached by calling the {@link RequestContent#cache()}.
-	 * 	<li class='note'>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return A new fluent assertion object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
-	public FluentByteArrayAssertion<R> asBytes() {
-		return new FluentByteArrayAssertion<>(valueAsBytes(), returns());
+	public FluentRequestContentAssertion(RequestContent value, R returns) {
+		this(null, value, returns);
 	}
-
 	/**
 	 * Converts the content to a type using {@link RequestContent#as(Class)} and then returns the value as an object assertion.
 	 *
@@ -238,10 +203,30 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		return new FluentObjectAssertion<>(valueAsType(type, args), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Provides the ability to perform fluent-style assertions on the bytes of the request content.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the request content equals the text "foo".</jc>
+	 * 	<jv>request</jv>
+	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
+	 *  <li class='note'>
+	 *		When using this method, the content is automatically cached by calling the {@link RequestContent#cache()}.
+	 * 	<li class='note'>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentByteArrayAssertion<R> asBytes() {
+		return new FluentByteArrayAssertion<>(valueAsBytes(), returns());
+	}
 	/**
 	 * Asserts that the content contains the specified value.
 	 *
@@ -265,6 +250,16 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	}
 
 	/**
+	 * Asserts that the content is empty.
+	 *
+	 * @return This object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEmpty() {
+		return asString().isEmpty();
+	}
+
+	/**
 	 * Asserts that the content doesn't contain any of the specified substrings.
 	 *
 	 * @param values The values to check against.
@@ -276,16 +271,6 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	}
 
 	/**
-	 * Asserts that the content is empty.
-	 *
-	 * @return This object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEmpty() {
-		return asString().isEmpty();
-	}
-
-	/**
 	 * Asserts that the content is not empty.
 	 *
 	 * @return This object.
@@ -294,18 +279,33 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	public R isNotEmpty() {
 		return asString().isNotEmpty();
 	}
+	@Override /* Overridden from Assertion */
+	public FluentRequestContentAssertion<R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
+		return this;
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from Assertion */
+	public FluentRequestContentAssertion<R> setOut(PrintStream value) {
+		super.setOut(value);
+		return this;
+	}
 
-	@Override
-	protected String valueAsString() throws AssertionError {
-		try {
-			return value().cache().asString();
-		} catch (IOException e) {
-			throw error(e, "Exception occurred during call.");
-		}
+	@Override /* Overridden from Assertion */
+	public FluentRequestContentAssertion<R> setSilent() {
+		super.setSilent();
+		return this;
+	}
+
+	@Override /* Overridden from Assertion */
+	public FluentRequestContentAssertion<R> setStdOut() {
+		super.setStdOut();
+		return this;
+	}
+	@Override /* Overridden from Assertion */
+	public FluentRequestContentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
+		return this;
 	}
 
 	private byte[] valueAsBytes() throws AssertionError {
@@ -332,36 +332,12 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from Assertion */
-	public FluentRequestContentAssertion<R> setMsg(String msg, Object...args) {
-		super.setMsg(msg, args);
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentRequestContentAssertion<R> setOut(PrintStream value) {
-		super.setOut(value);
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentRequestContentAssertion<R> setSilent() {
-		super.setSilent();
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentRequestContentAssertion<R> setStdOut() {
-		super.setStdOut();
-		return this;
-	}
-
-	@Override /* Overridden from Assertion */
-	public FluentRequestContentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
-		super.setThrowable(value);
-		return this;
+	@Override
+	protected String valueAsString() throws AssertionError {
+		try {
+			return value().cache().asString();
+		} catch (IOException e) {
+			throw error(e, "Exception occurred during call.");
+		}
 	}
 }

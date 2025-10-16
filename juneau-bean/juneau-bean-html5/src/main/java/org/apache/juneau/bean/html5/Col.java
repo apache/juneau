@@ -96,34 +96,26 @@ public class Col extends HtmlElementVoid {
 		span(span);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-col-span">span</a> attribute.
-	 *
-	 * <p>
-	 * Number of columns spanned by the element.
-	 *
-	 * @param span
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Col span(Object value) {
-		attr("span", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Col _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Col accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Col attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Col attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -457,6 +449,22 @@ public class Col extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-col-span">span</a> attribute.
+	 *
+	 * <p>
+	 * Number of columns spanned by the element.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Col span(Object value) {
+		attr("span", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Col spellcheck(Object value) {
 		super.spellcheck(value);
@@ -484,18 +492,6 @@ public class Col extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Col translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Col attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Col attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

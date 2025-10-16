@@ -75,7 +75,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#canvas() canvas()}
- * 		<li class='jm'>{@link HtmlBuilder#canvas(Object, Object...) canvas(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#canvas(Number, Number) canvas(Number, Number)}
  * 	</ul>
  * </ul>
  * </p>
@@ -103,41 +103,6 @@ public class Canvas extends HtmlElementMixed {
 		width(width).height(height);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height">height</a> attribute.
-	 *
-	 * <p>
-	 * Vertical dimension.
-	 *
-	 * @param height
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Canvas height(Object value) {
-		attr("height", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Canvas width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Canvas _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -147,6 +112,29 @@ public class Canvas extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Canvas accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Canvas attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Canvas attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Canvas child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Canvas children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -159,6 +147,22 @@ public class Canvas extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Canvas dir(String value) {
 		super.dir(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height">height</a> attribute.
+	 *
+	 * <p>
+	 * Vertical dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Canvas height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -510,27 +514,19 @@ public class Canvas extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Canvas child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Canvas children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Canvas attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Canvas attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Canvas width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

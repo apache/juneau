@@ -37,8 +37,8 @@ public class BeanMetaFiltered<T> extends BeanMeta<T> {
 	 * @param innerMeta The untransformed bean meta of the bean property.
 	 * @param pNames The list of transformed property names.
 	 */
-	public BeanMetaFiltered(BeanMeta<T> innerMeta, String[] pNames) {
-		super(innerMeta.classMeta, innerMeta.ctx, innerMeta.beanFilter, pNames, null);
+	public BeanMetaFiltered(BeanMeta<T> innerMeta, Collection<String> pNames) {
+		this(innerMeta, pNames.toArray(new String[pNames.size()]));
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class BeanMetaFiltered<T> extends BeanMeta<T> {
 	 * @param innerMeta The untransformed bean meta of the bean property.
 	 * @param pNames The list of transformed property names.
 	 */
-	public BeanMetaFiltered(BeanMeta<T> innerMeta, Collection<String> pNames) {
-		this(innerMeta, pNames.toArray(new String[pNames.size()]));
+	public BeanMetaFiltered(BeanMeta<T> innerMeta, String[] pNames) {
+		super(innerMeta.classMeta, innerMeta.ctx, innerMeta.beanFilter, pNames, null);
 	}
 }

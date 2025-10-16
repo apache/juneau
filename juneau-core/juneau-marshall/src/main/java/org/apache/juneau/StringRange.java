@@ -46,21 +46,15 @@ import org.apache.juneau.common.utils.*;
 @BeanIgnore
 public class StringRange {
 
+	private static HeaderElement parse(String value) {
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
+	}
 	private final NameValuePair[] extensions;
 	private final Float qValue;
 	private final String name;
-	private final String string;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The raw string range string.
-	 * 	<br>A value of <jk>null</jk> gets interpreted as matching anything (e.g. <js>"*"</js>).
-	 */
-	public StringRange(String value) {
-		this(parse(value));
-	}
+	private final String string;
 
 	/**
 	 * Constructor.
@@ -102,6 +96,52 @@ public class StringRange {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The raw string range string.
+	 * 	<br>A value of <jk>null</jk> gets interpreted as matching anything (e.g. <js>"*"</js>).
+	 */
+	public StringRange(String value) {
+		this(parse(value));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is also a <c>StringRange</c>, and has the same qValue, type,
+	 * parameters, and extensions.
+	 *
+	 * @return <jk>true</jk> if object is equivalent.
+	 */
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof StringRange) && eq(this, (StringRange)o, (x,y)->eq(x.string, y.string));
+	}
+
+	/**
+	 * Performs an action on the optional set of custom extensions defined for this type.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public StringRange forEachExtension(Consumer<NameValuePair> action) {
+		for (NameValuePair p : extensions)
+			action.accept(p);
+		return this;
+	}
+
+	/**
+	 * Returns the optional set of custom extensions defined for this type.
+	 *
+	 * <p>
+	 * Values are lowercase and never <jk>null</jk>.
+	 *
+	 * @return The optional list of extensions, never <jk>null</jk>.
+	 */
+	public List<NameValuePair> getExtensions() {
+		return alist(extensions);
+	}
+
+	/**
 	 * Returns the name of this string range.
 	 *
 	 * <p>
@@ -130,41 +170,6 @@ public class StringRange {
 	}
 
 	/**
-	 * Returns the optional set of custom extensions defined for this type.
-	 *
-	 * <p>
-	 * Values are lowercase and never <jk>null</jk>.
-	 *
-	 * @return The optional list of extensions, never <jk>null</jk>.
-	 */
-	public List<NameValuePair> getExtensions() {
-		return alist(extensions);
-	}
-
-	/**
-	 * Performs an action on the optional set of custom extensions defined for this type.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public StringRange forEachExtension(Consumer<NameValuePair> action) {
-		for (NameValuePair p : extensions)
-			action.accept(p);
-		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is also a <c>StringRange</c>, and has the same qValue, type,
-	 * parameters, and extensions.
-	 *
-	 * @return <jk>true</jk> if object is equivalent.
-	 */
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof StringRange) && eq(this, (StringRange)o, (x,y)->eq(x.string, y.string));
-	}
-
-	/**
 	 * Returns a hash based on this instance's <c>media-type</c>.
 	 *
 	 * @return A hash based on this instance's <c>media-type</c>.
@@ -189,11 +194,6 @@ public class StringRange {
 		if (eq(this.name, "*"))
 			return 50;
 		return 0;
-	}
-
-	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
-		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
 	}
 
 	@Override /* Overridden from Object */

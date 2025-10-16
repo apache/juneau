@@ -76,15 +76,6 @@ import org.apache.juneau.common.utils.*;
 public class Assertions {
 
 	/**
-	 * Constructor.
-	 */
-	protected Assertions() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent assertions
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Performs an assertion on an arbitrary POJO.
 	 *
 	 * <p>
@@ -119,6 +110,10 @@ public class Assertions {
 	public static final <T> AnyAssertion<T> assertAny(T value) {
 		return AnyAssertion.create(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent assertions
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Performs an assertion on an array of POJOs.
@@ -908,6 +903,31 @@ public class Assertions {
 	}
 
 	/**
+	 * Executes an arbitrary snippet of code and captures anything thrown from it as a Throwable assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "foobar" in the message. </jc>
+	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
+	 * 		.isType(RuntimeException.<jk>class</jk>)
+	 * 		.message().contains(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param snippet The snippet of code to execute.
+	 * @return A new assertion object.  Never <jk>null</jk>.
+	 */
+	public static final ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (Throwable e) {
+			return assertThrowable(e);
+		}
+		return assertThrowable(null);
+	}
+
+	/**
 	 * Performs an assertion on a Version.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -964,27 +984,7 @@ public class Assertions {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Executes an arbitrary snippet of code and captures anything thrown from it as a Throwable assertion.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
-	 *
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
-	 * 		.isType(RuntimeException.<jk>class</jk>)
-	 * 		.message().contains(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @param snippet The snippet of code to execute.
-	 * @return A new assertion object.  Never <jk>null</jk>.
+	 * Constructor.
 	 */
-	public static final ThrowableAssertion<Throwable> assertThrown(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Throwable e) {
-			return assertThrowable(e);
-		}
-		return assertThrowable(null);
-	}
+	protected Assertions() {}
 }

@@ -117,186 +117,6 @@ public class Components extends OpenApiElement {
 	}
 
 	/**
-	 * Returns the schemas map.
-	 *
-	 * @return The schemas map.
-	 */
-	public Map<String,SchemaInfo> getSchemas() {
-		return schemas;
-	}
-
-	/**
-	 * Sets the schemas map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setSchemas(Map<String,SchemaInfo> value) {
-		this.schemas = value;
-		return this;
-	}
-
-	/**
-	 * Returns the responses map.
-	 *
-	 * @return The responses map.
-	 */
-	public Map<String,Response> getResponses() {
-		return responses;
-	}
-
-	/**
-	 * Sets the responses map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setResponses(Map<String,Response> value) {
-		this.responses = value;
-		return this;
-	}
-
-	/**
-	 * Returns the parameters map.
-	 *
-	 * @return The parameters map.
-	 */
-	public Map<String,Parameter> getParameters() {
-		return parameters;
-	}
-
-	/**
-	 * Sets the parameters map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setParameters(Map<String,Parameter> value) {
-		this.parameters = value;
-		return this;
-	}
-
-	/**
-	 * Returns the examples map.
-	 *
-	 * @return The examples map.
-	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
-
-	/**
-	 * Sets the examples map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setExamples(Map<String,Example> value) {
-		this.examples = value;
-		return this;
-	}
-
-	/**
-	 * Returns the request bodies map.
-	 *
-	 * @return The request bodies map.
-	 */
-	public Map<String,RequestBodyInfo> getRequestBodies() {
-		return requestBodies;
-	}
-
-	/**
-	 * Sets the request bodies map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setRequestBodies(Map<String,RequestBodyInfo> value) {
-		this.requestBodies = value;
-		return this;
-	}
-
-	/**
-	 * Returns the headers map.
-	 *
-	 * @return The headers map.
-	 */
-	public Map<String,HeaderInfo> getHeaders() {
-		return headers;
-	}
-
-	/**
-	 * Sets the headers map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setHeaders(Map<String,HeaderInfo> value) {
-		this.headers = value;
-		return this;
-	}
-
-	/**
-	 * Returns the security schemes map.
-	 *
-	 * @return The security schemes map.
-	 */
-	public Map<String,SecuritySchemeInfo> getSecuritySchemes() {
-		return securitySchemes;
-	}
-
-	/**
-	 * Sets the security schemes map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setSecuritySchemes(Map<String,SecuritySchemeInfo> value) {
-		this.securitySchemes = value;
-		return this;
-	}
-
-	/**
-	 * Returns the links map.
-	 *
-	 * @return The links map.
-	 */
-	public Map<String,Link> getLinks() {
-		return links;
-	}
-
-	/**
-	 * Sets the links map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setLinks(Map<String,Link> value) {
-		this.links = value;
-		return this;
-	}
-
-	/**
-	 * Returns the callbacks map.
-	 *
-	 * @return The callbacks map.
-	 */
-	public Map<String,Callback> getCallbacks() {
-		return callbacks;
-	}
-
-	/**
-	 * Sets the callbacks map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Components setCallbacks(Map<String,Callback> value) {
-		this.callbacks = value;
-		return this;
-	}
-
-	/**
 	 * Creates a copy of this object.
 	 *
 	 * @return A copy of this object.
@@ -322,6 +142,103 @@ public class Components extends OpenApiElement {
 		};
 	}
 
+	/**
+	 * Returns the callbacks map.
+	 *
+	 * @return The callbacks map.
+	 */
+	public Map<String,Callback> getCallbacks() {
+		return callbacks;
+	}
+
+	/**
+	 * Returns the examples map.
+	 *
+	 * @return The examples map.
+	 */
+	public Map<String,Example> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Returns the headers map.
+	 *
+	 * @return The headers map.
+	 */
+	public Map<String,HeaderInfo> getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Returns the links map.
+	 *
+	 * @return The links map.
+	 */
+	public Map<String,Link> getLinks() {
+		return links;
+	}
+
+	/**
+	 * Returns the parameters map.
+	 *
+	 * @return The parameters map.
+	 */
+	public Map<String,Parameter> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * Returns the request bodies map.
+	 *
+	 * @return The request bodies map.
+	 */
+	public Map<String,RequestBodyInfo> getRequestBodies() {
+		return requestBodies;
+	}
+
+	/**
+	 * Returns the responses map.
+	 *
+	 * @return The responses map.
+	 */
+	public Map<String,Response> getResponses() {
+		return responses;
+	}
+
+	/**
+	 * Returns the schemas map.
+	 *
+	 * @return The schemas map.
+	 */
+	public Map<String,SchemaInfo> getSchemas() {
+		return schemas;
+	}
+
+	/**
+	 * Returns the security schemes map.
+	 *
+	 * @return The security schemes map.
+	 */
+	public Map<String,SecuritySchemeInfo> getSecuritySchemes() {
+		return securitySchemes;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(callbacks != null, "callbacks")
+			.addIf(examples != null, "examples")
+			.addIf(headers != null, "headers")
+			.addIf(links != null, "links")
+			.addIf(parameters != null, "parameters")
+			.addIf(requestBodies != null, "requestBodies")
+			.addIf(responses != null, "responses")
+			.addIf(schemas != null, "schemas")
+			.addIf(securitySchemes != null, "securitySchemes")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
 	@Override /* Overridden from OpenApiElement */
 	public Components set(String property, Object value) {
 		assertArgNotNull("property", property);
@@ -342,20 +259,103 @@ public class Components extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(callbacks != null, "callbacks")
-			.addIf(examples != null, "examples")
-			.addIf(headers != null, "headers")
-			.addIf(links != null, "links")
-			.addIf(parameters != null, "parameters")
-			.addIf(requestBodies != null, "requestBodies")
-			.addIf(responses != null, "responses")
-			.addIf(schemas != null, "schemas")
-			.addIf(securitySchemes != null, "securitySchemes")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets the callbacks map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setCallbacks(Map<String,Callback> value) {
+		this.callbacks = value;
+		return this;
+	}
+
+	/**
+	 * Sets the examples map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setExamples(Map<String,Example> value) {
+		this.examples = value;
+		return this;
+	}
+
+	/**
+	 * Sets the headers map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setHeaders(Map<String,HeaderInfo> value) {
+		this.headers = value;
+		return this;
+	}
+
+	/**
+	 * Sets the links map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setLinks(Map<String,Link> value) {
+		this.links = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parameters map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setParameters(Map<String,Parameter> value) {
+		this.parameters = value;
+		return this;
+	}
+
+	/**
+	 * Sets the request bodies map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setRequestBodies(Map<String,RequestBodyInfo> value) {
+		this.requestBodies = value;
+		return this;
+	}
+
+	/**
+	 * Sets the responses map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setResponses(Map<String,Response> value) {
+		this.responses = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schemas map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setSchemas(Map<String,SchemaInfo> value) {
+		this.schemas = value;
+		return this;
+	}
+
+	/**
+	 * Sets the security schemes map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Components setSecuritySchemes(Map<String,SecuritySchemeInfo> value) {
+		this.securitySchemes = value;
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */

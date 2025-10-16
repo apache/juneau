@@ -36,28 +36,8 @@ import org.apache.juneau.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
+@SuppressWarnings("resource")
 public class MemoryStore extends ConfigStore {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default memory store, all default values.*/
-	public static final MemoryStore DEFAULT = MemoryStore.create().build();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -72,6 +52,15 @@ public class MemoryStore extends ConfigStore {
 		/**
 		 * Copy constructor.
 		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(MemoryStore copyFrom) {
@@ -79,28 +68,6 @@ public class MemoryStore extends ConfigStore {
 			type(copyFrom.getClass());
 		}
 
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder to copy from.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public MemoryStore build() {
-			return build(MemoryStore.class);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -112,13 +79,6 @@ public class MemoryStore extends ConfigStore {
 			super.apply(work);
 			return this;
 		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -126,9 +86,25 @@ public class MemoryStore extends ConfigStore {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public MemoryStore build() {
+			return build(MemoryStore.class);
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -156,15 +132,16 @@ public class MemoryStore extends ConfigStore {
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
+	/** Default memory store, all default values.*/
+	public static final MemoryStore DEFAULT = MemoryStore.create().build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
-
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 
 	/**
@@ -176,9 +153,37 @@ public class MemoryStore extends ConfigStore {
 		super(builder);
 	}
 
+	/**
+	 * No-op.
+	 */
+	@Override /* Overridden from Closeable */
+	public void close() throws IOException {
+		// No-op
+	}
+
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	@Override /* Overridden from ConfigStore */
+	public synchronized boolean exists(String name) {
+		return cache.containsKey(name);
+	}
+
 	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) {
 		return emptyIfNull(cache.get(name));
+	}
+
+	@Override /* Overridden from ConfigStore */
+	public synchronized MemoryStore update(String name, String newContents) {
+		if (newContents == null)
+			cache.remove(name);
+		else
+			cache.put(name, newContents);
+		super.update(name, newContents);  // Trigger any listeners.
+		return this;
 	}
 
 	@Override /* Overridden from ConfigStore */
@@ -196,28 +201,5 @@ public class MemoryStore extends ConfigStore {
 		update(name, newContents);
 
 		return null;
-	}
-
-	@Override /* Overridden from ConfigStore */
-	public synchronized boolean exists(String name) {
-		return cache.containsKey(name);
-	}
-
-	@Override /* Overridden from ConfigStore */
-	public synchronized MemoryStore update(String name, String newContents) {
-		if (newContents == null)
-			cache.remove(name);
-		else
-			cache.put(name, newContents);
-		super.update(name, newContents);  // Trigger any listeners.
-		return this;
-	}
-
-	/**
-	 * No-op.
-	 */
-	@Override /* Overridden from Closeable */
-	public void close() throws IOException {
-		// No-op
 	}
 }

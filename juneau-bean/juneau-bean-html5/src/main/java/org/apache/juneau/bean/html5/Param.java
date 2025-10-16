@@ -88,45 +88,6 @@ public class Param extends HtmlElementVoid {
 		name(name).value(value);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the parameter. This name is used by the parent object element
-	 * to identify the parameter and its associated value.
-	 *
-	 * <p>
-	 * The name should be meaningful and correspond to the expected parameter name
-	 * for the embedded content.
-	 *
-	 * @param name The name of the parameter.
-	 * @return This object.
-	 */
-	public Param name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value">value</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Value of parameter.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Param value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Param _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -136,6 +97,17 @@ public class Param extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Param accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Param attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Param attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -166,6 +138,25 @@ public class Param extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Param lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the parameter. This name is used by the parent object element
+	 * to identify the parameter and its associated value.
+	 *
+	 * <p>
+	 * The name should be meaningful and correspond to the expected parameter name
+	 * for the embedded content.
+	 *
+	 * @param value The name of the parameter.
+	 * @return This object.
+	 */
+	public Param name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -499,15 +490,20 @@ public class Param extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Param attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Param attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-param-value">value</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Value of parameter.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Param value(Object value) {
+		attr("value", value);
 		return this;
 	}
 }

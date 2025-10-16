@@ -56,11 +56,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("WWW-Authenticate")
 public class WwwAuthenticate extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "WWW-Authenticate";
 
@@ -90,11 +85,6 @@ public class WwwAuthenticate extends BasicStringHeader {
 	public static WwwAuthenticate of(Supplier<String> value) {
 		return value == null ? null : new WwwAuthenticate(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

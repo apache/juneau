@@ -44,12 +44,21 @@ import org.apache.juneau.http.annotation.*;
 @Header
 @Schema(type="integer",format="int32")
 public class BasicIntegerHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicIntegerHeader of(String name, Integer value) {
+		return value == null ? null : new BasicIntegerHeader(name, value);
+	}
 
 	/**
 	 * Static creator.
@@ -63,20 +72,6 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicIntegerHeader of(String name, String value) {
-		return value == null ? null : new BasicIntegerHeader(name, value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicIntegerHeader of(String name, Integer value) {
 		return value == null ? null : new BasicIntegerHeader(name, value);
 	}
 
@@ -96,13 +91,23 @@ public class BasicIntegerHeader extends BasicHeader {
 	public static BasicIntegerHeader of(String name, Supplier<Integer> value) {
 		return value == null ? null : new BasicIntegerHeader(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Integer value;
 	private final Supplier<Integer> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicIntegerHeader(String name, Integer value) {
+		super(name, value);
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -117,21 +122,6 @@ public class BasicIntegerHeader extends BasicHeader {
 	public BasicIntegerHeader(String name, String value) {
 		super(name, value);
 		this.value = parse(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicIntegerHeader(String name, Integer value) {
-		super(name, value);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -153,11 +143,6 @@ public class BasicIntegerHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
-
 	/**
 	 * Returns the header value as an {@link Integer} wrapped in an {@link Optional}.
 	 *
@@ -165,15 +150,6 @@ public class BasicIntegerHeader extends BasicHeader {
 	 */
 	public Optional<Integer> asInteger() {
 		return Utils.opt(value());
-	}
-
-	/**
-	 * Returns the header value as an {@link Integer}.
-	 *
-	 * @return The header value as an {@link Integer}.  Can be <jk>null</jk>.
-	 */
-	public Integer toInteger() {
-		return value();
 	}
 
 	/**
@@ -195,6 +171,11 @@ public class BasicIntegerHeader extends BasicHeader {
 		return new FluentIntegerAssertion<>(value(), this);
 	}
 
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
+	}
+
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
@@ -207,6 +188,15 @@ public class BasicIntegerHeader extends BasicHeader {
 	public Integer orElse(Integer other) {
 		Integer x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as an {@link Integer}.
+	 *
+	 * @return The header value as an {@link Integer}.  Can be <jk>null</jk>.
+	 */
+	public Integer toInteger() {
+		return value();
 	}
 
 	private Integer parse(String value) {

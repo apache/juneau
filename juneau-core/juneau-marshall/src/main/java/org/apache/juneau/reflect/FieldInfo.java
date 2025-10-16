@@ -32,11 +32,6 @@ import org.apache.juneau.*;
  * </ul>
  */
 public class FieldInfo implements Comparable<FieldInfo> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Convenience method for instantiating a {@link FieldInfo};
 	 *
@@ -61,11 +56,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 			return null;
 		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Field f;
 	private final ClassInfo declaringClass;
 	private volatile ClassInfo type;
@@ -82,36 +72,48 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
-	 * Returns the wrapped field.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @return The wrapped field.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
+	 * @return This object.
 	 */
-	public Field inner() {
-		return f;
+	public FieldInfo accept(Predicate<FieldInfo> test, Consumer<FieldInfo> action) {
+		if (matches(test))
+			action.accept(this);
+		return this;
 	}
 
 	/**
-	 * Returns metadata about the declaring class.
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * @return Metadata about the declaring class.
+	 * @return This object.
 	 */
-	public ClassInfo getDeclaringClass() {
-		return declaringClass;
+	public FieldInfo accessible() {
+		setAccessible();
+		return this;
+	}
+	@Override
+	public int compareTo(FieldInfo o) {
+		return getName().compareTo(o.getName());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the specified annotation on this field.
+	 * Returns the field value on the specified object.
 	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The annotation, or <jk>null</jk> if not found.
+	 * @param o The object containing the field.
+	 * @param <T> The object type to retrieve.
+	 * @return The field value.
+	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type);
+	@SuppressWarnings("unchecked")
+	public <T> T get(Object o) throws BeanRuntimeException {
+		try {
+			f.setAccessible(true);
+			return (T)f.get(o);
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
 	}
 
 	/**
@@ -129,25 +131,78 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified annotation is present.
+	 * Returns the specified annotation on this field.
 	 *
 	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present.
+	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return f.isAnnotationPresent(type);
+	public <A extends Annotation> A getAnnotation(Class<A> type) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified annotation is not present on this field.
+	 * Returns metadata about the declaring class.
 	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is not present on this field.
+	 * @return Metadata about the declaring class.
 	 */
-	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
-		return ! hasAnnotation(type);
+	public ClassInfo getDeclaringClass() {
+		return declaringClass;
+	}
+
+	/**
+	 * Returns the full name of this field.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 * 	<li><js>"com.foo.MyClass.myField"</js> - Method.
+	 * </ul>
+	 *
+	 * @return The underlying executable name.
+	 */
+	public String getFullName() {
+		StringBuilder sb = new StringBuilder(128);
+		ClassInfo dc = declaringClass;
+		Package p = dc.getPackage();
+		if (p != null)
+			sb.append(p.getName()).append('.');
+		dc.appendShortName(sb);
+		sb.append(".").append(getName());
+		return sb.toString();
+	}
+	/**
+	 * Returns the name of this field.
+	 *
+	 * @return The name of this field.
+	 */
+	public String getName() {
+		return f.getName();
+	}
+
+	/**
+	 * Same as {@link #get(Object)} but wraps the results in an {@link Optional}.
+	 *
+	 * @param o The object containing the field.
+	 * @param <T> The object type to retrieve.
+	 * @return The field value.
+	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
+	 */
+	public <T> Optional<T> getOptional(Object o) throws BeanRuntimeException {
+		return Optional.ofNullable(get(o));
+	}
+
+	/**
+	 * Returns the type of this field.
+	 *
+	 * @return The type of this field.
+	 */
+	public ClassInfo getType() {
+		if (type == null) {
+			synchronized(this) {
+				type = ClassInfo.of(f.getType());
+			}
+		}
+		return type;
 	}
 
 	/**
@@ -163,6 +218,27 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified annotation is present.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation to look for.
+	 * @return <jk>true</jk> if the specified annotation is present.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return f.isAnnotationPresent(type);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the field has the specified name.
+	 *
+	 * @param name The name to compare against.
+	 * @return <jk>true</jk> if the field has the specified name.
+	 */
+	public boolean hasName(String name) {
+		return f.getName().equals(name);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present.
 	 *
 	 * @param <A> The annotation type to look for.
@@ -174,9 +250,35 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		return ! hasAnnotation(annotationProvider, type);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Characteristics
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is not present on this field.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation to look for.
+	 * @return <jk>true</jk> if the specified annotation is not present on this field.
+	 */
+	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+		return ! hasAnnotation(type);
+	}
+
+	/**
+	 * Returns the wrapped field.
+	 *
+	 * @return The wrapped field.
+	 */
+	public Field inner() {
+		return f;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
+	 *
+	 * @param flags The flags to test for.
+	 * @return <jk>true</jk> if all specified flags are applicable to this field.
+	 */
+	public boolean is(ReflectFlags...flags) {
+		return isAll(flags);
+	}
 
 	/**
 	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
@@ -273,17 +375,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		}
 		return false;
 	}
-
-	/**
-	 * Returns <jk>true</jk> if all specified flags are applicable to this field.
-	 *
-	 * @param flags The flags to test for.
-	 * @return <jk>true</jk> if all specified flags are applicable to this field.
-	 */
-	public boolean is(ReflectFlags...flags) {
-		return isAll(flags);
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this field has the {@link Deprecated @Deprecated} annotation on it.
 	 *
@@ -303,15 +394,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this field is public.
-	 *
-	 * @return <jk>true</jk> if this field is public.
-	 */
-	public boolean isPublic() {
-		return Modifier.isPublic(f.getModifiers());
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this field is not public.
 	 *
 	 * @return <jk>true</jk> if this field is not public.
@@ -319,16 +401,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	public boolean isNotPublic() {
 		return ! Modifier.isPublic(f.getModifiers());
 	}
-
-	/**
-	 * Returns <jk>true</jk> if this field is static.
-	 *
-	 * @return <jk>true</jk> if this field is static.
-	 */
-	public boolean isStatic() {
-		return Modifier.isStatic(f.getModifiers());
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this field is not static.
 	 *
@@ -336,15 +408,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public boolean isNotStatic() {
 		return ! Modifier.isStatic(f.getModifiers());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this field is transient.
-	 *
-	 * @return <jk>true</jk> if this field is transient.
-	 */
-	public boolean isTransient() {
-		return Modifier.isTransient(f.getModifiers());
 	}
 
 	/**
@@ -357,42 +420,30 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the field has the specified name.
+	 * Returns <jk>true</jk> if this field is public.
 	 *
-	 * @param name The name to compare against.
-	 * @return <jk>true</jk> if the field has the specified name.
+	 * @return <jk>true</jk> if this field is public.
 	 */
-	public boolean hasName(String name) {
-		return f.getName().equals(name);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Visibility
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @return This object.
-	 */
-	public FieldInfo accessible() {
-		setAccessible();
-		return this;
+	public boolean isPublic() {
+		return Modifier.isPublic(f.getModifiers());
 	}
 
 	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 * Returns <jk>true</jk> if this field is static.
 	 *
-	 * @return <jk>true</jk> if call was successful.
+	 * @return <jk>true</jk> if this field is static.
 	 */
-	public boolean setAccessible() {
-		try {
-			if (f != null)
-				f.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
+	public boolean isStatic() {
+		return Modifier.isStatic(f.getModifiers());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this field is transient.
+	 *
+	 * @return <jk>true</jk> if this field is transient.
+	 */
+	public boolean isTransient() {
+		return Modifier.isTransient(f.getModifiers());
 	}
 
 	/**
@@ -405,10 +456,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		return v.isVisible(f);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
@@ -417,103 +464,6 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public boolean matches(Predicate<FieldInfo> test) {
 		return test(test, this);
-	}
-
-	/**
-	 * Performs an action on this object if the specified predicate test passes.
-	 *
-	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on this object.
-	 * @return This object.
-	 */
-	public FieldInfo accept(Predicate<FieldInfo> test, Consumer<FieldInfo> action) {
-		if (matches(test))
-			action.accept(this);
-		return this;
-	}
-
-	/**
-	 * Returns the type of this field.
-	 *
-	 * @return The type of this field.
-	 */
-	public ClassInfo getType() {
-		if (type == null) {
-			synchronized(this) {
-				type = ClassInfo.of(f.getType());
-			}
-		}
-		return type;
-	}
-
-	@Override
-	public String toString() {
-		return f.getDeclaringClass().getName() + "." + f.getName();
-	}
-
-	@Override
-	public int compareTo(FieldInfo o) {
-		return getName().compareTo(o.getName());
-	}
-
-	/**
-	 * Returns the name of this field.
-	 *
-	 * @return The name of this field.
-	 */
-	public String getName() {
-		return f.getName();
-	}
-
-	/**
-	 * Returns the full name of this field.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <ul>
-	 * 	<li><js>"com.foo.MyClass.myField"</js> - Method.
-	 * </ul>
-	 *
-	 * @return The underlying executable name.
-	 */
-	public String getFullName() {
-		StringBuilder sb = new StringBuilder(128);
-		ClassInfo dc = declaringClass;
-		Package p = dc.getPackage();
-		if (p != null)
-			sb.append(p.getName()).append('.');
-		dc.appendShortName(sb);
-		sb.append(".").append(getName());
-		return sb.toString();
-	}
-
-	/**
-	 * Returns the field value on the specified object.
-	 *
-	 * @param o The object containing the field.
-	 * @param <T> The object type to retrieve.
-	 * @return The field value.
-	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T get(Object o) throws BeanRuntimeException {
-		try {
-			f.setAccessible(true);
-			return (T)f.get(o);
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Same as {@link #get(Object)} but wraps the results in an {@link Optional}.
-	 *
-	 * @param o The object containing the field.
-	 * @param <T> The object type to retrieve.
-	 * @return The field value.
-	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
-	 */
-	public <T> Optional<T> getOptional(Object o) throws BeanRuntimeException {
-		return Optional.ofNullable(get(o));
 	}
 
 	/**
@@ -533,6 +483,21 @@ public class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
+	 *
+	 * @return <jk>true</jk> if call was successful.
+	 */
+	public boolean setAccessible() {
+		try {
+			if (f != null)
+				f.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Sets the field value on the specified object if the value is <jk>null</jk>.
 	 *
 	 * @param o The object containing the field.
@@ -543,5 +508,10 @@ public class FieldInfo implements Comparable<FieldInfo> {
 		Object v = get(o);
 		if (v == null)
 			set(o, value);
+	}
+
+	@Override
+	public String toString() {
+		return f.getDeclaringClass().getName() + "." + f.getName();
 	}
 }

@@ -62,7 +62,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#output() output()}
- * 		<li class='jm'>{@link HtmlBuilder#output(Object, Object...) output(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#output(String) output(String)}
  * 	</ul>
  * </ul>
  * </p>
@@ -88,6 +88,12 @@ public class Output extends HtmlElementMixed {
 		name(name);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Output _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-output-for">for</a> attribute.
 	 *
@@ -98,11 +104,52 @@ public class Output extends HtmlElementMixed {
 	 * <p>
 	 * Multiple IDs can be specified as a space-separated list.
 	 *
-	 * @param _for The IDs of the form controls that contribute to this output.
+	 * @param value The IDs of the form controls that contribute to this output.
 	 * @return This object.
 	 */
 	public Output _for(String value) {  // NOSONAR - Intentional naming.
 		attr("for", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Output accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Output attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Output attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Output child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Output children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Output contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Output dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -116,56 +163,11 @@ public class Output extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this output.
+	 * @param value The ID of the form element to associate with this output.
 	 * @return This object.
 	 */
 	public Output form(String value) {
 		attr("form", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the output element. This name is used when the form is submitted and
-	 * can be used to access the element via the form.elements API.
-	 *
-	 * <p>
-	 * The name should be unique within the form and should not contain spaces or special characters.
-	 *
-	 * @param name The name of the output element for submission and API access.
-	 * @return This object.
-	 */
-	public Output name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Output _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Output accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Output contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Output dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -184,6 +186,24 @@ public class Output extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Output lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the output element. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
+	 *
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param value The name of the output element for submission and API access.
+	 * @return This object.
+	 */
+	public Output name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -514,30 +534,6 @@ public class Output extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Output translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Output child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Output children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Output attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Output attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

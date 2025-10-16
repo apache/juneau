@@ -57,11 +57,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Content-Type")
 public class ContentType extends BasicMediaTypeHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Type";
 
@@ -98,12 +93,11 @@ public class ContentType extends BasicMediaTypeHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentType of(String value) {
-		return value == null ? null : CACHE.get(value, ()->new ContentType(value));
+	public static ContentType of(MediaType value) {
+		return value == null ? null : new ContentType(value);
 	}
 
 	/**
@@ -111,11 +105,12 @@ public class ContentType extends BasicMediaTypeHeader {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentType of(MediaType value) {
-		return value == null ? null : new ContentType(value);
+	public static ContentType of(String value) {
+		return value == null ? null : CACHE.get(value, ()->new ContentType(value));
 	}
 
 	/**
@@ -132,10 +127,16 @@ public class ContentType extends BasicMediaTypeHeader {
 	public static ContentType of(Supplier<MediaType> value) {
 		return value == null ? null : new ContentType(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentType(MediaType value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -146,17 +147,6 @@ public class ContentType extends BasicMediaTypeHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ContentType(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentType(MediaType value) {
 		super(NAME, value);
 	}
 

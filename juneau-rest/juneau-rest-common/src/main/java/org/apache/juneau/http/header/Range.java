@@ -150,11 +150,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Range")
 public class Range extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Range";
 
@@ -184,11 +179,6 @@ public class Range extends BasicStringHeader {
 	public static Range of(Supplier<String> value) {
 		return value == null ? null : new Range(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -76,36 +76,38 @@ public class Map extends HtmlElementContainer {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the image map. This name is used by img elements with the usemap attribute
-	 * to reference this map for defining clickable areas.
-	 *
-	 * <p>
-	 * The name should be unique within the document and should not contain spaces or special characters.
-	 *
-	 * @param name The name of the image map for referencing from img elements.
-	 * @return This object.
-	 */
-	public Map name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Map _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Map accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Map attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Map attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Map child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Map children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -136,6 +138,24 @@ public class Map extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Map lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-map-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the image map. This name is used by img elements with the usemap attribute
+	 * to reference this map for defining clickable areas.
+	 *
+	 * <p>
+	 * The name should be unique within the document and should not contain spaces or special characters.
+	 *
+	 * @param value The name of the image map for referencing from img elements.
+	 * @return This object.
+	 */
+	public Map name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -439,6 +459,12 @@ public class Map extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Map setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Map spellcheck(Object value) {
 		super.spellcheck(value);
@@ -466,36 +492,6 @@ public class Map extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Map translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Map child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Map children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Map setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Map attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Map attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

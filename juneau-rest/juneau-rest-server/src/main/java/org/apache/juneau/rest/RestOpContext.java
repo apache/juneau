@@ -81,26 +81,6 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class RestOpContext extends Context implements Comparable<RestOpContext>  {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param method The Java method this context belongs to.
-	 * @param context The Java class context.
-	 * @return A new builder.
-	 */
-	public static Builder create(java.lang.reflect.Method method, RestContext context) {
-		return new Builder(method, context);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -136,29 +116,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		Long maxInput;
 
 		private BeanStore beanStore;
-
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
-		}
-
-		@Override /* Overridden from BeanContext.Builder */
-		public RestOpContext build() {
-			try {
-				return beanStore.createBean(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
-			} catch (Exception e) {
-				throw new InternalServerError(e);
-			}
-		}
-
-		/**
-		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
-		 *
-		 * @return The default implementation class if not specified via {@link #type(Class)}.
-		 */
-		protected Class<? extends RestOpContext> getDefaultImplClass() {
-			return RestOpContext.class;
-		}
 
 		Builder(java.lang.reflect.Method method, RestContext context) {
 
@@ -200,39 +157,40 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 		}
 
-		/**
-		 * Returns the REST servlet/bean instance that this context is defined against.
-		 *
-		 * @return The REST servlet/bean instance that this context is defined against.
-		 */
-		public Supplier<?> resource() {
-			return restContext.builder.resource();
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
 		}
 
 		/**
-		 * Returns the default classes list.
+		 * Returns the bean context sub-builder.
 		 *
-		 * <p>
-		 * This defines the implementation classes for a variety of bean types.
-		 *
-		 * <p>
-		 * Default classes are inherited from the parent REST object.
-		 * Typically used on the top-level {@link RestContext.Builder} to affect class types for that REST object and all children.
-		 *
-		 * <p>
-		 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
-		 * here are inherited by child builders.
-		 *
-		 * @return The default classes list for this builder.
+		 * @return The bean context sub-builder.
 		 */
-		public DefaultClassList defaultClasses() {
-			return restContext.builder.defaultClasses();
+		public BeanContext.Builder beanContext() {
+			if (beanContext == null)
+				beanContext = createBeanContext(beanStore(), parent, resource());
+			return beanContext;
 		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// beanStore
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Returns access to the bean store being used by this builder.
 		 *
@@ -243,17 +201,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		public BeanStore beanStore() {
 			return beanStore;
-		}
-
-		/**
-		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
-		 *
-		 * @param beanStore The bean store to use for resolving constructor arguments.
-		 * @return This object.
-		 */
-		protected Builder beanStore(BeanStore beanStore) {
-			this.beanStore = beanStore;
-			return this;
 		}
 
 		/**
@@ -295,58 +242,405 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// beanContext
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the bean context sub-builder.
-		 *
-		 * @return The bean context sub-builder.
-		 */
-		public BeanContext.Builder beanContext() {
-			if (beanContext == null)
-				beanContext = createBeanContext(beanStore(), parent, resource());
-			return beanContext;
+		@Override /* Overridden from BeanContext.Builder */
+		public RestOpContext build() {
+			try {
+				return beanStore.createBean(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
+			} catch (Exception e) {
+				throw new InternalServerError(e);
+			}
+		}
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
 		}
 
 		/**
-		 * Instantiates the bean context sub-builder.
+		 * Client version pattern matcher.
 		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new bean context sub-builder.
+		 * <p>
+		 * Specifies whether this method can be called based on the client version.
+		 *
+		 * <p>
+		 * The client version is identified via the HTTP request header identified by
+		 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"Client-Version"</js>.
+		 *
+		 * <p>
+		 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
+		 * method/path based on the client version.
+		 *
+		 * <p>
+		 * The format of the client version range is similar to that of OSGi versions.
+		 *
+		 * <p>
+		 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
+		 * <p class='bjava'>
+		 * 	<jc>// Call this method if Client-Version is at least 2.0.
+		 * 	// Note that this also matches 2.0.1.</jc>
+		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+		 * 	<jk>public</jk> Object method1()  {...}
+		 *
+		 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+		 * 	<jk>public</jk> Object method2()  {...}
+		 *
+		 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
+		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+		 * 	<jk>public</jk> Object method3()  {...}
+		 * </p>
+		 *
+		 * <p>
+		 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
+		 * backwards compatibility.
+		 * <p class='bjava'>
+		 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
+		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+		 * 	<jk>public</jk> NewPojo newMethod()  {...}
+		 *
+		 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+		 * 	<ja>@BeanConfig(swaps=NewToOldSwap.<jk>class</jk>)
+		 * 	<jk>public</jk> NewPojo oldMethod() {
+		 * 		<jk>return</jk> newMethod();
+		 * 	}
+		 *
+		 * <p>
+		 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
+		 * an older form.
+		 * The old method could also just return back a completely different object.
+		 * The range can be any of the following:
+		 * <ul>
+		 * 	<li><js>"[0,1.0)"</js> = Less than 1.0.  1.0 and 1.0.0 does not match.
+		 * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
+		 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link RestOp#clientVersion}
+		 * 	<li class='ja'>{@link RestGet#clientVersion}
+		 * 	<li class='ja'>{@link RestPut#clientVersion}
+		 * 	<li class='ja'>{@link RestPost#clientVersion}
+		 * 	<li class='ja'>{@link RestDelete#clientVersion}
+		 * 	<li class='jm'>{@link RestContext.Builder#clientVersionHeader(String)}
+		 * </ul>
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
 		 */
-		protected BeanContext.Builder createBeanContext(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<BeanContext.Builder> v = Value.of(
-				parent.beanContext().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] BeanContext xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(BeanContext.Builder.class, v.get())
-				.createMethodFinder(BeanContext.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
+		public Builder clientVersion(String value) {
+			clientVersion = value;
+			return this;
 		}
 
-		Optional<BeanContext> getBeanContext() {
-			return Utils.opt(beanContext).map(BeanContext.Builder::build);
+		/**
+		 * Supported content media types.
+		 *
+		 * <p>
+		 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
+		 * <br>An example where this might be useful if you have parsers registered that handle media types that you
+		 * don't want exposed in the Swagger documentation.
+		 *
+		 * <p>
+		 * This affects the returned values from the following:
+		 * <ul class='javatree'>
+		 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Rest#consumes}
+		 * 	<li class='ja'>{@link RestOp#consumes}
+		 * 	<li class='ja'>{@link RestPut#consumes}
+		 * 	<li class='ja'>{@link RestPost#consumes}
+		 * </ul>
+		 *
+		 * @param values The values to add to this setting.
+		 * @return This object.
+		 */
+		public Builder consumes(MediaType...values) {
+			consumes = addAll(consumes, values);
+			return this;
+		}
+		/**
+		 * Returns the response converter list sub-builder.
+		 *
+		 * @return The response converter list sub-builder.
+		 */
+		public RestConverterList.Builder converters() {
+			if (converters == null)
+				converters = createConverters(beanStore(), resource());
+			return converters;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// encoders
-		//-----------------------------------------------------------------------------------------------------------------
+		/**
+		 * Adds one or more converters to use to convert response objects for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.converters().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder converters(Class<? extends RestConverter>...value) {
+			converters().append(value);
+			return this;
+		}
 
+		/**
+		 * Adds one or more converters to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.converters().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder converters(RestConverter...value) {
+			converters().append(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			throw new NoSuchMethodError("Not implemented.");
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		/**
+		 * Debug mode.
+		 *
+		 * <p>
+		 * Enables the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>
+		 * 		HTTP request/response bodies are cached in memory for logging purposes.
+		 * </ul>
+		 *
+		 * <p>
+		 * If not sppecified, the debug enablement is inherited from the class context.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder debug(Enablement value) {
+			debug = value;
+			return this;
+		}
+
+		/**
+		 * Default character encoding.
+		 *
+		 * <p>
+		 * The default character encoding for the request and response if not specified on the request.
+		 *
+		 * <p>
+		 * This overrides the value defined on the {@link RestContext}.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link RestContext.Builder#defaultCharset(Charset)}
+		 * 	<li class='ja'>{@link Rest#defaultCharset}
+		 * 	<li class='ja'>{@link RestOp#defaultCharset}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"RestContext.defaultCharset"
+		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
+		 * 		<li><js>"utf-8"</js>
+		 * 	</ul>
+		 * @return This object.
+		 */
+		public Builder defaultCharset(Charset value) {
+			defaultCharset = value;
+			return this;
+		}
+
+		/**
+		 * Returns the default classes list.
+		 *
+		 * <p>
+		 * This defines the implementation classes for a variety of bean types.
+		 *
+		 * <p>
+		 * Default classes are inherited from the parent REST object.
+		 * Typically used on the top-level {@link RestContext.Builder} to affect class types for that REST object and all children.
+		 *
+		 * <p>
+		 * Modifying the default class list on this builder does not affect the default class list on the parent builder, but changes made
+		 * here are inherited by child builders.
+		 *
+		 * @return The default classes list for this builder.
+		 */
+		public DefaultClassList defaultClasses() {
+			return restContext.builder.defaultClasses();
+		}
+
+		/**
+		 * Returns the default request attributes sub-builder.
+		 *
+		 * @return The default request attributes sub-builder.
+		 */
+		public NamedAttributeMap defaultRequestAttributes() {
+			if (defaultRequestAttributes == null)
+				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), parent, resource());
+			return defaultRequestAttributes;
+		}
+		/**
+		 * Adds one or more default request attributes to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.defaultRequestAttributes().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder defaultRequestAttributes(NamedAttribute...value) {
+			defaultRequestAttributes().add(value);
+			return this;
+		}
+
+		/**
+		 * Returns the default request form data.
+		 *
+		 * @return The default request form data.
+		 */
+		public PartList defaultRequestFormData() {
+			if (defaultRequestFormData == null)
+				defaultRequestFormData = createDefaultRequestFormData(beanStore(), parent, resource());
+			return defaultRequestFormData;
+		}
+
+		/**
+		 * Adds one or more default request form data to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.defaultRequestFormData().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder defaultRequestFormData(NameValuePair...value) {
+			defaultRequestFormData().append(value);
+			return this;
+		}
+
+		/**
+		 * Returns the default request headers.
+		 *
+		 * @return The default request headers.
+		 */
+		public HeaderList defaultRequestHeaders() {
+			if (defaultRequestHeaders == null)
+				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), parent, resource());
+			return defaultRequestHeaders;
+		}
+
+		/**
+		 * Adds one or more default request headers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.defaultRequestHeaders().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder defaultRequestHeaders(org.apache.http.Header...value) {
+			defaultRequestHeaders().append(value);
+			return this;
+		}
+		/**
+		 * Returns the default request query data.
+		 *
+		 * @return The default request query data.
+		 */
+		public PartList defaultRequestQueryData() {
+			if (defaultRequestQueryData == null)
+				defaultRequestQueryData = createDefaultRequestQueryData(beanStore(), parent, resource());
+			return defaultRequestQueryData;
+		}
+
+		/**
+		 * Adds one or more default request query data to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.defaultRequestQueryData().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder defaultRequestQueryData(NameValuePair...value) {
+			defaultRequestQueryData().append(value);
+			return this;
+		}
+
+		/**
+		 * Returns the default response headers.
+		 *
+		 * @return The default response headers.
+		 */
+		public HeaderList defaultResponseHeaders() {
+			if (defaultResponseHeaders == null)
+				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), parent, resource());
+			return defaultResponseHeaders;
+		}
+
+		/**
+		 * Adds one or more default response headers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.defaultResponseHeaders().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder defaultResponseHeaders(org.apache.http.Header...value) {
+			defaultResponseHeaders().append(value);
+			return this;
+		}
+
+		/**
+		 * When enabled, append <js>"/*"</js> to path patterns if not already present.
+		 *
+		 * @return This object.
+		 */
+		public Builder dotAll() {
+			dotAll = true;
+			return this;
+		}
 		/**
 		 * Returns the encoder group sub-builder.
 		 *
@@ -394,124 +688,268 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Instantiates the encoder group sub-builder.
+		 * Returns the guard list sub-builder.
 		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new encoder group sub-builder.
+		 * @return The guard list sub-builder.
 		 */
-		protected EncoderSet.Builder createEncoders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<EncoderSet.Builder> v = Value.of(
-				parent.encoders().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] EncoderSet xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(EncoderSet.Builder.class, v.get())
-				.createMethodFinder(EncoderSet.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		Optional<EncoderSet> getEncoders() {
-			return Utils.opt(encoders).map(EncoderSet.Builder::build);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// serializers
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the serializer group sub-builder.
-		 *
-		 * @return The serializer group sub-builder.
-		 */
-		public SerializerSet.Builder serializers() {
-			if (serializers == null)
-				serializers = createSerializers(beanStore(), parent, resource());
-			return serializers;
+		public RestGuardList.Builder guards() {
+			if (guards == null)
+				guards = createGuards(beanStore(), resource());
+			return guards;
 		}
 
 		/**
-		 * Adds one or more serializers to this operation.
+		 * Adds one or more guards to this operation.
 		 *
 		 * <p>
 		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
+		 * 	<jv>builder</jv>.guards().append(<jv>value</jv>);
 		 * </p>
 		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
 		@SafeVarargs
-		public final Builder serializers(Class<? extends Serializer>...value) {
-			serializers().add(value);
+		public final Builder guards(Class<? extends RestGuard>...value) {
+			guards().append(value);
 			return this;
 		}
-
 		/**
-		 * Adds one or more serializers to this operation.
+		 * Adds one or more guards to this operation.
 		 *
 		 * <p>
 		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
+		 * 	<jv>builder</jv>.guards().append(<jv>value</jv>);
 		 * </p>
 		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder serializers(Serializer...value) {
-			serializers().add(value);
+		public Builder guards(RestGuard...value) {
+			guards().append(value);
 			return this;
 		}
 
 		/**
-		 * Instantiates the serializer group sub-builder.
+		 * HTTP method name.
 		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new serializer group sub-builder.
+		 * <p>
+		 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
+		 *
+		 * <p>
+		 * Method names are case-insensitive (always folded to upper-case).
+		 *
+		 * <p>
+		 * Note that you can use {@link org.apache.juneau.http.HttpMethod} for constant values.
+		 *
+		 * <p>
+		 * Besides the standard HTTP method names, the following can also be specified:
+		 * <ul class='spaced-list'>
+		 * 	<li>
+		 * 		<js>"*"</js>
+		 * 		- Denotes any method.
+		 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
+		 * 		<br>The {@link org.apache.juneau.rest.annotation.Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
+		 * 		distinguish the actual HTTP method name.
+		 * 	<li>
+		 * 		<js>""</js>
+		 * 		- Auto-detect.
+		 * 		<br>The method name is determined based on the Java method name.
+		 * 		<br>For example, if the method is <c>doPost(...)</c>, then the method name is automatically detected
+		 * 		as <js>"POST"</js>.
+		 * 		<br>Otherwise, defaults to <js>"GET"</js>.
+		 * 	<li>
+		 * 		<js>"RRPC"</js>
+		 * 		- Remote-proxy interface.
+		 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
+		 * 		{@link Remote @Remote} annotation) to be used as a remote proxy using
+		 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
+		 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
+		 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
+		 * 		where the arguments are marshalled from the client to the server as an HTTP content containing an array of
+		 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
+		 * 	<li>
+		 * 		Anything else
+		 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
+		 * 		parameter.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link RestOp#method()}
+		 * 	<li class='ja'>{@link RestGet}
+		 * 	<li class='ja'>{@link RestPut}
+		 * 	<li class='ja'>{@link RestPost}
+		 * 	<li class='ja'>{@link RestDelete}
+		 * </ul>
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
 		 */
-		protected SerializerSet.Builder createSerializers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<SerializerSet.Builder> v = Value.of(
-				parent.serializers().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] SerializerSet xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(SerializerSet.Builder.class, v.get())
-				.createMethodFinder(SerializerSet.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
+		public Builder httpMethod(String value) {
+			this.httpMethod = value;
+			return this;
 		}
 
-		Optional<SerializerSet> getSerializers() {
-			return Utils.opt(serializers).map(SerializerSet.Builder::build);
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// parsers
-		//-----------------------------------------------------------------------------------------------------------------
+		/**
+		 * Returns the JSON schema generator sub-builder.
+		 *
+		 * @return The JSON schema generator sub-builder.
+		 */
+		public JsonSchemaGenerator.Builder jsonSchemaGenerator() {
+			if (jsonSchemaGenerator == null)
+				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), parent, resource());
+			return jsonSchemaGenerator;
+		}
+
+		/**
+		 * Specifies the JSON schema generator for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.jsonSchemaGenerator().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
+			jsonSchemaGenerator().type(value);
+			return this;
+		}
+		/**
+		 * Specifies the JSON schema generator for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.jsonSchemaGenerator().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
+			jsonSchemaGenerator().impl(value);
+			return this;
+		}
+
+		/**
+		 * Returns the matcher list sub-builder.
+		 *
+		 * @return The matcher list sub-builder.
+		 */
+		public RestMatcherList.Builder matchers() {
+			if (matchers == null)
+				matchers = createMatchers(beanStore(), resource());
+			return matchers;
+		}
+
+		/**
+		 * Adds one or more matchers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.matchers().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder matchers(Class<? extends RestMatcher>...value) {
+			matchers().append(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more matchers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.matchers().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder matchers(RestMatcher...value) {
+			matchers().append(value);
+			return this;
+		}
+		/**
+		 * The maximum allowed input size (in bytes) on HTTP requests.
+		 *
+		 * <p>
+		 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
+		 * in out-of-memory errors which could affect system stability.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
+		 * 	<jk>public class</jk> MyResource {
+		 *
+		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 *
+		 * 			<jc>// Using method on builder.</jc>
+		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
+		 * 		}
+		 *
+		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+		 * 		<ja>@RestInit</ja>
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
+		 * 		}
+		 *
+		 * 		<jc>// Override at the method level.</jc>
+		 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
+		 * 		<jk>public</jk> Object myMethod() {...}
+		 * 	}
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		String value that gets resolved to a <jk>long</jk>.
+		 * 	<li class='note'>
+		 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
+		 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
+		 * 	<li class='note'>
+		 * 		A value of <js>"-1"</js> can be used to represent no limit.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Rest#maxInput}
+		 * 	<li class='ja'>{@link RestOp#maxInput}
+		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is the first value found:
+		 * 	<ul>
+		 * 		<li>System property <js>"RestContext.maxInput"
+		 * 		<li>Environment variable <js>"RESTCONTEXT_MAXINPUT"
+		 * 		<li><js>"100M"</js>
+		 * 	</ul>
+		 * 	<br>The default is <js>"100M"</js>.
+		 * @return This object.
+		 */
+		public Builder maxInput(String value) {
+			maxInput = StringUtils.parseLongWithSuffix(value);
+			return this;
+		}
 
 		/**
 		 * Returns the parser group sub-builder.
@@ -560,41 +998,48 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Instantiates the parser group sub-builder.
+		 * Returns the part parser sub-builder.
 		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new parser group sub-builder.
+		 * @return The part parser sub-builder.
 		 */
-		protected ParserSet.Builder createParsers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<ParserSet.Builder> v = Value.of(
-				parent.parsers().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] ParserSet xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(ParserSet.Builder.class, v.get())
-				.createMethodFinder(ParserSet.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
+		public HttpPartParser.Creator partParser() {
+			if (partParser == null)
+				partParser = createPartParser(beanStore(), parent, resource());
+			return partParser;
+		}
+		/**
+		 * Specifies the part parser to use for parsing HTTP parts for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.partParser().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder partParser(Class<? extends HttpPartParser> value) {
+			partParser().type(value);
+			return this;
 		}
 
-		Optional<ParserSet> getParsers() {
-			return Utils.opt(parsers).map(ParserSet.Builder::build);
+		/**
+		 * Specifies the part parser to use for parsing HTTP parts for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.partParser().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder partParser(HttpPartParser value) {
+			partParser().impl(value);
+			return this;
 		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// partSerializer
-		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Returns the part serializer sub-builder.
@@ -640,254 +1085,273 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			partSerializer().impl(value);
 			return this;
 		}
-
 		/**
-		 * Instantiates the part serializer sub-builder.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new part serializer sub-builder.
-		 */
-		protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<HttpPartSerializer.Creator> v = Value.of(
-				parent.partSerializer().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartSerializer xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(HttpPartSerializer.Creator.class, v.get())
-				.createMethodFinder(HttpPartSerializer.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		Optional<HttpPartSerializer> getPartSerializer() {
-			return Utils.opt(partSerializer).map(Creator::create);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// partParser
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the part parser sub-builder.
-		 *
-		 * @return The part parser sub-builder.
-		 */
-		public HttpPartParser.Creator partParser() {
-			if (partParser == null)
-				partParser = createPartParser(beanStore(), parent, resource());
-			return partParser;
-		}
-
-		/**
-		 * Specifies the part parser to use for parsing HTTP parts for this operation.
+		 * Resource method paths.
 		 *
 		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.partParser().type(<jv>value</jv>);
-		 * </p>
+		 * Identifies the URL subpath relative to the servlet class.
 		 *
-		 * @param value The new value.
+		 * <p>
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		This method is only applicable for Java methods.
+		 * 	<li class='note'>
+		 * 		Slashes are trimmed from the path ends.
+		 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
+		 * </ul>
+		 *
+		 * @param values The new values for this setting.
 		 * @return This object.
 		 */
-		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(value);
+		public Builder path(String...values) {
+			path = prependAll(path, values);
 			return this;
 		}
 
 		/**
-		 * Specifies the part parser to use for parsing HTTP parts for this operation.
+		 * Supported accept media types.
 		 *
 		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.partParser().impl(<jv>value</jv>);
-		 * </p>
+		 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
+		 * <br>An example where this might be useful if you have serializers registered that handle media types that you
+		 * don't want exposed in the Swagger documentation.
 		 *
-		 * @param value The new value.
+		 * <p>
+		 * This affects the returned values from the following:
+		 * <ul class='javatree'>
+		 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
+		 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Rest#produces}
+		 * 	<li class='ja'>{@link RestOp#produces}
+		 * 	<li class='ja'>{@link RestGet#produces}
+		 * 	<li class='ja'>{@link RestPut#produces}
+		 * 	<li class='ja'>{@link RestPost#produces}
+		 * </ul>
+		 *
+		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		public Builder partParser(HttpPartParser value) {
-			partParser().impl(value);
+		public Builder produces(MediaType...values) {
+			produces = addAll(produces, values);
+			return this;
+		}
+		/**
+		 * Returns the REST servlet/bean instance that this context is defined against.
+		 *
+		 * @return The REST servlet/bean instance that this context is defined against.
+		 */
+		public Supplier<?> resource() {
+			return restContext.builder.resource();
+		}
+
+		/**
+		 * Role guard.
+		 *
+		 * <p>
+		 * An expression defining if a user with the specified roles are allowed to access methods on this class.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<ja>@Rest</ja>(
+		 * 		path=<js>"/foo"</js>,
+		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+		 * 	)
+		 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+		 * 		...
+		 * 	}
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		Supports any of the following expression constructs:
+		 * 		<ul>
+		 * 			<li><js>"foo"</js> - Single arguments.
+		 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
+		 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
+		 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
+		 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
+		 * 			<li><js>"fo* &amp; *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
+		 * 			<li><js>"fo* &amp;&amp; *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
+		 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
+		 * 		</ul>
+		 * 	<li class='note'>
+		 * 		AND operations take precedence over OR operations (as expected).
+		 * 	<li class='note'>
+		 * 		Whitespace is ignored.
+		 * 	<li class='note'>
+		 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
+		 * 	<li class='note'>
+		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
+		 * 	<li class='note'>
+		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+		 * </ul>
+		 *
+		 * @param value The values to add to this setting.
+		 * @return This object.
+		 */
+		public Builder roleGuard(String value) {
+			if (roleGuard == null)
+				roleGuard = Utils.set(value);
+			else
+				roleGuard.add(value);
 			return this;
 		}
 
 		/**
-		 * Instantiates the part parser sub-builder.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new part parser sub-builder.
-		 */
-		protected HttpPartParser.Creator createPartParser(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<HttpPartParser.Creator> v = Value.of(
-				parent.partParser().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartParser xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(HttpPartParser.Creator.class, v.get())
-				.createMethodFinder(HttpPartParser.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		Optional<HttpPartParser> getPartParser() {
-			return Utils.opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// jsonSchemaGenerator
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the JSON schema generator sub-builder.
-		 *
-		 * @return The JSON schema generator sub-builder.
-		 */
-		public JsonSchemaGenerator.Builder jsonSchemaGenerator() {
-			if (jsonSchemaGenerator == null)
-				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), parent, resource());
-			return jsonSchemaGenerator;
-		}
-
-		/**
-		 * Specifies the JSON schema generator for this operation.
+		 * Declared roles.
 		 *
 		 * <p>
-		 * Equivalent to calling:
+		 * A comma-delimited list of all possible user roles.
+		 *
+		 * <p>
+		 * Used in conjunction with {@link RestOpContext.Builder#roleGuard(String)} is used with patterns.
+		 *
+		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.jsonSchemaGenerator().type(<jv>value</jv>);
+		 * 	<ja>@Rest</ja>(
+		 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
+		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
+		 * 	)
+		 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+		 * 		...
+		 * 	}
 		 * </p>
 		 *
-		 * @param value The new value.
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Rest#rolesDeclared}
+		 * </ul>
+		 *
+		 * @param values The values to add to this setting.
 		 * @return This object.
 		 */
-		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
-			jsonSchemaGenerator().type(value);
+		public Builder rolesDeclared(String...values) {
+			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
+		}
+		/**
+		 * Returns the serializer group sub-builder.
+		 *
+		 * @return The serializer group sub-builder.
+		 */
+		public SerializerSet.Builder serializers() {
+			if (serializers == null)
+				serializers = createSerializers(beanStore(), parent, resource());
+			return serializers;
 		}
 
 		/**
-		 * Specifies the JSON schema generator for this operation.
+		 * Adds one or more serializers to this operation.
 		 *
 		 * <p>
 		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.jsonSchemaGenerator().impl(<jv>value</jv>);
+		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
-			jsonSchemaGenerator().impl(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the JSON schema generator sub-builder.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new JSON schema generator sub-builder.
-		 */
-		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			// Default value.
-			Value<JsonSchemaGenerator.Builder> v = Value.of(
-				parent.jsonSchemaGenerator().copy()
-			);
-
-			// Replace with bean from:  @RestInject(methodScope="foo") public [static] JsonSchemaGenerator xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(JsonSchemaGenerator.Builder.class, v.get())
-				.createMethodFinder(JsonSchemaGenerator.class, resource)
-				.find(this::matches)
-				.run(x -> v.get().impl(x));
-
-			return v.get();
-		}
-
-		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
-			return Utils.opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// converters
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the response converter list sub-builder.
-		 *
-		 * @return The response converter list sub-builder.
-		 */
-		public RestConverterList.Builder converters() {
-			if (converters == null)
-				converters = createConverters(beanStore(), resource());
-			return converters;
-		}
-
-		/**
-		 * Adds one or more converters to use to convert response objects for this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.converters().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
 		@SafeVarargs
-		public final Builder converters(Class<? extends RestConverter>...value) {
-			converters().append(value);
+		public final Builder serializers(Class<? extends Serializer>...value) {
+			serializers().add(value);
 			return this;
 		}
 
 		/**
-		 * Adds one or more converters to this operation.
+		 * Adds one or more serializers to this operation.
 		 *
 		 * <p>
 		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.converters().append(<jv>value</jv>);
+		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param value The new value.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder converters(RestConverter...value) {
-			converters().append(value);
+		public Builder serializers(Serializer...value) {
+			serializers().add(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
 			return this;
 		}
 
+		private String joinnlFirstNonEmptyArray(String[]...s) {
+			for (String[] ss : s)
+				if (ss.length > 0)
+					return Utils.joinnl(ss);
+			return null;
+		}
+
+		private boolean matches(MethodInfo annotated) {
+			RestInject a = annotated.getAnnotation(RestInject.class);
+			if (a != null) {
+				for (String n : a.methodScope()) {
+					if ("*".equals(n) || restMethod.getName().equals(n))
+						return true;
+				}
+			}
+			return false;
+		}
+		private boolean matches(MethodInfo annotated, String beanName) {
+			RestInject a = annotated.getAnnotation(RestInject.class);
+			if (a != null) {
+				if (! a.name().equals(beanName))
+					return false;
+				for (String n : a.methodScope()) {
+					if ("*".equals(n) || restMethod.getName().equals(n))
+						return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
+		 *
+		 * @param beanStore The bean store to use for resolving constructor arguments.
+		 * @return This object.
+		 */
+		protected Builder beanStore(BeanStore beanStore) {
+			this.beanStore = beanStore;
+			return this;
+		}
+
+		/**
+		 * Instantiates the bean context sub-builder.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new bean context sub-builder.
+		 */
+		protected BeanContext.Builder createBeanContext(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			// Default value.
+			Value<BeanContext.Builder> v = Value.of(
+				parent.beanContext().copy()
+			);
+
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] BeanContext xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(BeanContext.Builder.class, v.get())
+				.createMethodFinder(BeanContext.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
+		}
 		/**
 		 * Instantiates the response converter list sub-builder.
 		 *
@@ -993,54 +1457,171 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// guards
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Returns the guard list sub-builder.
+		 * Instantiates the default request attributes sub-builder.
 		 *
-		 * @return The guard list sub-builder.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new default request attributes sub-builder.
 		 */
-		public RestGuardList.Builder guards() {
-			if (guards == null)
-				guards = createGuards(beanStore(), resource());
-			return guards;
+		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			Value<NamedAttributeMap> v = Value.of(
+				parent.defaultRequestAttributes().copy()
+			);
+
+			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeMap xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(NamedAttributeMap.class, v.get())
+				.createMethodFinder(NamedAttributeMap.class, resource)
+				.find(x -> matches(x, "defaultRequestAttributes"))
+				.run(x -> v.set(x));
+
+			return v.get();
 		}
 
 		/**
-		 * Adds one or more guards to this operation.
+		 * Instantiates the default request form data.
 		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.guards().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new default request form data sub-builder.
 		 */
-		@SafeVarargs
-		public final Builder guards(Class<? extends RestGuard>...value) {
-			guards().append(value);
-			return this;
+		protected PartList createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			Value<PartList> v = Value.of(
+				PartList.create()
+			);
+
+			// Replace with bean from:  @RestInject(name="defaultRequestFormData",methodScope="foo") public [static] PartList xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(PartList.class, v.get())
+				.createMethodFinder(PartList.class, resource)
+				.find(x -> matches(x, "defaultRequestFormData"))
+				.run(x -> v.set(x));
+
+			return v.get();
+		}
+		/**
+		 * Instantiates the default request headers.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new default request headers sub-builder.
+		 */
+		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			Value<HeaderList> v = Value.of(
+				parent.defaultRequestHeaders().copy()
+			);
+
+			// Replace with bean from:  @RestInject(name="defaultRequestHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(HeaderList.class, v.get())
+				.createMethodFinder(HeaderList.class, resource)
+				.find(x -> matches(x, "defaultRequestHeaders"))
+				.run(x -> v.set(x));
+
+			return v.get();
+		}
+		/**
+		 * Instantiates the default request query data.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new default request query data sub-builder.
+		 */
+		protected PartList createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			Value<PartList> v = Value.of(
+				PartList.create()
+			);
+
+			// Replace with bean from:  @RestInject(name="defaultRequestQueryData",methodScope="foo") public [static] PartList xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(PartList.class, v.get())
+				.createMethodFinder(PartList.class, resource)
+				.find(x -> matches(x, "defaultRequestQueryData"))
+				.run(x -> v.set(x));
+
+			return v.get();
 		}
 
 		/**
-		 * Adds one or more guards to this operation.
+		 * Instantiates the default response headers.
 		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.guards().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new default response headers sub-builder.
 		 */
-		public Builder guards(RestGuard...value) {
-			guards().append(value);
-			return this;
+		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			Value<HeaderList> v = Value.of(
+				parent.defaultResponseHeaders().copy()
+			);
+
+			// Replace with bean from:  @RestInject(name="defaultResponseHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(HeaderList.class, v.get())
+				.createMethodFinder(HeaderList.class, resource)
+				.find(x -> matches(x, "defaultResponseHeaders"))
+				.run(x -> v.set(x));
+
+			return v.get();
+		}
+
+		/**
+		 * Instantiates the encoder group sub-builder.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new encoder group sub-builder.
+		 */
+		protected EncoderSet.Builder createEncoders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			// Default value.
+			Value<EncoderSet.Builder> v = Value.of(
+				parent.encoders().copy()
+			);
+
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] EncoderSet xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(EncoderSet.Builder.class, v.get())
+				.createMethodFinder(EncoderSet.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
 		}
 
 		/**
@@ -1101,69 +1682,33 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		RestGuardList getGuards() {
-			RestGuardList.Builder b = guards();
-			Set<String> roleGuard = Utils.opt(this.roleGuard).orElseGet(Utils::set);
-
-			for (String rg : roleGuard) {
-				try {
-					b.append(new RoleBasedRestGuard(rolesDeclared, rg));
-				} catch (java.text.ParseException e1) {
-					throw asRuntimeException(e1);
-				}
-			}
-
-			return guards.build();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// matchers
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Returns the matcher list sub-builder.
+		 * Instantiates the JSON schema generator sub-builder.
 		 *
-		 * @return The matcher list sub-builder.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new JSON schema generator sub-builder.
 		 */
-		public RestMatcherList.Builder matchers() {
-			if (matchers == null)
-				matchers = createMatchers(beanStore(), resource());
-			return matchers;
-		}
+		protected JsonSchemaGenerator.Builder createJsonSchemaGenerator(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-		/**
-		 * Adds one or more matchers to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.matchers().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		@SafeVarargs
-		public final Builder matchers(Class<? extends RestMatcher>...value) {
-			matchers().append(value);
-			return this;
-		}
+			// Default value.
+			Value<JsonSchemaGenerator.Builder> v = Value.of(
+				parent.jsonSchemaGenerator().copy()
+			);
 
-		/**
-		 * Adds one or more matchers to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.matchers().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		public Builder matchers(RestMatcher...value) {
-			matchers().append(value);
-			return this;
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] JsonSchemaGenerator xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(JsonSchemaGenerator.Builder.class, v.get())
+				.createMethodFinder(JsonSchemaGenerator.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
 		}
 
 		/**
@@ -1250,17 +1795,129 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		RestMatcherList getMatchers(RestContext restContext) {
-			RestMatcherList.Builder b = matchers();
-			if (clientVersion != null)
-				b.append(new ClientVersionMatcher(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
+		/**
+		 * Instantiates the parser group sub-builder.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new parser group sub-builder.
+		 */
+		protected ParserSet.Builder createParsers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			return b.build();
+			// Default value.
+			Value<ParserSet.Builder> v = Value.of(
+				parent.parsers().copy()
+			);
+
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] ParserSet xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(ParserSet.Builder.class, v.get())
+				.createMethodFinder(ParserSet.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// pathMatchers
-		//-----------------------------------------------------------------------------------------------------------------
+		/**
+		 * Instantiates the part parser sub-builder.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new part parser sub-builder.
+		 */
+		protected HttpPartParser.Creator createPartParser(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			// Default value.
+			Value<HttpPartParser.Creator> v = Value.of(
+				parent.partParser().copy()
+			);
+
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartParser xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(HttpPartParser.Creator.class, v.get())
+				.createMethodFinder(HttpPartParser.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
+		}
+
+		/**
+		 * Instantiates the part serializer sub-builder.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new part serializer sub-builder.
+		 */
+		protected HttpPartSerializer.Creator createPartSerializer(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			// Default value.
+			Value<HttpPartSerializer.Creator> v = Value.of(
+				parent.partSerializer().copy()
+			);
+
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] HttpPartSerializer xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(HttpPartSerializer.Creator.class, v.get())
+				.createMethodFinder(HttpPartSerializer.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
+		}
+
+		/**
+		 * Instantiates the serializer group sub-builder.
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param parent
+		 * 	The builder for the REST resource class.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @return A new serializer group sub-builder.
+		 */
+		protected SerializerSet.Builder createSerializers(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+
+			// Default value.
+			Value<SerializerSet.Builder> v = Value.of(
+				parent.serializers().copy()
+			);
+
+			// Replace with bean from:  @RestInject(methodScope="foo") public [static] SerializerSet xxx(<args>)
+			BeanStore
+				.of(beanStore, resource)
+				.addBean(SerializerSet.Builder.class, v.get())
+				.createMethodFinder(SerializerSet.class, resource)
+				.find(this::matches)
+				.run(x -> v.get().impl(x));
+
+			return v.get();
+		}
+		/**
+		 * Specifies the default implementation class if not specified via {@link #type(Class)}.
+		 *
+		 * @return The default implementation class if not specified via {@link #type(Class)}.
+		 */
+		protected Class<? extends RestOpContext> getDefaultImplClass() {
+			return RestOpContext.class;
+		}
 
 		/**
 		 * Instantiates the path matchers for this method.
@@ -1318,320 +1975,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * When enabled, append <js>"/*"</js> to path patterns if not already present.
-		 *
-		 * @return This object.
-		 */
-		public Builder dotAll() {
-			dotAll = true;
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// defaultRequestHeaders
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the default request headers.
-		 *
-		 * @return The default request headers.
-		 */
-		public HeaderList defaultRequestHeaders() {
-			if (defaultRequestHeaders == null)
-				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), parent, resource());
-			return defaultRequestHeaders;
-		}
-
-		/**
-		 * Adds one or more default request headers to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultRequestHeaders().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		public Builder defaultRequestHeaders(org.apache.http.Header...value) {
-			defaultRequestHeaders().append(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the default request headers.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new default request headers sub-builder.
-		 */
-		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			Value<HeaderList> v = Value.of(
-				parent.defaultRequestHeaders().copy()
-			);
-
-			// Replace with bean from:  @RestInject(name="defaultRequestHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(HeaderList.class, v.get())
-				.createMethodFinder(HeaderList.class, resource)
-				.find(x -> matches(x, "defaultRequestHeaders"))
-				.run(x -> v.set(x));
-
-			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// defaultResponseHeaders
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the default response headers.
-		 *
-		 * @return The default response headers.
-		 */
-		public HeaderList defaultResponseHeaders() {
-			if (defaultResponseHeaders == null)
-				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), parent, resource());
-			return defaultResponseHeaders;
-		}
-
-		/**
-		 * Adds one or more default response headers to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultResponseHeaders().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		public Builder defaultResponseHeaders(org.apache.http.Header...value) {
-			defaultResponseHeaders().append(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the default response headers.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new default response headers sub-builder.
-		 */
-		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			Value<HeaderList> v = Value.of(
-				parent.defaultResponseHeaders().copy()
-			);
-
-			// Replace with bean from:  @RestInject(name="defaultResponseHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(HeaderList.class, v.get())
-				.createMethodFinder(HeaderList.class, resource)
-				.find(x -> matches(x, "defaultResponseHeaders"))
-				.run(x -> v.set(x));
-
-			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// defaultRequestAttributes
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the default request attributes sub-builder.
-		 *
-		 * @return The default request attributes sub-builder.
-		 */
-		public NamedAttributeMap defaultRequestAttributes() {
-			if (defaultRequestAttributes == null)
-				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), parent, resource());
-			return defaultRequestAttributes;
-		}
-
-		/**
-		 * Adds one or more default request attributes to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultRequestAttributes().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		public Builder defaultRequestAttributes(NamedAttribute...value) {
-			defaultRequestAttributes().add(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the default request attributes sub-builder.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new default request attributes sub-builder.
-		 */
-		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			Value<NamedAttributeMap> v = Value.of(
-				parent.defaultRequestAttributes().copy()
-			);
-
-			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeMap xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(NamedAttributeMap.class, v.get())
-				.createMethodFinder(NamedAttributeMap.class, resource)
-				.find(x -> matches(x, "defaultRequestAttributes"))
-				.run(x -> v.set(x));
-
-			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// defaultRequestQuery
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the default request query data.
-		 *
-		 * @return The default request query data.
-		 */
-		public PartList defaultRequestQueryData() {
-			if (defaultRequestQueryData == null)
-				defaultRequestQueryData = createDefaultRequestQueryData(beanStore(), parent, resource());
-			return defaultRequestQueryData;
-		}
-
-		/**
-		 * Adds one or more default request query data to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultRequestQueryData().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		public Builder defaultRequestQueryData(NameValuePair...value) {
-			defaultRequestQueryData().append(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the default request query data.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new default request query data sub-builder.
-		 */
-		protected PartList createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			Value<PartList> v = Value.of(
-				PartList.create()
-			);
-
-			// Replace with bean from:  @RestInject(name="defaultRequestQueryData",methodScope="foo") public [static] PartList xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(PartList.class, v.get())
-				.createMethodFinder(PartList.class, resource)
-				.find(x -> matches(x, "defaultRequestQueryData"))
-				.run(x -> v.set(x));
-
-			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// defaultRequestFormData
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the default request form data.
-		 *
-		 * @return The default request form data.
-		 */
-		public PartList defaultRequestFormData() {
-			if (defaultRequestFormData == null)
-				defaultRequestFormData = createDefaultRequestFormData(beanStore(), parent, resource());
-			return defaultRequestFormData;
-		}
-
-		/**
-		 * Adds one or more default request form data to this operation.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.defaultRequestFormData().append(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The values to add.
-		 * @return This object.
-		 */
-		public Builder defaultRequestFormData(NameValuePair...value) {
-			defaultRequestFormData().append(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the default request form data.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param parent
-		 * 	The builder for the REST resource class.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new default request form data sub-builder.
-		 */
-		protected PartList createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
-
-			Value<PartList> v = Value.of(
-				PartList.create()
-			);
-
-			// Replace with bean from:  @RestInject(name="defaultRequestFormData",methodScope="foo") public [static] PartList xxx(<args>)
-			BeanStore
-				.of(beanStore, resource)
-				.addBean(PartList.class, v.get())
-				.createMethodFinder(PartList.class, resource)
-				.find(x -> matches(x, "defaultRequestFormData"))
-				.run(x -> v.set(x));
-
-			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Parameter annotations
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
 		 * Handles processing of any annotations on parameters.
 		 *
 		 * <p>
@@ -1683,524 +2026,70 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			}
 		}
 
-		//----------------------------------------------------------------------------------------------------
-		// Properties
-		//----------------------------------------------------------------------------------------------------
-
-		/**
-		 * Client version pattern matcher.
-		 *
-		 * <p>
-		 * Specifies whether this method can be called based on the client version.
-		 *
-		 * <p>
-		 * The client version is identified via the HTTP request header identified by
-		 * {@link Rest#clientVersionHeader() @Rest(clientVersionHeader)} which by default is <js>"Client-Version"</js>.
-		 *
-		 * <p>
-		 * This is a specialized kind of {@link RestMatcher} that allows you to invoke different Java methods for the same
-		 * method/path based on the client version.
-		 *
-		 * <p>
-		 * The format of the client version range is similar to that of OSGi versions.
-		 *
-		 * <p>
-		 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
-		 * <p class='bjava'>
-		 * 	<jc>// Call this method if Client-Version is at least 2.0.
-		 * 	// Note that this also matches 2.0.1.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
-		 * 	<jk>public</jk> Object method1()  {...}
-		 *
-		 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
-		 * 	<jk>public</jk> Object method2()  {...}
-		 *
-		 * 	<jc>// Call this method if Client-Version is less than 1.1.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
-		 * 	<jk>public</jk> Object method3()  {...}
-		 * </p>
-		 *
-		 * <p>
-		 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
-		 * backwards compatibility.
-		 * <p class='bjava'>
-		 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
-		 * 	<jk>public</jk> NewPojo newMethod()  {...}
-		 *
-		 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
-		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
-		 * 	<ja>@BeanConfig(swaps=NewToOldSwap.<jk>class</jk>)
-		 * 	<jk>public</jk> NewPojo oldMethod() {
-		 * 		<jk>return</jk> newMethod();
-		 * 	}
-		 *
-		 * <p>
-		 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
-		 * an older form.
-		 * The old method could also just return back a completely different object.
-		 * The range can be any of the following:
-		 * <ul>
-		 * 	<li><js>"[0,1.0)"</js> = Less than 1.0.  1.0 and 1.0.0 does not match.
-		 * 	<li><js>"[0,1.0]"</js> = Less than or equal to 1.0.  Note that 1.0.1 will match.
-		 * 	<li><js>"1.0"</js> = At least 1.0.  1.0 and 2.0 will match.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link RestOp#clientVersion}
-		 * 	<li class='ja'>{@link RestGet#clientVersion}
-		 * 	<li class='ja'>{@link RestPut#clientVersion}
-		 * 	<li class='ja'>{@link RestPost#clientVersion}
-		 * 	<li class='ja'>{@link RestDelete#clientVersion}
-		 * 	<li class='jm'>{@link RestContext.Builder#clientVersionHeader(String)}
-		 * </ul>
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder clientVersion(String value) {
-			clientVersion = value;
-			return this;
+		Optional<BeanContext> getBeanContext() {
+			return Utils.opt(beanContext).map(BeanContext.Builder::build);
 		}
 
-		/**
-		 * Debug mode.
-		 *
-		 * <p>
-		 * Enables the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		HTTP request/response bodies are cached in memory for logging purposes.
-		 * </ul>
-		 *
-		 * <p>
-		 * If not sppecified, the debug enablement is inherited from the class context.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder debug(Enablement value) {
-			debug = value;
-			return this;
+		Optional<EncoderSet> getEncoders() {
+			return Utils.opt(encoders).map(EncoderSet.Builder::build);
 		}
 
-		/**
-		 * Default character encoding.
-		 *
-		 * <p>
-		 * The default character encoding for the request and response if not specified on the request.
-		 *
-		 * <p>
-		 * This overrides the value defined on the {@link RestContext}.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link RestContext.Builder#defaultCharset(Charset)}
-		 * 	<li class='ja'>{@link Rest#defaultCharset}
-		 * 	<li class='ja'>{@link RestOp#defaultCharset}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.defaultCharset"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_defaultCharset"
-		 * 		<li><js>"utf-8"</js>
-		 * 	</ul>
-		 * @return This object.
-		 */
-		public Builder defaultCharset(Charset value) {
-			defaultCharset = value;
-			return this;
-		}
+		RestGuardList getGuards() {
+			RestGuardList.Builder b = guards();
+			Set<String> roleGuard = Utils.opt(this.roleGuard).orElseGet(Utils::set);
 
-		/**
-		 * HTTP method name.
-		 *
-		 * <p>
-		 * Typically <js>"GET"</js>, <js>"PUT"</js>, <js>"POST"</js>, <js>"DELETE"</js>, or <js>"OPTIONS"</js>.
-		 *
-		 * <p>
-		 * Method names are case-insensitive (always folded to upper-case).
-		 *
-		 * <p>
-		 * Note that you can use {@link org.apache.juneau.http.HttpMethod} for constant values.
-		 *
-		 * <p>
-		 * Besides the standard HTTP method names, the following can also be specified:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		<js>"*"</js>
-		 * 		- Denotes any method.
-		 * 		<br>Use this if you want to capture any HTTP methods in a single Java method.
-		 * 		<br>The {@link org.apache.juneau.rest.annotation.Method @Method} annotation and/or {@link RestRequest#getMethod()} method can be used to
-		 * 		distinguish the actual HTTP method name.
-		 * 	<li>
-		 * 		<js>""</js>
-		 * 		- Auto-detect.
-		 * 		<br>The method name is determined based on the Java method name.
-		 * 		<br>For example, if the method is <c>doPost(...)</c>, then the method name is automatically detected
-		 * 		as <js>"POST"</js>.
-		 * 		<br>Otherwise, defaults to <js>"GET"</js>.
-		 * 	<li>
-		 * 		<js>"RRPC"</js>
-		 * 		- Remote-proxy interface.
-		 * 		<br>This denotes a Java method that returns an object (usually an interface, often annotated with the
-		 * 		{@link Remote @Remote} annotation) to be used as a remote proxy using
-		 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
-		 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
-		 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
-		 * 		where the arguments are marshalled from the client to the server as an HTTP content containing an array of
-		 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
-		 * 	<li>
-		 * 		Anything else
-		 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
-		 * 		parameter.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link RestOp#method()}
-		 * 	<li class='ja'>{@link RestGet}
-		 * 	<li class='ja'>{@link RestPut}
-		 * 	<li class='ja'>{@link RestPost}
-		 * 	<li class='ja'>{@link RestDelete}
-		 * </ul>
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder httpMethod(String value) {
-			this.httpMethod = value;
-			return this;
-		}
-
-		/**
-		 * The maximum allowed input size (in bytes) on HTTP requests.
-		 *
-		 * <p>
-		 * Useful for alleviating DoS attacks by throwing an exception when too much input is received instead of resulting
-		 * in out-of-memory errors which could affect system stability.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
-		 * 		}
-		 *
-		 * 		<jc>// Override at the method level.</jc>
-		 * 		<ja>@RestPost</ja>(maxInput=<js>"10M"</js>)
-		 * 		<jk>public</jk> Object myMethod() {...}
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		String value that gets resolved to a <jk>long</jk>.
-		 * 	<li class='note'>
-		 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
-		 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-		 * 	<li class='note'>
-		 * 		A value of <js>"-1"</js> can be used to represent no limit.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#maxInput}
-		 * 	<li class='ja'>{@link RestOp#maxInput}
-		 * 	<li class='jm'>{@link RestOpContext.Builder#maxInput(String)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is the first value found:
-		 * 	<ul>
-		 * 		<li>System property <js>"RestContext.maxInput"
-		 * 		<li>Environment variable <js>"RESTCONTEXT_MAXINPUT"
-		 * 		<li><js>"100M"</js>
-		 * 	</ul>
-		 * 	<br>The default is <js>"100M"</js>.
-		 * @return This object.
-		 */
-		public Builder maxInput(String value) {
-			maxInput = StringUtils.parseLongWithSuffix(value);
-			return this;
-		}
-
-		/**
-		 * Resource method paths.
-		 *
-		 * <p>
-		 * Identifies the URL subpath relative to the servlet class.
-		 *
-		 * <p>
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		This method is only applicable for Java methods.
-		 * 	<li class='note'>
-		 * 		Slashes are trimmed from the path ends.
-		 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
-		 * </ul>
-		 *
-		 * @param values The new values for this setting.
-		 * @return This object.
-		 */
-		public Builder path(String...values) {
-			path = prependAll(path, values);
-			return this;
-		}
-
-		/**
-		 * Supported accept media types.
-		 *
-		 * <p>
-		 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
-		 * <br>An example where this might be useful if you have serializers registered that handle media types that you
-		 * don't want exposed in the Swagger documentation.
-		 *
-		 * <p>
-		 * This affects the returned values from the following:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getProduces() RestContext.getProduces()}
-		 * 	<li class='jm'>{@link SwaggerProvider#getSwagger(RestContext,Locale)} - Affects produces field.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#produces}
-		 * 	<li class='ja'>{@link RestOp#produces}
-		 * 	<li class='ja'>{@link RestGet#produces}
-		 * 	<li class='ja'>{@link RestPut#produces}
-		 * 	<li class='ja'>{@link RestPost#produces}
-		 * </ul>
-		 *
-		 * @param values The values to add to this setting.
-		 * @return This object.
-		 */
-		public Builder produces(MediaType...values) {
-			produces = addAll(produces, values);
-			return this;
-		}
-
-		/**
-		 * Declared roles.
-		 *
-		 * <p>
-		 * A comma-delimited list of all possible user roles.
-		 *
-		 * <p>
-		 * Used in conjunction with {@link RestOpContext.Builder#roleGuard(String)} is used with patterns.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<ja>@Rest</ja>(
-		 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
-		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-		 * 		...
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#rolesDeclared}
-		 * </ul>
-		 *
-		 * @param values The values to add to this setting.
-		 * @return This object.
-		 */
-		public Builder rolesDeclared(String...values) {
-			rolesDeclared = addAll(rolesDeclared, values);
-			return this;
-		}
-
-		/**
-		 * Role guard.
-		 *
-		 * <p>
-		 * An expression defining if a user with the specified roles are allowed to access methods on this class.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<ja>@Rest</ja>(
-		 * 		path=<js>"/foo"</js>,
-		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
-		 * 	)
-		 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-		 * 		...
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		Supports any of the following expression constructs:
-		 * 		<ul>
-		 * 			<li><js>"foo"</js> - Single arguments.
-		 * 			<li><js>"foo,bar,baz"</js> - Multiple OR'ed arguments.
-		 * 			<li><js>"foo | bar | bqz"</js> - Multiple OR'ed arguments, pipe syntax.
-		 * 			<li><js>"foo || bar || bqz"</js> - Multiple OR'ed arguments, Java-OR syntax.
-		 * 			<li><js>"fo*"</js> - Patterns including <js>'*'</js> and <js>'?'</js>.
-		 * 			<li><js>"fo* &amp; *oo"</js> - Multiple AND'ed arguments, ampersand syntax.
-		 * 			<li><js>"fo* &amp;&amp; *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
-		 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
-		 * 		</ul>
-		 * 	<li class='note'>
-		 * 		AND operations take precedence over OR operations (as expected).
-		 * 	<li class='note'>
-		 * 		Whitespace is ignored.
-		 * 	<li class='note'>
-		 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
-		 * 	<li class='note'>
-		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
-		 * 	<li class='note'>
-		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-		 * </ul>
-		 *
-		 * @param value The values to add to this setting.
-		 * @return This object.
-		 */
-		public Builder roleGuard(String value) {
-			if (roleGuard == null)
-				roleGuard = Utils.set(value);
-			else
-				roleGuard.add(value);
-			return this;
-		}
-
-		/**
-		 * Supported content media types.
-		 *
-		 * <p>
-		 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
-		 * <br>An example where this might be useful if you have parsers registered that handle media types that you
-		 * don't want exposed in the Swagger documentation.
-		 *
-		 * <p>
-		 * This affects the returned values from the following:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getConsumes() RestContext.getConsumes()}
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Rest#consumes}
-		 * 	<li class='ja'>{@link RestOp#consumes}
-		 * 	<li class='ja'>{@link RestPut#consumes}
-		 * 	<li class='ja'>{@link RestPost#consumes}
-		 * </ul>
-		 *
-		 * @param values The values to add to this setting.
-		 * @return This object.
-		 */
-		public Builder consumes(MediaType...values) {
-			consumes = addAll(consumes, values);
-			return this;
-		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-		//-----------------------------------------------------------------------------------------------------------------
-		// Helper methods.
-		//-----------------------------------------------------------------------------------------------------------------
-
-		private boolean matches(MethodInfo annotated) {
-			RestInject a = annotated.getAnnotation(RestInject.class);
-			if (a != null) {
-				for (String n : a.methodScope()) {
-					if ("*".equals(n) || restMethod.getName().equals(n))
-						return true;
+			for (String rg : roleGuard) {
+				try {
+					b.append(new RoleBasedRestGuard(rolesDeclared, rg));
+				} catch (java.text.ParseException e1) {
+					throw asRuntimeException(e1);
 				}
 			}
-			return false;
+
+			return guards.build();
 		}
 
-		private boolean matches(MethodInfo annotated, String beanName) {
-			RestInject a = annotated.getAnnotation(RestInject.class);
-			if (a != null) {
-				if (! a.name().equals(beanName))
-					return false;
-				for (String n : a.methodScope()) {
-					if ("*".equals(n) || restMethod.getName().equals(n))
-						return true;
-				}
-			}
-			return false;
+		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
+			return Utils.opt(jsonSchemaGenerator).map(JsonSchemaGenerator.Builder::build);
 		}
 
-		private String joinnlFirstNonEmptyArray(String[]...s) {
-			for (String[] ss : s)
-				if (ss.length > 0)
-					return Utils.joinnl(ss);
-			return null;
+		RestMatcherList getMatchers(RestContext restContext) {
+			RestMatcherList.Builder b = matchers();
+			if (clientVersion != null)
+				b.append(new ClientVersionMatcher(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
+
+			return b.build();
+		}
+
+		Optional<ParserSet> getParsers() {
+			return Utils.opt(parsers).map(ParserSet.Builder::build);
+		}
+		Optional<HttpPartParser> getPartParser() {
+			return Utils.opt(partParser).map(org.apache.juneau.httppart.HttpPartParser.Creator::create);
+		}
+
+		Optional<HttpPartSerializer> getPartSerializer() {
+			return Utils.opt(partSerializer).map(Creator::create);
+		}
+
+		Optional<SerializerSet> getSerializers() {
+			return Utils.opt(serializers).map(SerializerSet.Builder::build);
 		}
 
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param method The Java method this context belongs to.
+	 * @param context The Java class context.
+	 * @return A new builder.
+	 */
+	public static Builder create(java.lang.reflect.Method method, RestContext context) {
+		return new Builder(method, context);
+	}
+	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer _default) {
+		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(_default);
+	}
 	private final String httpMethod;
 	private final UrlPathMatcher[] pathMatchers;
 	private final RestGuard[] guards;
@@ -2228,12 +2117,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
-	private final CallLogger callLogger;
 
+	private final CallLogger callLogger;
 	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	private final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();
 	private final ResponseBeanMeta responseMeta;
 	private final int hierarchyDepth;
+
 	private final DebugEnablement debug;
 
 	/**
@@ -2319,15 +2209,61 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 	}
 
-	/**
-	 * Creates a new REST operation session.
-	 *
-	 * @param session The REST session.
-	 * @return A new REST operation session.
-	 * @throws Exception If op session could not be created.
+	/*
+	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
+	 * It maintains the order in which matches are made during requests.
 	 */
-	public RestOpSession.Builder createSession(RestSession session) throws Exception {
-		return RestOpSession.create(this, session).logger(callLogger).debug(debug.isDebug(this, session.getRequest()));
+	@Override /* Overridden from Comparable */
+	public int compareTo(RestOpContext o) {
+		int c;
+
+		for (int i = 0; i < Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
+			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
+			if (c != 0)
+				return c;
+		}
+
+		c = Utils.compare(o.hierarchyDepth, hierarchyDepth);
+		if (c != 0)
+			return c;
+
+		c = Utils.compare(o.requiredMatchers.length, requiredMatchers.length);
+		if (c != 0)
+			return c;
+
+		c = Utils.compare(o.optionalMatchers.length, optionalMatchers.length);
+		if (c != 0)
+			return c;
+
+		c = Utils.compare(o.guards.length, guards.length);
+
+		if (c != 0)
+			return c;
+
+		c = compare(method.getName(), o.method.getName());
+		if (c != 0)
+			return c;
+
+		c = Utils.compare(method.getParameterCount(), o.method.getParameterCount());
+		if (c != 0)
+			return c;
+
+		for (int i = 0; i < method.getParameterCount(); i++) {
+			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
+			if (c != 0)
+				return c;
+		}
+
+		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
+		if (c != 0)
+			return c;
+
+		return 0;
+	}
+
+	@Override /* Overridden from Context */
+	public Context.Builder copy() {
+		throw new UnsupportedOperationException("Method not implemented.");
 	}
 
 	/**
@@ -2355,12 +2291,163 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
+	 * Creates a new REST operation session.
+	 *
+	 * @param session The REST session.
+	 * @return A new REST operation session.
+	 * @throws Exception If op session could not be created.
+	 */
+	public RestOpSession.Builder createSession(RestSession session) throws Exception {
+		return RestOpSession.create(this, session).logger(callLogger).debug(debug.isDebug(this, session.getRequest()));
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
+	}
+
+	/**
 	 * Returns the bean context associated with this context.
 	 *
 	 * @return The bean context associated with this context.
 	 */
 	public BeanContext getBeanContext() {
 		return beanContext;
+	}
+
+	/**
+	 * Returns the default charset.
+	 *
+	 * @return The default charset.  Never <jk>null</jk>.
+	 */
+	public Charset getDefaultCharset() {
+		return defaultCharset;
+	}
+
+	/**
+	 * Returns the default request attributes.
+	 *
+	 * @return The default request attributes.  Never <jk>null</jk>.
+	 */
+	public NamedAttributeMap getDefaultRequestAttributes() {
+		return defaultRequestAttributes;
+	}
+
+	/**
+	 * Returns the default form data parameters.
+	 *
+	 * @return The default form data parameters.  Never <jk>null</jk>.
+	 */
+	public PartList getDefaultRequestFormData() {
+		return defaultRequestFormData;
+	}
+
+	/**
+	 * Returns the default request headers.
+	 *
+	 * @return The default request headers.  Never <jk>null</jk>.
+	 */
+	public HeaderList getDefaultRequestHeaders() {
+		return defaultRequestHeaders;
+	}
+
+	/**
+	 * Returns the default request query parameters.
+	 *
+	 * @return The default request query parameters.  Never <jk>null</jk>.
+	 */
+	public PartList getDefaultRequestQueryData() {
+		return defaultRequestQueryData;
+	}
+
+	/**
+	 * Returns the default response headers.
+	 *
+	 * @return The default response headers.  Never <jk>null</jk>.
+	 */
+	public HeaderList getDefaultResponseHeaders() {
+		return defaultResponseHeaders;
+	}
+
+	/**
+	 * Returns the compression encoders to use for this method.
+	 *
+	 * @return The compression encoders to use for this method.
+	 */
+	public EncoderSet getEncoders() {
+		return encoders;
+	}
+
+	/**
+	 * Returns the HTTP method name (e.g. <js>"GET"</js>).
+	 *
+	 * @return The HTTP method name.
+	 */
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	/**
+	 * Returns the underlying Java method that this context belongs to.
+	 *
+	 * @return The underlying Java method that this context belongs to.
+	 */
+	public Method getJavaMethod() {
+		return method;
+	}
+
+	/**
+	 * Returns the JSON-Schema generator applicable to this Java method.
+	 *
+	 * @return The JSON-Schema generator applicable to this Java method.
+	 */
+	public JsonSchemaGenerator getJsonSchemaGenerator() {
+		return jsonSchemaGenerator;
+	}
+
+	/**
+	 * Returns the max number of bytes to process in the input content.
+	 *
+	 * @return The max number of bytes to process in the input content.
+	 */
+	public long getMaxInput() {
+		return maxInput;
+	}
+
+	/**
+	 * Returns the parsers to use for this method.
+	 *
+	 * @return The parsers to use for this method.
+	 */
+	public ParserSet getParsers() {
+		return parsers;
+	}
+
+	/**
+	 * Bean property getter:  <property>partParser</property>.
+	 *
+	 * @return The value of the <property>partParser</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public HttpPartParser getPartParser() {
+		return partParser;
+	}
+
+	/**
+	 * Bean property getter:  <property>partSerializer</property>.
+	 *
+	 * @return The value of the <property>partSerializer</property> property on this bean, or <jk>null</jk> if it is not set.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
+	}
+
+	/**
+	 * Returns the path pattern for this method.
+	 *
+	 * @return The path pattern.
+	 */
+	public String getPathPattern() {
+		return pathMatchers[0].toString();
 	}
 
 	/**
@@ -2413,21 +2500,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns the HTTP method name (e.g. <js>"GET"</js>).
+	 * Returns the response bean meta if this method returns a {@link Response}-annotated bean.
 	 *
-	 * @return The HTTP method name.
+	 * @return The response bean meta or <jk>null</jk> if it's not a {@link Response}-annotated bean.
 	 */
-	public String getHttpMethod() {
-		return httpMethod;
-	}
-
-	/**
-	 * Returns the path pattern for this method.
-	 *
-	 * @return The path pattern.
-	 */
-	public String getPathPattern() {
-		return pathMatchers[0].toString();
+	public ResponseBeanMeta getResponseMeta() {
+		return responseMeta;
 	}
 
 	/**
@@ -2440,120 +2518,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns the parsers to use for this method.
+	 * Returns a list of supported accept types.
 	 *
-	 * @return The parsers to use for this method.
+	 * @return An unmodifiable list.
 	 */
-	public ParserSet getParsers() {
-		return parsers;
-	}
-
-	/**
-	 * Returns the compression encoders to use for this method.
-	 *
-	 * @return The compression encoders to use for this method.
-	 */
-	public EncoderSet getEncoders() {
-		return encoders;
-	}
-
-	/**
-	 * Bean property getter:  <property>partSerializer</property>.
-	 *
-	 * @return The value of the <property>partSerializer</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public HttpPartSerializer getPartSerializer() {
-		return partSerializer;
-	}
-
-	/**
-	 * Bean property getter:  <property>partParser</property>.
-	 *
-	 * @return The value of the <property>partParser</property> property on this bean, or <jk>null</jk> if it is not set.
-	 */
-	public HttpPartParser getPartParser() {
-		return partParser;
-	}
-
-	/**
-	 * Returns the JSON-Schema generator applicable to this Java method.
-	 *
-	 * @return The JSON-Schema generator applicable to this Java method.
-	 */
-	public JsonSchemaGenerator getJsonSchemaGenerator() {
-		return jsonSchemaGenerator;
-	}
-
-	/**
-	 * Returns the underlying Java method that this context belongs to.
-	 *
-	 * @return The underlying Java method that this context belongs to.
-	 */
-	public Method getJavaMethod() {
-		return method;
-	}
-
-	/**
-	 * Returns the default request headers.
-	 *
-	 * @return The default request headers.  Never <jk>null</jk>.
-	 */
-	public HeaderList getDefaultRequestHeaders() {
-		return defaultRequestHeaders;
-	}
-
-	/**
-	 * Returns the default response headers.
-	 *
-	 * @return The default response headers.  Never <jk>null</jk>.
-	 */
-	public HeaderList getDefaultResponseHeaders() {
-		return defaultResponseHeaders;
-	}
-
-	/**
-	 * Returns the default request query parameters.
-	 *
-	 * @return The default request query parameters.  Never <jk>null</jk>.
-	 */
-	public PartList getDefaultRequestQueryData() {
-		return defaultRequestQueryData;
-	}
-
-	/**
-	 * Returns the default form data parameters.
-	 *
-	 * @return The default form data parameters.  Never <jk>null</jk>.
-	 */
-	public PartList getDefaultRequestFormData() {
-		return defaultRequestFormData;
-	}
-
-	/**
-	 * Returns the default request attributes.
-	 *
-	 * @return The default request attributes.  Never <jk>null</jk>.
-	 */
-	public NamedAttributeMap getDefaultRequestAttributes() {
-		return defaultRequestAttributes;
-	}
-
-	/**
-	 * Returns the default charset.
-	 *
-	 * @return The default charset.  Never <jk>null</jk>.
-	 */
-	public Charset getDefaultCharset() {
-		return defaultCharset;
-	}
-
-	/**
-	 * Returns the max number of bytes to process in the input content.
-	 *
-	 * @return The max number of bytes to process in the input content.
-	 */
-	public long getMaxInput() {
-		return maxInput;
+	public List<MediaType> getSupportedAcceptTypes() {
+		return supportedAcceptTypes;
 	}
 
 	/**
@@ -2565,24 +2535,18 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return supportedContentTypes;
 	}
 
-	/**
-	 * Returns a list of supported accept types.
-	 *
-	 * @return An unmodifiable list.
-	 */
-	public List<MediaType> getSupportedAcceptTypes() {
-		return supportedAcceptTypes;
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return method.hashCode();
 	}
 
-	/**
-	 * Returns the response bean meta if this method returns a {@link Response}-annotated bean.
-	 *
-	 * @return The response bean meta or <jk>null</jk> if it's not a {@link Response}-annotated bean.
-	 */
-	public ResponseBeanMeta getResponseMeta() {
-		return responseMeta;
+	private UrlPathMatch matchPattern(RestSession call) {
+		UrlPathMatch pm = null;
+		for (UrlPathMatcher pp : pathMatchers)
+			if (pm == null)
+				pm = pp.match(call.getUrlPath());
+		return pm;
 	}
-
 	/**
 	 * Identifies if this method can process the specified call.
 	 *
@@ -2636,97 +2600,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 	}
 
-	RestOpInvoker getMethodInvoker() {
-		return methodInvoker;
-	}
-
-	RestGuard[] getGuards() {
-		return guards;
-	}
-
-	RestConverter[] getConverters() {
-		return converters;
-	}
-
-	RestOpInvoker[] getPreCallMethods() {
-		return preCallMethods;
-	}
-
-	RestOpInvoker[] getPostCallMethods() {
-		return postCallMethods;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Context */
-	public Context.Builder copy() {
-		throw new UnsupportedOperationException("Method not implemented.");
-	}
-
-	/*
-	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
-	 * It maintains the order in which matches are made during requests.
-	 */
-	@Override /* Overridden from Comparable */
-	public int compareTo(RestOpContext o) {
-		int c;
-
-		for (int i = 0; i < Math.min(pathMatchers.length, o.pathMatchers.length); i++) {
-			c = pathMatchers[i].compareTo(o.pathMatchers[i]);
-			if (c != 0)
-				return c;
-		}
-
-		c = Utils.compare(o.hierarchyDepth, hierarchyDepth);
-		if (c != 0)
-			return c;
-
-		c = Utils.compare(o.requiredMatchers.length, requiredMatchers.length);
-		if (c != 0)
-			return c;
-
-		c = Utils.compare(o.optionalMatchers.length, optionalMatchers.length);
-		if (c != 0)
-			return c;
-
-		c = Utils.compare(o.guards.length, guards.length);
-
-		if (c != 0)
-			return c;
-
-		c = compare(method.getName(), o.method.getName());
-		if (c != 0)
-			return c;
-
-		c = Utils.compare(method.getParameterCount(), o.method.getParameterCount());
-		if (c != 0)
-			return c;
-
-		for (int i = 0; i < method.getParameterCount(); i++) {
-			c = compare(method.getParameterTypes()[i].getName(), o.method.getParameterTypes()[i].getName());
-			if (c != 0)
-				return c;
-		}
-
-		c = compare(method.getReturnType().getName(), o.method.getReturnType().getName());
-		if (c != 0)
-			return c;
-
-		return 0;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return method.hashCode();
-	}
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
@@ -2736,19 +2609,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			.append("httpMethod", httpMethod);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer _default) {
-		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(_default);
+	RestConverter[] getConverters() {
+		return converters;
 	}
 
-	private UrlPathMatch matchPattern(RestSession call) {
-		UrlPathMatch pm = null;
-		for (UrlPathMatcher pp : pathMatchers)
-			if (pm == null)
-				pm = pp.match(call.getUrlPath());
-		return pm;
+	RestGuard[] getGuards() {
+		return guards;
+	}
+
+	RestOpInvoker getMethodInvoker() {
+		return methodInvoker;
+	}
+	RestOpInvoker[] getPostCallMethods() {
+		return postCallMethods;
+	}
+
+	RestOpInvoker[] getPreCallMethods() {
+		return preCallMethods;
 	}
 }

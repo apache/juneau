@@ -29,15 +29,6 @@ import java.util.function.*;
 public interface Consumer3<A,B,C> {
 
 	/**
-	 * Performs this operation on the given arguments.
-	 *
-	 * @param a Argument 1.
-	 * @param b Argument 2.
-	 * @param c Argument 3.
-	 */
-	void apply(A a, B b, C c);
-
-	/**
 	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
 	 *
 	 * @param <V> The return type.
@@ -50,4 +41,13 @@ public interface Consumer3<A,B,C> {
 			after.apply(a, b, c);
 		};
 	}
+
+	/**
+	 * Performs this operation on the given arguments.
+	 *
+	 * @param a Argument 1.
+	 * @param b Argument 2.
+	 * @param c Argument 3.
+	 */
+	void apply(A a, B b, C c);
 }

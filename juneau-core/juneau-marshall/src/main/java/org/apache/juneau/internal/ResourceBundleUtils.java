@@ -29,14 +29,23 @@ public class ResourceBundleUtils {
 
 	private static final ResourceBundle EMPTY = new ResourceBundle() {
 		@Override
-		protected Object handleGetObject(String key) {
-			return null;
-		}
-		@Override
 		public Enumeration<String> getKeys() {
 			return Collections.emptyEnumeration();
 		}
+		@Override
+		protected Object handleGetObject(String key) {
+			return null;
+		}
 	};
+
+	/**
+	 * Returns an empty resource bundle.
+	 *
+	 * @return An empty resource bundle.
+	 */
+	public static ResourceBundle empty() {
+		return EMPTY;
+	}
 
 	/**
 	 * Same as {@link ResourceBundle#getBundle(String, Locale, ClassLoader)} but never throws a {@link MissingResourceException}.
@@ -51,14 +60,5 @@ public class ResourceBundleUtils {
 			return ResourceBundle.getBundle(baseName, locale, loader);
 		} catch (MissingResourceException e) {}
 		return null;
-	}
-
-	/**
-	 * Returns an empty resource bundle.
-	 *
-	 * @return An empty resource bundle.
-	 */
-	public static ResourceBundle empty() {
-		return EMPTY;
 	}
 }

@@ -37,26 +37,8 @@ import org.apache.juneau.svl.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class XmlDocSerializerSession extends XmlSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(XmlDocSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -74,14 +56,14 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public XmlDocSerializerSession build() {
-			return new XmlDocSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public XmlDocSerializerSession build() {
+			return new XmlDocSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -91,20 +73,14 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -133,20 +109,14 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -169,20 +139,32 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -192,11 +174,15 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(XmlDocSerializer ctx) {
+		return new Builder(ctx);
+	}
 	/**
 	 * Constructor.
 	 *

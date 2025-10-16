@@ -52,15 +52,16 @@ package org.apache.juneau.rest.client;
 public interface RestCallInterceptor {
 
 	/**
-	 * Called immediately after {@link RestRequest} object is created and all headers/query/form-data has been
-	 * copied from the client to the request object.
+	 * Called when the response body is consumed.
 	 *
-	 * @param req The HTTP request object.
+	 * @param req The request object.
+	 * @param res The response object.
+	 * @throws RestCallException Error occurred during call.
 	 * @throws Exception
 	 * 	Any exception can be thrown.
 	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
-	void onInit(RestRequest req) throws Exception;
+	void onClose(RestRequest req, RestResponse res) throws Exception;
 
 	/**
 	 * Called immediately after an HTTP response has been received.
@@ -74,14 +75,13 @@ public interface RestCallInterceptor {
 	void onConnect(RestRequest req, RestResponse res) throws Exception;
 
 	/**
-	 * Called when the response body is consumed.
+	 * Called immediately after {@link RestRequest} object is created and all headers/query/form-data has been
+	 * copied from the client to the request object.
 	 *
-	 * @param req The request object.
-	 * @param res The response object.
-	 * @throws RestCallException Error occurred during call.
+	 * @param req The HTTP request object.
 	 * @throws Exception
 	 * 	Any exception can be thrown.
 	 * 	<br>If not a {@link RestCallException} or {@link RuntimeException}, will be wrapped in a {@link RestCallException}.
 	 */
-	void onClose(RestRequest req, RestResponse res) throws Exception;
+	void onInit(RestRequest req) throws Exception;
 }

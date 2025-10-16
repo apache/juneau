@@ -28,11 +28,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class N3Parser extends RdfParser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default N3 parser, all default settings.*/
 	public static final N3Parser DEFAULT = new N3Parser(create());
 
@@ -44,11 +39,6 @@ public class N3Parser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().n3();
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -38,9 +38,20 @@ import org.apache.juneau.parser.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class UonReader extends ParserReader {
 
+	private static int fromHexChar(int c) throws IOException {
+		if (c >= '0' && c <= '9')
+			return c - '0';
+		if (c >= 'a' && c <= 'f')
+			return 10 + c - 'a';
+		if (c >= 'A' && c <= 'F')
+			return 10 + c - 'A';
+		throw new IOException("Invalid hex character '"+c+"' found in escape pattern.");
+	}
 	private final boolean decodeChars;
+
 	private final char[] buff;
 
 	// Writable properties.
@@ -160,21 +171,10 @@ public class UonReader extends ParserReader {
 		return i;
 	}
 
-	private int readUTF8(int n, final int numBytes) throws IOException {
-		if (iCurrent + numBytes*3 > iEnd)
-			return -1;
-		for (int i = 0; i < numBytes; i++) {
-			n <<= 6;
-			n += readHex()-128;
-		}
-		return n;
-	}
-
-	private int readHex() throws IOException {
-		int c = buff[iCurrent++];
-		if (c != '%')
-			throw new IOException("Did not find expected '%' character in UTF-8 sequence.");
-		return readEncodedByte();
+	@Override /* Overridden from ParserReader */
+	public UonReader unread() throws IOException {
+		super.unread();
+		return this;
 	}
 
 	private int readEncodedByte() throws IOException {
@@ -187,19 +187,20 @@ public class UonReader extends ParserReader {
 		return (h << 4) + l;
 	}
 
-	private static int fromHexChar(int c) throws IOException {
-		if (c >= '0' && c <= '9')
-			return c - '0';
-		if (c >= 'a' && c <= 'f')
-			return 10 + c - 'a';
-		if (c >= 'A' && c <= 'F')
-			return 10 + c - 'A';
-		throw new IOException("Invalid hex character '"+c+"' found in escape pattern.");
+	private int readHex() throws IOException {
+		int c = buff[iCurrent++];
+		if (c != '%')
+			throw new IOException("Did not find expected '%' character in UTF-8 sequence.");
+		return readEncodedByte();
 	}
 
-	@Override /* Overridden from ParserReader */
-	public UonReader unread() throws IOException {
-		super.unread();
-		return this;
+	private int readUTF8(int n, final int numBytes) throws IOException {
+		if (iCurrent + numBytes*3 > iEnd)
+			return -1;
+		for (int i = 0; i < numBytes; i++) {
+			n <<= 6;
+			n += readHex()-128;
+		}
+		return n;
 	}
 }

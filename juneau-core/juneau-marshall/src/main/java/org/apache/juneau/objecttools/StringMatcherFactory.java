@@ -48,30 +48,15 @@ import org.apache.juneau.common.utils.*;
 public class StringMatcherFactory extends MatcherFactory {
 
 	/**
-	 * Default reusable matcher.
-	 */
-	public static final StringMatcherFactory DEFAULT = new StringMatcherFactory();
-
-	@Override
-	public boolean canMatch(ClassMeta<?> cm) {
-		return true;
-	}
-
-	@Override
-	public AbstractMatcher create(String pattern) {
-		return new StringMatcher(pattern);
-	}
-
-	/**
 	 * A construct representing a single search pattern.
 	 */
 	private static class StringMatcher extends AbstractMatcher {
-		private String pattern;
 		private static final AsciiSet
 			META_CHARS = AsciiSet.of("*?'\""),
 			SQ_CHAR = AsciiSet.of("'"),
 			DQ_CHAR = AsciiSet.of("\""),
 			REGEX_CHARS = AsciiSet.of("+\\[]{}()^$.");
+		private String pattern;
 
 		Pattern[] orPatterns, andPatterns, notPatterns;
 
@@ -168,5 +153,20 @@ public class StringMatcherFactory extends MatcherFactory {
 		public String toString() {
 			return pattern;
 		}
+	}
+
+	/**
+	 * Default reusable matcher.
+	 */
+	public static final StringMatcherFactory DEFAULT = new StringMatcherFactory();
+
+	@Override
+	public boolean canMatch(ClassMeta<?> cm) {
+		return true;
+	}
+
+	@Override
+	public AbstractMatcher create(String pattern) {
+		return new StringMatcher(pattern);
 	}
 }

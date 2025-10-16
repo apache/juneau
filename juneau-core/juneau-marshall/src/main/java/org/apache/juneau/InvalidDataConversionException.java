@@ -39,15 +39,18 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public InvalidDataConversionException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
+	private static String name(Class<?> c) {
+		return ClassInfo.of(c).getFullName();
+	}
+
+	private static String name(Object o) {
+		return ClassInfo.of(o).getFullName();
+	}
+
+	private static String value(Object o) {
+		if (o instanceof Class)
+			return "'" + name(o) + "'";
+		return Json5Serializer.DEFAULT == null ? "'" + o.toString() + "'" : Json5Serializer.DEFAULT.toString(o);
 	}
 
 	/**
@@ -68,18 +71,15 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), Utils.s(toType), value(value));
 	}
 
-	private static String value(Object o) {
-		if (o instanceof Class)
-			return "'" + name(o) + "'";
-		return Json5Serializer.DEFAULT == null ? "'" + o.toString() + "'" : Json5Serializer.DEFAULT.toString(o);
-	}
-
-	private static String name(Class<?> c) {
-		return ClassInfo.of(c).getFullName();
-	}
-
-	private static String name(Object o) {
-		return ClassInfo.of(o).getFullName();
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public InvalidDataConversionException(Throwable cause, String message, Object... args) {
+		super(cause, message, args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

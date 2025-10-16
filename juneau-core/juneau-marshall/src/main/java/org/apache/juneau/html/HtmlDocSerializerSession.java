@@ -46,27 +46,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final VarResolver DEFAULT_VR = VarResolver.create().defaultVars().vars(HtmlWidgetVar.class).build();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(HtmlDocSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,14 +63,14 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public HtmlDocSerializerSession build() {
-			return new HtmlDocSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public HtmlDocSerializerSession build() {
+			return new HtmlDocSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -101,20 +80,14 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -143,20 +116,14 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -179,20 +146,32 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -203,9 +182,17 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	private static final VarResolver DEFAULT_VR = VarResolver.create().defaultVars().vars(HtmlWidgetVar.class).build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(HtmlDocSerializer ctx) {
+		return new Builder(ctx);
+	}
+	private final HtmlDocSerializer ctx;
 
 	/**
 	 * Constructor.
@@ -218,13 +205,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		addVarBean(HtmlWidgetMap.class, ctx.getWidgets());
 	}
 
-	private final HtmlDocSerializer ctx;
-
-	@Override /* Overridden from SerializerSession */
-	protected VarResolverSession createDefaultVarResolverSession() {
-		return DEFAULT_VR.createSession();
-	}
-
 	/**
 	 * Returns the {@link HtmlDocSerializer.Builder#navlinks(String...)} setting value in this context.
 	 *
@@ -235,18 +215,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	 */
 	public final String[] getNavLinks() {
 		return ctx.navlinks;
-	}
-
-	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-
-		try (HtmlWriter w = getHtmlWriter(out)) {
-			try {
-				getTemplate().writeTo(this, w, o);
-			} catch (Exception e) {
-				throw new SerializeException(e);
-			}
-		}
 	}
 
 	/**
@@ -262,9 +230,34 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 			super.doSerialize(pipe, o);
 		}
 	}
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from SerializerSession */
+	protected VarResolverSession createDefaultVarResolverSession() {
+		return DEFAULT_VR.createSession();
+	}
+
+	@Override /* Overridden from Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+
+		try (HtmlWriter w = getHtmlWriter(out)) {
+			try {
+				getTemplate().writeTo(this, w, o);
+			} catch (Exception e) {
+				throw new SerializeException(e);
+			}
+		}
+	}
+	/**
+	 * Performs an action on all widgets defined in his session.
+	 *
+	 * @param action The action to perform.
+	 * @see HtmlDocSerializer.Builder#widgets(Class...)
+	 * @return This object.
+	 */
+	protected final HtmlDocSerializerSession forEachWidget(Consumer<HtmlWidget> action) {
+		ctx.forEachWidget(action);
+		return this;
+	}
 
 	/**
 	 * Aside section contents.
@@ -355,28 +348,6 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Prevent word wrap on page.
-	 *
-	 * @see HtmlDocSerializer.Builder#nowrap()
-	 * @return
-	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> should be added to the CSS instructions on the page to prevent word wrapping.
-	 */
-	protected final boolean isNowrap() {
-		return ctx.nowrap;
-	}
-
-	/**
-	 * Resolve $ variables in serialized POJO.
-	 *
-	 * @see HtmlDocSerializer.Builder#resolveBodyVars()
-	 * @return
-	 * 	<jk>true</jk> if $ variables in serialized POJO should be resolved.
-	 */
-	protected final boolean isResolveBodyVars() {
-		return ctx.resolveBodyVars;
-	}
-
-	/**
 	 * Javascript code.
 	 *
 	 * @see HtmlDocSerializer.Builder#script(String...)
@@ -421,21 +392,26 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Performs an action on all widgets defined in his session.
+	 * Prevent word wrap on page.
 	 *
-	 * @param action The action to perform.
-	 * @see HtmlDocSerializer.Builder#widgets(Class...)
-	 * @return This object.
+	 * @see HtmlDocSerializer.Builder#nowrap()
+	 * @return
+	 * 	<jk>true</jk> if <js>"* {white-space:nowrap}"</js> should be added to the CSS instructions on the page to prevent word wrapping.
 	 */
-	protected final HtmlDocSerializerSession forEachWidget(Consumer<HtmlWidget> action) {
-		ctx.forEachWidget(action);
-		return this;
+	protected final boolean isNowrap() {
+		return ctx.nowrap;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Resolve $ variables in serialized POJO.
+	 *
+	 * @see HtmlDocSerializer.Builder#resolveBodyVars()
+	 * @return
+	 * 	<jk>true</jk> if $ variables in serialized POJO should be resolved.
+	 */
+	protected final boolean isResolveBodyVars() {
+		return ctx.resolveBodyVars;
+	}
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("ctx", ctx, "varResolver", getVarResolver());

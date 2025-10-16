@@ -1047,27 +1047,8 @@ import org.apache.juneau.xml.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RestClient extends BeanContextable implements HttpClient, Closeable {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = {};
-
-	/**
-	 * Instantiates a new clean-slate {@link Builder} object.
-	 *
-	 * @return A new {@link Builder} object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -1108,9 +1089,397 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		protected Builder() {
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
+		/**
+		 * Appends an <c>Accept</c> header on this request.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
+		 * @param value
+		 * 	The new header value.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder accept(String value) {
+			return headers(Accept.of(value));
+		}
+
+		/**
+		 * Sets the value for the <c>Accept-Charset</c> request header on all requests.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(AcceptCharset.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
+		 * @param value The new header value.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder acceptCharset(String value) {
+			return headers(AcceptCharset.of(value));
+		}
+		/**
+		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
+		 *
+		 * <p>
+		 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+		 * through reflection.
+		 *
+		 * <p>
+		 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
+		 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
+		 * the type of the values.
+		 *
+		 * <p>
+		 * Note the differences between the following settings:
+		 * <ul class='javatree'>
+		 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.addBeanTypes()
+		 * 		.build();
+		 *
+		 * 	<jc>// Our map of beans to serialize.</jc>
+		 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	AMap <jv>map</jv> = AMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
+		 *
+		 * 	<jc>// Request body will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder addBeanTypes() {
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addBeanTypes);
+			return this;
+		}
+
+		/**
+		 * Adds this protocol interceptor to the head of the protocol processing list.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @param itcp New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
+		 */
+		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
+			httpClientBuilder().addInterceptorFirst(itcp);
+			return this;
+		}
+
+		/**
+		 * Adds this protocol interceptor to the head of the protocol processing list.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @param itcp New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
+		 */
+		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
+			httpClientBuilder().addInterceptorFirst(itcp);
+			return this;
+		}
+
+		/**
+		 * Adds this protocol interceptor to the tail of the protocol processing list.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @param itcp New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
+		 */
+		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
+			httpClientBuilder().addInterceptorLast(itcp);
+			return this;
+		}
+
+		/**
+		 * Adds this protocol interceptor to the tail of the protocol processing list.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @param itcp New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
+		 */
+		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
+			httpClientBuilder().addInterceptorLast(itcp);
+			return this;
+		}
+
+		/**
+		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add type attribute to root nodes.
+		 *
+		 * <p>
+		 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
+		 *
+		 * <p>
+		 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
+		 * type information that might normally be included to determine the data type will not be serialized.
+		 *
+		 * <p>
+		 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
+		 * <js>'_type'</js> attribute will only be added when this setting is enabled.
+		 *
+		 * <p>
+		 * Note the differences between the following settings:
+		 * <ul class='javatree'>
+		 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
+		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.addRootType()
+		 * 		.build();
+		 *
+		 * 	<jc>// Our bean to serialize.</jc>
+		 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Request body will contain:  {"_type":"mybean","foo":"bar"}</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder addRootType() {
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addRootType);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link BackoffManager} instance.
+		 *
+		 * @param backoffManager New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
+		 */
+		public Builder backoffManager(BackoffManager backoffManager) {
+			httpClientBuilder().setBackoffManager(backoffManager);
+			return this;
+		}
+
+		/**
+		 * Set up this client to use BASIC auth.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses BASIC authentication.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.basicAuth(<js>"http://localhost"</js>, 80, <js>"me"</js>, <js>"mypassword"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param host The auth scope hostname.
+		 * @param port The auth scope port.
+		 * @param user The username.
+		 * @param pw The password.
+		 * @return This object.
+		 */
+		public Builder basicAuth(String host, int port, String user, String pw) {
+			AuthScope scope = new AuthScope(host, port);
+			Credentials up = new UsernamePasswordCredentials(user, pw);
+			CredentialsProvider p = new BasicCredentialsProvider();
+			p.setCredentials(scope, up);
+			defaultCredentialsProvider(p);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext value) {
+			super.beanContext(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext.Builder value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanDictionary(java.lang.Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -1118,138 +1487,967 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return build(RestClient.class);
 		}
 
-		//------------------------------------------------------------------------------------------------------------------
-		// Convenience marshalling support methods.
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Convenience method for specifying JSON as the marshalling transmission media type.
-		 *
-		 * <p>
-		 * {@link JsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses JSON marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder json() {
-			return serializer(JsonSerializer.class).parser(JsonParser.class);
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
 		}
 
 		/**
-		 * Convenience method for specifying Simplified JSON as the marshalling transmission media type.
+		 * Returns the creator for the rest call handler.
 		 *
 		 * <p>
-		 * Simplified JSON is typically useful for automated tests because you can do simple string comparison of results
-		 * without having to escape lots of quotes.
-		 *
-		 * <p>
-		 * 	{@link Json5Serializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link Json5Parser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"application/json5"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(Json5Serializer.<jk>class</jk>).parser(Json5Parser.<jk>class</jk>)</c>.
+		 * Allows you to provide a custom handler for making HTTP calls.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
+		 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
+		 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
+		 * 			<jc>// Custom handle requests.</jc>
+		 * 		}
+		 * 	}
+		 *
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.callHandler(MyRestCallHandler.<jk>class</jk>)
+		 * 		.build();
 		 * </p>
 		 *
-		 * @return This object.
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
+		 * 	<li class='note'>
+		 * 		Use {@link BeanCreator#impl(Object)} to specify an already instantiated instance.
+		 * 	<li class='note'>
+		 * 		Use {@link BeanCreator#type(Class)} to specify a subtype to instantiate.
+		 * 		<br>Subclass must have a public constructor that takes in any args available
+		 * 		in the bean store of this builder (including {@link RestClient} itself).
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jic'>{@link RestCallHandler}
+		 * </ul>
+		 *
+		 * @return The creator for the rest call handler.
 		 */
-		public Builder json5() {
-			return serializer(Json5Serializer.class).parser(Json5Parser.class);
+		public final BeanCreator<RestCallHandler> callHandler() {
+			if (callHandler == null)
+				callHandler = createCallHandler();
+			return callHandler;
+		}
+		/**
+		 * REST call handler class.
+		 *
+		 * <p>
+		 * Specifies a custom handler for making HTTP calls.
+		 *
+		 * <p>
+		 * This is a shortcut for <c>callHandler().type(<jv>value</jv>)</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 * @see #callHandler()
+		 */
+		public Builder callHandler(Class<? extends RestCallHandler> value) {
+			callHandler().type(value);
+			return this;
 		}
 
 		/**
-		 * Convenience method for specifying XML as the marshalling transmission media type.
+		 * Sets the client version by setting the value for the <js>"Client-Version"</js> header.
 		 *
 		 * <p>
-		 * {@link XmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
+		 * This is a shortcut for calling <c>headerData().append(ClientVersion.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
+		 * @param value The version string (e.g. <js>"1.2.3"</js>)
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder clientVersion(String value) {
+			return headers(ClientVersion.of(value));
+		}
+		/**
+		 * Assigns {@link ConnectionBackoffStrategy} instance.
+		 *
+		 * @param connectionBackoffStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
+		 */
+		public Builder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
+			httpClientBuilder().setConnectionBackoffStrategy(connectionBackoffStrategy);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link HttpClientConnectionManager} instance.
+		 *
+		 * @param value New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
+		 */
+		public Builder connectionManager(HttpClientConnectionManager value) {
+			connectionManager = value;
+			httpClientBuilder().setConnectionManager(value);
+			return this;
+		}
+
+		/**
+		 * Defines the connection manager is to be shared by multiple client instances.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
+		 * </ul>
+		 *
+		 * @param shared New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
+		 */
+		public Builder connectionManagerShared(boolean shared) {
+			httpClientBuilder().setConnectionManagerShared(shared);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link ConnectionReuseStrategy} instance.
+		 *
+		 * @param reuseStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
+		 */
+		public Builder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
+			httpClientBuilder().setConnectionReuseStrategy(reuseStrategy);
+			return this;
+		}
+
+		/**
+		 * Sets maximum time to live for persistent connections.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * </ul>
+		 *
+		 * @param connTimeToLive New property value.
+		 * @param connTimeToLiveTimeUnit New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
+		 */
+		public Builder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
+			httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
+			return this;
+		}
+
+		/**
+		 * Console print stream
+		 *
 		 * <p>
-		 * 	{@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
+		 * Allows you to redirect the console output to a different print stream.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder console(PrintStream value) {
+			console = value;
+			return this;
+		}
+
+		/**
+		 * Assigns a map of {@link org.apache.http.client.entity.InputStreamFactory InputStreamFactories} to be used for automatic content decompression.
+		 *
+		 * @param contentDecoderMap New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
+		 */
+		public Builder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
+			httpClientBuilder().setContentDecoderRegistry(contentDecoderMap);
+			return this;
+		}
+
+		/**
+		 * Sets the value for the <c>Content-Type</c> request header on all requests.
+		 *
 		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * This is a shortcut for calling <c>headerData().append(ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
 		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * This overrides the media type specified on the serializer.
+		 *
+		 * @param value The new header value.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder contentType(String value) {
+			return headers(ContentType.of(value));
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			throw new NoSuchMethodError("Not implemented.");
+		}
+
+		/**
+		 * Sets the value for the <c>Debug</c> request header on all requests.
+		 *
 		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
+		 * This is a shortcut for calling <c>headerData().append(Debug.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
+		 * @return This object.
+		 * @see #headers()
+		 */
+		@Override
+		public Builder debug() {
+			super.debug();
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::debug);
+			return headers(Debug.TRUE);
+		}
+
+		/**
+		 * <i><l>Parser</l> configuration property:&emsp;</i>  Debug output lines.
+		 *
 		 * <p>
-		 * 	Identical to calling <c>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</c>.
+		 * When parse errors occur, this specifies the number of lines of input before and after the
+		 * error location to be printed as part of the exception message.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses XML marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
+		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
+		 * 		.debugOuputLines(100)
+		 * 		.build();
+		 *
+		 * 	<jc>// Try to parse some bad JSON.</jc>
+		 * 	<jk>try</jk> {
+		 * 		<jv>client</jv>
+		 * 			.get(<js>"/pathToBadJson"</js>)
+		 * 			.run()
+		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
+		 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+		 * 	}
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#debugOutputLines(int)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default value is <c>5</c>.
+		 * @return This object.
+		 */
+		public Builder debugOutputLines(int value) {
+			parsers().forEach(x -> x.debugOutputLines(value));
+			return this;
+		}
+
+		/**
+		 * Assigns default {@link org.apache.http.auth.AuthScheme} registry which will be used for request execution if not explicitly set in the client execution context.
+		 *
+		 * @param authSchemeRegistry New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
+		 */
+		public Builder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
+			httpClientBuilder().setDefaultAuthSchemeRegistry(authSchemeRegistry);
+			return this;
+		}
+
+		/**
+		 * Assigns default {@link ConnectionConfig}.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * </ul>
+		 *
+		 * @param config New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
+		 */
+		public Builder defaultConnectionConfig(ConnectionConfig config) {
+			httpClientBuilder().setDefaultConnectionConfig(config);
+			return this;
+		}
+
+		/**
+		 * Assigns default {@link CookieSpec} registry which will be used for request execution if not explicitly set in the client execution context.
+		 *
+		 * @param cookieSpecRegistry New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
+		 */
+		public Builder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
+			httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
+			return this;
+		}
+		/**
+		 * Assigns default {@link CookieStore} instance which will be used for request execution if not explicitly set in the client execution context.
+		 *
+		 * @param cookieStore New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
+		 */
+		public Builder defaultCookieStore(CookieStore cookieStore) {
+			httpClientBuilder().setDefaultCookieStore(cookieStore);
+			return this;
+		}
+
+		/**
+		 * Assigns default {@link CredentialsProvider} instance which will be used for request execution if not explicitly set in the client execution context.
+		 *
+		 * @param credentialsProvider New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
+		 */
+		public Builder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
+			httpClientBuilder().setDefaultCredentialsProvider(credentialsProvider);
+			return this;
+		}
+
+		/**
+		 * Assigns default {@link RequestConfig} instance which will be used for request execution if not explicitly set in the client execution context.
+		 *
+		 * @param config New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
+		 */
+		public Builder defaultRequestConfig(RequestConfig config) {
+			httpClientBuilder().setDefaultRequestConfig(config);
+			return this;
+		}
+
+		/**
+		 * Assigns default {@link SocketConfig}.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * </ul>
+		 *
+		 * @param config New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
+		 */
+		public Builder defaultSocketConfig(SocketConfig config) {
+			httpClientBuilder().setDefaultSocketConfig(config);
+			return this;
+		}
+
+		/**
+		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Enable leak detection.
+		 *
+		 * <p>
+		 * Enable client and request/response leak detection.
+		 *
+		 * <p>
+		 * Causes messages to be logged to the console if clients or request/response objects are not properly closed
+		 * when the <c>finalize</c> methods are invoked.
+		 *
+		 * <p>
+		 * Automatically enabled with {@link org.apache.juneau.Context.Builder#debug()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that logs a message if </jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.detectLeaks()
+		 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
+		 * 		.build();
+		 *
+		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 		 * </p>
 		 *
 		 * @return This object.
 		 */
-		public Builder xml() {
-			return serializer(XmlSerializer.class).parser(XmlParser.class);
+		public Builder detectLeaks() {
+			detectLeaks = true;
+			return this;
+		}
+
+		/**
+		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
+		 *
+		 * <p>
+		 * When enabled, specifies that recursions should be checked for during traversal.
+		 *
+		 * <p>
+		 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+		 * <br>In general, unchecked recursions cause stack-overflow-errors.
+		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		Checking for recursion can cause a small performance penalty.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.detectRecursions()
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+		 * 	<jk>public class</jk> A {
+		 * 		<jk>public</jk> Object <jf>f</jf>;
+		 * 	}
+		 * 	A <jv>a</jv> = <jk>new</jk> A();
+		 * 	<jv>a</jv>.<jf>f</jf> = <jv>a</jv>;
+		 *
+		 *	<jk>try</jk> {
+		 * 		<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
+		 * 		<jv>client</jv>
+		 * 			.post(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
+		 * 			.run();
+		 *	} <jk>catch</jk> (RestCallException <jv>e</jv>} {
+		 *		<jc>// Handle exception.</jc>
+		 *	}
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder detectRecursions() {
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		/**
+		 * Disables authentication scheme caching.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#disableAuthCaching()
+		 */
+		public Builder disableAuthCaching() {
+			httpClientBuilder().disableAuthCaching();
+			return this;
+		}
+
+		/**
+		 * Disables automatic request recovery and re-execution.
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#disableAutomaticRetries()
+		 */
+		public Builder disableAutomaticRetries() {
+			httpClientBuilder().disableAutomaticRetries();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		/**
+		 * Disables connection state tracking.
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#disableConnectionState()
+		 */
+		public Builder disableConnectionState() {
+			httpClientBuilder().disableConnectionState();
+			return this;
+		}
+
+		/**
+		 * Disables automatic content decompression.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#disableContentCompression()
+		 */
+		public Builder disableContentCompression() {
+			httpClientBuilder().disableContentCompression();
+			return this;
+		}
+		/**
+		 * Disables state (cookie) management.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#disableCookieManagement()
+		 */
+		public Builder disableCookieManagement() {
+			httpClientBuilder().disableCookieManagement();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		/**
+		 * Disables automatic redirect handling.
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#disableRedirectHandling()
+		 */
+		public Builder disableRedirectHandling() {
+			httpClientBuilder().disableRedirectHandling();
+			return this;
+		}
+		/**
+		 * Errors codes predicate.
+		 *
+		 * <p>
+		 * Defines a predicate to test for error codes.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
+		 * @return This object.
+		 */
+		public Builder errorCodes(Predicate<Integer> value) {
+			errorCodes = Utils.assertArgNotNull("value", value);
+			return this;
+		}
+
+		/**
+		 * Makes this instance of {@link HttpClient} proactively evict expired connections from the connection pool using a background thread.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
+		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
+		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @see HttpClientBuilder#evictExpiredConnections()
+		 */
+		public Builder evictExpiredConnections() {
+			httpClientBuilder().evictExpiredConnections();
+			return this;
+		}
+
+		/**
+		 * Makes this instance of {@link HttpClient} proactively evict idle connections from the connection pool using a background thread.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
+		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
+		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
+		 * </ul>
+		 *
+		 * @param maxIdleTime New property value.
+		 * @param maxIdleTimeUnit New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
+		 */
+		public Builder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
+			httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
+			return this;
+		}
+		/**
+		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Executor service.
+		 *
+		 * <p>
+		 * Defines the executor service to use when calling future methods on the {@link RestRequest} class.
+		 *
+		 * <p>
+		 * This executor service is used to create {@link Future} objects on the following methods:
+		 * <ul>
+		 * 	<li class='jm'>{@link RestRequest#runFuture()}
+		 * 	<li class='jm'>{@link RestRequest#completeFuture()}
+		 * 	<li class='jm'>{@link ResponseContent#asFuture(Class)} (and similar methods)
+		 * </ul>
+		 *
+		 * <p>
+		 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
+		 * and a queue size of 10.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client with a customized executor service.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.executorService(<jk>new</jk> ThreadPoolExecutor(1, 1, 30, TimeUnit.<jsf>SECONDS</jsf>, <jk>new</jk> ArrayBlockingQueue&lt;Runnable&gt;(10)), <jk>true</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it to asynchronously run a request.</jc>
+		 * 	Future&lt;RestResponse&gt; <jv>responseFuture</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
+		 *
+		 * 	<jc>// Do some other stuff.</jc>
+		 *
+		 * 	<jc>// Now read the response.</jc>
+		 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getContent().asString();
+		 *
+		 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
+		 * 	Future&lt;MyBean&gt; <jv>myBeanFuture</jv> = <jv>client</jv>
+		 * 		.get(<jsf>URI</jsf>)
+		 * 		.run()
+		 * 		.getContent().asFuture(MyBean.<jk>class</jk>);
+		 *
+		 * 	<jc>// Do some other stuff.</jc>
+		 *
+		 * 	<jc>// Now read the response.</jc>
+		 * 	MyBean <jv>bean</jv> = <jv>myBeanFuture</jv>.get();
+		 * </p>
+		 *
+		 * @param executorService The executor service.
+		 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
+		 * @return This object.
+		 */
+		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
+			this.executorService = executorService;
+			this.executorServiceShutdownOnClose = shutdownOnClose;
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		/**
+		 * Returns the builder for the list of form data parameters that get applied to all requests created by this builder.
+		 *
+		 * <p>
+		 * This is the primary method for accessing the form data parameter list.
+		 * On first call, the builder is created via the method {@link #createFormData()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+		 * </p>
+		 *
+		 * <p>
+		 * The following convenience methods are also provided for updating the parameters:
+		 * <ul>
+		 * 	<li class='jm'>{@link #formData(NameValuePair...)}
+		 * 	<li class='jm'>{@link #formDataDefault(NameValuePair...)}
+		 * 	<li class='jm'>{@link #formData(String,String)}
+		 * 	<li class='jm'>{@link #formData(String,Supplier)}
+		 * </ul>
+		 *
+		 * @return The form data list builder.
+		 */
+		public final PartList formData() {
+			if (formData == null)
+				formData = createFormData();
+			return formData;
+		}
+		/**
+		 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+		 *
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.formData(
+		 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+		 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>formData().append(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts
+		 * 	The form-data parameters.
+		 * @return This object.
+		 * @see #formData()
+		 */
+		public Builder formData(NameValuePair...parts) {
+			formData().append(parts);
+			return this;
+		}
+
+		/**
+		 * Appends a form-data parameter to all request bodies.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The parameter name.
+		 * @param value The parameter value.
+		 * @return This object.
+		 * @see #formData()
+		 */
+		public Builder formData(String name, String value) {
+			formData().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Appends a form-data parameter with a dynamic value to all request bodies.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The parameter name.
+		 * @param value The parameter value supplier.
+		 * @return This object.
+		 * @see #formData()
+		 */
+		public Builder formData(String name, Supplier<String> value) {
+			formData().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Sets default form-data parameter values.
+		 *
+		 * <p>
+		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.formDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>formData().setDefault(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts The parts.
+		 * @return This object.
+		 * @see #formData()
+		 */
+		public Builder formDataDefault(NameValuePair...parts) {
+			formData().setDefault(parts);
+			return this;
+		}
+
+		/**
+		 * Returns the root URI defined for this client.
+		 *
+		 * <p>
+		 * Returns <jk>null</jk> in leu of an empty string.
+		 * Trailing slashes are trimmed.
+		 *
+		 * @return The root URI defined for this client.
+		 */
+		public String getRootUri() {
+			return rootUrl;
+		}
+		/**
+		 * Appends a header to all requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The header name.
+		 * @param value The header value.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder header(String name, String value) {
+			headers().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Appends a header to all requests using a dynamic value.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The header name.
+		 * @param value The header value supplier.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder header(String name, Supplier<String> value) {
+			headers().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Returns the builder for the list of headers that get applied to all requests created by this builder.
+		 *
+		 * <p>
+		 * This is the primary method for accessing the request header list.
+		 * On first call, the builder is created via the method {@link #createHeaderData()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	<jv>builder</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>));
+		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+		 * </p>
+		 *
+		 * <p>
+		 * The following convenience methods are also provided for updating the headers:
+		 * <ul>
+		 * 	<li class='jm'>{@link #headers(Header...)}
+		 * 	<li class='jm'>{@link #headersDefault(Header...)}
+		 * 	<li class='jm'>{@link #header(String,String)}
+		 * 	<li class='jm'>{@link #header(String,Supplier)}
+		 * 	<li class='jm'>{@link #mediaType(String)}
+		 * 	<li class='jm'>{@link #mediaType(MediaType)}
+		 * 	<li class='jm'>{@link #accept(String)}
+		 * 	<li class='jm'>{@link #acceptCharset(String)}
+		 * 	<li class='jm'>{@link #clientVersion(String)}
+		 * 	<li class='jm'>{@link #contentType(String)}
+		 * 	<li class='jm'>{@link #debug()}
+		 * 	<li class='jm'>{@link #noTrace()}
+		 * </ul>
+		 *
+		 * @return The header list builder.
+		 */
+		public final HeaderList headers() {
+			if (headerData == null)
+				headerData = createHeaderData();
+			return headerData;
+		}
+
+		/**
+		 * Appends multiple headers to all requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+		 *
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.headers(
+		 * 			<jsf>ACCEPT_TEXT_XML</jsf>,
+		 * 			<jsm>stringHeader</jsm>(<js>"Foo"</js>, <js>"bar"</js>)
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts
+		 * 	The header to set.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder headers(Header...parts) {
+			headers().append(parts);
+			return this;
+		}
+
+		/**
+		 * Sets default header values.
+		 *
+		 * <p>
+		 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().setDefault(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts The header values.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder headersDefault(Header...parts) {
+			headers().setDefault(parts);
+			return this;
 		}
 
 		/**
@@ -1388,296 +2586,27 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Convenience method for specifying Plain Text as the marshalling transmission media type.
+		 * Sets the {@link HttpClient} to be used to handle all HTTP communications with the target server.
 		 *
 		 * <p>
-		 * Plain text marshalling typically only works on simple POJOs that can be converted to and from strings using
-		 * swaps, swap methods, etc...
-		 *
-		 * <p>
-		 * 	{@link PlainTextSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link PlainTextParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</c>.
+		 * This can be used to bypass the client created by {@link #createHttpClient()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
+		 * 	<jc>// Construct a client that uses a customized HttpClient.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.httpClient(HttpClientBuilder.<jsm>create</jsm>().build())
+		 * 		.build();
 		 * </p>
 		 *
+		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 		 * @return This object.
 		 */
-		public Builder plainText() {
-			return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
+		public Builder httpClient(CloseableHttpClient value) {
+			this.httpClient = value;
+			return this;
 		}
-
-		/**
-		 * Convenience method for specifying MessagePack as the marshalling transmission media type.
-		 *
-		 * <p>
-		 * MessagePack is a binary equivalent to JSON that takes up considerably less space than JSON.
-		 *
-		 * <p>
-		 * 	{@link MsgPackSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link MsgPackParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder msgPack() {
-			return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
-		}
-
-		/**
-		 * Convenience method for specifying UON as the marshalling transmission media type.
-		 *
-		 * <p>
-		 * UON is Url-Encoding Object notation that is equivalent to JSON but suitable for transmission as URL-encoded
-		 * query and form post values.
-		 *
-		 * <p>
-		 * 	{@link UonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</c>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses UON marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder uon() {
-			return serializer(UonSerializer.class).parser(UonParser.class);
-		}
-
-		/**
-		 * Convenience method for specifying URL-Encoding as the marshalling transmission media type.
-		 *
-		 * <p>
-		 * 	{@link UrlEncodingSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 		<li>This serializer is NOT used when using the {@link RestRequest#formData(String, Object)} (and related) methods for constructing
-		 * 			the request body.  Instead, the part serializer specified via {@link #partSerializer(Class)} is used.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</c>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder urlEnc() {
-			return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
-		}
-
-		/**
-		 * Convenience method for specifying OpenAPI as the marshalling transmission media type.
-		 *
-		 * <p>
-		 * OpenAPI is a language that allows serialization to formats that use {@link HttpPartSchema} objects to describe their structure.
-		 *
-		 * <p>
-		 * 	{@link OpenApiSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 		<li>Typically the {@link RestRequest#content(Object, HttpPartSchema)} method will be used to specify the body of the request with the
-		 * 			schema describing it's structure.
-		 * 	</ul>
-		 * <p>
-		 * 	{@link OpenApiParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 		<li>Typically the {@link ResponseContent#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
-		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
-		 * <p>
-		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
-		 * 	<ul>
-		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
-		 * 		last-enabled language if the headers are not set.
-		 * 	</ul>
-		 * <p>
-		 * 	Identical to calling <c>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</c>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder openApi() {
-			return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
-		}
-
-		/**
-		 * Convenience method for specifying all available transmission types.
-		 *
-		 * <p>
-		 * 	All basic Juneau serializers will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
-		 * 	<ul>
-		 * 		<li>The serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	All basic Juneau parsers will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
-		 * 	<ul>
-		 * 		<li>The parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 	</ul>
-		 * <p>
-		 * 	<c>Accept</c> request header must be set via {@link #headers()}, or per-request
-		 * 		via {@link RestRequest#header(Header)} in order for the correct parser to be selected.
-		 * <p>
-		 * 	<c>Content-Type</c> request header must be set via {@link #headers()},
-		 * 		or per-request via {@link RestRequest#header(Header)} in order for the correct serializer to be selected.
-		 * <p>
-		 * 	Similar to calling <c>json().json5().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses universal marshalling.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public Builder universal() {
-			return
-				serializers(
-					JsonSerializer.class,
-					Json5Serializer.class,
-					HtmlSerializer.class,
-					XmlSerializer.class,
-					UonSerializer.class,
-					UrlEncodingSerializer.class,
-					OpenApiSerializer.class,
-					MsgPackSerializer.class,
-					PlainTextSerializer.class
-				)
-				.parsers(
-					JsonParser.class,
-					Json5Parser.class,
-					XmlParser.class,
-					HtmlParser.class,
-					UonParser.class,
-					UrlEncodingParser.class,
-					OpenApiParser.class,
-					MsgPackParser.class,
-					PlainTextParser.class
-				);
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// httpClientBuilder
-		//------------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Returns the HTTP client builder.
@@ -1688,33 +2617,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (httpClientBuilder == null)
 				httpClientBuilder = createHttpClientBuilder();
 			return httpClientBuilder;
-		}
-
-		/**
-		 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own client builder.
-		 * The builder can also be specified using the {@link #httpClientBuilder(HttpClientBuilder)} method.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A Builder that provides it's own customized HttpClientBuilder.</jc>
-		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
-		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> HttpClientBuilder createHttpClientBuilder() {
-		 * 			<jk>return</jk> HttpClientBuilder.<jsm>create</jsm>();
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Instantiate.</jc>
-		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
-		 * </p>
-		 *
-		 * @return The HTTP client builder to use to create the HTTP client.
-		 */
-		protected HttpClientBuilder createHttpClientBuilder() {
-			return HttpClientBuilder.create();
 		}
 
 		/**
@@ -1740,1789 +2642,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return this;
 		}
 
-		//------------------------------------------------------------------------------------------------------------------
-		// httpClient
-		//------------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
+		 * Assigns {@link HttpProcessor} instance.
 		 *
-		 * <p>
-		 * This HTTP client is used when the HTTP client is not specified through one of the constructors or the
-		 * {@link #httpClient(CloseableHttpClient)} method.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide specially-configured HTTP clients to handle stuff such as
-		 * SSL/TLS certificate handling, authentication, etc.
-		 *
-		 * <p>
-		 * The default implementation returns an instance of {@link HttpClient} using the client builder returned by
-		 * {@link #createHttpClientBuilder()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A Builder that provides it's own customized HttpClient.</jc>
-		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
-		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> HttpClientBuilder createHttpClient() {
-		 * 			<jk>return</jk> HttpClientBuilder.<jsm>create</jsm>().build();
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Instantiate.</jc>
-		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
-		 * </p>
-		 *
-		 * @return The HTTP client to use.
-		 */
-		protected CloseableHttpClient createHttpClient() {
-			if (connectionManager == null)
-				connectionManager = createConnectionManager();
-			httpClientBuilder().setConnectionManager(connectionManager);
-			return httpClientBuilder().build();
-		}
-
-		/**
-		 * Sets the {@link HttpClient} to be used to handle all HTTP communications with the target server.
-		 *
-		 * <p>
-		 * This can be used to bypass the client created by {@link #createHttpClient()} method.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses a customized HttpClient.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.httpClient(HttpClientBuilder.<jsm>create</jsm>().build())
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
+		 * @param httpprocessor New property value.
 		 * @return This object.
+		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 		 */
-		public Builder httpClient(CloseableHttpClient value) {
-			this.httpClient = value;
-			return this;
-		}
-
-		final CloseableHttpClient getHttpClient() {
-			return httpClient != null ? httpClient : createHttpClient();
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// serializers
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the serializer group sub-builder.
-		 *
-		 * @return The serializer group sub-builder.
-		 */
-		public final SerializerSet.Builder serializers() {
-			if (serializers == null)
-				serializers = createSerializers();
-			return serializers;
-		}
-
-		/**
-		 * Instantiates the serializer group sub-builder.
-		 *
-		 * @return A new serializer group sub-builder.
-		 */
-		protected SerializerSet.Builder createSerializers() {
-			return SerializerSet.create().beanContext(beanContext());
-		}
-
-		/**
-		 * Serializer.
-		 *
-		 * <p>
-		 * Associates the specified {@link Serializer Serializer} with the HTTP client.
-		 *
-		 * <p>
-		 * The serializer is used to serialize POJOs into the HTTP request body.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.serializer(JsonSerializer.<jk>class</jk>)
-		 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public Builder serializer(Class<? extends Serializer> value) {
-			return serializers(value);
-		}
-
-		/**
-		 * Serializer.
-		 *
-		 * <p>
-		 * Associates the specified {@link Serializer Serializer} with the HTTP client.
-		 *
-		 * <p>
-		 * The serializer is used to serialize POJOs into the HTTP request body.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
-		 * 	on this builder class have no effect.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object.
-		 */
-		public Builder serializer(Serializer value) {
-			return serializers(value);
-		}
-
-		/**
-		 * Serializers.
-		 *
-		 * <p>
-		 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-		 *
-		 * <p>
-		 * The serializer is used to serialize POJOs into the HTTP request body.
-		 *
-		 * <p>
-		 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>)
-		 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public Builder serializers(Class<? extends Serializer>...value) {
-			serializers().add(value);
-			return this;
-		}
-
-		/**
-		 * Serializers.
-		 *
-		 * <p>
-		 * Associates the specified {@link Serializer Serializers} with the HTTP client.
-		 *
-		 * <p>
-		 * The serializer is used to serialize POJOs into the HTTP request body.
-		 *
-		 * <p>
-		 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
-		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
-		 * 	on this builder class have no effect.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>, XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link JsonSerializer}.
-		 * @return This object.
-		 */
-		public Builder serializers(Serializer...value) {
-			serializers().add(value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// parsers
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the parser group sub-builder.
-		 *
-		 * @return The parser group sub-builder.
-		 */
-		public final ParserSet.Builder parsers() {
-			if (parsers == null)
-				parsers = createParsers();
-			return parsers;
-		}
-
-		/**
-		 * Instantiates the parser group sub-builder.
-		 *
-		 * @return A new parser group sub-builder.
-		 */
-		protected ParserSet.Builder createParsers() {
-			return ParserSet.create().beanContext(beanContext());
-		}
-
-		/**
-		 * Parser.
-		 *
-		 * <p>
-		 * Associates the specified {@link Parser Parser} with the HTTP client.
-		 *
-		 * <p>
-		 * The parser is used to parse the HTTP response body into a POJO.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.parser(JsonParser.<jk>class</jk>)
-		 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public Builder parser(Class<? extends Parser> value) {
-			return parsers(value);
-		}
-
-		/**
-		 * Parser.
-		 *
-		 * <p>
-		 * Associates the specified {@link Parser Parser} with the HTTP client.
-		 *
-		 * <p>
-		 * The parser is used to parse the HTTP response body into a POJO.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
-		 * 	on this builder class have no effect.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object.
-		 */
-		public Builder parser(Parser value) {
-			return parsers(value);
-		}
-
-		/**
-		 * Parsers.
-		 *
-		 * <p>
-		 * Associates the specified {@link Parser Parsers} with the HTTP client.
-		 *
-		 * <p>
-		 * The parsers are used to parse the HTTP response body into a POJO.
-		 *
-		 * <p>
-		 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
-		 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object.
-		 */
-		@SuppressWarnings("unchecked")
-		public Builder parsers(Class<? extends Parser>...value) {
-			parsers().add(value);
-			return this;
-		}
-
-		/**
-		 * Parsers.
-		 *
-		 * <p>
-		 * Associates the specified {@link Parser Parsers} with the HTTP client.
-		 *
-		 * <p>
-		 * The parsers are used to parse the HTTP response body into a POJO.
-		 *
-		 * <p>
-		 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
-		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}) or
-		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
-		 * 	on this builder class have no effect.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
-		 * @return This object.
-		 */
-		public Builder parsers(Parser...value) {
-			parsers().add(value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// partSerializer
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the part serializer sub-builder.
-		 *
-		 * @return The part serializer sub-builder.
-		 */
-		public final HttpPartSerializer.Creator partSerializer() {
-			if (partSerializer == null)
-				partSerializer = createPartSerializer();
-			return partSerializer;
-		}
-
-		/**
-		 * Instantiates the part serializer sub-builder.
-		 *
-		 * @return A new part serializer sub-builder.
-		 */
-		protected HttpPartSerializer.Creator createPartSerializer() {
-			return HttpPartSerializer.creator().type(OpenApiSerializer.class).beanContext(beanContext());
-		}
-
-		/**
-		 * Part serializer.
-		 *
-		 * <p>
-		 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-		 *
-		 * <p>
-		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.partSerializer(UonSerializer.<jk>class</jk>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link OpenApiSerializer}.
-		 * @return This object.
-		 */
-		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
-			partSerializer().type(value);
-			return this;
-		}
-
-		/**
-		 * Part serializer.
-		 *
-		 * <p>
-		 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
-		 *
-		 * <p>
-		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.partSerializer(UonSerializer.<jsf>DEFAULT</jsf>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link OpenApiSerializer}.
-		 * @return This object.
-		 */
-		public Builder partSerializer(HttpPartSerializer value) {
-			partSerializer().impl(value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// partParser
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the part parser sub-builder.
-		 *
-		 * @return The part parser sub-builder.
-		 */
-		public final HttpPartParser.Creator partParser() {
-			if (partParser == null)
-				partParser = createPartParser();
-			return partParser;
-		}
-
-		/**
-		 * Instantiates the part parser sub-builder.
-		 *
-		 * @return A new part parser sub-builder.
-		 */
-		protected HttpPartParser.Creator createPartParser() {
-			return HttpPartParser.creator().type(OpenApiParser.class).beanContext(beanContext());
-		}
-
-		/**
-		 * Part parser.
-		 *
-		 * <p>
-		 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
-		 *
-		 * <p>
-		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.partParser(UonParser.<jk>class</jk>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link OpenApiParser}.
-		 * @return This object.
-		 */
-		public Builder partParser(Class<? extends HttpPartParser> value) {
-			partParser().type(value);
-			return this;
-		}
-
-		/**
-		 * Part parser.
-		 *
-		 * <p>
-		 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
-		 *
-		 * <p>
-		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is {@link OpenApiParser}.
-		 * @return This object.
-		 */
-		public Builder partParser(HttpPartParser value) {
-			partParser().impl(value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// urlEncodingSerializer
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the URL-encoding serializer sub-builder.
-		 *
-		 * @return The URL-encoding serializer sub-builder.
-		 */
-		public final UrlEncodingSerializer.Builder urlEncodingSerializer() {
-			if (urlEncodingSerializer == null)
-				urlEncodingSerializer = createUrlEncodingSerializer();
-			return urlEncodingSerializer;
-		}
-
-		/**
-		 * Instantiates the URL-encoding serializer sub-builder.
-		 *
-		 * @return A new URL-encoding serializer sub-builder.
-		 */
-		protected UrlEncodingSerializer.Builder createUrlEncodingSerializer() {
-			return UrlEncodingSerializer.create().beanContext(beanContext());
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// headerData
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the builder for the list of headers that get applied to all requests created by this builder.
-		 *
-		 * <p>
-		 * This is the primary method for accessing the request header list.
-		 * On first call, the builder is created via the method {@link #createHeaderData()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
-		 * 	<jv>builder</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>));
-		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
-		 * </p>
-		 *
-		 * <p>
-		 * The following convenience methods are also provided for updating the headers:
-		 * <ul>
-		 * 	<li class='jm'>{@link #headers(Header...)}
-		 * 	<li class='jm'>{@link #headersDefault(Header...)}
-		 * 	<li class='jm'>{@link #header(String,String)}
-		 * 	<li class='jm'>{@link #header(String,Supplier)}
-		 * 	<li class='jm'>{@link #mediaType(String)}
-		 * 	<li class='jm'>{@link #mediaType(MediaType)}
-		 * 	<li class='jm'>{@link #accept(String)}
-		 * 	<li class='jm'>{@link #acceptCharset(String)}
-		 * 	<li class='jm'>{@link #clientVersion(String)}
-		 * 	<li class='jm'>{@link #contentType(String)}
-		 * 	<li class='jm'>{@link #debug()}
-		 * 	<li class='jm'>{@link #noTrace()}
-		 * </ul>
-		 *
-		 * @return The header list builder.
-		 */
-		public final HeaderList headers() {
-			if (headerData == null)
-				headerData = createHeaderData();
-			return headerData;
-		}
-
-		/**
-		 * Creates the builder for the header list.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own implementation.
-		 *
-		 * <p>
-		 * The default behavior creates an empty builder.
-		 *
-		 * @return The header list builder.
-		 * @see #headers()
-		 */
-		protected HeaderList createHeaderData() {
-			return HeaderList.create();
-		}
-
-		/**
-		 * Appends multiple headers to all requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-		 *
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.headers(
-		 * 			<jsf>ACCEPT_TEXT_XML</jsf>,
-		 * 			<jsm>stringHeader</jsm>(<js>"Foo"</js>, <js>"bar"</js>)
-		 * 		)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts
-		 * 	The header to set.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder headers(Header...parts) {
-			headers().append(parts);
-			return this;
-		}
-
-		/**
-		 * Sets default header values.
-		 *
-		 * <p>
-		 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().setDefault(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts The header values.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder headersDefault(Header...parts) {
-			headers().setDefault(parts);
-			return this;
-		}
-
-		/**
-		 * Appends a header to all requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The header name.
-		 * @param value The header value.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder header(String name, String value) {
-			headers().append(name, value);
-			return this;
-		}
-
-		/**
-		 * Appends a header to all requests using a dynamic value.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The header name.
-		 * @param value The header value supplier.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder header(String name, Supplier<String> value) {
-			headers().append(name, value);
-			return this;
-		}
-
-		/**
-		 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
-		 *
-		 * <p>
-		 * Headers are appended to the end of the current header list.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header values.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder mediaType(String value) {
-			super.mediaType(MediaType.of(value));
-			return headers(Accept.of(value), ContentType.of(value));
-		}
-
-		/**
-		 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
-		 *
-		 * <p>
-		 * Headers are appended to the end of the current header list.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header values.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		@Override
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return headers(Accept.of(value), ContentType.of(value));
-		}
-
-		/**
-		 * Appends an <c>Accept</c> header on this request.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value
-		 * 	The new header value.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder accept(String value) {
-			return headers(Accept.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Accept-Charset</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(AcceptCharset.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder acceptCharset(String value) {
-			return headers(AcceptCharset.of(value));
-		}
-
-		/**
-		 * Sets the client version by setting the value for the <js>"Client-Version"</js> header.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(ClientVersion.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The version string (e.g. <js>"1.2.3"</js>)
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder clientVersion(String value) {
-			return headers(ClientVersion.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Content-Type</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * <p>
-		 * This overrides the media type specified on the serializer.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder contentType(String value) {
-			return headers(ContentType.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Debug</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Debug.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @return This object.
-		 * @see #headers()
-		 */
-		@Override
-		public Builder debug() {
-			super.debug();
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::debug);
-			return headers(Debug.TRUE);
-		}
-
-		/**
-		 * When called, <c>No-Trace: true</c> is added to requests.
-		 *
-		 * <p>
-		 * This gives the opportunity for the servlet to not log errors on invalid requests.
-		 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
-		 * results of testing.
-		 *
-		 * <p>
-		 * It's up to the server to decide whether to allow for this.
-		 * The <c>BasicTestRestLogger</c> class watches for this header and prevents logging of status 400+ responses to
-		 * prevent needless logging of test scenarios.
-		 *
-		 * @return This object.
-		 * @see #headers()
-		 */
-		public Builder noTrace() {
-			return headers(NoTrace.of(true));
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// queryData
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the builder for the list of query parameters that get applied to all requests created by this builder.
-		 *
-		 * <p>
-		 * This is the primary method for accessing the query parameter list.
-		 * On first call, the builder is created via the method {@link #createQueryData()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
-		 * 	<jv>builder</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
-		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
-		 * </p>
-		 *
-		 * <p>
-		 * The following convenience methods are also provided for updating the parameters:
-		 * <ul>
-		 * 	<li class='jm'>{@link #queryData(NameValuePair...)}
-		 * 	<li class='jm'>{@link #queryDataDefault(NameValuePair...)}
-		 * 	<li class='jm'>{@link #queryData(String,String)}
-		 * 	<li class='jm'>{@link #queryData(String,Supplier)}
-		 * </ul>
-		 *
-		 * @return The query data list builder.
-		 */
-		public final PartList queryData() {
-			if (queryData == null)
-				queryData = createQueryData();
-			return queryData;
-		}
-
-		/**
-		 * Creates the builder for the query data list.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own implementation.
-		 *
-		 * <p>
-		 * The default behavior creates an empty builder.
-		 *
-		 * @return The query data list builder.
-		 * @see #queryData()
-		 */
-		protected PartList createQueryData() {
-			return PartList.create();
-		}
-
-		/**
-		 * Appends multiple query parameters to the URI of all requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-		 *
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(
-		 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-		 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
-		 * 		)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>queryData().append(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts
-		 * 	The query parameters.
-		 * @return This object.
-		 * @see #queryData()
-		 */
-		public Builder queryData(NameValuePair...parts) {
-			queryData().append(parts);
-			return this;
-		}
-
-		/**
-		 * Sets default query parameter values.
-		 *
-		 * <p>
-		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>queryData().setDefault(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts The parts.
-		 * @return This object.
-		 * @see #queryData()
-		 */
-		public Builder queryDataDefault(NameValuePair...parts) {
-			queryData().setDefault(parts);
-			return this;
-		}
-
-		/**
-		 * Appends a query parameter to the URI.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<js>"foo"</js>, <js>"bar"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The parameter name.
-		 * @param value The parameter value.
-		 * @return This object.
-		 * @see #queryData()
-		 */
-		public Builder queryData(String name, String value) {
-			queryData().append(name, value);
-			return this;
-		}
-
-		/**
-		 * Appends a query parameter with a dynamic value to the URI.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The parameter name.
-		 * @param value The parameter value supplier.
-		 * @return This object.
-		 * @see #queryData()
-		 */
-		public Builder queryData(String name, Supplier<String> value) {
-			queryData().append(name, value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// formData
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the builder for the list of form data parameters that get applied to all requests created by this builder.
-		 *
-		 * <p>
-		 * This is the primary method for accessing the form data parameter list.
-		 * On first call, the builder is created via the method {@link #createFormData()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
-		 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
-		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
-		 * </p>
-		 *
-		 * <p>
-		 * The following convenience methods are also provided for updating the parameters:
-		 * <ul>
-		 * 	<li class='jm'>{@link #formData(NameValuePair...)}
-		 * 	<li class='jm'>{@link #formDataDefault(NameValuePair...)}
-		 * 	<li class='jm'>{@link #formData(String,String)}
-		 * 	<li class='jm'>{@link #formData(String,Supplier)}
-		 * </ul>
-		 *
-		 * @return The form data list builder.
-		 */
-		public final PartList formData() {
-			if (formData == null)
-				formData = createFormData();
-			return formData;
-		}
-
-		/**
-		 * Creates the builder for the form data list.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own implementation.
-		 *
-		 * <p>
-		 * The default behavior creates an empty builder.
-		 *
-		 * @return The query data list builder.
-		 * @see #formData()
-		 */
-		protected PartList createFormData() {
-			return PartList.create();
-		}
-
-		/**
-		 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-		 *
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.formData(
-		 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-		 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
-		 * 		)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>formData().append(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts
-		 * 	The form-data parameters.
-		 * @return This object.
-		 * @see #formData()
-		 */
-		public Builder formData(NameValuePair...parts) {
-			formData().append(parts);
-			return this;
-		}
-
-		/**
-		 * Sets default form-data parameter values.
-		 *
-		 * <p>
-		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.formDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>formData().setDefault(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts The parts.
-		 * @return This object.
-		 * @see #formData()
-		 */
-		public Builder formDataDefault(NameValuePair...parts) {
-			formData().setDefault(parts);
-			return this;
-		}
-
-		/**
-		 * Appends a form-data parameter to all request bodies.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The parameter name.
-		 * @param value The parameter value.
-		 * @return This object.
-		 * @see #formData()
-		 */
-		public Builder formData(String name, String value) {
-			formData().append(name, value);
-			return this;
-		}
-
-		/**
-		 * Appends a form-data parameter with a dynamic value to all request bodies.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>formData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The parameter name.
-		 * @param value The parameter value supplier.
-		 * @return This object.
-		 * @see #formData()
-		 */
-		public Builder formData(String name, Supplier<String> value) {
-			formData().append(name, value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// pathData
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the builder for the list of path data parameters that get applied to all requests created by this builder.
-		 *
-		 * <p>
-		 * This is the primary method for accessing the path data parameter list.
-		 * On first call, the builder is created via the method {@link #createFormData()}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
-		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
-		 * 	<jv>builder</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
-		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
-		 * </p>
-		 *
-		 * <p>
-		 * The following convenience methods are also provided for updating the parameters:
-		 * <ul>
-		 * 	<li class='jm'>{@link #pathData(NameValuePair...)}
-		 * 	<li class='jm'>{@link #pathDataDefault(NameValuePair...)}
-		 * 	<li class='jm'>{@link #pathData(String,String)}
-		 * 	<li class='jm'>{@link #pathData(String,Supplier)}
-		 * </ul>
-		 *
-		 * @return The form data list builder.
-		 */
-		public final PartList pathData() {
-			if (pathData == null)
-				pathData = createPathData();
-			return pathData;
-		}
-
-		/**
-		 * Creates the builder for the path data list.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own implementation.
-		 *
-		 * <p>
-		 * The default behavior creates an empty builder.
-		 *
-		 * @return The query data list builder.
-		 * @see #pathData()
-		 */
-		protected PartList createPathData() {
-			return PartList.create();
-		}
-
-		/**
-		 * Sets multiple path parameters on all requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-		 *
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(
-		 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-		 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
-		 * 		)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>pathData().append(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts
-		 * 	The path parameters.
-		 * @return This object.
-		 * @see #pathData()
-		 */
-		public Builder pathData(NameValuePair...parts) {
-			pathData().append(parts);
-			return this;
-		}
-
-		/**
-		 * Sets default path parameter values.
-		 *
-		 * <p>
-		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>pathData().setDefault(<jv>parts</jv>)</c>.
-		 *
-		 * @param parts The parts.
-		 * @return This object.
-		 * @see #pathData()
-		 */
-		public Builder pathDataDefault(NameValuePair...parts) {
-			pathData().setDefault(parts);
-			return this;
-		}
-
-		/**
-		 * Appends a path parameter to all request bodies.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<js>"foo"</js>, <js>"bar"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The parameter name.
-		 * @param value The parameter value.
-		 * @return This object.
-		 * @see #pathData()
-		 */
-		public Builder pathData(String name, String value) {
-			pathData().append(name, value);
-			return this;
-		}
-
-		/**
-		 * Sets a path parameter with a dynamic value to all request bodies.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
-		 *
-		 * @param name The parameter name.
-		 * @param value The parameter value supplier.
-		 * @return This object.
-		 * @see #pathData()
-		 */
-		public Builder pathData(String name, Supplier<String> value) {
-			pathData().set(name, value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// callHandler
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the creator for the rest call handler.
-		 *
-		 * <p>
-		 * Allows you to provide a custom handler for making HTTP calls.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
-		 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
-		 * 			<jc>// Custom handle requests.</jc>
-		 * 		}
-		 * 	}
-		 *
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.callHandler(MyRestCallHandler.<jk>class</jk>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
-		 * 	<li class='note'>
-		 * 		Use {@link BeanCreator#impl(Object)} to specify an already instantiated instance.
-		 * 	<li class='note'>
-		 * 		Use {@link BeanCreator#type(Class)} to specify a subtype to instantiate.
-		 * 		<br>Subclass must have a public constructor that takes in any args available
-		 * 		in the bean store of this builder (including {@link RestClient} itself).
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jic'>{@link RestCallHandler}
-		 * </ul>
-		 *
-		 * @return The creator for the rest call handler.
-		 */
-		public final BeanCreator<RestCallHandler> callHandler() {
-			if (callHandler == null)
-				callHandler = createCallHandler();
-			return callHandler;
-		}
-
-		/**
-		 * Creates the creator for the rest call handler.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own implementation.
-		 *
-		 * <p>
-		 * The default behavior creates a bean creator initialized to return a {@link BasicRestCallHandler}.
-		 *
-		 * @return The creator for the rest call handler.
-		 * @see #callHandler()
-		 */
-		protected BeanCreator<RestCallHandler> createCallHandler() {
-			return beanStore.createBean(RestCallHandler.class).type(BasicRestCallHandler.class);
-		}
-
-		/**
-		 * REST call handler class.
-		 *
-		 * <p>
-		 * Specifies a custom handler for making HTTP calls.
-		 *
-		 * <p>
-		 * This is a shortcut for <c>callHandler().type(<jv>value</jv>)</c>.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 * @see #callHandler()
-		 */
-		public Builder callHandler(Class<? extends RestCallHandler> value) {
-			callHandler().type(value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// errorCodes
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Errors codes predicate.
-		 *
-		 * <p>
-		 * Defines a predicate to test for error codes.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
-		 * @return This object.
-		 */
-		public Builder errorCodes(Predicate<Integer> value) {
-			errorCodes = Utils.assertArgNotNull("value", value);
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// Logging.
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Logger.
-		 *
-		 * <p>
-		 * Specifies the logger to use for logging.
-		 *
-		 * <p>
-		 * If not specified, uses the following logger:
-		 * <p class='bjava'>
-		 * 	Logger.<jsm>getLogger</jsm>(RestClient.<jk>class</jk>.getName());
-		 * </p>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.logger(Logger.<jsm>getLogger</jsm>(<js>"MyLogger"</js>))  <jc>// Log to MyLogger logger.</jc>
-		 * 		.logToConsole()  <jc>// Also log to console.</jc>
-		 * 		.logRequests(<jsf>FULL</jsf>, <jsf>WARNING</jsf>)  <jc>// Log requests with full detail at WARNING level.</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param value The logger to use for logging.
-		 * @return This object.
-		 */
-		public Builder logger(Logger value) {
-			logger = value;
-			return this;
-		}
-
-		/**
-		 * Log to console.
-		 *
-		 * <p>
-		 * Specifies to log messages to the console.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.logToConsole()
-		 * 		.logRequests(<jsf>FULL</jsf>, <jsf>INFO</jsf>)  <jc>// Level is ignored when logging to console.</jc>
-		 * 		.build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder logToConsole() {
-			logToConsole = true;
-			return this;
-		}
-
-		/**
-		 * Log requests.
-		 *
-		 * <p>
-		 * Causes requests/responses to be logged at the specified log level at the end of the request.
-		 *
-		 * <p>
-		 * <jsf>SIMPLE</jsf> detail produces a log message like the following:
-		 * <p class='bconsole'>
-		 * 	POST http://localhost:10000/testUrl, HTTP/1.1 200 OK
-		 * </p>
-		 *
-		 * <p>
-		 * <jsf>FULL</jsf> detail produces a log message like the following:
-		 * <p class='bconsole'>
-		 * 	=== HTTP Call (outgoing) =======================================================
-		 * 	=== REQUEST ===
-		 * 	POST http://localhost:10000/testUrl
-		 * 	---request headers---
-		 * 		Debug: true
-		 * 		No-Trace: true
-		 * 		Accept: application/json
-		 * 	---request entity---
-		 * 		Content-Type: application/json
-		 * 	---request content---
-		 * 	{"foo":"bar","baz":123}
-		 * 	=== RESPONSE ===
-		 * 	HTTP/1.1 200 OK
-		 * 	---response headers---
-		 * 		Content-Type: application/json;charset=utf-8
-		 * 		Content-Length: 21
-		 * 		Server: Jetty(8.1.0.v20120127)
-		 * 	---response content---
-		 * 	{"message":"OK then"}
-		 * 	=== END ========================================================================
-		 * </p>
-		 *
-		 * <p>
-		 * By default, the message is logged to the default logger.  It can be logged to a different logger via the
-		 * {@link #logger(Logger)} method or logged to the console using the
-		 * {@link #logToConsole()} method.
-		 *
-		 * @param detail The detail level of logging.
-		 * @param level The log level.
-		 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
-		 * @return This object.
-		 */
-		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
-			logRequests = detail;
-			logRequestsLevel = level;
-			logRequestsPredicate = test;
-			return this;
-		}
-
-		//------------------------------------------------------------------------------------------------------------------
-		// HttpClientConnectionManager methods.
-		//------------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Creates the {@link HttpClientConnectionManager} returned by {@link #createConnectionManager()}.
-		 *
-		 * <p>
-		 * Subclasses can override this method to provide their own connection manager.
-		 *
-		 * <p>
-		 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager} if {@link #pooled()}
-		 * was called or {@link BasicHttpClientConnectionManager} if not..
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A Builder that provides it's own customized HttpClientConnectionManager.</jc>
-		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
-		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> HttpClientConnectionManager createConnectionManager() {
-		 * 			<jk>return new</jk> PoolingHttpClientConnectionManager();
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Instantiate.</jc>
-		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
-		 * </p>
-		 *
-		 * @return The HTTP client builder to use to create the HTTP client.
-		 */
-		protected HttpClientConnectionManager createConnectionManager() {
-			return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
-		}
-
-		/**
-		 * When called, the {@link #createConnectionManager()} method will return a {@link PoolingHttpClientConnectionManager}
-		 * instead of a {@link BasicHttpClientConnectionManager}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses pooled connections.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pooled()
-		 * 		.build();
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder pooled() {
-			this.pooled = true;
-			return this;
-		}
-
-		/**
-		 * Assigns {@link HttpClientConnectionManager} instance.
-		 *
-		 * @param value New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setConnectionManager(HttpClientConnectionManager)
-		 */
-		public Builder connectionManager(HttpClientConnectionManager value) {
-			connectionManager = value;
-			httpClientBuilder().setConnectionManager(value);
-			return this;
-		}
-
-		/**
-		 * Defines the connection manager is to be shared by multiple client instances.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
-		 * </ul>
-		 *
-		 * @param shared New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setConnectionManagerShared(boolean)
-		 */
-		public Builder connectionManagerShared(boolean shared) {
-			httpClientBuilder().setConnectionManagerShared(shared);
-			return this;
-		}
-
-		/**
-		 * Set up this client to use BASIC auth.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Construct a client that uses BASIC authentication.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.basicAuth(<js>"http://localhost"</js>, 80, <js>"me"</js>, <js>"mypassword"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param host The auth scope hostname.
-		 * @param port The auth scope port.
-		 * @param user The username.
-		 * @param pw The password.
-		 * @return This object.
-		 */
-		public Builder basicAuth(String host, int port, String user, String pw) {
-			AuthScope scope = new AuthScope(host, port);
-			Credentials up = new UsernamePasswordCredentials(user, pw);
-			CredentialsProvider p = new BasicCredentialsProvider();
-			p.setCredentials(scope, up);
-			defaultCredentialsProvider(p);
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Console print stream
-		 *
-		 * <p>
-		 * Allows you to redirect the console output to a different print stream.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder console(PrintStream value) {
-			console = value;
-			return this;
-		}
-
-		/**
-		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Executor service.
-		 *
-		 * <p>
-		 * Defines the executor service to use when calling future methods on the {@link RestRequest} class.
-		 *
-		 * <p>
-		 * This executor service is used to create {@link Future} objects on the following methods:
-		 * <ul>
-		 * 	<li class='jm'>{@link RestRequest#runFuture()}
-		 * 	<li class='jm'>{@link RestRequest#completeFuture()}
-		 * 	<li class='jm'>{@link ResponseContent#asFuture(Class)} (and similar methods)
-		 * </ul>
-		 *
-		 * <p>
-		 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
-		 * and a queue size of 10.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client with a customized executor service.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.executorService(<jk>new</jk> ThreadPoolExecutor(1, 1, 30, TimeUnit.<jsf>SECONDS</jsf>, <jk>new</jk> ArrayBlockingQueue&lt;Runnable&gt;(10)), <jk>true</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Use it to asynchronously run a request.</jc>
-		 * 	Future&lt;RestResponse&gt; <jv>responseFuture</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
-		 *
-		 * 	<jc>// Do some other stuff.</jc>
-		 *
-		 * 	<jc>// Now read the response.</jc>
-		 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getContent().asString();
-		 *
-		 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
-		 * 	Future&lt;MyBean&gt; <jv>myBeanFuture</jv> = <jv>client</jv>
-		 * 		.get(<jsf>URI</jsf>)
-		 * 		.run()
-		 * 		.getContent().asFuture(MyBean.<jk>class</jk>);
-		 *
-		 * 	<jc>// Do some other stuff.</jc>
-		 *
-		 * 	<jc>// Now read the response.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>myBeanFuture</jv>.get();
-		 * </p>
-		 *
-		 * @param executorService The executor service.
-		 * @param shutdownOnClose Call {@link ExecutorService#shutdown()} when {@link RestClient#close()} is called.
-		 * @return This object.
-		 */
-		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
-			this.executorService = executorService;
-			this.executorServiceShutdownOnClose = shutdownOnClose;
-			return this;
-		}
-
-		/**
-		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Keep HttpClient open.
-		 *
-		 * <p>
-		 * Don't close this client when the {@link RestClient#close()} method is called.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.httpClient(<jv>myHttpClient</jv>)
-		 * 		.keepHttpClientOpen()
-		 * 		.build();
-		 *
-		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder keepHttpClientOpen() {
-			keepHttpClientOpen = true;
+		public Builder httpProcessor(HttpProcessor httpprocessor) {
+			httpClientBuilder().setHttpProcessor(httpprocessor);
 			return this;
 		}
 
@@ -3551,6 +2679,142 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder ignoreErrors() {
 			ignoreErrors = true;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		/**
+		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
+		 *
+		 * <p>
+		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+		 *
+		 * <p>
+		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+		 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+		 *
+		 * <p class='bjson'>
+		 * 	{A:{B:{C:<jk>null</jk>}}}
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		Checking for recursion can cause a small performance penalty.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a JSON client that ignores recursions.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.ignoreRecursions()
+		 * 		.build();
+		 *
+		 * 	<jc>// Create a POJO model with a recursive loop.</jc>
+		 * 	<jk>public class</jk> A {
+		 * 		<jk>public</jk> Object <jf>f</jf>;
+		 * 	}
+		 * 	A <jv>a</jv> = <jk>new</jk> A();
+		 * 	<jv>a</jv>.<jf>f</jf> = <jv>a</jv>;
+		 *
+		 * 	<jc>// Produces request body "{f:null}"</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder ignoreRecursions() {
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::ignoreRecursions);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+		/**
+		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Initial depth.
+		 *
+		 * <p>
+		 * The initial indentation level at the root.
+		 *
+		 * <p>
+		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled and an initial depth of 2.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.ws()
+		 * 		.initialDepth(2)
+		 * 		.build();
+		 *
+		 * 	<jc>// Our bean to serialize.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+		 * 	}
+		 *
+		 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <c>0</c>.
+		 * @return This object.
+		 */
+		public Builder initialDepth(int value) {
+			serializers().forEach(x -> x.initialDepth(value));
 			return this;
 		}
 
@@ -3689,26 +2953,131 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
 		/**
-		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Enable leak detection.
+		 * Convenience method for specifying JSON as the marshalling transmission media type.
 		 *
 		 * <p>
-		 * Enable client and request/response leak detection.
-		 *
+		 * {@link JsonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
 		 * <p>
-		 * Causes messages to be logged to the console if clients or request/response objects are not properly closed
-		 * when the <c>finalize</c> methods are invoked.
-		 *
+		 * 	{@link JsonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
 		 * <p>
-		 * Automatically enabled with {@link org.apache.juneau.Context.Builder#debug()}.
+		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a client that logs a message if </jc>
+		 * 	<jc>// Construct a client that uses JSON marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder json() {
+			return serializer(JsonSerializer.class).parser(JsonParser.class);
+		}
+
+		/**
+		 * Convenience method for specifying Simplified JSON as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * Simplified JSON is typically useful for automated tests because you can do simple string comparison of results
+		 * without having to escape lots of quotes.
+		 *
+		 * <p>
+		 * 	{@link Json5Serializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	{@link Json5Parser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"application/json5"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(Json5Serializer.<jk>class</jk>).parser(Json5Parser.<jk>class</jk>)</c>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder json5() {
+			return serializer(Json5Serializer.class).parser(Json5Parser.class);
+		}
+
+		/**
+		 * Assigns {@link ConnectionKeepAliveStrategy} instance.
+		 *
+		 * @param keepAliveStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
+		 */
+		public Builder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
+			httpClientBuilder().setKeepAliveStrategy(keepAliveStrategy);
+			return this;
+		}
+
+		/**
+		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Keep HttpClient open.
+		 *
+		 * <p>
+		 * Don't close this client when the {@link RestClient#close()} method is called.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.detectLeaks()
-		 * 		.logToConsole()  <jc>// Also log the error message to System.err</jc>
+		 * 		.httpClient(<jv>myHttpClient</jv>)
+		 * 		.keepHttpClientOpen()
 		 * 		.build();
 		 *
 		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
@@ -3716,8 +3085,162 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		public Builder detectLeaks() {
-			detectLeaks = true;
+		public Builder keepHttpClientOpen() {
+			keepHttpClientOpen = true;
+			return this;
+		}
+
+		/**
+		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Don't trim null bean property values.
+		 *
+		 * <p>
+		 * When enabled, null bean values will be serialized to the output.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.keepNullProperties()
+		 * 		.build();
+		 *
+		 * 	<jc>// Our bean to serialize.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
+		 * 	}
+		 *
+		 * 	<jc>// Request body will contain:  {foo:null}</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder keepNullProperties() {
+			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::keepNullProperties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+		/**
+		 * Logger.
+		 *
+		 * <p>
+		 * Specifies the logger to use for logging.
+		 *
+		 * <p>
+		 * If not specified, uses the following logger:
+		 * <p class='bjava'>
+		 * 	Logger.<jsm>getLogger</jsm>(RestClient.<jk>class</jk>.getName());
+		 * </p>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.logger(Logger.<jsm>getLogger</jsm>(<js>"MyLogger"</js>))  <jc>// Log to MyLogger logger.</jc>
+		 * 		.logToConsole()  <jc>// Also log to console.</jc>
+		 * 		.logRequests(<jsf>FULL</jsf>, <jsf>WARNING</jsf>)  <jc>// Log requests with full detail at WARNING level.</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value The logger to use for logging.
+		 * @return This object.
+		 */
+		public Builder logger(Logger value) {
+			logger = value;
+			return this;
+		}
+
+		/**
+		 * Log requests.
+		 *
+		 * <p>
+		 * Causes requests/responses to be logged at the specified log level at the end of the request.
+		 *
+		 * <p>
+		 * <jsf>SIMPLE</jsf> detail produces a log message like the following:
+		 * <p class='bconsole'>
+		 * 	POST http://localhost:10000/testUrl, HTTP/1.1 200 OK
+		 * </p>
+		 *
+		 * <p>
+		 * <jsf>FULL</jsf> detail produces a log message like the following:
+		 * <p class='bconsole'>
+		 * 	=== HTTP Call (outgoing) =======================================================
+		 * 	=== REQUEST ===
+		 * 	POST http://localhost:10000/testUrl
+		 * 	---request headers---
+		 * 		Debug: true
+		 * 		No-Trace: true
+		 * 		Accept: application/json
+		 * 	---request entity---
+		 * 		Content-Type: application/json
+		 * 	---request content---
+		 * 	{"foo":"bar","baz":123}
+		 * 	=== RESPONSE ===
+		 * 	HTTP/1.1 200 OK
+		 * 	---response headers---
+		 * 		Content-Type: application/json;charset=utf-8
+		 * 		Content-Length: 21
+		 * 		Server: Jetty(8.1.0.v20120127)
+		 * 	---response content---
+		 * 	{"message":"OK then"}
+		 * 	=== END ========================================================================
+		 * </p>
+		 *
+		 * <p>
+		 * By default, the message is logged to the default logger.  It can be logged to a different logger via the
+		 * {@link #logger(Logger)} method or logged to the console using the
+		 * {@link #logToConsole()} method.
+		 *
+		 * @param detail The detail level of logging.
+		 * @param level The log level.
+		 * @param test A predicate to use per-request to see if the request should be logged.  If <jk>null</jk>, always logs.
+		 * @return This object.
+		 */
+		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
+			logRequests = detail;
+			logRequestsLevel = level;
+			logRequestsPredicate = test;
+			return this;
+		}
+
+		/**
+		 * Log to console.
+		 *
+		 * <p>
+		 * Specifies to log messages to the console.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.logToConsole()
+		 * 		.logRequests(<jsf>FULL</jsf>, <jsf>INFO</jsf>)  <jc>// Level is ignored when logging to console.</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder logToConsole() {
+			logToConsole = true;
 			return this;
 		}
 
@@ -3783,6 +3306,1246 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
+		 * Assigns maximum connection per route value.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * </ul>
+		 *
+		 * @param maxConnPerRoute New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
+		 */
+		public Builder maxConnPerRoute(int maxConnPerRoute) {
+			httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
+			return this;
+		}
+
+		/**
+		 * Assigns maximum total connection value.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * </ul>
+		 *
+		 * @param maxConnTotal New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setMaxConnTotal(int)
+		 */
+		public Builder maxConnTotal(int maxConnTotal) {
+			httpClientBuilder().setMaxConnTotal(maxConnTotal);
+			return this;
+		}
+
+		/**
+		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Max serialization depth.
+		 *
+		 * <p>
+		 * When enabled, abort traversal if specified depth is reached in the POJO tree.
+		 *
+		 * <p>
+		 * If this depth is exceeded, an exception is thrown.
+		 *
+		 * <p>
+		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON serializer that throws an exception if the depth reaches greater than 20.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.maxDepth(20)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <c>100</c>.
+		 * @return This object.
+		 */
+		public Builder maxDepth(int value) {
+			serializers().forEach(x -> x.maxDepth(value));
+			return this;
+		}
+		/**
+		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Maximum indentation.
+		 *
+		 * <p>
+		 * Specifies the maximum indentation level in the serialized document.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON serializer that indents a maximum of 20 tabs.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.ws()  <jc>// Enable whitespace</jc>
+		 * 		.maxIndent(20)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <c>100</c>.
+		 * @return This object.
+		 */
+		public Builder maxIndent(int value) {
+			serializers().forEachWS(x -> x.maxIndent(value));
+			return this;
+		}
+
+		/**
+		 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
+		 *
+		 * <p>
+		 * Headers are appended to the end of the current header list.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
+		 * @param value The new header values.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		@Override
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return headers(Accept.of(value), ContentType.of(value));
+		}
+		/**
+		 * Appends the <c>Accept</c> and <c>Content-Type</c> headers on all requests made by this client.
+		 *
+		 * <p>
+		 * Headers are appended to the end of the current header list.
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>headerData().append(Accept.<jsm>of</jsm>(<jv>value</jv>), ContentType.<jsm>of</jsm>(<jv>value</jv>))</c>.
+		 *
+		 * @param value The new header values.
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder mediaType(String value) {
+			super.mediaType(MediaType.of(value));
+			return headers(Accept.of(value), ContentType.of(value));
+		}
+
+		/**
+		 * Convenience method for specifying MessagePack as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * MessagePack is a binary equivalent to JSON that takes up considerably less space than JSON.
+		 *
+		 * <p>
+		 * 	{@link MsgPackSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	{@link MsgPackParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder msgPack() {
+			return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
+		}
+		@Override /* Overridden from Builder */
+		public Builder notBeanClasses(java.lang.Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		/**
+		 * When called, <c>No-Trace: true</c> is added to requests.
+		 *
+		 * <p>
+		 * This gives the opportunity for the servlet to not log errors on invalid requests.
+		 * This is useful for testing purposes when you don't want your log file to show lots of errors that are simply the
+		 * results of testing.
+		 *
+		 * <p>
+		 * It's up to the server to decide whether to allow for this.
+		 * The <c>BasicTestRestLogger</c> class watches for this header and prevents logging of status 400+ responses to
+		 * prevent needless logging of test scenarios.
+		 *
+		 * @return This object.
+		 * @see #headers()
+		 */
+		public Builder noTrace() {
+			return headers(NoTrace.of(true));
+		}
+
+		/**
+		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
+		 *
+		 * <p>
+		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()} for the
+		 * OpenAPI serializer and parser on this client.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.collectionFormat(<jsf>CSV</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// An arbitrary data structure.</jc>
+		 * 	AList <jv>list</jv> = AList.<jsm>of</jsm>(
+		 * 		<js>"foo"</js>,
+		 * 		<js>"bar"</js>,
+		 * 		AMap.<jsm>of</jsm>(
+		 * 			<js>"baz"</js>, AList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
+		 *		)
+		 *	);
+		 *
+		 * 	<jc>// Set a header with a comma-separated list.</jc>
+		 * 	<jv>client</jv>
+		 * 		.get(<js>"/uri"</js>)
+		 * 		.header(<js>"Foo"</js>, <jv>list</jv>)  <jc>// Will be serialized as: foo=bar,baz=qux\,true\,123</jc>
+		 * 		.run();
+		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jc'>{@link HttpPartCollectionFormat}
+		 * 	<ul>
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
+		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
+		 * @return This object.
+		 */
+		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
+			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
+			parsers().forEach(OpenApiParser.Builder.class, x -> x.collectionFormat(value));
+			partSerializer().builder(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
+			partParser().builder(OpenApiParser.Builder.class, x -> x.collectionFormat(value));
+			return this;
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// InputStreamParser Properties
+		//-----------------------------------------------------------------------------------------------------------------
+		/**
+		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default OpenAPI format for HTTP parts.
+		 *
+		 * <p>
+		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()} for
+		 * the OpenAPI serializer and parser on this client.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
+		 * 	RestClient <jv>client</jv>  = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.oapiFormat(<jsf>UON</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Set a header with a value in UON format.</jc>
+		 * 	<jv>client</jv>
+		 * 		.get(<js>"/uri"</js>)
+		 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
+		 * 		.run();
+		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+		 * 	<ul>
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT32 INT32} - Signed 32 bits.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT64 INT64} - Signed 64 bits.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
+		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
+		 * 	</ul>
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}
+		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#format(HttpPartFormat)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
+		 * @return This object.
+		 */
+		public Builder oapiFormat(HttpPartFormat value) {
+			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.format(value));
+			parsers().forEach(OpenApiParser.Builder.class, x -> x.format(value));
+			partSerializer().builder(OpenApiSerializer.Builder.class).ifPresent(x -> x.format(value));
+			partParser().builder(OpenApiParser.Builder.class).ifPresent(x -> x.format(value));
+			return this;
+		}
+
+		/**
+		 * Convenience method for specifying OpenAPI as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * OpenAPI is a language that allows serialization to formats that use {@link HttpPartSchema} objects to describe their structure.
+		 *
+		 * <p>
+		 * 	{@link OpenApiSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 		<li>Typically the {@link RestRequest#content(Object, HttpPartSchema)} method will be used to specify the body of the request with the
+		 * 			schema describing it's structure.
+		 * 	</ul>
+		 * <p>
+		 * 	{@link OpenApiParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 		<li>Typically the {@link ResponseContent#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</c>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder openApi() {
+			return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
+		}
+
+		/**
+		 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Parameter format.
+		 *
+		 * <p>
+		 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
+		 *
+		 * <p>
+		 * Specifies the format to use for GET parameter keys and values.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.urlEnc()
+		 * 		.paramFormat(<jsf>PLAINTEXT</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// An arbitrary data structure.</jc>
+		 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(
+		 * 		<js>"foo"</js>, <js>"bar"</js>,
+		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+		 * 	);
+		 *
+		 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
+		 * 		.run();
+		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
+		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
+		 * </ul>
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder paramFormat(ParamFormat value) {
+			serializers().forEach(UonSerializer.Builder.class, x -> x.paramFormat(value));
+			return this;
+		}
+
+		/**
+		 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Parameter format.
+		 *
+		 * <p>
+		 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
+		 *
+		 * <p>
+		 * Specifies plaintext as the format to use for GET parameter keys and values.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.urlEnc()
+		 * 		.build();
+		 *
+		 * 	<jc>// An arbitrary data structure.</jc>
+		 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(
+		 * 		<js>"foo"</js>, <js>"bar"</js>,
+		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
+		 * 	);
+		 *
+		 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormatPlain()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder paramFormatPlain() {
+			serializers().forEach(UonSerializer.Builder.class, org.apache.juneau.uon.UonSerializer.Builder::paramFormatPlain);
+			return this;
+		}
+
+		/**
+		 * Parser.
+		 *
+		 * <p>
+		 * Associates the specified {@link Parser Parser} with the HTTP client.
+		 *
+		 * <p>
+		 * The parser is used to parse the HTTP response body into a POJO.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.parser(JsonParser.<jk>class</jk>)
+		 * 		.strict()  <jc>// Enable strict mode on JsonParser.</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder parser(Class<? extends Parser> value) {
+			return parsers(value);
+		}
+
+		/**
+		 * Parser.
+		 *
+		 * <p>
+		 * Associates the specified {@link Parser Parser} with the HTTP client.
+		 *
+		 * <p>
+		 * The parser is used to parse the HTTP response body into a POJO.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
+		 * 	on this builder class have no effect.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+		 * @return This object.
+		 */
+		public Builder parser(Parser value) {
+			return parsers(value);
+		}
+
+		/**
+		 * Returns the parser group sub-builder.
+		 *
+		 * @return The parser group sub-builder.
+		 */
+		public final ParserSet.Builder parsers() {
+			if (parsers == null)
+				parsers = createParsers();
+			return parsers;
+		}
+
+		/**
+		 * Parsers.
+		 *
+		 * <p>
+		 * Associates the specified {@link Parser Parsers} with the HTTP client.
+		 *
+		 * <p>
+		 * The parsers are used to parse the HTTP response body into a POJO.
+		 *
+		 * <p>
+		 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.parser(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>)
+		 * 		.strict()  <jc>// Enable strict mode on parsers.</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder parsers(Class<? extends Parser>...value) {
+			parsers().add(value);
+			return this;
+		}
+
+		/**
+		 * Parsers.
+		 *
+		 * <p>
+		 * Associates the specified {@link Parser Parsers} with the HTTP client.
+		 *
+		 * <p>
+		 * The parsers are used to parse the HTTP response body into a POJO.
+		 *
+		 * <p>
+		 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
+		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
+		 * 	on this builder class have no effect.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.parser(JsonParser.<jsf>DEFAULT_STRICT</jsf>, XmlParser.<jsf>DEFAULT</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link JsonParser#DEFAULT}.
+		 * @return This object.
+		 */
+		public Builder parsers(Parser...value) {
+			parsers().add(value);
+			return this;
+		}
+
+		/**
+		 * Returns the part parser sub-builder.
+		 *
+		 * @return The part parser sub-builder.
+		 */
+		public final HttpPartParser.Creator partParser() {
+			if (partParser == null)
+				partParser = createPartParser();
+			return partParser;
+		}
+
+		/**
+		 * Part parser.
+		 *
+		 * <p>
+		 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+		 *
+		 * <p>
+		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.partParser(UonParser.<jk>class</jk>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link OpenApiParser}.
+		 * @return This object.
+		 */
+		public Builder partParser(Class<? extends HttpPartParser> value) {
+			partParser().type(value);
+			return this;
+		}
+
+		/**
+		 * Part parser.
+		 *
+		 * <p>
+		 * The parser to use for parsing POJOs from form data, query parameters, headers, and path variables.
+		 *
+		 * <p>
+		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.partParser(UonParser.<jsf>DEFAULT</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link OpenApiParser}.
+		 * @return This object.
+		 */
+		public Builder partParser(HttpPartParser value) {
+			partParser().impl(value);
+			return this;
+		}
+
+		/**
+		 * Returns the part serializer sub-builder.
+		 *
+		 * @return The part serializer sub-builder.
+		 */
+		public final HttpPartSerializer.Creator partSerializer() {
+			if (partSerializer == null)
+				partSerializer = createPartSerializer();
+			return partSerializer;
+		}
+
+		/**
+		 * Part serializer.
+		 *
+		 * <p>
+		 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+		 *
+		 * <p>
+		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.partSerializer(UonSerializer.<jk>class</jk>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link OpenApiSerializer}.
+		 * @return This object.
+		 */
+		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
+			partSerializer().type(value);
+			return this;
+		}
+
+		/**
+		 * Part serializer.
+		 *
+		 * <p>
+		 * The serializer to use for serializing POJOs in form data, query parameters, headers, and path variables.
+		 *
+		 * <p>
+		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.partSerializer(UonSerializer.<jsf>DEFAULT</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default value is {@link OpenApiSerializer}.
+		 * @return This object.
+		 */
+		public Builder partSerializer(HttpPartSerializer value) {
+			partSerializer().impl(value);
+			return this;
+		}
+
+		/**
+		 * Returns the builder for the list of path data parameters that get applied to all requests created by this builder.
+		 *
+		 * <p>
+		 * This is the primary method for accessing the path data parameter list.
+		 * On first call, the builder is created via the method {@link #createFormData()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	<jv>builder</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+		 * </p>
+		 *
+		 * <p>
+		 * The following convenience methods are also provided for updating the parameters:
+		 * <ul>
+		 * 	<li class='jm'>{@link #pathData(NameValuePair...)}
+		 * 	<li class='jm'>{@link #pathDataDefault(NameValuePair...)}
+		 * 	<li class='jm'>{@link #pathData(String,String)}
+		 * 	<li class='jm'>{@link #pathData(String,Supplier)}
+		 * </ul>
+		 *
+		 * @return The form data list builder.
+		 */
+		public final PartList pathData() {
+			if (pathData == null)
+				pathData = createPathData();
+			return pathData;
+		}
+
+		/**
+		 * Sets multiple path parameters on all requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+		 *
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.pathData(
+		 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+		 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>pathData().append(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts
+		 * 	The path parameters.
+		 * @return This object.
+		 * @see #pathData()
+		 */
+		public Builder pathData(NameValuePair...parts) {
+			pathData().append(parts);
+			return this;
+		}
+
+		/**
+		 * Appends a path parameter to all request bodies.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.pathData(<js>"foo"</js>, <js>"bar"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The parameter name.
+		 * @param value The parameter value.
+		 * @return This object.
+		 * @see #pathData()
+		 */
+		public Builder pathData(String name, String value) {
+			pathData().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Sets a path parameter with a dynamic value to all request bodies.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>pathData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The parameter name.
+		 * @param value The parameter value supplier.
+		 * @return This object.
+		 * @see #pathData()
+		 */
+		public Builder pathData(String name, Supplier<String> value) {
+			pathData().set(name, value);
+			return this;
+		}
+
+		/**
+		 * Sets default path parameter values.
+		 *
+		 * <p>
+		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>pathData().setDefault(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts The parts.
+		 * @return This object.
+		 * @see #pathData()
+		 */
+		public Builder pathDataDefault(NameValuePair...parts) {
+			pathData().setDefault(parts);
+			return this;
+		}
+
+		/**
+		 * Convenience method for specifying Plain Text as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * Plain text marshalling typically only works on simple POJOs that can be converted to and from strings using
+		 * swaps, swap methods, etc...
+		 *
+		 * <p>
+		 * 	{@link PlainTextSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	{@link PlainTextParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</c>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder plainText() {
+			return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
+		}
+
+		/**
+		 * When called, the {@link #createConnectionManager()} method will return a {@link PoolingHttpClientConnectionManager}
+		 * instead of a {@link BasicHttpClientConnectionManager}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses pooled connections.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.pooled()
+		 * 		.build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder pooled() {
+			this.pooled = true;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		/**
+		 * Assigns default proxy value.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #routePlanner(HttpRoutePlanner)} method.
+		 * </ul>
+		 *
+		 * @param proxy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setProxy(HttpHost)
+		 */
+		public Builder proxy(HttpHost proxy) {
+			httpClientBuilder().setProxy(proxy);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link AuthenticationStrategy} instance for proxy authentication.
+		 *
+		 * @param proxyAuthStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
+		 */
+		public Builder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
+			httpClientBuilder().setProxyAuthenticationStrategy(proxyAuthStrategy);
+			return this;
+		}
+
+		/**
+		 * Assigns file containing public suffix matcher.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>Instances of this class can be created with {@link PublicSuffixMatcherLoader}.
+		 * </ul>
+		 *
+		 * @param publicSuffixMatcher New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
+		 */
+		public Builder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
+			httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
+			return this;
+		}
+
+		/**
+		 * Returns the builder for the list of query parameters that get applied to all requests created by this builder.
+		 *
+		 * <p>
+		 * This is the primary method for accessing the query parameter list.
+		 * On first call, the builder is created via the method {@link #createQueryData()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	<jv>builder</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
+		 * </p>
+		 *
+		 * <p>
+		 * The following convenience methods are also provided for updating the parameters:
+		 * <ul>
+		 * 	<li class='jm'>{@link #queryData(NameValuePair...)}
+		 * 	<li class='jm'>{@link #queryDataDefault(NameValuePair...)}
+		 * 	<li class='jm'>{@link #queryData(String,String)}
+		 * 	<li class='jm'>{@link #queryData(String,Supplier)}
+		 * </ul>
+		 *
+		 * @return The query data list builder.
+		 */
+		public final PartList queryData() {
+			if (queryData == null)
+				queryData = createQueryData();
+			return queryData;
+		}
+
+		/**
+		 * Appends multiple query parameters to the URI of all requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+		 *
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.queryData(
+		 * 			<jsm>stringPart</jsm>(<js>"foo"</js>, <js>"bar"</js>),
+		 * 			<jsm>booleanPart</jsm>(<js>"baz"</js>, <jk>true</jk>)
+		 * 		)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>queryData().append(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts
+		 * 	The query parameters.
+		 * @return This object.
+		 * @see #queryData()
+		 */
+		public Builder queryData(NameValuePair...parts) {
+			queryData().append(parts);
+			return this;
+		}
+
+		/**
+		 * Appends a query parameter to the URI.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.queryData(<js>"foo"</js>, <js>"bar"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The parameter name.
+		 * @param value The parameter value.
+		 * @return This object.
+		 * @see #queryData()
+		 */
+		public Builder queryData(String name, String value) {
+			queryData().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Appends a query parameter with a dynamic value to the URI.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>queryData().append(<jv>name</jv>,<jv>value</jv>)</c>.
+		 *
+		 * @param name The parameter name.
+		 * @param value The parameter value supplier.
+		 * @return This object.
+		 * @see #queryData()
+		 */
+		public Builder queryData(String name, Supplier<String> value) {
+			queryData().append(name, value);
+			return this;
+		}
+
+		/**
+		 * Sets default query parameter values.
+		 *
+		 * <p>
+		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shortcut for calling <c>queryData().setDefault(<jv>parts</jv>)</c>.
+		 *
+		 * @param parts The parts.
+		 * @return This object.
+		 * @see #queryData()
+		 */
+		public Builder queryDataDefault(NameValuePair...parts) {
+			queryData().setDefault(parts);
+			return this;
+		}
+
+		/**
+		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
+		 *
+		 * <p>
+		 * Specifies the character to use for quoting attributes and values.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.quoteChar(<js>'\''</js>)
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a single property</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is <js>'"'</js>.
+		 * @return This object.
+		 */
+		public Builder quoteChar(char value) {
+			serializers().forEachWS(x -> x.quoteChar(value));
+			return this;
+		}
+
+		/**
+		 * Assigns {@link RedirectStrategy} instance.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #disableRedirectHandling()} method.
+		 * </ul>
+		 *
+		 * @param redirectStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
+		 */
+		public Builder redirectStrategy(RedirectStrategy redirectStrategy) {
+			httpClientBuilder().setRedirectStrategy(redirectStrategy);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link HttpRequestExecutor} instance.
+		 *
+		 * @param requestExec New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
+		 */
+		public Builder requestExecutor(HttpRequestExecutor requestExec) {
+			httpClientBuilder().setRequestExecutor(requestExec);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link HttpRequestRetryHandler} instance.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #disableAutomaticRetries()} method.
+		 * </ul>
+		 *
+		 * @param retryHandler New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
+		 */
+		public Builder retryHandler(HttpRequestRetryHandler retryHandler) {
+			httpClientBuilder().setRetryHandler(retryHandler);
+			return this;
+		}
+
+		/**
 		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Root URI.
 		 *
 		 * <p>
@@ -3824,16 +4587,210 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Returns the root URI defined for this client.
+		 * Assigns {@link HttpRoutePlanner} instance.
+		 *
+		 * @param routePlanner New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
+		 */
+		public Builder routePlanner(HttpRoutePlanner routePlanner) {
+			httpClientBuilder().setRoutePlanner(routePlanner);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link SchemePortResolver} instance.
+		 *
+		 * @param schemePortResolver New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
+		 */
+		public Builder schemePortResolver(SchemePortResolver schemePortResolver) {
+			httpClientBuilder().setSchemePortResolver(schemePortResolver);
+			return this;
+		}
+
+		/**
+		 * Serializer.
 		 *
 		 * <p>
-		 * Returns <jk>null</jk> in leu of an empty string.
-		 * Trailing slashes are trimmed.
+		 * Associates the specified {@link Serializer Serializer} with the HTTP client.
 		 *
-		 * @return The root URI defined for this client.
+		 * <p>
+		 * The serializer is used to serialize POJOs into the HTTP request body.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.serializer(JsonSerializer.<jk>class</jk>)
+		 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link JsonSerializer}.
+		 * @return This object.
 		 */
-		public String getRootUri() {
-			return rootUrl;
+		@SuppressWarnings("unchecked")
+		public Builder serializer(Class<? extends Serializer> value) {
+			return serializers(value);
+		}
+
+		/**
+		 * Serializer.
+		 *
+		 * <p>
+		 * Associates the specified {@link Serializer Serializer} with the HTTP client.
+		 *
+		 * <p>
+		 * The serializer is used to serialize POJOs into the HTTP request body.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
+		 * 	on this builder class have no effect.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.serializer(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link JsonSerializer}.
+		 * @return This object.
+		 */
+		public Builder serializer(Serializer value) {
+			return serializers(value);
+		}
+
+		/**
+		 * Returns the serializer group sub-builder.
+		 *
+		 * @return The serializer group sub-builder.
+		 */
+		public final SerializerSet.Builder serializers() {
+			if (serializers == null)
+				serializers = createSerializers();
+			return serializers;
+		}
+
+		/**
+		 * Serializers.
+		 *
+		 * <p>
+		 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+		 *
+		 * <p>
+		 * The serializer is used to serialize POJOs into the HTTP request body.
+		 *
+		 * <p>
+		 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.serializers(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>)
+		 * 		.sortCollections()  <jc>// Sort any collections being serialized.</jc>
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link JsonSerializer}.
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder serializers(Class<? extends Serializer>...value) {
+			serializers().add(value);
+			return this;
+		}
+
+		/**
+		 * Serializers.
+		 *
+		 * <p>
+		 * Associates the specified {@link Serializer Serializers} with the HTTP client.
+		 *
+		 * <p>
+		 * The serializer is used to serialize POJOs into the HTTP request body.
+		 *
+		 * <p>
+		 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
+		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
+		 * 	on this builder class have no effect.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.serializers(JsonSerializer.<jsf>DEFAULT_READABLE</jsf>, XmlSerializer.<jsf>DEFAULT_READABLE</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link JsonSerializer}.
+		 * @return This object.
+		 */
+		public Builder serializers(Serializer...value) {
+			serializers().add(value);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link ServiceUnavailableRetryStrategy} instance.
+		 *
+		 * @param serviceUnavailStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
+		 */
+		public Builder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
+			httpClientBuilder().setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
+			return this;
+		}
+
+		/**
+		 * Skip empty form data.
+		 *
+		 * <p>
+		 * When enabled, form data consisting of empty strings will be skipped on requests.
+		 * Note that <jk>null</jk> values are already skipped.
+		 *
+		 * <p>
+		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
+		 *
+		 * @return This object.
+		 */
+		public Builder skipEmptyFormData() {
+			return skipEmptyFormData(true);
 		}
 
 		/**
@@ -3857,10 +4814,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Skip empty form data.
+		 * Skip empty header data.
 		 *
 		 * <p>
-		 * When enabled, form data consisting of empty strings will be skipped on requests.
+		 * When enabled, headers consisting of empty strings will be skipped on requests.
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
@@ -3868,8 +4825,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		public Builder skipEmptyFormData() {
-			return skipEmptyFormData(true);
+		public Builder skipEmptyHeaderData() {
+			return skipEmptyHeaderData(true);
 		}
 
 		/**
@@ -3893,10 +4850,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Skip empty header data.
+		 * Skip empty query data.
 		 *
 		 * <p>
-		 * When enabled, headers consisting of empty strings will be skipped on requests.
+		 * When enabled, query parameters consisting of empty strings will be skipped on requests.
 		 * Note that <jk>null</jk> values are already skipped.
 		 *
 		 * <p>
@@ -3904,8 +4861,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return This object.
 		 */
-		public Builder skipEmptyHeaderData() {
-			return skipEmptyHeaderData(true);
+		public Builder skipEmptyQueryData() {
+			return skipEmptyQueryData(true);
 		}
 
 		/**
@@ -3925,362 +4882,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder skipEmptyQueryData(boolean value) {
 			skipEmptyQueryData = true;
-			return this;
-		}
-
-		/**
-		 * Skip empty query data.
-		 *
-		 * <p>
-		 * When enabled, query parameters consisting of empty strings will be skipped on requests.
-		 * Note that <jk>null</jk> values are already skipped.
-		 *
-		 * <p>
-		 * The {@link Schema#skipIfEmpty()} annotation overrides this setting.
-		 *
-		 * @return This object.
-		 */
-		public Builder skipEmptyQueryData() {
-			return skipEmptyQueryData(true);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// BeanTraverse Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Automatically detect POJO recursions.
-		 *
-		 * <p>
-		 * When enabled, specifies that recursions should be checked for during traversal.
-		 *
-		 * <p>
-		 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
-		 * <br>In general, unchecked recursions cause stack-overflow-errors.
-		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		Checking for recursion can cause a small performance penalty.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.detectRecursions()
-		 * 		.build();
-		 *
-		 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-		 * 	<jk>public class</jk> A {
-		 * 		<jk>public</jk> Object <jf>f</jf>;
-		 * 	}
-		 * 	A <jv>a</jv> = <jk>new</jk> A();
-		 * 	<jv>a</jv>.<jf>f</jf> = <jv>a</jv>;
-		 *
-		 *	<jk>try</jk> {
-		 * 		<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
-		 * 		<jv>client</jv>
-		 * 			.post(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
-		 * 			.run();
-		 *	} <jk>catch</jk> (RestCallException <jv>e</jv>} {
-		 *		<jc>// Handle exception.</jc>
-		 *	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder detectRecursions() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::detectRecursions);
-			return this;
-		}
-
-		/**
-		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Ignore recursion errors.
-		 *
-		 * <p>
-		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-		 *
-		 * <p>
-		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-		 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
-		 *
-		 * <p class='bjson'>
-		 * 	{A:{B:{C:<jk>null</jk>}}}
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		Checking for recursion can cause a small performance penalty.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a JSON client that ignores recursions.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.ignoreRecursions()
-		 * 		.build();
-		 *
-		 * 	<jc>// Create a POJO model with a recursive loop.</jc>
-		 * 	<jk>public class</jk> A {
-		 * 		<jk>public</jk> Object <jf>f</jf>;
-		 * 	}
-		 * 	A <jv>a</jv> = <jk>new</jk> A();
-		 * 	<jv>a</jv>.<jf>f</jf> = <jv>a</jv>;
-		 *
-		 * 	<jc>// Produces request body "{f:null}"</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder ignoreRecursions() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::ignoreRecursions);
-			return this;
-		}
-
-		/**
-		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Initial depth.
-		 *
-		 * <p>
-		 * The initial indentation level at the root.
-		 *
-		 * <p>
-		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled and an initial depth of 2.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.ws()
-		 * 		.initialDepth(2)
-		 * 		.build();
-		 *
-		 * 	<jc>// Our bean to serialize.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
-		 * 	}
-		 *
-		 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is <c>0</c>.
-		 * @return This object.
-		 */
-		public Builder initialDepth(int value) {
-			serializers().forEach(x -> x.initialDepth(value));
-			return this;
-		}
-
-		/**
-		 * <i><l>BeanTraverse</l> configuration property:&emsp;</i>  Max serialization depth.
-		 *
-		 * <p>
-		 * When enabled, abort traversal if specified depth is reached in the POJO tree.
-		 *
-		 * <p>
-		 * If this depth is exceeded, an exception is thrown.
-		 *
-		 * <p>
-		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON serializer that throws an exception if the depth reaches greater than 20.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.maxDepth(20)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is <c>100</c>.
-		 * @return This object.
-		 */
-		public Builder maxDepth(int value) {
-			serializers().forEach(x -> x.maxDepth(value));
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Serializer Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add <js>"_type"</js> properties when needed.
-		 *
-		 * <p>
-		 * When enabled, <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-		 * through reflection.
-		 *
-		 * <p>
-		 * This is used to recreate the correct objects during parsing if the object types cannot be inferred.
-		 * <br>For example, when serializing a <c>Map&lt;String,Object&gt;</c> field where the bean class cannot be determined from
-		 * the type of the values.
-		 *
-		 * <p>
-		 * Note the differences between the following settings:
-		 * <ul class='javatree'>
-		 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.addBeanTypes()
-		 * 		.build();
-		 *
-		 * 	<jc>// Our map of beans to serialize.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 * 	}
-		 *
-		 * 	AMap <jv>map</jv> = AMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
-		 *
-		 * 	<jc>// Request body will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder addBeanTypes() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addBeanTypes);
-			return this;
-		}
-
-		/**
-		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Add type attribute to root nodes.
-		 *
-		 * <p>
-		 * When enabled, <js>"_type"</js> properties will be added to top-level beans.
-		 *
-		 * <p>
-		 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
-		 * type information that might normally be included to determine the data type will not be serialized.
-		 *
-		 * <p>
-		 * For example, when serializing a top-level POJO with a {@link Bean#typeName() @Bean(typeName)} value, a
-		 * <js>'_type'</js> attribute will only be added when this setting is enabled.
-		 *
-		 * <p>
-		 * Note the differences between the following settings:
-		 * <ul class='javatree'>
-		 * 	<li class='jf'>{@link #addRootType()} - Affects whether <js>'_type'</js> is added to root node.
-		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.addRootType()
-		 * 		.build();
-		 *
-		 * 	<jc>// Our bean to serialize.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Request body will contain:  {"_type":"mybean","foo":"bar"}</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder addRootType() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::addRootType);
-			return this;
-		}
-
-		/**
-		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Don't trim null bean property values.
-		 *
-		 * <p>
-		 * When enabled, null bean values will be serialized to the output.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.keepNullProperties()
-		 * 		.build();
-		 *
-		 * 	<jc>// Our bean to serialize.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf> = <jk>null</jk>;
-		 * 	}
-		 *
-		 * 	<jc>// Request body will contain:  {foo:null}</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder keepNullProperties() {
-			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::keepNullProperties);
 			return this;
 		}
 
@@ -4357,6 +4958,221 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		public Builder sortMaps() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::sortMaps);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		/**
+		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
+		 *
+		 * <p>
+		 * Specifies to use single quotes for quoting attributes and values.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.sq()
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a single property</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
+		 * 	<jv>client</jv>
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.run();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder sq() {
+			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::sq);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link SSLContext} instance.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
+		 *  	and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
+		 * </ul>
+		 *
+		 * @param sslContext New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setSSLContext(SSLContext)
+		 */
+		public Builder sslContext(SSLContext sslContext) {
+			httpClientBuilder().setSSLContext(sslContext);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link javax.net.ssl.HostnameVerifier} instance.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
+		 * 		and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
+		 * </ul>
+		 *
+		 * @param hostnameVerifier New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
+		 */
+		public Builder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
+			httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link LayeredConnectionSocketFactory} instance.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * </ul>
+		 *
+		 * @param sslSocketFactory New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
+		 */
+		public Builder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
+			httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+		/**
+		 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
+		 *
+		 * <p>
+		 * When enabled, strict mode for the parser is enabled.
+		 *
+		 * <p>
+		 * Strict mode can mean different things for different parsers.
+		 *
+		 * <table class='styled'>
+		 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
+		 * 	<tr>
+		 * 		<td>All reader-based parsers</td>
+		 * 		<td>
+		 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
+		 * 			Otherwise, malformed input is ignored.
+		 * 		</td>
+		 * 	</tr>
+		 * 	<tr>
+		 * 		<td>{@link JsonParser}</td>
+		 * 		<td>
+		 * 			When enabled, throws exceptions on the following invalid JSON syntax:
+		 * 			<ul>
+		 * 				<li>Unquoted attributes.
+		 * 				<li>Missing attribute values.
+		 * 				<li>Concatenated strings.
+		 * 				<li>Javascript comments.
+		 * 				<li>Numbers and booleans when Strings are expected.
+		 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
+		 * 			</ul>
+		 * 		</td>
+		 * 	</tr>
+		 * </table>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.strict()
+		 * 		.build();
+		 *
+		 * 	<jc>// Try to parse some bad JSON.</jc>
+		 * 	<jk>try</jk> {
+		 * 		<jv>client</jv>
+		 * 			.get(<js>"/pathToBadJson"</js>)
+		 * 			.run()
+		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
+		 * 		<jc>// Handle exception.</jc>
+		 * 	}
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#strict()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder strict() {
+			parsers().forEach(org.apache.juneau.parser.Parser.Builder::strict);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		/**
+		 * Assigns {@link AuthenticationStrategy} instance for target host authentication.
+		 *
+		 * @param targetAuthStrategy New property value.
+		 * @return This object.
+		 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
+		 */
+		public Builder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
+			httpClientBuilder().setTargetAuthenticationStrategy(targetAuthStrategy);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
 			return this;
 		}
 
@@ -4450,6 +5266,43 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
+		 * <i><l>Parser</l> configuration property:&emsp;</i>  Trim parsed strings.
+		 *
+		 * <p>
+		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
+		 * the POJO.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.json()
+		 * 		.trimStringsOnRead()
+		 * 		.build();
+		 *
+		 * 	<jc>// Try to parse JSON containing {" foo ":" bar "}.</jc>
+		 * 	Map&lt;String,String&gt; <jv>map</jv> = <jv>client</jv>
+		 * 		.get(<js>"/pathToJson"</js>)
+		 * 		.run()
+		 * 		.getContent().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+		 *
+		 * 	<jc>// Make sure strings are trimmed.</jc>
+		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>map</jv>.get(<js>"foo"</js>));
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#trimStrings()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder trimStringsOnRead() {
+			parsers().forEach(org.apache.juneau.parser.Parser.Builder::trimStrings);
+			return this;
+		}
+
+		/**
 		 * <i><l>Serializer</l> configuration property:&emsp;</i>  Trim strings.
 		 *
 		 * <p>
@@ -4482,6 +5335,135 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		public Builder trimStringsOnWrite() {
 			serializers().forEach(org.apache.juneau.serializer.Serializer.Builder::trimStrings);
 			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		/**
+		 * Convenience method for specifying all available transmission types.
+		 *
+		 * <p>
+		 * 	All basic Juneau serializers will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	All basic Juneau parsers will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header must be set via {@link #headers()}, or per-request
+		 * 		via {@link RestRequest#header(Header)} in order for the correct parser to be selected.
+		 * <p>
+		 * 	<c>Content-Type</c> request header must be set via {@link #headers()},
+		 * 		or per-request via {@link RestRequest#header(Header)} in order for the correct serializer to be selected.
+		 * <p>
+		 * 	Similar to calling <c>json().json5().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses universal marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		@SuppressWarnings("unchecked")
+		public Builder universal() {
+			return
+				serializers(
+					JsonSerializer.class,
+					Json5Serializer.class,
+					HtmlSerializer.class,
+					XmlSerializer.class,
+					UonSerializer.class,
+					UrlEncodingSerializer.class,
+					OpenApiSerializer.class,
+					MsgPackSerializer.class,
+					PlainTextSerializer.class
+				)
+				.parsers(
+					JsonParser.class,
+					Json5Parser.class,
+					XmlParser.class,
+					HtmlParser.class,
+					UonParser.class,
+					UrlEncodingParser.class,
+					OpenApiParser.class,
+					MsgPackParser.class,
+					PlainTextParser.class
+				);
+		}
+
+		/**
+		 * Convenience method for specifying UON as the marshalling transmission media type.
+		 *
+		 * <p>
+		 * UON is Url-Encoding Object notation that is equivalent to JSON but suitable for transmission as URL-encoded
+		 * query and form post values.
+		 *
+		 * <p>
+		 * 	{@link UonSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	{@link UonParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</c>.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Construct a client that uses UON marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder uon() {
+			return serializer(UonSerializer.class).parser(UonParser.class);
 		}
 
 		/**
@@ -4606,127 +5588,97 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// WriterSerializer Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Maximum indentation.
+		 * Convenience method for specifying URL-Encoding as the marshalling transmission media type.
 		 *
 		 * <p>
-		 * Specifies the maximum indentation level in the serialized document.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This setting does not apply to the RDF serializers.
-		 * </ul>
+		 * 	{@link UrlEncodingSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
+		 * 	<ul>
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 		<li>This serializer is NOT used when using the {@link RestRequest#formData(String, Object)} (and related) methods for constructing
+		 * 			the request body.  Instead, the part serializer specified via {@link #partSerializer(Class)} is used.
+		 * 	</ul>
+		 * <p>
+		 * 	{@link UrlEncodingParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
+		 * 	<ul>
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
+		 * 	</ul>
+		 * <p>
+		 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON serializer that indents a maximum of 20 tabs.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.ws()  <jc>// Enable whitespace</jc>
-		 * 		.maxIndent(20)
-		 * 		.build();
+		 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is <c>100</c>.
 		 * @return This object.
 		 */
-		public Builder maxIndent(int value) {
-			serializers().forEachWS(x -> x.maxIndent(value));
+		public Builder urlEnc() {
+			return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
+		}
+
+		/**
+		 * Returns the URL-encoding serializer sub-builder.
+		 *
+		 * @return The URL-encoding serializer sub-builder.
+		 */
+		public final UrlEncodingSerializer.Builder urlEncodingSerializer() {
+			if (urlEncodingSerializer == null)
+				urlEncodingSerializer = createUrlEncodingSerializer();
+			return urlEncodingSerializer;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
 			return this;
 		}
 
 		/**
-		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
-		 *
-		 * <p>
-		 * Specifies the character to use for quoting attributes and values.
+		 * Assigns {@link UserTokenHandler} instance.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This value can be overridden by the {@link #disableConnectionState()} method.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.quoteChar(<js>'\''</js>)
-		 * 		.build();
-		 *
-		 * 	<jc>// A bean with a single property</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is <js>'"'</js>.
+		 * @param userTokenHandler New property value.
 		 * @return This object.
+		 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
 		 */
-		public Builder quoteChar(char value) {
-			serializers().forEachWS(x -> x.quoteChar(value));
+		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
+			httpClientBuilder().setUserTokenHandler(userTokenHandler);
 			return this;
 		}
 
 		/**
-		 * <i><l>WriterSerializer</l> configuration property:&emsp;</i>  Quote character.
-		 *
-		 * <p>
-		 * Specifies to use single quotes for quoting attributes and values.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This setting does not apply to the RDF serializers.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.sq()
-		 * 		.build();
-		 *
-		 * 	<jc>// A bean with a single property</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
-		 * 		.run();
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
-		 * </ul>
+		 * Use system properties when creating and configuring default implementations.
 		 *
 		 * @return This object.
+		 * @see HttpClientBuilder#useSystemProperties()
 		 */
-		public Builder sq() {
-			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::sq);
+		public Builder useSystemProperties() {
+			httpClientBuilder().useSystemProperties();
 			return this;
 		}
 
@@ -4802,1380 +5754,293 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			serializers().forEachWS(org.apache.juneau.serializer.WriterSerializer.Builder::ws);
 			return this;
 		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// OutputStreamSerializer Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		//-----------------------------------------------------------------------------------------------------------------
 		// Parser Properties
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * <i><l>Parser</l> configuration property:&emsp;</i>  Debug output lines.
+		 * Convenience method for specifying XML as the marshalling transmission media type.
 		 *
 		 * <p>
-		 * When parse errors occur, this specifies the number of lines of input before and after the
-		 * error location to be printed as part of the exception message.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.debug()  <jc>// Enable debug mode to capture Reader contents as strings.</jc>
-		 * 		.debugOuputLines(100)
-		 * 		.build();
-		 *
-		 * 	<jc>// Try to parse some bad JSON.</jc>
-		 * 	<jk>try</jk> {
-		 * 		<jv>client</jv>
-		 * 			.get(<js>"/pathToBadJson"</js>)
-		 * 			.run()
-		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
-		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
-		 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#debugOutputLines(int)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is <c>5</c>.
-		 * @return This object.
-		 */
-		public Builder debugOutputLines(int value) {
-			parsers().forEach(x -> x.debugOutputLines(value));
-			return this;
-		}
-
-		/**
-		 * <i><l>Parser</l> configuration property:&emsp;</i>  Strict mode.
-		 *
-		 * <p>
-		 * When enabled, strict mode for the parser is enabled.
-		 *
-		 * <p>
-		 * Strict mode can mean different things for different parsers.
-		 *
-		 * <table class='styled'>
-		 * 	<tr><th>Parser class</th><th>Strict behavior</th></tr>
-		 * 	<tr>
-		 * 		<td>All reader-based parsers</td>
-		 * 		<td>
-		 * 			When enabled, throws {@link ParseException ParseExceptions} on malformed charset input.
-		 * 			Otherwise, malformed input is ignored.
-		 * 		</td>
-		 * 	</tr>
-		 * 	<tr>
-		 * 		<td>{@link JsonParser}</td>
-		 * 		<td>
-		 * 			When enabled, throws exceptions on the following invalid JSON syntax:
-		 * 			<ul>
-		 * 				<li>Unquoted attributes.
-		 * 				<li>Missing attribute values.
-		 * 				<li>Concatenated strings.
-		 * 				<li>Javascript comments.
-		 * 				<li>Numbers and booleans when Strings are expected.
-		 * 				<li>Numbers valid in Java but not JSON (e.g. octal notation, etc...)
-		 * 			</ul>
-		 * 		</td>
-		 * 	</tr>
-		 * </table>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.strict()
-		 * 		.build();
-		 *
-		 * 	<jc>// Try to parse some bad JSON.</jc>
-		 * 	<jk>try</jk> {
-		 * 		<jv>client</jv>
-		 * 			.get(<js>"/pathToBadJson"</js>)
-		 * 			.run()
-		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
-		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
-		 * 		<jc>// Handle exception.</jc>
-		 * 	}
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#strict()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder strict() {
-			parsers().forEach(org.apache.juneau.parser.Parser.Builder::strict);
-			return this;
-		}
-
-		/**
-		 * <i><l>Parser</l> configuration property:&emsp;</i>  Trim parsed strings.
-		 *
-		 * <p>
-		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
-		 * the POJO.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.json()
-		 * 		.trimStringsOnRead()
-		 * 		.build();
-		 *
-		 * 	<jc>// Try to parse JSON containing {" foo ":" bar "}.</jc>
-		 * 	Map&lt;String,String&gt; <jv>map</jv> = <jv>client</jv>
-		 * 		.get(<js>"/pathToJson"</js>)
-		 * 		.run()
-		 * 		.getContent().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-		 *
-		 * 	<jc>// Make sure strings are trimmed.</jc>
-		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>map</jv>.get(<js>"foo"</js>));
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#trimStrings()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder trimStringsOnRead() {
-			parsers().forEach(org.apache.juneau.parser.Parser.Builder::trimStrings);
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// ReaderParser Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// InputStreamParser Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// OpenApi Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default OpenAPI format for HTTP parts.
-		 *
-		 * <p>
-		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()} for
-		 * the OpenAPI serializer and parser on this client.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
-		 * 	RestClient <jv>client</jv>  = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.oapiFormat(<jsf>UON</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Set a header with a value in UON format.</jc>
-		 * 	<jv>client</jv>
-		 * 		.get(<js>"/uri"</js>)
-		 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
-		 * 		.run();
-		 * </p>
-		 *
-		 * <ul class='values javatree'>
-		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
+		 * {@link XmlSerializer} will be used to serialize POJOs to request bodies unless overridden per request via {@link RestRequest#serializer(Serializer)}.
 		 * 	<ul>
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT32 INT32} - Signed 32 bits.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#INT64 INT64} - Signed 64 bits.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. <js>"00FF"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. <js>"00 FF"</js>).
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE DATE} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 full-date</a>.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#DATE_TIME DATE_TIME} - An <a href='http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html#anchor14'>RFC3339 date-time</a>.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.
-		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
+		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}
-		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#format(HttpPartFormat)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is {@link HttpPartFormat#NO_FORMAT}.
-		 * @return This object.
-		 */
-		public Builder oapiFormat(HttpPartFormat value) {
-			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.format(value));
-			parsers().forEach(OpenApiParser.Builder.class, x -> x.format(value));
-			partSerializer().builder(OpenApiSerializer.Builder.class).ifPresent(x -> x.format(value));
-			partParser().builder(OpenApiParser.Builder.class).ifPresent(x -> x.format(value));
-			return this;
-		}
-
-		/**
-		 * <i><l>OpenApiCommon</l> configuration property:&emsp;</i>  Default collection format for HTTP parts.
-		 *
 		 * <p>
-		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()} for the
-		 * OpenAPI serializer and parser on this client.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.collectionFormat(<jsf>CSV</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// An arbitrary data structure.</jc>
-		 * 	AList <jv>list</jv> = AList.<jsm>of</jsm>(
-		 * 		<js>"foo"</js>,
-		 * 		<js>"bar"</js>,
-		 * 		AMap.<jsm>of</jsm>(
-		 * 			<js>"baz"</js>, AList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
-		 *		)
-		 *	);
-		 *
-		 * 	<jc>// Set a header with a comma-separated list.</jc>
-		 * 	<jv>client</jv>
-		 * 		.get(<js>"/uri"</js>)
-		 * 		.header(<js>"Foo"</js>, <jv>list</jv>)  <jc>// Will be serialized as: foo=bar,baz=qux\,true\,123</jc>
-		 * 		.run();
-		 * </p>
-		 *
-		 * <ul class='values javatree'>
-		 * 	<li class='jc'>{@link HttpPartCollectionFormat}
+		 * 	{@link XmlParser} will be used to parse POJOs from response bodies unless overridden per request via {@link RestRequest#parser(Parser)}.
 		 * 	<ul>
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
-		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is {@link HttpPartCollectionFormat#NO_COLLECTION_FORMAT}.
-		 * @return This object.
-		 */
-		public Builder oapiCollectionFormat(HttpPartCollectionFormat value) {
-			serializers().forEach(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
-			parsers().forEach(OpenApiParser.Builder.class, x -> x.collectionFormat(value));
-			partSerializer().builder(OpenApiSerializer.Builder.class, x -> x.collectionFormat(value));
-			partParser().builder(OpenApiParser.Builder.class, x -> x.collectionFormat(value));
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// UON Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Parameter format.
-		 *
 		 * <p>
-		 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
-		 *
+		 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
-		 * Specifies the format to use for GET parameter keys and values.
+		 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
+		 * 	<ul>
+		 * 		<li>When multiple languages are supported, the <c>Accept</c> and <c>Content-Type</c> headers control which marshallers are used, or uses the
+		 * 		last-enabled language if the headers are not set.
+		 * 	</ul>
+		 * <p>
+		 * 	Identical to calling <c>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.urlEnc()
-		 * 		.paramFormat(<jsf>PLAINTEXT</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// An arbitrary data structure.</jc>
-		 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(
-		 * 		<js>"foo"</js>, <js>"bar"</js>,
-		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-		 * 	);
-		 *
-		 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
-		 * 		.run();
+		 * 	<jc>// Construct a client that uses XML marshalling.</jc>
+		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
 		 * </p>
 		 *
-		 * <ul class='values javatree'>
-		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
-		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
-		 * </ul>
-		 *
-		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder paramFormat(ParamFormat value) {
-			serializers().forEach(UonSerializer.Builder.class, x -> x.paramFormat(value));
-			return this;
+		public Builder xml() {
+			return serializer(XmlSerializer.class).parser(XmlParser.class);
 		}
 
 		/**
-		 * <i><l>UonSerializer</l> configuration property:&emsp;</i>  Parameter format.
+		 * Creates the creator for the rest call handler.
 		 *
 		 * <p>
-		 * Specifies the format of parameters when using the {@link UrlEncodingSerializer} to serialize Form Posts.
+		 * Subclasses can override this method to provide their own implementation.
 		 *
 		 * <p>
-		 * Specifies plaintext as the format to use for GET parameter keys and values.
+		 * The default behavior creates a bean creator initialized to return a {@link BasicRestCallHandler}.
+		 *
+		 * @return The creator for the rest call handler.
+		 * @see #callHandler()
+		 */
+		protected BeanCreator<RestCallHandler> createCallHandler() {
+			return beanStore.createBean(RestCallHandler.class).type(BasicRestCallHandler.class);
+		}
+
+		/**
+		 * Creates the {@link HttpClientConnectionManager} returned by {@link #createConnectionManager()}.
+		 *
+		 * <p>
+		 * Subclasses can override this method to provide their own connection manager.
+		 *
+		 * <p>
+		 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager} if {@link #pooled()}
+		 * was called or {@link BasicHttpClientConnectionManager} if not..
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.urlEnc()
-		 * 		.build();
+		 * 	<jc>// A Builder that provides it's own customized HttpClientConnectionManager.</jc>
+		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
+		 * 		<ja>@Override</ja>
+		 * 		<jk>protected</jk> HttpClientConnectionManager createConnectionManager() {
+		 * 			<jk>return new</jk> PoolingHttpClientConnectionManager();
+		 * 		}
+		 * 	}
 		 *
-		 * 	<jc>// An arbitrary data structure.</jc>
-		 * 	AMap <jv>map</jv> = AMap.<jsm>of</jsm>(
-		 * 		<js>"foo"</js>, <js>"bar"</js>,
-		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
-		 * 	);
-		 *
-		 * 	<jc>// Request body will be serialized as:  foo=bar,baz=qux,true,123</jc>
-		 * 	<jv>client</jv>
-		 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
-		 * 		.run();
+		 * 	<jc>// Instantiate.</jc>
+		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormatPlain()}
-		 * </ul>
-		 *
-		 * @return This object.
+		 * @return The HTTP client builder to use to create the HTTP client.
 		 */
-		public Builder paramFormatPlain() {
-			serializers().forEach(UonSerializer.Builder.class, org.apache.juneau.uon.UonSerializer.Builder::paramFormatPlain);
-			return this;
-		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-		//------------------------------------------------------------------------------------------------
-		// Passthrough methods for HttpClientBuilder.
-		//------------------------------------------------------------------------------------------------
-
-		/**
-		 * Disables automatic redirect handling.
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#disableRedirectHandling()
-		 */
-		public Builder disableRedirectHandling() {
-			httpClientBuilder().disableRedirectHandling();
-			return this;
+		protected HttpClientConnectionManager createConnectionManager() {
+			return (pooled ? new PoolingHttpClientConnectionManager() : new BasicHttpClientConnectionManager());
 		}
 
 		/**
-		 * Assigns {@link RedirectStrategy} instance.
+		 * Creates the builder for the form data list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #disableRedirectHandling()} method.
-		 * </ul>
+		 * <p>
+		 * Subclasses can override this method to provide their own implementation.
 		 *
-		 * @param redirectStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setRedirectStrategy(RedirectStrategy)
+		 * <p>
+		 * The default behavior creates an empty builder.
+		 *
+		 * @return The query data list builder.
+		 * @see #formData()
 		 */
-		public Builder redirectStrategy(RedirectStrategy redirectStrategy) {
-			httpClientBuilder().setRedirectStrategy(redirectStrategy);
-			return this;
+		protected PartList createFormData() {
+			return PartList.create();
 		}
 
 		/**
-		 * Assigns default {@link CookieSpec} registry which will be used for request execution if not explicitly set in the client execution context.
+		 * Creates the builder for the header list.
 		 *
-		 * @param cookieSpecRegistry New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultCookieSpecRegistry(Lookup)
+		 * <p>
+		 * Subclasses can override this method to provide their own implementation.
+		 *
+		 * <p>
+		 * The default behavior creates an empty builder.
+		 *
+		 * @return The header list builder.
+		 * @see #headers()
 		 */
-		public Builder defaultCookieSpecRegistry(Lookup<CookieSpecProvider> cookieSpecRegistry) {
-			httpClientBuilder().setDefaultCookieSpecRegistry(cookieSpecRegistry);
-			return this;
+		protected HeaderList createHeaderData() {
+			return HeaderList.create();
 		}
 
 		/**
-		 * Assigns {@link HttpRequestExecutor} instance.
+		 * Creates an instance of an {@link HttpClient} to be used to handle all HTTP communications with the target server.
 		 *
-		 * @param requestExec New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setRequestExecutor(HttpRequestExecutor)
+		 * <p>
+		 * This HTTP client is used when the HTTP client is not specified through one of the constructors or the
+		 * {@link #httpClient(CloseableHttpClient)} method.
+		 *
+		 * <p>
+		 * Subclasses can override this method to provide specially-configured HTTP clients to handle stuff such as
+		 * SSL/TLS certificate handling, authentication, etc.
+		 *
+		 * <p>
+		 * The default implementation returns an instance of {@link HttpClient} using the client builder returned by
+		 * {@link #createHttpClientBuilder()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A Builder that provides it's own customized HttpClient.</jc>
+		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
+		 * 		<ja>@Override</ja>
+		 * 		<jk>protected</jk> HttpClientBuilder createHttpClient() {
+		 * 			<jk>return</jk> HttpClientBuilder.<jsm>create</jsm>().build();
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Instantiate.</jc>
+		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
+		 * </p>
+		 *
+		 * @return The HTTP client to use.
 		 */
-		public Builder requestExecutor(HttpRequestExecutor requestExec) {
-			httpClientBuilder().setRequestExecutor(requestExec);
-			return this;
+		protected CloseableHttpClient createHttpClient() {
+			if (connectionManager == null)
+				connectionManager = createConnectionManager();
+			httpClientBuilder().setConnectionManager(connectionManager);
+			return httpClientBuilder().build();
 		}
 
 		/**
-		 * Assigns {@link javax.net.ssl.HostnameVerifier} instance.
+		 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
-		 * 		and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
-		 * </ul>
+		 * <p>
+		 * Subclasses can override this method to provide their own client builder.
+		 * The builder can also be specified using the {@link #httpClientBuilder(HttpClientBuilder)} method.
 		 *
-		 * @param hostnameVerifier New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A Builder that provides it's own customized HttpClientBuilder.</jc>
+		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
+		 * 		<ja>@Override</ja>
+		 * 		<jk>protected</jk> HttpClientBuilder createHttpClientBuilder() {
+		 * 			<jk>return</jk> HttpClientBuilder.<jsm>create</jsm>();
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Instantiate.</jc>
+		 * 	RestClient <jv>client</jv> = <jk>new</jk> MyBuilder().build();
+		 * </p>
+		 *
+		 * @return The HTTP client builder to use to create the HTTP client.
 		 */
-		public Builder sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
-			httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
-			return this;
+		protected HttpClientBuilder createHttpClientBuilder() {
+			return HttpClientBuilder.create();
 		}
 
 		/**
-		 * Assigns file containing public suffix matcher.
+		 * Instantiates the parser group sub-builder.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Instances of this class can be created with {@link PublicSuffixMatcherLoader}.
-		 * </ul>
-		 *
-		 * @param publicSuffixMatcher New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
+		 * @return A new parser group sub-builder.
 		 */
-		public Builder publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
-			httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
-			return this;
+		protected ParserSet.Builder createParsers() {
+			return ParserSet.create().beanContext(beanContext());
 		}
 
 		/**
-		 * Assigns {@link SSLContext} instance.
+		 * Instantiates the part parser sub-builder.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
-		 *  	and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
-		 * </ul>
-		 *
-		 * @param sslContext New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setSSLContext(SSLContext)
+		 * @return A new part parser sub-builder.
 		 */
-		public Builder sslContext(SSLContext sslContext) {
-			httpClientBuilder().setSSLContext(sslContext);
-			return this;
+		protected HttpPartParser.Creator createPartParser() {
+			return HttpPartParser.creator().type(OpenApiParser.class).beanContext(beanContext());
 		}
 
 		/**
-		 * Assigns {@link LayeredConnectionSocketFactory} instance.
+		 * Instantiates the part serializer sub-builder.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
-		 * </ul>
-		 *
-		 * @param sslSocketFactory New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
+		 * @return A new part serializer sub-builder.
 		 */
-		public Builder sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
-			httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
-			return this;
+		protected HttpPartSerializer.Creator createPartSerializer() {
+			return HttpPartSerializer.creator().type(OpenApiSerializer.class).beanContext(beanContext());
 		}
 
 		/**
-		 * Assigns maximum total connection value.
+		 * Creates the builder for the path data list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
-		 * </ul>
+		 * <p>
+		 * Subclasses can override this method to provide their own implementation.
 		 *
-		 * @param maxConnTotal New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setMaxConnTotal(int)
+		 * <p>
+		 * The default behavior creates an empty builder.
+		 *
+		 * @return The query data list builder.
+		 * @see #pathData()
 		 */
-		public Builder maxConnTotal(int maxConnTotal) {
-			httpClientBuilder().setMaxConnTotal(maxConnTotal);
-			return this;
+		protected PartList createPathData() {
+			return PartList.create();
 		}
 
 		/**
-		 * Assigns maximum connection per route value.
+		 * Creates the builder for the query data list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
-		 * </ul>
+		 * <p>
+		 * Subclasses can override this method to provide their own implementation.
 		 *
-		 * @param maxConnPerRoute New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
+		 * <p>
+		 * The default behavior creates an empty builder.
+		 *
+		 * @return The query data list builder.
+		 * @see #queryData()
 		 */
-		public Builder maxConnPerRoute(int maxConnPerRoute) {
-			httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
-			return this;
+		protected PartList createQueryData() {
+			return PartList.create();
 		}
 
 		/**
-		 * Assigns default {@link SocketConfig}.
+		 * Instantiates the serializer group sub-builder.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
-		 * </ul>
-		 *
-		 * @param config New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
+		 * @return A new serializer group sub-builder.
 		 */
-		public Builder defaultSocketConfig(SocketConfig config) {
-			httpClientBuilder().setDefaultSocketConfig(config);
-			return this;
+		protected SerializerSet.Builder createSerializers() {
+			return SerializerSet.create().beanContext(beanContext());
 		}
 
 		/**
-		 * Assigns default {@link ConnectionConfig}.
+		 * Instantiates the URL-encoding serializer sub-builder.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
-		 * </ul>
-		 *
-		 * @param config New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
+		 * @return A new URL-encoding serializer sub-builder.
 		 */
-		public Builder defaultConnectionConfig(ConnectionConfig config) {
-			httpClientBuilder().setDefaultConnectionConfig(config);
-			return this;
+		protected UrlEncodingSerializer.Builder createUrlEncodingSerializer() {
+			return UrlEncodingSerializer.create().beanContext(beanContext());
 		}
 
-		/**
-		 * Sets maximum time to live for persistent connections.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
-		 * </ul>
-		 *
-		 * @param connTimeToLive New property value.
-		 * @param connTimeToLiveTimeUnit New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
-		 */
-		public Builder connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
-			httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link ConnectionReuseStrategy} instance.
-		 *
-		 * @param reuseStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setConnectionReuseStrategy(ConnectionReuseStrategy)
-		 */
-		public Builder connectionReuseStrategy(ConnectionReuseStrategy reuseStrategy) {
-			httpClientBuilder().setConnectionReuseStrategy(reuseStrategy);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link ConnectionKeepAliveStrategy} instance.
-		 *
-		 * @param keepAliveStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setKeepAliveStrategy(ConnectionKeepAliveStrategy)
-		 */
-		public Builder keepAliveStrategy(ConnectionKeepAliveStrategy keepAliveStrategy) {
-			httpClientBuilder().setKeepAliveStrategy(keepAliveStrategy);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link AuthenticationStrategy} instance for target host authentication.
-		 *
-		 * @param targetAuthStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setTargetAuthenticationStrategy(AuthenticationStrategy)
-		 */
-		public Builder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
-			httpClientBuilder().setTargetAuthenticationStrategy(targetAuthStrategy);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link AuthenticationStrategy} instance for proxy authentication.
-		 *
-		 * @param proxyAuthStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setProxyAuthenticationStrategy(AuthenticationStrategy)
-		 */
-		public Builder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
-			httpClientBuilder().setProxyAuthenticationStrategy(proxyAuthStrategy);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link UserTokenHandler} instance.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #disableConnectionState()} method.
-		 * </ul>
-		 *
-		 * @param userTokenHandler New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setUserTokenHandler(UserTokenHandler)
-		 */
-		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
-			httpClientBuilder().setUserTokenHandler(userTokenHandler);
-			return this;
-		}
-
-		/**
-		 * Disables connection state tracking.
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#disableConnectionState()
-		 */
-		public Builder disableConnectionState() {
-			httpClientBuilder().disableConnectionState();
-			return this;
-		}
-
-		/**
-		 * Assigns {@link SchemePortResolver} instance.
-		 *
-		 * @param schemePortResolver New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setSchemePortResolver(SchemePortResolver)
-		 */
-		public Builder schemePortResolver(SchemePortResolver schemePortResolver) {
-			httpClientBuilder().setSchemePortResolver(schemePortResolver);
-			return this;
-		}
-
-		/**
-		 * Adds this protocol interceptor to the head of the protocol processing list.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @param itcp New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorFirst(HttpResponseInterceptor)
-		 */
-		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(itcp);
-			return this;
-		}
-
-		/**
-		 * Adds this protocol interceptor to the tail of the protocol processing list.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @param itcp New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorLast(HttpResponseInterceptor)
-		 */
-		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(itcp);
-			return this;
-		}
-
-		/**
-		 * Adds this protocol interceptor to the head of the protocol processing list.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @param itcp New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorFirst(HttpRequestInterceptor)
-		 */
-		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorFirst(itcp);
-			return this;
-		}
-
-		/**
-		 * Adds this protocol interceptor to the tail of the protocol processing list.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @param itcp New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)
-		 */
-		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
-			httpClientBuilder().addInterceptorLast(itcp);
-			return this;
-		}
-
-		/**
-		 * Disables state (cookie) management.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#disableCookieManagement()
-		 */
-		public Builder disableCookieManagement() {
-			httpClientBuilder().disableCookieManagement();
-			return this;
-		}
-
-		/**
-		 * Disables automatic content decompression.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#disableContentCompression()
-		 */
-		public Builder disableContentCompression() {
-			httpClientBuilder().disableContentCompression();
-			return this;
-		}
-
-		/**
-		 * Disables authentication scheme caching.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
-		 * </ul>
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#disableAuthCaching()
-		 */
-		public Builder disableAuthCaching() {
-			httpClientBuilder().disableAuthCaching();
-			return this;
-		}
-
-		/**
-		 * Assigns {@link HttpProcessor} instance.
-		 *
-		 * @param httpprocessor New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
-		 */
-		public Builder httpProcessor(HttpProcessor httpprocessor) {
-			httpClientBuilder().setHttpProcessor(httpprocessor);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link HttpRequestRetryHandler} instance.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #disableAutomaticRetries()} method.
-		 * </ul>
-		 *
-		 * @param retryHandler New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setRetryHandler(HttpRequestRetryHandler)
-		 */
-		public Builder retryHandler(HttpRequestRetryHandler retryHandler) {
-			httpClientBuilder().setRetryHandler(retryHandler);
-			return this;
-		}
-
-		/**
-		 * Disables automatic request recovery and re-execution.
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#disableAutomaticRetries()
-		 */
-		public Builder disableAutomaticRetries() {
-			httpClientBuilder().disableAutomaticRetries();
-			return this;
-		}
-
-		/**
-		 * Assigns default proxy value.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #routePlanner(HttpRoutePlanner)} method.
-		 * </ul>
-		 *
-		 * @param proxy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setProxy(HttpHost)
-		 */
-		public Builder proxy(HttpHost proxy) {
-			httpClientBuilder().setProxy(proxy);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link HttpRoutePlanner} instance.
-		 *
-		 * @param routePlanner New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setRoutePlanner(HttpRoutePlanner)
-		 */
-		public Builder routePlanner(HttpRoutePlanner routePlanner) {
-			httpClientBuilder().setRoutePlanner(routePlanner);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link ConnectionBackoffStrategy} instance.
-		 *
-		 * @param connectionBackoffStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setConnectionBackoffStrategy(ConnectionBackoffStrategy)
-		 */
-		public Builder connectionBackoffStrategy(ConnectionBackoffStrategy connectionBackoffStrategy) {
-			httpClientBuilder().setConnectionBackoffStrategy(connectionBackoffStrategy);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link BackoffManager} instance.
-		 *
-		 * @param backoffManager New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setBackoffManager(BackoffManager)
-		 */
-		public Builder backoffManager(BackoffManager backoffManager) {
-			httpClientBuilder().setBackoffManager(backoffManager);
-			return this;
-		}
-
-		/**
-		 * Assigns {@link ServiceUnavailableRetryStrategy} instance.
-		 *
-		 * @param serviceUnavailStrategy New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setServiceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy)
-		 */
-		public Builder serviceUnavailableRetryStrategy(ServiceUnavailableRetryStrategy serviceUnavailStrategy) {
-			httpClientBuilder().setServiceUnavailableRetryStrategy(serviceUnavailStrategy);
-			return this;
-		}
-
-		/**
-		 * Assigns default {@link CookieStore} instance which will be used for request execution if not explicitly set in the client execution context.
-		 *
-		 * @param cookieStore New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultCookieStore(CookieStore)
-		 */
-		public Builder defaultCookieStore(CookieStore cookieStore) {
-			httpClientBuilder().setDefaultCookieStore(cookieStore);
-			return this;
-		}
-
-		/**
-		 * Assigns default {@link CredentialsProvider} instance which will be used for request execution if not explicitly set in the client execution context.
-		 *
-		 * @param credentialsProvider New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultCredentialsProvider(CredentialsProvider)
-		 */
-		public Builder defaultCredentialsProvider(CredentialsProvider credentialsProvider) {
-			httpClientBuilder().setDefaultCredentialsProvider(credentialsProvider);
-			return this;
-		}
-
-		/**
-		 * Assigns default {@link org.apache.http.auth.AuthScheme} registry which will be used for request execution if not explicitly set in the client execution context.
-		 *
-		 * @param authSchemeRegistry New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultAuthSchemeRegistry(Lookup)
-		 */
-		public Builder defaultAuthSchemeRegistry(Lookup<AuthSchemeProvider> authSchemeRegistry) {
-			httpClientBuilder().setDefaultAuthSchemeRegistry(authSchemeRegistry);
-			return this;
-		}
-
-		/**
-		 * Assigns a map of {@link org.apache.http.client.entity.InputStreamFactory InputStreamFactories} to be used for automatic content decompression.
-		 *
-		 * @param contentDecoderMap New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setContentDecoderRegistry(Map)
-		 */
-		public Builder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
-			httpClientBuilder().setContentDecoderRegistry(contentDecoderMap);
-			return this;
-		}
-
-		/**
-		 * Assigns default {@link RequestConfig} instance which will be used for request execution if not explicitly set in the client execution context.
-		 *
-		 * @param config New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#setDefaultRequestConfig(RequestConfig)
-		 */
-		public Builder defaultRequestConfig(RequestConfig config) {
-			httpClientBuilder().setDefaultRequestConfig(config);
-			return this;
-		}
-
-		/**
-		 * Use system properties when creating and configuring default implementations.
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#useSystemProperties()
-		 */
-		public Builder useSystemProperties() {
-			httpClientBuilder().useSystemProperties();
-			return this;
-		}
-
-		/**
-		 * Makes this instance of {@link HttpClient} proactively evict expired connections from the connection pool using a background thread.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
-		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
-		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
-		 * </ul>
-		 *
-		 * @return This object.
-		 * @see HttpClientBuilder#evictExpiredConnections()
-		 */
-		public Builder evictExpiredConnections() {
-			httpClientBuilder().evictExpiredConnections();
-			return this;
-		}
-
-		/**
-		 * Makes this instance of {@link HttpClient} proactively evict idle connections from the connection pool using a background thread.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
-		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
-		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
-		 * </ul>
-		 *
-		 * @param maxIdleTime New property value.
-		 * @param maxIdleTimeUnit New property value.
-		 * @return This object.
-		 * @see HttpClientBuilder#evictIdleConnections(long,TimeUnit)
-		 */
-		public Builder evictIdleConnections(long maxIdleTime, TimeUnit maxIdleTimeUnit) {
-			httpClientBuilder().evictIdleConnections(maxIdleTime, maxIdleTimeUnit);
-			return this;
+		final CloseableHttpClient getHttpClient() {
+			return httpClient != null ? httpClient : createHttpClient();
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = {};
+	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
+	private static final
+		BiPredicate<RestRequest,RestResponse> LOG_REQUESTS_PREDICATE_DEFAULT = (req,res) -> true;
+	/**
+	 * Instantiates a new clean-slate {@link Builder} object.
+	 *
+	 * @return A new {@link Builder} object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final HeaderList headerData;
+
 	final PartList queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
-
 	private final HttpClientConnectionManager connectionManager;
 	private final boolean keepHttpClientOpen, detectLeaks, skipEmptyHeaderData, skipEmptyQueryData, skipEmptyFormData;
 	private final BeanStore beanStore;
@@ -6193,25 +6058,24 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	final boolean ignoreErrors;
 	private final boolean logToConsole;
 	private final PrintStream console;
-	private StackTraceElement[] closedStack;
-	private static final ConcurrentHashMap<Class<?>,Context> requestContexts = new ConcurrentHashMap<>();
 
+	private StackTraceElement[] closedStack;
 	// These are read directly by RestCall.
 	final SerializerSet serializers;
 	final ParserSet parsers;
+
 	Predicate<Integer> errorCodes;
 
 	final RestCallInterceptor[] interceptors;
-
 	private final Map<Class<?>, HttpPartParser> partParsers = new ConcurrentHashMap<>();
-	private final Map<Class<?>, HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
 
+	private final Map<Class<?>, HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
 	// This is lazy-created.
 	private volatile ExecutorService executorService;
+
 	private final boolean executorServiceShutdownOnClose;
 
-	private static final
-		BiPredicate<RestRequest,RestResponse> LOG_REQUESTS_PREDICATE_DEFAULT = (req,res) -> true;
+	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
 	/**
 	 * Constructor.
@@ -6256,582 +6120,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 
 		init();
-	}
-
-	@Override /* Overridden from Context */
-	public Builder copy() {
-		throw new NoSuchMethodError("Not implemented.");
-	}
-
-	/**
-	 * Perform optional initialization on builder before it is used.
-	 *
-	 * <p>
-	 * Default behavior is a no-op.
-	 *
-	 * @param builder The builder to initialize.
-	 */
-	protected void init(RestClient.Builder builder) {}
-
-	/**
-	 * Gets called add the end of the constructor call to perform any post-initialization.
-	 */
-	protected void init() {
-	}
-
-	/**
-	 * Calls {@link CloseableHttpClient#close()} on the underlying {@link CloseableHttpClient}.
-	 *
-	 * <p>
-	 * It's good practice to call this method after the client is no longer used.
-	 *
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	@Override
-	public void close() throws IOException {
-		isClosed = true;
-		if (! keepHttpClientOpen)
-			httpClient.close();
-		if (executorService != null && executorServiceShutdownOnClose)
-			executorService.shutdown();
-		if (creationStack != null)
-			closedStack = Thread.currentThread().getStackTrace();
-	}
-
-	/**
-	 * Same as {@link #close()}, but ignores any exceptions.
-	 */
-	public void closeQuietly() {
-		isClosed = true;
-		try {
-			if (! keepHttpClientOpen)
-				httpClient.close();
-			if (executorService != null && executorServiceShutdownOnClose)
-				executorService.shutdown();
-		} catch (Throwable t) {}
-		if (creationStack != null)
-			closedStack = Thread.currentThread().getStackTrace();
-	}
-
-	/**
-	 * Entrypoint for executing all requests and returning a response.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide specialized handling.
-	 *
-	 * <p>
-	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link Builder#callHandler()}
-	 * </ul>
-	 *
-	 * @param target The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
-	 * 		target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return
-	 * 	The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	protected HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
-		return callHandler.run(target, request, context);
-	}
-
-	/**
-	 * Perform a <c>GET</c> request against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest get(Object uri) throws RestCallException {
-		return request(op("GET", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>GET</c> request against the root URI.
-	 *
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest get() throws RestCallException {
-		return request(op("GET", null, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>PUT</c> request against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request.
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
-	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} / {@link HttpResource} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li>
-	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
-	 * 		<li>
-	 * 			{@link Supplier} - A supplier of anything on this list.
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest put(Object uri, Object body) throws RestCallException {
-		return request(op("PUT", uri, body));
-	}
-
-	/**
-	 * Perform a <c>PUT</c> request against the specified URI using a plain text body bypassing the serializer.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
-	 * @param contentType The content type of the request.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request
-	 * 	and getting the response as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest put(Object uri, String body, ContentType contentType) throws RestCallException {
-		return request(op("PUT", uri, stringBody(body))).header(contentType);
-	}
-
-	/**
-	 * Same as {@link #put(Object, Object)} but don't specify the input yet.
-	 *
-	 * <p>
-	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)}
-	 * to set the contents on the result object.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException REST call failed.
-	 */
-	public RestRequest put(Object uri) throws RestCallException {
-		return request(op("PUT", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>POST</c> request against the specified URI.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
-	 * </ul>
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request.
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
-	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link HttpEntity} / {@link HttpResource} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li>
-	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
-	 * 		<li>
-	 * 			{@link Supplier} - A supplier of anything on this list.
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest post(Object uri, Object body) throws RestCallException {
-		return request(op("POST", uri, body));
-	}
-
-	/**
-	 * Perform a <c>POST</c> request against the specified URI as a plain text body bypassing the serializer.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
-	 * @param contentType
-	 * 	The content type of the request.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest post(Object uri, String body, ContentType contentType) throws RestCallException {
-		return request(op("POST", uri, stringBody(body))).header(contentType);
-	}
-
-	/**
-	 * Same as {@link #post(Object, Object)} but don't specify the input yet.
-	 *
-	 * <p>
-	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)} to set the
-	 * contents on the result object.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
-	 * </ul>
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException REST call failed.
-	 */
-	public RestRequest post(Object uri) throws RestCallException {
-		return request(op("POST", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>DELETE</c> request against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest delete(Object uri) throws RestCallException {
-		return request(op("DELETE", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform an <c>OPTIONS</c> request against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest options(Object uri) throws RestCallException {
-		return request(op("OPTIONS", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>HEAD</c> request against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest head(Object uri) throws RestCallException {
-		return request(op("HEAD", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
-	 * against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request.
-	 * 	<ul class='spaced-list'>
-	 * 		<li>{@link NameValuePair} - URL-encoded as a single name-value pair.
-	 * 		<li>{@link NameValuePair} array - URL-encoded as name value pairs.
-	 * 		<li>{@link PartList} - URL-encoded as name value pairs.
-	 * 		<li>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
-	 * 		<li>{@link HttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li>{@link Object} - Converted to a {@link SerializedEntity} using {@link UrlEncodingSerializer} to serialize.
-	 * 		<li>{@link Supplier} - A supplier of anything on this list.
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest formPost(Object uri, Object body) throws RestCallException {
-		RestRequest req = request(op("POST", uri, NO_BODY));
-		try {
-			if (body instanceof Supplier)
-				body = ((Supplier<?>)body).get();
-			if (body instanceof NameValuePair)
-				return req.content(new UrlEncodedFormEntity(alist((NameValuePair)body)));
-			if (body instanceof NameValuePair[])
-				return req.content(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
-			if (body instanceof PartList)
-				return req.content(new UrlEncodedFormEntity(((PartList)body)));
-			if (body instanceof HttpResource)
-				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
-			if (body instanceof HttpEntity) {
-				HttpEntity e = (HttpEntity)body;
-				if (e.getContentType() == null)
-					req.header(ContentType.APPLICATION_FORM_URLENCODED);
-				return req.content(e);
-			}
-			if (body instanceof Reader || body instanceof InputStream)
-				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
-			return req.content(serializedEntity(body, urlEncodingSerializer, null));
-		} catch (IOException e) {
-			throw new RestCallException(null, e, "Could not read form post body.");
-		}
-	}
-
-	/**
-	 * Same as {@link #formPost(Object, Object)} but doesn't specify the input yet.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest formPost(Object uri) throws RestCallException {
-		return request(op("POST", uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
-	 * against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param parameters
-	 * 	The parameters of the form post.
-	 * 	<br>The parameters represent name/value pairs and must be an even number of arguments.
-	 * 	<br>Parameters are converted to {@link BasicPart} objects.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest formPostPairs(Object uri, String...parameters) throws RestCallException {
-		return formPost(uri, partList(parameters));
-	}
-
-	/**
-	 * Perform a <c>PATCH</c> request against the specified URI.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request.
-	 * 	Can be of the following types:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link HttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li>
-	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
-	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
-	 * 		<li>
-	 * 			{@link Supplier} - A supplier of anything on this list.
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest patch(Object uri, Object body) throws RestCallException {
-		return request(op("PATCH", uri, body));
-	}
-
-	/**
-	 * Perform a <c>PATCH</c> request against the specified URI as a plain text body bypassing the serializer.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param body
-	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
-	 * @param contentType
-	 * 	The content type of the request.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest patch(Object uri, String body, ContentType contentType) throws RestCallException {
-		return request(op("PATCH", uri, stringBody(body))).header(contentType);
-	}
-
-	/**
-	 * Same as {@link #patch(Object, Object)} but don't specify the input yet.
-	 *
-	 * <p>
-	 * You must call {@link RestRequest#content(Object)} to set the contents on the result object.
-	 *
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException REST call failed.
-	 */
-	public RestRequest patch(Object uri) throws RestCallException {
-		return request(op("PATCH", uri, NO_BODY));
 	}
 
 	/**
@@ -6923,9 +6211,346 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	/**
-	 * Perform a generic REST call.
+	 * Calls {@link CloseableHttpClient#close()} on the underlying {@link CloseableHttpClient}.
 	 *
-	 * @param method The HTTP method.
+	 * <p>
+	 * It's good practice to call this method after the client is no longer used.
+	 *
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	@Override
+	public void close() throws IOException {
+		isClosed = true;
+		if (! keepHttpClientOpen)
+			httpClient.close();
+		if (executorService != null && executorServiceShutdownOnClose)
+			executorService.shutdown();
+		if (creationStack != null)
+			closedStack = Thread.currentThread().getStackTrace();
+	}
+
+	/**
+	 * Same as {@link #close()}, but ignores any exceptions.
+	 */
+	public void closeQuietly() {
+		isClosed = true;
+		try {
+			if (! keepHttpClientOpen)
+				httpClient.close();
+			if (executorService != null && executorServiceShutdownOnClose)
+				executorService.shutdown();
+		} catch (Throwable t) {}
+		if (creationStack != null)
+			closedStack = Thread.currentThread().getStackTrace();
+	}
+
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		throw new NoSuchMethodError("Not implemented.");
+	}
+
+	/**
+	 * Creates a mutable copy of the form data defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public PartList createFormData() {
+		return formData.copy();
+	}
+
+	/**
+	 * Creates a mutable copy of the header data defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public HeaderList createHeaderData() {
+		return headerData.copy();
+	}
+
+	/**
+	 * Creates a mutable copy of the path data defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public PartList createPathData() {
+		return pathData.copy();
+	}
+
+	/**
+	 * Creates a mutable copy of the query data defined on this client.
+	 *
+	 * <p>
+	 * Used during the construction of {@link RestRequest} objects.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own builder.
+	 *
+	 * @return A new builder.
+	 */
+	public PartList createQueryData() {
+		return queryData.copy();
+	}
+
+	/**
+	 * Perform a <c>DELETE</c> request against the specified URI.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest delete(Object uri) throws RestCallException {
+		return request(op("DELETE", uri, NO_BODY));
+	}
+
+	/**
+	 * Executes HTTP request using the default context.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param target The target host for the request.
+	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
+	 * 		target or by inspecting the request.
+	 * @param request The request to execute.
+	 * @return The response to the request.
+	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
+	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
+	 * 		implementation and configuration of this client.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public HttpResponse execute(HttpHost target, HttpRequest request) throws IOException, ClientProtocolException {
+		return httpClient.execute(target, request);
+	}
+
+	/**
+	 * Executes HTTP request using the given context.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
+	 * 		Subclasses can override these methods for handling requests with and without bodies separately.
+	 * 	<li class='note'>The {@link RestCallHandler} interface can also be implemented to intercept this method.
+	 * </ul>
+	 *
+	 * @param target The target host for the request.
+	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
+	 * 		target or by inspecting the request.
+	 * @param request The request to execute.
+	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
+	 * @return
+	 * 	The response to the request.
+	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
+	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
+	 * 		implementation and configuration of this client.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public HttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException, ClientProtocolException {
+		return httpClient.execute(target, request, context);
+	}
+
+	/**
+	 * Executes HTTP request to the target using the default context and processes the response using the given response handler.
+	 *
+	 * <p>
+	 * The content entity associated with the response is fully consumed and the underlying connection is released back
+	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * from having to manage resource deallocation internally.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param target
+	 * 	The target host for the request.
+	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default target or by inspecting the request.
+	 * @param request The request to execute.
+	 * @param responseHandler The response handler.
+	 * @return The response object as generated by the response handler.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
+		return httpClient.execute(target, request, responseHandler);
+	}
+
+	/**
+	 * Executes a request using the default context and processes the response using the given response handler.
+	 *
+	 * <p>
+	 * The content entity associated with the response is fully consumed and the underlying connection is released back
+	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * from having to manage resource deallocation internally.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param target
+	 * 	The target host for the request.
+	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default target or by inspecting the request.
+	 * @param request The request to execute.
+	 * @param responseHandler The response handler.
+	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
+	 * @return The response object as generated by the response handler.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
+		return httpClient.execute(target, request, responseHandler, context);
+	}
+
+	/**
+	 * Executes HTTP request using the default context.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param request The request to execute.
+	 * @return
+	 * 	The response to the request.
+	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
+	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
+	 * 		implementation and configuration of this client.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public HttpResponse execute(HttpUriRequest request) throws IOException, ClientProtocolException {
+		return httpClient.execute(request);
+	}
+
+	/**
+	 * Executes HTTP request using the given context.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param request The request to execute.
+	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
+	 * @return
+	 * 	The response to the request.
+	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
+	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
+	 * 		implementation and configuration of this client.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException, ClientProtocolException {
+		return httpClient.execute(request, context);
+	}
+
+	/**
+	 * Executes HTTP request using the default context and processes the response using the given response handler.
+	 *
+ 	 * <p>
+	 * The content entity associated with the response is fully consumed and the underlying connection is released back
+	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * from having to manage resource deallocation internally.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param request The request to execute.
+	 * @param responseHandler The response handler.
+	 * @return Object returned by response handler.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
+		return httpClient.execute(request, responseHandler);
+	}
+
+	/**
+	 * Executes HTTP request using the given context and processes the response using the given response handler.
+	 *
+	 * <p>
+	 * The content entity associated with the response is fully consumed and the underlying connection is released back
+	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
+	 * from having to manage resource deallocation internally.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * </ul>
+	 *
+	 * @param request The request to execute.
+	 * @param responseHandler The response handler.
+	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
+	 * @return The response object as generated by the response handler.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	@Override /* Overridden from HttpClient */
+	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
+		return httpClient.execute(request, responseHandler, context);
+	}
+
+	/**
+	 * Same as {@link #formPost(Object, Object)} but doesn't specify the input yet.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest formPost(Object uri) throws RestCallException {
+		return request(op("POST", uri, NO_BODY));
+	}
+
+	/**
+	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
+	 * against the specified URI.
+	 *
 	 * @param uri
 	 * 	The URI of the remote REST resource.
 	 * 	<br>Can be any of the following types:
@@ -6937,150 +6562,143 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
 	 * 	</ul>
 	 * @param body
-	 * 	The HTTP body content.
-	 * 	Can be of the following types:
+	 * 	The object to serialize and transmit to the URI as the body of the request.
 	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
-	 * 		<li>
-	 * 			{@link HttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
-	 * 		<li>
-	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
-	 * 		<li>
-	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
-	 * 			{@link RestClient}.
-	 * 		<li>
-	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
-	 * 		<li>
-	 * 			{@link Supplier} - A supplier of anything on this list.
-	 * 	</ul>
-	 * 	This parameter is IGNORED if the method type normally does not have content.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest request(String method, Object uri, Object body) throws RestCallException {
-		return request(op(method, uri, body));
-	}
-
-	/**
-	 * Perform a generic REST call.
-	 *
-	 * @param method The HTTP method.
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 		<li>{@link NameValuePair} - URL-encoded as a single name-value pair.
+	 * 		<li>{@link NameValuePair} array - URL-encoded as name value pairs.
+	 * 		<li>{@link PartList} - URL-encoded as name value pairs.
+	 * 		<li>{@link Reader}/{@link InputStream}- Streamed directly and <l>Content-Type</l> set to <js>"application/x-www-form-urlencoded"</js>
+	 * 		<li>{@link HttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 		<li>{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>{@link Object} - Converted to a {@link SerializedEntity} using {@link UrlEncodingSerializer} to serialize.
+	 * 		<li>{@link Supplier} - A supplier of anything on this list.
 	 * 	</ul>
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(String method, Object uri) throws RestCallException {
-		return request(op(method, uri, NO_BODY));
-	}
-
-	/**
-	 * Perform a generic REST call.
-	 *
-	 * <p>
-	 * Typically you're going to use {@link #request(String, Object)} or {@link #request(String, Object, Object)},
-	 * but this method is provided to allow you to perform non-standard HTTP methods (e.g. HTTP FOO).
-	 *
-	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
-	 * @param uri
-	 * 	The URI of the remote REST resource.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link URIBuilder}
-	 * 		<li>{@link URI}
-	 * 		<li>{@link URL}
-	 * 		<li>{@link String}
-	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
-	 * 	</ul>
-	 * @param hasBody Boolean flag indicating if the specified request has content associated with it.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	public RestRequest request(String method, Object uri, boolean hasBody) throws RestCallException {
-		return request(op(method, uri, NO_BODY).hasContent(hasBody));
-	}
-
-	/**
-	 * Perform an arbitrary request against the specified URI.
-	 *
-	 * <p>
-	 * All requests feed through this method so it can be used to intercept request creations and make modifications
-	 * (such as add headers).
-	 *
-	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
-	 * @return
-	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
-	 * 	as a parsed object.
-	 * @throws RestCallException If any authentication errors occurred.
-	 */
-	protected RestRequest request(RestOperation op) throws RestCallException {
-		if (isClosed) {
-			Exception e2 = null;
-			if (closedStack != null) {
-				e2 = new Exception("Creation stack:");
-				e2.setStackTrace(closedStack);
-				throw new RestCallException(null, e2, "RestClient.close() has already been called.  This client cannot be reused.");
+	public RestRequest formPost(Object uri, Object body) throws RestCallException {
+		RestRequest req = request(op("POST", uri, NO_BODY));
+		try {
+			if (body instanceof Supplier)
+				body = ((Supplier<?>)body).get();
+			if (body instanceof NameValuePair)
+				return req.content(new UrlEncodedFormEntity(alist((NameValuePair)body)));
+			if (body instanceof NameValuePair[])
+				return req.content(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
+			if (body instanceof PartList)
+				return req.content(new UrlEncodedFormEntity(((PartList)body)));
+			if (body instanceof HttpResource)
+				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
+			if (body instanceof HttpEntity) {
+				HttpEntity e = (HttpEntity)body;
+				if (e.getContentType() == null)
+					req.header(ContentType.APPLICATION_FORM_URLENCODED);
+				return req.content(e);
 			}
-			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
+			if (body instanceof Reader || body instanceof InputStream)
+				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
+			return req.content(serializedEntity(body, urlEncodingSerializer, null));
+		} catch (IOException e) {
+			throw new RestCallException(null, e, "Could not read form post body.");
 		}
-
-		RestRequest req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
-
-		onCallInit(req);
-
-		req.content(op.getContent());
-
-		return req;
 	}
 
 	/**
-	 * Creates a {@link RestRequest} object from the specified {@link HttpRequest} object.
+	 * Perform a <c>POST</c> request with a content type of <c>application/x-www-form-urlencoded</c>
+	 * against the specified URI.
 	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
-	 *
-	 * @param uri The target.
-	 * @param method The HTTP method (uppercase).
-	 * @param hasBody Whether this method has a request entity.
-	 * @return A new {@link RestRequest} object.
-	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param parameters
+	 * 	The parameters of the form post.
+	 * 	<br>The parameters represent name/value pairs and must be an even number of arguments.
+	 * 	<br>Parameters are converted to {@link BasicPart} objects.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	protected RestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
-		return new RestRequest(this, uri, method, hasBody);
+	public RestRequest formPostPairs(Object uri, String...parameters) throws RestCallException {
+		return formPost(uri, partList(parameters));
 	}
 
 	/**
-	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.
+	 * Perform a <c>GET</c> request against the root URI.
 	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own specialized {@link RestResponse} objects.
-	 *
-	 * @param request The request creating this response.
-	 * @param httpResponse The response object to wrap.
-	 * @param parser The parser to use to parse the response.
-	 *
-	 * @return A new {@link RestResponse} object.
-	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	protected RestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
-		return new RestResponse(this, request, httpResponse, parser);
+	public RestRequest get() throws RestCallException {
+		return request(op("GET", null, NO_BODY));
+	}
+
+	/**
+	 * Perform a <c>GET</c> request against the specified URI.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest get(Object uri) throws RestCallException {
+		return request(op("GET", uri, NO_BODY));
+	}
+
+	/**
+	 * Obtains the connection manager used by this client.
+	 *
+	 * @return The connection manager.
+	 * @deprecated Use {@link HttpClientBuilder}.
+	 */
+	@Deprecated
+	@Override /* Overridden from HttpClient */
+	public ClientConnectionManager getConnectionManager() {
+		return httpClient.getConnectionManager();
+	}
+
+	/**
+	 * Returns the connection manager if one was specified in the client builder.
+	 *
+	 * @return The connection manager.  May be <jk>null</jk>.
+	 */
+	public HttpClientConnectionManager getHttpClientConnectionManager() {
+		return connectionManager;
+	}
+
+	/**
+	 * Obtains the parameters for this client.
+	 *
+	 * These parameters will become defaults for all requests being executed with this client, and for the parameters of dependent objects in this client.
+	 *
+	 * @return The default parameters.
+	 * @deprecated Use {@link RequestConfig}.
+	 */
+	@Deprecated
+	@Override /* Overridden from HttpClient */
+	public HttpParams getParams() {
+		return httpClient.getParams();
 	}
 
 	/**
@@ -7348,52 +6966,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		});
 	}
 
-	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {
-		RemoteOperationReturn ror = rom.getReturns();
-
-		try {
-			Object ret = null;
-			RestResponse res = null;
-			rc.rethrow(RuntimeException.class);
-			rom.forEachException(x -> rc.rethrow(x));
-			if (ror.getReturnValue() == RemoteReturn.NONE) {
-				res = rc.complete();
-			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
-				res = rc.complete();
-				int returnCode = res.getStatusCode();
-				Class<?> rt = method.getReturnType();
-				if (rt == Integer.class || rt == int.class)
-					ret = returnCode;
-				else if (rt == Boolean.class || rt == boolean.class)
-					ret = returnCode < 400;
-				else
-					throw new RestCallException(res, null, "Invalid return type on method annotated with @RemoteOp(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
-			} else if (ror.getReturnValue() == RemoteReturn.BEAN) {
-				rc.ignoreErrors();
-				res = rc.run();
-				ret = res.as(ror.getResponseBeanMeta());
-			} else {
-				Class<?> rt = method.getReturnType();
-				if (Throwable.class.isAssignableFrom(rt))
-					rc.ignoreErrors();
-				res = rc.run();
-				Object v = res.getContent().as(ror.getReturnType());
-				if (v == null && rt.isPrimitive())
-					v = ClassInfo.of(rt).getPrimitiveDefault();
-				ret = v;
-			}
-			return ret;
-		} catch (RestCallException e) {
-			Throwable t = e.getCause();
-			if (t instanceof RuntimeException)
-				throw t;
-			for (Class<?> t2 : method.getExceptionTypes())
-				if (t2.isInstance(t))
-					throw t;
-			throw asRuntimeException(e);
-		}
-	}
-
 	/**
 	 * Create a new proxy interface against an RRPC-style service.
 	 *
@@ -7530,6 +7102,473 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		});
 	}
 
+	/**
+	 * Perform a <c>HEAD</c> request against the specified URI.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest head(Object uri) throws RestCallException {
+		return request(op("HEAD", uri, NO_BODY));
+	}
+
+	/**
+	 * Perform an <c>OPTIONS</c> request against the specified URI.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest options(Object uri) throws RestCallException {
+		return request(op("OPTIONS", uri, NO_BODY));
+	}
+
+	/**
+	 * Same as {@link #patch(Object, Object)} but don't specify the input yet.
+	 *
+	 * <p>
+	 * You must call {@link RestRequest#content(Object)} to set the contents on the result object.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException REST call failed.
+	 */
+	public RestRequest patch(Object uri) throws RestCallException {
+		return request(op("PATCH", uri, NO_BODY));
+	}
+
+	/**
+	 * Perform a <c>PATCH</c> request against the specified URI.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URI as the body of the request.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link HttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
+	 * 		<li>
+	 * 			{@link Supplier} - A supplier of anything on this list.
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest patch(Object uri, Object body) throws RestCallException {
+		return request(op("PATCH", uri, body));
+	}
+
+	/**
+	 * Perform a <c>PATCH</c> request against the specified URI as a plain text body bypassing the serializer.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
+	 * @param contentType
+	 * 	The content type of the request.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest patch(Object uri, String body, ContentType contentType) throws RestCallException {
+		return request(op("PATCH", uri, stringBody(body))).header(contentType);
+	}
+
+	/**
+	 * Same as {@link #post(Object, Object)} but don't specify the input yet.
+	 *
+	 * <p>
+	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)} to set the
+	 * contents on the result object.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
+	 * </ul>
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException REST call failed.
+	 */
+	public RestRequest post(Object uri) throws RestCallException {
+		return request(op("POST", uri, NO_BODY));
+	}
+
+	/**
+	 * Perform a <c>POST</c> request against the specified URI.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
+	 * </ul>
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URI as the body of the request.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} / {@link HttpResource} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
+	 * 		<li>
+	 * 			{@link Supplier} - A supplier of anything on this list.
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest post(Object uri, Object body) throws RestCallException {
+		return request(op("POST", uri, body));
+	}
+
+	/**
+	 * Perform a <c>POST</c> request against the specified URI as a plain text body bypassing the serializer.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
+	 * @param contentType
+	 * 	The content type of the request.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest post(Object uri, String body, ContentType contentType) throws RestCallException {
+		return request(op("POST", uri, stringBody(body))).header(contentType);
+	}
+
+	/**
+	 * Same as {@link #put(Object, Object)} but don't specify the input yet.
+	 *
+	 * <p>
+	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)}
+	 * to set the contents on the result object.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException REST call failed.
+	 */
+	public RestRequest put(Object uri) throws RestCallException {
+		return request(op("PUT", uri, NO_BODY));
+	}
+
+	/**
+	 * Perform a <c>PUT</c> request against the specified URI.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URI as the body of the request.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link HttpEntity} / {@link HttpResource} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
+	 * 		<li>
+	 * 			{@link Supplier} - A supplier of anything on this list.
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request
+	 * 	and getting the response as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest put(Object uri, Object body) throws RestCallException {
+		return request(op("PUT", uri, body));
+	}
+
+	/**
+	 * Perform a <c>PUT</c> request against the specified URI using a plain text body bypassing the serializer.
+	 *
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The object to serialize and transmit to the URI as the body of the request bypassing the serializer.
+	 * @param contentType The content type of the request.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request
+	 * 	and getting the response as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest put(Object uri, String body, ContentType contentType) throws RestCallException {
+		return request(op("PUT", uri, stringBody(body))).header(contentType);
+	}
+
+	/**
+	 * Perform a generic REST call.
+	 *
+	 * @param method The HTTP method.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest request(String method, Object uri) throws RestCallException {
+		return request(op(method, uri, NO_BODY));
+	}
+
+	/**
+	 * Perform a generic REST call.
+	 *
+	 * <p>
+	 * Typically you're going to use {@link #request(String, Object)} or {@link #request(String, Object, Object)},
+	 * but this method is provided to allow you to perform non-standard HTTP methods (e.g. HTTP FOO).
+	 *
+	 * @param method The method name (e.g. <js>"GET"</js>, <js>"OPTIONS"</js>).
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param hasBody Boolean flag indicating if the specified request has content associated with it.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest request(String method, Object uri, boolean hasBody) throws RestCallException {
+		return request(op(method, uri, NO_BODY).hasContent(hasBody));
+	}
+
+	/**
+	 * Perform a generic REST call.
+	 *
+	 * @param method The HTTP method.
+	 * @param uri
+	 * 	The URI of the remote REST resource.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link URIBuilder}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link String}
+	 * 		<li>{@link Object} - Converted to <c>String</c> using <c>toString()</c>
+	 * 	</ul>
+	 * @param body
+	 * 	The HTTP body content.
+	 * 	Can be of the following types:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			{@link Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+	 * 		<li>
+	 * 			{@link HttpResource} - Raw contents will be serialized to remote resource.  Additional headers and media type will be set on request.
+	 * 		<li>
+	 * 			{@link HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+	 * 		<li>
+	 * 			{@link Object} - POJO to be converted to text using the {@link Serializer} registered with the
+	 * 			{@link RestClient}.
+	 * 		<li>
+	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
+	 * 		<li>
+	 * 			{@link Supplier} - A supplier of anything on this list.
+	 * 	</ul>
+	 * 	This parameter is IGNORED if the method type normally does not have content.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	public RestRequest request(String method, Object uri, Object body) throws RestCallException {
+		return request(op(method, uri, body));
+	}
+
+	private Supplier<String> msg(String msg, Object...args) {
+		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
+	}
+
+	private RestOperation op(String method, Object url, Object body) {
+		return RestOperation.of(method, url, body);
+	}
+	private Reader stringBody(String body) {
+		return body == null ? null : new StringReader(s(body));
+	}
+
+	/**
+	 * Creates a {@link RestRequest} object from the specified {@link HttpRequest} object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
+	 *
+	 * @param uri The target.
+	 * @param method The HTTP method (uppercase).
+	 * @param hasBody Whether this method has a request entity.
+	 * @return A new {@link RestRequest} object.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	protected RestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
+		return new RestRequest(this, uri, method, hasBody);
+	}
+
+	/**
+	 * Creates a {@link RestResponse} object from the specified {@link HttpResponse} object.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own specialized {@link RestResponse} objects.
+	 *
+	 * @param request The request creating this response.
+	 * @param httpResponse The response object to wrap.
+	 * @param parser The parser to use to parse the response.
+	 *
+	 * @return A new {@link RestResponse} object.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	protected RestResponse createResponse(RestRequest request, HttpResponse httpResponse, Parser parser) throws RestCallException {
+		return new RestResponse(this, request, httpResponse, parser);
+	}
+
 	@Override
 	protected void finalize() throws Throwable {
 		if (detectLeaks && ! isClosed && ! keepHttpClientOpen) {
@@ -7542,50 +7581,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			log(WARNING, sb.toString());
 		}
 	}
-
-	/**
-	 * Logs a message.
-	 *
-	 * @param level The log level.
-	 * @param t Thrown exception.  Can be <jk>null</jk>.
-	 * @param msg The message.
-	 * @param args Optional message arguments.
-	 */
-	protected void log(Level level, Throwable t, String msg, Object...args) {
-		logger.log(level, t, msg(msg, args));
-		if (logToConsole) {
-			console.println(msg(msg, args).get());
-			if (t != null)
-				t.printStackTrace(console);
-		}
-	}
-
-	/**
-	 * Logs a message.
-	 *
-	 * @param level The log level.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
-	 * @param args The arguments.
-	 */
-	protected void log(Level level, String msg, Object...args) {
-		logger.log(level, msg(msg, args));
-		if (logToConsole)
-			console.println(msg(msg, args).get());
-	}
-
-	private Supplier<String> msg(String msg, Object...args) {
-		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
-	}
-
-	/**
-	 * Returns the part serializer associated with this client.
-	 *
-	 * @return The part serializer associated with this client.
-	 */
-	protected HttpPartSerializer getPartSerializer() {
-		return partSerializer;
-	}
-
 	/**
 	 * Returns the part parser associated with this client.
 	 *
@@ -7593,25 +7588,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 */
 	protected HttpPartParser getPartParser() {
 		return partParser;
-	}
-
-	/**
-	 * Returns the part serializer instance of the specified type.
-	 *
-	 * @param c The part serializer class.
-	 * @return The part serializer.
-	 */
-	protected HttpPartSerializer getPartSerializer(Class<? extends HttpPartSerializer> c) {
-		HttpPartSerializer x = partSerializers.get(c);
-		if (x == null) {
-			try {
-				x = beanStore.createBean(c).run();
-			} catch (ExecutableException e) {
-				throw asRuntimeException(e);
-			}
-			partSerializers.put(c, x);
-		}
-		return x;
 	}
 
 	/**
@@ -7634,6 +7610,58 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	/**
+	 * Returns the part serializer associated with this client.
+	 *
+	 * @return The part serializer associated with this client.
+	 */
+	protected HttpPartSerializer getPartSerializer() {
+		return partSerializer;
+	}
+	/**
+	 * Returns the part serializer instance of the specified type.
+	 *
+	 * @param c The part serializer class.
+	 * @return The part serializer.
+	 */
+	protected HttpPartSerializer getPartSerializer(Class<? extends HttpPartSerializer> c) {
+		HttpPartSerializer x = partSerializers.get(c);
+		if (x == null) {
+			try {
+				x = beanStore.createBean(c).run();
+			} catch (ExecutableException e) {
+				throw asRuntimeException(e);
+			}
+			partSerializers.put(c, x);
+		}
+		return x;
+	}
+
+	/**
+	 * Gets called add the end of the constructor call to perform any post-initialization.
+	 */
+	protected void init() {
+	}
+
+	/**
+	 * Perform optional initialization on builder before it is used.
+	 *
+	 * <p>
+	 * Default behavior is a no-op.
+	 *
+	 * @param builder The builder to initialize.
+	 */
+	protected void init(RestClient.Builder builder) {}
+
+	/**
+	 * Returns <jk>true</jk> if empty request form-data parameter values should be ignored.
+	 *
+	 * @return <jk>true</jk> if empty request form-data parameter values should be ignored.
+	 */
+	protected boolean isSkipEmptyFormData() {
+		return skipEmptyFormData;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if empty request header values should be ignored.
 	 *
 	 * @return <jk>true</jk> if empty request header values should be ignored.
@@ -7652,103 +7680,57 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	/**
-	 * Returns <jk>true</jk> if empty request form-data parameter values should be ignored.
+	 * Logs a message.
 	 *
-	 * @return <jk>true</jk> if empty request form-data parameter values should be ignored.
+	 * @param level The log level.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
 	 */
-	protected boolean isSkipEmptyFormData() {
-		return skipEmptyFormData;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Part list builders methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a mutable copy of the header data defined on this client.
-	 *
-	 * <p>
-	 * Used during the construction of {@link RestRequest} objects.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own builder.
-	 *
-	 * @return A new builder.
-	 */
-	public HeaderList createHeaderData() {
-		return headerData.copy();
+	protected void log(Level level, String msg, Object...args) {
+		logger.log(level, msg(msg, args));
+		if (logToConsole)
+			console.println(msg(msg, args).get());
 	}
 
 	/**
-	 * Creates a mutable copy of the query data defined on this client.
+	 * Logs a message.
 	 *
-	 * <p>
-	 * Used during the construction of {@link RestRequest} objects.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own builder.
-	 *
-	 * @return A new builder.
+	 * @param level The log level.
+	 * @param t Thrown exception.  Can be <jk>null</jk>.
+	 * @param msg The message.
+	 * @param args Optional message arguments.
 	 */
-	public PartList createQueryData() {
-		return queryData.copy();
+	protected void log(Level level, Throwable t, String msg, Object...args) {
+		logger.log(level, t, msg(msg, args));
+		if (logToConsole) {
+			console.println(msg(msg, args).get());
+			if (t != null)
+				t.printStackTrace(console);
+		}
 	}
 
 	/**
-	 * Creates a mutable copy of the form data defined on this client.
+	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been set on the request from the client.
 	 *
 	 * <p>
-	 * Used during the construction of {@link RestRequest} objects.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own builder.
-	 *
-	 * @return A new builder.
-	 */
-	public PartList createFormData() {
-		return formData.copy();
-	}
-
-	/**
-	 * Creates a mutable copy of the path data defined on this client.
-	 *
-	 * <p>
-	 * Used during the construction of {@link RestRequest} objects.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own builder.
-	 *
-	 * @return A new builder.
-	 */
-	public PartList createPathData() {
-		return pathData.copy();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RestCallInterceptor methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been copied from the client.
-	 *
-	 * <p>
-	 * Subclasses can override this method to intercept the request and perform special modifications.
+	 * Subclasses can override this method to handle any cleanup operations.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link Builder#interceptors(Object...)}
 	 * </ul>
 	 *
 	 * @param req The HTTP request.
+	 * @param res The HTTP response.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	protected void onCallInit(RestRequest req) throws RestCallException {
+	protected void onCallClose(RestRequest req, RestResponse res) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
-				rci.onInit(req);
+				rci.onClose(req, res);
 		} catch (RuntimeException | RestCallException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestCallException(null, e, "Interceptor threw an exception on init.");
+			throw new RestCallException(res, e, "Interceptor threw an exception on close.");
 		}
 	}
 
@@ -7778,268 +7760,216 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	/**
-	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been set on the request from the client.
+	 * Interceptor method called immediately after the RestRequest object is created and all headers/query/form-data has been copied from the client.
 	 *
 	 * <p>
-	 * Subclasses can override this method to handle any cleanup operations.
+	 * Subclasses can override this method to intercept the request and perform special modifications.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link Builder#interceptors(Object...)}
 	 * </ul>
 	 *
 	 * @param req The HTTP request.
-	 * @param res The HTTP response.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	protected void onCallClose(RestRequest req, RestResponse res) throws RestCallException {
+	protected void onCallInit(RestRequest req) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
-				rci.onClose(req, res);
+				rci.onInit(req);
 		} catch (RuntimeException | RestCallException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new RestCallException(res, e, "Interceptor threw an exception on close.");
+			throw new RestCallException(null, e, "Interceptor threw an exception on init.");
+		}
+	}
+	@Override /* Overridden from Context */
+	protected JsonMap properties() {
+		return filteredMap()
+			.append("errorCodes", errorCodes)
+			.append("executorService", executorService)
+			.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+			.append("headerData", headerData)
+			.append("interceptors", interceptors)
+			.append("keepHttpClientOpen", keepHttpClientOpen)
+			.append("partParser", partParser)
+			.append("partSerializer", partSerializer)
+			.append("queryData", queryData)
+			.append("rootUrl", rootUrl);
+	}
+
+	/**
+	 * Perform an arbitrary request against the specified URI.
+	 *
+	 * <p>
+	 * All requests feed through this method so it can be used to intercept request creations and make modifications
+	 * (such as add headers).
+	 *
+	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
+	 * @return
+	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
+	 * 	as a parsed object.
+	 * @throws RestCallException If any authentication errors occurred.
+	 */
+	protected RestRequest request(RestOperation op) throws RestCallException {
+		if (isClosed) {
+			Exception e2 = null;
+			if (closedStack != null) {
+				e2 = new Exception("Creation stack:");
+				e2.setStackTrace(closedStack);
+				throw new RestCallException(null, e2, "RestClient.close() has already been called.  This client cannot be reused.");
+			}
+			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
+		}
+
+		RestRequest req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
+
+		onCallInit(req);
+
+		req.content(op.getContent());
+
+		return req;
+	}
+
+	/**
+	 * Entrypoint for executing all requests and returning a response.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide specialized handling.
+	 *
+	 * <p>
+	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link Builder#callHandler()}
+	 * </ul>
+	 *
+	 * @param target The target host for the request.
+	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
+	 * 		target or by inspecting the request.
+	 * @param request The request to execute.
+	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
+	 * @return
+	 * 	The response to the request.
+	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
+	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
+	 * 		implementation and configuration of this client.
+	 * @throws IOException In case of a problem or the connection was aborted.
+	 * @throws ClientProtocolException In case of an http protocol error.
+	 */
+	protected HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
+		return callHandler.run(target, request, context);
+	}
+
+	Object executeRemote(Class<?> interfaceClass, RestRequest rc, Method method, RemoteOperationMeta rom) throws Throwable {
+		RemoteOperationReturn ror = rom.getReturns();
+
+		try {
+			Object ret = null;
+			RestResponse res = null;
+			rc.rethrow(RuntimeException.class);
+			rom.forEachException(x -> rc.rethrow(x));
+			if (ror.getReturnValue() == RemoteReturn.NONE) {
+				res = rc.complete();
+			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {
+				res = rc.complete();
+				int returnCode = res.getStatusCode();
+				Class<?> rt = method.getReturnType();
+				if (rt == Integer.class || rt == int.class)
+					ret = returnCode;
+				else if (rt == Boolean.class || rt == boolean.class)
+					ret = returnCode < 400;
+				else
+					throw new RestCallException(res, null, "Invalid return type on method annotated with @RemoteOp(returns=RemoteReturn.STATUS).  Only integer and booleans types are valid.");
+			} else if (ror.getReturnValue() == RemoteReturn.BEAN) {
+				rc.ignoreErrors();
+				res = rc.run();
+				ret = res.as(ror.getResponseBeanMeta());
+			} else {
+				Class<?> rt = method.getReturnType();
+				if (Throwable.class.isAssignableFrom(rt))
+					rc.ignoreErrors();
+				res = rc.run();
+				Object v = res.getContent().as(ror.getReturnType());
+				if (v == null && rt.isPrimitive())
+					v = ClassInfo.of(rt).getPrimitiveDefault();
+				ret = v;
+			}
+			return ret;
+		} catch (RestCallException e) {
+			Throwable t = e.getCause();
+			if (t instanceof RuntimeException)
+				throw t;
+			for (Class<?> t2 : method.getExceptionTypes())
+				if (t2.isInstance(t))
+					throw t;
+			throw asRuntimeException(e);
 		}
 	}
 
-	//------------------------------------------------------------------------------------------------
-	// Passthrough methods for HttpClient.
-	//------------------------------------------------------------------------------------------------
-
-	/**
-	 * Obtains the parameters for this client.
-	 *
-	 * These parameters will become defaults for all requests being executed with this client, and for the parameters of dependent objects in this client.
-	 *
-	 * @return The default parameters.
-	 * @deprecated Use {@link RequestConfig}.
-	 */
-	@Deprecated
-	@Override /* Overridden from HttpClient */
-	public HttpParams getParams() {
-		return httpClient.getParams();
+	ExecutorService getExecutorService() {
+		if (executorService != null)
+			return executorService;
+		synchronized(this) {
+			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
+			return executorService;
+		}
 	}
 
-	/**
-	 * Obtains the connection manager used by this client.
-	 *
-	 * @return The connection manager.
-	 * @deprecated Use {@link HttpClientBuilder}.
-	 */
-	@Deprecated
-	@Override /* Overridden from HttpClient */
-	public ClientConnectionManager getConnectionManager() {
-		return httpClient.getConnectionManager();
+	@SuppressWarnings("unchecked")
+	<T extends Context> T getInstance(Class<T> c) {
+		Context o = requestContexts.get(c);
+		if (o == null) {
+			if (Serializer.class.isAssignableFrom(c)) {
+				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).beanContext(getBeanContext()).build();
+			} else if (Parser.class.isAssignableFrom(c)) {
+				o = Parser.createParserBuilder((Class<? extends Parser>)c).beanContext(getBeanContext()).build();
+			}
+			requestContexts.put(c, o);
+		}
+		return (T)o;
 	}
 
-	/**
-	 * Returns the connection manager if one was specified in the client builder.
-	 *
-	 * @return The connection manager.  May be <jk>null</jk>.
+	/*
+	 * Returns the parser that best matches the specified content type.
+	 * If no match found or the content type is null, returns the parser in the list if it's a list of one.
+	 * Returns null if no parsers are defined.
 	 */
-	public HttpClientConnectionManager getHttpClientConnectionManager() {
-		return connectionManager;
+	Parser getMatchingParser(String mediaType) {
+		if (parsers.isEmpty())
+			return null;
+		if (mediaType != null) {
+			Parser p = parsers.getParser(mediaType);
+			if (p != null)
+				return p;
+		}
+		List<Parser> l = parsers.getParsers();
+		return (l.size() == 1 ? l.get(0) : null);
 	}
 
-	/**
-	 * Executes HTTP request using the default context.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param request The request to execute.
-	 * @return
-	 * 	The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
+	/*
+	 * Returns the serializer that best matches the specified content type.
+	 * If no match found or the content type is null, returns the serializer in the list if it's a list of one.
+	 * Returns null if no serializers are defined.
 	 */
-	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpUriRequest request) throws IOException, ClientProtocolException {
-		return httpClient.execute(request);
+	Serializer getMatchingSerializer(String mediaType) {
+		if (serializers.isEmpty())
+			return null;
+		if (mediaType != null) {
+			Serializer s = serializers.getSerializer(mediaType);
+			if (s != null)
+				return s;
+		}
+		List<Serializer> l = serializers.getSerializers();
+		return (l.size() == 1 ? l.get(0) : null);
 	}
 
-	/**
-	 * Executes HTTP request using the given context.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param request The request to execute.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return
-	 * 	The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException, ClientProtocolException {
-		return httpClient.execute(request, context);
+	boolean hasParsers() {
+		return ! parsers.getParsers().isEmpty();
 	}
 
-	/**
-	 * Executes HTTP request using the default context.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param target The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
-	 * 		target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @return The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpHost target, HttpRequest request) throws IOException, ClientProtocolException {
-		return httpClient.execute(target, request);
+	boolean hasSerializers() {
+		return ! serializers.getSerializers().isEmpty();
 	}
-
-	/**
-	 * Executes HTTP request using the given context.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * 	<li class='note'>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
-	 * 		Subclasses can override these methods for handling requests with and without bodies separately.
-	 * 	<li class='note'>The {@link RestCallHandler} interface can also be implemented to intercept this method.
-	 * </ul>
-	 *
-	 * @param target The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default
-	 * 		target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return
-	 * 	The response to the request.
-	 * 	<br>This is always a final response, never an intermediate response with an 1xx status code.
-	 * 	<br>Whether redirects or authentication challenges will be returned or handled automatically depends on the
-	 * 		implementation and configuration of this client.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public HttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException, ClientProtocolException {
-		return httpClient.execute(target, request, context);
-	}
-
-	/**
-	 * Executes HTTP request using the default context and processes the response using the given response handler.
-	 *
- 	 * <p>
-	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
-	 * from having to manage resource deallocation internally.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param request The request to execute.
-	 * @param responseHandler The response handler.
-	 * @return Object returned by response handler.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
-		return httpClient.execute(request, responseHandler);
-	}
-
-	/**
-	 * Executes HTTP request using the given context and processes the response using the given response handler.
-	 *
-	 * <p>
-	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
-	 * from having to manage resource deallocation internally.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param request The request to execute.
-	 * @param responseHandler The response handler.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return The response object as generated by the response handler.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
-		return httpClient.execute(request, responseHandler, context);
-	}
-
-	/**
-	 * Executes HTTP request to the target using the default context and processes the response using the given response handler.
-	 *
-	 * <p>
-	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
-	 * from having to manage resource deallocation internally.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param target
-	 * 	The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @param responseHandler The response handler.
-	 * @return The response object as generated by the response handler.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
-		return httpClient.execute(target, request, responseHandler);
-	}
-
-	/**
-	 * Executes a request using the default context and processes the response using the given response handler.
-	 *
-	 * <p>
-	 * The content entity associated with the response is fully consumed and the underlying connection is released back
-	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
-	 * from having to manage resource deallocation internally.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * </ul>
-	 *
-	 * @param target
-	 * 	The target host for the request.
-	 * 	<br>Implementations may accept <jk>null</jk> if they can still determine a route, for example to a default target or by inspecting the request.
-	 * @param request The request to execute.
-	 * @param responseHandler The response handler.
-	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
-	 * @return The response object as generated by the response handler.
-	 * @throws IOException In case of a problem or the connection was aborted.
-	 * @throws ClientProtocolException In case of an http protocol error.
-	 */
-	@Override /* Overridden from HttpClient */
-	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
-		return httpClient.execute(target, request, responseHandler, context);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
 	URI toURI(Object x, String rootUrl) throws RestCallException {
 		try {
@@ -8066,93 +7996,5 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		} catch (URISyntaxException e) {
 			throw new RestCallException(null, e, "Invalid URI encountered:  {0}", x);  // Shouldn't happen.
 		}
-	}
-
-	ExecutorService getExecutorService() {
-		if (executorService != null)
-			return executorService;
-		synchronized(this) {
-			executorService = new ThreadPoolExecutor(1, 1, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
-			return executorService;
-		}
-	}
-
-	/*
-	 * Returns the serializer that best matches the specified content type.
-	 * If no match found or the content type is null, returns the serializer in the list if it's a list of one.
-	 * Returns null if no serializers are defined.
-	 */
-	Serializer getMatchingSerializer(String mediaType) {
-		if (serializers.isEmpty())
-			return null;
-		if (mediaType != null) {
-			Serializer s = serializers.getSerializer(mediaType);
-			if (s != null)
-				return s;
-		}
-		List<Serializer> l = serializers.getSerializers();
-		return (l.size() == 1 ? l.get(0) : null);
-	}
-
-	boolean hasSerializers() {
-		return ! serializers.getSerializers().isEmpty();
-	}
-
-	/*
-	 * Returns the parser that best matches the specified content type.
-	 * If no match found or the content type is null, returns the parser in the list if it's a list of one.
-	 * Returns null if no parsers are defined.
-	 */
-	Parser getMatchingParser(String mediaType) {
-		if (parsers.isEmpty())
-			return null;
-		if (mediaType != null) {
-			Parser p = parsers.getParser(mediaType);
-			if (p != null)
-				return p;
-		}
-		List<Parser> l = parsers.getParsers();
-		return (l.size() == 1 ? l.get(0) : null);
-	}
-
-	boolean hasParsers() {
-		return ! parsers.getParsers().isEmpty();
-	}
-
-	@SuppressWarnings("unchecked")
-	<T extends Context> T getInstance(Class<T> c) {
-		Context o = requestContexts.get(c);
-		if (o == null) {
-			if (Serializer.class.isAssignableFrom(c)) {
-				o = Serializer.createSerializerBuilder((Class<? extends Serializer>)c).beanContext(getBeanContext()).build();
-			} else if (Parser.class.isAssignableFrom(c)) {
-				o = Parser.createParserBuilder((Class<? extends Parser>)c).beanContext(getBeanContext()).build();
-			}
-			requestContexts.put(c, o);
-		}
-		return (T)o;
-	}
-
-	private RestOperation op(String method, Object url, Object body) {
-		return RestOperation.of(method, url, body);
-	}
-
-	private Reader stringBody(String body) {
-		return body == null ? null : new StringReader(s(body));
-	}
-
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap()
-			.append("errorCodes", errorCodes)
-			.append("executorService", executorService)
-			.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-			.append("headerData", headerData)
-			.append("interceptors", interceptors)
-			.append("keepHttpClientOpen", keepHttpClientOpen)
-			.append("partParser", partParser)
-			.append("partSerializer", partSerializer)
-			.append("queryData", queryData)
-			.append("rootUrl", rootUrl);
 	}
 }

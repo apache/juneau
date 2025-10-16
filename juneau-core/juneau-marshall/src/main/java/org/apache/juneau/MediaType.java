@@ -39,11 +39,6 @@ import org.apache.juneau.json.*;
  */
 @BeanIgnore
 public class MediaType implements Comparable<MediaType>  {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Represents an empty media type object. */
 	public static final MediaType EMPTY = new MediaType("/*");
 
@@ -127,39 +122,20 @@ public class MediaType implements Comparable<MediaType>  {
 			mt[i] = of(values[i]);
 		return mt;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	private static HeaderElement parse(String value) {
+		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
+	}
 	private final String string;                          // The entire unparsed value.
 	private final String mediaType;                      // The "type/subtype" portion of the media type..
 	private final String type;                           // The media type (e.g. "text" for Accept, "utf-8" for Accept-Charset)
 	private final String subType;                        // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final String[] subTypes;                     // The media sub-type (e.g. "json" for Accept, not used for Accept-Charset)
 	private final String[] subTypesSorted;               // Same as subTypes, but sorted so that it can be used for comparison.
+
 	private final boolean hasSubtypeMeta;                // The media subtype contains meta-character '*'.
 
 	private final NameValuePair[] parameters;            // The media type parameters (e.g. "text/html;level=1").  Does not include q!
-
-	/**
-	 * Constructor.
-	 *
-	 * @param mt The media type string.
-	 */
-	public MediaType(String mt) {
-		this(parse(mt));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param mt The media type string.
-	 * @param parameters The media type parameters.  If <jk>null</jk>, they're pulled from the media type string.
-	 */
-	public MediaType(String mt, NameValuePair[] parameters) {
-		this(parse(mt), parameters);
-	}
 
 	/**
 	 * Constructor.
@@ -210,12 +186,82 @@ public class MediaType implements Comparable<MediaType>  {
 	}
 
 	/**
-	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
+	 * Constructor.
 	 *
-	 * @return The media type.
+	 * @param mt The media type string.
 	 */
-	public final String getType() {
-		return type;
+	public MediaType(String mt) {
+		this(parse(mt));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param mt The media type string.
+	 * @param parameters The media type parameters.  If <jk>null</jk>, they're pulled from the media type string.
+	 */
+	public MediaType(String mt, NameValuePair[] parameters) {
+		this(parse(mt), parameters);
+	}
+
+	@Override
+	public final int compareTo(MediaType o) {
+		return toString().compareTo(o.toString());
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.string, y.string));
+	}
+
+	/**
+	 * Performs an action on the additional parameters on this media type.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public MediaType forEachParameter(Consumer<NameValuePair> action) {
+		for (NameValuePair p : parameters)
+			action.accept(p);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the subtypes broken down by fragments delimited by <js>"'"</js>.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public final MediaType forEachSubType(Consumer<String> action) {
+		for (String s : subTypes)
+			action.accept(s);
+		return this;
+	}
+
+	/**
+	 * Returns the additional parameter on this media type.
+	 *
+	 * @param name The additional parameter name.
+	 * @return The parameter value, or <jk>null</jk> if not found.
+	 */
+	public String getParameter(String name) {
+		for (NameValuePair p : parameters)
+			if (eq(name, p.getName()))
+				return p.getValue();
+		return null;
+	}
+
+	/**
+	 * Returns the additional parameters on this media type.
+	 *
+	 * <p>
+	 * For example, given the media type string <js>"text/html;level=1"</js>, will return a map
+	 * with the single entry <code>{level:[<js>'1'</js>]}</code>.
+	 *
+	 * @return The map of additional parameters, or an empty map if there are no parameters.
+	 */
+	public List<NameValuePair> getParameters() {
+		return alist(parameters);
 	}
 
 	/**
@@ -225,6 +271,33 @@ public class MediaType implements Comparable<MediaType>  {
 	 */
 	public final String getSubType() {
 		return subType;
+	}
+
+	/**
+	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
+	 *
+	 * <P>
+	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
+	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
+	 *
+	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
+	 */
+	public final List<String> getSubTypes() {
+		return alist(subTypes);
+	}
+
+	/**
+	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
+	 *
+	 * @return The media type.
+	 */
+	public final String getType() {
+		return type;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return string.hashCode();
 	}
 
 	/**
@@ -244,37 +317,41 @@ public class MediaType implements Comparable<MediaType>  {
 	}
 
 	/**
-	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
-	 *
-	 * <P>
-	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
-	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
-	 *
-	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
-	 */
-	public final List<String> getSubTypes() {
-		return alist(subTypes);
-	}
-
-	/**
-	 * Performs an action on the subtypes broken down by fragments delimited by <js>"'"</js>.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public final MediaType forEachSubType(Consumer<String> action) {
-		for (String s : subTypes)
-			action.accept(s);
-		return this;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this media type subtype contains the <js>'*'</js> meta character.
 	 *
 	 * @return <jk>true</jk> if this media type subtype contains the <js>'*'</js> meta character.
 	 */
 	public final boolean isMetaSubtype() {
 		return hasSubtypeMeta;
+	}
+
+	/**
+	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.
+	 *
+	 * <p>
+	 * Note that fuzzy matching is allowed on the media types where the <c>Content-Types</c> header may
+	 * contain additional subtype parts.
+	 * <br>For example, given a <c>Content-Type</c> value of <js>"text/json+activity"</js>,
+	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
+	 * isn't found.
+	 * <br>The purpose for this is to allow parsers to match when artifacts such as <c>id</c> properties are
+	 * present in the header.
+	 *
+	 * @param mediaTypes The media types to match against.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
+	 */
+	public int match(List<MediaType> mediaTypes) {
+		int matchQuant = 0, matchIndex = -1;
+
+		for (int i = 0; i < mediaTypes.size(); i++) {
+			MediaType mt = mediaTypes.get(i);
+			int matchQuant2 = mt.match(this, true);
+			if (matchQuant2 > matchQuant) {
+				matchQuant = matchQuant2;
+				matchIndex = i;
+			}
+		}
+		return matchIndex;
 	}
 
 	/**
@@ -367,95 +444,8 @@ public class MediaType implements Comparable<MediaType>  {
 		return c;
 	}
 
-	/**
-	 * Returns the additional parameters on this media type.
-	 *
-	 * <p>
-	 * For example, given the media type string <js>"text/html;level=1"</js>, will return a map
-	 * with the single entry <code>{level:[<js>'1'</js>]}</code>.
-	 *
-	 * @return The map of additional parameters, or an empty map if there are no parameters.
-	 */
-	public List<NameValuePair> getParameters() {
-		return alist(parameters);
-	}
-
-	/**
-	 * Performs an action on the additional parameters on this media type.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public MediaType forEachParameter(Consumer<NameValuePair> action) {
-		for (NameValuePair p : parameters)
-			action.accept(p);
-		return this;
-	}
-
-	/**
-	 * Returns the additional parameter on this media type.
-	 *
-	 * @param name The additional parameter name.
-	 * @return The parameter value, or <jk>null</jk> if not found.
-	 */
-	public String getParameter(String name) {
-		for (NameValuePair p : parameters)
-			if (eq(name, p.getName()))
-				return p.getValue();
-		return null;
-	}
-
-	/**
-	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.
-	 *
-	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <c>Content-Types</c> header may
-	 * contain additional subtype parts.
-	 * <br>For example, given a <c>Content-Type</c> value of <js>"text/json+activity"</js>,
-	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
-	 * isn't found.
-	 * <br>The purpose for this is to allow parsers to match when artifacts such as <c>id</c> properties are
-	 * present in the header.
-	 *
-	 * @param mediaTypes The media types to match against.
-	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
-	 */
-	public int match(List<MediaType> mediaTypes) {
-		int matchQuant = 0, matchIndex = -1;
-
-		for (int i = 0; i < mediaTypes.size(); i++) {
-			MediaType mt = mediaTypes.get(i);
-			int matchQuant2 = mt.match(this, true);
-			if (matchQuant2 > matchQuant) {
-				matchQuant = matchQuant2;
-				matchIndex = i;
-			}
-		}
-		return matchIndex;
-	}
-
-	private static HeaderElement parse(String value) {
-		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
-		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
-	}
-
 	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return string.hashCode();
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.string, y.string));
-	}
-
-	@Override
-	public final int compareTo(MediaType o) {
-		return toString().compareTo(o.toString());
 	}
 }

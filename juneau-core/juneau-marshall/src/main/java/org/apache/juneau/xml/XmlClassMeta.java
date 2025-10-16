@@ -66,24 +66,6 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	}
 
 	/**
-	 * Returns the {@link Xml#format() @Xml(format)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.
-	 */
-	protected XmlFormat getFormat() {
-		return format;
-	}
-
-	/**
-	 * Returns the {@link Xml#childName() @Xml(childName)} annotation defined on the class.
-	 *
-	 * @return The value of the annotation, or <jk>null</jk> if not specified.
-	 */
-	protected String getChildName() {
-		return childName;
-	}
-
-	/**
 	 * Returns the XML namespace associated with this class.
 	 *
 	 * <p>
@@ -101,5 +83,23 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 */
 	public Namespace getNamespace() {
 		return namespace;
+	}
+
+	/**
+	 * Returns the {@link Xml#childName() @Xml(childName)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation, or <jk>null</jk> if not specified.
+	 */
+	protected String getChildName() {
+		return childName;
+	}
+
+	/**
+	 * Returns the {@link Xml#format() @Xml(format)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation, or {@link XmlFormat#DEFAULT} if not specified.
+	 */
+	protected XmlFormat getFormat() {
+		return format;
 	}
 }

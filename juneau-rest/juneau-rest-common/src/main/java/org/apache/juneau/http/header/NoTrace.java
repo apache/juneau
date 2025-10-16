@@ -31,11 +31,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("No-Trace")
 public class NoTrace extends BasicBooleanHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "No-Trace";
 
@@ -47,11 +42,10 @@ public class NoTrace extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace of(String value) {
+	public static NoTrace of(Boolean value) {
 		return value == null ? null : new NoTrace(value);
 	}
 
@@ -60,10 +54,11 @@ public class NoTrace extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static NoTrace of(Boolean value) {
+	public static NoTrace of(String value) {
 		return value == null ? null : new NoTrace(value);
 	}
 
@@ -81,10 +76,16 @@ public class NoTrace extends BasicBooleanHeader {
 	public static NoTrace of(Supplier<Boolean> value) {
 		return value == null ? null : new NoTrace(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public NoTrace(Boolean value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -95,17 +96,6 @@ public class NoTrace extends BasicBooleanHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public NoTrace(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public NoTrace(Boolean value) {
 		super(NAME, value);
 	}
 

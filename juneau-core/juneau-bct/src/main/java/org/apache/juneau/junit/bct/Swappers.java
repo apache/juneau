@@ -70,93 +70,6 @@ import java.util.function.*;
 public class Swappers {
 
 	/**
-	 * Constructor.
-	 */
-	private Swappers() {}
-
-	/**
-	 * Returns a swapper for {@link Optional} objects that unwraps them to their contained values.
-	 *
-	 * <p>This swapper extracts the value from Optional instances, returning the contained object
-	 * if present, or <jk>null</jk> if the Optional is empty. This allows Optional-wrapped values
-	 * to be processed naturally by the converter without special handling.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Present value:</b> Returns the contained object for further processing</li>
-	 *    <li><b>Empty Optional:</b> Returns <jk>null</jk>, which will be rendered as the configured null value</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test Optional with value</jc>
-	 *    <jk>var</jk> <jv>optional</jv> = Optional.<jsm>of</jsm>(<js>"Hello"</js>);
-	 *    <jsm>assertBean</jsm>(<jv>optional</jv>, <js>"&lt;self&gt;"</js>, <js>"Hello"</js>);
-	 *
-	 *    <jc>// Test empty Optional</jc>
-	 *    <jk>var</jk> <jv>empty</jv> = Optional.<jsm>empty</jsm>();
-	 *    <jsm>assertBean</jsm>(<jv>empty</jv>, <js>"&lt;self&gt;"</js>, <js>"&lt;null&gt;"</js>);
-	 *
-	 *    <jc>// Test nested Optional in object</jc>
-	 *    <jk>var</jk> <jv>user</jv> = <jk>new</jk> User().setName(Optional.<jsm>of</jsm>(<js>"John"</js>));
-	 *    <jsm>assertBean</jsm>(<jv>user</jv>, <js>"name"</js>, <js>"John"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Integration:</h5>
-	 * <p>This swapper is particularly useful when working with modern Java APIs that return
-	 * Optional values. It allows test assertions to focus on the actual data rather than
-	 * Optional wrapper mechanics.</p>
-	 *
-	 * @return A {@link Swapper} for {@link Optional} objects
-	 * @see Optional
-	 */
-	public static Swapper<Optional> optionalSwapper() {
-		return (bc, optional) -> optional.orElse(null);
-	}
-
-	/**
-	 * Returns a swapper for {@link Supplier} objects that evaluates them to get their supplied values.
-	 *
-	 * <p>This swapper calls the {@link Supplier#get()} method to obtain the value that the supplier
-	 * provides. This enables testing of lazy-evaluated or dynamically-computed values as if they
-	 * were regular objects.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Successful evaluation:</b> Returns the result of calling {@link Supplier#get()}</li>
-	 *    <li><b>Exception during evaluation:</b> Allows the exception to propagate (no special handling)</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test supplier with simple value</jc>
-	 *    <jk>var</jk> <jv>supplier</jv> = () -&gt; <js>"Hello World"</js>;
-	 *    <jsm>assertBean</jsm>(<jv>supplier</jv>, <js>"&lt;self&gt;"</js>, <js>"Hello World"</js>);
-	 *
-	 *    <jc>// Test supplier in object property</jc>
-	 *    <jk>var</jk> <jv>config</jv> = <jk>new</jk> Configuration().setDynamicValue(() -&gt; calculateValue());
-	 *    <jsm>assertBean</jsm>(<jv>config</jv>, <js>"dynamicValue"</js>, <js>"computed-result"</js>);
-	 *
-	 *    <jc>// Test supplier returning null</jc>
-	 *    <jk>var</jk> <jv>nullSupplier</jv> = () -&gt; <jk>null</jk>;
-	 *    <jsm>assertBean</jsm>(<jv>nullSupplier</jv>, <js>"&lt;self&gt;"</js>, <js>"&lt;null&gt;"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Important Notes:</h5>
-	 * <ul>
-	 *    <li><b>Side Effects:</b> The supplier will be evaluated during conversion, which may cause side effects</li>
-	 *    <li><b>Performance:</b> Expensive computations in suppliers will impact test performance</li>
-	 *    <li><b>Exception Handling:</b> Exceptions from suppliers are not caught by this swapper</li>
-	 * </ul>
-	 *
-	 * @return A {@link Swapper} for {@link Supplier} objects
-	 * @see Supplier
-	 */
-	public static Swapper<Supplier> supplierSwapper() {
-		return (bc, supplier) -> supplier.get();
-	}
-
-	/**
 	 * Returns a swapper for {@link Future} objects that extracts completed results or status information.
 	 *
 	 * <p>This swapper handles {@link Future} objects in a non-blocking manner, providing meaningful
@@ -217,4 +130,92 @@ public class Swappers {
 			return future.isCancelled() ? "<cancelled>" : "<pending>";
 		};
 	}
+
+	/**
+	 * Returns a swapper for {@link Optional} objects that unwraps them to their contained values.
+	 *
+	 * <p>This swapper extracts the value from Optional instances, returning the contained object
+	 * if present, or <jk>null</jk> if the Optional is empty. This allows Optional-wrapped values
+	 * to be processed naturally by the converter without special handling.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Present value:</b> Returns the contained object for further processing</li>
+	 *    <li><b>Empty Optional:</b> Returns <jk>null</jk>, which will be rendered as the configured null value</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test Optional with value</jc>
+	 *    <jk>var</jk> <jv>optional</jv> = Optional.<jsm>of</jsm>(<js>"Hello"</js>);
+	 *    <jsm>assertBean</jsm>(<jv>optional</jv>, <js>"&lt;self&gt;"</js>, <js>"Hello"</js>);
+	 *
+	 *    <jc>// Test empty Optional</jc>
+	 *    <jk>var</jk> <jv>empty</jv> = Optional.<jsm>empty</jsm>();
+	 *    <jsm>assertBean</jsm>(<jv>empty</jv>, <js>"&lt;self&gt;"</js>, <js>"&lt;null&gt;"</js>);
+	 *
+	 *    <jc>// Test nested Optional in object</jc>
+	 *    <jk>var</jk> <jv>user</jv> = <jk>new</jk> User().setName(Optional.<jsm>of</jsm>(<js>"John"</js>));
+	 *    <jsm>assertBean</jsm>(<jv>user</jv>, <js>"name"</js>, <js>"John"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Integration:</h5>
+	 * <p>This swapper is particularly useful when working with modern Java APIs that return
+	 * Optional values. It allows test assertions to focus on the actual data rather than
+	 * Optional wrapper mechanics.</p>
+	 *
+	 * @return A {@link Swapper} for {@link Optional} objects
+	 * @see Optional
+	 */
+	@SuppressWarnings("unchecked")
+	public static Swapper<Optional> optionalSwapper() {
+		return (bc, optional) -> optional.orElse(null);
+	}
+
+	/**
+	 * Returns a swapper for {@link Supplier} objects that evaluates them to get their supplied values.
+	 *
+	 * <p>This swapper calls the {@link Supplier#get()} method to obtain the value that the supplier
+	 * provides. This enables testing of lazy-evaluated or dynamically-computed values as if they
+	 * were regular objects.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Successful evaluation:</b> Returns the result of calling {@link Supplier#get()}</li>
+	 *    <li><b>Exception during evaluation:</b> Allows the exception to propagate (no special handling)</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test supplier with simple value</jc>
+	 *    <jk>var</jk> <jv>supplier</jv> = () -&gt; <js>"Hello World"</js>;
+	 *    <jsm>assertBean</jsm>(<jv>supplier</jv>, <js>"&lt;self&gt;"</js>, <js>"Hello World"</js>);
+	 *
+	 *    <jc>// Test supplier in object property</jc>
+	 *    <jk>var</jk> <jv>config</jv> = <jk>new</jk> Configuration().setDynamicValue(() -&gt; calculateValue());
+	 *    <jsm>assertBean</jsm>(<jv>config</jv>, <js>"dynamicValue"</js>, <js>"computed-result"</js>);
+	 *
+	 *    <jc>// Test supplier returning null</jc>
+	 *    <jk>var</jk> <jv>nullSupplier</jv> = () -&gt; <jk>null</jk>;
+	 *    <jsm>assertBean</jsm>(<jv>nullSupplier</jv>, <js>"&lt;self&gt;"</js>, <js>"&lt;null&gt;"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Important Notes:</h5>
+	 * <ul>
+	 *    <li><b>Side Effects:</b> The supplier will be evaluated during conversion, which may cause side effects</li>
+	 *    <li><b>Performance:</b> Expensive computations in suppliers will impact test performance</li>
+	 *    <li><b>Exception Handling:</b> Exceptions from suppliers are not caught by this swapper</li>
+	 * </ul>
+	 *
+	 * @return A {@link Swapper} for {@link Supplier} objects
+	 * @see Supplier
+	 */
+	public static Swapper<Supplier> supplierSwapper() {
+		return (bc, supplier) -> supplier.get();
+	}
+
+	/**
+	 * Constructor.
+	 */
+	private Swappers() {}
 }

@@ -62,82 +62,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Thrown")
 public class Thrown extends BasicCsvHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final long serialVersionUID = 1L;
-	private static final String NAME = "Thrown";
-
-	/**
-	 * An empty unmodifiable Thrown header.
-	 */
-	public static final Thrown EMPTY = new Thrown((String)null);
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Thrown of(String value) {
-		return value == null ? null : new Thrown(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param values
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Thrown of(Throwable...values) {
-		return new Thrown(alist(values).stream().map(Part::new).collect(Collectors.toList()));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final List<Part> value;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 */
-	public Thrown(String value) {
-		super(NAME, value);
-		List<Part> l = Utils.list();
-		Utils.split(value, x -> l.add(new Part(x)));
-		this.value = value == null ? null : u(l);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 */
-	public Thrown(List<Part> value) {
-		super(NAME, Utils.join(value, ", "));
-		this.value = u(value);
-	}
-
-	/**
-	 * Returns the class name portion of the header.
-	 *
-	 * @return The class name portion of the header, or <jk>null</jk> if not there.
-	 */
-	public Optional<List<Part>> asParts() {
-		return Utils.opt(value);
-	}
-
 	/**
 	 * Represents a single entry in this header.
 	 */
@@ -191,5 +115,71 @@ public class Thrown extends BasicCsvHeader {
 		public String toString() {
 			return value;
 		}
+	}
+	private static final long serialVersionUID = 1L;
+
+	private static final String NAME = "Thrown";
+
+	/**
+	 * An empty unmodifiable Thrown header.
+	 */
+	public static final Thrown EMPTY = new Thrown((String)null);
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Thrown of(String value) {
+		return value == null ? null : new Thrown(value);
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param values
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Thrown of(Throwable...values) {
+		return new Thrown(alist(values).stream().map(Part::new).collect(Collectors.toList()));
+	}
+
+	private final List<Part> value;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 */
+	public Thrown(List<Part> value) {
+		super(NAME, Utils.join(value, ", "));
+		this.value = u(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 */
+	public Thrown(String value) {
+		super(NAME, value);
+		List<Part> l = Utils.list();
+		Utils.split(value, x -> l.add(new Part(x)));
+		this.value = value == null ? null : u(l);
+	}
+
+	/**
+	 * Returns the class name portion of the header.
+	 *
+	 * @return The class name portion of the header, or <jk>null</jk> if not there.
+	 */
+	public Optional<List<Part>> asParts() {
+		return Utils.opt(value);
 	}
 }

@@ -38,19 +38,6 @@ import org.apache.juneau.serializer.*;
 public abstract class HtmlRender<T> {
 
 	/**
-	 * Returns the CSS style of the element containing the bean property value.
-	 *
-	 * @param session
-	 * 	The current serializer session.
-	 * 	Can be used to retrieve properties and session-level information.
-	 * @param value The bean property value.
-	 * @return The CSS style string, or <jk>null</jk> if no style should be added.
-	 */
-	public String getStyle(SerializerSession session, T value) {
-		return null;
-	}
-
-	/**
 	 * Returns the delegate value for the specified bean property value.
 	 *
 	 * <p>
@@ -65,5 +52,18 @@ public abstract class HtmlRender<T> {
 	 */
 	public Object getContent(SerializerSession session, T value) {
 		return value;
+	}
+
+	/**
+	 * Returns the CSS style of the element containing the bean property value.
+	 *
+	 * @param session
+	 * 	The current serializer session.
+	 * 	Can be used to retrieve properties and session-level information.
+	 * @param value The bean property value.
+	 * @return The CSS style string, or <jk>null</jk> if no style should be added.
+	 */
+	public String getStyle(SerializerSession session, T value) {
+		return null;
 	}
 }

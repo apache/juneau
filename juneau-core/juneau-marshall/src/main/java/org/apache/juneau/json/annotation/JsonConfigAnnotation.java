@@ -31,6 +31,28 @@ import org.apache.juneau.svl.*;
 public class JsonConfigAnnotation {
 
 	/**
+	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(JsonConfig.class, JsonParser.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<JsonConfig> ai, JsonParser.Builder b) {
+			JsonConfig a = ai.inner();
+
+			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
+		}
+	}
+
+	/**
 	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<JsonConfig,JsonSerializer.Builder> {
@@ -51,28 +73,6 @@ public class JsonConfigAnnotation {
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesJson(x));
 			bool(a.escapeSolidus()).ifPresent(x -> b.escapeSolidus(x));
 			bool(a.simpleAttrs()).ifPresent(x -> b.simpleAttrs(x));
-		}
-	}
-
-	/**
-	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.json.JsonParser.Builder}.
-	 */
-	public static class ParserApply extends AnnotationApplier<JsonConfig,JsonParser.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public ParserApply(VarResolverSession vr) {
-			super(JsonConfig.class, JsonParser.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<JsonConfig> ai, JsonParser.Builder b) {
-			JsonConfig a = ai.inner();
-
-			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
 		}
 	}
 }

@@ -43,6 +43,27 @@ import org.apache.juneau.http.annotation.*;
 public @interface RemoteOp {
 
 	/**
+	 * Defines the HTTP method to use for REST calls.
+	 *
+	 * <p>
+	 * If not specified, then the method is inferred from the Java method name.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@RemotePost</ja>
+	 * 	<jk>public void</jk> postPet(...);
+	 * </p>
+	 *
+	 * <br>If the method cannot be inferred, then the default is <js>"GET"</js>.
+	 *
+	 * <p>
+	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
+	 *
+	 * @return The annotation value.
+	 */
+	String method() default "";
+
+	/**
 	 * REST service path.
 	 *
 	 * <p>
@@ -66,27 +87,6 @@ public @interface RemoteOp {
 	 * @return The annotation value.
 	 */
 	String path() default "";
-
-	/**
-	 * Defines the HTTP method to use for REST calls.
-	 *
-	 * <p>
-	 * If not specified, then the method is inferred from the Java method name.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@RemotePost</ja>
-	 * 	<jk>public void</jk> postPet(...);
-	 * </p>
-	 *
-	 * <br>If the method cannot be inferred, then the default is <js>"GET"</js>.
-	 *
-	 * <p>
-	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
-	 *
-	 * @return The annotation value.
-	 */
-	String method() default "";
 
 	/**
 	 * The value the remote method returns.

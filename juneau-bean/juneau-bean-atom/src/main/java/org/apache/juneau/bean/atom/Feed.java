@@ -118,6 +118,9 @@ public class Feed extends CommonEntry {
 	private Text subtitle;        // atomSubtitle?
 	private Entry[] entries;      // atomEntry*
 
+	/** Bean constructor. */
+	public Feed() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -139,13 +142,23 @@ public class Feed extends CommonEntry {
 	public Feed(String id, String title, String updated) {
 		super(id, title, updated);
 	}
-
-	/** Bean constructor. */
-	public Feed() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Bean property getter:  <property>entries</property>.
+	 *
+	 * <p>
+	 * Returns the individual entries contained within this feed.
+	 *
+	 * <p>
+	 * Each entry represents a single item in the feed, such as a blog post, news article,
+	 * podcast episode, or other discrete piece of content. Entries contain their own metadata
+	 * including title, content, links, and timestamps.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=COLLAPSED)
+	public Entry[] getEntries() {
+		return entries;
+	}
 
 	/**
 	 * Bean property getter:  <property>generator</property>.
@@ -161,32 +174,6 @@ public class Feed extends CommonEntry {
 	 */
 	public Generator getGenerator() {
 		return generator;
-	}
-
-	/**
-	 * Bean property setter:  <property>generator</property>.
-	 *
-	 * <p>
-	 * Identifies the software agent used to generate the feed.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
-	 * 		.setGenerator(
-	 * 			<jk>new</jk> Generator(<js>"My Blog Software"</js>)
-	 * 				.setUri(<js>"http://www.example.com/software"</js>)
-	 * 				.setVersion(<js>"2.0"</js>)
-	 * 		);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed setGenerator(Generator value) {
-		this.generator = value;
-		return this;
 	}
 
 	/**
@@ -206,28 +193,6 @@ public class Feed extends CommonEntry {
 	}
 
 	/**
-	 * Bean property setter:  <property>icon</property>.
-	 *
-	 * <p>
-	 * Identifies a small image that provides iconic visual identification for the feed.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
-	 * 		.setIcon(<jk>new</jk> Icon(<js>"http://example.org/icon.png"</js>));
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed setIcon(Icon value) {
-		this.icon = value;
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>logo</property>.
 	 *
 	 * <p>
@@ -240,28 +205,6 @@ public class Feed extends CommonEntry {
 	 */
 	public Logo getLogo() {
 		return logo;
-	}
-
-	/**
-	 * Bean property setter:  <property>logo</property>.
-	 *
-	 * <p>
-	 * Identifies a larger image that provides visual identification for the feed.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
-	 * 		.setLogo(<jk>new</jk> Logo(<js>"http://example.org/logo.png"</js>));
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed setLogo(Logo value) {
-		this.logo = value;
-		return this;
 	}
 
 	/**
@@ -280,63 +223,28 @@ public class Feed extends CommonEntry {
 		return subtitle;
 	}
 
-	/**
-	 * Bean property setter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * Sets a human-readable description or subtitle for the feed.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
-	 * 		.setSubtitle(
-	 * 			<jk>new</jk> Text(<js>"html"</js>)
-	 * 				.setText(<js>"A &lt;em&gt;comprehensive&lt;/em&gt; guide to Atom feeds"</js>)
-	 * 		);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed setSubtitle(Text value) {
-		this.subtitle = value;
+	@Override /* Overridden from CommonEntry */
+	public Feed setAuthors(Person...value) {
+		super.setAuthors(value);
 		return this;
 	}
 
-	/**
-	 * Bean property fluent setter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * Sets a human-readable description or subtitle for the feed as plain text.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed setSubtitle(String value) {
-		setSubtitle(new Text(value));
+	@Override /* Overridden from Common */
+	public Feed setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>entries</property>.
-	 *
-	 * <p>
-	 * Returns the individual entries contained within this feed.
-	 *
-	 * <p>
-	 * Each entry represents a single item in the feed, such as a blog post, news article,
-	 * podcast episode, or other discrete piece of content. Entries contain their own metadata
-	 * including title, content, links, and timestamps.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=COLLAPSED)
-	public Entry[] getEntries() {
-		return entries;
+	@Override /* Overridden from CommonEntry */
+	public Feed setCategories(Category...value) {
+		super.setCategories(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Feed setContributors(Person...value) {
+		super.setContributors(value);
+		return this;
 	}
 
 	/**
@@ -376,43 +284,50 @@ public class Feed extends CommonEntry {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Feed setBase(Object value) {
-		super.setBase(value);
+	/**
+	 * Bean property setter:  <property>generator</property>.
+	 *
+	 * <p>
+	 * Identifies the software agent used to generate the feed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+	 * 		.setGenerator(
+	 * 			<jk>new</jk> Generator(<js>"My Blog Software"</js>)
+	 * 				.setUri(<js>"http://www.example.com/software"</js>)
+	 * 				.setVersion(<js>"2.0"</js>)
+	 * 		);
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Feed setGenerator(Generator value) {
+		this.generator = value;
 		return this;
 	}
-
-	@Override /* Overridden from Common */
-	public Feed setLang(String value) {
-		super.setLang(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setAuthors(Person...value) {
-		super.setAuthors(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setCategories(Category...value) {
-		super.setCategories(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setContributors(Person...value) {
-		super.setContributors(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Feed setId(String value) {
-		super.setId(value);
+	/**
+	 * Bean property setter:  <property>icon</property>.
+	 *
+	 * <p>
+	 * Identifies a small image that provides iconic visual identification for the feed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+	 * 		.setIcon(<jk>new</jk> Icon(<js>"http://example.org/icon.png"</js>));
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Feed setIcon(Icon value) {
+		this.icon = value;
 		return this;
 	}
 
@@ -423,8 +338,42 @@ public class Feed extends CommonEntry {
 	}
 
 	@Override /* Overridden from CommonEntry */
+	public Feed setId(String value) {
+		super.setId(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Feed setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
 	public Feed setLinks(Link...value) {
 		super.setLinks(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>logo</property>.
+	 *
+	 * <p>
+	 * Identifies a larger image that provides visual identification for the feed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+	 * 		.setLogo(<jk>new</jk> Logo(<js>"http://example.org/logo.png"</js>));
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Feed setLogo(Logo value) {
+		this.logo = value;
 		return this;
 	}
 
@@ -437,6 +386,47 @@ public class Feed extends CommonEntry {
 	@Override /* Overridden from CommonEntry */
 	public Feed setRights(Text value) {
 		super.setRights(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * Sets a human-readable description or subtitle for the feed as plain text.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Feed setSubtitle(String value) {
+		setSubtitle(new Text(value));
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * Sets a human-readable description or subtitle for the feed.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
+	 * 		.setSubtitle(
+	 * 			<jk>new</jk> Text(<js>"html"</js>)
+	 * 				.setText(<js>"A &lt;em&gt;comprehensive&lt;/em&gt; guide to Atom feeds"</js>)
+	 * 		);
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Feed setSubtitle(Text value) {
+		this.subtitle = value;
 		return this;
 	}
 
@@ -453,13 +443,13 @@ public class Feed extends CommonEntry {
 	}
 
 	@Override /* Overridden from CommonEntry */
-	public Feed setUpdated(String value) {
+	public Feed setUpdated(Calendar value) {
 		super.setUpdated(value);
 		return this;
 	}
 
 	@Override /* Overridden from CommonEntry */
-	public Feed setUpdated(Calendar value) {
+	public Feed setUpdated(String value) {
 		super.setUpdated(value);
 		return this;
 	}

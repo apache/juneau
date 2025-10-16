@@ -79,11 +79,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Accept-Charset")
 public class AcceptCharset extends BasicStringRangesHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept-Charset";
 
@@ -128,11 +123,6 @@ public class AcceptCharset extends BasicStringRangesHeader {
 	public static AcceptCharset of(Supplier<StringRanges> value) {
 		return value == null ? null : new AcceptCharset(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

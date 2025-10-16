@@ -36,24 +36,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicDatePart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static BasicDatePart of(String name, ZonedDateTime value) {
-		if (Utils.isEmpty(name) || value == null)
-			return null;
-		return new BasicDatePart(name, value);
-	}
-
 	/**
 	 * Static creator with delayed value.
 	 *
@@ -70,22 +52,34 @@ public class BasicDatePart extends BasicPart {
 		return new BasicDatePart(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 */
+	public static BasicDatePart of(String name, ZonedDateTime value) {
+		if (Utils.isEmpty(name) || value == null)
+			return null;
+		return new BasicDatePart(name, value);
+	}
 	private final ZonedDateTime value;
 	private final Supplier<ZonedDateTime> supplier;
 
 	/**
 	 * Constructor.
 	 *
+	 * <p>
+	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
+	 * Otherwise parses using {@link DateTimeFormatter#ISO_DATE_TIME}.
+	 *
 	 * @param name The part name.  Must not be <jk>null</jk>.
 	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicDatePart(String name, ZonedDateTime value) {
+	public BasicDatePart(String name, String value) {
 		super(name, value);
-		this.value = value;
+		this.value = Utils.isEmpty(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 
@@ -104,23 +98,23 @@ public class BasicDatePart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
-	 * Otherwise parses using {@link DateTimeFormatter#ISO_DATE_TIME}.
-	 *
 	 * @param name The part name.  Must not be <jk>null</jk>.
 	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicDatePart(String name, String value) {
+	public BasicDatePart(String name, ZonedDateTime value) {
 		super(name, value);
-		this.value = Utils.isEmpty(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.value = value;
 		this.supplier = null;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		ZonedDateTime v = value();
-		return v == null ? null : ISO_DATE_TIME.format(v);
+	/**
+	 * Provides the ability to perform fluent-style assertions on this part.
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentZonedDateTimeAssertion<BasicDatePart> assertZonedDateTime() {
+		return new FluentZonedDateTimeAssertion<>(value(), this);
 	}
 
 	/**
@@ -132,23 +126,10 @@ public class BasicDatePart extends BasicPart {
 		return Utils.opt(toZonedDateTime());
 	}
 
-	/**
-	 * Returns The part value as a {@link ZonedDateTime}.
-	 *
-	 * @return The part value as a {@link ZonedDateTime}, or <jk>null</jk> if the value <jk>null</jk>.
-	 */
-	public ZonedDateTime toZonedDateTime() {
-		return value();
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on this part.
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public FluentZonedDateTimeAssertion<BasicDatePart> assertZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(value(), this);
+	@Override /* Overridden from Header */
+	public String getValue() {
+		ZonedDateTime v = value();
+		return v == null ? null : ISO_DATE_TIME.format(v);
 	}
 
 	/**
@@ -163,6 +144,15 @@ public class BasicDatePart extends BasicPart {
 	public ZonedDateTime orElse(ZonedDateTime other) {
 		ZonedDateTime x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns The part value as a {@link ZonedDateTime}.
+	 *
+	 * @return The part value as a {@link ZonedDateTime}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public ZonedDateTime toZonedDateTime() {
+		return value();
 	}
 
 	private ZonedDateTime value() {

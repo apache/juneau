@@ -71,7 +71,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#form() form()}
- * 		<li class='jm'>{@link HtmlBuilder#form(Object, Object...) form(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#form(String, Object...) form(Object, Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -107,6 +107,12 @@ public class Form extends HtmlElementMixed {
 		action(action).children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Form _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-accept-charset">accept-charset</a>
 	 * attribute.
@@ -123,11 +129,17 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"UTF-8 ISO-8859-1"</js> - Multiple encodings</li>
 	 * </ul>
 	 *
-	 * @param acceptcharset The character encodings accepted for form submission.
+	 * @param value The character encodings accepted for form submission.
 	 * @return This object.
 	 */
 	public Form acceptcharset(String value) {
 		attr("accept-charset", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Form accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
@@ -144,11 +156,23 @@ public class Form extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param action The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Form action(String value) {
 		attrUri("action", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Form attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Form attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -167,11 +191,34 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"off"</js> - Disable autocomplete</li>
 	 * </ul>
 	 *
-	 * @param autocomplete The default autocomplete behavior for form controls.
+	 * @param value The default autocomplete behavior for form controls.
 	 * @return This object.
 	 */
 	public Form autocomplete(String value) {
 		attr("autocomplete", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Form child(Object value) {
+		super.child(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElementMixed */
+	public Form children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Form contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Form dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -189,116 +236,11 @@ public class Form extends HtmlElementMixed {
 	 * 	<li><js>"text/plain"</js> - Plain text encoding</li>
 	 * </ul>
 	 *
-	 * @param enctype The encoding type for form data submission.
+	 * @param value The encoding type for form data submission.
 	 * @return This object.
 	 */
 	public Form enctype(String value) {
 		attr("enctype", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-method">method</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the HTTP method to use when submitting the form.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"get"</js> - Form data is sent as URL parameters (default)</li>
-	 * 	<li><js>"post"</js> - Form data is sent in the request body</li>
-	 * 	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
-	 * </ul>
-	 *
-	 * @param method The HTTP method for form submission.
-	 * @return This object.
-	 */
-	public Form method(String value) {
-		attr("method", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the form. This name can be used to access the form via the
-	 * document.forms API and for form submission.
-	 *
-	 * <p>
-	 * The name should be unique within the document and should not contain spaces or special characters.
-	 *
-	 * @param name The name of the form for API access and submission.
-	 * @return This object.
-	 */
-	public Form name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate">novalidate</a> attribute.
-	 *
-	 * <p>
-	 * Disables form validation, allowing the form to be submitted even if validation fails.
-	 *
-	 * @param novalidate If <jk>true</jk>, disables form validation.
-	 * @return This object.
-	 */
-	public Form novalidate(Boolean value) {
-		attr("novalidate", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
-	 *
-	 * <p>
-	 * Specifies where to display the response after form submission.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"_self"</js> - Load in the same frame (default)</li>
-	 * 	<li><js>"_blank"</js> - Load in a new window or tab</li>
-	 * 	<li><js>"_parent"</js> - Load in the parent frame</li>
-	 * 	<li><js>"_top"</js> - Load in the full body of the window</li>
-	 * 	<li>Frame name - Load in the named frame</li>
-	 * </ul>
-	 *
-	 * @param target Where to display the form submission response.
-	 * @return This object.
-	 */
-	public Form target(String value) {
-		attr("target", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Form _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -317,6 +259,60 @@ public class Form extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Form lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-method">method</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the HTTP method to use when submitting the form.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"get"</js> - Form data is sent as URL parameters (default)</li>
+	 * 	<li><js>"post"</js> - Form data is sent in the request body</li>
+	 * 	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
+	 * </ul>
+	 *
+	 * @param value The HTTP method for form submission.
+	 * @return This object.
+	 */
+	public Form method(String value) {
+		attr("method", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-form-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the form. This name can be used to access the form via the
+	 * document.forms API and for form submission.
+	 *
+	 * <p>
+	 * The name should be unique within the document and should not contain spaces or special characters.
+	 *
+	 * @param value The name of the form for API access and submission.
+	 * @return This object.
+	 */
+	public Form name(String value) {
+		attr("name", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-novalidate">novalidate</a> attribute.
+	 *
+	 * <p>
+	 * Disables form validation, allowing the form to be submitted even if validation fails.
+	 *
+	 * @param value If <jk>true</jk>, disables form validation.
+	 * @return This object.
+	 */
+	public Form novalidate(Boolean value) {
+		attr("novalidate", value);
 		return this;
 	}
 
@@ -638,6 +634,30 @@ public class Form extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-target">target</a> attribute.
+	 *
+	 * <p>
+	 * Specifies where to display the response after form submission.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"_self"</js> - Load in the same frame (default)</li>
+	 * 	<li><js>"_blank"</js> - Load in a new window or tab</li>
+	 * 	<li><js>"_parent"</js> - Load in the parent frame</li>
+	 * 	<li><js>"_top"</js> - Load in the full body of the window</li>
+	 * 	<li>Frame name - Load in the named frame</li>
+	 * </ul>
+	 *
+	 * @param value Where to display the form submission response.
+	 * @return This object.
+	 */
+	public Form target(String value) {
+		attr("target", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Form title(String value) {
 		super.title(value);
@@ -647,30 +667,6 @@ public class Form extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Form translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Form child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Form children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Form attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

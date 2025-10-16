@@ -106,32 +106,16 @@ public class Example extends OpenApiElement {
 		return new Example(this);
 	}
 
-	/**
-	 * Bean property getter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getSummary() {
-		return summary;
-	}
-
-	/**
-	 * Bean property setter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Example setSummary(String value) {
-		summary = value;
-		return this;
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "externalValue" -> toType(getExternalValue(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "value" -> toType(getValue(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	/**
@@ -147,18 +131,6 @@ public class Example extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>description</property>.
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Example setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>externalValue</property>.
 	 *
 	 * <p>
@@ -168,6 +140,72 @@ public class Example extends OpenApiElement {
 	 */
 	public String getExternalValue() {
 		return externalValue;
+	}
+
+	/**
+	 * Bean property getter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getSummary() {
+		return summary;
+	}
+
+	/**
+	 * Bean property getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 *
+	 * (Note: <js>"value"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getValue() {
+		return value;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(externalValue != null, "externalValue")
+			.addIf(summary != null, "summary")
+			.addIf(value != null, "value")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Example set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> setDescription(Utils.s(value));
+			case "externalValue" -> setExternalValue(Utils.s(value));
+			case "summary" -> setSummary(Utils.s(value));
+			case "value" -> setValue(value);
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Example setDescription(String value) {
+		description = value;
+		return this;
 	}
 
 	/**
@@ -188,19 +226,19 @@ public class Example extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>default</property>.
+	 * Bean property setter:  <property>summary</property>.
 	 *
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * The identifying name of the contact person/organization.
 	 *
-	 * (Note: <js>"value"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
 	 */
-	public Object getValue() {
-		return value;
+	public Example setSummary(String value) {
+		summary = value;
+		return this;
 	}
 
 	/**
@@ -219,44 +257,6 @@ public class Example extends OpenApiElement {
 	public Example setValue(Object val) {
 		value = val;
 		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "externalValue" -> toType(getExternalValue(), type);
-			case "summary" -> toType(getSummary(), type);
-			case "value" -> toType(getValue(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Example set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "externalValue" -> setExternalValue(Utils.s(value));
-			case "summary" -> setSummary(Utils.s(value));
-			case "value" -> setValue(value);
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(description != null, "description")
-			.addIf(externalValue != null, "externalValue")
-			.addIf(summary != null, "summary")
-			.addIf(value != null, "value")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

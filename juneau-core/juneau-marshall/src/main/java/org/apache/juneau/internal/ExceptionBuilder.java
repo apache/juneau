@@ -42,16 +42,16 @@ public class ExceptionBuilder<T extends Throwable> {
 	}
 
 	/**
-	 * Specifies the exception message.
+	 * Creates the exception.
 	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return This object.
+	 * @return The exception.
 	 */
-	public ExceptionBuilder<T> message(String msg, Object...args) {
-		message = format(msg, args);
-		return this;
+	public T build() {
+		try {
+			return type.getConstructor(String.class, Throwable.class).newInstance(message, causedBy);
+		} catch (Exception e) {
+			throw asRuntimeException(e);
+		}
 	}
 
 	/**
@@ -65,15 +65,15 @@ public class ExceptionBuilder<T extends Throwable> {
 		return this;
 	}
 	/**
-	 * Creates the exception.
+	 * Specifies the exception message.
 	 *
-	 * @return The exception.
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return This object.
 	 */
-	public T build() {
-		try {
-			return type.getConstructor(String.class, Throwable.class).newInstance(message, causedBy);
-		} catch (Exception e) {
-			throw asRuntimeException(e);
-		}
+	public ExceptionBuilder<T> message(String msg, Object...args) {
+		message = format(msg, args);
+		return this;
 	}
 }

@@ -41,8 +41,13 @@ public class NoCloseOutputStream extends OutputStream {
 	}
 
 	@Override /* Overridden from OutputStream */
-	public void write(int b) throws IOException {
-		os.write(b);
+	public void close() throws IOException {
+		os.flush();
+	}
+
+	@Override /* Overridden from OutputStream */
+	public void flush() throws IOException {
+		os.flush();
 	}
 
 	@Override /* Overridden from OutputStream */
@@ -56,12 +61,7 @@ public class NoCloseOutputStream extends OutputStream {
 	}
 
 	@Override /* Overridden from OutputStream */
-	public void flush() throws IOException {
-		os.flush();
-	}
-
-	@Override /* Overridden from OutputStream */
-	public void close() throws IOException {
-		os.flush();
+	public void write(int b) throws IOException {
+		os.write(b);
 	}
 }

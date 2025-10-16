@@ -105,26 +105,6 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<StatusLine,R> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentResponseStatusLineAssertion(StatusLine value, R returns) {
-		this(null, value, returns);
-	}
-
 	/**
 	 * Chained constructor.
 	 *
@@ -147,10 +127,20 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 		setThrowable(BadRequest.class);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentResponseStatusLineAssertion(StatusLine value, R returns) {
+		this(null, value, returns);
+	}
 	/**
 	 * Returns an assertion against the status code on the response status object.
 	 *
@@ -158,24 +148,6 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	 */
 	public FluentIntegerAssertion<R> asCode() {
 		return new FluentIntegerAssertion<>(this, value().getStatusCode(), returns());
-	}
-
-	/**
-	 * Returns an assertion against the reason phrase on the response status object.
-	 *
-	 * @return An assertion against the reason phrase on the response status object.
-	 */
-	public FluentStringAssertion<R> asReason() {
-		return new FluentStringAssertion<>(this, value().getReasonPhrase(), returns());
-	}
-
-	/**
-	 * Returns an assertion against the protocol on the response status object.
-	 *
-	 * @return An assertion against the protocol on the response status object.
-	 */
-	public FluentStringAssertion<R> asProtocol() {
-		return new FluentStringAssertion<>(this, value().getProtocolVersion().getProtocol(), returns());
 	}
 
 	/**
@@ -196,9 +168,23 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 		return new FluentIntegerAssertion<>(this, value().getProtocolVersion().getMinor(), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns an assertion against the protocol on the response status object.
+	 *
+	 * @return An assertion against the protocol on the response status object.
+	 */
+	public FluentStringAssertion<R> asProtocol() {
+		return new FluentStringAssertion<>(this, value().getProtocolVersion().getProtocol(), returns());
+	}
+
+	/**
+	 * Returns an assertion against the reason phrase on the response status object.
+	 *
+	 * @return An assertion against the reason phrase on the response status object.
+	 */
+	public FluentStringAssertion<R> asReason() {
+		return new FluentStringAssertion<>(this, value().getReasonPhrase(), returns());
+	}
 	@Override /* Overridden from Assertion */
 	public FluentResponseStatusLineAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

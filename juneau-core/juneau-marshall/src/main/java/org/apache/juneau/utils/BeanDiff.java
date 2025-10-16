@@ -53,27 +53,6 @@ import org.apache.juneau.marshaller.*;
  */
 @Bean(properties="v1,v2")
 public class BeanDiff {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Create a new builder for this class.
-	 *
-	 * @param <T> The bean types.
-	 * @param first The first bean to compare.
-	 * @param second The second bean to compare.
-	 * @return A new builder.
-	 */
-	public static <T> Builder<T> create(T first, T second) {
-		return new Builder<T>().first(first).second(second);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -83,28 +62,6 @@ public class BeanDiff {
 		T first, second;
 		BeanContext beanContext = BeanContext.DEFAULT;
 		Set<String> include, exclude;
-
-		/**
-		 * Specifies the first bean to compare.
-		 *
-		 * @param value The first bean to compare.
-		 * @return This object.
-		 */
-		public Builder<T> first(T value) {
-			this.first = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the second bean to compare.
-		 *
-		 * @param value The first bean to compare.
-		 * @return This object.
-		 */
-		public Builder<T> second(T value) {
-			this.second = value;
-			return this;
-		}
 
 		/**
 		 * Specifies the bean context to use for introspecting beans.
@@ -121,16 +78,44 @@ public class BeanDiff {
 		}
 
 		/**
-		 * Specifies the properties to include in the comparison.
+		 * Build the differences.
 		 *
-		 * <p>
-		 * If not specified, compares all properties.
+		 * @return A new {@link BeanDiff} object.
+		 */
+		public BeanDiff build() {
+			return new BeanDiff(beanContext, first, second, include, exclude);
+		}
+
+		/**
+		 * Specifies the properties to exclude from the comparison.
 		 *
-		 * @param properties The properties to include in the comparison.
+		 * @param properties The properties to exclude from the comparison.
 		 * @return This object.
 		 */
-		public Builder<T> include(String...properties) {
-			include = set(properties);
+		public Builder<T> exclude(Set<String> properties) {
+			exclude = properties;
+			return this;
+		}
+
+		/**
+		 * Specifies the properties to exclude from the comparison.
+		 *
+		 * @param properties The properties to exclude from the comparison.
+		 * @return This object.
+		 */
+		public Builder<T> exclude(String...properties) {
+			exclude = set(properties);
+			return this;
+		}
+
+		/**
+		 * Specifies the first bean to compare.
+		 *
+		 * @param value The first bean to compare.
+		 * @return This object.
+		 */
+		public Builder<T> first(T value) {
+			this.first = value;
 			return this;
 		}
 
@@ -149,41 +134,41 @@ public class BeanDiff {
 		}
 
 		/**
-		 * Specifies the properties to exclude from the comparison.
+		 * Specifies the properties to include in the comparison.
 		 *
-		 * @param properties The properties to exclude from the comparison.
+		 * <p>
+		 * If not specified, compares all properties.
+		 *
+		 * @param properties The properties to include in the comparison.
 		 * @return This object.
 		 */
-		public Builder<T> exclude(String...properties) {
-			exclude = set(properties);
+		public Builder<T> include(String...properties) {
+			include = set(properties);
 			return this;
 		}
 
 		/**
-		 * Specifies the properties to exclude from the comparison.
+		 * Specifies the second bean to compare.
 		 *
-		 * @param properties The properties to exclude from the comparison.
+		 * @param value The first bean to compare.
 		 * @return This object.
 		 */
-		public Builder<T> exclude(Set<String> properties) {
-			exclude = properties;
+		public Builder<T> second(T value) {
+			this.second = value;
 			return this;
-		}
-
-		/**
-		 * Build the differences.
-		 *
-		 * @return A new {@link BeanDiff} object.
-		 */
-		public BeanDiff build() {
-			return new BeanDiff(beanContext, first, second, include, exclude);
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create a new builder for this class.
+	 *
+	 * @param <T> The bean types.
+	 * @param first The first bean to compare.
+	 * @param second The second bean to compare.
+	 * @return A new builder.
+	 */
+	public static <T> Builder<T> create(T first, T second) {
+		return new Builder<T>().first(first).second(second);
+	}
 	private JsonMap v1 = new JsonMap(), v2 = new JsonMap();
 
 	/**
@@ -222,15 +207,6 @@ public class BeanDiff {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the beans had differences.
-	 *
-	 * @return <jk>true</jk> if the beans had differences.
-	 */
-	public boolean hasDiffs() {
-		return v1.size() > 0 || v2.size() > 0;
-	}
-
-	/**
 	 * Returns the differences in the first bean.
 	 *
 	 * @return The differences in the first bean.
@@ -246,6 +222,15 @@ public class BeanDiff {
 	 */
 	public JsonMap getV2() {
 		return v2;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the beans had differences.
+	 *
+	 * @return <jk>true</jk> if the beans had differences.
+	 */
+	public boolean hasDiffs() {
+		return v1.size() > 0 || v2.size() > 0;
 	}
 
 	@Override

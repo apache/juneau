@@ -30,18 +30,9 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class ByteArrayEntity extends BasicHttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final byte[] EMPTY = {};
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -67,37 +58,18 @@ public class ByteArrayEntity extends BasicHttpEntity {
 		super(copyFrom);
 	}
 
-	@Override
-	public ByteArrayEntity copy() {
-		return new ByteArrayEntity(this);
+	@Override /* Overridden from AbstractHttpEntity */
+	public byte[] asBytes() throws IOException {
+		return content();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private byte[] content() {
-		return contentOrElse(EMPTY);
-	}
-
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		return new String(content(), getCharset());
 	}
 
-	@Override /* Overridden from AbstractHttpEntity */
-	public byte[] asBytes() throws IOException {
-		return content();
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return isSupplied() ? super.getContentLength() : content().length;
+	@Override
+	public ByteArrayEntity copy() {
+		return new ByteArrayEntity(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -106,10 +78,15 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
-		out.write(content());
+	public long getContentLength() {
+		return isSupplied() ? super.getContentLength() : content().length;
 	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isRepeatable() {
+		return true;
+	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public ByteArrayEntity setCached() throws IOException{
 		super.setCached();
@@ -121,7 +98,6 @@ public class ByteArrayEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpEntity */
 	public ByteArrayEntity setChunked() {
 		super.setChunked();
@@ -147,13 +123,13 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentEncoding(String value) {
+	public ByteArrayEntity setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentEncoding(ContentEncoding value) {
+	public ByteArrayEntity setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -165,13 +141,13 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentType(String value) {
+	public ByteArrayEntity setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public ByteArrayEntity setContentType(ContentType value) {
+	public ByteArrayEntity setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
@@ -186,5 +162,15 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	public ByteArrayEntity setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public void writeTo(OutputStream out) throws IOException {
+		Utils.assertArgNotNull("out", out);
+		out.write(content());
+	}
+
+	private byte[] content() {
+		return contentOrElse(EMPTY);
 	}
 }

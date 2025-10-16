@@ -138,6 +138,68 @@ public class Info extends OpenApiElement {
 		return new Info(this);
 	}
 
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "title" -> toType(getTitle(), type);
+			case "description" -> toType(getDescription(), type);
+			case "termsOfService" -> toType(getTermsOfService(), type);
+			case "contact" -> toType(getContact(), type);
+			case "license" -> toType(getLicense(), type);
+			case "version" -> toType(getVersion(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>contact</property>.
+	 *
+	 * <p>
+	 * The contact information for the exposed API.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Contact getContact() {
+		return contact;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the application.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>license</property>.
+	 *
+	 * <p>
+	 * The license information for the exposed API.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public License getLicense() {
+		return license;
+	}
+
+	/**
+	 * Bean property getter:  <property>termsOfService</property>.
+	 *
+	 * <p>
+	 * The Terms of Service for the API.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getTermsOfService() {
+		return termsOfService;
+	}
+
 	/**
 	 * Bean property getter:  <property>title</property>.
 	 *
@@ -148,6 +210,112 @@ public class Info extends OpenApiElement {
 	 */
 	public String getTitle() {
 		return title;
+	}
+
+	/**
+	 * Bean property getter:  <property>version</property>.
+	 *
+	 * <p>
+	 * Provides the version of the application API (not to be confused with the specification version).
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getVersion() {
+		return version;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(contact != null, "contact")
+			.addIf(description != null, "description")
+			.addIf(license != null, "license")
+			.addIf(termsOfService != null, "termsOfService")
+			.addIf(title != null, "title")
+			.addIf(version != null, "version")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Info set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "contact" -> setContact(toType(value, Contact.class));
+			case "description" -> setDescription(Utils.s(value));
+			case "license" -> setLicense(toType(value, License.class));
+			case "termsOfService" -> setTermsOfService(Utils.s(value));
+			case "title" -> setTitle(Utils.s(value));
+			case "version" -> setVersion(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>contact</property>.
+	 *
+	 * <p>
+	 * The contact information for the exposed API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Info setContact(Contact value) {
+		contact = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the application.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Info setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>license</property>.
+	 *
+	 * <p>
+	 * The license information for the exposed API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Info setLicense(License value) {
+		license = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>termsOfService</property>.
+	 *
+	 * <p>
+	 * The Terms of Service for the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Info setTermsOfService(String value) {
+		termsOfService = value;
+		return this;
 	}
 
 	/**
@@ -168,130 +336,6 @@ public class Info extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the application.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the application.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Info setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>termsOfService</property>.
-	 *
-	 * <p>
-	 * The Terms of Service for the API.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getTermsOfService() {
-		return termsOfService;
-	}
-
-	/**
-	 * Bean property setter:  <property>termsOfService</property>.
-	 *
-	 * <p>
-	 * The Terms of Service for the API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Info setTermsOfService(String value) {
-		termsOfService = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>contact</property>.
-	 *
-	 * <p>
-	 * The contact information for the exposed API.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Contact getContact() {
-		return contact;
-	}
-
-	/**
-	 * Bean property setter:  <property>contact</property>.
-	 *
-	 * <p>
-	 * The contact information for the exposed API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Info setContact(Contact value) {
-		contact = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>license</property>.
-	 *
-	 * <p>
-	 * The license information for the exposed API.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public License getLicense() {
-		return license;
-	}
-
-	/**
-	 * Bean property setter:  <property>license</property>.
-	 *
-	 * <p>
-	 * The license information for the exposed API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Info setLicense(License value) {
-		license = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>version</property>.
-	 *
-	 * <p>
-	 * Provides the version of the application API (not to be confused with the specification version).
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getVersion() {
-		return version;
-	}
-
-	/**
 	 * Bean property setter:  <property>version</property>.
 	 *
 	 * <p>
@@ -306,50 +350,6 @@ public class Info extends OpenApiElement {
 	public Info setVersion(String value) {
 		version = value;
 		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "title" -> toType(getTitle(), type);
-			case "description" -> toType(getDescription(), type);
-			case "termsOfService" -> toType(getTermsOfService(), type);
-			case "contact" -> toType(getContact(), type);
-			case "license" -> toType(getLicense(), type);
-			case "version" -> toType(getVersion(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Info set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "contact" -> setContact(toType(value, Contact.class));
-			case "description" -> setDescription(Utils.s(value));
-			case "license" -> setLicense(toType(value, License.class));
-			case "termsOfService" -> setTermsOfService(Utils.s(value));
-			case "title" -> setTitle(Utils.s(value));
-			case "version" -> setVersion(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(contact != null, "contact")
-			.addIf(description != null, "description")
-			.addIf(license != null, "license")
-			.addIf(termsOfService != null, "termsOfService")
-			.addIf(title != null, "title")
-			.addIf(version != null, "version")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

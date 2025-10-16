@@ -133,85 +133,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
-	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(create());
-
-	/** Reusable instance of {@link UrlEncodingSerializer.PlainText}. */
-	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(create());
-
-	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
-	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(create());
-
-	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
-	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();</code>.
-	 */
-	public static class Expanded extends UrlEncodingSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Expanded(Builder builder) {
-			super(builder.expandedParams());
-		}
-	}
-
-	/**
-	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().useWhitespace().build();</code>.
-	 */
-	public static class Readable extends UrlEncodingSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Readable(Builder builder) {
-			super(builder.useWhitespace());
-		}
-	}
-
-	/**
-	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().plainTextParts().build();</code>.
-	 */
-	public static class PlainText extends UrlEncodingSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public PlainText(Builder builder) {
-			super(builder.paramFormatPlain());
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -232,16 +153,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(UrlEncodingSerializer copyFrom) {
-			super(copyFrom);
-			expandedParams = copyFrom.expandedParams;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -249,82 +160,56 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 			expandedParams = copyFrom.expandedParams;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public UrlEncodingSerializer build() {
-			return cache(CACHE).build(UrlEncodingSerializer.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				expandedParams
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Serialize bean property collections/arrays as separate key/value pairs.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * By default, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
-		 * <br>When enabled, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
-		 *
-		 * <p>
-		 * This option only applies to beans.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
-		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
-		 * 		is added to it.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A sample bean.</jc>
-		 * 	<jk>public class</jk> A {
-		 * 		<jk>public</jk> String[] <jf>f1</jf> = {<js>"a"</js>,<js>"b"</js>};
-		 * 		<jk>public</jk> List&lt;String&gt; <jf>f2</jf> = Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>});
-		 * 	}
-		 *
-		 * 	<jc>// Normal serializer.</jc>
-		 * 	WriterSerializer <jv>serializer1</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
-		 *
-		 * 	<jc>// Expanded-params serializer.</jc>
-		 * 	WriterSerializer <jv>serializer2</jv> = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
-		 *
-		 *  <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
-		 * 	String <jv>out1</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> A());
-		 *
-		 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A());
-		 * </p>
-		 *
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder expandedParams() {
-			return expandedParams(true);
+		protected Builder(UrlEncodingSerializer copyFrom) {
+			super(copyFrom);
+			expandedParams = copyFrom.expandedParams;
 		}
 
-		/**
-		 * Same as {@link #expandedParams()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder expandedParams(boolean value) {
-			expandedParams = value;
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypesUon() {
+			super.addBeanTypesUon();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypesUon(boolean value) {
+			super.addBeanTypesUon(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType(boolean value) {
+			super.addRootType(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -338,44 +223,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -434,14 +289,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -452,14 +307,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -470,14 +325,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -488,14 +343,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -520,6 +375,46 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public UrlEncodingSerializer build() {
+			return cache(CACHE).build(UrlEncodingSerializer.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
 			return this;
 		}
 
@@ -560,14 +455,81 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
+		public Builder encoding() {
+			super.encoding();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		/**
+		 * Serialize bean property collections/arrays as separate key/value pairs.
+		 *
+		 * <p>
+		 * By default, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+		 * <br>When enabled, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
+		 *
+		 * <p>
+		 * This option only applies to beans.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
+		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
+		 * 		is added to it.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A sample bean.</jc>
+		 * 	<jk>public class</jk> A {
+		 * 		<jk>public</jk> String[] <jf>f1</jf> = {<js>"a"</js>,<js>"b"</js>};
+		 * 		<jk>public</jk> List&lt;String&gt; <jf>f2</jf> = Arrays.<jsm>asList</jsm>(<jk>new</jk> String[]{<js>"c"</js>,<js>"d"</js>});
+		 * 	}
+		 *
+		 * 	<jc>// Normal serializer.</jc>
+		 * 	WriterSerializer <jv>serializer1</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>;
+		 *
+		 * 	<jc>// Expanded-params serializer.</jc>
+		 * 	WriterSerializer <jv>serializer2</jv> = UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();
+		 *
+		 *  <jc>// Produces "f1=(a,b)&amp;f2=(c,d)"</jc>
+		 * 	String <jv>out1</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> A());
+		 *
+		 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
+		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A());
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder expandedParams() {
+			return expandedParams(true);
+		}
+
+		/**
+		 * Same as {@link #expandedParams()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder expandedParams(boolean value) {
+			expandedParams = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
@@ -583,6 +545,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 			return this;
 		}
 
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				expandedParams
+			);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
@@ -592,168 +562,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
 			return this;
 		}
 
@@ -770,44 +578,50 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder initialDepth(int value) {
 			super.initialDepth(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder accept(String value) {
-			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes() {
-			super.addBeanTypes();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes(boolean value) {
-			super.addBeanTypes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType() {
-			super.addRootType();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType(boolean value) {
-			super.addRootType(value);
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
 			return this;
 		}
 
@@ -830,8 +644,86 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanClasses(java.lang.Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder paramFormat(ParamFormat value) {
+			super.paramFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder paramFormatPlain() {
+			super.paramFormatPlain();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder produces(String value) {
 			super.produces(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder quoteCharOverride(char value) {
+			super.quoteCharOverride(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder quoteCharUon(char value) {
+			super.quoteCharUon(value);
 			return this;
 		}
 
@@ -856,6 +748,66 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		@Override /* Overridden from Builder */
 		public Builder sortMaps(boolean value) {
 			super.sortMaps(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sq() {
+			super.sq();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
 			return this;
 		}
 
@@ -896,6 +848,30 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
@@ -914,38 +890,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder maxIndent(int value) {
-			super.maxIndent(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder quoteChar(char value) {
-			super.quoteChar(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder quoteCharOverride(char value) {
-			super.quoteCharOverride(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sq() {
-			super.sq();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
 			return this;
 		}
 
@@ -966,48 +918,71 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 			super.ws();
 			return this;
 		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypesUon() {
-			super.addBeanTypesUon();
-			return this;
-		}
+	/**
+	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().expandedParams().build();</code>.
+	 */
+	public static class Expanded extends UrlEncodingSerializer {
 
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypesUon(boolean value) {
-			super.addBeanTypesUon(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder encoding() {
-			super.encoding();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder paramFormat(ParamFormat value) {
-			super.paramFormat(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder paramFormatPlain() {
-			super.paramFormatPlain();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder quoteCharUon(char value) {
-			super.quoteCharUon(value);
-			return this;
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Expanded(Builder builder) {
+			super(builder.expandedParams());
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().plainTextParts().build();</code>.
+	 */
+	public static class PlainText extends UrlEncodingSerializer {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public PlainText(Builder builder) {
+			super(builder.paramFormatPlain());
+		}
+	}
+
+	/**
+	 * Equivalent to <code>UrlEncodingSerializer.<jsm>create</jsm>().useWhitespace().build();</code>.
+	 */
+	public static class Readable extends UrlEncodingSerializer {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Readable(Builder builder) {
+			super(builder.useWhitespace());
+		}
+	}
+
+	/** Reusable instance of {@link UrlEncodingSerializer}, all default settings. */
+	public static final UrlEncodingSerializer DEFAULT = new UrlEncodingSerializer(create());
+	/** Reusable instance of {@link UrlEncodingSerializer.PlainText}. */
+	public static final UrlEncodingSerializer DEFAULT_PLAINTEXT = new PlainText(create());
+
+	/** Reusable instance of {@link UrlEncodingSerializer.Expanded}. */
+	public static final UrlEncodingSerializer DEFAULT_EXPANDED = new Expanded(create());
+
+	/** Reusable instance of {@link UrlEncodingSerializer.Readable}. */
+	public static final UrlEncodingSerializer DEFAULT_READABLE = new Readable(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final boolean
 		expandedParams;
 
@@ -1038,21 +1013,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	public UrlEncodingSerializerSession getSession() {
 		return createSession().build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from UrlEncodingMetaProvider */
-	public UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
-		UrlEncodingClassMeta m = urlEncodingClassMetas.get(cm);
-		if (m == null) {
-			m = new UrlEncodingClassMeta(cm, this);
-			urlEncodingClassMetas.put(cm, m);
-		}
-		return m;
-	}
-
 	@Override /* Overridden from UrlEncodingMetaProvider */
 	public UrlEncodingBeanPropertyMeta getUrlEncodingBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
@@ -1065,10 +1025,15 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		return m;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
+	@Override /* Overridden from UrlEncodingMetaProvider */
+	public UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		UrlEncodingClassMeta m = urlEncodingClassMetas.get(cm);
+		if (m == null) {
+			m = new UrlEncodingClassMeta(cm, this);
+			urlEncodingClassMetas.put(cm, m);
+		}
+		return m;
+	}
 	/**
 	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
@@ -1080,11 +1045,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	protected final boolean isExpandedParams() {
 		return expandedParams;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("expandedParams", expandedParams);

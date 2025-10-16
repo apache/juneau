@@ -107,9 +107,9 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
-
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RestResponse extends HttpServletResponseWrapper {
 
 	private HttpServletResponse inner;
@@ -179,59 +179,87 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns access to the inner {@link RestContext} of the class of this method.
-	 *
-	 * @return The {@link RestContext} of this class.  Never <jk>null</jk>.
-	 */
-	public RestContext getContext() {
-		return request.getContext();
-	}
-
-	/**
-	 * Returns access to the inner {@link RestOpContext} of this method.
-	 *
-	 * @return The {@link RestOpContext} of this method.  Never <jk>null</jk>.
-	 */
-	public RestOpContext getOpContext() {
-		return request.getOpContext();
-	}
-
-	/**
-	 * Sets the HTTP output on the response.
+	 * Adds a response header.
 	 *
 	 * <p>
-	 * The object type can be anything allowed by the registered response handlers.
+	 * Any previous header values are preserved.
 	 *
 	 * <p>
-	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
+	 * Value is added at the end of the headers.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
-	 * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>, <ja>@Path</ja> UUID <jv>personId</jv>) {
-	 * 		Person <jv>person</jv> = getPersonById(<jv>personId</jv>);
-	 * 		<jv>res</jv>.setOutput(<jv>person</jv>);
-	 * 	}
-	 * </p>
+	 * <p>
+	 * If the header is a {@link BasicUriHeader}, the URI will be resolved using the {@link RestRequest#getUriResolver()} object.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
-	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
-	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
-	 * </ul>
+	 * <p>
+	 * If the header is a {@link SerializedHeader} and the serializer session is not set, it will be set to the one returned by {@link RestRequest#getPartSerializerSession()} before serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
-	 * </ul>
+	 * <p>
+	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
+	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
 	 *
-	 * @param output The output to serialize to the connection.
+	 * @param header The header.
 	 * @return This object.
 	 */
-	public RestResponse setContent(Object output) {
-		this.content = Utils.opt(output);
+	public RestResponse addHeader(Header header) {
+		if (header == null) {
+			// Do nothing.
+		} else if (header instanceof BasicUriHeader) {
+			BasicUriHeader x = (BasicUriHeader)header;
+			addHeader(x.getName(), resolveUris(x.getValue()));
+		} else if (header instanceof SerializedHeader) {
+			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
+			addHeader(x.getName(), resolveUris(x.getValue()));
+		} else {
+			addHeader(header.getName(), header.getValue());
+		}
 		return this;
+	}
+
+	/**
+	 * Adds a response header with the given name and value.
+	 *
+	 * <p>
+	 * This method allows response headers to have multiple values.
+	 *
+	 * <p>
+	 * A no-op of either the name or value is <jk>null</jk>.
+	 *
+	 * <p>
+	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
+	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 */
+	@Override
+	public void addHeader(String name, String value) {
+		if (name != null && value != null) {
+			if (name.equalsIgnoreCase("Content-Type"))
+				setHeader(name, value);
+			else {
+				if (safeHeaders)
+					value = stripInvalidHttpHeaderChars(value);
+				value = abbreviate(value, maxHeaderLength);
+				inner.addHeader(name, value);
+			}
+		}
+	}
+
+	/**
+	 * Forces any content in the buffer to be written to the client.
+	 *
+	 * <p>
+	 * A call to this method automatically commits the response, meaning the status code and headers will be written.
+	 *
+	 * @throws IOException If an I/O error occurred.
+	 */
+	@Override
+	public void flushBuffer() throws IOException {
+		if (w != null)
+			w.flush();
+		if (os != null)
+			os.flush();
+		inner.flushBuffer();
 	}
 
 	/**
@@ -244,15 +272,13 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <c>getRequest().setAttribute(String,Object)</c>.
+	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
 	 *
-	 * @param name The property name.
-	 * @param value The property value.
-	 * @return This object.
+	 * @return The request character encoding converted to a {@link Charset}.
 	 */
-	public RestResponse setAttribute(String name, Object value) {
-		request.setAttribute(name, value);
-		return this;
+	public Charset getCharset() {
+		String s = getCharacterEncoding();
+		return s == null ? null : Charset.forName(s);
 	}
 
 	/**
@@ -270,32 +296,85 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the response contains output.
+	 * Returns this value cast to the specified class.
 	 *
-	 * <p>
-	 * This implies {@link #setContent(Object)} has been called on this object.
-	 *
-	 * <p>
-	 * Note that this also returns <jk>true</jk> even if {@link #setContent(Object)} was called with a <jk>null</jk>
-	 * value as this means the response contains an output value of <jk>null</jk> as opposed to no value at all.
-	 *
-	 * @return <jk>true</jk> if the response contains output.
+	 * @param <T> The class to cast to.
+	 * @param c The class to cast to.
+	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
 	 */
-	public boolean hasContent() {
-		return content != null;
+	@SuppressWarnings("unchecked")
+	public <T> T getContent(Class<T> c) {
+		if (isContentOfType(c))
+			return (T)getRawOutput();
+		return null;
 	}
 
 	/**
-	 * Sets the output to a plain-text message regardless of the content type.
+	 * Returns the schema of the response content.
 	 *
-	 * @param text The output text to send.
-	 * @return This object.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @return The schema of the response content, never <jk>null</jk>.
 	 */
-	public RestResponse sendPlainText(String text) throws IOException {
-		setContentType("text/plain");
-		getNegotiatedWriter().write(text);
-		return this;
+	public Optional<HttpPartSchema> getContentSchema() {
+		if (contentSchema != null)
+			return contentSchema;
+		if (responseBeanMeta != null)
+			contentSchema = Utils.opt(responseBeanMeta.getSchema());
+		else {
+			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getContent(Object.class));
+			if (rbm != null)
+				contentSchema = Utils.opt(rbm.getSchema());
+			else
+				contentSchema = Utils.opte();
+		}
+		return contentSchema;
+	}
+
+	/**
+	 * Returns access to the inner {@link RestContext} of the class of this method.
+	 *
+	 * @return The {@link RestContext} of this class.  Never <jk>null</jk>.
+	 */
+	public RestContext getContext() {
+		return request.getContext();
+	}
+
+	/**
+	 * Convenience method meant to be used when rendering directly to a browser with no buffering.
+	 *
+	 * <p>
+	 * Sets the header <js>"x-content-type-options=nosniff"</js> so that output is rendered immediately on IE and Chrome
+	 * without any buffering for content-type sniffing.
+	 *
+	 * <p>
+	 * This can be useful if you want to render a streaming 'console' on a web page.
+	 *
+	 * @param contentType The value to set as the <c>Content-Type</c> on the response.
+	 * @return The raw writer.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public PrintWriter getDirectWriter(String contentType) throws IOException {
+		setContentType(contentType);
+		setHeader("X-Content-Type-Options", "nosniff");
+		setHeader("Content-Encoding", "identity");
+		return getWriter(true, true);
+	}
+
+	/**
+	 * Returns the wrapped servlet request.
+	 *
+	 * @return The wrapped servlet request.
+	 */
+	public HttpServletResponse getHttpServletResponse() {
+		return inner;
+	}
+
+	/**
+	 * Returns the <c>Content-Type</c> header stripped of the charset attribute if present.
+	 *
+	 * @return The <c>media-type</c> portion of the <c>Content-Type</c> header.
+	 */
+	public MediaType getMediaType() {
+		return MediaType.of(getContentType());
 	}
 
 	/**
@@ -339,6 +418,28 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
+	 * Equivalent to {@link HttpServletResponse#getWriter()}, except wraps the output stream if an {@link Encoder} was
+	 * found that matched the <c>Accept-Encoding</c> header and sets the <c>Content-Encoding</c>
+	 * header to the appropriate value.
+	 *
+	 * @return The negotiated writer.
+	 * @throws NotAcceptable If unsupported charset in request header Accept-Charset.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {
+		return getWriter(false, false);
+	}
+
+	/**
+	 * Returns access to the inner {@link RestOpContext} of this method.
+	 *
+	 * @return The {@link RestOpContext} of this method.  Never <jk>null</jk>.
+	 */
+	public RestOpContext getOpContext() {
+		return request.getOpContext();
+	}
+
+	/**
 	 * Returns a ServletOutputStream suitable for writing binary data in the response.
 	 *
 	 * <p>
@@ -368,6 +469,33 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
+	 * Returns the metadata about this response.
+	 *
+	 * @return
+	 * 	The metadata about this response.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public ResponseBeanMeta getResponseBeanMeta() {
+		return responseBeanMeta;
+	}
+
+	/**
+	 * Returns the matching serializer and media type for this response.
+	 *
+	 * @return The matching serializer, never <jk>null</jk>.
+	 */
+	public Optional<SerializerMatch> getSerializerMatch() {
+		if (serializerMatch != null)
+			return serializerMatch;
+		if (serializer != null) {
+			serializerMatch = Utils.opt(new SerializerMatch(getMediaType(), serializer));
+		} else {
+			serializerMatch = Utils.opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
+		}
+		return serializerMatch;
+	}
+
+	/**
 	 * Returns the writer to the response content.
 	 *
 	 * <p>
@@ -383,76 +511,42 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Convenience method meant to be used when rendering directly to a browser with no buffering.
+	 * Returns <jk>true</jk> if the response contains output.
 	 *
 	 * <p>
-	 * Sets the header <js>"x-content-type-options=nosniff"</js> so that output is rendered immediately on IE and Chrome
-	 * without any buffering for content-type sniffing.
+	 * This implies {@link #setContent(Object)} has been called on this object.
 	 *
 	 * <p>
-	 * This can be useful if you want to render a streaming 'console' on a web page.
+	 * Note that this also returns <jk>true</jk> even if {@link #setContent(Object)} was called with a <jk>null</jk>
+	 * value as this means the response contains an output value of <jk>null</jk> as opposed to no value at all.
 	 *
-	 * @param contentType The value to set as the <c>Content-Type</c> on the response.
-	 * @return The raw writer.
-	 * @throws IOException Thrown by underlying stream.
+	 * @return <jk>true</jk> if the response contains output.
 	 */
-	public PrintWriter getDirectWriter(String contentType) throws IOException {
-		setContentType(contentType);
-		setHeader("X-Content-Type-Options", "nosniff");
-		setHeader("Content-Encoding", "identity");
-		return getWriter(true, true);
+	public boolean hasContent() {
+		return content != null;
 	}
 
 	/**
-	 * Equivalent to {@link HttpServletResponse#getWriter()}, except wraps the output stream if an {@link Encoder} was
-	 * found that matched the <c>Accept-Encoding</c> header and sets the <c>Content-Encoding</c>
-	 * header to the appropriate value.
+	 * Returns <jk>true</jk> if this response object is of the specified type.
 	 *
-	 * @return The negotiated writer.
-	 * @throws NotAcceptable If unsupported charset in request header Accept-Charset.
-	 * @throws IOException Thrown by underlying stream.
+	 * @param c The type to check against.
+	 * @return <jk>true</jk> if this response object is of the specified type.
 	 */
-	public FinishablePrintWriter getNegotiatedWriter() throws NotAcceptable, IOException {
-		return getWriter(false, false);
-	}
-
-	@SuppressWarnings("resource")
-	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
-		if (w != null)
-			return w;
-
-		// If plain text requested, override it now.
-		if (request.isPlainText())
-			setHeader("Content-Type", "text/plain");
-
-		try {
-			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());
-			w = new FinishablePrintWriter(out, getCharacterEncoding(), autoflush);
-			return w;
-		} catch (UnsupportedEncodingException e) {
-			String ce = getCharacterEncoding();
-			setCharacterEncoding("UTF-8");
-			throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);
-		}
+	public boolean isContentOfType(Class<?> c) {
+		return c.isInstance(getRawOutput());
 	}
 
 	/**
-	 * Returns the <c>Content-Type</c> header stripped of the charset attribute if present.
+	 * Sets the output to a plain-text message regardless of the content type.
 	 *
-	 * @return The <c>media-type</c> portion of the <c>Content-Type</c> header.
+	 * @param text The output text to send.
+	 * @return This object.
+	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public MediaType getMediaType() {
-		return MediaType.of(getContentType());
-	}
-
-	/**
-	 * Wrapper around {@link #getCharacterEncoding()} that converts the value to a {@link Charset}.
-	 *
-	 * @return The request character encoding converted to a {@link Charset}.
-	 */
-	public Charset getCharset() {
-		String s = getCharacterEncoding();
-		return s == null ? null : Charset.forName(s);
+	public RestResponse sendPlainText(String text) throws IOException {
+		setContentType("text/plain");
+		getNegotiatedWriter().write(text);
+		return this;
 	}
 
 	/**
@@ -474,70 +568,52 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets a response header with the given name and value.
+	 * Shortcut for calling <c>getRequest().setAttribute(String,Object)</c>.
 	 *
-	 * <p>
-	 * If the header had already been set, the new value overwrites the previous one.
-	 *
-	 * <p>
-	 * The {@link #containsHeader(String)} method can be used to test for the presence of a header before setting its value.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 */
-	@Override
-	public void setHeader(String name, String value) {
-
-		// Jetty doesn't set the content type correctly if set through this method.
-		// Tomcat/WAS does.
-		if (name.equalsIgnoreCase("Content-Type")) {
-			inner.setContentType(value);
-			ContentType ct = contentType(value);
-			if (ct != null && ct.getParameter("charset") != null)
-				inner.setCharacterEncoding(ct.getParameter("charset"));
-		} else {
-			if (safeHeaders)
-				value = stripInvalidHttpHeaderChars(value);
-			value = abbreviate(value, maxHeaderLength);
-			inner.setHeader(name, value);
-		}
-	}
-
-	/**
-	 * Sets a header on the request.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
+	 * @param name The property name.
+	 * @param value The property value.
 	 * @return This object.
-	 * @throws SchemaValidationException Header failed schema validation.
-	 * @throws SerializeException Header could not be serialized.
 	 */
-	public RestResponse setHeader(String name, Object value) throws SchemaValidationException, SerializeException {
-		setHeader(name, request.getPartSerializerSession().serialize(HEADER, null, value));
+	public RestResponse setAttribute(String name, Object value) {
+		request.setAttribute(name, value);
 		return this;
 	}
 
 	/**
-	 * Sets a header on the request.
+	 * Sets the HTTP output on the response.
 	 *
-	 * @param schema
-	 * 	The schema to use to serialize the header, or <jk>null</jk> to use the default schema.
-	 * @param name The header name.
-	 * @param value The header value.
-	 * 	<ul>
-	 * 		<li>Can be any POJO.
-	 * 		<li>Converted to a string using the specified part serializer.
-	 * 	</ul>
+	 * <p>
+	 * The object type can be anything allowed by the registered response handlers.
+	 *
+	 * <p>
+	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
+	 * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>, <ja>@Path</ja> UUID <jv>personId</jv>) {
+	 * 		Person <jv>person</jv> = getPersonById(<jv>personId</jv>);
+	 * 		<jv>res</jv>.setOutput(<jv>person</jv>);
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
+	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
+	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link RestContext.Builder#responseProcessors()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+	 * </ul>
+	 *
+	 * @param output The output to serialize to the connection.
 	 * @return This object.
-	 * @throws SchemaValidationException Header failed schema validation.
-	 * @throws SerializeException Header could not be serialized.
 	 */
-	public RestResponse setHeader(HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
-		setHeader(name, request.getPartSerializerSession().serialize(HEADER, schema, value));
+	public RestResponse setContent(Object output) {
+		this.content = Utils.opt(output);
 		return this;
 	}
 
@@ -556,40 +632,13 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
-	 *
-	 * <p>
-	 * This exception is used by {@link CallLogger} for logging purposes.
-	 *
-	 * @param t The attribute value.
-	 * @return This object.
-	 */
-	public RestResponse setException(Throwable t) {
-		request.setException(t);
-		return this;
-	}
-
-	/**
-	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
-	 *
-	 * <p>
-	 * This flag is used by {@link CallLogger} and tells it not to log the current request.
-	 *
-	 * @param b The attribute value.
-	 * @return This object.
-	 */
-	public RestResponse setNoTrace(Boolean b) {
-		request.setNoTrace(b);
-		return this;
-	}
-
-	/**
-	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
+	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
 	 *
 	 * @return This object.
+	 * @throws IOException If bodies could not be cached.
 	 */
-	public RestResponse setNoTrace() {
-		return setNoTrace(true);
+	public RestResponse setDebug() throws IOException {
+		return setDebug(true);
 	}
 
 	/**
@@ -610,147 +659,17 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
+	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
 	 *
-	 * @return This object.
-	 * @throws IOException If bodies could not be cached.
-	 */
-	public RestResponse setDebug() throws IOException {
-		return setDebug(true);
-	}
-
-	/**
-	 * Returns the metadata about this response.
+	 * <p>
+	 * This exception is used by {@link CallLogger} for logging purposes.
 	 *
-	 * @return
-	 * 	The metadata about this response.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public ResponseBeanMeta getResponseBeanMeta() {
-		return responseBeanMeta;
-	}
-
-	/**
-	 * Sets metadata about this response.
-	 *
-	 * @param rbm The metadata about this response.
+	 * @param t The attribute value.
 	 * @return This object.
 	 */
-	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {
-		this.responseBeanMeta = rbm;
+	public RestResponse setException(Throwable t) {
+		request.setException(t);
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this response object is of the specified type.
-	 *
-	 * @param c The type to check against.
-	 * @return <jk>true</jk> if this response object is of the specified type.
-	 */
-	public boolean isContentOfType(Class<?> c) {
-		return c.isInstance(getRawOutput());
-	}
-
-	/**
-	 * Returns this value cast to the specified class.
-	 *
-	 * @param <T> The class to cast to.
-	 * @param c The class to cast to.
-	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getContent(Class<T> c) {
-		if (isContentOfType(c))
-			return (T)getRawOutput();
-		return null;
-	}
-
-	/**
-	 * Returns the wrapped servlet request.
-	 *
-	 * @return The wrapped servlet request.
-	 */
-	public HttpServletResponse getHttpServletResponse() {
-		return inner;
-	}
-
-	/**
-	 * Forces any content in the buffer to be written to the client.
-	 *
-	 * <p>
-	 * A call to this method automatically commits the response, meaning the status code and headers will be written.
-	 *
-	 * @throws IOException If an I/O error occurred.
-	 */
-	@Override
-	public void flushBuffer() throws IOException {
-		if (w != null)
-			w.flush();
-		if (os != null)
-			os.flush();
-		inner.flushBuffer();
-	}
-
-	private Object getRawOutput() {
-		return content == null ? null : content.orElse(null);
-	}
-
-	/**
-	 * Enabled safe-header mode.
-	 *
-	 * <p>
-	 * When enabled, invalid characters such as CTRL characters will be stripped from header values
-	 * before they get set.
-	 *
-	 * @return This object.
-	 */
-	public RestResponse setSafeHeaders() {
-		this.safeHeaders = true;
-		return this;
-	}
-
-	/**
-	 * Specifies the maximum length for header values.
-	 *
-	 * <p>
-	 * Header values that exceed this length will get truncated.
-	 *
-	 * @param value The new value for this setting.  The default is <c>8096</c>.
-	 * @return This object.
-	 */
-	public RestResponse setMaxHeaderLength(int value) {
-		this.maxHeaderLength = value;
-		return this;
-	}
-
-	/**
-	 * Adds a response header with the given name and value.
-	 *
-	 * <p>
-	 * This method allows response headers to have multiple values.
-	 *
-	 * <p>
-	 * A no-op of either the name or value is <jk>null</jk>.
-	 *
-	 * <p>
-	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
-	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 */
-	@Override
-	public void addHeader(String name, String value) {
-		if (name != null && value != null) {
-			if (name.equalsIgnoreCase("Content-Type"))
-				setHeader(name, value);
-			else {
-				if (safeHeaders)
-					value = stripInvalidHttpHeaderChars(value);
-				value = abbreviate(value, maxHeaderLength);
-				inner.addHeader(name, value);
-			}
-		}
 	}
 
 	/**
@@ -784,80 +703,161 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Adds a response header.
+	 * Sets a header on the request.
+	 *
+	 * @param schema
+	 * 	The schema to use to serialize the header, or <jk>null</jk> to use the default schema.
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 	</ul>
+	 * @return This object.
+	 * @throws SchemaValidationException Header failed schema validation.
+	 * @throws SerializeException Header could not be serialized.
+	 */
+	public RestResponse setHeader(HttpPartSchema schema, String name, Object value) throws SchemaValidationException, SerializeException {
+		setHeader(name, request.getPartSerializerSession().serialize(HEADER, schema, value));
+		return this;
+	}
+
+	/**
+	 * Sets a header on the request.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * 	<ul>
+	 * 		<li>Can be any POJO.
+	 * 		<li>Converted to a string using the specified part serializer.
+	 * 	</ul>
+	 * @return This object.
+	 * @throws SchemaValidationException Header failed schema validation.
+	 * @throws SerializeException Header could not be serialized.
+	 */
+	public RestResponse setHeader(String name, Object value) throws SchemaValidationException, SerializeException {
+		setHeader(name, request.getPartSerializerSession().serialize(HEADER, null, value));
+		return this;
+	}
+
+	/**
+	 * Sets a response header with the given name and value.
 	 *
 	 * <p>
-	 * Any previous header values are preserved.
+	 * If the header had already been set, the new value overwrites the previous one.
 	 *
 	 * <p>
-	 * Value is added at the end of the headers.
+	 * The {@link #containsHeader(String)} method can be used to test for the presence of a header before setting its value.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 */
+	@Override
+	public void setHeader(String name, String value) {
+
+		// Jetty doesn't set the content type correctly if set through this method.
+		// Tomcat/WAS does.
+		if (name.equalsIgnoreCase("Content-Type")) {
+			inner.setContentType(value);
+			ContentType ct = contentType(value);
+			if (ct != null && ct.getParameter("charset") != null)
+				inner.setCharacterEncoding(ct.getParameter("charset"));
+		} else {
+			if (safeHeaders)
+				value = stripInvalidHttpHeaderChars(value);
+			value = abbreviate(value, maxHeaderLength);
+			inner.setHeader(name, value);
+		}
+	}
+
+	/**
+	 * Specifies the maximum length for header values.
 	 *
 	 * <p>
-	 * If the header is a {@link BasicUriHeader}, the URI will be resolved using the {@link RestRequest#getUriResolver()} object.
+	 * Header values that exceed this length will get truncated.
 	 *
-	 * <p>
-	 * If the header is a {@link SerializedHeader} and the serializer session is not set, it will be set to the one returned by {@link RestRequest#getPartSerializerSession()} before serialization.
-	 *
-	 * <p>
-	 * Note that per <a class='doclink' href='https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2'>RFC2616</a>,
-	 * only headers defined as comma-delimited lists [i.e., #(values)] should be defined as multiple message header fields.
-	 *
-	 * @param header The header.
+	 * @param value The new value for this setting.  The default is <c>8096</c>.
 	 * @return This object.
 	 */
-	public RestResponse addHeader(Header header) {
-		if (header == null) {
-			// Do nothing.
-		} else if (header instanceof BasicUriHeader) {
-			BasicUriHeader x = (BasicUriHeader)header;
-			addHeader(x.getName(), resolveUris(x.getValue()));
-		} else if (header instanceof SerializedHeader) {
-			SerializedHeader x = ((SerializedHeader)header).copyWith(request.getPartSerializerSession(), null);
-			addHeader(x.getName(), resolveUris(x.getValue()));
-		} else {
-			addHeader(header.getName(), header.getValue());
-		}
+	public RestResponse setMaxHeaderLength(int value) {
+		this.maxHeaderLength = value;
 		return this;
+	}
+
+	/**
+	 * Shortcut for calling <c>setNoTrace(<jk>true</jk>)</c>.
+	 *
+	 * @return This object.
+	 */
+	public RestResponse setNoTrace() {
+		return setNoTrace(true);
+	}
+
+	/**
+	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
+	 *
+	 * <p>
+	 * This flag is used by {@link CallLogger} and tells it not to log the current request.
+	 *
+	 * @param b The attribute value.
+	 * @return This object.
+	 */
+	public RestResponse setNoTrace(Boolean b) {
+		request.setNoTrace(b);
+		return this;
+	}
+
+	/**
+	 * Sets metadata about this response.
+	 *
+	 * @param rbm The metadata about this response.
+	 * @return This object.
+	 */
+	public RestResponse setResponseBeanMeta(ResponseBeanMeta rbm) {
+		this.responseBeanMeta = rbm;
+		return this;
+	}
+
+	/**
+	 * Enabled safe-header mode.
+	 *
+	 * <p>
+	 * When enabled, invalid characters such as CTRL characters will be stripped from header values
+	 * before they get set.
+	 *
+	 * @return This object.
+	 */
+	public RestResponse setSafeHeaders() {
+		this.safeHeaders = true;
+		return this;
+	}
+
+	private Object getRawOutput() {
+		return content == null ? null : content.orElse(null);
+	}
+
+	@SuppressWarnings("resource")
+	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
+		if (w != null)
+			return w;
+
+		// If plain text requested, override it now.
+		if (request.isPlainText())
+			setHeader("Content-Type", "text/plain");
+
+		try {
+			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());
+			w = new FinishablePrintWriter(out, getCharacterEncoding(), autoflush);
+			return w;
+		} catch (UnsupportedEncodingException e) {
+			String ce = getCharacterEncoding();
+			setCharacterEncoding("UTF-8");
+			throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);
+		}
 	}
 
 	private String resolveUris(Object value) {
 		String s = Utils.s(value);
 		return request.getUriResolver().resolve(s);
-	}
-
-	/**
-	 * Returns the matching serializer and media type for this response.
-	 *
-	 * @return The matching serializer, never <jk>null</jk>.
-	 */
-	public Optional<SerializerMatch> getSerializerMatch() {
-		if (serializerMatch != null)
-			return serializerMatch;
-		if (serializer != null) {
-			serializerMatch = Utils.opt(new SerializerMatch(getMediaType(), serializer));
-		} else {
-			serializerMatch = Utils.opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
-		}
-		return serializerMatch;
-	}
-
-	/**
-	 * Returns the schema of the response content.
-	 *
-	 * @return The schema of the response content, never <jk>null</jk>.
-	 */
-	public Optional<HttpPartSchema> getContentSchema() {
-		if (contentSchema != null)
-			return contentSchema;
-		if (responseBeanMeta != null)
-			contentSchema = Utils.opt(responseBeanMeta.getSchema());
-		else {
-			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getContent(Object.class));
-			if (rbm != null)
-				contentSchema = Utils.opt(rbm.getSchema());
-			else
-				contentSchema = Utils.opte();
-		}
-		return contentSchema;
 	}
 }

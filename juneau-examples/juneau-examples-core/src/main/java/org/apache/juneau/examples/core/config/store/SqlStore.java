@@ -39,31 +39,6 @@ import org.apache.juneau.config.store.*;
  */
 @SuppressWarnings({"resource","unused","javadoc"})
 public class SqlStore extends ConfigStore {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	static final String
-		SQLSTORE_jdbcUrl = "SqlStore.jdbcUrl",
-		SQLSTORE_tableName = "SqlStore.tableName",
-		SQLSTORE_nameColumn = "SqlStore.nameColumn",
-		SQLSTORE_valueColumn = "SqlStore.valueColumn",
-		SQLSTORE_pollInterval = "SqlStore.pollInterval";
-
-	/**
-	 * Instantiates a builder for this object.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -80,6 +55,16 @@ public class SqlStore extends ConfigStore {
 			this.pollInterval = env(SQLSTORE_pollInterval, 600);  // Time in seconds.
 		}
 
+		@Override
+		public SqlStore build() {
+			return build(SqlStore.class);
+		}
+
+		@Override
+		public Builder copy() {
+			return null;
+		}
+
 		/**
 		 * Sets the JDBC URL for the database connection.
 		 *
@@ -88,17 +73,6 @@ public class SqlStore extends ConfigStore {
 		 */
 		public Builder jdbcUrl(String value) {
 			this.jdbcUrl = value;
-			return this;
-		}
-
-		/**
-		 * Sets the name of the database table containing configuration entries.
-		 *
-		 * @param value The table name.
-		 * @return This object.
-		 */
-		public Builder tableName(String value) {
-			this.tableName = value;
 			return this;
 		}
 
@@ -114,17 +88,6 @@ public class SqlStore extends ConfigStore {
 		}
 
 		/**
-		 * Sets the name of the column containing configuration entry values.
-		 *
-		 * @param value The column name.
-		 * @return This object.
-		 */
-		public Builder valueColumn(String value) {
-			this.valueColumn = value;
-			return this;
-		}
-
-		/**
 		 * Sets the polling interval in seconds for checking database changes.
 		 *
 		 * @param value The polling interval in seconds.
@@ -135,21 +98,43 @@ public class SqlStore extends ConfigStore {
 			return this;
 		}
 
-		@Override
-		public Builder copy() {
-			return null;
+		/**
+		 * Sets the name of the database table containing configuration entries.
+		 *
+		 * @param value The table name.
+		 * @return This object.
+		 */
+		public Builder tableName(String value) {
+			this.tableName = value;
+			return this;
 		}
 
-		@Override
-		public SqlStore build() {
-			return build(SqlStore.class);
+		/**
+		 * Sets the name of the column containing configuration entry values.
+		 *
+		 * @param value The column name.
+		 * @return This object.
+		 */
+		public Builder valueColumn(String value) {
+			this.valueColumn = value;
+			return this;
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	static final String
+		SQLSTORE_jdbcUrl = "SqlStore.jdbcUrl",
+		SQLSTORE_tableName = "SqlStore.tableName",
+		SQLSTORE_nameColumn = "SqlStore.nameColumn",
+		SQLSTORE_valueColumn = "SqlStore.valueColumn",
+		SQLSTORE_pollInterval = "SqlStore.pollInterval";
+	/**
+	 * Instantiates a builder for this object.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	private final String jdbcUrl;
 	private final String tableName, nameColumn, valueColumn;
 	private final Timer watcher;
@@ -180,22 +165,10 @@ public class SqlStore extends ConfigStore {
 		watcher.scheduleAtFixedRate(timerTask, 0, pollInterval * 1000);
 	}
 
-	synchronized void poll() {
-
-		// Loop through all our entries and find the latest values.
-		cache.forEach((name,cacheContents) -> {
-			var newContents = getDatabaseValue(name);
-
-			// Change detected!
-			if (! cacheContents.equals(newContents))
-				update(name, newContents);
-		});
-	}
-
-	// Reads the value from the database.
-	protected String getDatabaseValue(String name) {
-		// Implement me!
-		return null;
+	@Override /* Closeable */
+	public synchronized void close() {
+		if (watcher != null)
+			watcher.cancel();
 	}
 
 	@Override /* ConfigStore */
@@ -212,6 +185,13 @@ public class SqlStore extends ConfigStore {
 			update(name, contents);
 		}
 		return contents;
+	}
+
+	@Override /* ConfigStore */
+	public synchronized SqlStore update(String name, String newContents) {
+		cache.put(name, newContents);
+		super.update(name, newContents);  // Trigger any listeners.
+		return this;
 	}
 
 	@Override /* ConfigStore */
@@ -232,16 +212,21 @@ public class SqlStore extends ConfigStore {
 		return null;
 	}
 
-	@Override /* ConfigStore */
-	public synchronized SqlStore update(String name, String newContents) {
-		cache.put(name, newContents);
-		super.update(name, newContents);  // Trigger any listeners.
-		return this;
+	// Reads the value from the database.
+	protected String getDatabaseValue(String name) {
+		// Implement me!
+		return null;
 	}
 
-	@Override /* Closeable */
-	public synchronized void close() {
-		if (watcher != null)
-			watcher.cancel();
+	synchronized void poll() {
+
+		// Loop through all our entries and find the latest values.
+		cache.forEach((name,cacheContents) -> {
+			var newContents = getDatabaseValue(name);
+
+			// Change detected!
+			if (! cacheContents.equals(newContents))
+				update(name, newContents);
+		});
 	}
 }

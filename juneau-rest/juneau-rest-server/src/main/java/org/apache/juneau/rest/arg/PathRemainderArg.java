@@ -58,11 +58,6 @@ import org.apache.juneau.rest.util.*;
  * @since 9.2.0
  */
 public class PathRemainderArg implements RestOpArg {
-	private final HttpPartParser partParser;
-	private final HttpPartSchema schema;
-	private final String def;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -76,6 +71,11 @@ public class PathRemainderArg implements RestOpArg {
 			return new PathRemainderArg(paramInfo, annotations);
 		return null;
 	}
+	private final HttpPartParser partParser;
+	private final HttpPartSchema schema;
+	private final String def;
+
+	private final Type type;
 
 	/**
 	 * Constructor.

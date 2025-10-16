@@ -63,15 +63,6 @@ public class NoContent extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public NoContent(NoContent copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class NoContent extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public NoContent(NoContent copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class NoContent extends BasicHttpResponse {
 		return new NoContent(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public NoContent setContent(String value) {
+	public NoContent setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NoContent setContent(HttpEntity value) {
+	public NoContent setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class NoContent extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NoContent setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public NoContent setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NoContent setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public NoContent setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

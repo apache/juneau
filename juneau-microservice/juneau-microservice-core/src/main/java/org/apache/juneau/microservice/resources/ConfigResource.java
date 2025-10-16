@@ -55,6 +55,15 @@ import org.apache.juneau.rest.servlet.*;
 )
 @SuppressWarnings("javadoc")
 public class ConfigResource extends BasicRestServlet {
+	@Response @Schema(description="Section not found.")
+	private class SectionNotFound extends NotFound {
+		private static final long serialVersionUID = 1L;
+
+		SectionNotFound() {
+			super("Section not found.");
+		}
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@RestGet(
@@ -92,23 +101,6 @@ public class ConfigResource extends BasicRestServlet {
 	}
 
 	@RestGet(
-		path="/{section}",
-		summary="Get config file section contents",
-		description="Show contents of config file section as a JsonMap.",
-		swagger=@OpSwagger(
-			responses={
-				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
-			}
-		)
-	)
-	public JsonMap getConfigSection(
-			@Path("section") @Schema(d="Section name in config file.") String section
-		) throws SectionNotFound {
-
-		return getSection(section);
-	}
-
-	@RestGet(
 		path="/{section}/{key}",
 		summary="Get config file entry value",
 		description="Show value of config file entry as a simple string.",
@@ -126,21 +118,21 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section).getString(key);
 	}
 
-	@RestPost(
-		path="/",
-		summary="Update config file contents",
-		description="Update the contents of the config file from a FORM post.",
+	@RestGet(
+		path="/{section}",
+		summary="Get config file section contents",
+		description="Show contents of config file section as a JsonMap.",
 		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
 		)
 	)
-	public JsonMap setConfigContentsFormPost(
-			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
-		) throws Exception {
+	public JsonMap getConfigSection(
+			@Path("section") @Schema(d="Section name in config file.") String section
+		) throws SectionNotFound {
 
-		return setConfigContents(new StringReader(contents));
+		return getSection(section);
 	}
 
 	@RestPut(
@@ -158,6 +150,23 @@ public class ConfigResource extends BasicRestServlet {
 		) throws Exception {
 
 		return getContext().getConfig().load(contents, true).toMap();
+	}
+
+	@RestPost(
+		path="/",
+		summary="Update config file contents",
+		description="Update the contents of the config file from a FORM post.",
+		swagger=@OpSwagger(
+			responses={
+				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
+			}
+		)
+	)
+	public JsonMap setConfigContentsFormPost(
+			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
+		) throws Exception {
+
+		return setConfigContents(new StringReader(contents));
 	}
 
 	@RestPut(
@@ -179,7 +188,6 @@ public class ConfigResource extends BasicRestServlet {
 		getContext().getConfig().setSection(section, null, contents);
 		return getSection(section);
 	}
-
 	@RestPut(
 		path="/{section}/{key}",
 		summary="Update config entry value",
@@ -199,24 +207,6 @@ public class ConfigResource extends BasicRestServlet {
 		getContext().getConfig().set(section + '/' + key, value);
 		return getSection(section).getString(key);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper beans
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Response @Schema(description="Section not found.")
-	private class SectionNotFound extends NotFound {
-		private static final long serialVersionUID = 1L;
-
-		SectionNotFound() {
-			super("Section not found.");
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private JsonMap getSection(String name) throws SectionNotFound {
 		return getContext().getConfig().getSection(name).asMap().orElseThrow(SectionNotFound::new);
 	}

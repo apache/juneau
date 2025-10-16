@@ -57,12 +57,12 @@ public class UrlVar extends SimpleVar {
 	}
 
 	@Override /* Overridden from Var */
-	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getUriResolver().resolve(key);
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(RestRequest.class).isPresent();
 	}
 
 	@Override /* Overridden from Var */
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(RestRequest.class).isPresent();
+	public String resolve(VarResolverSession session, String key) {
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getUriResolver().resolve(key);
 	}
 }

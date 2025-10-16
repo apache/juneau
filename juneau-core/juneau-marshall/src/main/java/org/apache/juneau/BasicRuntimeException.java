@@ -32,30 +32,9 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicRuntimeException extends RuntimeException {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	boolean unmodifiable;
 	String message;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public BasicRuntimeException(Throwable cause, String message, Object...args) {
-		super(format(message, args), cause);
-	}
 
 	/**
 	 * Constructor.
@@ -76,37 +55,20 @@ public class BasicRuntimeException extends RuntimeException {
 		super(cause);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Constructor.
 	 *
-	 * @return This object.
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	protected BasicRuntimeException setUnmodifiable() {
-		unmodifiable = true;
-		return this;
+	public BasicRuntimeException(Throwable cause, String message, Object...args) {
+		super(format(message, args), cause);
 	}
-
-	/**
-	 * Returns <jk>true</jk> if this bean is unmodifiable.
-	 *
-	 * @return <jk>true</jk> if this bean is unmodifiable.
-	 */
-	public boolean isUnmodifiable() {
-		return unmodifiable;
-	}
-
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+	@Override /* Overridden from Throwable */
+	public synchronized Throwable fillInStackTrace() {
+		assertModifiable();
+		return super.fillInStackTrace();
 	}
 
 	/**
@@ -118,6 +80,31 @@ public class BasicRuntimeException extends RuntimeException {
 	 */
 	public <T extends Throwable> T getCause(Class<T> c) {
 		return ThrowableUtils.getCause(c, this);
+	}
+
+	@Override /* Overridden from Throwable */
+	public String getMessage() {
+		if (message != null)
+			return message;
+		String m = super.getMessage();
+		if (m == null && getCause() != null)
+			m = getCause().getMessage();
+		return m;
+	}
+
+	@Override /* Overridden from Throwable */
+	public synchronized Throwable initCause(Throwable cause) {
+		assertModifiable();
+		return super.initCause(cause);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this bean is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return unmodifiable;
 	}
 
 	/**
@@ -134,28 +121,6 @@ public class BasicRuntimeException extends RuntimeException {
 	}
 
 	@Override /* Overridden from Throwable */
-	public String getMessage() {
-		if (message != null)
-			return message;
-		String m = super.getMessage();
-		if (m == null && getCause() != null)
-			m = getCause().getMessage();
-		return m;
-	}
-
-	@Override /* Overridden from Throwable */
-	public synchronized Throwable fillInStackTrace() {
-		assertModifiable();
-		return super.fillInStackTrace();
-	}
-
-	@Override /* Overridden from Throwable */
-	public synchronized Throwable initCause(Throwable cause) {
-		assertModifiable();
-		return super.initCause(cause);
-	}
-
-	@Override /* Overridden from Throwable */
 	public void setStackTrace(StackTraceElement[] stackTrace) {
 		assertModifiable();
 		super.setStackTrace(stackTrace);
@@ -169,5 +134,25 @@ public class BasicRuntimeException extends RuntimeException {
 	public Throwable unwrap() {
 		Throwable t = getCause();
 		return t == null ? this : t;
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
+	}
+
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	protected BasicRuntimeException setUnmodifiable() {
+		unmodifiable = true;
+		return this;
 	}
 }

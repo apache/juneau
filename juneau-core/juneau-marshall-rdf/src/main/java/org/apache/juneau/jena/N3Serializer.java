@@ -28,11 +28,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class N3Serializer extends RdfSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default N3 serializer, all default settings.*/
 	public static final N3Serializer DEFAULT = new N3Serializer(create());
 
@@ -44,11 +39,6 @@ public class N3Serializer extends RdfSerializer {
 	public static RdfSerializer.Builder create() {
 		return RdfSerializer.create().n3();
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -45,26 +45,8 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(UonSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,9 +66,20 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			encoding = ctx.encoding;
 		}
 
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
 		@Override
 		public UonSerializerSession build() {
 			return new UonSerializerSession(this);
+		}
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
 		}
 
 		/**
@@ -99,33 +92,16 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			encoding = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -154,20 +130,14 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -190,20 +160,32 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -213,11 +195,15 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(UonSerializer ctx) {
+		return new Builder(ctx);
+	}
 	private final UonSerializer ctx;
 	private final boolean plainTextParams;
 
@@ -232,6 +218,144 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		plainTextParams = ctx.getParamFormat() == ParamFormat.PLAINTEXT;
 	}
 
+	@Override /* Overridden from HttpPartSerializer */
+	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+		try {
+			// Shortcut for simple types.
+			ClassMeta<?> cm = getClassMetaForObject(value);
+			if (cm != null && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
+				if (cm.isNumber() || cm.isBoolean())
+					return Mutaters.toString(value);
+				if (cm.isString()) {
+					String s = Mutaters.toString(value);
+					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
+						return s;
+				}
+			}
+			StringWriter w = new StringWriter();
+			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
+			return w.toString();
+		} catch (Exception e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	private final UonWriter getUonWriter(Writer out) throws Exception {
+		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
+	}
+
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+
+		if (! plainTextParams)
+			out.append('(');
+
+		Flag addComma = Flag.create();
+
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
+			addComma.set();
+		}
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
+
+			if (thrown != null)
+				onBeanGetterException(pMeta, thrown);
+
+			if (canIgnoreValue(cMeta, key, value))
+				return;
+
+			addComma.ifSet(() -> out.append(',')).set();
+
+			out.cr(indent).appendObject(key, false).append('=');
+
+			serializeAnything(out, value, cMeta, key, pMeta);
+		});
+
+		if (m.size() > 0)
+			out.cre(indent-1);
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+
+		ClassMeta<?> elementType = type.getElementType();
+
+		if (! plainTextParams)
+			out.append('@').append('(');
+
+		Flag addComma = Flag.create();
+		forEachEntry(c, x -> {
+			addComma.ifSet(()->out.append(',')).set();
+			out.cr(indent);
+			serializeAnything(out, x, elementType, "<iterator>", null);
+		});
+
+		addComma.ifSet(()->out.cre(indent-1));
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		if (! plainTextParams)
+			out.append('(');
+
+		Flag addComma = Flag.create();
+		forEachEntry(m, x -> {
+			addComma.ifSet(()->out.append(',')).set();
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
+			out.cr(indent).appendObject(key, false).append('=');
+			serializeAnything(out, value, valueType, toString(key), null);
+		});
+
+		addComma.ifSet(()->out.cre(indent-1));
+
+		if (! plainTextParams)
+			out.append(')');
+
+		return out;
+	}
+
+	@Override /* Overridden from Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
+	}
+
+	/**
+	 * Format to use for query/form-data/header values.
+	 *
+	 * @see UonSerializer.Builder#paramFormat(ParamFormat)
+	 * @return
+	 * 	Specifies the format to use for URL GET parameter keys and values.
+	 */
+	protected final ParamFormat getParamFormat() {
+		return ctx.getParamFormat();
+	}
+
+	/**
+	 * Quote character.
+	 *
+	 * @see UonSerializer.Builder#quoteCharUon(char)
+	 * @return
+	 * 	The character used for quoting attributes and values.
+	 */
+	@Override
+	protected final char getQuoteChar() {
+		return ctx.getQuoteChar();
+	}
 	/**
 	 * Converts the specified output target object to an {@link UonWriter}.
 	 *
@@ -248,13 +372,28 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return w;
 	}
 
-	private final UonWriter getUonWriter(Writer out) throws Exception {
-		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see UonSerializer.Builder#addBeanTypesUon()
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
 	}
 
-	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
+	/**
+	 * Encode non-valid URI characters.
+	 *
+	 * @see UonSerializer.Builder#encoding()
+	 * @return
+	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
+	 */
+	protected final boolean isEncoding() {
+		return ctx.isEncoding();
 	}
 
 	/**
@@ -354,163 +493,5 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		if (! isRecursion)
 			pop();
 		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		if (! plainTextParams)
-			out.append('(');
-
-		Flag addComma = Flag.create();
-		forEachEntry(m, x -> {
-			addComma.ifSet(()->out.append(',')).set();
-			Object value = x.getValue();
-			Object key = generalize(x.getKey(), keyType);
-			out.cr(indent).appendObject(key, false).append('=');
-			serializeAnything(out, value, valueType, toString(key), null);
-		});
-
-		addComma.ifSet(()->out.cre(indent-1));
-
-		if (! plainTextParams)
-			out.append(')');
-
-		return out;
-	}
-
-	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
-
-		if (! plainTextParams)
-			out.append('(');
-
-		Flag addComma = Flag.create();
-
-		if (typeName != null) {
-			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
-			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
-			addComma.set();
-		}
-
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
-
-			if (thrown != null)
-				onBeanGetterException(pMeta, thrown);
-
-			if (canIgnoreValue(cMeta, key, value))
-				return;
-
-			addComma.ifSet(() -> out.append(',')).set();
-
-			out.cr(indent).appendObject(key, false).append('=');
-
-			serializeAnything(out, value, cMeta, key, pMeta);
-		});
-
-		if (m.size() > 0)
-			out.cre(indent-1);
-		if (! plainTextParams)
-			out.append(')');
-
-		return out;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> elementType = type.getElementType();
-
-		if (! plainTextParams)
-			out.append('@').append('(');
-
-		Flag addComma = Flag.create();
-		forEachEntry(c, x -> {
-			addComma.ifSet(()->out.append(',')).set();
-			out.cr(indent);
-			serializeAnything(out, x, elementType, "<iterator>", null);
-		});
-
-		addComma.ifSet(()->out.cre(indent-1));
-		if (! plainTextParams)
-			out.append(')');
-
-		return out;
-	}
-
-	@Override /* Overridden from HttpPartSerializer */
-	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-		try {
-			// Shortcut for simple types.
-			ClassMeta<?> cm = getClassMetaForObject(value);
-			if (cm != null && (schema == null || schema.getType() == HttpPartDataType.NO_TYPE)) {
-				if (cm.isNumber() || cm.isBoolean())
-					return Mutaters.toString(value);
-				if (cm.isString()) {
-					String s = Mutaters.toString(value);
-					if (s.isEmpty() || ! UonUtils.needsQuotes(s))
-						return s;
-				}
-			}
-			StringWriter w = new StringWriter();
-			serializeAnything(getUonWriter(w).i(getInitialDepth()), value, getExpectedRootType(value), "root", null);
-			return w.toString();
-		} catch (Exception e) {
-			throw asRuntimeException(e);
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * @see UonSerializer.Builder#addBeanTypesUon()
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
-	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
-
-	/**
-	 * Encode non-valid URI characters.
-	 *
-	 * @see UonSerializer.Builder#encoding()
-	 * @return
-	 * 	<jk>true</jk> if non-valid URI characters should be encoded with <js>"%xx"</js> constructs.
-	 */
-	protected final boolean isEncoding() {
-		return ctx.isEncoding();
-	}
-
-	/**
-	 * Format to use for query/form-data/header values.
-	 *
-	 * @see UonSerializer.Builder#paramFormat(ParamFormat)
-	 * @return
-	 * 	Specifies the format to use for URL GET parameter keys and values.
-	 */
-	protected final ParamFormat getParamFormat() {
-		return ctx.getParamFormat();
-	}
-
-	/**
-	 * Quote character.
-	 *
-	 * @see UonSerializer.Builder#quoteCharUon(char)
-	 * @return
-	 * 	The character used for quoting attributes and values.
-	 */
-	@Override
-	protected final char getQuoteChar() {
-		return ctx.getQuoteChar();
 	}
 }

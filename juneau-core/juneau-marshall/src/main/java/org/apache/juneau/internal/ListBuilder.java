@@ -37,11 +37,6 @@ import org.apache.juneau.parser.*;
  * @param <E> Element type.
  */
 public class ListBuilder<E> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -53,11 +48,6 @@ public class ListBuilder<E> {
 	public static <E> ListBuilder<E> create(Class<E> elementType, Type...elementTypeArgs) {
 		return new ListBuilder<>(elementType, elementTypeArgs);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private List<E> list;
 	private boolean unmodifiable = false, sparse = false;
 	private Comparator<E> comparator;
@@ -83,113 +73,6 @@ public class ListBuilder<E> {
 	 */
 	public ListBuilder(List<E> addTo) {
 		this.list = addTo;
-	}
-
-	/**
-	 * Specifies the element type on this list.
-	 *
-	 * @param value The element type.
-	 * @return This object.
-	 */
-	public ListBuilder<E> elementType(Class<E> value) {
-		this.elementType = value;
-		return this;
-	}
-
-	/**
-	 * Builds the list.
-	 *
-	 * @return A list conforming to the settings on this builder.
-	 */
-	public List<E> build() {
-		if (sparse) {
-			if (list != null && list.isEmpty())
-				list = null;
-		} else {
-			if (list == null)
-				list = new ArrayList<>(0);
-		}
-		if (list != null) {
-			if (comparator != null)
-				Collections.sort(list, comparator);
-			if (unmodifiable)
-				list = unmodifiableList(list);
-		}
- 		return list;
-	}
-
-	/**
-	 * When specified, the {@link #build()} method will return <jk>null</jk> if the list is empty.
-	 *
-	 * <p>
-	 * Otherwise {@link #build()} will never return <jk>null</jk>.
-	 *
-	 * @return This object.
-	 */
-	public ListBuilder<E> sparse() {
-		this.sparse = true;
-		return this;
-	}
-
-	/**
-	 * When specified, {@link #build()} will return an unmodifiable list.
-	 *
-	 * @return This object.
-	 */
-	public ListBuilder<E> unmodifiable() {
-		this.unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Forces the existing list to be copied instead of appended to.
-	 *
-	 * @return This object.
-	 */
-	public ListBuilder<E> copy() {
-		if (list != null)
-			list = new ArrayList<>(list);
-		return this;
-	}
-
-	/**
-	 * Sorts the contents of the list.
-	 *
-	 * @return This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public ListBuilder<E> sorted() {
-		return sorted((Comparator<E>)Comparator.naturalOrder());
-	}
-
-	/**
-	 * Sorts the contents of the list using the specified comparator.
-	 *
-	 * @param comparator The comparator to use for sorting.
-	 * @return This object.
-	 */
-	public ListBuilder<E> sorted(Comparator<E> comparator) {
-		this.comparator = comparator;
-		return this;
-	}
-
-	/**
-	 * Appends the contents of the specified collection into this list.
-	 *
-	 * <p>
-	 * This is a no-op if the value is <jk>null</jk>.
-	 *
-	 * @param value The collection to add to this list.
-	 * @return This object.
-	 */
-	public ListBuilder<E> addAll(Collection<E> value) {
-		if (value != null) {
-			if (list == null)
-				list = new LinkedList<>(value);
-			else
-				list.addAll(value);
-		}
-		return this;
 	}
 
 	/**
@@ -219,13 +102,22 @@ public class ListBuilder<E> {
 	}
 
 	/**
-	 * Adds entries to this list via JSON array strings.
+	 * Appends the contents of the specified collection into this list.
 	 *
-	 * @param values The JSON array strings to parse and add to this list.
+	 * <p>
+	 * This is a no-op if the value is <jk>null</jk>.
+	 *
+	 * @param value The collection to add to this list.
 	 * @return This object.
 	 */
-	public ListBuilder<E> addJson(String...values) {
-		return addAny((Object[])values);
+	public ListBuilder<E> addAll(Collection<E> value) {
+		if (value != null) {
+			if (list == null)
+				list = new LinkedList<>(value);
+			else
+				list.addAll(value);
+		}
+		return this;
 	}
 
 	/**
@@ -280,6 +172,104 @@ public class ListBuilder<E> {
 	public ListBuilder<E> addIf(boolean flag, E value) {
 		if (flag)
 			add(value);
+		return this;
+	}
+
+	/**
+	 * Adds entries to this list via JSON array strings.
+	 *
+	 * @param values The JSON array strings to parse and add to this list.
+	 * @return This object.
+	 */
+	public ListBuilder<E> addJson(String...values) {
+		return addAny((Object[])values);
+	}
+
+	/**
+	 * Builds the list.
+	 *
+	 * @return A list conforming to the settings on this builder.
+	 */
+	public List<E> build() {
+		if (sparse) {
+			if (list != null && list.isEmpty())
+				list = null;
+		} else {
+			if (list == null)
+				list = new ArrayList<>(0);
+		}
+		if (list != null) {
+			if (comparator != null)
+				Collections.sort(list, comparator);
+			if (unmodifiable)
+				list = unmodifiableList(list);
+		}
+ 		return list;
+	}
+
+	/**
+	 * Forces the existing list to be copied instead of appended to.
+	 *
+	 * @return This object.
+	 */
+	public ListBuilder<E> copy() {
+		if (list != null)
+			list = new ArrayList<>(list);
+		return this;
+	}
+
+	/**
+	 * Specifies the element type on this list.
+	 *
+	 * @param value The element type.
+	 * @return This object.
+	 */
+	public ListBuilder<E> elementType(Class<E> value) {
+		this.elementType = value;
+		return this;
+	}
+
+	/**
+	 * Sorts the contents of the list.
+	 *
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public ListBuilder<E> sorted() {
+		return sorted((Comparator<E>)Comparator.naturalOrder());
+	}
+
+	/**
+	 * Sorts the contents of the list using the specified comparator.
+	 *
+	 * @param comparator The comparator to use for sorting.
+	 * @return This object.
+	 */
+	public ListBuilder<E> sorted(Comparator<E> comparator) {
+		this.comparator = comparator;
+		return this;
+	}
+
+	/**
+	 * When specified, the {@link #build()} method will return <jk>null</jk> if the list is empty.
+	 *
+	 * <p>
+	 * Otherwise {@link #build()} will never return <jk>null</jk>.
+	 *
+	 * @return This object.
+	 */
+	public ListBuilder<E> sparse() {
+		this.sparse = true;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will return an unmodifiable list.
+	 *
+	 * @return This object.
+	 */
+	public ListBuilder<E> unmodifiable() {
+		this.unmodifiable = true;
 		return this;
 	}
 }

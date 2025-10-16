@@ -40,11 +40,6 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicStringHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -94,11 +89,6 @@ public class BasicStringHeader extends BasicHeader {
 			return of(pair, "");
 		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String value;
 	private final Supplier<String> supplier;
 
@@ -135,16 +125,6 @@ public class BasicStringHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
-
-	@Override /* Overridden from BasicHeader */
-	public Optional<String> asString() {
-		return Utils.opt(value());
-	}
-
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
@@ -162,6 +142,16 @@ public class BasicStringHeader extends BasicHeader {
 	 */
 	public FluentStringAssertion<BasicStringHeader> assertString() {
 		return new FluentStringAssertion<>(value(), this);
+	}
+
+	@Override /* Overridden from BasicHeader */
+	public Optional<String> asString() {
+		return Utils.opt(value());
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
 	}
 
 	/**

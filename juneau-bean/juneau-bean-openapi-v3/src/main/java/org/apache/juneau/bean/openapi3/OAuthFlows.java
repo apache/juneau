@@ -108,15 +108,39 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	protected OAuthFlows strict() {
-		super.strict();
-		return this;
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "implicit" -> toType(getImplicit(), type);
+			case "password" -> toType(getPassword(), type);
+			case "clientCredentials" -> toType(getClientCredentials(), type);
+			case "authorizationCode" -> toType(getAuthorizationCode(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public OAuthFlows strict(Object value) {
-		super.strict(value);
-		return this;
+	/**
+	 * Bean property getter:  <property>authorizationCode</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public OAuthFlow getAuthorizationCode() {
+		return authorizationCode;
+	}
+
+	/**
+	 * Bean property getter:  <property>clientCredentials</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public OAuthFlow getClientCredentials() {
+		return clientCredentials;
 	}
 
 	/**
@@ -132,23 +156,6 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public OAuthFlows setImplicit(OAuthFlow value) {
-		implicit = value;
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>password</property>.
 	 *
 	 * <p>
@@ -160,8 +167,34 @@ public class OAuthFlows extends OpenApiElement {
 		return password;
 	}
 
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(authorizationCode != null, "authorizationCode")
+			.addIf(clientCredentials != null, "clientCredentials")
+			.addIf(implicit != null, "implicit")
+			.addIf(password != null, "password")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public OAuthFlows set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "authorizationCode" -> setAuthorizationCode(toType(value, OAuthFlow.class));
+			case "clientCredentials" -> setClientCredentials(toType(value, OAuthFlow.class));
+			case "implicit" -> setImplicit(toType(value, OAuthFlow.class));
+			case "password" -> setPassword(toType(value, OAuthFlow.class));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
 	/**
-	 * Bean property setter:  <property>items</property>.
+	 * Bean property setter:  <property>authorizationCode</property>.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -172,21 +205,9 @@ public class OAuthFlows extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public OAuthFlows setPassword(OAuthFlow value) {
-		password = value;
+	public OAuthFlows setAuthorizationCode(OAuthFlow value) {
+		authorizationCode = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>clientCredentials</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public OAuthFlow getClientCredentials() {
-		return clientCredentials;
 	}
 
 	/**
@@ -207,19 +228,7 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>authorizationCode</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public OAuthFlow getAuthorizationCode() {
-		return authorizationCode;
-	}
-
-	/**
-	 * Bean property setter:  <property>authorizationCode</property>.
+	 * Bean property setter:  <property>items</property>.
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
@@ -230,46 +239,37 @@ public class OAuthFlows extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public OAuthFlows setAuthorizationCode(OAuthFlow value) {
-		authorizationCode = value;
+	public OAuthFlows setImplicit(OAuthFlow value) {
+		implicit = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public OAuthFlows setPassword(OAuthFlow value) {
+		password = value;
+		return this;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public OAuthFlows strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "implicit" -> toType(getImplicit(), type);
-			case "password" -> toType(getPassword(), type);
-			case "clientCredentials" -> toType(getClientCredentials(), type);
-			case "authorizationCode" -> toType(getAuthorizationCode(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public OAuthFlows set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "authorizationCode" -> setAuthorizationCode(toType(value, OAuthFlow.class));
-			case "clientCredentials" -> setClientCredentials(toType(value, OAuthFlow.class));
-			case "implicit" -> setImplicit(toType(value, OAuthFlow.class));
-			case "password" -> setPassword(toType(value, OAuthFlow.class));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(authorizationCode != null, "authorizationCode")
-			.addIf(clientCredentials != null, "clientCredentials")
-			.addIf(implicit != null, "implicit")
-			.addIf(password != null, "password")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected OAuthFlows strict() {
+		super.strict();
+		return this;
 	}
 }

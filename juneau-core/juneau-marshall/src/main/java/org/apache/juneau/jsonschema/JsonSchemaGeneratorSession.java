@@ -45,25 +45,6 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 public class JsonSchemaGeneratorSession extends BeanTraverseSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(JsonSchemaGenerator ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -81,37 +62,19 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public JsonSchemaGeneratorSession build() {
-			return new JsonSchemaGeneratorSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
 		}
+		@Override
+		public JsonSchemaGeneratorSession build() {
+			return new JsonSchemaGeneratorSession(this);
+		}
 
 		@Override /* Overridden from Builder */
 		public Builder debug(Boolean value) {
 			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
 			return this;
 		}
 
@@ -140,6 +103,18 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
@@ -150,12 +125,22 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			super.timeZoneDefault(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(JsonSchemaGenerator ctx) {
+		return new Builder(ctx);
+	}
 	private final JsonSchemaGenerator ctx;
 	private final Map<String,JsonMap> defs;
 	private JsonSerializerSession jsSession;
@@ -170,6 +155,94 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		super(builder);
 		ctx = builder.ctx;
 		defs = isUseBeanDefs() ? new TreeMap<>() : null;
+	}
+
+	/**
+	 * Adds a schema definition to this session.
+	 *
+	 * @param id The definition ID.
+	 * @param def The definition schema.
+	 * @return This object.
+	 */
+	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
+		if (defs != null)
+			defs.put(id, def);
+		return this;
+	}
+
+	/**
+	 * Returns the definition ID for the specified class.
+	 *
+	 * @param cm The class to get the definition ID of.
+	 * @return The definition ID for the specified class.
+	 */
+	public String getBeanDefId(ClassMeta<?> cm) {
+		return getBeanDefMapper().getId(cm);
+	}
+
+	/**
+	 * Returns the definitions that were gathered during this session.
+	 *
+	 * <p>
+	 * This map is modifiable and affects the map in the session.
+	 *
+	 * @return
+	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator.Builder#useBeanDefs()} was not enabled.
+	 */
+	public Map<String,JsonMap> getBeanDefs() {
+		return defs;
+	}
+
+	/**
+	 * Returns the definition URI for the specified class.
+	 *
+	 * @param cm The class to get the definition URI of.
+	 * @return The definition URI for the specified class.
+	 */
+	public java.net.URI getBeanDefUri(ClassMeta<?> cm) {
+		return getBeanDefMapper().getURI(cm);
+	}
+
+	/**
+	 * Returns the definition URI for the specified class.
+	 *
+	 * @param id The definition ID to get the definition URI of.
+	 * @return The definition URI for the specified class.
+	 */
+	public java.net.URI getBeanDefUri(String id) {
+		return getBeanDefMapper().getURI(id);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getJsonSchemaBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonSchemaClassMeta(cm);
+	}
+
+	/**
+	 * Returns the JSON-schema for the specified type.
+	 *
+	 * @param cm The object type.
+	 * @return The schema for the type.
+	 * @throws BeanRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
+	 */
+	public JsonMap getSchema(ClassMeta<?> cm) throws BeanRecursionException, SerializeException {
+		return getSchema(cm, "root", null, false, false, null);
 	}
 
 	/**
@@ -198,16 +271,34 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 		return getSchema(getClassMeta(type), "root", null, false, false, null);
 	}
 
-	/**
-	 * Returns the JSON-schema for the specified type.
-	 *
-	 * @param cm The object type.
-	 * @return The schema for the type.
-	 * @throws BeanRecursionException Bean recursion occurred.
-	 * @throws SerializeException Error occurred.
-	 */
-	public JsonMap getSchema(ClassMeta<?> cm) throws BeanRecursionException, SerializeException {
-		return getSchema(cm, "root", null, false, false, null);
+	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
+		boolean canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
+		if (canAdd && (getAddDescriptionsTo().contains(t) || getAddDescriptionsTo().contains(ANY)))
+			return sType.toString();
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> getEnums(ClassMeta<?> cm) {
+		List<String> l = list();
+		for (Enum<?> e : ((Class<Enum<?>>)cm.getInnerClass()).getEnumConstants())
+			l.add(cm.toString(e));
+		return l;
+	}
+
+	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws SerializeException {
+		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
+		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
+			Object example = sType.getExample(this, jpSession());
+			if (example != null) {
+				try {
+					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
+				} catch (ParseException e) {
+					throw new SerializeException(e);
+				}
+			}
+		}
+		return null;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -370,28 +461,16 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		return out;
 	}
-
-	@SuppressWarnings("unchecked")
-	private List<String> getEnums(ClassMeta<?> cm) {
-		List<String> l = list();
-		for (Enum<?> e : ((Class<Enum<?>>)cm.getInnerClass()).getEnumConstants())
-			l.add(cm.toString(e));
-		return l;
+	private JsonParserSession jpSession() {
+		if (jpSession == null)
+			jpSession = ctx.getJsonParser().getSession();
+		return jpSession;
 	}
 
-	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws SerializeException {
-		boolean canAdd = isAllowNestedExamples() || ! exampleAdded;
-		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
-			Object example = sType.getExample(this, jpSession());
-			if (example != null) {
-				try {
-					return JsonParser.DEFAULT.parse(toJson(example), Object.class);
-				} catch (ParseException e) {
-					throw new SerializeException(e);
-				}
-			}
-		}
-		return null;
+	private ClassMeta<?> toClassMeta(Object o) {
+		if (o instanceof Type)
+			return getClassMeta((Type)o);
+		return getClassMetaForObject(o);
 	}
 
 	private String toJson(Object o) throws SerializeException {
@@ -399,79 +478,6 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			jsSession = ctx.getJsonSerializer().getSession();
 		return jsSession.serializeToString(o);
 	}
-
-	private JsonParserSession jpSession() {
-		if (jpSession == null)
-			jpSession = ctx.getJsonParser().getSession();
-		return jpSession;
-	}
-
-	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
-		boolean canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
-		if (canAdd && (getAddDescriptionsTo().contains(t) || getAddDescriptionsTo().contains(ANY)))
-			return sType.toString();
-		return null;
-	}
-
-	/**
-	 * Returns the definition ID for the specified class.
-	 *
-	 * @param cm The class to get the definition ID of.
-	 * @return The definition ID for the specified class.
-	 */
-	public String getBeanDefId(ClassMeta<?> cm) {
-		return getBeanDefMapper().getId(cm);
-	}
-
-	/**
-	 * Returns the definition URI for the specified class.
-	 *
-	 * @param cm The class to get the definition URI of.
-	 * @return The definition URI for the specified class.
-	 */
-	public java.net.URI getBeanDefUri(ClassMeta<?> cm) {
-		return getBeanDefMapper().getURI(cm);
-	}
-
-	/**
-	 * Returns the definition URI for the specified class.
-	 *
-	 * @param id The definition ID to get the definition URI of.
-	 * @return The definition URI for the specified class.
-	 */
-	public java.net.URI getBeanDefUri(String id) {
-		return getBeanDefMapper().getURI(id);
-	}
-
-	/**
-	 * Returns the definitions that were gathered during this session.
-	 *
-	 * <p>
-	 * This map is modifiable and affects the map in the session.
-	 *
-	 * @return
-	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator.Builder#useBeanDefs()} was not enabled.
-	 */
-	public Map<String,JsonMap> getBeanDefs() {
-		return defs;
-	}
-
-	/**
-	 * Adds a schema definition to this session.
-	 *
-	 * @param id The definition ID.
-	 * @param def The definition schema.
-	 * @return This object.
-	 */
-	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
-		if (defs != null)
-			defs.put(id, def);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Add descriptions to types.
@@ -496,28 +502,6 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Allow nested descriptions.
-	 *
-	 * @see JsonSchemaGenerator.Builder#allowNestedDescriptions()
-	 * @return
-	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
-	 */
-	protected final boolean isAllowNestedDescriptions() {
-		return ctx.isAllowNestedDescriptions();
-	}
-
-	/**
-	 * Allow nested examples.
-	 *
-	 * @see JsonSchemaGenerator.Builder#allowNestedExamples()
-	 * @return
-	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
-	 */
-	protected final boolean isAllowNestedExamples() {
-		return ctx.isAllowNestedExamples();
-	}
-
-	/**
 	 * Bean schema definition mapper.
 	 *
 	 * @see JsonSchemaGenerator.Builder#beanDefMapper(Class)
@@ -538,7 +522,27 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	protected final List<Pattern> getIgnoreTypes() {
 		return ctx.getIgnoreTypes();
 	}
+	/**
+	 * Allow nested descriptions.
+	 *
+	 * @see JsonSchemaGenerator.Builder#allowNestedDescriptions()
+	 * @return
+	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedDescriptions() {
+		return ctx.isAllowNestedDescriptions();
+	}
 
+	/**
+	 * Allow nested examples.
+	 *
+	 * @see JsonSchemaGenerator.Builder#allowNestedExamples()
+	 * @return
+	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedExamples() {
+		return ctx.isAllowNestedExamples();
+	}
 	/**
 	 * Use bean definitions.
 	 *
@@ -548,39 +552,5 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 */
 	protected final boolean isUseBeanDefs() {
 		return ctx.isUseBeanDefs();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
-		return ctx.getJsonSchemaClassMeta(cm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
-		return ctx.getJsonSchemaBeanPropertyMeta(bpm);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private ClassMeta<?> toClassMeta(Object o) {
-		if (o instanceof Type)
-			return getClassMeta((Type)o);
-		return getClassMetaForObject(o);
 	}
 }

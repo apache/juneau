@@ -52,7 +52,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#audio() audio()}
- * 		<li class='jm'>{@link HtmlBuilder#audio(Object, Object...) audio(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#audio(String) audio(String)}
  * 	</ul>
  * </ul>
  * </p>
@@ -78,6 +78,30 @@ public class Audio extends HtmlElementMixed {
 		src(src);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Audio _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Audio accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Audio attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Audio attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a>
 	 * attribute.
@@ -93,7 +117,7 @@ public class Audio extends HtmlElementMixed {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param autoplay
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -103,6 +127,23 @@ public class Audio extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Audio child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Audio children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Audio contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-controls">controls</a>
 	 * attribute.
@@ -118,7 +159,7 @@ public class Audio extends HtmlElementMixed {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param controls
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -142,126 +183,11 @@ public class Audio extends HtmlElementMixed {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param crossorigin How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Audio crossorigin(String value) {
 		attr("crossorigin", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
-	 *
-	 * <p>
-	 * Causes the media to automatically restart from the beginning when it reaches the end.
-	 *
-	 * @param loop If <jk>true</jk>, the media will loop continuously.
-	 * @return This object.
-	 */
-	public Audio loop(Object value) {
-		attr("loop", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Groups multiple media elements together so they can be controlled as a single unit. All media elements
-	 * with the same mediagroup value will share the same MediaController, allowing synchronized playback.
-	 *
-	 * <p>
-	 * This is useful for creating synchronized audio/video presentations or multiple audio tracks.
-	 *
-	 * @param mediagroup The name of the media group to join.
-	 * @return This object.
-	 */
-	public Audio mediagroup(String value) {
-		attr("mediagroup", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
-	 *
-	 * @param muted If <jk>true</jk>, the media will be muted by default.
-	 * @return This object.
-	 */
-	public Audio muted(Object value) {
-		attr("muted", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies how the browser should load the media resource.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"none"</js> - Do not preload the media</li>
-	 * 	<li><js>"metadata"</js> - Preload only metadata (duration, dimensions, etc.)</li>
-	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
-	 * </ul>
-	 *
-	 * @param preload How much of the media to preload.
-	 * @return This object.
-	 */
-	public Audio preload(Object value) {
-		attr("preload", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Audio src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Audio _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Audio accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Audio contenteditable(Object value) {
-		super.contenteditable(value);
 		return this;
 	}
 
@@ -286,6 +212,54 @@ public class Audio extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Audio lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
+	 *
+	 * <p>
+	 * Causes the media to automatically restart from the beginning when it reaches the end.
+	 *
+	 * @param value If <jk>true</jk>, the media will loop continuously.
+	 * @return This object.
+	 */
+	public Audio loop(Object value) {
+		attr("loop", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Groups multiple media elements together so they can be controlled as a single unit. All media elements
+	 * with the same mediagroup value will share the same MediaController, allowing synchronized playback.
+	 *
+	 * <p>
+	 * This is useful for creating synchronized audio/video presentations or multiple audio tracks.
+	 *
+	 * @param value The name of the media group to join.
+	 * @return This object.
+	 */
+	public Audio mediagroup(String value) {
+		attr("mediagroup", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
+	 *
+	 * @param value If <jk>true</jk>, the media will be muted by default.
+	 * @return This object.
+	 */
+	public Audio muted(Object value) {
+		attr("muted", value);
 		return this;
 	}
 
@@ -589,9 +563,55 @@ public class Audio extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies how the browser should load the media resource.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"none"</js> - Do not preload the media</li>
+	 * 	<li><js>"metadata"</js> - Preload only metadata (duration, dimensions, etc.)</li>
+	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
+	 * </ul>
+	 *
+	 * @param value How much of the media to preload.
+	 * @return This object.
+	 */
+	public Audio preload(Object value) {
+		attr("preload", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Audio spellcheck(Object value) {
 		super.spellcheck(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Audio src(Object value) {
+		attrUri("src", value);
 		return this;
 	}
 
@@ -616,30 +636,6 @@ public class Audio extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Audio translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Audio child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Audio children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Audio attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Audio attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

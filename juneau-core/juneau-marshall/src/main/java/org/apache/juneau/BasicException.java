@@ -49,21 +49,21 @@ public abstract class BasicException extends Exception {
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public BasicException(Throwable causedBy, String message, Object...args) {
-		this(message, args);
-		initCause(causedBy);
+	public BasicException(Throwable causedBy) {
+		this(causedBy, causedBy.getLocalizedMessage());
 	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param causedBy The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public BasicException(Throwable causedBy) {
-		this(causedBy, causedBy.getLocalizedMessage());
+	public BasicException(Throwable causedBy, String message, Object...args) {
+		this(message, args);
+		initCause(causedBy);
 	}
 
 	/**

@@ -64,64 +64,6 @@ import jakarta.servlet.*;
  * </ul>
  */
 public class JettyMicroservice extends Microservice {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
-
-	private static volatile JettyMicroservice INSTANCE;
-
-	private static void setInstance(JettyMicroservice m) {
-		synchronized(JettyMicroservice.class) {
-			INSTANCE = m;
-		}
-	}
-
-	/**
-	 * Returns the Microservice instance.
-	 * <p>
-	 * This method only works if there's only one Microservice instance in a JVM.
-	 * Otherwise, it's just overwritten by the last instantiated microservice.
-	 *
-	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
-	 */
-	public static JettyMicroservice getInstance() {
-		synchronized(JettyMicroservice.class) {
-			return INSTANCE;
-		}
-	}
-
-	/**
-	 * Entry-point method.
-	 *
-	 * @param args Command line arguments.
-	 * @throws Exception Error occurred.
-	 */
-	public static void main(String[] args) throws Exception {
-		JettyMicroservice
-			.create()
-			.args(args)
-			.build()
-			.start()
-			.startConsole()
-			.join();
-	}
-
-	/**
-	 * Creates a new microservice builder.
-	 *
-	 * @return A new microservice builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -156,8 +98,74 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		@Override /* Overridden from MicroserviceBuilder */
+		public Builder args(Args args) {
+			super.args(args);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder args(String...args) {
+			super.args(args);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public JettyMicroservice build() throws Exception {
+			return new JettyMicroservice(this);
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder config(Config config) {
+			super.config(config);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder configName(String configName) {
+			super.configName(configName);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder configStore(ConfigStore configStore) {
+			super.configStore(configStore);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder console(Scanner consoleReader, PrintWriter consoleWriter) {
+			super.console(consoleReader, consoleWriter);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
+			super.consoleCommands(consoleCommands);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder consoleEnabled(boolean consoleEnabled) {
+			super.consoleEnabled(consoleEnabled);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder copy() {
 			return new Builder(this);
+		}
+		/**
+		 * Specifies the factory to use for creating the Jetty {@link Server} instance.
+		 *
+		 * <p>
+		 * If not specified, uses {@link BasicJettyServerFactory}.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder jettyServerFactory(JettyServerFactory value) {
+			this.factory = value;
+			return this;
 		}
 
 		/**
@@ -210,6 +218,30 @@ public class JettyMicroservice extends Microservice {
 			else
 				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", className(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
+			return this;
+		}
+
+		/**
+		 * Registers an event listener for this microservice.
+		 *
+		 * @param listener An event listener for this microservice.
+		 * @return This object.
+		 */
+		public Builder listener(JettyMicroserviceListener listener) {
+			super.listener(listener);
+			this.listener = listener;
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder logger(Logger logger) {
+			super.logger(logger);
+			return this;
+		}
+
+		@Override /* Overridden from MicroserviceBuilder */
+		public Builder manifest(Object manifest) throws IOException {
+			super.manifest(manifest);
 			return this;
 		}
 
@@ -294,16 +326,14 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		/**
-		 * Adds a set of servlets to the servlet container.
+		 * Adds a set of servlet attributes to the servlet container.
 		 *
-		 * @param servlets
-		 * 	A map of servlets to add to the servlet container.
-		 * 	<br>Keys are path specs for the servlet.
+		 * @param values The map of attributes.
 		 * @return This object.
 		 */
-		public Builder servlets(Map<String,Servlet> servlets) {
-			if (servlets != null)
-				this.servlets.putAll(servlets);
+		public Builder servletAttribute(Map<String,Object> values) {
+			if (values != null)
+				this.servletAttributes.putAll(values);
 			return this;
 		}
 
@@ -320,97 +350,22 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		/**
-		 * Adds a set of servlet attributes to the servlet container.
+		 * Adds a set of servlets to the servlet container.
 		 *
-		 * @param values The map of attributes.
+		 * @param servlets
+		 * 	A map of servlets to add to the servlet container.
+		 * 	<br>Keys are path specs for the servlet.
 		 * @return This object.
 		 */
-		public Builder servletAttribute(Map<String,Object> values) {
-			if (values != null)
-				this.servletAttributes.putAll(values);
-			return this;
-		}
-
-		/**
-		 * Specifies the factory to use for creating the Jetty {@link Server} instance.
-		 *
-		 * <p>
-		 * If not specified, uses {@link BasicJettyServerFactory}.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder jettyServerFactory(JettyServerFactory value) {
-			this.factory = value;
-			return this;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Inherited from MicroserviceBuilder
-		//-----------------------------------------------------------------------------------------------------------------
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public JettyMicroservice build() throws Exception {
-			return new JettyMicroservice(this);
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder args(Args args) {
-			super.args(args);
+		public Builder servlets(Map<String,Servlet> servlets) {
+			if (servlets != null)
+				this.servlets.putAll(servlets);
 			return this;
 		}
 
 		@Override /* Overridden from MicroserviceBuilder */
-		public Builder args(String...args) {
-			super.args(args);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder manifest(Object manifest) throws IOException {
-			super.manifest(manifest);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder logger(Logger logger) {
-			super.logger(logger);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder config(Config config) {
-			super.config(config);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder configName(String configName) {
-			super.configName(configName);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder configStore(ConfigStore configStore) {
-			super.configStore(configStore);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder consoleEnabled(boolean consoleEnabled) {
-			super.consoleEnabled(consoleEnabled);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
-			super.consoleCommands(consoleCommands);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public Builder console(Scanner consoleReader, PrintWriter consoleWriter) {
-			super.console(consoleReader, consoleWriter);
+		public <T> Builder varBean(Class<T> c, T value) {
+			super.varBean(c, value);
 			return this;
 		}
 
@@ -418,12 +373,6 @@ public class JettyMicroservice extends Microservice {
 		@SuppressWarnings("unchecked")
 		public Builder vars(Class<? extends Var>...vars) {
 			super.vars(vars);
-			return this;
-		}
-
-		@Override /* Overridden from MicroserviceBuilder */
-		public <T> Builder varBean(Class<T> c, T value) {
-			super.varBean(c, value);
 			return this;
 		}
 
@@ -438,32 +387,74 @@ public class JettyMicroservice extends Microservice {
 			super.workingDir(path);
 			return this;
 		}
+	}
 
-		/**
-		 * Registers an event listener for this microservice.
-		 *
-		 * @param listener An event listener for this microservice.
-		 * @return This object.
-		 */
-		public Builder listener(JettyMicroserviceListener listener) {
-			super.listener(listener);
-			this.listener = listener;
-			return this;
+	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
+
+	private static volatile JettyMicroservice INSTANCE;
+
+	/**
+	 * Creates a new microservice builder.
+	 *
+	 * @return A new microservice builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Returns the Microservice instance.
+	 * <p>
+	 * This method only works if there's only one Microservice instance in a JVM.
+	 * Otherwise, it's just overwritten by the last instantiated microservice.
+	 *
+	 * @return The Microservice instance, or <jk>null</jk> if there isn't one.
+	 */
+	public static JettyMicroservice getInstance() {
+		synchronized(JettyMicroservice.class) {
+			return INSTANCE;
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Entry-point method.
+	 *
+	 * @param args Command line arguments.
+	 * @throws Exception Error occurred.
+	 */
+	public static void main(String[] args) throws Exception {
+		JettyMicroservice
+			.create()
+			.args(args)
+			.build()
+			.start()
+			.startConsole()
+			.join();
+	}
+	private static int findOpenPort(int[] ports) {
+		for (int port : ports) {
+			// If port is 0, try a random port between ports[0] and 32767.
+			if (port == 0)
+				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
+			try (ServerSocket ss = new ServerSocket(port)) {
+				return port;
+			} catch (IOException e) {}
+		}
+		return 0;
+	}
+	private static void setInstance(JettyMicroservice m) {
+		synchronized(JettyMicroservice.class) {
+			INSTANCE = m;
+		}
+	}
 
 	final Messages messages = Messages.of(JettyMicroservice.class);
-
 	private final Builder builder;
 	final JettyMicroserviceListener listener;
+
 	private final JettyServerFactory factory;
 
 	volatile Server server;
-
 	/**
 	 * Constructor.
 	 *
@@ -479,158 +470,33 @@ public class JettyMicroservice extends Microservice {
 		this.factory = builder.factory != null ? builder.factory : new BasicJettyServerFactory();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Methods implemented on Microservice API
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Microservice */
-	public synchronized JettyMicroservice init() throws ParseException, IOException {
-		super.init();
-		return this;
-	}
-
-	@Override /* Overridden from Microservice */
-	public synchronized JettyMicroservice startConsole() throws Exception {
-		super.startConsole();
-		return this;
-	}
-
-	@Override /* Overridden from Microservice */
-	public synchronized JettyMicroservice stopConsole() throws Exception {
-		super.stopConsole();
-		return this;
-	}
-
-	@Override /* Overridden from Microservice */
-	public synchronized JettyMicroservice start() throws Exception {
-		super.start();
-		createServer();
-		startServer();
-		return this;
-	}
-
-	@Override /* Overridden from Microservice */
-	public JettyMicroservice join() throws Exception {
-		server.join();
-		return this;
-	}
-
-	@Override /* Overridden from Microservice */
-	public synchronized JettyMicroservice stop() throws Exception {
-		final Logger logger = getLogger();
-		final Messages mb2 = messages;
-		Thread t = new Thread("JettyMicroserviceStop") {
-			@Override /* Overridden from Thread */
-			public void run() {
-				try {
-					if (server == null || server.isStopping() || server.isStopped())
-						return;
-					listener.onStopServer(JettyMicroservice.this);
-					out(mb2, "StoppingServer");
-					server.stop();
-					out(mb2, "ServerStopped");
-					listener.onPostStopServer(JettyMicroservice.this);
-				} catch (Exception e) {
-					logger.log(Level.WARNING, e.getLocalizedMessage(), e);
-				}
-			}
-		};
-		t.start();
-		try {
-			t.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		super.stop();
-
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// JettyMicroservice API methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the port that this microservice started up on.
-	 * <p>
-	 * The value is determined by looking at the <c>Server/Connectors[ServerConnector]/port</c> value in the
-	 * Jetty configuration.
+	 * Adds an arbitrary servlet to this microservice.
 	 *
-	 * @return The port that this microservice started up on.
+	 * @param servlet The servlet instance.
+	 * @param pathSpec The context path of the servlet.
+	 * @return This object.
+	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
-	public int getPort() {
-		for (Connector c : getServer().getConnectors())
-			if (c instanceof ServerConnector)
-				return ((ServerConnector)c).getPort();
-		throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");
+	public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {
+		ServletHolder sh = new ServletHolder(servlet);
+		if (pathSpec != null && ! pathSpec.endsWith("/*"))
+			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
+		getServletContextHandler().addServlet(sh, pathSpec);
+		return this;
 	}
 
 	/**
-	 * Returns the context path that this microservice is using.
-	 * <p>
-	 * The value is determined by looking at the <c>Server/Handlers[ServletContextHandler]/contextPath</c> value
-	 * in the Jetty configuration.
+	 * Adds a servlet attribute to the Jetty server.
 	 *
-	 * @return The context path that this microservice is using.
+	 * @param name The server attribute name.
+	 * @param value The context path of the servlet.
+	 * @return This object.
+	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
 	 */
-	public String getContextPath() {
-		return getServletContextHandler().getContextPath();
-//        for (Handler h : getServer().getHandlers()) {
-//            if (h instanceof HandlerCollection)
-//                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
-//                    if (h2 instanceof ServletContextHandler)
-//                        return ((ServletContextHandler) h2).getContextPath();
-//            if (h instanceof ServletContextHandler)
-//                return ((ServletContextHandler) h).getContextPath();
-//        }
-//        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
-	}
-
-	/**
-	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.
-	 * <p>
-	 * The value is determined by looking for the existence of an SSL Connection Factorie by looking for the
-	 * <c>Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]</c> value in the Jetty
-	 * configuration.
-	 *
-	 * @return Whether this microservice is using <js>"http"</js> or <js>"https"</js>.
-	 */
-	public String getProtocol() {
-		for (Connector c : getServer().getConnectors())
-			if (c instanceof ServerConnector)
-				for (ConnectionFactory cf : ((ServerConnector)c).getConnectionFactories())
-					if (cf instanceof SslConnectionFactory)
-						return "https";
-		return "http";
-	}
-
-	/**
-	 * Returns the hostname of this microservice.
-	 * <p>
-	 * Simply uses <c>InetAddress.getLocalHost().getHostName()</c>.
-	 *
-	 * @return The hostname of this microservice.
-	 */
-	public String getHostName() {
-		String hostname = "localhost";
-		try {
-			hostname = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {}
-		return hostname;
-	}
-
-	/**
-	 * Returns the URI where this microservice is listening on.
-	 *
-	 * @return The URI where this microservice is listening on.
-	 */
-	public URI getURI() {
-		String cp = getContextPath();
-		try {
-			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
-		} catch (URISyntaxException e) {
-			throw asRuntimeException(e);
-		}
+	public JettyMicroservice addServletAttribute(String name, Object value) {
+		getServer().setAttribute(name, value);
+		return this;
 	}
 
 	/**
@@ -751,19 +617,80 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	/**
-	 * Adds an arbitrary servlet to this microservice.
+	 * Returns the context path that this microservice is using.
+	 * <p>
+	 * The value is determined by looking at the <c>Server/Handlers[ServletContextHandler]/contextPath</c> value
+	 * in the Jetty configuration.
 	 *
-	 * @param servlet The servlet instance.
-	 * @param pathSpec The context path of the servlet.
-	 * @return This object.
-	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
+	 * @return The context path that this microservice is using.
 	 */
-	public JettyMicroservice addServlet(Servlet servlet, String pathSpec) {
-		ServletHolder sh = new ServletHolder(servlet);
-		if (pathSpec != null && ! pathSpec.endsWith("/*"))
-			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
-		getServletContextHandler().addServlet(sh, pathSpec);
-		return this;
+	public String getContextPath() {
+		return getServletContextHandler().getContextPath();
+//        for (Handler h : getServer().getHandlers()) {
+//            if (h instanceof HandlerCollection)
+//                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
+//                    if (h2 instanceof ServletContextHandler)
+//                        return ((ServletContextHandler) h2).getContextPath();
+//            if (h instanceof ServletContextHandler)
+//                return ((ServletContextHandler) h).getContextPath();
+//        }
+//        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
+	}
+	/**
+	 * Returns the hostname of this microservice.
+	 * <p>
+	 * Simply uses <c>InetAddress.getLocalHost().getHostName()</c>.
+	 *
+	 * @return The hostname of this microservice.
+	 */
+	public String getHostName() {
+		String hostname = "localhost";
+		try {
+			hostname = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {}
+		return hostname;
+	}
+
+	/**
+	 * Returns the port that this microservice started up on.
+	 * <p>
+	 * The value is determined by looking at the <c>Server/Connectors[ServerConnector]/port</c> value in the
+	 * Jetty configuration.
+	 *
+	 * @return The port that this microservice started up on.
+	 */
+	public int getPort() {
+		for (Connector c : getServer().getConnectors())
+			if (c instanceof ServerConnector)
+				return ((ServerConnector)c).getPort();
+		throw new IllegalStateException("Could not locate ServerConnector in Jetty server.");
+	}
+
+	/**
+	 * Returns whether this microservice is using <js>"http"</js> or <js>"https"</js>.
+	 * <p>
+	 * The value is determined by looking for the existence of an SSL Connection Factorie by looking for the
+	 * <c>Server/Connectors[ServerConnector]/ConnectionFactories[SslConnectionFactory]</c> value in the Jetty
+	 * configuration.
+	 *
+	 * @return Whether this microservice is using <js>"http"</js> or <js>"https"</js>.
+	 */
+	public String getProtocol() {
+		for (Connector c : getServer().getConnectors())
+			if (c instanceof ServerConnector)
+				for (ConnectionFactory cf : ((ServerConnector)c).getConnectionFactories())
+					if (cf instanceof SslConnectionFactory)
+						return "https";
+		return "http";
+	}
+
+	/**
+	 * Returns the underlying Jetty server.
+	 *
+	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
+	 */
+	public Server getServer() {
+		return Objects.requireNonNull(server, "Server not found.  createServer() must be called first.");
 	}
 
 	/**
@@ -781,27 +708,81 @@ public class JettyMicroservice extends Microservice {
 	}
 
 	/**
-	 * Adds a servlet attribute to the Jetty server.
+	 * Returns the URI where this microservice is listening on.
 	 *
-	 * @param name The server attribute name.
-	 * @param value The context path of the servlet.
-	 * @return This object.
-	 * @throws RuntimeException if {@link #createServer()} has not previously been called.
+	 * @return The URI where this microservice is listening on.
 	 */
-	public JettyMicroservice addServletAttribute(String name, Object value) {
-		getServer().setAttribute(name, value);
+	public URI getURI() {
+		String cp = getContextPath();
+		try {
+			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
+		} catch (URISyntaxException e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	@Override /* Overridden from Microservice */
+	public synchronized JettyMicroservice init() throws ParseException, IOException {
+		super.init();
 		return this;
 	}
 
-	/**
-	 * Returns the underlying Jetty server.
-	 *
-	 * @return The underlying Jetty server, or <jk>null</jk> if {@link #createServer()} has not yet been called.
-	 */
-	public Server getServer() {
-		return Objects.requireNonNull(server, "Server not found.  createServer() must be called first.");
+	@Override /* Overridden from Microservice */
+	public JettyMicroservice join() throws Exception {
+		server.join();
+		return this;
 	}
 
+	@Override /* Overridden from Microservice */
+	public synchronized JettyMicroservice start() throws Exception {
+		super.start();
+		createServer();
+		startServer();
+		return this;
+	}
+
+	@Override /* Overridden from Microservice */
+	public synchronized JettyMicroservice startConsole() throws Exception {
+		super.startConsole();
+		return this;
+	}
+
+	@Override /* Overridden from Microservice */
+	public synchronized JettyMicroservice stop() throws Exception {
+		final Logger logger = getLogger();
+		final Messages mb2 = messages;
+		Thread t = new Thread("JettyMicroserviceStop") {
+			@Override /* Overridden from Thread */
+			public void run() {
+				try {
+					if (server == null || server.isStopping() || server.isStopped())
+						return;
+					listener.onStopServer(JettyMicroservice.this);
+					out(mb2, "StoppingServer");
+					server.stop();
+					out(mb2, "ServerStopped");
+					listener.onPostStopServer(JettyMicroservice.this);
+				} catch (Exception e) {
+					logger.log(Level.WARNING, e.getLocalizedMessage(), e);
+				}
+			}
+		};
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		super.stop();
+
+		return this;
+	}
+
+	@Override /* Overridden from Microservice */
+	public synchronized JettyMicroservice stopConsole() throws Exception {
+		super.stopConsole();
+		return this;
+	}
 	/**
 	 * Method used to start the Jetty server created by {@link #createServer()}.
 	 *
@@ -817,21 +798,5 @@ public class JettyMicroservice extends Microservice {
 		out(messages, "ServerStarted", getPort());
 		listener.onPostStartServer(this);
 		return getPort();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static int findOpenPort(int[] ports) {
-		for (int port : ports) {
-			// If port is 0, try a random port between ports[0] and 32767.
-			if (port == 0)
-				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
-			try (ServerSocket ss = new ServerSocket(port)) {
-				return port;
-			} catch (IOException e) {}
-		}
-		return 0;
 	}
 }

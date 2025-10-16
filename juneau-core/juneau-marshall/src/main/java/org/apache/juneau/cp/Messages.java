@@ -113,60 +113,21 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class Messages extends ResourceBundle {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param forClass
-	 * 	The class we're creating this object for.
-	 * @return A new builder.
-	 */
-	public static final Builder create(Class<?> forClass) {
-		return new Builder(forClass);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param forClass
-	 * 	The class we're creating this object for.
-	 * @return A new message bundle belonging to the class.
-	 */
-	public static final Messages of(Class<?> forClass) {
-		return create(forClass).build();
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param forClass
-	 * 	The class we're creating this object for.
-	 * @param name
-	 * 	The bundle name (e.g. <js>"Messages"</js>).
-	 * 	<br>If <jk>null</jk>, uses the class name.
-	 * @return A new message bundle belonging to the class.
-	 */
-	public static final Messages of(Class<?> forClass, String name) {
-		return create(forClass).name(name).build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends BeanBuilder<Messages> {
 
+		private static class MessagesString {
+			public String name;
+			public String[] baseNames;
+			public String locale;
+		}
 		Class<?> forClass;
 		Locale locale;
 		String name;
 		Messages parent;
+
 		List<Tuple2<Class<?>,String>> locations;
 
 		private String[] baseNames = {"{package}.{name}","{package}.i18n.{name}","{package}.nls.{name}","{package}.messages.{name}"};
@@ -182,70 +143,6 @@ public class Messages extends ResourceBundle {
 			this.name = forClass.getSimpleName();
 			locations = Utils.list();
 			locale = Locale.getDefault();
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected Messages buildDefault() {
-
-			if (! locations.isEmpty()) {
-				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
-
-				Builder x = null;
-
-				for (int i = mbl.length-1; i >= 0; i--) {
-					Class<?> c = Utils.firstNonNull(mbl[i].getA(), forClass);
-					String value = mbl[i].getB();
-					if (isJsonObject(value, true)) {
-						MessagesString ms;
-						try {
-							ms = Json5.DEFAULT.read(value, MessagesString.class);
-						} catch (ParseException e) {
-							throw asRuntimeException(e);
-						}
-						x = Messages.create(c).name(ms.name).baseNames(Utils.splita(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
-					} else {
-						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
-					}
-				}
-
-				return x == null ? null : x.build();  // Shouldn't be null.
-			}
-
-			return new Messages(this);
-		}
-
-		private static class MessagesString {
-			public String name;
-			public String[] baseNames;
-			public String locale;
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Adds a parent bundle.
-		 *
-		 * @param parent The parent bundle.  Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder parent(Messages parent) {
-			this.parent = parent;
-			return this;
-		}
-
-		/**
-		 * Specifies the bundle name (e.g. <js>"Messages"</js>).
-		 *
-		 * @param name
-		 * 	The bundle name.
-		 * 	<br>If <jk>null</jk>, the forClass class name is used.
-		 * @return This object.
-		 */
-		public Builder name(String name) {
-			this.name = Utils.isEmpty(name) ? forClass.getSimpleName() : name;
-			return this;
 		}
 
 		/**
@@ -264,6 +161,11 @@ public class Messages extends ResourceBundle {
 		 */
 		public Builder baseNames(String...baseNames) {
 			this.baseNames = baseNames == null ? new String[]{} : baseNames;
+			return this;
+		}
+		@Override /* Overridden from BeanBuilder */
+		public Builder impl(Object value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -314,21 +216,65 @@ public class Messages extends ResourceBundle {
 			this.locations.add(0, Tuple2.of(forClass, bundlePath));
 			return this;
 		}
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
+
+		/**
+		 * Specifies the bundle name (e.g. <js>"Messages"</js>).
+		 *
+		 * @param name
+		 * 	The bundle name.
+		 * 	<br>If <jk>null</jk>, the forClass class name is used.
+		 * @return This object.
+		 */
+		public Builder name(String name) {
+			this.name = Utils.isEmpty(name) ? forClass.getSimpleName() : name;
 			return this;
 		}
 
+		/**
+		 * Adds a parent bundle.
+		 *
+		 * @param parent The parent bundle.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder parent(Messages parent) {
+			this.parent = parent;
+			return this;
+		}
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-		//-------------------------------------------------------------------------------------------------------------
-		// Other methods
-		//-------------------------------------------------------------------------------------------------------------
 
+		@Override /* Overridden from BeanBuilder */
+		protected Messages buildDefault() {
+
+			if (! locations.isEmpty()) {
+				Tuple2<Class<?>,String>[] mbl = locations.toArray(new Tuple2[0]);
+
+				Builder x = null;
+
+				for (int i = mbl.length-1; i >= 0; i--) {
+					Class<?> c = Utils.firstNonNull(mbl[i].getA(), forClass);
+					String value = mbl[i].getB();
+					if (isJsonObject(value, true)) {
+						MessagesString ms;
+						try {
+							ms = Json5.DEFAULT.read(value, MessagesString.class);
+						} catch (ParseException e) {
+							throw asRuntimeException(e);
+						}
+						x = Messages.create(c).name(ms.name).baseNames(Utils.splita(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
+					} else {
+						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
+					}
+				}
+
+				return x == null ? null : x.build();  // Shouldn't be null.
+			}
+
+			return new Messages(this);
+		}
 		ResourceBundle getBundle() {
 			ClassLoader cl = forClass.getClassLoader();
 			JsonMap m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
@@ -342,10 +288,40 @@ public class Messages extends ResourceBundle {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Static creator.
+	 *
+	 * @param forClass
+	 * 	The class we're creating this object for.
+	 * @return A new builder.
+	 */
+	public static final Builder create(Class<?> forClass) {
+		return new Builder(forClass);
+	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param forClass
+	 * 	The class we're creating this object for.
+	 * @return A new message bundle belonging to the class.
+	 */
+	public static final Messages of(Class<?> forClass) {
+		return create(forClass).build();
+	}
+	/**
+	 * Constructor.
+	 *
+	 * @param forClass
+	 * 	The class we're creating this object for.
+	 * @param name
+	 * 	The bundle name (e.g. <js>"Messages"</js>).
+	 * 	<br>If <jk>null</jk>, uses the class name.
+	 * @return A new message bundle belonging to the class.
+	 */
+	public static final Messages of(Class<?> forClass, String name) {
+		return create(forClass).name(name).build();
+	}
 	private ResourceBundle rb;
 	private Class<?> c;
 	private Messages parent;
@@ -403,6 +379,25 @@ public class Messages extends ResourceBundle {
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
 
+	@Override /* Overridden from ResourceBundle */
+	public boolean containsKey(String key) {
+		return keyMap.containsKey(key);
+	}
+
+	/**
+	 * Looks for all the specified keys in the resource bundle and returns the first value that exists.
+	 *
+	 * @param keys The list of possible keys.
+	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
+	 */
+	public String findFirstString(String...keys) {
+		for (String k : keys) {
+			if (containsKey(k))
+				return getString(k);
+		}
+		return null;
+	}
+
 	/**
 	 * Returns this message bundle for the specified locale.
 	 *
@@ -424,22 +419,9 @@ public class Messages extends ResourceBundle {
 		return mb;
 	}
 
-	/**
-	 * Returns all keys in this resource bundle with the specified prefix.
-	 *
-	 * <p>
-	 * Keys are returned in alphabetical order.
-	 *
-	 * @param prefix The prefix.
-	 * @return The set of all keys in the resource bundle with the prefix.
-	 */
-	public Set<String> keySet(String prefix) {
-		Set<String> set = Utils.set();
-		keySet().forEach(x -> {
-			if (x.equals(prefix) || (x.startsWith(prefix) && x.charAt(prefix.length()) == '.'))
-				set.add(x);
-		});
-		return set;
+	@Override /* Overridden from ResourceBundle */
+	public Enumeration<String> getKeys() {
+		return Collections.enumeration(keySet());
 	}
 
 	/**
@@ -458,18 +440,35 @@ public class Messages extends ResourceBundle {
 		return format(s, args);
 	}
 
+	@Override /* Overridden from ResourceBundle */
+	public Set<String> keySet() {
+		return keyMap.keySet();
+	}
+
 	/**
-	 * Looks for all the specified keys in the resource bundle and returns the first value that exists.
+	 * Returns all keys in this resource bundle with the specified prefix.
 	 *
-	 * @param keys The list of possible keys.
-	 * @return The resolved value, or <jk>null</jk> if no value is found or the resource bundle is missing.
+	 * <p>
+	 * Keys are returned in alphabetical order.
+	 *
+	 * @param prefix The prefix.
+	 * @return The set of all keys in the resource bundle with the prefix.
 	 */
-	public String findFirstString(String...keys) {
-		for (String k : keys) {
-			if (containsKey(k))
-				return getString(k);
-		}
-		return null;
+	public Set<String> keySet(String prefix) {
+		Set<String> set = Utils.set();
+		keySet().forEach(x -> {
+			if (x.equals(prefix) || (x.startsWith(prefix) && x.charAt(prefix.length()) == '.'))
+				set.add(x);
+		});
+		return set;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		JsonMap m = new JsonMap();
+		for (String k : new TreeSet<>(keySet()))
+			m.put(k, getString(k));
+		return Json5.of(m);
 	}
 
 	@Override /* Overridden from ResourceBundle */
@@ -482,28 +481,5 @@ public class Messages extends ResourceBundle {
 				return rb.getObject(k);
 		} catch (MissingResourceException e) { /* Shouldn't happen */ }
 		return parent.handleGetObject(key);
-	}
-
-	@Override /* Overridden from ResourceBundle */
-	public boolean containsKey(String key) {
-		return keyMap.containsKey(key);
-	}
-
-	@Override /* Overridden from ResourceBundle */
-	public Set<String> keySet() {
-		return keyMap.keySet();
-	}
-
-	@Override /* Overridden from ResourceBundle */
-	public Enumeration<String> getKeys() {
-		return Collections.enumeration(keySet());
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		JsonMap m = new JsonMap();
-		for (String k : new TreeSet<>(keySet()))
-			m.put(k, getString(k));
-		return Json5.of(m);
 	}
 }

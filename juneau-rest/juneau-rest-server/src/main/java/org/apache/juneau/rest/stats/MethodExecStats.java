@@ -34,25 +34,6 @@ import org.apache.juneau.marshaller.*;
  * </ul>
  */
 public class MethodExecStats {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -71,14 +52,10 @@ public class MethodExecStats {
 		}
 
 		@Override /* Overridden from BeanBuilder */
-		protected MethodExecStats buildDefault() {
-			return new MethodExecStats(this);
+		public Builder impl(Object value) {
+			super.impl(value);
+			return this;
 		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Specifies the Java method.
 		 *
@@ -101,22 +78,25 @@ public class MethodExecStats {
 			return this;
 		}
 		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected MethodExecStats buildDefault() {
+			return new MethodExecStats(this);
+		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final long guid;
 	private final Method method;
 	private final ThrownStore thrownStore;
@@ -143,12 +123,14 @@ public class MethodExecStats {
 	}
 
 	/**
-	 * Call when task is started.
+	 * Call when an error occurs.
 	 *
+	 * @param e The exception thrown.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public MethodExecStats started() {
-		starts.incrementAndGet();
+	public MethodExecStats error(Throwable e) {
+		errors.incrementAndGet();
+		thrownStore.add(e);
 		return this;
 	}
 
@@ -168,15 +150,22 @@ public class MethodExecStats {
 	}
 
 	/**
-	 * Call when an error occurs.
+	 * Returns the average execution time.
 	 *
-	 * @param e The exception thrown.  Can be <jk>null</jk>.
-	 * @return This object.
+	 * @return The average execution time in milliseconds.
 	 */
-	public MethodExecStats error(Throwable e) {
-		errors.incrementAndGet();
-		thrownStore.add(e);
-		return this;
+	public int getAvgTime() {
+		int runs = finishes.get();
+		return runs == 0 ? 0 : (int)(getTotalTime() / runs);
+	}
+
+	/**
+	 * Returns the number of times the {@link #error(Throwable)} method was called.
+	 *
+	 * @return The number of times the {@link #error(Throwable)} method was called.
+	 */
+	public int getErrors() {
+		return errors.get();
 	}
 
 	/**
@@ -194,39 +183,21 @@ public class MethodExecStats {
 	}
 
 	/**
+	 * Returns the max execution time.
+	 *
+	 * @return The average execution time in milliseconds.
+	 */
+	public int getMaxTime() {
+		return maxTime;
+	}
+
+	/**
 	 * Returns the method name of these stats.
 	 *
 	 * @return The method name of these stats.
 	 */
 	public Method getMethod() {
 		return method;
-	}
-
-	/**
-	 * Returns the number of times the {@link #started()} method was called.
-	 *
-	 * @return The number of times the {@link #started()} method was called.
-	 */
-	public int getRuns() {
-		return starts.get();
-	}
-
-	/**
-	 * Returns the number currently running method invocations.
-	 *
-	 * @return The number of currently running method invocations.
-	 */
-	public int getRunning() {
-		return starts.get() - finishes.get();
-	}
-
-	/**
-	 * Returns the number of times the {@link #error(Throwable)} method was called.
-	 *
-	 * @return The number of times the {@link #error(Throwable)} method was called.
-	 */
-	public int getErrors() {
-		return errors.get();
 	}
 
 	/**
@@ -239,22 +210,30 @@ public class MethodExecStats {
 	}
 
 	/**
-	 * Returns the max execution time.
+	 * Returns the number currently running method invocations.
 	 *
-	 * @return The average execution time in milliseconds.
+	 * @return The number of currently running method invocations.
 	 */
-	public int getMaxTime() {
-		return maxTime;
+	public int getRunning() {
+		return starts.get() - finishes.get();
 	}
 
 	/**
-	 * Returns the average execution time.
+	 * Returns the number of times the {@link #started()} method was called.
 	 *
-	 * @return The average execution time in milliseconds.
+	 * @return The number of times the {@link #started()} method was called.
 	 */
-	public int getAvgTime() {
-		int runs = finishes.get();
-		return runs == 0 ? 0 : (int)(getTotalTime() / runs);
+	public int getRuns() {
+		return starts.get();
+	}
+
+	/**
+	 * Returns information on all stack traces of all exceptions encountered.
+	 *
+	 * @return Information on all stack traces of all exceptions encountered.
+	 */
+	public ThrownStore getThrownStore() {
+		return thrownStore;
 	}
 
 	/**
@@ -267,12 +246,13 @@ public class MethodExecStats {
 	}
 
 	/**
-	 * Returns information on all stack traces of all exceptions encountered.
+	 * Call when task is started.
 	 *
-	 * @return Information on all stack traces of all exceptions encountered.
+	 * @return This object.
 	 */
-	public ThrownStore getThrownStore() {
-		return thrownStore;
+	public MethodExecStats started() {
+		starts.incrementAndGet();
+		return this;
 	}
 
 	@Override /* Overridden from Object */

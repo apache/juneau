@@ -57,12 +57,6 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class FormDataArg implements RestOpArg {
-	private final boolean multi;
-	private final HttpPartParser partParser;
-	private final HttpPartSchema schema;
-	private final String name, def;
-	private final ClassInfo type;
-
 	/**
 	 * Static creator.
 	 *
@@ -75,32 +69,6 @@ public class FormDataArg implements RestOpArg {
 			return new FormDataArg(paramInfo, annotations);
 		return null;
 	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param pi The Java method parameter being resolved.
-	 * @param annotations The annotations to apply to any new part parsers.
-	 */
-	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
-		// Get the form data parameter name
-		this.name = findName(pi).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
-
-		// Check for class-level defaults and merge if found
-		FormData mergedFormData = getMergedFormData(pi, name);
-
-		// Use merged form data annotation for all lookups
-		this.def = mergedFormData != null && !mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
-		this.type = pi.getParameterType();
-		this.schema = mergedFormData != null ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
-		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
-		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
-
-		if (multi && ! type.isCollectionOrArray())
-			throw new ArgException(pi, "Use of multipart flag on @FormData parameter that is not an array or Collection");
-	}
-
 	/**
 	 * Gets the merged @FormData annotation combining class-level and parameter-level values.
 	 *
@@ -145,7 +113,6 @@ public class FormDataArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelFormData, paramFormData);
 	}
-
 	/**
 	 * Merges two @FormData annotations, with param-level taking precedence over class-level.
 	 *
@@ -164,7 +131,6 @@ public class FormDataArg implements RestOpArg {
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
 	}
-
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -177,6 +143,40 @@ public class FormDataArg implements RestOpArg {
 		if (!SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
+	}
+	private final boolean multi;
+
+	private final HttpPartParser partParser;
+
+	private final HttpPartSchema schema;
+
+	private final String name, def;
+
+	private final ClassInfo type;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param pi The Java method parameter being resolved.
+	 * @param annotations The annotations to apply to any new part parsers.
+	 */
+	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
+		// Get the form data parameter name
+		this.name = findName(pi).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
+
+		// Check for class-level defaults and merge if found
+		FormData mergedFormData = getMergedFormData(pi, name);
+
+		// Use merged form data annotation for all lookups
+		this.def = mergedFormData != null && !mergedFormData.def().isEmpty() ? mergedFormData.def() : findDef(pi).orElse(null);
+		this.type = pi.getParameterType();
+		this.schema = mergedFormData != null ? HttpPartSchema.create(mergedFormData) : HttpPartSchema.create(FormData.class, pi);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
+
+		if (multi && ! type.isCollectionOrArray())
+			throw new ArgException(pi, "Use of multipart flag on @FormData parameter that is not an array or Collection");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

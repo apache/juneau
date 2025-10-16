@@ -45,20 +45,6 @@ import org.apache.juneau.parser.*;
 public @interface JsonSchemaConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// JsonSchemaGenerator
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Add descriptions to types.
 	 *
 	 * <p>
@@ -92,7 +78,6 @@ public @interface JsonSchemaConfig {
 	 * @return The annotation value.
 	 */
 	String addDescriptionsTo() default "";
-
 	/**
 	 * Add examples.
 	 *
@@ -203,68 +188,6 @@ public @interface JsonSchemaConfig {
 	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Void.class;
 
 	/**
-	 * Ignore types from schema definitions.
-	 *
-	 * <p>
-	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
-	 * Swagger documentation.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: Comma-delimited list of patterns
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String ignoreTypes() default "";
-
-	/**
-	 * Use bean definitions.
-	 *
-	 * <p>
-	 * When enabled, schemas on beans will be serialized as the following:
-	 * <p class='bjson'>
-	 * 	{
-	 * 		type: <js>'object'</js>,
-	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-	 * 	}
-	 * </p>
-	 *
-	 * <p>
-	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
-	 *
-	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String useBeanDefs() default "";
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BeanTraverseContext
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Automatically detect POJO recursions.
 	 *
 	 * <p>
@@ -336,6 +259,27 @@ public @interface JsonSchemaConfig {
 	String ignoreRecursions() default "";
 
 	/**
+	 * Ignore types from schema definitions.
+	 *
+	 * <p>
+	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
+	 * Swagger documentation.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Format: Comma-delimited list of patterns
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String ignoreTypes() default "";
+	/**
 	 * Initial depth.
 	 *
 	 * <p>
@@ -382,4 +326,50 @@ public @interface JsonSchemaConfig {
 	 * @return The annotation value.
 	 */
 	String maxDepth() default "";
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
+
+	/**
+	 * Use bean definitions.
+	 *
+	 * <p>
+	 * When enabled, schemas on beans will be serialized as the following:
+	 * <p class='bjson'>
+	 * 	{
+	 * 		type: <js>'object'</js>,
+	 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+	 * 	}
+	 * </p>
+	 *
+	 * <p>
+	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
+	 *
+	 * <p>
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String useBeanDefs() default "";
 }

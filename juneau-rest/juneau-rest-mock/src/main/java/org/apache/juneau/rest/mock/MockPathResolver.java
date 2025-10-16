@@ -36,7 +36,18 @@ import org.apache.juneau.rest.util.*;
  */
 class MockPathResolver {
 
+	private static String fixSegment(String s, Map<String,Object> pathVars) {
+		s = StringUtils.replaceVars(emptyIfNull(s), pathVars);
+		if (s.isEmpty() || s.equals("/"))
+			return "";
+		s = StringUtils.trimTrailingSlashes(s);
+		if (s.charAt(0) != '/')
+			s = '/' + s;
+		return s;
+
+	}
 	private String uri, target, contextPath, servletPath, remainder;
+
 	private String error;
 
 	/**
@@ -61,6 +72,72 @@ class MockPathResolver {
 		} catch (Exception e) {
 			error = e.getLocalizedMessage();
 		}
+	}
+
+	/**
+	 * Returns the context path of the URL.
+	 *
+	 * @return The context path of the URL always starting with <js>'/'</js>, or an empty string if it doesn't exist.
+	 */
+	public String getContextPath() {
+		return contextPath;
+	}
+
+	/**
+	 * Returns any parsing errors.
+	 *
+	 * @return Any parsing errors.
+	 */
+	public String getError() {
+		return error;
+	}
+
+	/**
+	 * Returns the remainder of the URL following the context and servlet paths.
+	 *
+	 * @return The remainder of the URL.
+	 */
+	public String getRemainder() {
+		return remainder;
+	}
+
+	/**
+	 * Returns the servlet path of the URL.
+	 *
+	 * @return The servlet path of the URL always starting with <js>'/'</js>, or an empty string if it doesn't exist.
+	 */
+	public String getServletPath() {
+		return servletPath;
+	}
+
+	/**
+	 * Returns just the hostname portion of the URL.
+	 *
+	 * @return The hostname portion of the URL.
+	 */
+	public String getTarget() {
+		return target;
+	}
+
+	/**
+	 * Returns the fully-qualified URL.
+	 *
+	 * @return The fully-qualified URL.
+	 */
+	public String getURI() {
+		return uri;
+	}
+
+	@Override
+	public String toString() {
+		return JsonMap.create()
+			.append("uri", uri)
+			.append("contextPath", contextPath)
+			.append("servletPath", servletPath)
+			.append("remainder", remainder)
+			.append("target", target)
+			.append("error", error)
+			.toString();
 	}
 
 	private void init(String target, String contextPath, String servletPath, String pathToResolve, Map<String,Object> pathVars) {
@@ -167,82 +244,5 @@ class MockPathResolver {
 			if (p.match(UrlPath.of(this.servletPath)) == null)
 				throw new BasicRuntimeException("Servlet path [{0}] not found in URI:  {1}", servletPath, uri);
 		}
-	}
-
-	private static String fixSegment(String s, Map<String,Object> pathVars) {
-		s = StringUtils.replaceVars(emptyIfNull(s), pathVars);
-		if (s.isEmpty() || s.equals("/"))
-			return "";
-		s = StringUtils.trimTrailingSlashes(s);
-		if (s.charAt(0) != '/')
-			s = '/' + s;
-		return s;
-
-	}
-
-	/**
-	 * Returns the fully-qualified URL.
-	 *
-	 * @return The fully-qualified URL.
-	 */
-	public String getURI() {
-		return uri;
-	}
-
-	/**
-	 * Returns the context path of the URL.
-	 *
-	 * @return The context path of the URL always starting with <js>'/'</js>, or an empty string if it doesn't exist.
-	 */
-	public String getContextPath() {
-		return contextPath;
-	}
-
-	/**
-	 * Returns the servlet path of the URL.
-	 *
-	 * @return The servlet path of the URL always starting with <js>'/'</js>, or an empty string if it doesn't exist.
-	 */
-	public String getServletPath() {
-		return servletPath;
-	}
-
-	/**
-	 * Returns the remainder of the URL following the context and servlet paths.
-	 *
-	 * @return The remainder of the URL.
-	 */
-	public String getRemainder() {
-		return remainder;
-	}
-
-	/**
-	 * Returns just the hostname portion of the URL.
-	 *
-	 * @return The hostname portion of the URL.
-	 */
-	public String getTarget() {
-		return target;
-	}
-
-	/**
-	 * Returns any parsing errors.
-	 *
-	 * @return Any parsing errors.
-	 */
-	public String getError() {
-		return error;
-	}
-
-	@Override
-	public String toString() {
-		return JsonMap.create()
-			.append("uri", uri)
-			.append("contextPath", contextPath)
-			.append("servletPath", servletPath)
-			.append("remainder", remainder)
-			.append("target", target)
-			.append("error", error)
-			.toString();
 	}
 }

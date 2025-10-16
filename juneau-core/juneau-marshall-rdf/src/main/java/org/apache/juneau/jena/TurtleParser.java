@@ -28,11 +28,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class TurtleParser extends RdfParser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default Turtle parser, all default settings.*/
 	public static final TurtleParser DEFAULT = new TurtleParser(create());
 
@@ -44,11 +39,6 @@ public class TurtleParser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().turtle();
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

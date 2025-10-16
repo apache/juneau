@@ -96,48 +96,6 @@ public class ServerVariable extends OpenApiElement {
 	}
 
 	/**
-	 * Make a deep copy of this object.
-	 * @return A deep copy of this object.
-	 */
-	public ServerVariable copy() {
-		return new ServerVariable(this);
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	protected ServerVariable strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public ServerVariable strict(Object value) {
-		super.strict(value);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>enum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
-
-	/**
-	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public ServerVariable setEnum(Collection<Object> value) {
-		_enum = listFrom(value);
-		return this;
-	}
-
-	/**
 	 * Adds one or more values to the <property>enum</property> property.
 	 *
 	 * @param values
@@ -166,6 +124,25 @@ public class ServerVariable extends OpenApiElement {
 	}
 
 	/**
+	 * Make a deep copy of this object.
+	 * @return A deep copy of this object.
+	 */
+	public ServerVariable copy() {
+		return new ServerVariable(this);
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "enum" -> toType(getEnum(), type);
+			case "default" -> toType(getDefault(), type);
+			case "description" -> toType(getDescription(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
 	 * Bean property getter:  <property>default</property>.
 	 *
 	 * <p>
@@ -183,6 +160,59 @@ public class ServerVariable extends OpenApiElement {
 	 */
 	public String getDefault() {
 		return _default;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * Declares the value of the item that the server will use if none is provided.
+	 *
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<js>"description"</js> has no meaning for required items.
+	 * 	<li>
+	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
+	 * </ul>
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>enum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getEnum() {
+		return _enum;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(_default != null,"default" )
+			.addIf(description != null, "description")
+			.addIf(_enum != null, "enum")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public ServerVariable set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "default" -> setDefault(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -210,26 +240,6 @@ public class ServerVariable extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * Declares the value of the item that the server will use if none is provided.
-	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"description"</js> has no meaning for required items.
-	 * 	<li>
-	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
 	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
@@ -253,38 +263,28 @@ public class ServerVariable extends OpenApiElement {
 		return this;
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "enum" -> toType(getEnum(), type);
-			case "default" -> toType(getDefault(), type);
-			case "description" -> toType(getDescription(), type);
-			default -> super.get(property, type);
-		};
+	/**
+	 * Bean property setter:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public ServerVariable setEnum(Collection<Object> value) {
+		_enum = listFrom(value);
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public ServerVariable set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "default" -> setDefault(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
+	public ServerVariable strict(Object value) {
+		super.strict(value);
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(_default != null,"default" )
-			.addIf(description != null, "description")
-			.addIf(_enum != null, "enum")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected ServerVariable strict() {
+		super.strict();
+		return this;
 	}
 }

@@ -33,59 +33,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class BeanpAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Beanp DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link Beanp} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Applier extends AnnotationApplier<Beanp,BeanContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Applier(VarResolverSession vr) {
+			super(Beanp.class, BeanContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Beanp> ai, BeanContext.Builder b) {
+			Beanp a = ai.inner();
+			if (isEmptyArray(a.on()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link Beanp @Beanp annotations}.
 	 */
-	public static Builder create(String...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Beanp copy(Beanp a, VarResolverSession r) {
-		return
-			create()
-			.dictionary(a.dictionary())
-			.format(r.resolve(a.format()))
-			.name(r.resolve(a.name()))
-			.on(r.resolve(a.on()))
-			.params(a.params())
-			.properties(r.resolve(a.properties()))
-			.ro(r.resolve(a.ro()))
-			.type(a.type())
-			.value(r.resolve(a.value()))
-			.wo(r.resolve(a.wo()))
-			.build();
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Beanp[] value();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -217,10 +203,6 @@ public class BeanpAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationImpl implements Beanp {
 
 		private final Class<?> type;
@@ -286,52 +268,45 @@ public class BeanpAnnotation {
 			return wo;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final Beanp DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link Beanp} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
 	 */
-	public static class Applier extends AnnotationApplier<Beanp,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(Beanp.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Beanp> ai, BeanContext.Builder b) {
-			Beanp a = ai.inner();
-			if (isEmptyArray(a.on()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static Beanp copy(Beanp a, VarResolverSession r) {
+		return
+			create()
+			.dictionary(a.dictionary())
+			.format(r.resolve(a.format()))
+			.name(r.resolve(a.name()))
+			.on(r.resolve(a.on()))
+			.params(a.params())
+			.properties(r.resolve(a.properties()))
+			.ro(r.resolve(a.ro()))
+			.type(a.type())
+			.value(r.resolve(a.value()))
+			.wo(r.resolve(a.wo()))
+			.build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link Beanp @Beanp annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Beanp[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

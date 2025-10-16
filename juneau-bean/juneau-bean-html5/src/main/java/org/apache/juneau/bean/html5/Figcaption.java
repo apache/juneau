@@ -77,7 +77,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#figcaption() figcaption()}
- * 		<li class='jm'>{@link HtmlBuilder#figcaption(Object, Object...) figcaption(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#figcaption(Object...) figcaption(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -102,10 +102,6 @@ public class Figcaption extends HtmlElementMixed {
 	public Figcaption(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Figcaption _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -115,6 +111,30 @@ public class Figcaption extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Figcaption accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Figcaption attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Figcaption attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Figcaption child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Figcaption children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -475,30 +495,6 @@ public class Figcaption extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Figcaption translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Figcaption child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Figcaption children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Figcaption attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Figcaption attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

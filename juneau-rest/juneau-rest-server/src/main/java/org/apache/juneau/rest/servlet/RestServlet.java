@@ -71,94 +71,12 @@ public abstract class RestServlet extends HttpServlet {
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 	private AtomicReference<Exception> initException = new AtomicReference<>();
 
-	@Override /* Overridden from Servlet */
-	public synchronized void init(ServletConfig servletConfig) throws ServletException {
-		try {
-			if (context.get() != null)
-				return;
-			super.init(servletConfig);
-			context.set(RestContext.create(this.getClass(), null, servletConfig).init(()->this).build());
-			context.get().postInit();
-			context.get().postInitChildFirst();
-		} catch (ServletException e) {
-			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
-			throw e;
-		} catch (BasicHttpException e) {
-			initException.set(e);
-			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
-		} catch (Throwable e) {
-			initException.set(new InternalServerError(e));
-			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
-		}
-	}
-
-	/**
-	 * Sets the context object for this servlet.
-	 *
-	 * <p>
-	 * This method is effectively a no-op if {@link #init(ServletConfig)} has already been called.
-	 *
-	 * @param context Sets the context object on this servlet.
-	 * @throws ServletException If error occurred during initialization.
-	 */
-	protected void setContext(RestContext context) throws ServletException {
-		if (this.context.get() == null) {
-			super.init(context.getBuilder());
-			this.context.set(context);
-		}
-	}
-
-	/**
-	 * Returns the path for this resource as defined by the @Rest(path) annotation or RestContext.Builder.path(String) method
-	 * concatenated with those on all parent classes.
-	 *
-	 * @return The path defined on this servlet, or an empty string if not specified.
-	 */
-	public synchronized String getPath() {
-		RestContext context = this.context.get();
-		if (context != null)
-			return context.getFullPath();
-		ClassInfo ci = ClassInfo.of(getClass());
-		Value<String> path = Value.empty();
-		ci.forEachAnnotation(Rest.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
-		return path.orElse("");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Lifecycle methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * The main service method.
-	 *
-	 * <p>
-	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
-	 */
-	@Override /* Overridden from Servlet */
-	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
-		try {
-			if (initException.get() != null)
-				throw initException.get();
-			if (context.get() == null)
-				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", className(this));
-			getContext().execute(this, r1, r2);
-
-		} catch (Throwable e) {
-			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
-		}
-	}
-
 	@Override /* Overridden from GenericServlet */
 	public synchronized void destroy() {
 		if (context.get() != null)
 			context.get().destroy();
 		super.destroy();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Context methods.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the read-only context object that contains all the configuration information about this resource.
@@ -183,10 +101,59 @@ public abstract class RestServlet extends HttpServlet {
 		return rc;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Convenience logger methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the path for this resource as defined by the @Rest(path) annotation or RestContext.Builder.path(String) method
+	 * concatenated with those on all parent classes.
+	 *
+	 * @return The path defined on this servlet, or an empty string if not specified.
+	 */
+	public synchronized String getPath() {
+		RestContext context = this.context.get();
+		if (context != null)
+			return context.getFullPath();
+		ClassInfo ci = ClassInfo.of(getClass());
+		Value<String> path = Value.empty();
+		ci.forEachAnnotation(Rest.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
+		return path.orElse("");
+	}
+	/**
+	 * Returns the current thread-local HTTP request.
+	 *
+	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
+	 */
+	public synchronized RestRequest getRequest() {
+		return getContext().getLocalSession().getOpSession().getRequest();
+	}
 
+	/**
+	 * Returns the current thread-local HTTP response.
+	 *
+	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
+	 */
+	public synchronized RestResponse getResponse() {
+		return getContext().getLocalSession().getOpSession().getResponse();
+	}
+	@Override /* Overridden from Servlet */
+	public synchronized void init(ServletConfig servletConfig) throws ServletException {
+		try {
+			if (context.get() != null)
+				return;
+			super.init(servletConfig);
+			context.set(RestContext.create(this.getClass(), null, servletConfig).init(()->this).build());
+			context.get().postInit();
+			context.get().postInitChildFirst();
+		} catch (ServletException e) {
+			initException.set(e);
+			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
+			throw e;
+		} catch (BasicHttpException e) {
+			initException.set(e);
+			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
+		} catch (Throwable e) {
+			initException.set(new InternalServerError(e));
+			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
+		}
+	}
 	/**
 	 * Log a message.
 	 *
@@ -217,6 +184,25 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
+	 * The main service method.
+	 *
+	 * <p>
+	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
+	 */
+	@Override /* Overridden from Servlet */
+	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
+		try {
+			if (initException.get() != null)
+				throw initException.get();
+			if (context.get() == null)
+				throw new InternalServerError("Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", className(this));
+			getContext().execute(this, r1, r2);
+
+		} catch (Throwable e) {
+			r2.sendError(SC_INTERNAL_SERVER_ERROR, e.getLocalizedMessage());
+		}
+	}
+	/**
 	 * Main logger method.
 	 *
 	 * <p>
@@ -237,25 +223,19 @@ public abstract class RestServlet extends HttpServlet {
 		logger.log(level, cause, msg);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the current thread-local HTTP request.
+	 * Sets the context object for this servlet.
 	 *
-	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
-	 */
-	public synchronized RestRequest getRequest() {
-		return getContext().getLocalSession().getOpSession().getRequest();
-	}
-
-	/**
-	 * Returns the current thread-local HTTP response.
+	 * <p>
+	 * This method is effectively a no-op if {@link #init(ServletConfig)} has already been called.
 	 *
-	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
+	 * @param context Sets the context object on this servlet.
+	 * @throws ServletException If error occurred during initialization.
 	 */
-	public synchronized RestResponse getResponse() {
-		return getContext().getLocalSession().getOpSession().getResponse();
+	protected void setContext(RestContext context) throws ServletException {
+		if (this.context.get() == null) {
+			super.init(context.getBuilder());
+			this.context.set(context);
+		}
 	}
 }

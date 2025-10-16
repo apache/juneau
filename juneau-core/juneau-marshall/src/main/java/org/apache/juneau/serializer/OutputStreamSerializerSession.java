@@ -46,25 +46,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class OutputStreamSerializerSession extends SerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(OutputStreamSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -82,14 +63,14 @@ public class OutputStreamSerializerSession extends SerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public OutputStreamSerializerSession build() {
-			return new OutputStreamSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public OutputStreamSerializerSession build() {
+			return new OutputStreamSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -99,20 +80,8 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -141,20 +110,14 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -177,16 +140,38 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(OutputStreamSerializer ctx) {
+		return new Builder(ctx);
+	}
 	private final OutputStreamSerializer ctx;
 
 	/**
@@ -202,11 +187,6 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	@Override /* Overridden from SerializerSession */
 	public final boolean isWriterSerializer() {
 		return false;
-	}
-
-	@Override /* Overridden from SerializerSession */
-	protected SerializerPipe createPipe(Object output) {
-		return new SerializerPipe(output);
 	}
 
 	/**
@@ -239,10 +219,10 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
+	@Override /* Overridden from SerializerSession */
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output);
+	}
 	/**
 	 * Binary output format.
 	 *

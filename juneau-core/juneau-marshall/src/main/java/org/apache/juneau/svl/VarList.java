@@ -50,7 +50,8 @@ public class VarList extends ArrayList<Object> {
 	 * @param vars The variables to create.
 	 * @return A new list of variables.
 	 */
-	public static VarList of(Var...vars) {
+	@SafeVarargs
+	public static final VarList of(Class<? extends Var>...vars) {
 		return create().append(vars);
 	}
 
@@ -60,8 +61,7 @@ public class VarList extends ArrayList<Object> {
 	 * @param vars The variables to create.
 	 * @return A new list of variables.
 	 */
-	@SafeVarargs
-	public static final VarList of(Class<? extends Var>...vars) {
+	public static VarList of(Var...vars) {
 		return create().append(vars);
 	}
 
@@ -78,40 +78,6 @@ public class VarList extends ArrayList<Object> {
 	 */
 	protected VarList(VarList copyFrom) {
 		super(copyFrom);
-	}
-
-	/**
-	 * Adds a list of variables to this list.
-	 *
-	 * @param vars The variables to append to this list.
-	 * @return This object.
-	 */
-	public VarList append(Var...vars) {
-		addAll(alist(vars));
-		return this;
-	}
-
-	/**
-	 * Adds a list of variables to this list.
-	 *
-	 * @param vars The variables to append to this list.
-	 * @return This object.
-	 */
-	public VarList append(VarList vars) {
-		addAll(vars);
-		return this;
-	}
-
-	/**
-	 * Adds a list of variables to this list.
-	 *
-	 * @param vars The variables to append to this list.
-	 * @return This object.
-	 */
-	@SafeVarargs
-	public final VarList append(Class<? extends Var>...vars) {
-		addAll(alist(vars));
-		return this;
 	}
 
 	/**
@@ -157,6 +123,40 @@ public class VarList extends ArrayList<Object> {
 			LenVar.class,
 			SubstringVar.class
 		);
+	}
+
+	/**
+	 * Adds a list of variables to this list.
+	 *
+	 * @param vars The variables to append to this list.
+	 * @return This object.
+	 */
+	@SafeVarargs
+	public final VarList append(Class<? extends Var>...vars) {
+		addAll(alist(vars));
+		return this;
+	}
+
+	/**
+	 * Adds a list of variables to this list.
+	 *
+	 * @param vars The variables to append to this list.
+	 * @return This object.
+	 */
+	public VarList append(Var...vars) {
+		addAll(alist(vars));
+		return this;
+	}
+
+	/**
+	 * Adds a list of variables to this list.
+	 *
+	 * @param vars The variables to append to this list.
+	 * @return This object.
+	 */
+	public VarList append(VarList vars) {
+		addAll(vars);
+		return this;
 	}
 
 	/**

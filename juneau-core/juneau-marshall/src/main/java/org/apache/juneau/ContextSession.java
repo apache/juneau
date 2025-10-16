@@ -39,11 +39,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 public abstract class ContextSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -61,6 +56,20 @@ public abstract class ContextSession {
 		protected Builder(Context ctx) {
 			this.ctx = ctx;
 			debug = ctx.debug;
+		}
+
+		/**
+		 * Applies a consumer to this builder if it's the specified type.
+		 *
+		 * @param <T> The expected type.
+		 * @param type The expected type.
+		 * @param apply	The consumer to apply.
+		 * @return This object.
+		 */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			if (type.isInstance(this))
+				apply.accept(type.cast(this));
+			return this;
 		}
 
 		/**
@@ -94,19 +103,6 @@ public abstract class ContextSession {
 		public Builder debug(Boolean value) {
 			if (value != null)
 				debug = value;
-			return this;
-		}
-
-		/**
-		 * Create an unmodifiable session.
-		 *
-		 * <p>
-		 * The created ContextSession object will be unmodifiable which makes it suitable for caching and reuse.
-		 *
-		 * @return This object.
-		 */
-		public Builder unmodifiable() {
-			unmodifiable = true;
 			return this;
 		}
 
@@ -146,24 +142,18 @@ public abstract class ContextSession {
 		}
 
 		/**
-		 * Applies a consumer to this builder if it's the specified type.
+		 * Create an unmodifiable session.
 		 *
-		 * @param <T> The expected type.
-		 * @param type The expected type.
-		 * @param apply	The consumer to apply.
+		 * <p>
+		 * The created ContextSession object will be unmodifiable which makes it suitable for caching and reuse.
+		 *
 		 * @return This object.
 		 */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			if (type.isInstance(this))
-				apply.accept(type.cast(this));
+		public Builder unmodifiable() {
+			unmodifiable = true;
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final JsonMap properties;
 	private List<String> warnings;	// Any warnings encountered.
 
@@ -187,24 +177,6 @@ public abstract class ContextSession {
 	}
 
 	/**
-	 * Returns the session properties on this session.
-	 *
-	 * @return The session properties on this session.  Never <jk>null</jk>.
-	 */
-	public final JsonMap getSessionProperties() {
-		return properties;
-	}
-
-	/**
-	 * Returns the context that created this session.
-	 *
-	 * @return The context that created this session.
-	 */
-	public Context getContext() {
-		return ctx;
-	}
-
-	/**
 	 * Logs a warning message.
 	 *
 	 * @param msg The warning message.
@@ -219,15 +191,6 @@ public abstract class ContextSession {
 	}
 
 	/**
-	 * Returns the warnings that occurred in this session.
-	 *
-	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
-	 */
-	public final List<String> getWarnings() {
-		return warnings == null ? emptyList() : warnings;
-	}
-
-	/**
 	 * Throws a {@link BeanRuntimeException} if any warnings occurred in this session and debug is enabled.
 	 */
 	public void checkForWarnings() {
@@ -235,10 +198,32 @@ public abstract class ContextSession {
 			throw new BeanRuntimeException("Warnings occurred in session: \n" + Utils.join(getWarnings(), "\n"));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Configuration properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the context that created this session.
+	 *
+	 * @return The context that created this session.
+	 */
+	public Context getContext() {
+		return ctx;
+	}
 
+	/**
+	 * Returns the session properties on this session.
+	 *
+	 * @return The session properties on this session.  Never <jk>null</jk>.
+	 */
+	public final JsonMap getSessionProperties() {
+		return properties;
+	}
+
+	/**
+	 * Returns the warnings that occurred in this session.
+	 *
+	 * @return The warnings that occurred in this session, or <jk>null</jk> if no warnings occurred.
+	 */
+	public final List<String> getWarnings() {
+		return warnings == null ? emptyList() : warnings;
+	}
 	/**
 	 * Debug mode enabled.
 	 *
@@ -249,10 +234,10 @@ public abstract class ContextSession {
 	public boolean isDebug() {
 		return debug;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from Object */
+	public String toString() {
+		return Utils2.toPropertyMap(this).asReadableString();
+	}
 
 	/**
 	 * Returns the properties on this bean as a map for debugging.
@@ -261,10 +246,5 @@ public abstract class ContextSession {
 	 */
 	protected JsonMap properties() {
 		return filteredMap("debug", debug);
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return Utils2.toPropertyMap(this).asReadableString();
 	}
 }

@@ -37,27 +37,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class SimplePartSerializer extends BaseHttpPartSerializer {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
-	public static final SimplePartSerializer DEFAULT = create().build();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -85,22 +64,28 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 			return cache(CACHE).build(SimplePartSerializer.class);
 		}
 
-		@Override
-		public Builder copy() {
-			return new Builder(this);
-		}
+		@Override /* Overridden from Context */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+				super.cache(value);
+				return this;
+			}
 
-	@Override /* Overridden from Context */
-	public Builder cache(Cache<HashKey,? extends Context> value) {
-			super.cache(value);
-			return this;
-		}
+	@Override
+	public Builder copy() {
+		return new Builder(this);
+	}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/** Reusable instance of {@link SimplePartSerializer}, all default settings. */
+	public static final SimplePartSerializer DEFAULT = create().build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	/**
 	 * Constructor
 	 *

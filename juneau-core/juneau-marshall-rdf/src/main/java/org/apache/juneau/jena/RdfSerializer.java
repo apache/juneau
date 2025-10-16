@@ -59,26 +59,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = new Namespace[0];
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -119,27 +99,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(RdfSerializer copyFrom) {
-			super(copyFrom);
-			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
-			addLiteralTypes = copyFrom.addLiteralTypes;
-			addRootProperty = copyFrom.addRootProperty;
-			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
-			disableUseXmlNamespaces = ! copyFrom.useXmlNamespaces;
-			looseCollections = copyFrom.looseCollections;
-			language = copyFrom.language;
-			collectionFormat = copyFrom.collectionFormat;
-			juneauNs = copyFrom.juneauNs;
-			juneauBpNs = copyFrom.juneauBpNs;
-			namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
-			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -158,44 +117,44 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(RdfSerializer copyFrom) {
+			super(copyFrom);
+			addBeanTypesRdf = copyFrom.addBeanTypesRdf;
+			addLiteralTypes = copyFrom.addLiteralTypes;
+			addRootProperty = copyFrom.addRootProperty;
+			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
+			disableUseXmlNamespaces = ! copyFrom.useXmlNamespaces;
+			looseCollections = copyFrom.looseCollections;
+			language = copyFrom.language;
+			collectionFormat = copyFrom.collectionFormat;
+			juneauNs = copyFrom.juneauNs;
+			juneauBpNs = copyFrom.juneauBpNs;
+			namespaces = copyFrom.namespaces.length == 0 ? null : Utils.list(copyFrom.namespaces);
+			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public RdfSerializer build() {
-			return cache(CACHE).build(RdfSerializer.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				addBeanTypesRdf,
-				addLiteralTypes,
-				addRootProperty,
-				disableAutoDetectNamespaces,
-				disableUseXmlNamespaces,
-				looseCollections,
-				language,
-				collectionFormat,
-				juneauNs,
-				juneauBpNs,
-				namespaces,
-				jenaSettings
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		Builder jena(String key, Object value) {
-			jenaSettings.put(key, value);
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -222,507 +181,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		public Builder addBeanTypesRdf(boolean value) {
 			addBeanTypesRdf = value;
 			return this;
-		}
-
-		/**
-		 * RDF/XML property: <c>iri_rules</c>.
-		 *
-		 * <p>
-		 * Set the engine for checking and resolving.
-		 *
-		 * <ul class='values spaced-list'>
-		 * 	<li>
-		 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
-		 * 		is not good practice.
-		 * 	<li>
-		 * 		<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces
-		 * 		in IRIs.
-		 * 	<li>
-		 * 		<js>"iri"</js> - Sets the IRI engine to IRI
-		 * 		({doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
-		 * 		{doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_iriRules(String value) {
-			return jena("rdfXml.iri-rules", value);
-		}
-
-		/**
-		 * RDF/XML ARP property: <c>error-mode</c>.
-		 *
-		 * <p>
-		 * This allows a coarse-grained approach to control of error handling.
-		 *
-		 * <ul class='values'>
-		 * 	<li><js>"default"</js>
-		 * 	<li><js>"lax"</js>
-		 * 	<li><js>"strict"</js>
-		 * 	<li><js>"strict-ignore"</js>
-		 * 	<li><js>"strict-warning"</js>
-		 * 	<li><js>"strict-error"</js>
-		 * 	<li><js>"strict-fatal"</js>
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li>
-		 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
-		 * 	<li>
-		 * 		{doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
-		 * 	<li>
-		 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
-		 * 	<li>
-		 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_errorMode(String value) {
-			return jena("rdfXml.error-mode", value);
-		}
-
-		/**
-		 * RDF/XML ARP property: <c>error-mode</c>.
-		 *
-		 * <p>
-		 * Sets ARP to look for RDF embedded within an enclosing XML document.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li>
-		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder rdfxml_embedding() {
-			return rdfxml_embedding(true);
-		}
-
-		/**
-		 * RDF/XML ARP property: <c>error-mode</c>.
-		 *
-		 * <p>
-		 * Sets ARP to look for RDF embedded within an enclosing XML document.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li>
-		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_embedding(boolean value) {
-			return jena("rdfXml.embedding", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>xmlbase</c>.
-		 *
-		 * <p>
-		 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_xmlbase(String value) {
-			return jena("rdfXml.xmlbase", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>longId</c>.
-		 *
-		 * <p>
-		 * Whether to use long ID's for anon resources.
-		 * Short ID's are easier to read, but can run out of memory on very large models.
-		 *
-		 * @return This object.
-		 */
-		public Builder rdfxml_longId() {
-			return rdfxml_longId(true);
-		}
-
-		/**
-		 * RDF/XML property: <c>longId</c>.
-		 *
-		 * <p>
-		 * Whether to use long ID's for anon resources.
-		 * Short ID's are easier to read, but can run out of memory on very large models.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_longId(boolean value) {
-			return jena("rdfXml.longId", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>allowBadURIs</c>.
-		 *
-		 * <p>
-		 * URIs in the graph are, by default, checked prior to serialization.
-		 *
-		 * @return This object.
-		 */
-		public Builder rdfxml_allowBadUris() {
-			return rdfxml_allowBadUris(true);
-		}
-
-		/**
-		 * RDF/XML property: <c>allowBadURIs</c>.
-		 *
-		 * <p>
-		 * URIs in the graph are, by default, checked prior to serialization.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_allowBadUris(boolean value) {
-			return jena("rdfXml.allowBadURIs", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>relativeURIs</c>.
-		 *
-		 * <p>
-		 * What sort of relative URIs should be used.
-		 *
-		 * <p>
-		 * A comma separate list of options:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		<js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
-		 * 	<li>
-		 * 		<js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
-		 * 	<li>
-		 * 		<js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
-		 * 	<li>
-		 * 		<js>"relative"</js> - Relative path not beginning in <js>"../"</js>
-		 * 	<li>
-		 * 		<js>"parent"</js> - Relative path beginning in <js>"../"</js>
-		 * 	<li>
-		 * 		<js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
-		 * </ul>
-		 *
-		 * <p>
-		 * The default value is <js>"same-document, absolute, relative, parent"</js>.
-		 * To switch off relative URIs use the value <js>""</js>.
-		 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_relativeUris(String value) {
-			return jena("rdfXml.relativeURIs", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>showXmlDeclaration</c>.
-		 *
-		 * <ul class='values spaced-list'>
-		 * 	<li>
-		 * 		<js>"true"</js> - Add XML Declaration to the output.
-		 * 	<li>
-		 * 		<js>"false"</js> - Don't add XML Declaration to the output.
-		 * 	<li>
-		 * 		<js>"default"</js> - Only add an XML Declaration when asked to write to an <c>OutputStreamWriter</c>
-		 * 		that uses some encoding other than <c>UTF-8</c> or <c>UTF-16</c>.
-		 * 		In this case the encoding is shown in the XML declaration.
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_showXmlDeclaration(String value) {
-			return jena("rdfXml.showXmlDeclaration", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
-		 *
-		 * <p>
-		 * If disabled, an XML doctype declaration isn't included in the output.
-		 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
-		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
-		 * invocation.
-		 *
-		 * @return This object.
-		 */
-		public Builder rdfxml_disableShowDoctypeDeclaration() {
-			return rdfxml_disableShowDoctypeDeclaration(true);
-		}
-
-		/**
-		 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
-		 *
-		 * <p>
-		 * If disabled, an XML doctype declaration isn't included in the output.
-		 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
-		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
-		 * invocation.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_disableShowDoctypeDeclaration(boolean value) {
-			return jena("rdfXml.disableShowDoctypeDeclaration", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>tab</c>.
-		 *
-		 * <p>
-		 * The number of spaces with which to indent XML child elements.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_tab(int value) {
-			return jena("rdfXml.tab", value);
-		}
-
-		/**
-		 * RDF/XML property: <c>attributeQuoteChar</c>.
-		 *
-		 * <p>
-		 * The XML attribute quote character.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_attributeQuoteChar(char value) {
-			return jena("rdfXml.attributeQuoteChar", value);
-		}
-
-		/**
-	 	 * RDF/XML property: <c>blockRules</c>.
-		 *
-		 * <p>
-		 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
-		 * {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
-		 * rules that will not be used.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder rdfxml_blockRules(String value) {
-			return jena("rdfXml.blockRules", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>minGap</c>.
-		 *
-		 * <p>
-		 * Minimum gap between items on a line.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_minGap(int value) {
-			return jena("n3.minGap", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableObjectLists</c>.
-		 *
-		 * <p>
-		 * Don't print object lists as comma separated lists.
-		 *
-		 * @return This object.
-		 */
-		public Builder n3_disableObjectLists() {
-			return n3_disableObjectLists(true);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableObjectLists</c>.
-		 *
-		 * <p>
-		 * Don't print object lists as comma separated lists.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_disableObjectLists(boolean value) {
-			return jena("n3.disableObjectLists", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>subjectColumn</c>.
-		 *
-		 * <p>
-		 * If the subject is shorter than this value, the first property may go on the same line.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_subjectColumn(int value) {
-			return jena("n3.subjectColumn", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>propertyColumn</c>.
-		 *
-		 * <p>
-		 * Width of the property column.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_propertyColumn(int value) {
-			return jena("n3.propertyColumn", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>indentProperty</c>.
-		 *
-		 * <p>
-		 * Width to indent properties.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_indentProperty(int value) {
-			return jena("n3.indentProperty", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>widePropertyLen</c>.
-		 *
-		 * <p>
-		 * Width of the property column.
-		 * Must be longer than <c>propertyColumn</c>.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_widePropertyLen(int value) {
-			return jena("n3.widePropertyLen", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
-		 *
-		 * <p>
-		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
-		 *
-		 * @return This object.
-		 */
-		public Builder n3_disableAbbrevBaseUri() {
-			return n3_disableAbbrevBaseUri(true);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
-		 *
-		 * <p>
-		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_disableAbbrevBaseUri(boolean value) {
-			return jena("n3.disableAbbrevBaseUri", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
-		 *
-		 * <p>
-		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
-		 *
-		 * @return This object.
-		 */
-		public Builder n3_disableUsePropertySymbols() {
-			return n3_disableUsePropertySymbols(true);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
-		 *
-		 * <p>
-		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_disableUsePropertySymbols(boolean value) {
-			return jena("n3.disableUsePropertySymbols", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
-		 *
-		 * <p>
-		 * Disallow the use of <c>"""</c> to delimit long strings.
-		 *
-		 * @return This object.
-		 */
-		public Builder n3_disableUseTripleQuotedStrings() {
-			return n3_disableUseTripleQuotedStrings(true);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
-		 *
-		 * <p>
-		 * Disallow the use of <c>"""</c> to delimit long strings.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_disableUseTripleQuotedStrings(boolean value) {
-			return jena("n3.disableUseTripleQuotedStrings", value);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableUseDoubles</c>.
-		 *
-		 * <p>
-		 * Disallow the use of doubles as <c>123.456</c>.
-		 *
-		 * @return This object.
-		 */
-		public Builder n3_disableUseDoubles() {
-			return n3_disableUseDoubles(true);
-		}
-
-		/**
-		 * N3/Turtle property: <c>disableUseDoubles</c>.
-		 *
-		 * <p>
-		 * Disallow the use of doubles as <c>123.456</c>.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder n3_disableUseDoubles(boolean value) {
-			return jena("n3.disableUseDoubles", value);
 		}
 
 		/**
@@ -791,6 +249,258 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType(boolean value) {
+			super.addRootType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext.Builder value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanDictionary(java.lang.Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public RdfSerializer build() {
+			return cache(CACHE).build(RdfSerializer.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		/**
+		 * RDF format for representing collections and arrays.
+		 *
+		 * <ul class='values'>
+		 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+		 * 	<li><js>"SEQ"</js> - RDF Sequence container.
+		 * 	<li><js>"BAG"</js> - RDF Bag container.
+		 * 	<li><js>"LIST"</js> - RDF List container.
+		 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>
+		 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
+		 * 		lost.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder collectionFormat(RdfCollectionFormat value) {
+			collectionFormat = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
 		/**
 		 * Disable auto-detect namespace usage.
 		 *
@@ -826,29 +536,184 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
 		/**
-		 * RDF format for representing collections and arrays.
+		 * Disable reuse of XML namespaces when RDF namespaces not specified.
 		 *
-		 * <ul class='values'>
-		 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-		 * 	<li><js>"SEQ"</js> - RDF Sequence container.
-		 * 	<li><js>"BAG"</js> - RDF Bag container.
-		 * 	<li><js>"LIST"</js> - RDF List container.
-		 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
-		 * </ul>
+		 * <p>
+		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
+		 * inherited by the RDF serializers.
+		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>
-		 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
-		 * 		lost.
-		 * </ul>
+		 * @return This object.
+		 */
+		public Builder disableUseXmlNamespaces() {
+			return disableUseXmlNamespaces(true);
+		}
+
+		/**
+		 * Disable reuse of XML namespaces when RDF namespaces not specified.
+		 *
+		 * <p>
+		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
+		 * inherited by the RDF serializers.
+		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 		 *
 		 * @param value
 		 * 	The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder collectionFormat(RdfCollectionFormat value) {
-			collectionFormat = value;
+		public Builder disableUseXmlNamespaces(boolean value) {
+			disableUseXmlNamespaces = value;
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesRdf,
+				addLiteralTypes,
+				addRootProperty,
+				disableAutoDetectNamespaces,
+				disableUseXmlNamespaces,
+				looseCollections,
+				language,
+				collectionFormat,
+				juneauNs,
+				juneauBpNs,
+				namespaces,
+				jenaSettings
+			);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions(boolean value) {
+			super.ignoreRecursions(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
 			return this;
 		}
 
@@ -875,6 +740,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 */
 		public Builder juneauNs(Namespace value) {
 			juneauNs = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder keepNullProperties(boolean value) {
+			super.keepNullProperties(value);
 			return this;
 		}
 
@@ -925,6 +802,18 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 */
 		public Builder language(String value) {
 			language = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
 			return this;
 		}
 
@@ -1037,6 +926,24 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
 		/**
 		 * RDF language.
 		 *
@@ -1047,6 +954,207 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 */
 		public Builder n3() {
 			return language(Constants.LANG_N3);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+		 *
+		 * <p>
+		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+		 *
+		 * @return This object.
+		 */
+		public Builder n3_disableAbbrevBaseUri() {
+			return n3_disableAbbrevBaseUri(true);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+		 *
+		 * <p>
+		 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_disableAbbrevBaseUri(boolean value) {
+			return jena("n3.disableAbbrevBaseUri", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableObjectLists</c>.
+		 *
+		 * <p>
+		 * Don't print object lists as comma separated lists.
+		 *
+		 * @return This object.
+		 */
+		public Builder n3_disableObjectLists() {
+			return n3_disableObjectLists(true);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableObjectLists</c>.
+		 *
+		 * <p>
+		 * Don't print object lists as comma separated lists.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_disableObjectLists(boolean value) {
+			return jena("n3.disableObjectLists", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableUseDoubles</c>.
+		 *
+		 * <p>
+		 * Disallow the use of doubles as <c>123.456</c>.
+		 *
+		 * @return This object.
+		 */
+		public Builder n3_disableUseDoubles() {
+			return n3_disableUseDoubles(true);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableUseDoubles</c>.
+		 *
+		 * <p>
+		 * Disallow the use of doubles as <c>123.456</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_disableUseDoubles(boolean value) {
+			return jena("n3.disableUseDoubles", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
+		 *
+		 * <p>
+		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+		 *
+		 * @return This object.
+		 */
+		public Builder n3_disableUsePropertySymbols() {
+			return n3_disableUsePropertySymbols(true);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
+		 *
+		 * <p>
+		 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_disableUsePropertySymbols(boolean value) {
+			return jena("n3.disableUsePropertySymbols", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+		 *
+		 * <p>
+		 * Disallow the use of <c>"""</c> to delimit long strings.
+		 *
+		 * @return This object.
+		 */
+		public Builder n3_disableUseTripleQuotedStrings() {
+			return n3_disableUseTripleQuotedStrings(true);
+		}
+
+		/**
+		 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+		 *
+		 * <p>
+		 * Disallow the use of <c>"""</c> to delimit long strings.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_disableUseTripleQuotedStrings(boolean value) {
+			return jena("n3.disableUseTripleQuotedStrings", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>indentProperty</c>.
+		 *
+		 * <p>
+		 * Width to indent properties.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_indentProperty(int value) {
+			return jena("n3.indentProperty", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>minGap</c>.
+		 *
+		 * <p>
+		 * Minimum gap between items on a line.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_minGap(int value) {
+			return jena("n3.minGap", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>propertyColumn</c>.
+		 *
+		 * <p>
+		 * Width of the property column.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_propertyColumn(int value) {
+			return jena("n3.propertyColumn", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>subjectColumn</c>.
+		 *
+		 * <p>
+		 * If the subject is shorter than this value, the first property may go on the same line.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_subjectColumn(int value) {
+			return jena("n3.subjectColumn", value);
+		}
+
+		/**
+		 * N3/Turtle property: <c>widePropertyLen</c>.
+		 *
+		 * <p>
+		 * Width of the property column.
+		 * Must be longer than <c>propertyColumn</c>.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder n3_widePropertyLen(int value) {
+			return jena("n3.widePropertyLen", value);
 		}
 
 		/**
@@ -1063,402 +1171,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
-		/**
-		 * RDF language.
-		 *
-		 * <p>
-		 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
-		 *
-		 * @return This object.
-		 */
-		public Builder ntriple() {
-			return language(Constants.LANG_NTRIPLE);
-		}
-
-		/**
-		 * RDF language.
-		 *
-		 * <p>
-		 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
-		 *
-		 * @return This object.
-		 */
-		public Builder turtle() {
-			return language(Constants.LANG_TURTLE);
-		}
-
-		/**
-		 * Disable reuse of XML namespaces when RDF namespaces not specified.
-		 *
-		 * <p>
-		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
-		 * inherited by the RDF serializers.
-		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-		 *
-		 * @return This object.
-		 */
-		public Builder disableUseXmlNamespaces() {
-			return disableUseXmlNamespaces(true);
-		}
-
-		/**
-		 * Disable reuse of XML namespaces when RDF namespaces not specified.
-		 *
-		 * <p>
-		 * When enabled, namespaces defined using {@link XmlNs @XmlNs} and {@link org.apache.juneau.xml.annotation.Xml Xml} will not be
-		 * inherited by the RDF serializers.
-		 * Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder disableUseXmlNamespaces(boolean value) {
-			disableUseXmlNamespaces = value;
-			return this;
-		}
-
-		/**
-		 * RDF language.
-		 *
-		 * <p>
-		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
-		 *
-		 * @return This object.
-		 */
-		public Builder xml() {
-			return language(Constants.LANG_RDF_XML);
-		}
-
-		/**
-		 * RDF language.
-		 *
-		 * <p>
-		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
-		 *
-		 * @return This object.
-		 */
-		public Builder xmlabbrev() {
-			return language(Constants.LANG_RDF_XML_ABBREV);
-		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
 		@Override /* Overridden from Builder */
 		public Builder notBeanClasses(java.lang.Class<?>...values) {
 			super.notBeanClasses(values);
@@ -1471,9 +1183,21 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_NTRIPLE</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder ntriple() {
+			return language(Constants.LANG_NTRIPLE);
+		}
+
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder produces(String value) {
+			super.produces(value);
 			return this;
 		}
 
@@ -1484,171 +1208,321 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
+		public Builder quoteCharOverride(char value) {
+			super.quoteCharOverride(value);
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
+		/**
+		 * RDF/XML property: <c>allowBadURIs</c>.
+		 *
+		 * <p>
+		 * URIs in the graph are, by default, checked prior to serialization.
+		 *
+		 * @return This object.
+		 */
+		public Builder rdfxml_allowBadUris() {
+			return rdfxml_allowBadUris(true);
 		}
 
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
+		/**
+		 * RDF/XML property: <c>allowBadURIs</c>.
+		 *
+		 * <p>
+		 * URIs in the graph are, by default, checked prior to serialization.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_allowBadUris(boolean value) {
+			return jena("rdfXml.allowBadURIs", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
+		/**
+		 * RDF/XML property: <c>attributeQuoteChar</c>.
+		 *
+		 * <p>
+		 * The XML attribute quote character.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_attributeQuoteChar(char value) {
+			return jena("rdfXml.attributeQuoteChar", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
+		/**
+	 	 * RDF/XML property: <c>blockRules</c>.
+		 *
+		 * <p>
+		 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
+		 * {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
+		 * rules that will not be used.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_blockRules(String value) {
+			return jena("rdfXml.blockRules", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
+		/**
+		 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+		 *
+		 * <p>
+		 * If disabled, an XML doctype declaration isn't included in the output.
+		 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
+		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
+		 * invocation.
+		 *
+		 * @return This object.
+		 */
+		public Builder rdfxml_disableShowDoctypeDeclaration() {
+			return rdfxml_disableShowDoctypeDeclaration(true);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
+		/**
+		 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+		 *
+		 * <p>
+		 * If disabled, an XML doctype declaration isn't included in the output.
+		 * This declaration includes a <c>!ENTITY</c> declaration for each prefix mapping in the model, and any
+		 * attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
+		 * invocation.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_disableShowDoctypeDeclaration(boolean value) {
+			return jena("rdfXml.disableShowDoctypeDeclaration", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
+		/**
+		 * RDF/XML ARP property: <c>error-mode</c>.
+		 *
+		 * <p>
+		 * Sets ARP to look for RDF embedded within an enclosing XML document.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li>
+		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder rdfxml_embedding() {
+			return rdfxml_embedding(true);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
+		/**
+		 * RDF/XML ARP property: <c>error-mode</c>.
+		 *
+		 * <p>
+		 * Sets ARP to look for RDF embedded within an enclosing XML document.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li>
+		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_embedding(boolean value) {
+			return jena("rdfXml.embedding", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
+		/**
+		 * RDF/XML ARP property: <c>error-mode</c>.
+		 *
+		 * <p>
+		 * This allows a coarse-grained approach to control of error handling.
+		 *
+		 * <ul class='values'>
+		 * 	<li><js>"default"</js>
+		 * 	<li><js>"lax"</js>
+		 * 	<li><js>"strict"</js>
+		 * 	<li><js>"strict-ignore"</js>
+		 * 	<li><js>"strict-warning"</js>
+		 * 	<li><js>"strict-error"</js>
+		 * 	<li><js>"strict-fatal"</js>
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li>
+		 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
+		 * 	<li>
+		 * 		{doc ext.ARP/ARPOptions.html#setLaxErrorMode() ARPOptions.setLaxErrorMode()}
+		 * 	<li>
+		 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode() ARPOptions.setStrictErrorMode()}
+		 * 	<li>
+		 * 		{doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_errorMode(String value) {
+			return jena("rdfXml.error-mode", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
+		/**
+		 * RDF/XML property: <c>iri_rules</c>.
+		 *
+		 * <p>
+		 * Set the engine for checking and resolving.
+		 *
+		 * <ul class='values spaced-list'>
+		 * 	<li>
+		 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
+		 * 		is not good practice.
+		 * 	<li>
+		 * 		<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces
+		 * 		in IRIs.
+		 * 	<li>
+		 * 		<js>"iri"</js> - Sets the IRI engine to IRI
+		 * 		({doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
+		 * 		{doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_iriRules(String value) {
+			return jena("rdfXml.iri-rules", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
+		/**
+		 * RDF/XML property: <c>longId</c>.
+		 *
+		 * <p>
+		 * Whether to use long ID's for anon resources.
+		 * Short ID's are easier to read, but can run out of memory on very large models.
+		 *
+		 * @return This object.
+		 */
+		public Builder rdfxml_longId() {
+			return rdfxml_longId(true);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
-			return this;
+		/**
+		 * RDF/XML property: <c>longId</c>.
+		 *
+		 * <p>
+		 * Whether to use long ID's for anon resources.
+		 * Short ID's are easier to read, but can run out of memory on very large models.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_longId(boolean value) {
+			return jena("rdfXml.longId", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions() {
-			super.ignoreRecursions();
-			return this;
+		/**
+		 * RDF/XML property: <c>relativeURIs</c>.
+		 *
+		 * <p>
+		 * What sort of relative URIs should be used.
+		 *
+		 * <p>
+		 * A comma separate list of options:
+		 * <ul class='spaced-list'>
+		 * 	<li>
+		 * 		<js>"same-document"</js> - Same-document references (e.g. <js>""</js> or <js>"#foo"</js>)
+		 * 	<li>
+		 * 		<js>"network"</js>  - Network paths (e.g. <js>"//example.org/foo"</js> omitting the URI scheme)
+		 * 	<li>
+		 * 		<js>"absolute"</js> - Absolute paths (e.g. <js>"/foo"</js> omitting the scheme and authority)
+		 * 	<li>
+		 * 		<js>"relative"</js> - Relative path not beginning in <js>"../"</js>
+		 * 	<li>
+		 * 		<js>"parent"</js> - Relative path beginning in <js>"../"</js>
+		 * 	<li>
+		 * 		<js>"grandparent"</js> - Relative path beginning in <js>"../../"</js>
+		 * </ul>
+		 *
+		 * <p>
+		 * The default value is <js>"same-document, absolute, relative, parent"</js>.
+		 * To switch off relative URIs use the value <js>""</js>.
+		 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_relativeUris(String value) {
+			return jena("rdfXml.relativeURIs", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions(boolean value) {
-			super.ignoreRecursions(value);
-			return this;
+		/**
+		 * RDF/XML property: <c>showXmlDeclaration</c>.
+		 *
+		 * <ul class='values spaced-list'>
+		 * 	<li>
+		 * 		<js>"true"</js> - Add XML Declaration to the output.
+		 * 	<li>
+		 * 		<js>"false"</js> - Don't add XML Declaration to the output.
+		 * 	<li>
+		 * 		<js>"default"</js> - Only add an XML Declaration when asked to write to an <c>OutputStreamWriter</c>
+		 * 		that uses some encoding other than <c>UTF-8</c> or <c>UTF-16</c>.
+		 * 		In this case the encoding is shown in the XML declaration.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_showXmlDeclaration(String value) {
+			return jena("rdfXml.showXmlDeclaration", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder initialDepth(int value) {
-			super.initialDepth(value);
-			return this;
+		/**
+		 * RDF/XML property: <c>tab</c>.
+		 *
+		 * <p>
+		 * The number of spaces with which to indent XML child elements.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_tab(int value) {
+			return jena("rdfXml.tab", value);
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder accept(String value) {
-			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes() {
-			super.addBeanTypes();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes(boolean value) {
-			super.addBeanTypes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType() {
-			super.addRootType();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType(boolean value) {
-			super.addRootType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder keepNullProperties() {
-			super.keepNullProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder keepNullProperties(boolean value) {
-			super.keepNullProperties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
-			super.listener(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder produces(String value) {
-			super.produces(value);
-			return this;
+		/**
+		 * RDF/XML property: <c>xmlbase</c>.
+		 *
+		 * <p>
+		 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
+		 *
+		 * @param value
+		 * 	The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder rdfxml_xmlbase(String value) {
+			return jena("rdfXml.xmlbase", value);
 		}
 
 		@Override /* Overridden from Builder */
@@ -1672,6 +1546,66 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder sortMaps(boolean value) {
 			super.sortMaps(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sq() {
+			super.sq();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
 			return this;
 		}
 
@@ -1711,6 +1645,42 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			return this;
 		}
 
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_TURTLE</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder turtle() {
+			return language(Constants.LANG_TURTLE);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
@@ -1730,38 +1700,14 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder maxIndent(int value) {
-			super.maxIndent(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder quoteChar(char value) {
-			super.quoteChar(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder quoteCharOverride(char value) {
-			super.quoteCharOverride(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sq() {
-			super.sq();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
 			return this;
 		}
 
@@ -1782,12 +1728,77 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			super.ws();
 			return this;
 		}
+
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder xml() {
+			return language(Constants.LANG_RDF_XML);
+		}
+
+		/**
+		 * RDF language.
+		 *
+		 * <p>
+		 * Shortcut for calling <code>language(<jsf>LANG_RDF_XML_ABBREV</jsf>)</code>
+		 *
+		 * @return This object.
+		 */
+		public Builder xmlabbrev() {
+			return language(Constants.LANG_RDF_XML_ABBREV);
+		}
+
+		Builder jena(String key, Object value) {
+			jenaSettings.put(key, value);
+			return this;
+		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = new Namespace[0];
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	private static String getAccept(Builder builder) {
+		if (builder.getAccept() != null)
+			return builder.getAccept();
+		switch(builder.language) {
+			case "RDF/XML": return "text/xml+rdf+abbrev";
+			case "RDF/XML-ABBREV": return "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
+			case "N-TRIPLE": return "text/n-triple";
+			case "N3": return "text/n3";
+			case "N3-PP": return "text/n3-pp";
+			case "N3-PLAIN": return "text/n3-plain";
+			case "N3-TRIPLES": return "text/n3-triples";
+			case "TURTLE": return "text/turtle";
+			default: return "text/xml+rdf";
+		}
+	}
 
+	private static String getProduces(Builder builder) {
+		if (builder.getProduces() != null)
+			return builder.getProduces();
+		switch(builder.language) {
+			case "RDF/XML": return "text/xml+rdf+abbrev";
+			case "RDF/XML-ABBREV": return "text/xml+rdf";
+			case "N-TRIPLE": return "text/n-triple";
+			case "N3": return "text/n3";
+			case "N3-PP": return "text/n3-pp";
+			case "N3-PLAIN": return "text/n3-plain";
+			case "N3-TRIPLES": return "text/n3-triples";
+			case "TURTLE": return "text/turtle";
+			default: return "text/xml+rdf";
+		}
+	}
 	final boolean
 		addLiteralTypes,
 		addRootProperty,
@@ -1795,20 +1806,21 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		looseCollections,
 		autoDetectNamespaces,
 		addBeanTypesRdf;
-
 	final String language;
 	final Namespace juneauNs, juneauBpNs;
 	final RdfCollectionFormat collectionFormat;
+
 	final Map<String,Object> jenaSettings;
 	final Namespace[] namespaces;
-
 	private final boolean addBeanTypes;
 	private final Map<ClassMeta<?>,RdfClassMeta> rdfClassMetas = new ConcurrentHashMap<>();
+
 	private final Map<BeanMeta<?>,RdfBeanMeta> rdfBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,RdfBeanPropertyMeta> rdfBeanPropertyMetas = new ConcurrentHashMap<>();
-
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
+
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
+
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
@@ -1839,29 +1851,20 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	public Builder copy() {
 		return new Builder(this);
 	}
-
 	@Override /* Overridden from Context */
 	public  RdfSerializerSession.Builder createSession() {
 		return RdfSerializerSession.create(this);
 	}
 
-	@Override /* Overridden from Context */
-	public RdfSerializerSession getSession() {
-		return createSession().build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from RdfMetaProvider */
-	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
-		RdfClassMeta m = rdfClassMetas.get(cm);
-		if (m == null) {
-			m = new RdfClassMeta(cm, this);
-			rdfClassMetas.put(cm, m);
-		}
-		return m;
+	/**
+	 * Default namespaces.
+	 *
+	 * @see RdfSerializer.Builder#namespaces(Namespace...)
+	 * @return
+	 * 	The default list of namespaces associated with this serializer.
+	 */
+	public Namespace[] getNamespaces() {
+		return namespaces;
 	}
 
 	@Override /* Overridden from RdfMetaProvider */
@@ -1884,16 +1887,20 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* Overridden from XmlMetaProvider */
-	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
-		XmlClassMeta m = xmlClassMetas.get(cm);
+	@Override /* Overridden from RdfMetaProvider */
+	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		RdfClassMeta m = rdfClassMetas.get(cm);
 		if (m == null) {
-			m = new XmlClassMeta(cm, this);
-			xmlClassMetas.put(cm, m);
+			m = new RdfClassMeta(cm, this);
+			rdfClassMetas.put(cm, m);
 		}
 		return m;
 	}
 
+	@Override /* Overridden from Context */
+	public RdfSerializerSession getSession() {
+		return createSession().build();
+	}
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
 		XmlBeanMeta m = xmlBeanMetas.get(bm);
@@ -1914,9 +1921,15 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Common properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from XmlMetaProvider */
+	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
+		XmlClassMeta m = xmlClassMetas.get(cm);
+		if (m == null) {
+			m = new XmlClassMeta(cm, this);
+			xmlClassMetas.put(cm, m);
+		}
+		return m;
+	}
 
 	/**
 	 * RDF format for representing collections and arrays.
@@ -1930,6 +1943,15 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	}
 
 	/**
+	 * All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaSettings() {
+		return jenaSettings;
+	}
+	/**
 	 * Default XML namespace for bean properties.
 	 *
 	 * @see RdfSerializer.Builder#juneauBpNs(Namespace)
@@ -1939,7 +1961,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	protected final Namespace getJuneauBpNs() {
 		return juneauBpNs;
 	}
-
 	/**
 	 * XML namespace for Juneau properties.
 	 *
@@ -1961,36 +1982,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	protected final String getLanguage() {
 		return language;
 	}
-
-	/**
-	 * Collections should be serialized and parsed as loose collections.
-	 *
-	 * @see RdfSerializer.Builder#looseCollections()
-	 * @return
-	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
-	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
-	 */
-	protected final boolean isLooseCollections() {
-		return looseCollections;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Jena properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * All Jena-related configuration properties.
-	 *
-	 * @return
-	 * 	A map of all Jena-related configuration properties.
-	 */
-	protected final Map<String,Object> getJenaSettings() {
-		return jenaSettings;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -2038,16 +2029,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	protected final boolean isAutoDetectNamespaces() {
 		return autoDetectNamespaces;
 	}
-
 	/**
-	 * Default namespaces.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see RdfSerializer.Builder#namespaces(Namespace...)
+	 * @see RdfSerializer.Builder#looseCollections()
 	 * @return
-	 * 	The default list of namespaces associated with this serializer.
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 */
-	public Namespace[] getNamespaces() {
-		return namespaces;
+	protected final boolean isLooseCollections() {
+		return looseCollections;
 	}
 
 	/**
@@ -2060,42 +2051,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 */
 	protected final boolean isUseXmlNamespaces() {
 		return useXmlNamespaces;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static String getProduces(Builder builder) {
-		if (builder.getProduces() != null)
-			return builder.getProduces();
-		switch(builder.language) {
-			case "RDF/XML": return "text/xml+rdf+abbrev";
-			case "RDF/XML-ABBREV": return "text/xml+rdf";
-			case "N-TRIPLE": return "text/n-triple";
-			case "N3": return "text/n3";
-			case "N3-PP": return "text/n3-pp";
-			case "N3-PLAIN": return "text/n3-plain";
-			case "N3-TRIPLES": return "text/n3-triples";
-			case "TURTLE": return "text/turtle";
-			default: return "text/xml+rdf";
-		}
-	}
-
-	private static String getAccept(Builder builder) {
-		if (builder.getAccept() != null)
-			return builder.getAccept();
-		switch(builder.language) {
-			case "RDF/XML": return "text/xml+rdf+abbrev";
-			case "RDF/XML-ABBREV": return "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
-			case "N-TRIPLE": return "text/n-triple";
-			case "N3": return "text/n3";
-			case "N3-PP": return "text/n3-pp";
-			case "N3-PLAIN": return "text/n3-plain";
-			case "N3-TRIPLES": return "text/n3-triples";
-			case "TURTLE": return "text/turtle";
-			default: return "text/xml+rdf";
-		}
 	}
 
 	@Override /* Overridden from Context */

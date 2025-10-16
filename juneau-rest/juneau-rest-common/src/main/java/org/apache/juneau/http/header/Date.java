@@ -88,11 +88,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Date")
 public class Date extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Date";
 
@@ -106,18 +101,6 @@ public class Date extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Date of(String value) {
-		return value == null ? null : new Date(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static Date of(ZonedDateTime value) {
 		return value == null ? null : new Date(value);
 	}
 
@@ -136,10 +119,17 @@ public class Date extends BasicDateHeader {
 		return value == null ? null : new Date(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static Date of(ZonedDateTime value) {
+		return value == null ? null : new Date(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -149,17 +139,6 @@ public class Date extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Date(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Date(ZonedDateTime value) {
 		super(NAME, value);
 	}
 
@@ -174,6 +153,17 @@ public class Date extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Date(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Date(ZonedDateTime value) {
 		super(NAME, value);
 	}
 }

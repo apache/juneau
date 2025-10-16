@@ -46,22 +46,145 @@ import org.apache.juneau.xml.*;
 public @interface XmlConfig {
 
 	/**
-	 * Optional rank for this config.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
+	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * through reflection.
+	 *
+	 * <p>
+	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
+	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addBeanTypesXml()}
+	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	int rank() default 0;
+	String addBeanTypes() default "";
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// XmlCommon
-	//-------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Add namespace URLs to the root element.
+	 *
+	 * <p>
+	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String addNamespaceUrisToRoot() default "";
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// XmlParser
-	//-------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Default namespace.
+	 *
+	 * <p>
+	 * Specifies the default namespace URI for this document.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String defaultNamespace() default "";
+
+	/**
+	 * Don't auto-detect namespace usage.
+	 *
+	 * <p>
+	 * Don't detect namespace usage before serialization.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
+	 * root element to only those that will be used in the resulting document.
+	 *
+	 * <p>
+	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
+	 * the root element is serialized.
+	 *
+	 * <p>
+	 * This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='warn'>
+	 * 		Auto-detection of namespaces can be costly performance-wise.
+	 * 		<br>In high-performance environments, it's recommended that namespace detection be
+	 * 		disabled, and that namespaces be manually defined through the {@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)} property.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableAutoDetectNamespaces() default "";
+
+	/**
+	 * Enable support for XML namespaces.
+	 *
+	 * <p>
+	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String enableNamespaces() default "";
 
 	/**
 	 * XML event allocator.
@@ -76,6 +199,25 @@ public @interface XmlConfig {
 	 * @return The annotation value.
 	 */
 	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Void.class;
+	/**
+	 * Default namespaces.
+	 *
+	 * <p>
+	 * The default list of namespaces associated with this serializer.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] namespaces() default {};
 
 	/**
 	 * Preserve root element during generalized parsing.
@@ -101,6 +243,19 @@ public @interface XmlConfig {
 	 * @return The annotation value.
 	 */
 	String preserveRootElement() default "";
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
+	//-------------------------------------------------------------------------------------------------------------------
+	// XmlParser
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * XML reporter.
@@ -161,169 +316,4 @@ public @interface XmlConfig {
 	 * @return The annotation value.
 	 */
 	String validating() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// XmlSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Add <js>"_type"</js> properties when needed.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * through reflection.
-	 *
-	 * <p>
-	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
-	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addBeanTypesXml()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String addBeanTypes() default "";
-
-	/**
-	 * Add namespace URLs to the root element.
-	 *
-	 * <p>
-	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String addNamespaceUrisToRoot() default "";
-
-	/**
-	 * Don't auto-detect namespace usage.
-	 *
-	 * <p>
-	 * Don't detect namespace usage before serialization.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()} to reduce the list of namespace URLs appended to the
-	 * root element to only those that will be used in the resulting document.
-	 *
-	 * <p>
-	 * If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
-	 * the root element is serialized.
-	 *
-	 * <p>
-	 * This setting is ignored if {@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()} is not enabled.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='warn'>
-	 * 		Auto-detection of namespaces can be costly performance-wise.
-	 * 		<br>In high-performance environments, it's recommended that namespace detection be
-	 * 		disabled, and that namespaces be manually defined through the {@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)} property.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableAutoDetectNamespaces() default "";
-
-	/**
-	 * Default namespace.
-	 *
-	 * <p>
-	 * Specifies the default namespace URI for this document.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String defaultNamespace() default "";
-
-	/**
-	 * Enable support for XML namespaces.
-	 *
-	 * <p>
-	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String enableNamespaces() default "";
-
-	/**
-	 * Default namespaces.
-	 *
-	 * <p>
-	 * The default list of namespaces associated with this serializer.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] namespaces() default {};
 }

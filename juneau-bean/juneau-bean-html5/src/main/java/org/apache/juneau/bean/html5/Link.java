@@ -106,6 +106,36 @@ public class Link extends HtmlElementVoid {
 		href(href);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Link _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-crossorigin">crossorigin</a>
 	 * attribute.
@@ -120,11 +150,22 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param crossorigin How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Link crossorigin(String value) {
 		attr("crossorigin", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link dir(String value) {
+		super.dir(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Link hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
@@ -141,7 +182,7 @@ public class Link extends HtmlElementVoid {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param href
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
@@ -169,11 +210,23 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"ja"</js> - Japanese</li>
 	 * </ul>
 	 *
-	 * @param hreflang The language code of the linked resource.
+	 * @param value The language code of the linked resource.
 	 * @return This object.
 	 */
 	public Link hreflang(String value) {
 		attr("hreflang", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link id(String value) {
+		super.id(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
@@ -194,135 +247,11 @@ public class Link extends HtmlElementVoid {
 	 * 	<li><js>"(max-width: 768px)"</js> - Media queries</li>
 	 * </ul>
 	 *
-	 * @param media The media types the linked resource applies to.
+	 * @param value The media types the linked resource applies to.
 	 * @return This object.
 	 */
 	public Link media(String value) {
 		attr("media", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the relationship between the current document and the linked resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"stylesheet"</js> - External CSS stylesheet</li>
-	 * 	<li><js>"icon"</js> - Favicon or site icon</li>
-	 * 	<li><js>"canonical"</js> - Canonical URL for SEO</li>
-	 * 	<li><js>"alternate"</js> - Alternative version of the page</li>
-	 * 	<li><js>"preload"</js> - Resource to preload</li>
-	 * 	<li><js>"prefetch"</js> - Resource to prefetch</li>
-	 * 	<li><js>"dns-prefetch"</js> - DNS lookup to prefetch</li>
-	 * 	<li><js>"next"</js> - Next page in a sequence</li>
-	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
-	 * </ul>
-	 *
-	 * @param rel The relationship between the document and linked resource.
-	 * @return This object.
-	 */
-	public Link rel(String value) {
-		attr("rel", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the sizes of icons for different device contexts. Used with <c>rel="icon"</c> or <c>rel="apple-touch-icon"</c>.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"16x16"</js> - Small favicon</li>
-	 * 	<li><js>"32x32"</js> - Standard favicon</li>
-	 * 	<li><js>"180x180"</js> - Apple touch icon</li>
-	 * 	<li><js>"192x192"</js> - Android icon</li>
-	 * 	<li><js>"512x512"</js> - Large icon</li>
-	 * 	<li><js>"any"</js> - Any size</li>
-	 * </ul>
-	 *
-	 * @param sizes The sizes of the linked icon resource.
-	 * @return This object.
-	 */
-	public Link sizes(String value) {
-		attr("sizes", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"text/css"</js> - CSS stylesheet</li>
-	 * 	<li><js>"text/javascript"</js> - JavaScript file</li>
-	 * 	<li><js>"application/json"</js> - JSON data</li>
-	 * 	<li><js>"image/png"</js> - PNG image</li>
-	 * 	<li><js>"image/jpeg"</js> - JPEG image</li>
-	 * 	<li><js>"image/svg+xml"</js> - SVG image</li>
-	 * 	<li><js>"font/woff2"</js> - Web font</li>
-	 * </ul>
-	 *
-	 * @param type The MIME type of the linked resource.
-	 * @return This object.
-	 */
-	public Link type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Link _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -626,6 +555,59 @@ public class Link extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-rel">rel</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the relationship between the current document and the linked resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"stylesheet"</js> - External CSS stylesheet</li>
+	 * 	<li><js>"icon"</js> - Favicon or site icon</li>
+	 * 	<li><js>"canonical"</js> - Canonical URL for SEO</li>
+	 * 	<li><js>"alternate"</js> - Alternative version of the page</li>
+	 * 	<li><js>"preload"</js> - Resource to preload</li>
+	 * 	<li><js>"prefetch"</js> - Resource to prefetch</li>
+	 * 	<li><js>"dns-prefetch"</js> - DNS lookup to prefetch</li>
+	 * 	<li><js>"next"</js> - Next page in a sequence</li>
+	 * 	<li><js>"prev"</js> - Previous page in a sequence</li>
+	 * </ul>
+	 *
+	 * @param value The relationship between the document and linked resource.
+	 * @return This object.
+	 */
+	public Link rel(String value) {
+		attr("rel", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-link-sizes">sizes</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the sizes of icons for different device contexts. Used with <c>rel="icon"</c> or <c>rel="apple-touch-icon"</c>.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"16x16"</js> - Small favicon</li>
+	 * 	<li><js>"32x32"</js> - Standard favicon</li>
+	 * 	<li><js>"180x180"</js> - Apple touch icon</li>
+	 * 	<li><js>"192x192"</js> - Android icon</li>
+	 * 	<li><js>"512x512"</js> - Large icon</li>
+	 * 	<li><js>"any"</js> - Any size</li>
+	 * </ul>
+	 *
+	 * @param value The sizes of the linked icon resource.
+	 * @return This object.
+	 */
+	public Link sizes(String value) {
+		attr("sizes", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Link spellcheck(Object value) {
 		super.spellcheck(value);
@@ -656,15 +638,29 @@ public class Link extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Link attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Link attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-link-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"text/css"</js> - CSS stylesheet</li>
+	 * 	<li><js>"text/javascript"</js> - JavaScript file</li>
+	 * 	<li><js>"application/json"</js> - JSON data</li>
+	 * 	<li><js>"image/png"</js> - PNG image</li>
+	 * 	<li><js>"image/jpeg"</js> - JPEG image</li>
+	 * 	<li><js>"image/svg+xml"</js> - SVG image</li>
+	 * 	<li><js>"font/woff2"</js> - Web font</li>
+	 * </ul>
+	 *
+	 * @param value The MIME type of the linked resource.
+	 * @return This object.
+	 */
+	public Link type(String value) {
+		attr("type", value);
 		return this;
 	}
 }

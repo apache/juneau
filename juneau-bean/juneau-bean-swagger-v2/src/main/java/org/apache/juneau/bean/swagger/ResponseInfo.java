@@ -107,6 +107,36 @@ public class ResponseInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Adds a single value to the <property>examples</property> property.
+	 *
+	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
+	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ResponseInfo addExample(String mimeType, Object example) {
+		assertArgNotNull("mimeType", mimeType);
+		assertArgNotNull("example", example);
+		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>headers</property>.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param header The header descriptions  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ResponseInfo addHeader(String name, HeaderInfo header) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("header", header);
+		headers = mapBuilder(headers).add(name, header).build();
+		return this;
+	}
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -137,9 +167,17 @@ public class ResponseInfo extends SwaggerElement {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "schema" -> toType(getSchema(), type);
+			default -> super.get(property, type);
+		};
+	}
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -151,24 +189,6 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public String getDescription() {
 		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the response.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
-	 * 	<br>Property value is required.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ResponseInfo setDescription(String value) {
-		description = value;
-		return this;
 	}
 
 	/**
@@ -184,37 +204,14 @@ public class ResponseInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>examples</property>.
+	 * Returns the header information with the specified name.
 	 *
-	 * <p>
-	 * An example of the response message.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Keys must be MIME-type strings.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return The header info, or <jk>null</jk> if not found.
 	 */
-	public ResponseInfo setExamples(Map<String,Object> value) {
-		examples = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>examples</property>.
-	 *
-	 * <p>
-	 * Adds a single value to the <property>examples</property> property.
-	 *
-	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
-	 * @param example The example.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public ResponseInfo addExample(String mimeType, Object example) {
-		assertArgNotNull("mimeType", mimeType);
-		assertArgNotNull("example", example);
-		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
-		return this;
+	public HeaderInfo getHeader(String name) {
+		assertArgNotNull("name", name);
+		return headers == null ? null : headers.get(name);
 	}
 
 	/**
@@ -230,47 +227,6 @@ public class ResponseInfo extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>headers</property>.
-	 *
-	 * <p>
-	 * A list of headers that are sent with the response.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>headers</property>.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @param header The header descriptions  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public ResponseInfo addHeader(String name, HeaderInfo header) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("header", header);
-		headers = mapBuilder(headers).add(name, header).build();
-		return this;
-	}
-
-	/**
-	 * Returns the header information with the specified name.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @return The header info, or <jk>null</jk> if not found.
-	 */
-	public HeaderInfo getHeader(String name) {
-		assertArgNotNull("name", name);
-		return headers == null ? null : headers.get(name);
-	}
-
-	/**
 	 * Bean property getter:  <property>schema</property>.
 	 *
 	 * <p>
@@ -280,50 +236,6 @@ public class ResponseInfo extends SwaggerElement {
 	 */
 	public SchemaInfo getSchema() {
 		return schema;
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * A definition of the response structure.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>It can be a primitive, an array or an object.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ResponseInfo setSchema(SchemaInfo value) {
-		schema = value;
-		return this;
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "examples" -> toType(getExamples(), type);
-			case "headers" -> toType(getHeaders(), type);
-			case "schema" -> toType(getSchema(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public ResponseInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "examples" -> setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
-			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -358,6 +270,89 @@ public class ResponseInfo extends SwaggerElement {
 		if (headers != null)
 			headers.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
+		return this;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public ResponseInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> setDescription(Utils.s(value));
+			case "examples" -> setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
+			case "headers" -> setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the response.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Keys must be MIME-type strings.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setExamples(Map<String,Object> value) {
+		examples = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>headers</property>.
+	 *
+	 * <p>
+	 * A list of headers that are sent with the response.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
+		headers = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * A definition of the response structure.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>It can be a primitive, an array or an object.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ResponseInfo setSchema(SchemaInfo value) {
+		schema = value;
 		return this;
 	}
 

@@ -54,30 +54,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class SimplePartParser extends BaseHttpPartParser {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Reusable instance of {@link SimplePartParser}, all default settings. */
-	public static final SimplePartParser DEFAULT = create().build();
-
-	/** Reusable instance of {@link SimplePartParser}, all default settings. */
-	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.getPartSession();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -105,22 +81,31 @@ public class SimplePartParser extends BaseHttpPartParser {
 			return cache(CACHE).build(SimplePartParser.class);
 		}
 
-		@Override
-		public Builder copy() {
-			return new Builder(this);
-		}
+		@Override /* Overridden from Context */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+				super.cache(value);
+				return this;
+			}
 
-	@Override /* Overridden from Context */
-	public Builder cache(Cache<HashKey,? extends Context> value) {
-			super.cache(value);
-			return this;
-		}
+	@Override
+	public Builder copy() {
+		return new Builder(this);
+	}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/** Reusable instance of {@link SimplePartParser}, all default settings. */
+	public static final SimplePartParser DEFAULT = create().build();
 
+	/** Reusable instance of {@link SimplePartParser}, all default settings. */
+	public static final SimplePartParserSession DEFAULT_SESSION = DEFAULT.getPartSession();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	/**
 	 * Constructor
 	 *

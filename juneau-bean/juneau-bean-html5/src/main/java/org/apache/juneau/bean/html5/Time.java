@@ -64,7 +64,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#time() time()}
- * 		<li class='jm'>{@link HtmlBuilder#time(Object, Object...) time(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#time(Object...) time(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -90,6 +90,47 @@ public class Time extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Time _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Time accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Time attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Time attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Time child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Time children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Time contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-time-datetime">datetime</a>
 	 * attribute.
@@ -101,32 +142,11 @@ public class Time extends HtmlElementMixed {
 	 * <p>
 	 * The value should be a valid date-time string in ISO 8601 format.
 	 *
-	 * @param datetime The machine-readable date and time value.
+	 * @param value The machine-readable date and time value.
 	 * @return This object.
 	 */
 	public Time datetime(String value) {
 		attr("datetime", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Time _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Time accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Time contenteditable(Object value) {
-		super.contenteditable(value);
 		return this;
 	}
 
@@ -481,30 +501,6 @@ public class Time extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Time translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Time child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Time children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Time attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Time attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

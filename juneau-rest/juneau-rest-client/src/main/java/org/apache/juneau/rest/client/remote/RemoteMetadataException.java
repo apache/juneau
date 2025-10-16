@@ -35,15 +35,23 @@ public class RemoteMetadataException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String getMessage(Class<?> c, Method m, String msg) {
+		StringBuilder sb = new StringBuilder("Invalid remote definition found on class ").append(c.getName());
+		if (m != null)
+			sb.append(" on method ").append(m.getName());
+		sb.append(". ").append(msg);
+		return sb.toString();
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.
+	 * @param c The interface class that has an invalid definition.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public RemoteMetadataException(Throwable cause, String message, Object... args) {
-		super(cause, message, args);
+	public RemoteMetadataException(Class<?> c, String message, Object...args) {
+		this((Throwable)null, getMessage(c, null, message), args);
 	}
 
 	/**
@@ -60,20 +68,12 @@ public class RemoteMetadataException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The interface class that has an invalid definition.
+	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public RemoteMetadataException(Class<?> c, String message, Object...args) {
-		this((Throwable)null, getMessage(c, null, message), args);
-	}
-
-	private static final String getMessage(Class<?> c, Method m, String msg) {
-		StringBuilder sb = new StringBuilder("Invalid remote definition found on class ").append(c.getName());
-		if (m != null)
-			sb.append(" on method ").append(m.getName());
-		sb.append(". ").append(msg);
-		return sb.toString();
+	public RemoteMetadataException(Throwable cause, String message, Object... args) {
+		super(cause, message, args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

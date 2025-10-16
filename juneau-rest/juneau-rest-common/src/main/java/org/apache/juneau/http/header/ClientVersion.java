@@ -48,11 +48,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Client-Version")
 public class ClientVersion extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Client-Version";
 
@@ -72,18 +67,6 @@ public class ClientVersion extends BasicStringHeader {
 	}
 
 	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ClientVersion of(Version value) {
-		return value == null ? null : new ClientVersion(value);
-	}
-
-	/**
 	 * Static creator with delayed value.
 	 *
 	 * <p>
@@ -98,10 +81,17 @@ public class ClientVersion extends BasicStringHeader {
 		return value == null ? null : new ClientVersion(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ClientVersion of(Version value) {
+		return value == null ? null : new ClientVersion(value);
+	}
 	private final Version value;
 	private final Supplier<Version> supplier;
 
@@ -116,19 +106,6 @@ public class ClientVersion extends BasicStringHeader {
 	public ClientVersion(String value) {
 		super(NAME, value);
 		this.value = Version.of(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ClientVersion(Version value) {
-		super(NAME, Utils.s(value));
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -148,20 +125,17 @@ public class ClientVersion extends BasicStringHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		if (supplier != null)
-			return Utils.s(supplier.get());
-		return super.getValue();
-	}
-
 	/**
-	 * Returns the header value as a {@link Version} object.
+	 * Constructor.
 	 *
-	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Optional<Version> asVersion() {
-		return Utils.opt(value);
+	public ClientVersion(Version value) {
+		super(NAME, Utils.s(value));
+		this.value = value;
+		this.supplier = null;
 	}
 
 	/**
@@ -181,5 +155,21 @@ public class ClientVersion extends BasicStringHeader {
 	 */
 	public FluentVersionAssertion<ClientVersion> assertVersion() {
 		return new FluentVersionAssertion<>(asVersion().orElse(null), this);
+	}
+
+	/**
+	 * Returns the header value as a {@link Version} object.
+	 *
+	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 */
+	public Optional<Version> asVersion() {
+		return Utils.opt(value);
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		if (supplier != null)
+			return Utils.s(supplier.get());
+		return super.getValue();
 	}
 }

@@ -33,25 +33,6 @@ import org.apache.juneau.marshaller.*;
  * </ul>
  */
 public class ThrownStats implements Cloneable {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -85,24 +66,13 @@ public class ThrownStats implements Cloneable {
 		}
 
 		/**
-		 * Specifies a subclass of {@link ThrownStats} to create when the {@link #build()} method is called.
+		 * Specifies the caused-by exception.
 		 *
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder type(Class<? extends ThrownStats> value) {
-			creator.type(value == null ? ThrownStats.class : value);
-			return this;
-		}
-
-		/**
-		 * Specifies the thrown exception.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder throwable(Throwable value) {
-			this.throwable = value;
+		public Builder causedBy(ThrownStats value) {
+			this.causedBy = value;
 			return this;
 		}
 
@@ -129,21 +99,36 @@ public class ThrownStats implements Cloneable {
 		}
 
 		/**
-		 * Specifies the caused-by exception.
+		 * Specifies the thrown exception.
 		 *
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder causedBy(ThrownStats value) {
-			this.causedBy = value;
+		public Builder throwable(Throwable value) {
+			this.throwable = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link ThrownStats} to create when the {@link #build()} method is called.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder type(Class<? extends ThrownStats> value) {
+			creator.type(value == null ? ThrownStats.class : value);
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final long guid;
 	private final long hash;
 	private final Class<?> thrownClass;
@@ -153,6 +138,21 @@ public class ThrownStats implements Cloneable {
 
 	private final AtomicInteger count;
 	private final AtomicLong firstOccurrence, lastOccurrence;
+
+	/**
+	 * Copy constructor.
+	 */
+	private ThrownStats(ThrownStats x) {
+		this.guid = x.guid;
+		this.thrownClass = x.thrownClass;
+		this.firstMessage = x.firstMessage;
+		this.stackTrace = listBuilder(x.stackTrace).copy().unmodifiable().build();
+		this.causedBy = Utils.opt(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
+		this.hash = x.hash;
+		this.count = new AtomicInteger(x.count.get());
+		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());
+		this.lastOccurrence = new AtomicLong(x.lastOccurrence.get());
+	}
 
 	/**
 	 * Constructor.
@@ -172,19 +172,45 @@ public class ThrownStats implements Cloneable {
 		this.lastOccurrence = new AtomicLong(ct);
 	}
 
+	@Override /* Overridden from Object */
+	public ThrownStats clone() {
+		return new ThrownStats(this);
+	}
+
 	/**
-	 * Copy constructor.
+	 * Returns the stats on the caused-by exception.
+	 *
+	 * @return The stats on the caused-by exception, never <jk>null</jk>.
 	 */
-	private ThrownStats(ThrownStats x) {
-		this.guid = x.guid;
-		this.thrownClass = x.thrownClass;
-		this.firstMessage = x.firstMessage;
-		this.stackTrace = listBuilder(x.stackTrace).copy().unmodifiable().build();
-		this.causedBy = Utils.opt(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
-		this.hash = x.hash;
-		this.count = new AtomicInteger(x.count.get());
-		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());
-		this.lastOccurrence = new AtomicLong(x.lastOccurrence.get());
+	public Optional<ThrownStats> getCausedBy() {
+		return causedBy;
+	}
+
+	/**
+	 * Returns the number of times this exception occurred at a specific location in code.
+	 *
+	 * @return The number of times this exception occurred at a specific location in code.
+	 */
+	public int getCount() {
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the message of the first exception at a specific location in code.
+	 *
+	 * @return The message of the first exception at a specific location in code.
+	 */
+	public String getFirstMessage() {
+		return firstMessage;
+	}
+
+	/**
+	 * Returns the UTC time of the first occurrence of this exception at a specific location in code.
+	 *
+	 * @return The UTC time of the first occurrence of this exception at a specific location in code.
+	 */
+	public long getFirstOccurrence() {
+		return firstOccurrence.longValue();
 	}
 
 	/**
@@ -211,48 +237,12 @@ public class ThrownStats implements Cloneable {
 	}
 
 	/**
-	 * Returns the exception class.
-	 *
-	 * @return The exception class.
-	 */
-	public Class<?> getThrownClass() {
-		return thrownClass;
-	}
-
-	/**
-	 * Returns the number of times this exception occurred at a specific location in code.
-	 *
-	 * @return The number of times this exception occurred at a specific location in code.
-	 */
-	public int getCount() {
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the UTC time of the first occurrence of this exception at a specific location in code.
-	 *
-	 * @return The UTC time of the first occurrence of this exception at a specific location in code.
-	 */
-	public long getFirstOccurrence() {
-		return firstOccurrence.longValue();
-	}
-
-	/**
 	 * Returns the UTC time of the last occurrence of this exception at a specific location in code.
 	 *
 	 * @return The UTC time of the last occurrence of this exception at a specific location in code.
 	 */
 	public long getLastOccurrence() {
 		return lastOccurrence.longValue();
-	}
-
-	/**
-	 * Returns the message of the first exception at a specific location in code.
-	 *
-	 * @return The message of the first exception at a specific location in code.
-	 */
-	public String getFirstMessage() {
-		return firstMessage;
 	}
 
 	/**
@@ -265,12 +255,12 @@ public class ThrownStats implements Cloneable {
 	}
 
 	/**
-	 * Returns the stats on the caused-by exception.
+	 * Returns the exception class.
 	 *
-	 * @return The stats on the caused-by exception, never <jk>null</jk>.
+	 * @return The exception class.
 	 */
-	public Optional<ThrownStats> getCausedBy() {
-		return causedBy;
+	public Class<?> getThrownClass() {
+		return thrownClass;
 	}
 
 	/**
@@ -288,10 +278,5 @@ public class ThrownStats implements Cloneable {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(this);
-	}
-
-	@Override /* Overridden from Object */
-	public ThrownStats clone() {
-		return new ThrownStats(this);
 	}
 }

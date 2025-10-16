@@ -145,21 +145,6 @@ public class HttpEntities {
 	 * Creates a new {@link SerializedEntity} object.
 	 *
 	 * @param content
-	 * 	The supplier of a Java POJO representing the content.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param serializer
-	 * 	The serializer to use to serialize the POJO.
-	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
-	 * @return A new {@link SerializedEntity} object.
-	 */
-	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer) {
-		return new SerializedEntity().setContent(content).setSerializer(serializer);
-	}
-
-	/**
-	 * Creates a new {@link SerializedEntity} object.
-	 *
-	 * @param content
 	 * 	The Java POJO representing the content.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @param serializer
@@ -171,6 +156,21 @@ public class HttpEntities {
 	 */
 	public static final SerializedEntity serializedEntity(Object content, Serializer serializer, HttpPartSchema schema) {
 		return new SerializedEntity().setContent(content).setSerializer(serializer).setSchema(schema);
+	}
+
+	/**
+	 * Creates a new {@link SerializedEntity} object.
+	 *
+	 * @param content
+	 * 	The supplier of a Java POJO representing the content.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param serializer
+	 * 	The serializer to use to serialize the POJO.
+	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
+	 * @return A new {@link SerializedEntity} object.
+	 */
+	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer) {
+		return new SerializedEntity().setContent(content).setSerializer(serializer);
 	}
 
 	/**

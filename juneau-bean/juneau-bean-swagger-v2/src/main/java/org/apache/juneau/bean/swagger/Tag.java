@@ -102,10 +102,16 @@ public class Tag extends SwaggerElement {
 	public Tag copy() {
 		return new Tag(this);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "name" -> toType(getName(), type);
+			default -> super.get(property, type);
+		};
+	}
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -117,6 +123,54 @@ public class Tag extends SwaggerElement {
 	 */
 	public String getDescription() {
 		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation for this tag.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public ExternalDocumentation getExternalDocs() {
+		return externalDocs;
+	}
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the tag.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(name != null, "name")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Tag set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> setDescription(Utils.s(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "name" -> setName(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -137,18 +191,6 @@ public class Tag extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this tag.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
-
-	/**
 	 * Bean property setter:  <property>externalDocs</property>.
 	 *
 	 * <p>
@@ -162,18 +204,6 @@ public class Tag extends SwaggerElement {
 	public Tag setExternalDocs(ExternalDocumentation value) {
 		externalDocs = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the tag.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
 	}
 
 	/**
@@ -191,41 +221,6 @@ public class Tag extends SwaggerElement {
 	public Tag setName(String value) {
 		name = value;
 		return this;
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			case "name" -> toType(getName(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Tag set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "name" -> setName(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(name != null, "name")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	/**

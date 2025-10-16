@@ -61,16 +61,49 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class BasicSwaggerProviderSession {
 
+	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
+		Set<Integer> codes = new TreeSet<>();
+		for (StatusCode a : la) {
+			for (int i : a.value())
+				codes.add(i);
+		}
+		if (codes.isEmpty() && def != null)
+			codes.add(def);
+		return codes;
+	}
+	private static JsonMap newMap(JsonMap om) {
+		if (om == null)
+			return new JsonMap();
+		return om.modifiable();
+	}
+	private static JsonList nullIfEmpty(JsonList l) {
+		return (l == null || l.isEmpty() ? null : l);
+	}
+	private static JsonMap nullIfEmpty(JsonMap m) {
+		return (m == null || m.isEmpty() ? null : m);
+	}
+	static String joinnl(String[]...s) {
+		for (String[] ss : s) {
+			if (ss.length != 0)
+			return Utils.joinnl(ss).trim();
+		}
+		return "";
+	}
 	private final RestContext context;
 	private final Class<?> c;
 	private final ClassInfo rci;
 	private final FileFinder ff;
+
 	private final Messages mb;
+
 	private final VarResolverSession vr;
 	private final JsonParser jp = JsonParser.create().ignoreUnknownBeanProperties().build();
+
 	private final JsonSchemaGeneratorSession js;
+
 	private final Locale locale;
 
 	/**
@@ -573,252 +606,6 @@ public class BasicSwaggerProviderSession {
 			throw new ServletException("Error detected in swagger.", e);
 		}
 	}
-	//=================================================================================================================
-	// Utility methods
-	//=================================================================================================================
-
-	private boolean isMulti(Header h) {
-		if ("*".equals(h.name()) || "*".equals(h.value()))
-			return true;
-		return false;
-	}
-
-	private JsonMap resolve(JsonMap om) throws ParseException {
-		JsonMap om2 = null;
-		if (om.containsKey("_value")) {
-			om = om.modifiable();
-			om2 = parseMap(om.remove("_value"));
-		} else {
-			om2 = new JsonMap();
-		}
-		for (Map.Entry<String,Object> e : om.entrySet()) {
-			Object val = e.getValue();
-			if (val instanceof JsonMap) {
-				val = resolve((JsonMap)val);
-			} else if (val instanceof JsonList) {
-				val = resolve((JsonList) val);
-			} else if (val instanceof String) {
-				val = resolve(val.toString());
-			}
-			om2.put(e.getKey(), val);
-		}
-		return om2;
-	}
-
-	private JsonList resolve(JsonList om) throws ParseException {
-		JsonList ol2 = new JsonList();
-		for (Object val : om) {
-			if (val instanceof JsonMap) {
-				val = resolve((JsonMap)val);
-			} else if (val instanceof JsonList) {
-				val = resolve((JsonList) val);
-			} else if (val instanceof String) {
-				val = resolve(val.toString());
-			}
-			ol2.add(val);
-		}
-		return ol2;
-	}
-
-	private String resolve(String[]...s) {
-		for (String[] ss : s) {
-			if (ss.length != 0)
-				return resolve(joinnl(ss));
-		}
-		return null;
-	}
-
-	private String resolve(String s) {
-		if (s == null)
-			return null;
-		return vr.resolve(s.trim());
-	}
-
-	private JsonMap parseMap(String[] o, String location, Object...args) throws ParseException {
-		if (o.length == 0)
-			return JsonMap.EMPTY_MAP;
-		try {
-			return parseMap(o);
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
-	}
-
-	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {
-		try {
-			return parseMap(o);
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
-		}
-	}
-
-	private JsonMap parseMap(Object o) throws ParseException {
-		if (o == null)
-			return null;
-		if (o instanceof String[])
-			o = joinnl((String[])o);
-		if (o instanceof String) {
-			String s = o.toString();
-			if (s.isEmpty())
-				return null;
-			s = resolve(s);
-			if ("IGNORE".equalsIgnoreCase(s))
-				return JsonMap.of("ignore", true);
-			if (! isJsonObject(s, true))
-				s = "{" + s + "}";
-			return JsonMap.ofJson(s);
-		}
-		if (o instanceof JsonMap)
-			return (JsonMap)o;
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", className(o));
-	}
-
-	private JsonList parseList(Object o, String location, Object...locationArgs) throws ParseException {
-		try {
-			if (o == null)
-				return null;
-			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
-			if (s.isEmpty())
-				return null;
-			s = resolve(s);
-			if (! isJsonArray(s, true))
-				s = "[" + s + "]";
-			return JsonList.ofJson(s);
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
-		}
-	}
-
-	private JsonList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {
-		try {
-			if (o == null)
-				return null;
-			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
-			if (s.isEmpty())
-				return null;
-			s = resolve(s);
-			return JsonList.ofJsonOrCdl(s);
-		} catch (ParseException e) {
-			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
-		}
-	}
-
-	private JsonMap merge(JsonMap...maps) {
-		JsonMap m = maps[0];
-		for (int i = 1; i < maps.length; i++) {
-			if (maps[i] != null) {
-				if (m == null)
-					m = new JsonMap();
-				m.putAll(maps[i]);
-			}
-		}
-		return m;
-	}
-
-	private JsonList merge(JsonList...lists) {
-		JsonList l = lists[0];
-		for (int i = 1; i < lists.length; i++) {
-			if (lists[i] != null) {
-				if (l == null)
-					l = new JsonList();
-				l.addAll(lists[i]);
-			}
-		}
-		return l;
-	}
-
-	@SafeVarargs
-	private final <T> T firstNonEmpty(T...t) {
-		for (T oo : t)
-			if (! Utils.isEmpty(oo))
-				return oo;
-		return null;
-	}
-
-	private JsonMap toMap(ExternalDocs a, String location, Object...locationArgs) {
-		if (ExternalDocsAnnotation.empty(a))
-			return null;
-		Predicate<String> ne = Utils::isNotEmpty;
-		JsonMap om = JsonMap.create()
-			.appendIf(ne, "description", resolve(joinnl(a.description())))
-			.appendIf(ne, "url", resolve(a.url()));
-		return nullIfEmpty(om);
-	}
-
-	private JsonMap toMap(Contact a, String location, Object...locationArgs) {
-		if (ContactAnnotation.empty(a))
-			return null;
-		Predicate<String> ne = Utils::isNotEmpty;
-		JsonMap om = JsonMap.create()
-			.appendIf(ne, "name", resolve(a.name()))
-			.appendIf(ne, "url", resolve(a.url()))
-			.appendIf(ne, "email", resolve(a.email()));
-		return nullIfEmpty(om);
-	}
-
-	private JsonMap toMap(License a, String location, Object...locationArgs) {
-		if (LicenseAnnotation.empty(a))
-			return null;
-		Predicate<String> ne = Utils::isNotEmpty;
-		JsonMap om = JsonMap.create()
-			.appendIf(ne, "name", resolve(a.name()))
-			.appendIf(ne, "url", resolve(a.url()));
-		return nullIfEmpty(om);
-	}
-
-	private JsonMap toMap(Tag a, String location, Object...locationArgs) {
-		JsonMap om = JsonMap.create();
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
-		om
-			.appendIf(ne, "name", resolve(a.name()))
-			.appendIf(ne, "description", resolve(joinnl(a.description())))
-			.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
-		return nullIfEmpty(om);
-	}
-
-	private JsonList toList(Tag[] aa, String location, Object...locationArgs) {
-		if (aa.length == 0)
-			return null;
-		JsonList ol = new JsonList();
-		for (Tag a : aa)
-			ol.add(toMap(a, location, locationArgs));
-		return nullIfEmpty(ol);
-	}
-
-	private JsonMap getSchema(JsonMap schema, Type type, BeanSession bs) throws Exception {
-
-		if (type == Swagger.class)
-			return JsonMap.create();
-
-		schema = newMap(schema);
-
-		ClassMeta<?> cm = bs.getClassMeta(type);
-
-		if (schema.getBoolean("ignore", false))
-			return null;
-
-		if (schema.containsKey("type") || schema.containsKey("$ref"))
-			return schema;
-
-		JsonMap om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
-
-		return om;
-	}
-
-	/**
-	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
-	 */
-	private JsonMap fixSwaggerExtensions(JsonMap om) {
-		Predicate<Object> nn = Utils::isNotNull;
-		om
-			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
-			.appendIf(nn, "readOnly", om.remove("x-readOnly"))
-			.appendIf(nn, "xml", om.remove("x-xml"))
-			.appendIf(nn, "externalDocs", om.remove("x-externalDocs"))
-			.appendIf(nn, "example", om.remove("x-example"));
-		return nullIfEmpty(om);
-	}
 
 	private void addBodyExamples(RestOpContext sm, JsonMap piri, boolean response, Type type, Locale locale) throws Exception {
 
@@ -903,15 +690,26 @@ public class BasicSwaggerProviderSession {
 			piri.put("examples", examples);
 	}
 
-	private JsonMap resolveRef(JsonMap m) {
-		if (m == null)
-			return null;
-		if (m.containsKey("$ref") && js.getBeanDefs() != null) {
-			String ref = m.getString("$ref");
-			if (ref.startsWith("#/definitions/"))
-				return js.getBeanDefs().get(ref.substring(14));
-		}
-		return m;
+	@SafeVarargs
+	private final <T> T firstNonEmpty(T...t) {
+		for (T oo : t)
+			if (! Utils.isEmpty(oo))
+				return oo;
+		return null;
+	}
+
+	/**
+	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
+	 */
+	private JsonMap fixSwaggerExtensions(JsonMap om) {
+		Predicate<Object> nn = Utils::isNotNull;
+		om
+			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
+			.appendIf(nn, "readOnly", om.remove("x-readOnly"))
+			.appendIf(nn, "xml", om.remove("x-xml"))
+			.appendIf(nn, "externalDocs", om.remove("x-externalDocs"))
+			.appendIf(nn, "example", om.remove("x-example"));
+		return nullIfEmpty(om);
 	}
 
 	private JsonMap getOperation(JsonMap om, String path, String httpMethod) {
@@ -926,10 +724,123 @@ public class BasicSwaggerProviderSession {
 		return om.getMap(httpMethod);
 	}
 
-	private static JsonMap newMap(JsonMap om) {
-		if (om == null)
-			return new JsonMap();
-		return om.modifiable();
+	private JsonMap getSchema(JsonMap schema, Type type, BeanSession bs) throws Exception {
+
+		if (type == Swagger.class)
+			return JsonMap.create();
+
+		schema = newMap(schema);
+
+		ClassMeta<?> cm = bs.getClassMeta(type);
+
+		if (schema.getBoolean("ignore", false))
+			return null;
+
+		if (schema.containsKey("type") || schema.containsKey("$ref"))
+			return schema;
+
+		JsonMap om = fixSwaggerExtensions(schema.append(js.getSchema(cm)));
+
+		return om;
+	}
+
+	private boolean isMulti(Header h) {
+		if ("*".equals(h.name()) || "*".equals(h.value()))
+			return true;
+		return false;
+	}
+
+	private JsonList merge(JsonList...lists) {
+		JsonList l = lists[0];
+		for (int i = 1; i < lists.length; i++) {
+			if (lists[i] != null) {
+				if (l == null)
+					l = new JsonList();
+				l.addAll(lists[i]);
+			}
+		}
+		return l;
+	}
+
+	private JsonMap merge(JsonMap...maps) {
+		JsonMap m = maps[0];
+		for (int i = 1; i < maps.length; i++) {
+			if (maps[i] != null) {
+				if (m == null)
+					m = new JsonMap();
+				m.putAll(maps[i]);
+			}
+		}
+		return m;
+	}
+
+	private JsonMap merge(JsonMap om, ExternalDocs a) {
+		if (ExternalDocsAnnotation.empty(a))
+			return om;
+		om = newMap(om);
+		Predicate<String> ne = Utils::isNotEmpty;
+		return om
+			.appendIf(ne, "description", resolve(a.description()))
+			.appendIf(ne, "url", a.url())
+		;
+	}
+
+	private JsonMap merge(JsonMap om, Header[] a) {
+		if (a.length == 0)
+			return om;
+		om = newMap(om);
+		for (Header aa : a) {
+			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
+			if (Utils.isEmpty(name))
+				throw new IllegalArgumentException("@Header used without name or value.");
+			merge(om.getMap(name, true), aa.schema());
+		}
+		return om;
+	}
+
+	private JsonMap merge(JsonMap om, Items a) throws ParseException {
+		if (ItemsAnnotation.empty(a))
+			return om;
+		om = newMap(om);
+		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		return om
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(ne, "$ref", a.$ref())
+		;
+	}
+
+	private JsonMap merge(JsonMap om, Response a) throws ParseException {
+		if (ResponseAnnotation.empty(a))
+			return om;
+		om = newMap(om);
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		if (! SchemaAnnotation.empty(a.schema()))
+			merge(om, a.schema());
+		return om
+			.appendIf(nem, "examples", parseMap(a.examples()))
+			.appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))
+			.appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))
+		;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -981,48 +892,6 @@ public class BasicSwaggerProviderSession {
 		}
 	}
 
-	private JsonMap merge(JsonMap om, ExternalDocs a) {
-		if (ExternalDocsAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		Predicate<String> ne = Utils::isNotEmpty;
-		return om
-			.appendIf(ne, "description", resolve(a.description()))
-			.appendIf(ne, "url", a.url())
-		;
-	}
-
-	private JsonMap merge(JsonMap om, Items a) throws ParseException {
-		if (ItemsAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
-		return om
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(ne, "$ref", a.$ref())
-		;
-	}
-
 	private JsonMap merge(JsonMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
@@ -1054,31 +923,73 @@ public class BasicSwaggerProviderSession {
 		;
 	}
 
-	private JsonMap merge(JsonMap om, Response a) throws ParseException {
-		if (ResponseAnnotation.empty(a))
-			return om;
-		om = newMap(om);
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
-		if (! SchemaAnnotation.empty(a.schema()))
-			merge(om, a.schema());
-		return om
-			.appendIf(nem, "examples", parseMap(a.examples()))
-			.appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))
-			.appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))
-		;
+	private JsonList parseList(Object o, String location, Object...locationArgs) throws ParseException {
+		try {
+			if (o == null)
+				return null;
+			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
+			if (s.isEmpty())
+				return null;
+			s = resolve(s);
+			if (! isJsonArray(s, true))
+				s = "[" + s + "]";
+			return JsonList.ofJson(s);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
+		}
 	}
 
-	private JsonMap merge(JsonMap om, Header[] a) {
-		if (a.length == 0)
-			return om;
-		om = newMap(om);
-		for (Header aa : a) {
-			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
-			if (Utils.isEmpty(name))
-				throw new IllegalArgumentException("@Header used without name or value.");
-			merge(om.getMap(name, true), aa.schema());
+	private JsonList parseListOrCdl(Object o, String location, Object...locationArgs) throws ParseException {
+		try {
+			if (o == null)
+				return null;
+			String s = (o instanceof String[] ? joinnl((String[])o) : o.toString());
+			if (s.isEmpty())
+				return null;
+			s = resolve(s);
+			return JsonList.ofJsonOrCdl(s);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
 		}
-		return om;
+	}
+
+	private JsonMap parseMap(Object o) throws ParseException {
+		if (o == null)
+			return null;
+		if (o instanceof String[])
+			o = joinnl((String[])o);
+		if (o instanceof String) {
+			String s = o.toString();
+			if (s.isEmpty())
+				return null;
+			s = resolve(s);
+			if ("IGNORE".equalsIgnoreCase(s))
+				return JsonMap.of("ignore", true);
+			if (! isJsonObject(s, true))
+				s = "{" + s + "}";
+			return JsonMap.ofJson(s);
+		}
+		if (o instanceof JsonMap)
+			return (JsonMap)o;
+		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected JsonMap or String.", className(o));
+	}
+
+	private JsonMap parseMap(String o, String location, Object...args) throws ParseException {
+		try {
+			return parseMap(o);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
+	}
+
+	private JsonMap parseMap(String[] o, String location, Object...args) throws ParseException {
+		if (o.length == 0)
+			return JsonMap.EMPTY_MAP;
+		try {
+			return parseMap(o);
+		} catch (ParseException e) {
+			throw new SwaggerException(e, "Malformed swagger JSON object encountered in " + location + ".", args);
+		}
 	}
 
 	private JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
@@ -1118,6 +1029,68 @@ public class BasicSwaggerProviderSession {
 		return param;
 	}
 
+	private JsonList resolve(JsonList om) throws ParseException {
+		JsonList ol2 = new JsonList();
+		for (Object val : om) {
+			if (val instanceof JsonMap) {
+				val = resolve((JsonMap)val);
+			} else if (val instanceof JsonList) {
+				val = resolve((JsonList) val);
+			} else if (val instanceof String) {
+				val = resolve(val.toString());
+			}
+			ol2.add(val);
+		}
+		return ol2;
+	}
+
+	private JsonMap resolve(JsonMap om) throws ParseException {
+		JsonMap om2 = null;
+		if (om.containsKey("_value")) {
+			om = om.modifiable();
+			om2 = parseMap(om.remove("_value"));
+		} else {
+			om2 = new JsonMap();
+		}
+		for (Map.Entry<String,Object> e : om.entrySet()) {
+			Object val = e.getValue();
+			if (val instanceof JsonMap) {
+				val = resolve((JsonMap)val);
+			} else if (val instanceof JsonList) {
+				val = resolve((JsonList) val);
+			} else if (val instanceof String) {
+				val = resolve(val.toString());
+			}
+			om2.put(e.getKey(), val);
+		}
+		return om2;
+	}
+
+	private String resolve(String s) {
+		if (s == null)
+			return null;
+		return vr.resolve(s.trim());
+	}
+
+	private String resolve(String[]...s) {
+		for (String[] ss : s) {
+			if (ss.length != 0)
+				return resolve(joinnl(ss));
+		}
+		return null;
+	}
+
+	private JsonMap resolveRef(JsonMap m) {
+		if (m == null)
+			return null;
+		if (m.containsKey("$ref") && js.getBeanDefs() != null) {
+			String ref = m.getString("$ref");
+			if (ref.startsWith("#/definitions/"))
+				return js.getBeanDefs().get(ref.substring(14));
+		}
+		return m;
+	}
+
 	private JsonMap toJsonMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;
@@ -1130,6 +1103,57 @@ public class BasicSwaggerProviderSession {
 		return JsonMap.ofJson(s);
 	}
 
+	private JsonList toList(Tag[] aa, String location, Object...locationArgs) {
+		if (aa.length == 0)
+			return null;
+		JsonList ol = new JsonList();
+		for (Tag a : aa)
+			ol.add(toMap(a, location, locationArgs));
+		return nullIfEmpty(ol);
+	}
+
+	private JsonMap toMap(Contact a, String location, Object...locationArgs) {
+		if (ContactAnnotation.empty(a))
+			return null;
+		Predicate<String> ne = Utils::isNotEmpty;
+		JsonMap om = JsonMap.create()
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "url", resolve(a.url()))
+			.appendIf(ne, "email", resolve(a.email()));
+		return nullIfEmpty(om);
+	}
+
+	private JsonMap toMap(ExternalDocs a, String location, Object...locationArgs) {
+		if (ExternalDocsAnnotation.empty(a))
+			return null;
+		Predicate<String> ne = Utils::isNotEmpty;
+		JsonMap om = JsonMap.create()
+			.appendIf(ne, "description", resolve(joinnl(a.description())))
+			.appendIf(ne, "url", resolve(a.url()));
+		return nullIfEmpty(om);
+	}
+
+	private JsonMap toMap(License a, String location, Object...locationArgs) {
+		if (LicenseAnnotation.empty(a))
+			return null;
+		Predicate<String> ne = Utils::isNotEmpty;
+		JsonMap om = JsonMap.create()
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "url", resolve(a.url()));
+		return nullIfEmpty(om);
+	}
+
+	private JsonMap toMap(Tag a, String location, Object...locationArgs) {
+		JsonMap om = JsonMap.create();
+		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		om
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "description", resolve(joinnl(a.description())))
+			.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
+		return nullIfEmpty(om);
+	}
+
 	private Set<String> toSet(String[] ss) {
 		if (ss.length == 0)
 			return null;
@@ -1137,32 +1161,5 @@ public class BasicSwaggerProviderSession {
 		for (String s : ss)
 			Utils.split(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;
-	}
-
-	static String joinnl(String[]...s) {
-		for (String[] ss : s) {
-			if (ss.length != 0)
-			return Utils.joinnl(ss).trim();
-		}
-		return "";
-	}
-
-	private static Set<Integer> getCodes(List<StatusCode> la, Integer def) {
-		Set<Integer> codes = new TreeSet<>();
-		for (StatusCode a : la) {
-			for (int i : a.value())
-				codes.add(i);
-		}
-		if (codes.isEmpty() && def != null)
-			codes.add(def);
-		return codes;
-	}
-
-	private static JsonMap nullIfEmpty(JsonMap m) {
-		return (m == null || m.isEmpty() ? null : m);
-	}
-
-	private static JsonList nullIfEmpty(JsonList l) {
-		return (l == null || l.isEmpty() ? null : l);
 	}
 }

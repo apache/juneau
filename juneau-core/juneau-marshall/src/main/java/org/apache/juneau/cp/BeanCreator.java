@@ -116,11 +116,26 @@ import org.apache.juneau.reflect.*;
  * @param <T> The bean type being created.
  */
 public class BeanCreator<T> {
+	static class Match<T extends ExecutableInfo> {
+		T executable = null;
+		int numMatches = -1;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
+		@SuppressWarnings("unchecked")
+		void add(T ei) {
+			if (ei.getParamCount() > numMatches) {
+				numMatches = ei.getParamCount();
+				executable = (T)ei.accessible();
+			}
+		}
 
+		T get() {
+			return executable;
+		}
+
+		boolean isPresent() {
+			return executable != null;
+		}
+	}
 	/**
 	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
 	 *
@@ -131,15 +146,11 @@ public class BeanCreator<T> {
 	public static <T> BeanCreator<T> of(Class<T> beanType) {
 		return BeanStore.INSTANCE.createBean(beanType);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final BeanStore store;
 	private ClassInfo type;
 	private Object builder;
 	private T impl;
+
 	private boolean silent;
 
 	/**
@@ -154,38 +165,6 @@ public class BeanCreator<T> {
 	}
 
 	/**
-	 * Allows you to specify a subclass of the specified bean type to create.
-	 *
-	 * @param value The value for this setting.
-	 * @return This object.
-	 */
-	public BeanCreator<T> type(Class<?> value) {
-		type = ClassInfo.of(value);
-		return this;
-	}
-
-	/**
-	 * Allows you to specify a subclass of the specified bean type to create.
-	 *
-	 * @param value The value for this setting.
-	 * @return This object.
-	 */
-	public BeanCreator<T> type(ClassInfo value) {
-		return type(value == null ? null : value.inner());
-	}
-
-	/**
-	 * Allows you to specify a specific instance for the build method to return.
-	 *
-	 * @param value The value for this setting.
-	 * @return This object.
-	 */
-	public BeanCreator<T> impl(T value) {
-		impl = value;
-		return this;
-	}
-
-	/**
 	 * Adds an argument to this creator.
 	 *
 	 * @param <T2> The parameter type.
@@ -195,17 +174,6 @@ public class BeanCreator<T> {
 	 */
 	public <T2> BeanCreator<T> arg(Class<T2> beanType, T2 bean) {
 		store.add(beanType, bean);
-		return this;
-	}
-
-	/**
-	 * Suppresses throwing of {@link ExecutableException ExecutableExceptions} from the {@link #run()} method when
-	 * a form of creation cannot be found.
-	 *
-	 * @return This object.
-	 */
-	public BeanCreator<T> silent() {
-		silent = true;
 		return this;
 	}
 
@@ -233,6 +201,26 @@ public class BeanCreator<T> {
 	}
 
 	/**
+	 * Same as {@link #run()} but returns the value wrapped in an {@link Optional}.
+	 *
+	 * @return A new bean wrapped in an {@link Optional}.
+	 */
+	public Optional<T> execute() {
+		return Utils.opt(silent().run());
+	}
+
+	/**
+	 * Allows you to specify a specific instance for the build method to return.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> impl(T value) {
+		impl = value;
+		return this;
+	}
+
+	/**
 	 * Same as {@link #run()} but returns the alternate value if a method of creation could not be found.
 	 *
 	 * @param other The other bean to use.
@@ -240,15 +228,6 @@ public class BeanCreator<T> {
 	 */
 	public T orElse(T other) {
 		return execute().orElse(other);
-	}
-
-	/**
-	 * Same as {@link #run()} but returns the value wrapped in an {@link Optional}.
-	 *
-	 * @return A new bean wrapped in an {@link Optional}.
-	 */
-	public Optional<T> execute() {
-		return Utils.opt(silent().run());
 	}
 
 	/**
@@ -377,12 +356,55 @@ public class BeanCreator<T> {
 	}
 
 	/**
+	 * Suppresses throwing of {@link ExecutableException ExecutableExceptions} from the {@link #run()} method when
+	 * a form of creation cannot be found.
+	 *
+	 * @return This object.
+	 */
+	public BeanCreator<T> silent() {
+		silent = true;
+		return this;
+	}
+
+	/**
 	 * Converts this creator into a supplier.
 	 *
 	 * @return A supplier that returns the results of the {@link #run()} method.
 	 */
 	public Supplier<T> supplier() {
 		return ()->run();
+	}
+
+	/**
+	 * Allows you to specify a subclass of the specified bean type to create.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> type(Class<?> value) {
+		type = ClassInfo.of(value);
+		return this;
+	}
+
+	/**
+	 * Allows you to specify a subclass of the specified bean type to create.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> type(ClassInfo value) {
+		return type(value == null ? null : value.inner());
+	}
+
+	private String getMissingParams(ExecutableInfo ei) {
+		return store.getMissingParams(ei);
+	}
+	private Object[] getParams(ExecutableInfo ei) {
+		return store.getParams(ei);
+	}
+
+	private boolean hasAllParams(ExecutableInfo ei) {
+		return store.hasAllParams(ei);
 	}
 
 	private boolean isStaticCreateMethod(MethodInfo m) {
@@ -395,42 +417,5 @@ public class BeanCreator<T> {
 			&& m.hasReturnType(type)
 			&& m.hasNoAnnotation(BeanIgnore.class)
 			&& (m.hasName("create") || m.hasName("builder"));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helpers
-	//-----------------------------------------------------------------------------------------------------------------
-
-	static class Match<T extends ExecutableInfo> {
-		T executable = null;
-		int numMatches = -1;
-
-		@SuppressWarnings("unchecked")
-		void add(T ei) {
-			if (ei.getParamCount() > numMatches) {
-				numMatches = ei.getParamCount();
-				executable = (T)ei.accessible();
-			}
-		}
-
-		boolean isPresent() {
-			return executable != null;
-		}
-
-		T get() {
-			return executable;
-		}
-	}
-
-	private boolean hasAllParams(ExecutableInfo ei) {
-		return store.hasAllParams(ei);
-	}
-
-	private Object[] getParams(ExecutableInfo ei) {
-		return store.getParams(ei);
-	}
-
-	private String getMissingParams(ExecutableInfo ei) {
-		return store.getMissingParams(ei);
 	}
 }

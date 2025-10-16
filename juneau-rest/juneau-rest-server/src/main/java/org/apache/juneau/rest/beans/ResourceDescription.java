@@ -43,6 +43,9 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 
 	private String name, uri, description;
 
+	/** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */
+	public ResourceDescription() {}
+
 	/**
 	 * Constructor for when the name and uri are the same.
 	 *
@@ -68,8 +71,35 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 		this.description = description;
 	}
 
-	/** No-arg constructor.  Used for JUnit testing of OPTIONS pages. */
-	public ResourceDescription() {}
+	@Override /* Overridden from Comparable */
+	public int compareTo(ResourceDescription o) {
+		return getName().toString().compareTo(o.getName().toString());
+	}
+
+	/**
+	 * Sets the description field on this label to a new value.
+	 *
+	 * @param description The new description.
+	 * @return This object.
+	 */
+	public ResourceDescription description(String description) {
+		this.description = description;
+		return this;
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x,y)->Utils.eq(x.getName(), y.getName()));
+	}
+
+	/**
+	 * Returns the description field on this label.
+	 *
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
+	}
 
 	/**
 	 * Returns the name field on this label.
@@ -90,6 +120,11 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 		return uri == null ? name : uri;
 	}
 
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
 	/**
 	 * Sets the name field on this label to a new value.
 	 *
@@ -102,26 +137,6 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 	}
 
 	/**
-	 * Returns the description field on this label.
-	 *
-	 * @return The description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Sets the description field on this label to a new value.
-	 *
-	 * @param description The new description.
-	 * @return This object.
-	 */
-	public ResourceDescription description(String description) {
-		this.description = description;
-		return this;
-	}
-
-	/**
 	 * Sets the uri field on this label to a new value.
 	 *
 	 * @param uri The new uri.
@@ -130,20 +145,5 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 	public ResourceDescription uri(String uri) {
 		this.uri = uri;
 		return this;
-	}
-
-	@Override /* Overridden from Comparable */
-	public int compareTo(ResourceDescription o) {
-		return getName().toString().compareTo(o.getName().toString());
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x,y)->Utils.eq(x.getName(), y.getName()));
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return getName().hashCode();
 	}
 }

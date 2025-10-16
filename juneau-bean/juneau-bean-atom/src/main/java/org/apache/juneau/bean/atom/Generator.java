@@ -76,6 +76,9 @@ public class Generator extends Common {
 	private String version;
 	private String text;
 
+	/** Bean constructor. */
+	public Generator() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -84,13 +87,18 @@ public class Generator extends Common {
 	public Generator(String text) {
 		this.text = text;
 	}
-
-	/** Bean constructor. */
-	public Generator() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Bean property getter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this generator statement.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=TEXT)
+	public String getText() {
+		return text;
+	}
 
 	/**
 	 * Bean property getter:  <property>uri</property>.
@@ -105,6 +113,46 @@ public class Generator extends Common {
 		return uri;
 	}
 
+	/**
+	 * Bean property getter:  <property>version</property>.
+	 *
+	 * <p>
+	 * The version of this generator statement.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public String getVersion() {
+		return version;
+	}
+
+	@Override /* Overridden from Common */
+	public Generator setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Generator setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this generator statement.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Generator setText(String value) {
+		this.text = value;
+		return this;
+	}
 	/**
 	 * Bean property setter:  <property>uri</property>.
 	 *
@@ -126,19 +174,6 @@ public class Generator extends Common {
 	}
 
 	/**
-	 * Bean property getter:  <property>version</property>.
-	 *
-	 * <p>
-	 * The version of this generator statement.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=ATTR)
-	public String getVersion() {
-		return version;
-	}
-
-	/**
 	 * Bean property setter:  <property>version</property>.
 	 *
 	 * <p>
@@ -151,51 +186,6 @@ public class Generator extends Common {
 	 */
 	public Generator setVersion(String value) {
 		this.version = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this generator statement.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=TEXT)
-	public String getText() {
-		return text;
-	}
-
-	/**
-	 * Bean property setter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this generator statement.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Generator setText(String value) {
-		this.text = value;
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Generator setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Generator setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

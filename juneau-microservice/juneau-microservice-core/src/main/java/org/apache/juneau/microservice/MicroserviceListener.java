@@ -28,6 +28,14 @@ import org.apache.juneau.config.event.*;
 public interface MicroserviceListener {
 
 	/**
+	 * Called if one or more changes occur in the config file.
+	 *
+	 * @param microservice Reference to microservice.
+	 * @param events The list of changes in the config file.
+	 */
+	void onConfigChange(Microservice microservice, ConfigEvents events);
+
+	/**
 	 * Called at the beginning of the {@link Microservice#start()} call.
 	 *
 	 * @param microservice Reference to microservice.
@@ -40,12 +48,4 @@ public interface MicroserviceListener {
 	 * @param microservice Reference to microservice.
 	 */
 	void onStop(Microservice microservice);
-
-	/**
-	 * Called if one or more changes occur in the config file.
-	 *
-	 * @param microservice Reference to microservice.
-	 * @param events The list of changes in the config file.
-	 */
-	void onConfigChange(Microservice microservice, ConfigEvents events);
 }

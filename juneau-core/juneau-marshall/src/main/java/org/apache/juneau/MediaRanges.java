@@ -56,56 +56,10 @@ import org.apache.juneau.internal.*;
  */
 @BeanIgnore
 public class MediaRanges {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Represents an empty media ranges object. */
 	public static final MediaRanges EMPTY = new MediaRanges("");
 
 	private static final Cache<String,MediaRanges> CACHE = Cache.of(String.class, MediaRanges.class).build();
-
-	private final MediaRange[] ranges;
-	private final String string;
-
-	/**
-	 * Returns a parsed <c>Accept</c> header value.
-	 *
-	 * @param value The raw <c>Accept</c> header value.
-	 * @return A parsed <c>Accept</c> header value.
-	 */
-	public static MediaRanges of(String value) {
-		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new MediaRanges(value));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value The <c>Accept</c> header value.
-	 */
-	public MediaRanges(String value) {
-		this(parse(value));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param e The parsed header value.
-	 */
-	public MediaRanges(HeaderElement[] e) {
-
-		ranges = new MediaRange[e.length];
-		for (int i = 0; i < e.length; i++)
-			ranges[i] = new MediaRange(e[i]);
-		Arrays.sort(ranges, RANGE_COMPARATOR);
-
-		this.string = ranges.length == 1 ? ranges[0].toString() : Utils.join(ranges, ',');
-	}
 
 	/**
 	 * Compares two MediaRanges for equality.
@@ -129,6 +83,90 @@ public class MediaRanges {
 		// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
 		return o2.toString().compareTo(o1.toString());
 	};
+	/**
+	 * Returns a parsed <c>Accept</c> header value.
+	 *
+	 * @param value The raw <c>Accept</c> header value.
+	 * @return A parsed <c>Accept</c> header value.
+	 */
+	public static MediaRanges of(String value) {
+		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new MediaRanges(value));
+	}
+
+	private static HeaderElement[] parse(String value) {
+		return BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+	}
+	private final MediaRange[] ranges;
+
+	private final String string;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param e The parsed header value.
+	 */
+	public MediaRanges(HeaderElement[] e) {
+
+		ranges = new MediaRange[e.length];
+		for (int i = 0; i < e.length; i++)
+			ranges[i] = new MediaRange(e[i]);
+		Arrays.sort(ranges, RANGE_COMPARATOR);
+
+		this.string = ranges.length == 1 ? ranges[0].toString() : Utils.join(ranges, ',');
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value The <c>Accept</c> header value.
+	 */
+	public MediaRanges(String value) {
+		this(parse(value));
+	}
+
+	/**
+	 * Performs an action on the media ranges that make up this object.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public MediaRanges forEachRange(Consumer<MediaRange> action) {
+		for (MediaRange r : ranges)
+			action.accept(r);
+		return this;
+	}
+
+	/**
+	 * Returns the {@link MediaRange} at the specified index.
+	 *
+	 * @param index The index position of the media range.
+	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
+	 */
+	public MediaRange getRange(int index) {
+		if (index < 0 || index >= ranges.length)
+			return null;
+		return ranges[index];
+	}
+
+	/**
+	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
+	 * presence of a subtype fragment.
+	 *
+	 * <p>
+	 * For example, given the header <js>"text/json+activity"</js>, calling
+	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
+	 *
+	 * @param part The media type subtype fragment.
+	 * @return <jk>true</jk> if subtype fragment exists.
+	 */
+	public boolean hasSubtypePart(String part) {
+
+		for (MediaRange mr : ranges)
+			if (mr.getQValue() > 0 && mr.getSubTypes().indexOf(part) >= 0)
+				return true;
+
+		return false;
+	}
 
 	/**
 	 * Given a list of media types, returns the best match for this <c>Accept</c> header.
@@ -179,60 +217,12 @@ public class MediaRanges {
 	}
 
 	/**
-	 * Returns the {@link MediaRange} at the specified index.
-	 *
-	 * @param index The index position of the media range.
-	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
-	 */
-	public MediaRange getRange(int index) {
-		if (index < 0 || index >= ranges.length)
-			return null;
-		return ranges[index];
-	}
-
-	/**
-	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
-	 * presence of a subtype fragment.
-	 *
-	 * <p>
-	 * For example, given the header <js>"text/json+activity"</js>, calling
-	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
-	 *
-	 * @param part The media type subtype fragment.
-	 * @return <jk>true</jk> if subtype fragment exists.
-	 */
-	public boolean hasSubtypePart(String part) {
-
-		for (MediaRange mr : ranges)
-			if (mr.getQValue() > 0 && mr.getSubTypes().indexOf(part) >= 0)
-				return true;
-
-		return false;
-	}
-
-	/**
 	 * Returns the media ranges that make up this object.
 	 *
 	 * @return The media ranges that make up this object.
 	 */
 	public List<MediaRange> toList() {
 		return alist(ranges);
-	}
-
-	/**
-	 * Performs an action on the media ranges that make up this object.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public MediaRanges forEachRange(Consumer<MediaRange> action) {
-		for (MediaRange r : ranges)
-			action.accept(r);
-		return this;
-	}
-
-	private static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
 
 	@Override /* Overridden from Object */

@@ -32,11 +32,6 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Convenience method for instantiating a {@link ConstructorInfo};
 	 *
@@ -61,11 +56,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			return null;
 		return ClassInfo.of(c.getDeclaringClass()).getConstructorInfo(c);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Constructor<?> c;
 
 	/**
@@ -80,95 +70,6 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	}
 
 	/**
-	 * Returns the wrapped method.
-	 *
-	 * @param <T> The inner class type.
-	 * @return The wrapped method.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> Constructor<T> inner() {
-		return (Constructor<T>)c;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Annotations
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Finds the annotation of the specified type defined on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type);
-	}
-
-	/**
-	 * Finds the annotation of the specified type defined on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
-	 */
-	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		Value<A> t = Value.empty();
-		annotationProvider.forEachAnnotation(type, c, x -> true, x -> t.set(x));
-		return t.orElse(null);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, type);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
-	 */
-	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation is not present on this constructor.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return <jk>true</jk> if the specified annotation is not present on this constructor.
-	 */
-	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return ! hasAnnotation(annotationProvider, type);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if this object passes the specified predicate test.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if this object passes the specified predicate test.
-	 */
-	public boolean matches(Predicate<ConstructorInfo> test) {
-		return test(test, this);
-	}
-
-	/**
 	 * Performs an action on this object if the specified predicate test passes.
 	 *
 	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
@@ -178,6 +79,28 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	public ConstructorInfo accept(Predicate<ConstructorInfo> test, Consumer<ConstructorInfo> action) {
 		if (matches(test))
 			action.accept(this);
+		return this;
+	}
+	@Override /* Overridden from ExecutableInfo */
+	public ConstructorInfo accessible() {
+		super.accessible();
+		return this;
+	}
+
+	/**
+	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 *
+	 * <p>
+	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
+	 *
+	 * @param v The minimum visibility.
+	 * @return
+	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
+	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
+	 */
+	public ConstructorInfo accessible(Visibility v) {
+		if (v.transform(c) == null)
+			return null;
 		return this;
 	}
 
@@ -197,18 +120,95 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		return true;
 	}
 
+	@Override
+	public int compareTo(ConstructorInfo o) {
+		int i = getSimpleName().compareTo(o.getSimpleName());
+		if (i == 0) {
+			i = getParamCount() - o.getParamCount();
+			if (i == 0) {
+				for (int j = 0; j < getParamCount() && i == 0; j++) {
+					Class<?>[] tpt = _getRawParamTypes(), opt = o._getRawParamTypes();
+					i = tpt[j].getName().compareTo(opt[j].getName());
+				}
+			}
+		}
+		return i;
+	}
+
+	@Override /* Overridden from ExecutableInfo */
+	public ConstructorInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+		super.forEachParam(filter, action);
+		return this;
+	}
 	/**
-	 * Shortcut for calling the new-instance method on the underlying constructor.
+	 * Finds the annotation of the specified type defined on this constructor.
 	 *
-	 * @param <T> The constructor class type.
-	 * @param args the arguments used for the method call.
-	 * 	<br>Extra parameters are ignored.
-	 * 	<br>Missing parameters are set to null.
-	 * @return The object returned from the constructor.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 * @param <A> The annotation type to look for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public <T> T invokeFuzzy(Object...args) throws ExecutableException {
-		return invoke(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		Value<A> t = Value.empty();
+		annotationProvider.forEachAnnotation(type, c, x -> true, x -> t.set(x));
+		return t.orElse(null);
+	}
+
+	/**
+	 * Finds the annotation of the specified type defined on this constructor.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation to look for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
+	 */
+	public <A extends Annotation> A getAnnotation(Class<A> type) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation to look for.
+	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
+	 */
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return hasAnnotation(AnnotationProvider.DEFAULT, type);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is not present on this constructor.
+	 *
+	 * @param <A> The annotation type to look for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @return <jk>true</jk> if the specified annotation is not present on this constructor.
+	 */
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return ! hasAnnotation(annotationProvider, type);
+	}
+
+	/**
+	 * Returns the wrapped method.
+	 *
+	 * @param <T> The inner class type.
+	 * @return The wrapped method.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Constructor<T> inner() {
+		return (Constructor<T>)c;
 	}
 
 	/**
@@ -229,47 +229,27 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 			throw new ExecutableException(e);
 		}
 	}
+	/**
+	 * Shortcut for calling the new-instance method on the underlying constructor.
+	 *
+	 * @param <T> The constructor class type.
+	 * @param args the arguments used for the method call.
+	 * 	<br>Extra parameters are ignored.
+	 * 	<br>Missing parameters are set to null.
+	 * @return The object returned from the constructor.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public <T> T invokeFuzzy(Object...args) throws ExecutableException {
+		return invoke(ClassUtils.getMatchingArgs(c.getParameterTypes(), args));
+	}
 
 	/**
-	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * <p>
-	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
-	 *
-	 * @param v The minimum visibility.
-	 * @return
-	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not
-	 * 	met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.
+	 * @param test The test to perform.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public ConstructorInfo accessible(Visibility v) {
-		if (v.transform(c) == null)
-			return null;
-		return this;
-	}
-
-	@Override
-	public int compareTo(ConstructorInfo o) {
-		int i = getSimpleName().compareTo(o.getSimpleName());
-		if (i == 0) {
-			i = getParamCount() - o.getParamCount();
-			if (i == 0) {
-				for (int j = 0; j < getParamCount() && i == 0; j++) {
-					Class<?>[] tpt = _getRawParamTypes(), opt = o._getRawParamTypes();
-					i = tpt[j].getName().compareTo(opt[j].getName());
-				}
-			}
-		}
-		return i;
-	}
-	@Override /* Overridden from ExecutableInfo */
-	public ConstructorInfo accessible() {
-		super.accessible();
-		return this;
-	}
-
-	@Override /* Overridden from ExecutableInfo */
-	public ConstructorInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
-		super.forEachParam(filter, action);
-		return this;
+	public boolean matches(Predicate<ConstructorInfo> test) {
+		return test(test, this);
 	}
 }

@@ -92,10 +92,6 @@ public class Mark extends HtmlElementMixed {
 	public Mark(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Mark _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -105,6 +101,30 @@ public class Mark extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Mark accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Mark attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Mark attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Mark child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Mark children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -465,30 +485,6 @@ public class Mark extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Mark translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Mark child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Mark children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Mark attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Mark attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

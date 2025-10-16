@@ -161,46 +161,6 @@ public class AssertionArgs {
 	}
 
 	/**
-	 * Gets the configured bean converter, if any.
-	 *
-	 * @return An Optional containing the custom converter, or empty if using default behavior.
-	 */
-	protected Optional<BeanConverter> getBeanConverter() {
-		return ofNullable(beanConverter);
-	}
-
-	/**
-	 * Sets a custom error message supplier for assertion failures.
-	 *
-	 * <p>The supplier allows for dynamic message generation, including context that may only
-	 * be available at the time of assertion failure. This is useful for:</p>
-	 * <ul>
-	 *     <li><b>Timestamps:</b> Including the exact time of failure</li>
-	 *     <li><b>Test State:</b> Including runtime state information</li>
-	 *     <li><b>Expensive Operations:</b> Deferring costly string operations until needed</li>
-	 *     <li><b>Conditional Messages:</b> Different messages based on runtime conditions</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *     <jc>// Dynamic message with timestamp</jc>
-	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Test failed at "</js> + Instant.<jsm>now</jsm>()),
-	 *         <jv>result</jv>, <js>"status"</js>, <js>"SUCCESS"</js>);
-	 *
-	 *     <jc>// Message with expensive computation</jc>
-	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Failed after "</js> + computeTestDuration() + <js>" ms"</js>),
-	 *         <jv>response</jv>, <js>"error"</js>, <js>"null"</js>);
-	 * </p>
-	 *
-	 * @param value The message supplier. Called only when an assertion fails.
-	 * @return This instance for method chaining.
-	 */
-	public AssertionArgs setMessage(Supplier<String> value) {
-		messageSupplier = value;
-		return this;
-	}
-
-	/**
 	 * Sets a parameterized error message for assertion failures.
 	 *
 	 * <p>This method uses {@link MessageFormat} to substitute parameters into the message template.
@@ -237,6 +197,46 @@ public class AssertionArgs {
 	public AssertionArgs setMessage(String message, Object... args) {
 		messageSupplier = fs(message, args);
 		return this;
+	}
+
+	/**
+	 * Sets a custom error message supplier for assertion failures.
+	 *
+	 * <p>The supplier allows for dynamic message generation, including context that may only
+	 * be available at the time of assertion failure. This is useful for:</p>
+	 * <ul>
+	 *     <li><b>Timestamps:</b> Including the exact time of failure</li>
+	 *     <li><b>Test State:</b> Including runtime state information</li>
+	 *     <li><b>Expensive Operations:</b> Deferring costly string operations until needed</li>
+	 *     <li><b>Conditional Messages:</b> Different messages based on runtime conditions</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *     <jc>// Dynamic message with timestamp</jc>
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Test failed at "</js> + Instant.<jsm>now</jsm>()),
+	 *         <jv>result</jv>, <js>"status"</js>, <js>"SUCCESS"</js>);
+	 *
+	 *     <jc>// Message with expensive computation</jc>
+	 *     <jsm>assertBean</jsm>(<jsm>args</jsm>().setMessage(() -> <js>"Failed after "</js> + computeTestDuration() + <js>" ms"</js>),
+	 *         <jv>response</jv>, <js>"error"</js>, <js>"null"</js>);
+	 * </p>
+	 *
+	 * @param value The message supplier. Called only when an assertion fails.
+	 * @return This instance for method chaining.
+	 */
+	public AssertionArgs setMessage(Supplier<String> value) {
+		messageSupplier = value;
+		return this;
+	}
+
+	/**
+	 * Gets the configured bean converter, if any.
+	 *
+	 * @return An Optional containing the custom converter, or empty if using default behavior.
+	 */
+	protected Optional<BeanConverter> getBeanConverter() {
+		return ofNullable(beanConverter);
 	}
 
 	/**

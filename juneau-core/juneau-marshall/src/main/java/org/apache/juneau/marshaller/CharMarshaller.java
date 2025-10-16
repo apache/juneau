@@ -30,11 +30,6 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class CharMarshaller extends Marshaller {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final ReaderParser p;
 	private final WriterSerializer s;
 

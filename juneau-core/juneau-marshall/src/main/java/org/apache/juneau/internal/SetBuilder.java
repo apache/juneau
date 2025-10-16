@@ -66,116 +66,6 @@ public class SetBuilder<E> {
 	}
 
 	/**
-	 * Specifies the element type on this list.
-	 *
-	 * @param value The element type.
-	 * @return This object.
-	 */
-	public SetBuilder<E> elementType(Class<E> value) {
-		this.elementType = value;
-		return this;
-	}
-
-	/**
-	 * Builds the set.
-	 *
-	 * @return A set conforming to the settings on this builder.
-	 */
-	public Set<E> build() {
-		if (sparse) {
-			if (set != null && set.isEmpty())
-				set = null;
-		} else {
-			if (set == null)
-				set = new LinkedHashSet<>(0);
-		}
-		if (set != null) {
-			if (comparator != null) {
-				Set<E> s = new TreeSet<>(comparator);
-				s.addAll(set);
-				set = s;
-			}
-			if (unmodifiable)
-				set = unmodifiableSet(set);
-		}
-		return set;
-	}
-
-	/**
-	 * When specified, the {@link #build()} method will return <jk>null</jk> if the set is empty.
-	 *
-	 * <p>
-	 * Otherwise {@link #build()} will never return <jk>null</jk>.
-	 *
-	 * @return This object.
-	 */
-	public SetBuilder<E> sparse() {
-		this.sparse = true;
-		return this;
-	}
-
-	/**
-	 * When specified, {@link #build()} will return an unmodifiable set.
-	 *
-	 * @return This object.
-	 */
-	public SetBuilder<E> unmodifiable() {
-		this.unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Forces the existing set to be copied instead of appended to.
-	 *
-	 * @return This object.
-	 */
-	public SetBuilder<E> copy() {
-		if (set != null)
-			set = new LinkedHashSet<>(set);
-		return this;
-	}
-
-	/**
-	 * Converts the set into a {@link SortedSet}.
-	 *
-	 * @return This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public SetBuilder<E> sorted() {
-		return sorted((Comparator<E>)Comparator.naturalOrder());
-	}
-
-	/**
-	 * Converts the set into a {@link SortedSet} using the specified comparator.
-	 *
-	 * @param comparator The comparator to use for sorting.
-	 * @return This object.
-	 */
-	public SetBuilder<E> sorted(Comparator<E> comparator) {
-		this.comparator = comparator;
-		return this;
-	}
-
-	/**
-	 * Appends the contents of the specified collection into this set.
-	 *
-	 * <p>
-	 * This is a no-op if the value is <jk>null</jk>.
-	 *
-	 * @param value The collection to add to this set.
-	 * @return This object.
-	 */
-	public SetBuilder<E> addAll(Collection<E> value) {
-		if (value != null) {
-			if (set == null)
-				set = new LinkedHashSet<>(value);
-			else
-				set.addAll(value);
-		}
-		return this;
-	}
-
-	/**
 	 * Adds a single value to this set.
 	 *
 	 * @param value The value to add to this set.
@@ -202,13 +92,22 @@ public class SetBuilder<E> {
 	}
 
 	/**
-	 * Adds entries to this set via JSON array strings.
+	 * Appends the contents of the specified collection into this set.
 	 *
-	 * @param values The JSON array strings to parse and add to this set.
+	 * <p>
+	 * This is a no-op if the value is <jk>null</jk>.
+	 *
+	 * @param value The collection to add to this set.
 	 * @return This object.
 	 */
-	public SetBuilder<E> addJson(String...values) {
-		return addAny((Object[])values);
+	public SetBuilder<E> addAll(Collection<E> value) {
+		if (value != null) {
+			if (set == null)
+				set = new LinkedHashSet<>(value);
+			else
+				set.addAll(value);
+		}
+		return this;
 	}
 
 	/**
@@ -263,6 +162,107 @@ public class SetBuilder<E> {
 	public SetBuilder<E> addIf(boolean flag, E value) {
 		if (flag)
 			add(value);
+		return this;
+	}
+
+	/**
+	 * Adds entries to this set via JSON array strings.
+	 *
+	 * @param values The JSON array strings to parse and add to this set.
+	 * @return This object.
+	 */
+	public SetBuilder<E> addJson(String...values) {
+		return addAny((Object[])values);
+	}
+
+	/**
+	 * Builds the set.
+	 *
+	 * @return A set conforming to the settings on this builder.
+	 */
+	public Set<E> build() {
+		if (sparse) {
+			if (set != null && set.isEmpty())
+				set = null;
+		} else {
+			if (set == null)
+				set = new LinkedHashSet<>(0);
+		}
+		if (set != null) {
+			if (comparator != null) {
+				Set<E> s = new TreeSet<>(comparator);
+				s.addAll(set);
+				set = s;
+			}
+			if (unmodifiable)
+				set = unmodifiableSet(set);
+		}
+		return set;
+	}
+
+	/**
+	 * Forces the existing set to be copied instead of appended to.
+	 *
+	 * @return This object.
+	 */
+	public SetBuilder<E> copy() {
+		if (set != null)
+			set = new LinkedHashSet<>(set);
+		return this;
+	}
+
+	/**
+	 * Specifies the element type on this list.
+	 *
+	 * @param value The element type.
+	 * @return This object.
+	 */
+	public SetBuilder<E> elementType(Class<E> value) {
+		this.elementType = value;
+		return this;
+	}
+
+	/**
+	 * Converts the set into a {@link SortedSet}.
+	 *
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public SetBuilder<E> sorted() {
+		return sorted((Comparator<E>)Comparator.naturalOrder());
+	}
+
+	/**
+	 * Converts the set into a {@link SortedSet} using the specified comparator.
+	 *
+	 * @param comparator The comparator to use for sorting.
+	 * @return This object.
+	 */
+	public SetBuilder<E> sorted(Comparator<E> comparator) {
+		this.comparator = comparator;
+		return this;
+	}
+
+	/**
+	 * When specified, the {@link #build()} method will return <jk>null</jk> if the set is empty.
+	 *
+	 * <p>
+	 * Otherwise {@link #build()} will never return <jk>null</jk>.
+	 *
+	 * @return This object.
+	 */
+	public SetBuilder<E> sparse() {
+		this.sparse = true;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will return an unmodifiable set.
+	 *
+	 * @return This object.
+	 */
+	public SetBuilder<E> unmodifiable() {
+		this.unmodifiable = true;
 		return this;
 	}
 }

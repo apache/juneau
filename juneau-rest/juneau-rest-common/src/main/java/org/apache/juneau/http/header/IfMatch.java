@@ -99,13 +99,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("If-Match")
 public class IfMatch extends BasicEntityTagsHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Match";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static IfMatch of(EntityTags value) {
+		return value == null ? null : new IfMatch(value);
+	}
 
 	/**
 	 * Static creator.
@@ -117,18 +124,6 @@ public class IfMatch extends BasicEntityTagsHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static IfMatch of(String value) {
-		return value == null ? null : new IfMatch(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static IfMatch of(EntityTags value) {
 		return value == null ? null : new IfMatch(value);
 	}
 
@@ -146,10 +141,16 @@ public class IfMatch extends BasicEntityTagsHeader {
 	public static IfMatch of(Supplier<EntityTags> value) {
 		return value == null ? null : new IfMatch(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfMatch(EntityTags value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -160,17 +161,6 @@ public class IfMatch extends BasicEntityTagsHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public IfMatch(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public IfMatch(EntityTags value) {
 		super(NAME, value);
 	}
 

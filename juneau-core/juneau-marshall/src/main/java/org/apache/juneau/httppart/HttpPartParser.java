@@ -40,31 +40,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public interface HttpPartParser {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Represent "no" part parser.
-	 *
-	 * <p>
-	 * Used to represent the absence of a part parser in annotations.
-	 */
-	public interface Void extends HttpPartParser {}
-
-	/**
-	 * Instantiates a creator for a part parser.
-	 * @return A new creator.
-	 */
-	static Creator creator() {
-		return new Creator();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Creator
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * A creator for a part parser.
 	 */
@@ -75,6 +50,22 @@ public interface HttpPartParser {
 
 		Creator(Creator creator) {
 			super(creator);
+		}
+
+		/**
+		 * Associates an existing bean context builder with this part parser.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Creator beanContext(BeanContext.Builder value) {
+			builder(BeanContextable.Builder.class).ifPresent(x -> x.beanContext(value));
+			return this;
+		}
+
+		@Override
+		public Creator copy() {
+			return new Creator(this);
 		}
 
 		@Override
@@ -88,35 +79,22 @@ public interface HttpPartParser {
 			super.type(value);
 			return this;
 		}
-
-		@Override
-		public Creator copy() {
-			return new Creator(this);
-		}
-
-		/**
-		 * Associates an existing bean context builder with this part parser.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Creator beanContext(BeanContext.Builder value) {
-			builder(BeanContextable.Builder.class).ifPresent(x -> x.beanContext(value));
-			return this;
-		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Creates a new parser session.
+	 * Represent "no" part parser.
 	 *
-	 * @return A new parser session.
+	 * <p>
+	 * Used to represent the absence of a part parser in annotations.
 	 */
-	HttpPartParserSession getPartSession();
-
+	public interface Void extends HttpPartParser {}
+	/**
+	 * Instantiates a creator for a part parser.
+	 * @return A new creator.
+	 */
+	static Creator creator() {
+		return new Creator();
+	}
 	/**
 	 * Returns metadata about the specified class.
 	 *
@@ -135,4 +113,11 @@ public interface HttpPartParser {
 	 * @return Metadata about the specified class.
 	 */
 	<T> ClassMeta<T> getClassMeta(Type t, Type...args);
+
+	/**
+	 * Creates a new parser session.
+	 *
+	 * @return A new parser session.
+	 */
+	HttpPartParserSession getPartSession();
 }

@@ -88,37 +88,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public interface FileFinder {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Represents no file finder */
-	public abstract class Void implements FileFinder {}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -141,15 +110,16 @@ public interface FileFinder {
 			exclude = new Pattern[0];
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected FileFinder buildDefault() {
-			return new BasicFileFinder(this);
+		/**
+		 * Enables in-memory caching of files for quicker retrieval.
+		 *
+		 * @param cachingLimit The maximum file size in bytes.
+		 * @return This object.
+		 */
+		public Builder caching(long cachingLimit) {
+			this.cachingLimit = cachingLimit;
+			return this;
 		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Adds a class subpackage to the lookup paths.
 		 *
@@ -179,24 +149,21 @@ public interface FileFinder {
 		}
 
 		/**
-		 * Adds a file system directory to the lookup paths.
+		 * Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.
 		 *
-		 * @param path The directory path.
+		 * @param patterns
+		 * 	The regular expression exclude patterns.
+		 * 	<br>If none are specified, no files will be excluded.
 		 * @return This object.
 		 */
-		public Builder path(Path path) {
-			roots.add(new LocalDir(path));
+		public Builder exclude(String...patterns) {
+			this.exclude = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
 			return this;
 		}
 
-		/**
-		 * Enables in-memory caching of files for quicker retrieval.
-		 *
-		 * @param cachingLimit The maximum file size in bytes.
-		 * @return This object.
-		 */
-		public Builder caching(long cachingLimit) {
-			this.cachingLimit = cachingLimit;
+		@Override /* Overridden from BeanBuilder */
+		public Builder impl(Object value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -214,34 +181,47 @@ public interface FileFinder {
 		}
 
 		/**
-		 * Specifies the regular expression file name pattern to use to exclude files from being retrieved from the file source.
+		 * Adds a file system directory to the lookup paths.
 		 *
-		 * @param patterns
-		 * 	The regular expression exclude patterns.
-		 * 	<br>If none are specified, no files will be excluded.
+		 * @param path The directory path.
 		 * @return This object.
 		 */
-		public Builder exclude(String...patterns) {
-			this.exclude = alist(patterns).stream().map(Pattern::compile).toArray(Pattern[]::new);
+		public Builder path(Path path) {
+			roots.add(new LocalDir(path));
 			return this;
 		}
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected FileFinder buildDefault() {
+			return new BasicFileFinder(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/** Represents no file finder */
+	public abstract class Void implements FileFinder {}
 
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	static Builder create() {
+		return new Builder(BeanStore.INSTANCE);
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	/**
 	 * Returns the contents of the resource with the specified name.
 	 *

@@ -64,15 +64,6 @@ public class SeeOther extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public SeeOther(SeeOther copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -87,6 +78,15 @@ public class SeeOther extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public SeeOther(SeeOther copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -95,13 +95,13 @@ public class SeeOther extends BasicHttpResponse {
 		return new SeeOther(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setContent(String value) {
+	public SeeOther setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setContent(HttpEntity value) {
+	public SeeOther setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -119,14 +119,14 @@ public class SeeOther extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public SeeOther setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SeeOther setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public SeeOther setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

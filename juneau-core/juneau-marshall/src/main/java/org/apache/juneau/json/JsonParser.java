@@ -122,47 +122,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class JsonParser extends ReaderParser implements JsonMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT = new JsonParser(create());
-
-	/** Default parser, all default settings.*/
-	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default parser, strict mode. */
-	public static class Strict extends JsonParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Strict(Builder builder) {
-			super(builder.strict().validateEnd());
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -183,16 +142,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(JsonParser copyFrom) {
-			super(copyFrom);
-			validateEnd = copyFrom.validateEnd;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -200,64 +149,16 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public JsonParser build() {
-			return cache(CACHE).build(JsonParser.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				validateEnd
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Validate end.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
-		 * the stream consists of only comments or whitespace.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser.
-		 * 		.<jsm>create</jsm>()
-		 * 		.validateEnd()
-		 * 		.build();
-		 *
-		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
-		 * 	String <jv>json</jv> = <js>"{foo:'bar'}{baz:'qux'}"</js>;
-		 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder validateEnd() {
-			return validateEnd(true);
+		protected Builder(JsonParser copyFrom) {
+			super(copyFrom);
+			validateEnd = copyFrom.validateEnd;
 		}
 
-		/**
-		 * Same as {@link #validateEnd()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder validateEnd(boolean value) {
-			validateEnd = value;
-			return this;
-		}
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -271,44 +172,24 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
+		public Builder autoCloseStreams() {
+			super.autoCloseStreams();
 			return this;
 		}
-
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder autoCloseStreams(boolean value) {
+			super.autoCloseStreams(value);
 			return this;
 		}
 
@@ -367,14 +248,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -385,14 +266,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -403,14 +284,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -421,14 +302,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -453,6 +334,46 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public JsonParser build() {
+			return cache(CACHE).build(JsonParser.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder consumes(String value) {
+			super.consumes(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debugOutputLines(int value) {
+			super.debugOutputLines(value);
 			return this;
 		}
 
@@ -493,14 +414,20 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
@@ -514,6 +441,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				validateEnd
+			);
 		}
 
 		@Override /* Overridden from Builder */
@@ -537,6 +472,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -565,6 +506,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
@@ -589,14 +536,14 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -619,92 +566,8 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-			super.listener(value);
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
 			return this;
 		}
 
@@ -721,6 +584,36 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
@@ -729,6 +622,30 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		@Override /* Overridden from Builder */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -745,22 +662,80 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		/**
+		 * Validate end.
+		 *
+		 * <p>
+		 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
+		 * the stream consists of only comments or whitespace.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser.
+		 * 		.<jsm>create</jsm>()
+		 * 		.validateEnd()
+		 * 		.build();
+		 *
+		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
+		 * 	String <jv>json</jv> = <js>"{foo:'bar'}{baz:'qux'}"</js>;
+		 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder validateEnd() {
+			return validateEnd(true);
+		}
+
+		/**
+		 * Same as {@link #validateEnd()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder validateEnd(boolean value) {
+			validateEnd = value;
 			return this;
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/** Default parser, strict mode. */
+	public static class Strict extends JsonParser {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Strict(Builder builder) {
+			super(builder.strict().validateEnd());
+		}
+	}
+
+	/** Default parser, all default settings.*/
+	public static final JsonParser DEFAULT = new JsonParser(create());
+	/** Default parser, all default settings.*/
+	public static final JsonParser DEFAULT_STRICT = new JsonParser.Strict(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final boolean validateEnd;
 
 	private final Map<ClassMeta<?>,JsonClassMeta> jsonClassMetas = new ConcurrentHashMap<>();
@@ -786,25 +761,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		return JsonParserSession.create(this);
 	}
 
-	@Override /* Overridden from Context */
-	public JsonParserSession getSession() {
-		return createSession().build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from JsonMetaProvider */
-	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
-		JsonClassMeta m = jsonClassMetas.get(cm);
-		if (m == null) {
-			m = new JsonClassMeta(cm, this);
-			jsonClassMetas.put(cm, m);
-		}
-		return m;
-	}
-
 	@Override /* Overridden from JsonMetaProvider */
 	public JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
@@ -816,11 +772,20 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 		return m;
 	}
+	@Override /* Overridden from JsonMetaProvider */
+	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
+		JsonClassMeta m = jsonClassMetas.get(cm);
+		if (m == null) {
+			m = new JsonClassMeta(cm, this);
+			jsonClassMetas.put(cm, m);
+		}
+		return m;
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
+	@Override /* Overridden from Context */
+	public JsonParserSession getSession() {
+		return createSession().build();
+	}
 	/**
 	 * Validate end.
 	 *

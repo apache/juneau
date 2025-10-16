@@ -63,6 +63,15 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	}
 
 	/**
+	 * Returns the child element of this property from the {@link Xml#childName} annotation on this bean property.
+	 *
+	 * @return The child element, or <jk>null</jk> if annotation not specified.
+	 */
+	public String getChildName() {
+		return childName;
+	}
+
+	/**
 	 * Returns the XML namespace associated with this bean property.
 	 *
 	 * <p>
@@ -92,15 +101,6 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public XmlFormat getXmlFormat() {
 		return xmlFormat;
-	}
-
-	/**
-	 * Returns the child element of this property from the {@link Xml#childName} annotation on this bean property.
-	 *
-	 * @return The child element, or <jk>null</jk> if annotation not specified.
-	 */
-	public String getChildName() {
-		return childName;
 	}
 
 	private void findXmlInfo(Xml xml, AnnotationProvider mp) {

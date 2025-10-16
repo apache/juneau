@@ -135,13 +135,8 @@ public class RequestAttributes {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestAttributes addDefault(NamedAttributeMap pairs) {
-		for (NamedAttribute p : pairs.values())
-			if (sreq.getAttribute(p.getName()) == null) {
-				Object o = p.getValue();
-				sreq.setAttribute(p.getName(), o instanceof String ? vs.resolve(o) : o);
-			}
-		return this;
+	public RequestAttributes addDefault(NamedAttribute...pairs) {
+		return addDefault(alist(pairs));
 	}
 
 	/**
@@ -152,8 +147,13 @@ public class RequestAttributes {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestAttributes addDefault(NamedAttribute...pairs) {
-		return addDefault(alist(pairs));
+	public RequestAttributes addDefault(NamedAttributeMap pairs) {
+		for (NamedAttribute p : pairs.values())
+			if (sreq.getAttribute(p.getName()) == null) {
+				Object o = p.getValue();
+				sreq.setAttribute(p.getName(), o instanceof String ? vs.resolve(o) : o);
+			}
+		return this;
 	}
 
 	/**
@@ -168,28 +168,18 @@ public class RequestAttributes {
 	}
 
 	/**
-	 * Returns the request attribute with the specified name.
+	 * Returns the request attributes as a map.
 	 *
-	 * @param name The attribute name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 * @return The request attributes as a map.  Never <jk>null</jk>.
 	 */
-	public RequestAttribute get(String name) {
-		return new RequestAttribute(req, name, sreq.getAttribute(name));
-	}
-
-	/**
-	 * Returns all the attribute on this request.
-	 *
-	 * @return All the attribute on this request.
-	 */
-	public List<RequestAttribute> getAll() {
-		List<RequestAttribute> l = Utils.list();
+	public Map<String,Object> asMap() {
+		JsonMap m = new JsonMap();
 		Enumeration<String> e = sreq.getAttributeNames();
 		while (e.hasMoreElements()) {
 			String n = e.nextElement();
-			l.add(new RequestAttribute(req, n, sreq.getAttribute(n)));
+			m.put(n, sreq.getAttribute(n));
 		}
-		return l;
+		return m;
 	}
 
 	/**
@@ -221,30 +211,39 @@ public class RequestAttributes {
 	}
 
 	/**
-	 * Sets a request attribute.
+	 * Returns the request attribute with the specified name.
 	 *
-	 * @param name The attribute name.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The attribute value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object.
+	 * @param name The attribute name.
+	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
 	 */
-	public RequestAttributes set(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		sreq.setAttribute(name, value);
-		return this;
+	public RequestAttribute get(String name) {
+		return new RequestAttribute(req, name, sreq.getAttribute(name));
 	}
 
 	/**
-	 * Sets request attributes.
+	 * Returns all the attribute on this request.
 	 *
-	 * @param attributes The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return All the attribute on this request.
+	 */
+	public List<RequestAttribute> getAll() {
+		List<RequestAttribute> l = Utils.list();
+		Enumeration<String> e = sreq.getAttributeNames();
+		while (e.hasMoreElements()) {
+			String n = e.nextElement();
+			l.add(new RequestAttribute(req, n, sreq.getAttribute(n)));
+		}
+		return l;
+	}
+
+	/**
+	 * Remove request attributes.
+	 *
+	 * @param attributes The attributes to remove.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestAttributes set(NamedAttribute...attributes) {
-		Utils.assertArgNotNull("attributes", attributes);
+	public RequestAttributes remove(NamedAttribute...attributes) {
 		for (NamedAttribute p : attributes)
-			set(p);
+			remove(p.getName());
 		return this;
 	}
 
@@ -263,30 +262,31 @@ public class RequestAttributes {
 	}
 
 	/**
-	 * Remove request attributes.
+	 * Sets request attributes.
 	 *
-	 * @param attributes The attributes to remove.  Must not be <jk>null</jk>.
+	 * @param attributes The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestAttributes remove(NamedAttribute...attributes) {
+	public RequestAttributes set(NamedAttribute...attributes) {
+		Utils.assertArgNotNull("attributes", attributes);
 		for (NamedAttribute p : attributes)
-			remove(p.getName());
+			set(p);
 		return this;
 	}
 
 	/**
-	 * Returns the request attributes as a map.
+	 * Sets a request attribute.
 	 *
-	 * @return The request attributes as a map.  Never <jk>null</jk>.
+	 * @param name The attribute name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The attribute value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object.
 	 */
-	public Map<String,Object> asMap() {
-		JsonMap m = new JsonMap();
-		Enumeration<String> e = sreq.getAttributeNames();
-		while (e.hasMoreElements()) {
-			String n = e.nextElement();
-			m.put(n, sreq.getAttribute(n));
-		}
-		return m;
+	public RequestAttributes set(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		sreq.setAttribute(name, value);
+		return this;
 	}
 
 	@Override /* Overridden from Object */

@@ -97,6 +97,12 @@ public class Input extends HtmlElementVoid {
 		type(type);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Input _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-accept">accept</a> attribute.
 	 *
@@ -111,11 +117,17 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"image/png,image/jpeg"</js> - Accept specific MIME types</li>
 	 * </ul>
 	 *
-	 * @param accept File type restrictions for file uploads.
+	 * @param value File type restrictions for file uploads.
 	 * @return This object.
 	 */
 	public Input accept(String value) {
 		attr("accept", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input accesskey(String value) {
+		super.accesskey(value);
 		return this;
 	}
 
@@ -126,11 +138,23 @@ public class Input extends HtmlElementVoid {
 	 * Alternative text for image submit buttons. Used with <c>type="image"</c> to provide
 	 * accessible text when the image cannot be displayed.
 	 *
-	 * @param alt Alternative text for image submit buttons.
+	 * @param value Alternative text for image submit buttons.
 	 * @return This object.
 	 */
 	public Input alt(String value) {
 		attr("alt", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -157,7 +181,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"postal-code"</js> - Postal code</li>
 	 * </ul>
 	 *
-	 * @param autocomplete Autocomplete hint for the input field.
+	 * @param value Autocomplete hint for the input field.
 	 * @return This object.
 	 */
 	public Input autocomplete(String value) {
@@ -172,7 +196,7 @@ public class Input extends HtmlElementVoid {
 	 * Automatically focuses the form control when the page loads.
 	 * Only one element per page should have this attribute.
 	 *
-	 * @param autofocus
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -196,13 +220,25 @@ public class Input extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param checked
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Input checked(Object value) {
 		attr("checked", deminimize(value, "checked"));
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -217,7 +253,7 @@ public class Input extends HtmlElementVoid {
 	 * This is useful for forms that need to preserve text direction information when submitted.
 	 * The hidden field will contain either "ltr" or "rtl" based on the input's direction.
 	 *
-	 * @param dirname The name of the hidden field for directionality information.
+	 * @param value The name of the hidden field for directionality information.
 	 * @return This object.
 	 */
 	public Input dirname(String value) {
@@ -239,7 +275,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -259,7 +295,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this input.
+	 * @param value The ID of the form element to associate with this input.
 	 * @return This object.
 	 */
 	public Input form(String value) {
@@ -273,7 +309,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * URL to use for form submission.
 	 *
-	 * @param formaction The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Input formaction(String value) {
@@ -287,7 +323,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Form data set encoding type to use for form submission.
 	 *
-	 * @param formenctype The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Input formenctype(String value) {
@@ -301,7 +337,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * HTTP method to use for form submission.
 	 *
-	 * @param formmethod The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Input formmethod(String value) {
@@ -316,7 +352,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Bypass form control validation for form submission.
 	 *
-	 * @param formnovalidate The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Input formnovalidate(String value) {
@@ -330,7 +366,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Browsing context for form submission.
 	 *
-	 * @param formtarget The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Input formtarget(String value) {
@@ -345,13 +381,25 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Vertical dimension.
 	 *
-	 * @param height
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
 	public Input height(Object value) {
 		attr("height", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input id(String value) {
+		super.id(value);
 		return this;
 	}
 
@@ -375,11 +423,17 @@ public class Input extends HtmlElementVoid {
 	 * 	<li><js>"search"</js> - Keyboard optimized for search</li>
 	 * </ul>
 	 *
-	 * @param inputmode The input modality hint for mobile keyboards.
+	 * @param value The input modality hint for mobile keyboards.
 	 * @return This object.
 	 */
 	public Input inputmode(String value) {
 		attr("inputmode", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
@@ -390,7 +444,7 @@ public class Input extends HtmlElementVoid {
 	 * References a <c>&lt;datalist&gt;</c> element that provides predefined options
 	 * for the input field. Creates a dropdown with autocomplete suggestions.
 	 *
-	 * @param list The ID of a datalist element (without the # prefix).
+	 * @param value The ID of a datalist element (without the # prefix).
 	 * @return This object.
 	 */
 	public Input list(String value) {
@@ -404,7 +458,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Maximum value.
 	 *
-	 * @param max
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
@@ -418,7 +472,7 @@ public class Input extends HtmlElementVoid {
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-maxlength">maxlength</a> attribute.
 	 * Maximum length of value.
 	 *
-	 * @param maxlength The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
@@ -433,7 +487,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Minimum value.
 	 *
-	 * @param min
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
@@ -449,7 +503,7 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Minimum length of value.
 	 *
-	 * @param minlength
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
@@ -473,7 +527,7 @@ public class Input extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param multiple
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -489,245 +543,11 @@ public class Input extends HtmlElementVoid {
 	 * <p>
 	 * Name of form control to use for form submission and in the form.elements API.
 	 *
-	 * @param name The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Input name(String value) {
 		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern">pattern</a> attribute.
-	 *
-	 * <p>
-	 * Specifies a regular expression that the input's value must match for the form to be valid.
-	 * Works with the <c>title</c> attribute to provide user feedback.
-	 *
-	 * @param pattern A regular expression pattern (e.g., <js>"[0-9]{3}-[0-9]{3}-[0-9]{4}"</js> for phone numbers).
-	 * @return This object.
-	 */
-	public Input pattern(String value) {
-		attr("pattern", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder">placeholder</a> attribute.
-	 *
-	 * <p>
-	 * Provides a hint to the user about what to enter in the input field.
-	 * The placeholder text appears when the field is empty and disappears when the user starts typing.
-	 *
-	 * @param placeholder Hint text to display in the empty input field.
-	 * @return This object.
-	 */
-	public Input placeholder(String value) {
-		attr("placeholder", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
-	 *
-	 * <p>
-	 * Makes the input field read-only, preventing user modification while still allowing
-	 * the value to be submitted with the form.
-	 *
-	 * @param readonly If <jk>true</jk>, makes the input read-only.
-	 * @return This object.
-	 */
-	public Input readonly(Object value) {
-		attr("readonly", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
-	 *
-	 * <p>
-	 * Whether to allow the value to be edited by the user.
-	 *
-	 * @param value If <jk>true</jk>, adds <c>readonly="readonly"</c>.
-	 * @return This object.
-	 */
-	public Input readonly(boolean value) {
-		if (value)
-			value("value");
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
-	 *
-	 * <p>
-	 * Indicates that the input field must be filled out before the form can be submitted.
-	 * Browsers will show validation messages for empty required fields.
-	 *
-	 * @param required If <jk>true</jk>, makes the input required for form submission.
-	 * @return This object.
-	 */
-	public Input required(Object value) {
-		attr("required", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size">size</a> attribute.
-	 *
-	 * <p>
-	 * Size of the control.
-	 *
-	 * @param size
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Input size(Object value) {
-		attr("size", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Input src(Object value) {
-		attr("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step">step</a> attribute.
-	 *
-	 * <p>
-	 * Granularity to be matched by the form control's value.
-	 *
-	 * @param step The new value for this attribute.
-	 * @return This object.
-	 */
-	public Input step(String value) {
-		attr("step", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the type of form control to display.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"text"</js> - Single-line text input (default)</li>
-	 * 	<li><js>"password"</js> - Password input (characters are masked)</li>
-	 * 	<li><js>"email"</js> - Email address input with validation</li>
-	 * 	<li><js>"number"</js> - Numeric input with spinner controls</li>
-	 * 	<li><js>"tel"</js> - Telephone number input</li>
-	 * 	<li><js>"url"</js> - URL input with validation</li>
-	 * 	<li><js>"search"</js> - Search input field</li>
-	 * 	<li><js>"date"</js> - Date picker</li>
-	 * 	<li><js>"time"</js> - Time picker</li>
-	 * 	<li><js>"datetime-local"</js> - Date and time picker</li>
-	 * 	<li><js>"checkbox"</js> - Checkbox input</li>
-	 * 	<li><js>"radio"</js> - Radio button input</li>
-	 * 	<li><js>"file"</js> - File upload input</li>
-	 * 	<li><js>"submit"</js> - Submit button</li>
-	 * 	<li><js>"button"</js> - Generic button</li>
-	 * 	<li><js>"reset"</js> - Reset form button</li>
-	 * 	<li><js>"hidden"</js> - Hidden input field</li>
-	 * </ul>
-	 *
-	 * @param type The input type for the form control.
-	 * @return This object.
-	 */
-	public Input type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value">value</a> attribute.
-	 *
-	 * <p>
-	 * Value of the form control.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Input value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Input width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Input _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Input accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Input contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Input dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Input hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Input id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Input lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -742,7 +562,6 @@ public class Input extends HtmlElementVoid {
 		super.onblur(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Input oncancel(String value) {
 		super.oncancel(value);
@@ -1031,9 +850,130 @@ public class Input extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-pattern">pattern</a> attribute.
+	 *
+	 * <p>
+	 * Specifies a regular expression that the input's value must match for the form to be valid.
+	 * Works with the <c>title</c> attribute to provide user feedback.
+	 *
+	 * @param value A regular expression pattern (e.g., <js>"[0-9]{3}-[0-9]{3}-[0-9]{4}"</js> for phone numbers).
+	 * @return This object.
+	 */
+	public Input pattern(String value) {
+		attr("pattern", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-placeholder">placeholder</a> attribute.
+	 *
+	 * <p>
+	 * Provides a hint to the user about what to enter in the input field.
+	 * The placeholder text appears when the field is empty and disappears when the user starts typing.
+	 *
+	 * @param value Hint text to display in the empty input field.
+	 * @return This object.
+	 */
+	public Input placeholder(String value) {
+		attr("placeholder", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
+	 *
+	 * <p>
+	 * Whether to allow the value to be edited by the user.
+	 *
+	 * @param value If <jk>true</jk>, adds <c>readonly="readonly"</c>.
+	 * @return This object.
+	 */
+	public Input readonly(boolean value) {
+		if (value)
+			value("value");
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">readonly</a> attribute.
+	 *
+	 * <p>
+	 * Makes the input field read-only, preventing user modification while still allowing
+	 * the value to be submitted with the form.
+	 *
+	 * @param value If <jk>true</jk>, makes the input read-only.
+	 * @return This object.
+	 */
+	public Input readonly(Object value) {
+		attr("readonly", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-readonly">required</a> attribute.
+	 *
+	 * <p>
+	 * Indicates that the input field must be filled out before the form can be submitted.
+	 * Browsers will show validation messages for empty required fields.
+	 *
+	 * @param value If <jk>true</jk>, makes the input required for form submission.
+	 * @return This object.
+	 */
+	public Input required(Object value) {
+		attr("required", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-size">size</a> attribute.
+	 *
+	 * <p>
+	 * Size of the control.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Input size(Object value) {
+		attr("size", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Input spellcheck(Object value) {
 		super.spellcheck(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Input src(Object value) {
+		attr("src", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-step">step</a> attribute.
+	 *
+	 * <p>
+	 * Granularity to be matched by the form control's value.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Input step(String value) {
+		attr("step", value);
 		return this;
 	}
 
@@ -1061,15 +1001,71 @@ public class Input extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Input attr(String key, Object val) {
-		super.attr(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the type of form control to display.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"text"</js> - Single-line text input (default)</li>
+	 * 	<li><js>"password"</js> - Password input (characters are masked)</li>
+	 * 	<li><js>"email"</js> - Email address input with validation</li>
+	 * 	<li><js>"number"</js> - Numeric input with spinner controls</li>
+	 * 	<li><js>"tel"</js> - Telephone number input</li>
+	 * 	<li><js>"url"</js> - URL input with validation</li>
+	 * 	<li><js>"search"</js> - Search input field</li>
+	 * 	<li><js>"date"</js> - Date picker</li>
+	 * 	<li><js>"time"</js> - Time picker</li>
+	 * 	<li><js>"datetime-local"</js> - Date and time picker</li>
+	 * 	<li><js>"checkbox"</js> - Checkbox input</li>
+	 * 	<li><js>"radio"</js> - Radio button input</li>
+	 * 	<li><js>"file"</js> - File upload input</li>
+	 * 	<li><js>"submit"</js> - Submit button</li>
+	 * 	<li><js>"button"</js> - Generic button</li>
+	 * 	<li><js>"reset"</js> - Reset form button</li>
+	 * 	<li><js>"hidden"</js> - Hidden input field</li>
+	 * </ul>
+	 *
+	 * @param value The input type for the form control.
+	 * @return This object.
+	 */
+	public Input type(String value) {
+		attr("type", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Input attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-input-value">value</a> attribute.
+	 *
+	 * <p>
+	 * Value of the form control.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Input value(Object value) {
+		attr("value", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Input width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

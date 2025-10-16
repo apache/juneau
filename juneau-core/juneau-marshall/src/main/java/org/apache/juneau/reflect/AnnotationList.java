@@ -36,31 +36,6 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final Comparator<AnnotationInfo<?>> RANK_COMPARATOR = (o1, o2) -> o1.rank - o2.rank;
 
 	/**
-	 * Sort the annotations in this list based on rank.
-	 *
-	 * @return This object.
-	 */
-	public AnnotationList sort() {
-		Collections.sort(this, RANK_COMPARATOR);
-		return this;
-	}
-
-	/**
-	 * Performs an action on the specified matching values from all annotations in this list.
-	 *
-	 * @param <T> The annotation value type.
-	 * @param type The annotation value type.
-	 * @param name The annotation value name.
-	 * @param filter A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
-	 * @param action An action to perform on the value.
-	 * @return This object.
-	 */
-	public <T> AnnotationList forEachValue(Class<T> type, String name, Predicate<T> filter, Consumer<T> action) {
-		forEach(x -> x.forEachValue(type, name, filter, action));
-		return this;
-	}
-
-	/**
 	 * Performs an action on all matching annotations in this list.
 	 *
 	 * @param <A> The annotation type.
@@ -88,6 +63,31 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 */
 	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		forEach(x -> consume(filter, action, x));
+		return this;
+	}
+
+	/**
+	 * Performs an action on the specified matching values from all annotations in this list.
+	 *
+	 * @param <T> The annotation value type.
+	 * @param type The annotation value type.
+	 * @param name The annotation value name.
+	 * @param filter A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the value.
+	 * @return This object.
+	 */
+	public <T> AnnotationList forEachValue(Class<T> type, String name, Predicate<T> filter, Consumer<T> action) {
+		forEach(x -> x.forEachValue(type, name, filter, action));
+		return this;
+	}
+
+	/**
+	 * Sort the annotations in this list based on rank.
+	 *
+	 * @return This object.
+	 */
+	public AnnotationList sort() {
+		Collections.sort(this, RANK_COMPARATOR);
 		return this;
 	}
 }

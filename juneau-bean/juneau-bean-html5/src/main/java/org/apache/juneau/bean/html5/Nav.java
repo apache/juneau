@@ -103,7 +103,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#nav() nav()}
- * 		<li class='jm'>{@link HtmlBuilder#nav(Object, Object...) nav(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#nav(Object...) nav(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -128,10 +128,6 @@ public class Nav extends HtmlElementMixed {
 	public Nav(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Nav _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -141,6 +137,30 @@ public class Nav extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Nav accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Nav attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Nav attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Nav child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Nav children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -501,30 +521,6 @@ public class Nav extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Nav translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Nav child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Nav children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Nav attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Nav attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -31,39 +31,6 @@ public class HtmlElementRawText extends HtmlElement {
 
 	private Object text;
 
-	/**
-	 * Returns the inner text of this element.
-	 *
-	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
-	 */
-	@Xml(format=XmlFormat.TEXT_PWS)
-	@Beanp("c")
-	public Object getText() {
-		return text;
-	}
-
-	/**
-	 * Sets the inner text of this element.
-	 *
-	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
-	 * @return This object.
-	 */
-	@Beanp("c")
-	public HtmlElement setText(Object text) {
-		this.text = text;
-		return this;
-	}
-
-	/**
-	 * Sets the text node on this element.
-	 *
-	 * @param text The text node to add to this element.
-	 * @return This object.
-	 */
-	public HtmlElement text(Object value) {  // NOSONAR - Intentional naming.
-		this.text = value;
-		return this;
-	}
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -77,6 +44,17 @@ public class HtmlElementRawText extends HtmlElement {
 	}
 
 	@Override /* Overridden from HtmlElement */
+	public HtmlElementRawText attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementRawText attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText contenteditable(Object value) {
 		super.contenteditable(value);
 		return this;
@@ -86,6 +64,17 @@ public class HtmlElementRawText extends HtmlElement {
 	public HtmlElementRawText dir(String value) {
 		super.dir(value);
 		return this;
+	}
+
+	/**
+	 * Returns the inner text of this element.
+	 *
+	 * @return The inner text of this element, or <jk>null</jk> if no text is set.
+	 */
+	@Xml(format=XmlFormat.TEXT_PWS)
+	@Beanp("c")
+	public Object getText() {
+		return text;
 	}
 
 	@Override /* Overridden from HtmlElement */
@@ -406,6 +395,18 @@ public class HtmlElementRawText extends HtmlElement {
 		return this;
 	}
 
+	/**
+	 * Sets the inner text of this element.
+	 *
+	 * @param text The inner text of this element, or <jk>null</jk> if no text is set.
+	 * @return This object.
+	 */
+	@Beanp("c")
+	public HtmlElement setText(Object text) {
+		this.text = text;
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText spellcheck(Object value) {
 		super.spellcheck(value);
@@ -424,6 +425,17 @@ public class HtmlElementRawText extends HtmlElement {
 		return this;
 	}
 
+	/**
+	 * Sets the text node on this element.
+	 *
+	 * @param value The text node to add to this element.
+	 * @return This object.
+	 */
+	public HtmlElement text(Object value) {  // NOSONAR - Intentional naming.
+		this.text = value;
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText title(String value) {
 		super.title(value);
@@ -433,18 +445,6 @@ public class HtmlElementRawText extends HtmlElement {
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementRawText translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementRawText attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementRawText attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -367,25 +367,36 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		this.zoneOptional = zoneOptional;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the time zone on the pattern is optional.
-	 *
-	 * <p>
-	 * If it's not optional, then local dates/times must be converted into zoned times using the session time zone.
-	 * Otherwise, local date/times are fine.
-	 *
-	 * @return <jk>true</jk> if the time zone on the pattern is optional.
-	 */
-	protected boolean zoneOptional() {
-		return zoneOptional;
-	}
-
 	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, Temporal o) throws Exception {
 		if (o == null)
 			return null;
 		o = convertToSerializable(session, o);
 		return formatter.format(o);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* Overridden from ObjectSwap */
+	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
+		if (f == null)
+			return null;
+		if (hint == null)
+			hint = session.getClassMeta(Instant.class);
+		Class<? extends Temporal> tc = (Class<? extends Temporal>)hint.getInnerClass();
+
+		ZoneId offset = session.getTimeZoneId();
+
+		if (tc == Instant.class)
+			offset = Z;
+
+		Method parseMethod = findParseMethod(tc);
+
+		TemporalAccessor ta = defaulting(formatter.parse(f), offset);
+		return (Temporal)parseMethod.invoke(null, ta);
+	}
+
+	private final TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
+		return new DefaultingTemporalAccessor(t, zoneId);
 	}
 
 	/**
@@ -420,27 +431,16 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		return ZonedDateTime.from(defaulting(t, zoneId));
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override /* Overridden from ObjectSwap */
-	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
-		if (f == null)
-			return null;
-		if (hint == null)
-			hint = session.getClassMeta(Instant.class);
-		Class<? extends Temporal> tc = (Class<? extends Temporal>)hint.getInnerClass();
-
-		ZoneId offset = session.getTimeZoneId();
-
-		if (tc == Instant.class)
-			offset = Z;
-
-		Method parseMethod = findParseMethod(tc);
-
-		TemporalAccessor ta = defaulting(formatter.parse(f), offset);
-		return (Temporal)parseMethod.invoke(null, ta);
-	}
-
-	private final TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
-		return new DefaultingTemporalAccessor(t, zoneId);
+	/**
+	 * Returns <jk>true</jk> if the time zone on the pattern is optional.
+	 *
+	 * <p>
+	 * If it's not optional, then local dates/times must be converted into zoned times using the session time zone.
+	 * Otherwise, local date/times are fine.
+	 *
+	 * @return <jk>true</jk> if the time zone on the pattern is optional.
+	 */
+	protected boolean zoneOptional() {
+		return zoneOptional;
 	}
 }

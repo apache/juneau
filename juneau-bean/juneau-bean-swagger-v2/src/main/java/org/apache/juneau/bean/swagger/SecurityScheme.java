@@ -121,6 +121,23 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>scopes</property>.
+	 *
+	 * <p>
+	 * The available scopes for the OAuth2 security scheme.
+	 *
+	 * @param key The scope key.  Must not be <jk>null</jk>.
+	 * @param value The scope value.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SecurityScheme addScope(String key, String value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
+		scopes = mapBuilder(scopes).sparse().add(key, value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -130,30 +147,20 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	public SecurityScheme strict() {
-		super.strict();
-		return this;
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
+			case "description" -> toType(getDescription(), type);
+			case "flow" -> toType(getFlow(), type);
+			case "in" -> toType(getIn(), type);
+			case "name" -> toType(getName(), type);
+			case "scopes" -> toType(getScopes(), type);
+			case "tokenUrl" -> toType(getTokenUrl(), type);
+			case "type" -> toType(getType(), type);
+			default -> super.get(property, type);
+		};
 	}
-
-	/**
-	 * Sets strict mode on this bean.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
-	 * @return This object.
-	 */
-	@Override
-	public SecurityScheme strict(Object value) {
-		super.strict(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>authorizationUrl</property>.
 	 *
@@ -164,6 +171,124 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public String getAuthorizationUrl() {
 		return authorizationUrl;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description for security scheme.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>flow</property>.
+	 *
+	 * <p>
+	 * The flow used by the OAuth2 security scheme.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getFlow() {
+		return flow;
+	}
+
+	/**
+	 * Bean property getter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the API key.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getIn() {
+		return in;
+	}
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the header or query parameter to be used.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Bean property getter:  <property>scopes</property>.
+	 *
+	 * <p>
+	 * The available scopes for the OAuth2 security scheme.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,String> getScopes() {
+		return scopes;
+	}
+
+	/**
+	 * Bean property getter:  <property>tokenUrl</property>.
+	 *
+	 * <p>
+	 * The token URL to be used for this flow.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getTokenUrl() {
+		return tokenUrl;
+	}
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the security scheme.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(authorizationUrl != null, "authorizationUrl")
+			.addIf(description != null, "description")
+			.addIf(flow != null, "flow")
+			.addIf(in != null, "in")
+			.addIf(name != null, "name")
+			.addIf(scopes != null, "scopes")
+			.addIf(tokenUrl != null, "tokenUrl")
+			.addIf(type != null, "type")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public SecurityScheme set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "flow" -> setFlow(Utils.s(value));
+			case "in" -> setIn(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
+			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "tokenUrl" -> setTokenUrl(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -184,18 +309,6 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description for security scheme.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
 	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
@@ -209,18 +322,6 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>flow</property>.
-	 *
-	 * <p>
-	 * The flow used by the OAuth2 security scheme.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getFlow() {
-		return flow;
 	}
 
 	/**
@@ -247,18 +348,6 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the API key.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getIn() {
-		return in;
-	}
-
-	/**
 	 * Bean property setter:  <property>in</property>.
 	 *
 	 * <p>
@@ -280,18 +369,6 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the header or query parameter to be used.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
 	 * Bean property setter:  <property>name</property>.
 	 *
 	 * <p>
@@ -305,18 +382,6 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme setName(String value) {
 		name = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>scopes</property>.
-	 *
-	 * <p>
-	 * The available scopes for the OAuth2 security scheme.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,String> getScopes() {
-		return scopes;
 	}
 
 	/**
@@ -336,35 +401,6 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property appender:  <property>scopes</property>.
-	 *
-	 * <p>
-	 * The available scopes for the OAuth2 security scheme.
-	 *
-	 * @param key The scope key.  Must not be <jk>null</jk>.
-	 * @param value The scope value.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public SecurityScheme addScope(String key, String value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
-		scopes = mapBuilder(scopes).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>tokenUrl</property>.
-	 *
-	 * <p>
-	 * The token URL to be used for this flow.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getTokenUrl() {
-		return tokenUrl;
-	}
-
-	/**
 	 * Bean property setter:  <property>tokenUrl</property>.
 	 *
 	 * <p>
@@ -379,18 +415,6 @@ public class SecurityScheme extends SwaggerElement {
 	public SecurityScheme setTokenUrl(String value) {
 		tokenUrl = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the security scheme.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
 	}
 
 	/**
@@ -422,52 +446,23 @@ public class SecurityScheme extends SwaggerElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
-			case "description" -> toType(getDescription(), type);
-			case "flow" -> toType(getFlow(), type);
-			case "in" -> toType(getIn(), type);
-			case "name" -> toType(getName(), type);
-			case "scopes" -> toType(getScopes(), type);
-			case "tokenUrl" -> toType(getTokenUrl(), type);
-			case "type" -> toType(getType(), type);
-			default -> super.get(property, type);
-		};
+	public SecurityScheme strict() {
+		super.strict();
+		return this;
 	}
 
-	@Override /* Overridden from SwaggerElement */
-	public SecurityScheme set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "flow" -> setFlow(Utils.s(value));
-			case "in" -> setIn(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
-			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			case "tokenUrl" -> setTokenUrl(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(authorizationUrl != null, "authorizationUrl")
-			.addIf(description != null, "description")
-			.addIf(flow != null, "flow")
-			.addIf(in != null, "in")
-			.addIf(name != null, "name")
-			.addIf(scopes != null, "scopes")
-			.addIf(tokenUrl != null, "tokenUrl")
-			.addIf(type != null, "type")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public SecurityScheme strict(Object value) {
+		super.strict(value);
+		return this;
 	}
 }

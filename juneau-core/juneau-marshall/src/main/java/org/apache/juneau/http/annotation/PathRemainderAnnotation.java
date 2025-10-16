@@ -40,68 +40,45 @@ import org.apache.juneau.svl.*;
  * @since 9.2.0
  */
 public class PathRemainderAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final PathRemainder DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link PathRemainder} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Applier extends AnnotationApplier<PathRemainder,BeanContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Applier(VarResolverSession vr) {
+			super(PathRemainder.class, BeanContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<PathRemainder> ai, BeanContext.Builder b) {
+			PathRemainder a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(a);
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link PathRemainder @PathRemainder annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		PathRemainder[] value();
 	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(PathRemainder a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Finds the default value from the specified list of annotations.
-	 *
-	 * @param pi The parameter.
-	 * @return The last matching default value, or {@link Value#empty()} if not found.
-	 */
-	public static Value<String> findDef(ParamInfo pi) {
-		Value<String> n = Value.empty();
-		pi.forEachAnnotation(PathRemainder.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
-		return n;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -151,6 +128,7 @@ public class PathRemainderAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
+		@Override
 		public Builder description(String...value) {
 			this.description = value;
 			return this;
@@ -189,10 +167,6 @@ public class PathRemainderAnnotation {
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends TargetedAnnotationTImpl implements PathRemainder {
 
@@ -238,51 +212,53 @@ public class PathRemainderAnnotation {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
+	/** Default value */
+	public static final PathRemainder DEFAULT = create().build();
 
 	/**
-	 * Applies targeted {@link PathRemainder} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class Applier extends AnnotationApplier<PathRemainder,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(PathRemainder.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<PathRemainder> ai, BeanContext.Builder b) {
-			PathRemainder a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(a);
-		}
+	public static Builder create() {
+		return new Builder();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link PathRemainder @PathRemainder annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		PathRemainder[] value();
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(PathRemainder a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	/**
+	 * Finds the default value from the specified list of annotations.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching default value, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findDef(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(PathRemainder.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
+		return n;
 	}
 }

@@ -98,13 +98,13 @@ public class Continue extends BasicHttpResponse {
 		return new Continue(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public Continue setContent(String value) {
+	public Continue setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Continue setContent(HttpEntity value) {
+	public Continue setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -122,14 +122,14 @@ public class Continue extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Continue setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public Continue setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Continue setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public Continue setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

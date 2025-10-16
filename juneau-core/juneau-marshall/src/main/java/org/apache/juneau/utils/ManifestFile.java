@@ -42,50 +42,10 @@ import org.apache.juneau.common.utils.*;
  *
  * @serial exclude
  */
+@SuppressWarnings("resource")
 public class ManifestFile extends JsonMap {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Create an instance of this class from a manifest file on the file system.
-	 *
-	 * @param f The manifest file.
-	 * @throws IOException If a problem occurred while trying to read the manifest file.
-	 */
-	public ManifestFile(File f) throws IOException {
-		Manifest mf = new Manifest();
-		try (FileInputStream fis = new FileInputStream(f)) {
-			mf.read(fis);
-			load(mf);
-		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
-		}
-	}
-
-	/**
-	 * Create an instance of this class from a manifest path on the file system.
-	 *
-	 * @param path The manifest path.
-	 * @throws IOException If a problem occurred while trying to read the manifest path.
-	 */
-	public ManifestFile(Path path) throws IOException {
-		Manifest mf = new Manifest();
-		try (InputStream fis = Files.newInputStream(path)) {
-			mf.read(fis);
-			load(mf);
-		} catch (IOException e) {
-			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(path), e);
-		}
-	}
-
-	/**
-	 * Create an instance of this class from a {@link Manifest} object.
-	 *
-	 * @param f The manifest to read from.
-	 */
-	public ManifestFile(Manifest f) {
-		load(f);
-	}
 
 	/**
 	 * Finds and loads the manifest file of the jar file that the specified class is contained within.
@@ -111,16 +71,19 @@ public class ManifestFile extends JsonMap {
 	}
 
 	/**
-	 * Create an instance of this class loaded from the contents of a reader.
+	 * Create an instance of this class from a manifest file on the file system.
 	 *
-	 * <p>
-	 * Note that the input must end in a newline to pick up the last line!
-	 *
-	 * @param r The manifest file contents.
+	 * @param f The manifest file.
 	 * @throws IOException If a problem occurred while trying to read the manifest file.
 	 */
-	public ManifestFile(Reader r) throws IOException {
-		load(new Manifest(new ByteArrayInputStream(read(r).getBytes(UTF8))));
+	public ManifestFile(File f) throws IOException {
+		Manifest mf = new Manifest();
+		try (FileInputStream fis = new FileInputStream(f)) {
+			mf.read(fis);
+			load(mf);
+		} catch (IOException e) {
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
+		}
 	}
 
 	/**
@@ -136,37 +99,42 @@ public class ManifestFile extends JsonMap {
 		load(new Manifest(is));
 	}
 
-	private void load(Manifest mf) {
-		mf.getMainAttributes().forEach((k,v) -> put(k.toString(), v.toString()));
+	/**
+	 * Create an instance of this class from a {@link Manifest} object.
+	 *
+	 * @param f The manifest to read from.
+	 */
+	public ManifestFile(Manifest f) {
+		load(f);
 	}
 
-	@Override /* Overridden from Object */
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		forEach((k,v) -> sb.append(k).append(": ").append(v));
-		return sb.toString();
+	/**
+	 * Create an instance of this class from a manifest path on the file system.
+	 *
+	 * @param path The manifest path.
+	 * @throws IOException If a problem occurred while trying to read the manifest path.
+	 */
+	public ManifestFile(Path path) throws IOException {
+		Manifest mf = new Manifest();
+		try (InputStream fis = Files.newInputStream(path)) {
+			mf.read(fis);
+			load(mf);
+		} catch (IOException e) {
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(path), e);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from JsonMap */
-	public ManifestFile inner(Map<String,Object> inner) {
-		super.inner(inner);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public ManifestFile session(BeanSession session) {
-		super.session(session);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public ManifestFile append(String key, Object value) {
-		super.append(key, value);
-		return this;
+	/**
+	 * Create an instance of this class loaded from the contents of a reader.
+	 *
+	 * <p>
+	 * Note that the input must end in a newline to pick up the last line!
+	 *
+	 * @param r The manifest file contents.
+	 * @throws IOException If a problem occurred while trying to read the manifest file.
+	 */
+	public ManifestFile(Reader r) throws IOException {
+		load(new Manifest(new ByteArrayInputStream(read(r).getBytes(UTF8))));
 	}
 
 	@Override /* Overridden from JsonMap */
@@ -175,6 +143,11 @@ public class ManifestFile extends JsonMap {
 		return this;
 	}
 
+	@Override /* Overridden from JsonMap */
+	public ManifestFile append(String key, Object value) {
+		super.append(key, value);
+		return this;
+	}
 	@Override /* Overridden from JsonMap */
 	public ManifestFile appendIf(boolean flag, String key, Object value) {
 		super.appendIf(flag, key, value);
@@ -188,14 +161,14 @@ public class ManifestFile extends JsonMap {
 	}
 
 	@Override /* Overridden from JsonMap */
-	public ManifestFile keepAll(String...keys) {
-		super.keepAll(keys);
+	public ManifestFile inner(Map<String,Object> inner) {
+		super.inner(inner);
 		return this;
 	}
 
 	@Override /* Overridden from JsonMap */
-	public ManifestFile setBeanSession(BeanSession value) {
-		super.setBeanSession(value);
+	public ManifestFile keepAll(String...keys) {
+		super.keepAll(keys);
 		return this;
 	}
 
@@ -205,7 +178,30 @@ public class ManifestFile extends JsonMap {
 	}
 
 	@Override /* Overridden from JsonMap */
+	public ManifestFile session(BeanSession session) {
+		super.session(session);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile setBeanSession(BeanSession value) {
+		super.setBeanSession(value);
+		return this;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		forEach((k,v) -> sb.append(k).append(": ").append(v));
+		return sb.toString();
+	}
+
+	@Override /* Overridden from JsonMap */
 	public ManifestFile unmodifiable() {
 		return this;
+	}
+
+	private void load(Manifest mf) {
+		mf.getMainAttributes().forEach((k,v) -> put(k.toString(), v.toString()));
 	}
 }

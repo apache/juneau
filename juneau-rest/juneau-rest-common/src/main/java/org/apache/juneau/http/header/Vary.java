@@ -80,11 +80,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Vary")
 public class Vary extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Vary";
 
@@ -114,11 +109,6 @@ public class Vary extends BasicStringHeader {
 	public static Vary of(Supplier<String> value) {
 		return value == null ? null : new Vary(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

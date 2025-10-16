@@ -31,9 +31,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class UrlPath {
 
-	final String[] parts;
-	final String path;
-
 	/**
 	 * Creates a new parsed {@link UrlPath} object from the specified string.
 	 *
@@ -45,6 +42,9 @@ public class UrlPath {
 			throw new IllegalArgumentException("Invalid path specified. Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
+	final String[] parts;
+
+	final String path;
 
 	/**
 	 * Constructor.
@@ -56,15 +56,6 @@ public class UrlPath {
 		parts = path == null ? new String[0] : Utils.splita(path.substring(1), '/');
 		for (int i = 0; i < parts.length; i++)
 			parts[i] = urlDecode(parts[i]);
-	}
-
-	/**
-	 * Returns the path parts.
-	 *
-	 * @return The path parts.
-	 */
-	public String[] getParts() {
-		return parts;
 	}
 
 	/**
@@ -82,6 +73,15 @@ public class UrlPath {
 		if (p.indexOf('.') == -1)
 			return Utils.opte();
 		return Utils.opt(p);
+	}
+
+	/**
+	 * Returns the path parts.
+	 *
+	 * @return The path parts.
+	 */
+	public String[] getParts() {
+		return parts;
 	}
 
 	/**

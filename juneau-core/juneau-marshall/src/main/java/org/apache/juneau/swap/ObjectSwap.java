@@ -165,28 +165,6 @@ public abstract class ObjectSwap<T,S> {
 	}
 
 	/**
-	 * Returns additional context information for this swap.
-	 *
-	 * <p>
-	 * Typically this is going to be used to specify a template name, such as a FreeMarker template file name.
-	 *
-	 * <p>
-	 * This method can be overridden to programmatically specify a template value.
-	 *
-	 * <p>
-	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
-	 * </ul>
-	 *
-	 * @return Additional context information, or <jk>null</jk> if not specified.
-	 */
-	public String withTemplate() {
-		return null;
-	}
-
-	/**
 	 * Sets the media types that this swap is associated with.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -202,18 +180,70 @@ public abstract class ObjectSwap<T,S> {
 	}
 
 	/**
-	 * Sets the template string on this swap.
+	 * Returns the T class, the normalized form of the class.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
-	 * </ul>
-	 *
-	 * @param template The template string on this swap.
-	 * @return This object.
+	 * @return The normal form of this class.
 	 */
-	public ObjectSwap<T,?> withTemplate(String template) {
-		this.template = template;
-		return this;
+	public ClassInfo getNormalClass() {
+		return normalClassInfo;
+	}
+
+	/**
+	 * Returns the G class, the generalized form of the class.
+	 *
+	 * <p>
+	 * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple
+	 * generalized forms.
+	 *
+	 * @return The transformed form of this class.
+	 */
+	public ClassInfo getSwapClass() {
+		return swapClassInfo;
+	}
+
+	/**
+	 * Returns the {@link ClassMeta} of the transformed class type.
+	 *
+	 * <p>
+	 * This value is cached for quick lookup.
+	 *
+	 * @param session
+	 * 	The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @return The {@link ClassMeta} of the transformed class type.
+	 */
+	public ClassMeta<?> getSwapClassMeta(BeanSession session) {
+		if (swapClassMeta == null)
+			swapClassMeta = session.getClassMeta(swapClass);
+		return swapClassMeta;
+	}
+
+	/**
+	 * Checks if the specified object is an instance of the normal class defined on this swap.
+	 *
+	 * @param o The object to check.
+	 * @return
+	 * 	<jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
+	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 */
+	public boolean isNormalObject(Object o) {
+		if (o == null)
+			return false;
+		return normalClassInfo.isParentOf(o.getClass());
+	}
+
+	/**
+	 * Checks if the specified object is an instance of the swap class defined on this swap.
+	 *
+	 * @param o The object to check.
+	 * @return
+	 * 	<jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
+	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 */
+	public boolean isSwappedObject(Object o) {
+		if (o == null)
+			return false;
+		return swapClassInfo.isParentOf(o.getClass());
 	}
 
 	/**
@@ -300,6 +330,11 @@ public abstract class ObjectSwap<T,S> {
 		throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", className(this));
 	}
 
+	@Override /* Overridden from Object */
+	public String toString() {
+		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '>';
+	}
+
 	/**
 	 * If this transform is to be used to reconstitute objects that aren't true Java beans, it must implement this method.
 	 *
@@ -341,78 +376,38 @@ public abstract class ObjectSwap<T,S> {
 	}
 
 	/**
-	 * Returns the T class, the normalized form of the class.
-	 *
-	 * @return The normal form of this class.
-	 */
-	public ClassInfo getNormalClass() {
-		return normalClassInfo;
-	}
-
-	/**
-	 * Returns the G class, the generalized form of the class.
+	 * Returns additional context information for this swap.
 	 *
 	 * <p>
-	 * Subclasses must override this method if the generalized class is {@code Object}, meaning it can produce multiple
-	 * generalized forms.
-	 *
-	 * @return The transformed form of this class.
-	 */
-	public ClassInfo getSwapClass() {
-		return swapClassInfo;
-	}
-
-	/**
-	 * Returns the {@link ClassMeta} of the transformed class type.
+	 * Typically this is going to be used to specify a template name, such as a FreeMarker template file name.
 	 *
 	 * <p>
-	 * This value is cached for quick lookup.
+	 * This method can be overridden to programmatically specify a template value.
 	 *
-	 * @param session
-	 * 	The bean context to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
-	 * @return The {@link ClassMeta} of the transformed class type.
+	 * <p>
+	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
+	 * </ul>
+	 *
+	 * @return Additional context information, or <jk>null</jk> if not specified.
 	 */
-	public ClassMeta<?> getSwapClassMeta(BeanSession session) {
-		if (swapClassMeta == null)
-			swapClassMeta = session.getClassMeta(swapClass);
-		return swapClassMeta;
+	public String withTemplate() {
+		return null;
 	}
-
 	/**
-	 * Checks if the specified object is an instance of the normal class defined on this swap.
+	 * Sets the template string on this swap.
 	 *
-	 * @param o The object to check.
-	 * @return
-	 * 	<jk>true</jk> if the specified object is a subclass of the normal class defined on this transform.
-	 * 	<jk>null</jk> always return <jk>false</jk>.
-	 */
-	public boolean isNormalObject(Object o) {
-		if (o == null)
-			return false;
-		return normalClassInfo.isParentOf(o.getClass());
-	}
-
-	/**
-	 * Checks if the specified object is an instance of the swap class defined on this swap.
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
+	 * </ul>
 	 *
-	 * @param o The object to check.
-	 * @return
-	 * 	<jk>true</jk> if the specified object is a subclass of the transformed class defined on this transform.
-	 * 	<jk>null</jk> always return <jk>false</jk>.
+	 * @param template The template string on this swap.
+	 * @return This object.
 	 */
-	public boolean isSwappedObject(Object o) {
-		if (o == null)
-			return false;
-		return swapClassInfo.isParentOf(o.getClass());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '>';
+	public ObjectSwap<T,?> withTemplate(String template) {
+		this.template = template;
+		return this;
 	}
 }

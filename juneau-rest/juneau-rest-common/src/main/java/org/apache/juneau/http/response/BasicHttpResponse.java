@@ -50,24 +50,10 @@ import org.apache.juneau.http.header.*;
  */
 @BeanIgnore /* Use toString() to serialize */
 public class BasicHttpResponse implements HttpResponse {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	BasicStatusLine statusLine = new BasicStatusLine();
 	HeaderList headers = HeaderList.create();
 	HttpEntity content;
 	boolean unmodifiable;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param statusLine The HTTP status line.
-	 */
-	public BasicHttpResponse(BasicStatusLine statusLine) {
-		setStatusLine(statusLine.copy());
-	}
 
 	/**
 	 * Copy constructor.
@@ -83,6 +69,15 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Constructor.
 	 *
+	 * @param statusLine The HTTP status line.
+	 */
+	public BasicHttpResponse(BasicStatusLine statusLine) {
+		setStatusLine(statusLine.copy());
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * <p>
 	 * This is the constructor used when parsing an HTTP response.
 	 *
@@ -93,21 +88,85 @@ public class BasicHttpResponse implements HttpResponse {
 		setContent(response.getEntity());
 		setStatusLine(response.getStatusLine());
 	}
+	@Override /* Overridden from HttpMessage */
+	public void addHeader(Header value) {
+		headers.append(value);
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from HttpMessage */
+	public void addHeader(String name, String value) {
+		headers.append(name, value);
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public boolean containsHeader(String name) {
+		return headers.contains(name);
+	}
+	@Override /* Overridden from HttpMessage */
+	public Header[] getAllHeaders() {
+		return headers.getAll();
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public HttpEntity getEntity() {
+		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
+		if (content == null)
+			content = stringEntity(getStatusLine().getReasonPhrase());
+		return content;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public Header getFirstHeader(String name) {
+		return headers.getFirst(name).orElse(null);
+	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns access to the underlying builder for the headers.
 	 *
-	 * @return This object.
+	 * @return The underlying builder for the headers.
 	 */
-	public BasicHttpResponse setUnmodifiable() {
-		unmodifiable = true;
-		return this;
+	public HeaderList getHeaders() {
+		return headers;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public Header[] getHeaders(String name) {
+		return headers.getAll(name);
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public Header getLastHeader(String name) {
+		return headers.getLast(name).orElse(null);
+	}
+	@Override /* Overridden from HttpMessage */
+	public Locale getLocale() {
+		return statusLine.getLocale();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* Overridden from HttpMessage */
+	public HttpParams getParams() {
+		return null;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public ProtocolVersion getProtocolVersion() {
+		return statusLine.getProtocolVersion();
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public StatusLine getStatusLine() {
+		return statusLine;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public HeaderIterator headerIterator() {
+		return headers.headerIterator();
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public HeaderIterator headerIterator(String name) {
+		return headers.headerIterator(name);
 	}
 
 	/**
@@ -119,45 +178,159 @@ public class BasicHttpResponse implements HttpResponse {
 		return unmodifiable;
 	}
 
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+	@Override /* Overridden from HttpMessage */
+	public void removeHeader(Header value) {
+		headers.remove(value);
+	}
+	@Override /* Overridden from HttpMessage */
+	public void removeHeaders(String name) {
+		headers.remove(name);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// BasicStatusLine setters.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Sets the protocol version on the status line.
+	 * Sets the body on this response.
 	 *
-	 * <p>
-	 * If not specified, <js>"HTTP/1.1"</js> will be used.
-	 *
-	 * @param value The new value.
+	 * @param value The body on this response.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
+	public BasicHttpResponse setContent(HttpEntity value) {
 		assertModifiable();
-		statusLine = value.copy();
+		this.content = value;
 		return this;
 	}
 
 	/**
-	 * Sets the status code on the status line.
+	 * Sets the body on this response.
 	 *
-	 * <p>
-	 * If not specified, <c>0</c> will be used.
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setContent(String value) {
+		return setContent(stringEntity(value));
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setEntity(HttpEntity entity) {
+		assertModifiable();
+		this.content = entity;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setHeader(Header value) {
+		headers.set(value);
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setHeader(String name, String value) {
+		headers.set(name, value);
+	}
+
+	/**
+	 * Sets the specified header to the end of the headers in this builder.
+	 *
+	 * @param value The header to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setHeader2(Header value) {
+		headers.set(value);
+		return this;
+	}
+
+	/**
+	 * Sets the specified header to the end of the headers in this builder.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setHeader2(String name, String value) {
+		headers.set(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setHeaders(Header[] values) {
+		headers.removeAll().append(values);
+	}
+
+	/**
+	 * Sets the specified headers on this response.
 	 *
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setStatusCode2(int value) {
-		statusLine.setStatusCode(value);
+	public BasicHttpResponse setHeaders(HeaderList value) {
+		assertModifiable();
+		headers = value.copy();
 		return this;
+	}
+
+	/**
+	 * Sets the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setHeaders(List<Header> values) {
+		headers.set(values);
+		return this;
+	}
+
+	/**
+	 * Sets the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setHeaders2(Header...values) {
+		headers.set(values);
+		return this;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setLocale(Locale loc) {
+		statusLine.setLocale(loc);
+	}
+
+	/**
+	 * Sets the locale used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link Locale#getDefault()}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setLocale2(Locale value) {
+		statusLine.setLocale(value);
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setLocation(String value) {
+		headers.set(Location.of(value));
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object.
+	 */
+	public BasicHttpResponse setLocation(URI value) {
+		headers.set(Location.of(value));
+		return this;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override /* Overridden from HttpMessage */
+	public void setParams(HttpParams params) {
 	}
 
 	/**
@@ -172,6 +345,11 @@ public class BasicHttpResponse implements HttpResponse {
 	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
 		statusLine.setProtocolVersion(value);
 		return this;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setReasonPhrase(String reason) throws IllegalStateException {
+		statusLine.setReasonPhrase(reason);
 	}
 
 	/**
@@ -203,253 +381,38 @@ public class BasicHttpResponse implements HttpResponse {
 		return this;
 	}
 
+	@Override /* Overridden from HttpMessage */
+	public void setStatusCode(int code) throws IllegalStateException {
+		statusLine.setStatusCode(code);
+	}
+
 	/**
-	 * Sets the locale used to retrieve reason phrases.
+	 * Sets the status code on the status line.
 	 *
 	 * <p>
-	 * If not specified, uses {@link Locale#getDefault()}.
+	 * If not specified, <c>0</c> will be used.
 	 *
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setLocale2(Locale value) {
-		statusLine.setLocale(value);
+	public BasicHttpResponse setStatusCode2(int value) {
+		statusLine.setStatusCode(value);
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// BasicHeaderGroup setters.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns access to the underlying builder for the headers.
+	 * Sets the protocol version on the status line.
 	 *
-	 * @return The underlying builder for the headers.
-	 */
-	public HeaderList getHeaders() {
-		return headers;
-	}
-
-	/**
-	 * Sets the specified headers on this response.
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
 	 *
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	public BasicHttpResponse setHeaders(HeaderList value) {
+	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
 		assertModifiable();
-		headers = value.copy();
+		statusLine = value.copy();
 		return this;
-	}
-
-	/**
-	 * Sets the specified header to the end of the headers in this builder.
-	 *
-	 * @param value The header to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setHeader2(Header value) {
-		headers.set(value);
-		return this;
-	}
-
-	/**
-	 * Sets the specified header to the end of the headers in this builder.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setHeader2(String name, String value) {
-		headers.set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets the specified headers to the end of the headers in this builder.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setHeaders2(Header...values) {
-		headers.set(values);
-		return this;
-	}
-
-	/**
-	 * Sets the specified headers to the end of the headers in this builder.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setHeaders(List<Header> values) {
-		headers.set(values);
-		return this;
-	}
-
-	/**
-	 * Specifies the value for the <c>Location</c> header.
-	 *
-	 * @param value The new header location.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setLocation(URI value) {
-		headers.set(Location.of(value));
-		return this;
-	}
-
-	/**
-	 * Specifies the value for the <c>Location</c> header.
-	 *
-	 * @param value The new header location.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setLocation(String value) {
-		headers.set(Location.of(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Body setters.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Sets the body on this response.
-	 *
-	 * @param value The body on this response.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setContent(String value) {
-		return setContent(stringEntity(value));
-	}
-
-	/**
-	 * Sets the body on this response.
-	 *
-	 * @param value The body on this response.
-	 * @return This object.
-	 */
-	public BasicHttpResponse setContent(HttpEntity value) {
-		assertModifiable();
-		this.content = value;
-		return this;
-	}
-
-	/**
-	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
-	 *
-	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If status code is not what was expected.
-	 */
-	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		Utils.assertArgNotNull("response", response);
-		int expected = getStatusLine().getStatusCode();
-		int actual = response.getStatusLine().getStatusCode();
-		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		StringBuilder sb = new StringBuilder().append(statusLine).append(' ').append(headers);
-		if (content != null)
-			sb.append(' ').append(content);
-		return sb.toString();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() {
-		return statusLine.getProtocolVersion();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public boolean containsHeader(String name) {
-		return headers.contains(name);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header[] getHeaders(String name) {
-		return headers.getAll(name);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header getFirstHeader(String name) {
-		return headers.getFirst(name).orElse(null);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header getLastHeader(String name) {
-		return headers.getLast(name).orElse(null);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() {
-		return headers.getAll();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void addHeader(Header value) {
-		headers.append(value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void addHeader(String name, String value) {
-		headers.append(name, value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setHeader(Header value) {
-		headers.set(value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setHeader(String name, String value) {
-		headers.set(name, value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setHeaders(Header[] values) {
-		headers.removeAll().append(values);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void removeHeader(Header value) {
-		headers.remove(value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void removeHeaders(String name) {
-		headers.remove(name);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator() {
-		return headers.headerIterator();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator(String name) {
-		return headers.headerIterator(name);
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override /* Overridden from HttpMessage */
-	public HttpParams getParams() {
-		return null;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override /* Overridden from HttpMessage */
-	public void setParams(HttpParams params) {
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public StatusLine getStatusLine() {
-		return statusLine;
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setStatusLine(StatusLine value) {
-		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -463,36 +426,48 @@ public class BasicHttpResponse implements HttpResponse {
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void setStatusCode(int code) throws IllegalStateException {
-		statusLine.setStatusCode(code);
+	public void setStatusLine(StatusLine value) {
+		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public void setReasonPhrase(String reason) throws IllegalStateException {
-		statusLine.setReasonPhrase(reason);
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	public BasicHttpResponse setUnmodifiable() {
+		unmodifiable = true;
+		return this;
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public HttpEntity getEntity() {
-		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
-		if (content == null)
-			content = stringEntity(getStatusLine().getReasonPhrase());
-		return content;
+	@Override /* Overridden from Object */
+	public String toString() {
+		StringBuilder sb = new StringBuilder().append(statusLine).append(' ').append(headers);
+		if (content != null)
+			sb.append(' ').append(content);
+		return sb.toString();
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public void setEntity(HttpEntity entity) {
-		assertModifiable();
-		this.content = entity;
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public Locale getLocale() {
-		return statusLine.getLocale();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setLocale(Locale loc) {
-		statusLine.setLocale(loc);
+	/**
+	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
+	 *
+	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If status code is not what was expected.
+	 */
+	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+		Utils.assertArgNotNull("response", response);
+		int expected = getStatusLine().getStatusCode();
+		int actual = response.getStatusLine().getStatusCode();
+		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 }

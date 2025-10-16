@@ -44,50 +44,6 @@ import org.apache.juneau.serializer.*;
 public @interface SerializerConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// OutputStreamSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Binary output format.
-	 *
-	 * <p>
-	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
-	 * when converting the resulting byte array to a string.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"SPACED_HEX"</js>
-	 * 	<li><js>"HEX"</js> (default)
-	 * 	<li><js>"BASE64"</js>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String binaryFormat() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Serializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
@@ -123,7 +79,6 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
-
 	/**
 	 * Add type attribute to root nodes.
 	 *
@@ -159,6 +114,156 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String addRootType() default "";
+	/**
+	 * Binary output format.
+	 *
+	 * <p>
+	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+	 * when converting the resulting byte array to a string.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"SPACED_HEX"</js>
+	 * 	<li><js>"HEX"</js> (default)
+	 * 	<li><js>"BASE64"</js>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String binaryFormat() default "";
+
+	/**
+	 * Automatically detect POJO recursions.
+	 *
+	 * <p>
+	 * Specifies that recursions should be checked for during traversal.
+	 *
+	 * <p>
+	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
+	 * <br>In general, unchecked recursions cause stack-overflow-errors.
+	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+	 *
+	 * <p>
+	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
+	 *
+	 * <p>
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
+	 *
+	 * <p class='bjson'>
+	 * 	{A:{B:{C:<jk>null</jk>}}}
+	 * </p>
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='warn'>
+	 * 		Checking for recursion can cause a small performance penalty.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String detectRecursions() default "";
+
+	/**
+	 * File charset.
+	 *
+	 * <p>
+	 * The character set to use for writing Files to the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Format: string
+	 * 	<li class='note'>
+	 * 		"DEFAULT" can be used to indicate the JVM default file system charset.
+	 * 	<li class='note'>
+	 * 		Default: JVM system default.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li class='note'>
+	 * 		This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#fileCharset(java.nio.charset.Charset)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String fileCharset() default "";
+
+	/**
+	 * Ignore recursion errors.
+	 *
+	 * <p>
+	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
+	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String ignoreRecursions() default "";
+
+	/**
+	 * Initial depth.
+	 *
+	 * <p>
+	 * The initial indentation level at the root.
+	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Format: integer
+	 *	<li class='note'>
+	 * 		Default value: <js>"0"</js>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String initialDepth() default "";
 
 	/**
 	 * Don't trim null bean property values.
@@ -206,6 +311,88 @@ public @interface SerializerConfig {
 	Class<? extends SerializerListener> listener() default SerializerListener.Void.class;
 
 	/**
+	 * Max traversal depth.
+	 *
+	 * <p>
+	 * Abort traversal if specified depth is reached in the POJO tree.
+	 * <br>If this depth is exceeded, an exception is thrown.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Format: integer
+	 * 	<li class='note'>
+	 * 		Default value: <js>"100"</js>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String maxDepth() default "";
+
+	/**
+	 * Maximum indentation.
+	 *
+	 * <p>
+	 * Specifies the maximum indentation level in the serialized document.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Format: integer
+	 * 	<li class='note'>
+	 * 		Default: 100
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li class='note'>
+	 * 		This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String maxIndent() default "";
+
+	/**
+	 * Quote character.
+	 *
+	 * <p>
+	 * This is the character used for quoting attributes and values.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Default: <c>"</c>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li class='note'>
+	 * 		This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String quoteChar() default "";
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
+
+	/**
 	 * Sort arrays and collections alphabetically.
 	 *
 	 * <p>
@@ -231,7 +418,6 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String sortCollections() default "";
-
 	/**
 	 * Sort maps alphabetically.
 	 *
@@ -258,6 +444,34 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String sortMaps() default "";
+
+	/**
+	 * Output stream charset.
+	 *
+	 * <p>
+	 * The character set to use when writing to OutputStreams.
+	 *
+	 * <p>
+	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Format: string
+	 * 	<li class='note'>
+	 * 		Default: <js>"utf-8"</js>.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 	<li class='note'>
+	 * 		This setting does not apply to the RDF serializers.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#streamCharset(Charset)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String streamCharset() default "";
 
 	/**
 	 * Trim empty lists and arrays.
@@ -346,7 +560,6 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String trimStrings() default "";
-
 	/**
 	 * URI context bean.
 	 *
@@ -430,116 +643,6 @@ public @interface SerializerConfig {
 	 */
 	String uriResolution() default "";
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// WriterSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * File charset.
-	 *
-	 * <p>
-	 * The character set to use for writing Files to the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: string
-	 * 	<li class='note'>
-	 * 		"DEFAULT" can be used to indicate the JVM default file system charset.
-	 * 	<li class='note'>
-	 * 		Default: JVM system default.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li class='note'>
-	 * 		This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#fileCharset(java.nio.charset.Charset)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String fileCharset() default "";
-
-	/**
-	 * Maximum indentation.
-	 *
-	 * <p>
-	 * Specifies the maximum indentation level in the serialized document.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: integer
-	 * 	<li class='note'>
-	 * 		Default: 100
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li class='note'>
-	 * 		This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String maxIndent() default "";
-
-	/**
-	 * Quote character.
-	 *
-	 * <p>
-	 * This is the character used for quoting attributes and values.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Default: <c>"</c>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li class='note'>
-	 * 		This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String quoteChar() default "";
-
-	/**
-	 * Output stream charset.
-	 *
-	 * <p>
-	 * The character set to use when writing to OutputStreams.
-	 *
-	 * <p>
-	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: string
-	 * 	<li class='note'>
-	 * 		Default: <js>"utf-8"</js>.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li class='note'>
-	 * 		This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#streamCharset(Charset)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String streamCharset() default "";
-
 	/**
 	 * Use whitespace.
 	 *
@@ -563,127 +666,4 @@ public @interface SerializerConfig {
 	 * @return The annotation value.
 	 */
 	String useWhitespace() default "";
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BeanTraverseContext
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Automatically detect POJO recursions.
-	 *
-	 * <p>
-	 * Specifies that recursions should be checked for during traversal.
-	 *
-	 * <p>
-	 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
-	 * <br>In general, unchecked recursions cause stack-overflow-errors.
-	 * <br>These show up as {@link ParseException ParseExceptions} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
-	 *
-	 * <p>
-	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
-	 *
-	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
-	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
-	 *
-	 * <p class='bjson'>
-	 * 	{A:{B:{C:<jk>null</jk>}}}
-	 * </p>
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='warn'>
-	 * 		Checking for recursion can cause a small performance penalty.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String detectRecursions() default "";
-
-	/**
-	 * Ignore recursion errors.
-	 *
-	 * <p>
-	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
-	 * <br>Setting is ignored if <jsf>BEANTRAVERSE_detectRecursions</jsf> is <js>"false"</js>.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String ignoreRecursions() default "";
-
-	/**
-	 * Initial depth.
-	 *
-	 * <p>
-	 * The initial indentation level at the root.
-	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: integer
-	 *	<li class='note'>
-	 * 		Default value: <js>"0"</js>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String initialDepth() default "";
-
-	/**
-	 * Max traversal depth.
-	 *
-	 * <p>
-	 * Abort traversal if specified depth is reached in the POJO tree.
-	 * <br>If this depth is exceeded, an exception is thrown.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: integer
-	 * 	<li class='note'>
-	 * 		Default value: <js>"100"</js>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String maxDepth() default "";
 }

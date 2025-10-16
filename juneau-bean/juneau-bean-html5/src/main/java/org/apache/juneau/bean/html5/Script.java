@@ -68,7 +68,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#script() script()}
- * 		<li class='jm'>{@link HtmlBuilder#script(Object, Object...) script(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#script(String, String...) script(String, String...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -96,6 +96,18 @@ public class Script extends HtmlElementRawText {
 		type(type).text(Utils.joinnl(text));
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Script _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Script accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-async">async</a> attribute.
 	 *
@@ -110,13 +122,25 @@ public class Script extends HtmlElementRawText {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param async
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Script async(Object value) {
 		attr("async", deminimize(value, "async"));
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Script attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Script attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -135,11 +159,16 @@ public class Script extends HtmlElementRawText {
 	 * 	<li><js>"windows-1252"</js> - Windows-1252 encoding</li>
 	 * </ul>
 	 *
-	 * @param charset The character encoding of the external script resource.
+	 * @param value The character encoding of the external script resource.
 	 * @return This object.
 	 */
 	public Script charset(String value) {
 		attr("charset", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Script contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
@@ -150,7 +179,7 @@ public class Script extends HtmlElementRawText {
 	 * <p>
 	 * How the element handles cross-origin requests.
 	 *
-	 * @param crossorigin The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Script crossorigin(String value) {
@@ -172,71 +201,13 @@ public class Script extends HtmlElementRawText {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param defer
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Script defer(Object value) {
 		attr("defer", deminimize(value, "defer"));
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Script src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Type of embedded resource.
-	 *
-	 * @param type The new value for this attribute.
-	 * @return This object.
-	 */
-	public Script type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Script _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Script accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Script contenteditable(Object value) {
-		super.contenteditable(value);
 		return this;
 	}
 
@@ -570,6 +541,29 @@ public class Script extends HtmlElementRawText {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Script src(Object value) {
+		attrUri("src", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Script style(String value) {
 		super.style(value);
@@ -579,6 +573,12 @@ public class Script extends HtmlElementRawText {
 	@Override /* Overridden from HtmlElement */
 	public Script tabindex(Object value) {
 		super.tabindex(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementRawText */
+	public Script text(Object value) {
+		super.text(value);
 		return this;
 	}
 
@@ -594,21 +594,17 @@ public class Script extends HtmlElementRawText {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementRawText */
-	public Script text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Script attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Script attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-script-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Type of embedded resource.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Script type(String value) {
+		attr("type", value);
 		return this;
 	}
 }

@@ -63,10 +63,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class UriResolver {
 
-	private final UriResolution resolution;
-	private final UriRelativity relativity;
-	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
-
 	/**
 	 * Static creator.
 	 *
@@ -78,6 +74,37 @@ public class UriResolver {
 	public static UriResolver of(UriResolution resolution, UriRelativity relativity, UriContext uriContext) {
 		return new UriResolver(resolution, relativity, uriContext);
 	}
+	private static boolean hasDotSegments(String s) {
+		if (s == null)
+			return false;
+		for (int i = 0; i < s.length()-1; i++) {
+			char c = s.charAt(i);
+			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i+1) == '.'))
+				return true;
+		}
+		return false;
+	}
+	private static boolean isSpecialUri(String s) {
+		if (s == null || s.isEmpty())
+			return false;
+		char c = s.charAt(0);
+		if (c != 's' && c != 'c' && c != 'r')
+			return false;
+		return s.startsWith("servlet:") || s.startsWith("context:") || s.startsWith("request:");
+	}
+
+	private static String normalize(String s) {
+		s = URI.create(s).normalize().toString();
+		if (s.length() > 1 && s.charAt(s.length()-1) == '/')
+			s = s.substring(0, s.length()-1);
+		return s;
+	}
+
+	private final UriResolution resolution;
+
+	private final UriRelativity relativity;
+
+	private final String authority, contextRoot, servletPath, pathInfo, parentPath;
 
 	/**
 	 * Constructor.
@@ -94,75 +121,6 @@ public class UriResolver {
 		this.servletPath = uriContext.servletPath;
 		this.pathInfo = uriContext.pathInfo;
 		this.parentPath = uriContext.parentPath;
-	}
-
-	/**
-	 * Converts the specified URI to absolute form based on values in this context.
-	 *
-	 * @param uri
-	 * 	The URI to convert to absolute form.
-	 * 	Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link java.net.URI}
-	 * 		<li>{@link java.net.URL}
-	 * 		<li>{@link CharSequence}
-	 * 	</ul>
-	 * 	URI can be any of the following forms:
-	 * 	<ul>
-	 * 		<li><js>"foo://foo"</js> - Absolute URI.
-	 * 		<li><js>"/foo"</js> - Root-relative URI.
-	 * 		<li><js>"/"</js> - Root URI.
-	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI with path.
-	 * 		<li><js>"context:/"</js> - Context-root URI.
-	 * 		<li><js>"context:?foo=bar"</js> - Context-root URI with query string.
-	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI with path.
-	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
-	 * 		<li><js>"servlet:?foo=bar"</js> - Servlet-path URI with query string.
-	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI with path.
-	 * 		<li><js>"request:/"</js> - Request-path URI.
-	 * 		<li><js>"request:?foo=bar"</js> - Request-path URI with query string.
-	 * 		<li><js>"foo"</js> - Path-info-relative URI.
-	 * 		<li><js>""</js> - Path-info URI.
-	 * 	</ul>
-	 * @return The converted URI.
-	 */
-	public String resolve(Object uri) {
-		return resolve(uri, resolution);
-	}
-
-	private String resolve(Object uri, UriResolution res) {
-		String s = s(uri);
-		if (StringUtils.isAbsoluteUri(s))
-			return hasDotSegments(s) && res != NONE ? normalize(s) : s;
-		if (res == ROOT_RELATIVE && StringUtils.startsWith(s, '/'))
-			return hasDotSegments(s) ? normalize(s) : s;
-		if (res == NONE && ! isSpecialUri(s))
-			return s;
-		return append(new StringBuilder(), s).toString();
-	}
-
-	/**
-	 * Relativizes a URI.
-	 *
-	 * <p>
-	 * Similar to {@link URI#relativize(URI)}, except supports special protocols (e.g. <js>"servlet:/"</js>) for both
-	 * the <c>relativeTo</c> and <c>uri</c> parameters.
-	 *
-	 * <p>
-	 * For example, to relativize a URI to its servlet-relative form:
-	 * <p class='bjava'>
-	 * 	<jc>// relativeUri == "path/foo"</jc>
-	 * 	String <jv>relativeUri</jv> = <jv>resolver</jv>.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
-	 * </p>
-	 *
-	 * @param relativeTo The URI to relativize against.
-	 * @param uri The URI to relativize.
-	 * @return The relativized URI.
-	 */
-	public String relativize(Object relativeTo, Object uri) {
-		String r = resolve(relativeTo, ABSOLUTE);
-		String s = resolve(uri, ABSOLUTE);
-		return URI.create(r).relativize(URI.create(s)).toString();
 	}
 
 	/**
@@ -304,30 +262,72 @@ public class UriResolver {
 		}
 	}
 
-	private static boolean isSpecialUri(String s) {
-		if (s == null || s.isEmpty())
-			return false;
-		char c = s.charAt(0);
-		if (c != 's' && c != 'c' && c != 'r')
-			return false;
-		return s.startsWith("servlet:") || s.startsWith("context:") || s.startsWith("request:");
+	/**
+	 * Relativizes a URI.
+	 *
+	 * <p>
+	 * Similar to {@link URI#relativize(URI)}, except supports special protocols (e.g. <js>"servlet:/"</js>) for both
+	 * the <c>relativeTo</c> and <c>uri</c> parameters.
+	 *
+	 * <p>
+	 * For example, to relativize a URI to its servlet-relative form:
+	 * <p class='bjava'>
+	 * 	<jc>// relativeUri == "path/foo"</jc>
+	 * 	String <jv>relativeUri</jv> = <jv>resolver</jv>.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
+	 * </p>
+	 *
+	 * @param relativeTo The URI to relativize against.
+	 * @param uri The URI to relativize.
+	 * @return The relativized URI.
+	 */
+	public String relativize(Object relativeTo, Object uri) {
+		String r = resolve(relativeTo, ABSOLUTE);
+		String s = resolve(uri, ABSOLUTE);
+		return URI.create(r).relativize(URI.create(s)).toString();
 	}
 
-	private static String normalize(String s) {
-		s = URI.create(s).normalize().toString();
-		if (s.length() > 1 && s.charAt(s.length()-1) == '/')
-			s = s.substring(0, s.length()-1);
-		return s;
+	/**
+	 * Converts the specified URI to absolute form based on values in this context.
+	 *
+	 * @param uri
+	 * 	The URI to convert to absolute form.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link java.net.URI}
+	 * 		<li>{@link java.net.URL}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	URI can be any of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"foo://foo"</js> - Absolute URI.
+	 * 		<li><js>"/foo"</js> - Root-relative URI.
+	 * 		<li><js>"/"</js> - Root URI.
+	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI with path.
+	 * 		<li><js>"context:/"</js> - Context-root URI.
+	 * 		<li><js>"context:?foo=bar"</js> - Context-root URI with query string.
+	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI with path.
+	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 		<li><js>"servlet:?foo=bar"</js> - Servlet-path URI with query string.
+	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI with path.
+	 * 		<li><js>"request:/"</js> - Request-path URI.
+	 * 		<li><js>"request:?foo=bar"</js> - Request-path URI with query string.
+	 * 		<li><js>"foo"</js> - Path-info-relative URI.
+	 * 		<li><js>""</js> - Path-info URI.
+	 * 	</ul>
+	 * @return The converted URI.
+	 */
+	public String resolve(Object uri) {
+		return resolve(uri, resolution);
 	}
 
-	private static boolean hasDotSegments(String s) {
-		if (s == null)
-			return false;
-		for (int i = 0; i < s.length()-1; i++) {
-			char c = s.charAt(i);
-			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i+1) == '.'))
-				return true;
-		}
-		return false;
+	private String resolve(Object uri, UriResolution res) {
+		String s = s(uri);
+		if (StringUtils.isAbsoluteUri(s))
+			return hasDotSegments(s) && res != NONE ? normalize(s) : s;
+		if (res == ROOT_RELATIVE && StringUtils.startsWith(s, '/'))
+			return hasDotSegments(s) ? normalize(s) : s;
+		if (res == NONE && ! isSpecialUri(s))
+			return s;
+		return append(new StringBuilder(), s).toString();
 	}
 }

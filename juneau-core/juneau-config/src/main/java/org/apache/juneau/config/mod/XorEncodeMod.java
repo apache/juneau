@@ -55,6 +55,11 @@ public class XorEncodeMod extends Mod {
 	}
 
 	@Override
+	public boolean isApplied(String value) {
+		return startsWith(value, '{') && endsWith(value, '}');
+	}
+
+	@Override
 	public String remove(String value) {
 		value = value.trim();
 		value = value.substring(1, value.length()-1);
@@ -64,10 +69,5 @@ public class XorEncodeMod extends Mod {
 			b[i] = (byte)(b[i] ^ KEY.charAt(j));
 		}
 		return new String(b, UTF8);
-	}
-
-	@Override
-	public boolean isApplied(String value) {
-		return startsWith(value, '{') && endsWith(value, '}');
 	}
 }

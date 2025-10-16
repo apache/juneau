@@ -54,15 +54,20 @@ public class CharSequenceReader extends BufferedReader {
 	}
 
 	@Override /* Overridden from Reader */
-	public int read() {
-		if (next >= length)
-			return -1;
-		return cs.charAt(next++);
+	public void close() {
+		// no-op
 	}
 
 	@Override /* Overridden from Reader */
 	public boolean markSupported() {
 		return false;
+	}
+
+	@Override /* Overridden from Reader */
+	public int read() {
+		if (next >= length)
+			return -1;
+		return cs.charAt(next++);
 	}
 
 	@Override /* Overridden from Reader */
@@ -92,11 +97,6 @@ public class CharSequenceReader extends BufferedReader {
 		n = Math.max(-next, n);
 		next += n;
 		return n;
-	}
-
-	@Override /* Overridden from Reader */
-	public void close() {
-		// no-op
 	}
 
 	@Override /* Overridden from Object */

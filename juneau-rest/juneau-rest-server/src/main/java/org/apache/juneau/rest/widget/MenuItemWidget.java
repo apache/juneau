@@ -38,11 +38,17 @@ import org.apache.juneau.serializer.*;
 public abstract class MenuItemWidget extends Widget {
 
 	/**
-	 * Returns the Javascript needed for the show and hide actions of the menu item.
+	 * Optional Javascript to execute immediately after a menu item is shown.
+	 *
+	 * <p>
+	 * Same as {@link #getBeforeShowScript(RestRequest,RestResponse)} except this Javascript gets executed after the popup dialog has become visible.
+	 *
+	 * @param req The HTTP request object.
+	 * @param res The HTTP response object.
+	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
 	 */
-	@Override /* Overridden from Widget */
-	public String getScript(RestRequest req, RestResponse res) {
-		return loadScript(req, "scripts/MenuItemWidget.js");
+	public String getAfterShowScript(RestRequest req, RestResponse res) {
+		return null;
 	}
 
 	/**
@@ -96,27 +102,21 @@ public abstract class MenuItemWidget extends Widget {
 	}
 
 	/**
-	 * Optional Javascript to execute immediately after a menu item is shown.
-	 *
-	 * <p>
-	 * Same as {@link #getBeforeShowScript(RestRequest,RestResponse)} except this Javascript gets executed after the popup dialog has become visible.
+	 * The content of the popup.
 	 *
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
-	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
+	 * @return
+	 * 	The content of the popup.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Reader} - Serialized directly to the output.
+	 * 		<li>{@link CharSequence} - Serialized directly to the output.
+	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
+	 * 			<br>Note that this includes any of the {@link org.apache.juneau.bean.html5} beans.
+	 * 	</ul>
 	 */
-	public String getAfterShowScript(RestRequest req, RestResponse res) {
-		return null;
-	}
-
-	/**
-	 * Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
-	 * {@link #getHtml(RestRequest,RestResponse)} method.
-	 */
-	@Override /* Overridden from Widget */
-	public String getStyle(RestRequest req, RestResponse res) {
-		return loadStyle(req, "styles/MenuItemWidget.css");
-	}
+	public abstract Object getContent(RestRequest req, RestResponse res);
 
 	@Override /* Overridden from Widget */
 	public String getHtml(RestRequest req, RestResponse res) {
@@ -181,12 +181,6 @@ public abstract class MenuItemWidget extends Widget {
 		return sb.toString();
 	}
 
-	private Integer getId(RestRequest req) {
-		Integer id = req.getAttribute("LastMenuItemId").as(Integer.class).orElse(0) + 1;
-		req.setAttribute("LastMenuItemId", id);
-		return id;
-	}
-
 	/**
 	 * The label for the menu item as it's rendered in the menu bar.
 	 *
@@ -197,19 +191,25 @@ public abstract class MenuItemWidget extends Widget {
 	public abstract String getLabel(RestRequest req, RestResponse res);
 
 	/**
-	 * The content of the popup.
-	 *
-	 * @param req The HTTP request object.
-	 * @param res The HTTP response object.
-	 * @return
-	 * 	The content of the popup.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link Reader} - Serialized directly to the output.
-	 * 		<li>{@link CharSequence} - Serialized directly to the output.
-	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
-	 * 			<br>Note that this includes any of the {@link org.apache.juneau.bean.html5} beans.
-	 * 	</ul>
+	 * Returns the Javascript needed for the show and hide actions of the menu item.
 	 */
-	public abstract Object getContent(RestRequest req, RestResponse res);
+	@Override /* Overridden from Widget */
+	public String getScript(RestRequest req, RestResponse res) {
+		return loadScript(req, "scripts/MenuItemWidget.js");
+	}
+
+	/**
+	 * Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
+	 * {@link #getHtml(RestRequest,RestResponse)} method.
+	 */
+	@Override /* Overridden from Widget */
+	public String getStyle(RestRequest req, RestResponse res) {
+		return loadStyle(req, "styles/MenuItemWidget.css");
+	}
+
+	private Integer getId(RestRequest req) {
+		Integer id = req.getAttribute("LastMenuItemId").as(Integer.class).orElse(0) + 1;
+		req.setAttribute("LastMenuItemId", id);
+		return id;
+	}
 }

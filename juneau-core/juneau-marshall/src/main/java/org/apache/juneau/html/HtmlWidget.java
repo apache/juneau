@@ -38,13 +38,6 @@ import org.apache.juneau.svl.*;
 public interface HtmlWidget {
 
 	/**
-	 * The name for this widget.
-	 *
-	 * @return A unique identifying name for this widget.
-	 */
-	String getName();
-
-	/**
 	 * Resolves the HTML content for this widget.
 	 *
 	 * <p>
@@ -54,6 +47,13 @@ public interface HtmlWidget {
 	 * @return The HTML content of this widget.
 	 */
 	String getHtml(VarResolverSession session);
+
+	/**
+	 * The name for this widget.
+	 *
+	 * @return A unique identifying name for this widget.
+	 */
+	String getName();
 
 	/**
 	 * Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.

@@ -74,7 +74,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#data() data()}
- * 		<li class='jm'>{@link HtmlBuilder#data(Object, Object...) data(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#data(String, Object) data(String, Object)}
  * 	</ul>
  * </ul>
  * </p>
@@ -101,35 +101,38 @@ public class Data extends HtmlElementMixed {
 		value(value).child(child);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value">value</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Machine-readable value.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Data value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Data _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Data accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Data attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Data attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Data child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Data children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -493,27 +496,20 @@ public class Data extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Data child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Data children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Data attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Data attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-data-value">value</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Machine-readable value.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Data value(Object value) {
+		attr("value", value);
 		return this;
 	}
 }

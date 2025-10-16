@@ -54,35 +54,21 @@ public class UrlPathMatch {
 	}
 
 	/**
-	 * Returns a map of the path variables and values.
+	 * Returns the part of the URL that the pattern matched against.
 	 *
 	 * @return
-	 * 	An unmodifiable map of variable keys/values.
-	 * 	<br>Returns an empty map if no variables were found in the path.
+	 * The part of the URL that the pattern matched against.
+	 * <br>Can be <jk>null</jk> if nothing matched.
+	 * <br>Otherwise, always starts with <js>'/'</js>.
 	 */
-	public Map<String,String> getVars() {
-		return vars;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this match contains one or more variables.
-	 *
-	 * @return <jk>true</jk> if this match contains one or more variables.
-	 */
-	public boolean hasVars() {
-		return ! vars.isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if any of the variable values are blank.
-	 *
-	 * @return <jk>true</jk> if any of the variable values are blank.
-	 */
-	public boolean hasEmptyVars() {
-		for (String v : vars.values())
-			if (Utils.isEmpty(v))
-				return true;
-		return false;
+	public String getPrefix() {
+		int c = 0;
+		for (int j = 0; j < matchedParts; j++) {
+			c = path.indexOf('/', c+1);
+			if (c == -1)
+				c = path.length();
+		}
+		return Utils.nullIfEmpty3(path.substring(0, c));
 	}
 
 	/**
@@ -120,21 +106,35 @@ public class UrlPathMatch {
 	}
 
 	/**
-	 * Returns the part of the URL that the pattern matched against.
+	 * Returns a map of the path variables and values.
 	 *
 	 * @return
-	 * The part of the URL that the pattern matched against.
-	 * <br>Can be <jk>null</jk> if nothing matched.
-	 * <br>Otherwise, always starts with <js>'/'</js>.
+	 * 	An unmodifiable map of variable keys/values.
+	 * 	<br>Returns an empty map if no variables were found in the path.
 	 */
-	public String getPrefix() {
-		int c = 0;
-		for (int j = 0; j < matchedParts; j++) {
-			c = path.indexOf('/', c+1);
-			if (c == -1)
-				c = path.length();
-		}
-		return Utils.nullIfEmpty3(path.substring(0, c));
+	public Map<String,String> getVars() {
+		return vars;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if any of the variable values are blank.
+	 *
+	 * @return <jk>true</jk> if any of the variable values are blank.
+	 */
+	public boolean hasEmptyVars() {
+		for (String v : vars.values())
+			if (Utils.isEmpty(v))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this match contains one or more variables.
+	 *
+	 * @return <jk>true</jk> if this match contains one or more variables.
+	 */
+	public boolean hasVars() {
+		return ! vars.isEmpty();
 	}
 
 	@Override /* Overridden from Object */

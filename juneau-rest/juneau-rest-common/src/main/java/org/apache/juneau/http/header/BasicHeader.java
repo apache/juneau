@@ -52,13 +52,20 @@ import org.apache.juneau.common.utils.*;
  */
 @BeanIgnore
 public class BasicHeader implements Header, Cloneable, Serializable {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final HeaderElement[] EMPTY_HEADER_ELEMENTS = {};
+
+	/**
+	 * Static creator.
+	 *
+	 * @param o The name value pair that makes up the header name and value.
+	 * 	The parameter value.
+	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
+	 * @return A new header bean.
+	 */
+	public static BasicHeader of(NameValuePair o) {
+		return new BasicHeader(o.getName(), o.getValue());
+	}
 
 	/**
 	 * Static creator.
@@ -73,23 +80,6 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	public static BasicHeader of(String name, Object value) {
 		return value == null ? null : new BasicHeader(name, value);
 	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param o The name value pair that makes up the header name and value.
-	 * 	The parameter value.
-	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
-	 * @return A new header bean.
-	 */
-	public static BasicHeader of(NameValuePair o) {
-		return new BasicHeader(o.getName(), o.getValue());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String name;
 	private final String stringValue;
 
@@ -148,40 +138,6 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.supplier = copyFrom.supplier;
 	}
 
-	@Override /* Overridden from Header */
-	public String getName() {
-		return name;
-	}
-
-	@Override /* Overridden from Header */
-	public String getValue() {
-		if (supplier != null)
-			return Utils.s(supplier.get());
-		return stringValue;
-	}
-
-	@Override
-	public HeaderElement[] getElements() throws ParseException {
-		if (elements == null) {
-			String s = getValue();
-			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
-			if (supplier == null)
-				elements = x;
-			return x;
-		}
-		return elements;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equalsIgnoreCase(String)}.
-	 *
-	 * @param compare The value to compare against.
-	 * @return <jk>true</jk> if the specified value is the same.
-	 */
-	public boolean equalsIgnoreCase(String compare) {
-		return Utils.eqic(getValue(), compare);
-	}
-
 	/**
 	 * Provides an object for performing assertions against the name of this header.
 	 *
@@ -209,16 +165,65 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		return Utils.opt(getValue());
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		// Functionality provided for HttpRequest.removeHeader().
+		// Not a perfect equality operator if using SVL vars.
+		if (! (o instanceof Header))
+			return false;
+		return Utils.eq(this, (Header)o, (x,y)->Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
+	}
+
 	/**
-	 * Returns <jk>true</jk> if the value exists.
+	 * Returns <jk>true</jk> if the specified value is the same using {@link String#equalsIgnoreCase(String)}.
+	 *
+	 * @param compare The value to compare against.
+	 * @return <jk>true</jk> if the specified value is the same.
+	 */
+	public boolean equalsIgnoreCase(String compare) {
+		return Utils.eqic(getValue(), compare);
+	}
+
+	/**
+	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>asString().isPresent()</c>.
+	 * This is a shortcut for calling <c>asString().get()</c>.
 	 *
-	 * @return <jk>true</jk> if the value exists.
+	 * @return The value if present.
 	 */
-	public boolean isPresent() {
-		return asString().isPresent();
+	public String get() {
+		return asString().get();
+	}
+
+	@Override
+	public HeaderElement[] getElements() throws ParseException {
+		if (elements == null) {
+			String s = getValue();
+			HeaderElement[] x = s == null ? EMPTY_HEADER_ELEMENTS : BasicHeaderValueParser.parseElements(s, null);
+			if (supplier == null)
+				elements = x;
+			return x;
+		}
+		return elements;
+	}
+
+	@Override /* Overridden from Header */
+	public String getName() {
+		return name;
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		if (supplier != null)
+			return Utils.s(supplier.get());
+		return stringValue;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		// Implemented since we override equals(Object).
+		return super.hashCode();
 	}
 
 	/**
@@ -234,15 +239,15 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	}
 
 	/**
-	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
+	 * Returns <jk>true</jk> if the value exists.
 	 *
 	 * <p>
-	 * This is a shortcut for calling <c>asString().get()</c>.
+	 * This is a shortcut for calling <c>asString().isPresent()</c>.
 	 *
-	 * @return The value if present.
+	 * @return <jk>true</jk> if the value exists.
 	 */
-	public String get() {
-		return asString().get();
+	public boolean isPresent() {
+		return asString().isPresent();
 	}
 
 	/**
@@ -256,21 +261,6 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 */
 	public String orElse(String other) {
 		return asString().orElse(other);
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		// Functionality provided for HttpRequest.removeHeader().
-		// Not a perfect equality operator if using SVL vars.
-		if (! (o instanceof Header))
-			return false;
-		return Utils.eq(this, (Header)o, (x,y)->Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
-	}
-
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		// Implemented since we override equals(Object).
-		return super.hashCode();
 	}
 
 	@Override /* Overridden from Object */

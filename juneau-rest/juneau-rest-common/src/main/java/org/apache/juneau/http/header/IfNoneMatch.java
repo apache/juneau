@@ -102,13 +102,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("If-None-Match")
 public class IfNoneMatch extends BasicEntityTagsHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-None-Match";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static IfNoneMatch of(EntityTags value) {
+		return value == null ? null : new IfNoneMatch(value);
+	}
 
 	/**
 	 * Static creator.
@@ -120,18 +127,6 @@ public class IfNoneMatch extends BasicEntityTagsHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static IfNoneMatch of(String value) {
-		return value == null ? null : new IfNoneMatch(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static IfNoneMatch of(EntityTags value) {
 		return value == null ? null : new IfNoneMatch(value);
 	}
 
@@ -149,10 +144,16 @@ public class IfNoneMatch extends BasicEntityTagsHeader {
 	public static IfNoneMatch of(Supplier<EntityTags> value) {
 		return value == null ? null : new IfNoneMatch(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfNoneMatch(EntityTags value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -163,17 +164,6 @@ public class IfNoneMatch extends BasicEntityTagsHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public IfNoneMatch(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public IfNoneMatch(EntityTags value) {
 		super(NAME, value);
 	}
 

@@ -50,25 +50,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class WriterSerializerSession extends SerializerSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(WriterSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -91,9 +72,21 @@ public class WriterSerializerSession extends SerializerSession {
 			streamCharset = ctx.streamCharset;
 		}
 
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
 		@Override
 		public WriterSerializerSession build() {
 			return new WriterSerializerSession(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
 		}
 
 		/**
@@ -118,73 +111,9 @@ public class WriterSerializerSession extends SerializerSession {
 				fileCharset = value;
 			return this;
 		}
-
-		/**
-		 * Output stream charset.
-		 *
-		 * <p>
-		 * The character set to use when writing to OutputStreams.
-		 *
-		 * <p>
-		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
-		 *
-		 * <p>
-		 * If not specified, defaults to UTF-8.
-		 *
-		 * @param value
-		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder streamCharset(Charset value) {
-			if (value != null)
-				streamCharset = value;
-			return this;
-		}
-
-		/**
-		 * Use whitespace.
-		 *
-		 * <p>
-		 * If true, whitespace is added to the output to improve readability.
-		 *
-		 * @param value
-		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder useWhitespace(Boolean value) {
-			if (value != null)
-				useWhitespace = value;
-			return this;
-		}
 		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -213,20 +142,14 @@ public class WriterSerializerSession extends SerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -248,17 +171,79 @@ public class WriterSerializerSession extends SerializerSession {
 			return this;
 		}
 
+		/**
+		 * Output stream charset.
+		 *
+		 * <p>
+		 * The character set to use when writing to OutputStreams.
+		 *
+		 * <p>
+		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
+		 *
+		 * <p>
+		 * If not specified, defaults to UTF-8.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder streamCharset(Charset value) {
+			if (value != null)
+				streamCharset = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
+
+		/**
+		 * Use whitespace.
+		 *
+		 * <p>
+		 * If true, whitespace is added to the output to improve readability.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder useWhitespace(Boolean value) {
+			if (value != null)
+				useWhitespace = value;
+			return this;
+		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(WriterSerializer ctx) {
+		return new Builder(ctx);
+	}
 	private final WriterSerializer ctx;
 	private final boolean useWhitespace;
 	private final Charset streamCharset, fileCharset;
@@ -276,14 +261,27 @@ public class WriterSerializerSession extends SerializerSession {
 		useWhitespace = builder.useWhitespace;
 	}
 
-	@Override /* Overridden from SerializerSession */
-	public final boolean isWriterSerializer() {
-		return true;
+	/**
+	 * Returns the file charset defined on this session.
+	 *
+	 * @return the file charset defined on this session.
+	 */
+	public Charset getFileCharset() {
+		return fileCharset;
+	}
+
+	/**
+	 * Returns the stream charset defined on this session.
+	 *
+	 * @return the stream charset defined on this session.
+	 */
+	public Charset getStreamCharset() {
+		return streamCharset;
 	}
 
 	@Override /* Overridden from SerializerSession */
-	protected SerializerPipe createPipe(Object output) {
-		return new SerializerPipe(output, streamCharset, fileCharset);
+	public final boolean isWriterSerializer() {
+		return true;
 	}
 
 	/**
@@ -303,15 +301,15 @@ public class WriterSerializerSession extends SerializerSession {
 		}
 		return w.toString();
 	}
-
 	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		return serialize(o);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from SerializerSession */
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output, streamCharset, fileCharset);
+	}
 
 	/**
 	 * Maximum indentation.
@@ -345,29 +343,6 @@ public class WriterSerializerSession extends SerializerSession {
 	protected final boolean isUseWhitespace() {
 		return useWhitespace;
 	}
-
-	/**
-	 * Returns the file charset defined on this session.
-	 *
-	 * @return the file charset defined on this session.
-	 */
-	public Charset getFileCharset() {
-		return fileCharset;
-	}
-
-	/**
-	 * Returns the stream charset defined on this session.
-	 *
-	 * @return the stream charset defined on this session.
-	 */
-	public Charset getStreamCharset() {
-		return streamCharset;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace);

@@ -108,6 +108,31 @@ public class Xml extends OpenApiElement {
 		return new Xml(this);
 	}
 
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "namespace" -> toType(getNamespace(), type);
+			case "prefix" -> toType(getPrefix(), type);
+			case "attribute" -> toType(getAttribute(), type);
+			case "wrapped" -> toType(getWrapped(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>attribute</property>.
+	 *
+	 * <p>
+	 * Declares whether the property definition translates to an attribute instead of an element.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getAttribute() {
+		return attribute;
+	}
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -125,6 +150,94 @@ public class Xml extends OpenApiElement {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Bean property getter:  <property>namespace</property>.
+	 *
+	 * <p>
+	 * The URL of the namespace definition. Value SHOULD be in the form of a URL.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
+
+	/**
+	 * Bean property getter:  <property>prefix</property>.
+	 *
+	 * <p>
+	 * The prefix to be used for the name.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * Bean property getter:  <property>wrapped</property>.
+	 *
+	 * <p>
+	 * MAY be used only for an array definition.
+	 *
+	 * <p>
+	 * Signifies whether the array is wrapped (for example,
+	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
+	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
+	 * <br>The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
+	 * (outside the <code>items</code>).
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getWrapped() {
+		return wrapped;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(attribute != null, "attribute")
+			.addIf(name != null, "name")
+			.addIf(namespace != null, "namespace")
+			.addIf(prefix != null, "prefix")
+			.addIf(wrapped != null, "wrapped")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Xml set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "attribute" -> setAttribute(toBoolean(value));
+			case "name" -> setName(Utils.s(value));
+			case "namespace" -> setNamespace(Utils.s(value));
+			case "prefix" -> setPrefix(Utils.s(value));
+			case "wrapped" -> setWrapped(toBoolean(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>attribute</property>.
+	 *
+	 * <p>
+	 * Declares whether the property definition translates to an attribute instead of an element.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Default value is <jk>false</jk>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Xml setAttribute(Boolean value) {
+		attribute = value;
+		return this;
 	}
 
 	/**
@@ -151,18 +264,6 @@ public class Xml extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>namespace</property>.
-	 *
-	 * <p>
-	 * The URL of the namespace definition. Value SHOULD be in the form of a URL.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getNamespace() {
-		return namespace;
-	}
-
-	/**
 	 * Bean property setter:  <property>namespace</property>.
 	 *
 	 * <p>
@@ -179,18 +280,6 @@ public class Xml extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>prefix</property>.
-	 *
-	 * <p>
-	 * The prefix to be used for the name.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
-
-	/**
 	 * Bean property setter:  <property>prefix</property>.
 	 *
 	 * <p>
@@ -204,54 +293,6 @@ public class Xml extends OpenApiElement {
 	public Xml setPrefix(String value) {
 		prefix = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>attribute</property>.
-	 *
-	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getAttribute() {
-		return attribute;
-	}
-
-	/**
-	 * Bean property setter:  <property>attribute</property>.
-	 *
-	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Xml setAttribute(Boolean value) {
-		attribute = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>wrapped</property>.
-	 *
-	 * <p>
-	 * MAY be used only for an array definition.
-	 *
-	 * <p>
-	 * Signifies whether the array is wrapped (for example,
-	 * <code>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</code>) or unwrapped
-	 * (<code>&lt;book/&gt;&lt;book/&gt;</code>).
-	 * <br>The definition takes effect only when defined alongside <code>type</code> being <code>array</code>
-	 * (outside the <code>items</code>).
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getWrapped() {
-		return wrapped;
 	}
 
 	/**
@@ -275,47 +316,6 @@ public class Xml extends OpenApiElement {
 	public Xml setWrapped(Boolean value) {
 		this.wrapped = value;
 		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "name" -> toType(getName(), type);
-			case "namespace" -> toType(getNamespace(), type);
-			case "prefix" -> toType(getPrefix(), type);
-			case "attribute" -> toType(getAttribute(), type);
-			case "wrapped" -> toType(getWrapped(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Xml set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "attribute" -> setAttribute(toBoolean(value));
-			case "name" -> setName(Utils.s(value));
-			case "namespace" -> setNamespace(Utils.s(value));
-			case "prefix" -> setPrefix(Utils.s(value));
-			case "wrapped" -> setWrapped(toBoolean(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(attribute != null, "attribute")
-			.addIf(name != null, "name")
-			.addIf(namespace != null, "namespace")
-			.addIf(prefix != null, "prefix")
-			.addIf(wrapped != null, "wrapped")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

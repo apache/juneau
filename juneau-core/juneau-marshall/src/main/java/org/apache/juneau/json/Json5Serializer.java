@@ -42,33 +42,6 @@ package org.apache.juneau.json;
  * </ul>
  */
 public class Json5Serializer extends JsonSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}. */
-	public static final Json5Serializer DEFAULT = new Json5Serializer(create());
-
-	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}, sorted bean properties. */
-	public static final Json5Serializer DEFAULT_SORTED = new Json5Serializer(create().sortProperties());
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static JsonSerializer.Builder create() {
-		return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9").type(Json5Serializer.class);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default serializer, single quotes, simple mode, with whitespace. */
 	public static class Readable extends Json5Serializer {
 
@@ -82,10 +55,22 @@ public class Json5Serializer extends JsonSerializer {
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}. */
+	public static final Json5Serializer DEFAULT = new Json5Serializer(create());
 
+	/** Default serializer, single quotes, {@link JsonSerializer.Builder#simpleAttrs() simple mode}, sorted bean properties. */
+	public static final Json5Serializer DEFAULT_SORTED = new Json5Serializer(create().sortProperties());
+
+	/** Default serializer, single quotes, simple mode, with whitespace. */
+	public static final Json5Serializer DEFAULT_READABLE = new Readable(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static JsonSerializer.Builder create() {
+		return JsonSerializer.create().simpleAttrs().quoteChar('\'').produces("application/json5").accept("application/json5,text/json5,application/json;q=0.9,text/json;q=0.9").type(Json5Serializer.class);
+	}
 	/**
 	 * Constructor.
 	 *

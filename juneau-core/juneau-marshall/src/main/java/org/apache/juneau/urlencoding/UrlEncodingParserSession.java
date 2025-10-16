@@ -42,27 +42,8 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class UrlEncodingParserSession extends UonParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(UrlEncodingParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -80,14 +61,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public UrlEncodingParserSession build() {
-			return new UrlEncodingParserSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public UrlEncodingParserSession build() {
+			return new UrlEncodingParserSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -97,20 +78,20 @@ public class UrlEncodingParserSession extends UonParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder decoding(boolean value) {
+			super.decoding(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -139,26 +120,20 @@ public class UrlEncodingParserSession extends UonParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -175,28 +150,38 @@ public class UrlEncodingParserSession extends UonParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder decoding(boolean value) {
-			super.decoding(value);
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
 			return this;
 		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(UrlEncodingParser ctx) {
+		return new Builder(ctx);
+	}
 	private final UrlEncodingParser ctx;
 
 	/**
@@ -222,23 +207,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 				return true;
 		}
 		return false;
-	}
-
-	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try (UonReader r = getUonReader(pipe, true)) {
-			return parseAnything(type, r, getOuter());
-		}
-	}
-
-	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		try (UonReader r = getUonReader(pipe, true)) {
-			if (r.peekSkipWs() == '?')
-				r.read();  // NOSONAR - skip leading '?'.
-			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
-			return m;
-		}
 	}
 
 	private <T> T parseAnything(ClassMeta<T> eType, UonReader r, Object outer) throws IOException, ParseException, ExecutableException {
@@ -318,92 +286,6 @@ public class UrlEncodingParserSession extends UonParserSession {
 			setParent(eType, o, outer);
 
 		return (T)o;
-	}
-
-	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
-
-		ClassMeta<K> keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
-
-		int c = r.peekSkipWs();
-		if (c == -1)
-			return m;
-
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName end, looking for =.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Looking for & or end.
-		boolean isInEscape = false;
-
-		int state = S1;
-		int argIndex = 0;
-		K currAttr = null;
-		while (c != -1) {
-			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == -1)
-						return m;
-					r.unread();
-					Object attr = parseAttr(r, true);
-					currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
-					state = S2;
-					c = 0; // Avoid isInEscape if c was '\'
-				} else if (state == S2) {
-					if (c == '\u0002')
-						state = S3;
-					else if (c == -1 || c == '\u0001') {
-						m.put(currAttr, null);
-						if (c == -1)
-							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == '\u0001') {
-						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
-						V value = convertAttrToType(m, "", valueType);
-						m.put(currAttr, value);
-						if (c == -1)
-							return m;
-						state = S1;
-					} else  {
-						// For performance, we bypass parseAnything for string values.
-						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
-						V value = (V)(valueType.isString() ? super.parseString(r.unread(), true) : super.parseAnything(valueType, r.unread(), outer, true, null));
-
-						// If we already encountered this parameter, turn it into a list.
-						if (m.containsKey(currAttr) && valueType.isObject()) {
-							Object v2 = m.get(currAttr);
-							if (! (v2 instanceof JsonList)) {
-								v2 = new JsonList(v2).setBeanSession(this);
-								m.put(currAttr, (V)v2);
-							}
-							((JsonList)v2).add(value);
-						} else {
-							m.put(currAttr, value);
-						}
-						state = S4;
-						c = 0; // Avoid isInEscape if c was '\'
-					}
-				} else if (state == S4) {
-					if (c == '\u0001')
-						state = S1;
-					else if (c == -1) {
-						return m;
-					}
-				}
-			}
-			isInEscape = (c == '\\' && ! isInEscape);
-		}
-		if (state == S1)
-			throw new ParseException(this, "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(this, "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(this, "Dangling '=' found in object entry");
-		if (state == S4)
-			throw new ParseException(this, "Could not find end of object.");
-
-		return null; // Unreachable.
 	}
 
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
@@ -531,10 +413,117 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return null; // Unreachable.
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	private <K,V> Map<K,V> parseIntoMap2(UonReader r, Map<K,V> m, ClassMeta<?> type, Object outer) throws IOException, ParseException, ExecutableException {
 
+		ClassMeta<K> keyType = (ClassMeta<K>)(type.isArgs() || type.isCollectionOrArray() ? getClassMeta(Integer.class) : type.getKeyType());
+
+		int c = r.peekSkipWs();
+		if (c == -1)
+			return m;
+
+		final int S1=1; // Looking for attrName start.
+		final int S2=2; // Found attrName end, looking for =.
+		final int S3=3; // Found =, looking for valStart.
+		final int S4=4; // Looking for & or end.
+		boolean isInEscape = false;
+
+		int state = S1;
+		int argIndex = 0;
+		K currAttr = null;
+		while (c != -1) {
+			c = r.read();
+			if (! isInEscape) {
+				if (state == S1) {
+					if (c == -1)
+						return m;
+					r.unread();
+					Object attr = parseAttr(r, true);
+					currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
+					state = S2;
+					c = 0; // Avoid isInEscape if c was '\'
+				} else if (state == S2) {
+					if (c == '\u0002')
+						state = S3;
+					else if (c == -1 || c == '\u0001') {
+						m.put(currAttr, null);
+						if (c == -1)
+							return m;
+						state = S1;
+					}
+				} else if (state == S3) {
+					if (c == -1 || c == '\u0001') {
+						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						V value = convertAttrToType(m, "", valueType);
+						m.put(currAttr, value);
+						if (c == -1)
+							return m;
+						state = S1;
+					} else  {
+						// For performance, we bypass parseAnything for string values.
+						ClassMeta<V> valueType = (ClassMeta<V>)(type.isArgs() ? type.getArg(argIndex++) : type.isCollectionOrArray() ? type.getElementType() : type.getValueType());
+						V value = (V)(valueType.isString() ? super.parseString(r.unread(), true) : super.parseAnything(valueType, r.unread(), outer, true, null));
+
+						// If we already encountered this parameter, turn it into a list.
+						if (m.containsKey(currAttr) && valueType.isObject()) {
+							Object v2 = m.get(currAttr);
+							if (! (v2 instanceof JsonList)) {
+								v2 = new JsonList(v2).setBeanSession(this);
+								m.put(currAttr, (V)v2);
+							}
+							((JsonList)v2).add(value);
+						} else {
+							m.put(currAttr, value);
+						}
+						state = S4;
+						c = 0; // Avoid isInEscape if c was '\'
+					}
+				} else if (state == S4) {
+					if (c == '\u0001')
+						state = S1;
+					else if (c == -1) {
+						return m;
+					}
+				}
+			}
+			isInEscape = (c == '\\' && ! isInEscape);
+		}
+		if (state == S1)
+			throw new ParseException(this, "Could not find attribute name on object.");
+		if (state == S2)
+			throw new ParseException(this, "Could not find '=' following attribute name on object.");
+		if (state == S3)
+			throw new ParseException(this, "Dangling '=' found in object entry");
+		if (state == S4)
+			throw new ParseException(this, "Could not find end of object.");
+
+		return null; // Unreachable.
+	}
+
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try (UonReader r = getUonReader(pipe, true)) {
+			return parseAnything(type, r, getOuter());
+		}
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		try (UonReader r = getUonReader(pipe, true)) {
+			if (r.peekSkipWs() == '?')
+				r.read();  // NOSONAR - skip leading '?'.
+			m = parseIntoMap2(r, m, getClassMeta(Map.class, keyType, valueType), null);
+			return m;
+		}
+	}
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		return ctx.getUrlEncodingClassMeta(cm);
+	}
 	/**
 	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
@@ -545,19 +534,5 @@ public class UrlEncodingParserSession extends UonParserSession {
 	 */
 	protected final boolean isExpandedParams() {
 		return ctx.isExpandedParams();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
-		return ctx.getUrlEncodingClassMeta(cm);
 	}
 }

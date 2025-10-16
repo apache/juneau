@@ -65,90 +65,64 @@ import org.apache.juneau.reflect.*;
  */
 public class BeanMeta<T> {
 
-	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = {};
-
-	/** The target class type that this meta object describes. */
-	protected final ClassMeta<T> classMeta;
-
-	/** The target class that this meta object describes. */
-	protected final Class<T> c;
-
-	/** The properties on the target class. */
-	protected final Map<String,BeanPropertyMeta> properties;
-
-	/** The properties on the target class. */
-	protected final BeanPropertyMeta[] propertyArray;
-
-	/** The hidden properties on the target class. */
-	protected final Map<String,BeanPropertyMeta> hiddenProperties;
-
-	/** The getter properties on the target class. */
-	protected final Map<Method,String> getterProps;
-
-	/** The setter properties on the target class. */
-	protected final Map<Method,String> setterProps;
-
-	/** The bean context that created this metadata object. */
-	protected final BeanContext ctx;
-
-	/** Optional bean filter associated with the target class. */
-	protected final BeanFilter beanFilter;
-
-	/** Type variables implemented by this bean. */
-	protected final Map<Class<?>,Class<?>[]> typeVarImpls;
-
-	/** The constructor for this bean. */
-	protected final ConstructorInfo constructor;
-
-	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
-	protected final String[] constructorArgs;
-
-	// Other fields
-	final String typePropertyName;                         // "_type" property actual name.
-	private final BeanPropertyMeta typeProperty;           // "_type" mock bean property.
-	final BeanPropertyMeta dynaProperty;                   // "extras" property.
-	private final String dictionaryName;                   // The @Bean(typeName) annotation defined on this bean class.
-	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
-	final BeanRegistry beanRegistry;
-	final boolean sortProperties;
-	final boolean fluentSetters;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param classMeta The target class.
-	 * @param ctx The bean context that created this object.
-	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
-	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
-	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
+	/*
+	 * Temporary getter/setter method struct.
 	 */
-	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
-		this.classMeta = classMeta;
-		this.ctx = ctx;
-		this.c = classMeta.getInnerClass();
+	private static class BeanMethod {
+		String propertyName;
+		MethodType methodType;
+		Method method;
+		ClassInfo type;
 
-		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
-		this.notABeanReason = b.init(this);
+		BeanMethod(String propertyName, MethodType type, Method method) {
+			this.propertyName = propertyName;
+			this.methodType = type;
+			this.method = method;
+			if (type == MethodType.SETTER)
+				this.type = ClassInfo.of(method.getParameterTypes()[0]);
+			else
+				this.type = ClassInfo.of(method.getReturnType());
+		}
 
-		this.beanFilter = beanFilter;
-		this.dictionaryName = b.dictionaryName;
-		this.properties = u(b.properties);
-		this.propertyArray = properties == null ? EMPTY_PROPERTIES : Utils.array(properties.values(), BeanPropertyMeta.class);
-		this.hiddenProperties = u(b.hiddenProperties);
-		this.getterProps = u(b.getterProps);
-		this.setterProps = u(b.setterProps);
-		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = u(b.typeVarImpls);
-		this.constructor = b.constructor;
-		this.constructorArgs = b.constructorArgs;
-		this.beanRegistry = b.beanRegistry;
-		this.typePropertyName = b.typePropertyName;
-		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
-		this.sortProperties = b.sortProperties;
-		this.fluentSetters = b.fluentSetters;
+		@Override /* Overridden from Object */
+		public String toString() {
+			return method.toString();
+		}
 
-		if (sortProperties)
-			Arrays.sort(propertyArray);
+		/*
+		 * Returns true if this method matches the class type of the specified property.
+		 * Only meant to be used for setters.
+		 */
+		boolean matchesPropertyType(BeanPropertyMeta.Builder b) {
+			if (b == null)
+				return false;
+
+			// Don't do further validation if this is the "*" bean property.
+			if ("*".equals(b.name))
+				return true;
+
+			// Get the bean property type from the getter/field.
+			Class<?> pt = null;
+			if (b.getter != null)
+				pt = b.getter.getReturnType();
+			else if (b.field != null)
+				pt = b.field.getType();
+
+			// Matches if only a setter is defined.
+			if (pt == null)
+				return true;
+
+			// Doesn't match if not same type or super type as getter/field.
+			if (! type.isParentOf(pt))
+				return false;
+
+			// If a setter was previously set, only use this setter if it's a closer
+			// match (e.g. prev type is a superclass of this type).
+			if (b.setter == null)
+				return true;
+
+			return type.isStrictChildOf(b.setter.getParameterTypes()[0]);
+		}
 	}
 
 	private static class Builder<T> {
@@ -176,6 +150,42 @@ public class BeanMeta<T> {
 			this.beanFilter = beanFilter;
 			this.pNames = pNames;
 			this.implClassConstructor = implClassConstructor;
+		}
+
+		private String findDictionaryName(ClassMeta<?> cm) {
+			BeanRegistry br = cm.getBeanRegistry();
+			if (br != null) {
+				String s = br.getTypeName(this.classMeta);
+				if (s != null)
+					return s;
+			}
+			Class<?> pcm = cm.innerClass.getSuperclass();
+			if (pcm != null) {
+				String s = findDictionaryName(ctx.getClassMeta(pcm));
+				if (s != null)
+					return s;
+			}
+			for (Class<?> icm : cm.innerClass.getInterfaces()) {
+				String s = findDictionaryName(ctx.getClassMeta(icm));
+				if (s != null)
+					return s;
+			}
+			return null;
+		}
+
+		/*
+		 * Returns the property name of the specified field if it's a valid property.
+		 * Returns null if the field isn't a valid property.
+		 */
+		private String findPropertyName(Field f) {
+			List<Beanp> lp = list();
+			List<Name> ln = list();
+			ctx.forEachAnnotation(Beanp.class, f, x -> true, x -> lp.add(x));
+			ctx.forEachAnnotation(Name.class, f, x -> true, x -> ln.add(x));
+			String name = bpName(lp, ln);
+			if (isNotEmpty(name))
+				return name;
+			return propertyNamer.getPropertyName(f.getName());
 		}
 
 		String init(BeanMeta<T> beanMeta) {
@@ -509,70 +519,6 @@ public class BeanMeta<T> {
 
 			return null;
 		}
-
-		private String findDictionaryName(ClassMeta<?> cm) {
-			BeanRegistry br = cm.getBeanRegistry();
-			if (br != null) {
-				String s = br.getTypeName(this.classMeta);
-				if (s != null)
-					return s;
-			}
-			Class<?> pcm = cm.innerClass.getSuperclass();
-			if (pcm != null) {
-				String s = findDictionaryName(ctx.getClassMeta(pcm));
-				if (s != null)
-					return s;
-			}
-			for (Class<?> icm : cm.innerClass.getInterfaces()) {
-				String s = findDictionaryName(ctx.getClassMeta(icm));
-				if (s != null)
-					return s;
-			}
-			return null;
-		}
-
-		/*
-		 * Returns the property name of the specified field if it's a valid property.
-		 * Returns null if the field isn't a valid property.
-		 */
-		private String findPropertyName(Field f) {
-			List<Beanp> lp = list();
-			List<Name> ln = list();
-			ctx.forEachAnnotation(Beanp.class, f, x -> true, x -> lp.add(x));
-			ctx.forEachAnnotation(Name.class, f, x -> true, x -> ln.add(x));
-			String name = bpName(lp, ln);
-			if (isNotEmpty(name))
-				return name;
-			return propertyNamer.getPropertyName(f.getName());
-		}
-	}
-
-	/**
-	 * Returns the {@link ClassMeta} of this bean.
-	 *
-	 * @return The {@link ClassMeta} of this bean.
-	 */
-	public final ClassMeta<T> getClassMeta() {
-		return classMeta;
-	}
-
-	/**
-	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean(typeName)} annotation.
-	 *
-	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
-	 */
-	public final String getDictionaryName() {
-		return dictionaryName;
-	}
-
-	/**
-	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
-	 * dictionary name of the bean.
-	 *
-	 * @return The type name property.
-	 */
-	public final BeanPropertyMeta getTypeProperty() {
-		return typeProperty;
 	}
 
 	/**
@@ -585,64 +531,47 @@ public class BeanMeta<T> {
 		EXTRAKEYS;
 	}
 
-	/*
-	 * Temporary getter/setter method struct.
-	 */
-	private static class BeanMethod {
-		String propertyName;
-		MethodType methodType;
-		Method method;
-		ClassInfo type;
+	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = {};
 
-		BeanMethod(String propertyName, MethodType type, Method method) {
-			this.propertyName = propertyName;
-			this.methodType = type;
-			this.method = method;
-			if (type == MethodType.SETTER)
-				this.type = ClassInfo.of(method.getParameterTypes()[0]);
-			else
-				this.type = ClassInfo.of(method.getReturnType());
-		}
+	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
+		ClassInfo sc = c.getSuperclass();
+		if (sc != null && ! sc.is(stopClass))
+			forEachClass(sc, stopClass, consumer);
+		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
+		consumer.accept(c);
+	}
 
-		/*
-		 * Returns true if this method matches the class type of the specified property.
-		 * Only meant to be used for setters.
-		 */
-		boolean matchesPropertyType(BeanPropertyMeta.Builder b) {
-			if (b == null)
-				return false;
+	static final String bpName(List<Beanp> p, List<Name> n) {
+		if (p.isEmpty() && n.isEmpty())
+			return null;
+		if (! n.isEmpty())
+			return CollectionUtils.last(n).value();
 
-			// Don't do further validation if this is the "*" bean property.
-			if ("*".equals(b.name))
-				return true;
+		Value<String> name = Value.of(p.isEmpty() ? null : "");
+		p.forEach(x -> {
+			if (! x.value().isEmpty())
+				name.set(x.value());
+			if (! x.name().isEmpty())
+				name.set(x.name());
+		});
 
-			// Get the bean property type from the getter/field.
-			Class<?> pt = null;
-			if (b.getter != null)
-				pt = b.getter.getReturnType();
-			else if (b.field != null)
-				pt = b.field.getType();
+		return name.orElse(null);
+	}
 
-			// Matches if only a setter is defined.
-			if (pt == null)
-				return true;
-
-			// Doesn't match if not same type or super type as getter/field.
-			if (! type.isParentOf(pt))
-				return false;
-
-			// If a setter was previously set, only use this setter if it's a closer
-			// match (e.g. prev type is a superclass of this type).
-			if (b.setter == null)
-				return true;
-
-			return type.isStrictChildOf(b.setter.getParameterTypes()[0]);
-		}
-
-		@Override /* Overridden from Object */
-		public String toString() {
-			return method.toString();
-		}
+	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
+		List<Field> l = new LinkedList<>();
+		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
+		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
+			c2.forEachDeclaredField(
+				x -> x.isNotStatic()
+				&& (x.isNotTransient() || noIgnoreTransients)
+				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
+				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
+				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)),
+				x -> l.add(x.inner())
+			);
+		});
+		return l;
 	}
 
 	/*
@@ -763,22 +692,6 @@ public class BeanMeta<T> {
 		return l;
 	}
 
-	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
-		List<Field> l = new LinkedList<>();
-		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
-		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
-			c2.forEachDeclaredField(
-				x -> x.isNotStatic()
-				&& (x.isNotTransient() || noIgnoreTransients)
-				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
-				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)),
-				x -> l.add(x.inner())
-			);
-		});
-		return l;
-	}
-
 	static final Field findInnerBeanField(BeanContext ctx, Class<?> c, Class<?> stopClass, String name) {
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		Value<Field> value = Value.empty();
@@ -794,95 +707,6 @@ public class BeanMeta<T> {
 				value.set(f.inner());
 		});
 		return value.get();
-	}
-
-//	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
-//		LinkedList<ClassInfo> l = new LinkedList<>();
-//		forEachClass(ClassInfo.of(c), stopClass, x -> l.add(x));
-//		return l;
-//	}
-
-	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
-		ClassInfo sc = c.getSuperclass();
-		if (sc != null && ! sc.is(stopClass))
-			forEachClass(sc, stopClass, consumer);
-		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
-		consumer.accept(c);
-	}
-
-	/**
-	 * Returns the metadata on all properties associated with this bean.
-	 *
-	 * @return Metadata on all properties associated with this bean.
-	 */
-	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return u(alist(propertyArray));
-	}
-
-	/**
-	 * Performs an action on all matching properties.
-	 *
-	 * @param filter The filter to apply.
-	 * @param action The action to apply.
-	 */
-	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		for (BeanPropertyMeta x : propertyArray)
-			if (test(filter, x))
-				action.accept(x);
-	}
-
-	/**
-	 * Performs a function on the first property that matches the specified filter.
-	 *
-	 * @param <T2> The type to convert the property to.
-	 * @param filter The filter to apply.
-	 * @param function The function to apply to the matching property.
-	 * @return The result of the function.  Never <jk>null</jk>.
-	 */
-	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
-		for (BeanPropertyMeta x : propertyArray)
-			if (test(filter, x))
-				return Optional.ofNullable(function.apply(x));
-		return Optional.empty();
-	}
-
-	/**
-	 * Returns metadata about the specified property.
-	 *
-	 * @param name The name of the property on this bean.
-	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
-	 */
-	public BeanPropertyMeta getPropertyMeta(String name) {
-		BeanPropertyMeta bpm = properties.get(name);
-		if (bpm == null)
-			bpm = hiddenProperties.get(name);
-		if (bpm == null)
-			bpm = dynaProperty;
-		return bpm;
-	}
-
-	/**
-	 * Creates a new instance of this bean.
-	 *
-	 * @param outer The outer object if bean class is a non-static inner member class.
-	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 */
-	@SuppressWarnings("unchecked")
-	protected T newBean(Object outer) throws ExecutableException {
-		if (classMeta.isMemberClass()) {
-			if (constructor != null)
-				return constructor.<T>invoke(outer);
-		} else {
-			if (constructor != null)
-				return constructor.<T>invoke();
-			InvocationHandler h = classMeta.getProxyInvocationHandler();
-			if (h != null) {
-				ClassLoader cl = classMeta.innerClass.getClassLoader();
-				return (T)Proxy.newProxyInstance(cl, new Class[] { classMeta.innerClass, java.io.Serializable.class }, h);
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -948,53 +772,6 @@ public class BeanMeta<T> {
 	}
 
 	/**
-	 * Property read interceptor.
-	 *
-	 * <p>
-	 * Called immediately after calling the getter to allow the value to be overridden.
-	 *
-	 * @param bean The bean from which the property was read.
-	 * @param name The property name.
-	 * @param value The value just extracted from calling the bean getter.
-	 * @return The value to serialize.  Default is just to return the existing value.
-	 */
-	public Object onReadProperty(Object bean, String name, Object value) {
-		return beanFilter == null ? value : beanFilter.readProperty(bean, name, value);
-	}
-
-	/**
-	 * Property write interceptor.
-	 *
-	 * <p>
-	 * Called immediately before calling theh setter to allow value to be overwridden.
-	 *
-	 * @param bean The bean from which the property was read.
-	 * @param name The property name.
-	 * @param value The value just parsed.
-	 * @return The value to serialize.  Default is just to return the existing value.
-	 */
-	public Object onWriteProperty(Object bean, String name, Object value) {
-		return beanFilter == null ? value : beanFilter.writeProperty(bean, name, value);
-	}
-
-	static final String bpName(List<Beanp> p, List<Name> n) {
-		if (p.isEmpty() && n.isEmpty())
-			return null;
-		if (! n.isEmpty())
-			return CollectionUtils.last(n).value();
-
-		Value<String> name = Value.of(p.isEmpty() ? null : "");
-		p.forEach(x -> {
-			if (! x.value().isEmpty())
-				name.set(x.value());
-			if (! x.name().isEmpty())
-				name.set(x.name());
-		});
-
-		return name.orElse(null);
-	}
-
-	/**
 	 * Finds @Beanp and @Name annotations from parent methods if this method overrides a parent.
 	 * This ensures that property names are inherited from parent methods, preventing duplicate
 	 * property definitions when a child overrides a @Beanp-annotated parent method.
@@ -1051,6 +828,215 @@ public class BeanMeta<T> {
 		}
 	}
 
+	/** The target class type that this meta object describes. */
+	protected final ClassMeta<T> classMeta;
+
+	/** The target class that this meta object describes. */
+	protected final Class<T> c;
+
+	/** The properties on the target class. */
+	protected final Map<String,BeanPropertyMeta> properties;
+	/** The properties on the target class. */
+	protected final BeanPropertyMeta[] propertyArray;
+	/** The hidden properties on the target class. */
+	protected final Map<String,BeanPropertyMeta> hiddenProperties;
+	/** The getter properties on the target class. */
+	protected final Map<Method,String> getterProps;
+	/** The setter properties on the target class. */
+	protected final Map<Method,String> setterProps;
+	/** The bean context that created this metadata object. */
+	protected final BeanContext ctx;
+	/** Optional bean filter associated with the target class. */
+	protected final BeanFilter beanFilter;
+	/** Type variables implemented by this bean. */
+	protected final Map<Class<?>,Class<?>[]> typeVarImpls;
+
+	/** The constructor for this bean. */
+	protected final ConstructorInfo constructor;
+
+	/** For beans with constructors with Beanc annotation, this is the list of constructor arg properties. */
+	protected final String[] constructorArgs;
+
+	// Other fields
+	final String typePropertyName;                         // "_type" property actual name.
+
+	private final BeanPropertyMeta typeProperty;           // "_type" mock bean property.
+
+	final BeanPropertyMeta dynaProperty;                   // "extras" property.
+
+	private final String dictionaryName;                   // The @Bean(typeName) annotation defined on this bean class.
+
+	final String notABeanReason;                           // Readable string explaining why this class wasn't a bean.
+
+	final BeanRegistry beanRegistry;
+
+	final boolean sortProperties;
+
+	final boolean fluentSetters;
+
+//	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
+//		LinkedList<ClassInfo> l = new LinkedList<>();
+//		forEachClass(ClassInfo.of(c), stopClass, x -> l.add(x));
+//		return l;
+//	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param classMeta The target class.
+	 * @param ctx The bean context that created this object.
+	 * @param beanFilter Optional bean filter associated with the target class.  Can be <jk>null</jk>.
+	 * @param pNames Explicit list of property names and order of properties.  If <jk>null</jk>, determine automatically.
+	 * @param implClassConstructor The constructor to use if one cannot be found.  Can be <jk>null</jk>.
+	 */
+	protected BeanMeta(final ClassMeta<T> classMeta, BeanContext ctx, BeanFilter beanFilter, String[] pNames, ConstructorInfo implClassConstructor) {
+		this.classMeta = classMeta;
+		this.ctx = ctx;
+		this.c = classMeta.getInnerClass();
+
+		Builder<T> b = new Builder<>(classMeta, ctx, beanFilter, pNames, implClassConstructor);
+		this.notABeanReason = b.init(this);
+
+		this.beanFilter = beanFilter;
+		this.dictionaryName = b.dictionaryName;
+		this.properties = u(b.properties);
+		this.propertyArray = properties == null ? EMPTY_PROPERTIES : Utils.array(properties.values(), BeanPropertyMeta.class);
+		this.hiddenProperties = u(b.hiddenProperties);
+		this.getterProps = u(b.getterProps);
+		this.setterProps = u(b.setterProps);
+		this.dynaProperty = b.dynaProperty;
+		this.typeVarImpls = u(b.typeVarImpls);
+		this.constructor = b.constructor;
+		this.constructorArgs = b.constructorArgs;
+		this.beanRegistry = b.beanRegistry;
+		this.typePropertyName = b.typePropertyName;
+		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
+		this.sortProperties = b.sortProperties;
+		this.fluentSetters = b.fluentSetters;
+
+		if (sortProperties)
+			Arrays.sort(propertyArray);
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->Utils.eq(x.classMeta, y.classMeta));
+	}
+
+	/**
+	 * Performs a function on the first property that matches the specified filter.
+	 *
+	 * @param <T2> The type to convert the property to.
+	 * @param filter The filter to apply.
+	 * @param function The function to apply to the matching property.
+	 * @return The result of the function.  Never <jk>null</jk>.
+	 */
+	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
+		for (BeanPropertyMeta x : propertyArray)
+			if (test(filter, x))
+				return Optional.ofNullable(function.apply(x));
+		return Optional.empty();
+	}
+
+	/**
+	 * Performs an action on all matching properties.
+	 *
+	 * @param filter The filter to apply.
+	 * @param action The action to apply.
+	 */
+	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
+		for (BeanPropertyMeta x : propertyArray)
+			if (test(filter, x))
+				action.accept(x);
+	}
+
+	/**
+	 * Returns the {@link ClassMeta} of this bean.
+	 *
+	 * @return The {@link ClassMeta} of this bean.
+	 */
+	public final ClassMeta<T> getClassMeta() {
+		return classMeta;
+	}
+
+	/**
+	 * Returns the dictionary name for this bean as defined through the {@link Bean#typeName() @Bean(typeName)} annotation.
+	 *
+	 * @return The dictionary name for this bean, or <jk>null</jk> if it has no dictionary name defined.
+	 */
+	public final String getDictionaryName() {
+		return dictionaryName;
+	}
+
+	/**
+	 * Returns metadata about the specified property.
+	 *
+	 * @param name The name of the property on this bean.
+	 * @return The metadata about the property, or <jk>null</jk> if no such property exists on this bean.
+	 */
+	public BeanPropertyMeta getPropertyMeta(String name) {
+		BeanPropertyMeta bpm = properties.get(name);
+		if (bpm == null)
+			bpm = hiddenProperties.get(name);
+		if (bpm == null)
+			bpm = dynaProperty;
+		return bpm;
+	}
+
+	/**
+	 * Returns the metadata on all properties associated with this bean.
+	 *
+	 * @return Metadata on all properties associated with this bean.
+	 */
+	public Collection<BeanPropertyMeta> getPropertyMetas() {
+		return u(alist(propertyArray));
+	}
+
+	/**
+	 * Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
+	 * dictionary name of the bean.
+	 *
+	 * @return The type name property.
+	 */
+	public final BeanPropertyMeta getTypeProperty() {
+		return typeProperty;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return classMeta.hashCode();
+	}
+
+	/**
+	 * Property read interceptor.
+	 *
+	 * <p>
+	 * Called immediately after calling the getter to allow the value to be overridden.
+	 *
+	 * @param bean The bean from which the property was read.
+	 * @param name The property name.
+	 * @param value The value just extracted from calling the bean getter.
+	 * @return The value to serialize.  Default is just to return the existing value.
+	 */
+	public Object onReadProperty(Object bean, String name, Object value) {
+		return beanFilter == null ? value : beanFilter.readProperty(bean, name, value);
+	}
+
+	/**
+	 * Property write interceptor.
+	 *
+	 * <p>
+	 * Called immediately before calling theh setter to allow value to be overwridden.
+	 *
+	 * @param bean The bean from which the property was read.
+	 * @param name The property name.
+	 * @param value The value just parsed.
+	 * @return The value to serialize.  Default is just to return the existing value.
+	 */
+	public Object onWriteProperty(Object bean, String name, Object value) {
+		return beanFilter == null ? value : beanFilter.writeProperty(bean, name, value);
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder(c.getName());
@@ -1061,13 +1047,27 @@ public class BeanMeta<T> {
 		return sb.toString();
 	}
 
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return classMeta.hashCode();
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->Utils.eq(x.classMeta, y.classMeta));
+	/**
+	 * Creates a new instance of this bean.
+	 *
+	 * @param outer The outer object if bean class is a non-static inner member class.
+	 * @return A new instance of this bean if possible, or <jk>null</jk> if not.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	@SuppressWarnings("unchecked")
+	protected T newBean(Object outer) throws ExecutableException {
+		if (classMeta.isMemberClass()) {
+			if (constructor != null)
+				return constructor.<T>invoke(outer);
+		} else {
+			if (constructor != null)
+				return constructor.<T>invoke();
+			InvocationHandler h = classMeta.getProxyInvocationHandler();
+			if (h != null) {
+				ClassLoader cl = classMeta.innerClass.getClassLoader();
+				return (T)Proxy.newProxyInstance(cl, new Class[] { classMeta.innerClass, java.io.Serializable.class }, h);
+			}
+		}
+		return null;
 	}
 }

@@ -46,13 +46,9 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 		this.thrown = thrown;
 	}
 
-	/**
-	 * Returns the bean property metadata.
-	 *
-	 * @return The bean property metadata.
-	 */
-	public final BeanPropertyMeta getMeta() {
-		return pMeta;
+	@Override /* Overridden from Comparable */
+	public int compareTo(BeanPropertyValue o) {
+		return name.compareTo(o.name);
 	}
 
 	/**
@@ -65,21 +61,21 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	}
 
 	/**
+	 * Returns the bean property metadata.
+	 *
+	 * @return The bean property metadata.
+	 */
+	public final BeanPropertyMeta getMeta() {
+		return pMeta;
+	}
+
+	/**
 	 * Returns the bean property name.
 	 *
 	 * @return The bean property name.
 	 */
 	public final String getName() {
 		return name;
-	}
-
-	/**
-	 * Returns the bean property value.
-	 *
-	 * @return The bean property value.
-	 */
-	public final Object getValue() {
-		return value;
 	}
 
 	/**
@@ -91,9 +87,13 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 		return thrown;
 	}
 
-	@Override /* Overridden from Comparable */
-	public int compareTo(BeanPropertyValue o) {
-		return name.compareTo(o.name);
+	/**
+	 * Returns the bean property value.
+	 *
+	 * @return The bean property value.
+	 */
+	public final Object getValue() {
+		return value;
 	}
 
 	@Override /* Overridden from Object */

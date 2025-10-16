@@ -31,6 +31,25 @@ import org.apache.juneau.svl.*;
 public class MsgPackConfigAnnotation {
 
 	/**
+	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.msgpack.MsgPackParser.Builder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParser.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(MsgPackConfig.class, MsgPackParser.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParser.Builder b) {
+		}
+	}
+
+	/**
 	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.msgpack.MsgPackSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<MsgPackConfig,MsgPackSerializer.Builder> {
@@ -49,25 +68,6 @@ public class MsgPackConfigAnnotation {
 			MsgPackConfig a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesMsgPack(x));
-		}
-	}
-
-	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.msgpack.MsgPackParser.Builder}.
-	 */
-	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParser.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public ParserApply(VarResolverSession vr) {
-			super(MsgPackConfig.class, MsgPackParser.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackParser.Builder b) {
 		}
 	}
 }

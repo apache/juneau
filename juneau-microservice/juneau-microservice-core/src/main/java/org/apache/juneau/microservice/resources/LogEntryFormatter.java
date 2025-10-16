@@ -48,10 +48,20 @@ import org.apache.juneau.common.utils.*;
  */
 public class LogEntryFormatter extends Formatter {
 
+	private static String hashCode(Throwable t) {
+		int i = 0;
+		while (t != null) {
+			for (StackTraceElement e : t.getStackTrace())
+				i ^= e.hashCode();
+			t = t.getCause();
+		}
+		return Integer.toHexString(i);
+	}
 	private ConcurrentHashMap<String,AtomicInteger> hashes;
 	private DateFormat df;
 	private String format;
 	private Pattern rePattern;
+
 	private Map<String,Integer> fieldIndexes;
 
 	/**
@@ -186,13 +196,36 @@ public class LogEntryFormatter extends Formatter {
 		fieldIndexes = mapFrom(fieldIndexes);
 	}
 
-	/**
-	 * Returns the regular expression pattern used for matching log entries.
-	 *
-	 * @return The regular expression pattern used for matching log entries.
-	 */
-	public Pattern getLogEntryPattern() {
-		return rePattern;
+	@SuppressWarnings("deprecation")
+	@Override /* Overridden from Formatter */
+	public String format(LogRecord r) {
+		String msg = formatMessage(r);
+		Throwable t = r.getThrown();
+		String hash = null;
+		int c = 0;
+		if (hashes != null && t != null) {
+			hash = hashCode(t);
+			hashes.putIfAbsent(hash, new AtomicInteger(0));
+			c = hashes.get(hash).incrementAndGet();
+			if (c == 1) {
+				msg = '[' + hash + '.' + c + "] " + msg;
+			} else {
+				msg = '[' + hash + '.' + c + "] " + msg + ", " + t.getLocalizedMessage();
+				t = null;
+			}
+		}
+		String s = String.format(format,
+			df.format(new Date(r.getMillis())),
+			r.getSourceClassName(),
+			r.getSourceMethodName(),
+			r.getLoggerName(),
+			r.getLevel(),
+			msg,
+			r.getThreadID(),
+			r.getThrown() == null ? "" : r.getThrown().getMessage());
+		if (t != null)
+			s += String.format("%n%s", ThrowableUtils.getStackTrace(r.getThrown()));
+		return s;
 	}
 
 	/**
@@ -229,44 +262,12 @@ public class LogEntryFormatter extends Formatter {
 		return (i == null ? null : m.group(i));
 	}
 
-	@Override /* Overridden from Formatter */
-	public String format(LogRecord r) {
-		String msg = formatMessage(r);
-		Throwable t = r.getThrown();
-		String hash = null;
-		int c = 0;
-		if (hashes != null && t != null) {
-			hash = hashCode(t);
-			hashes.putIfAbsent(hash, new AtomicInteger(0));
-			c = hashes.get(hash).incrementAndGet();
-			if (c == 1) {
-				msg = '[' + hash + '.' + c + "] " + msg;
-			} else {
-				msg = '[' + hash + '.' + c + "] " + msg + ", " + t.getLocalizedMessage();
-				t = null;
-			}
-		}
-		String s = String.format(format,
-			df.format(new Date(r.getMillis())),
-			r.getSourceClassName(),
-			r.getSourceMethodName(),
-			r.getLoggerName(),
-			r.getLevel(),
-			msg,
-			r.getThreadID(),
-			r.getThrown() == null ? "" : r.getThrown().getMessage());
-		if (t != null)
-			s += String.format("%n%s", ThrowableUtils.getStackTrace(r.getThrown()));
-		return s;
-	}
-
-	private static String hashCode(Throwable t) {
-		int i = 0;
-		while (t != null) {
-			for (StackTraceElement e : t.getStackTrace())
-				i ^= e.hashCode();
-			t = t.getCause();
-		}
-		return Integer.toHexString(i);
+	/**
+	 * Returns the regular expression pattern used for matching log entries.
+	 *
+	 * @return The regular expression pattern used for matching log entries.
+	 */
+	public Pattern getLogEntryPattern() {
+		return rePattern;
 	}
 }

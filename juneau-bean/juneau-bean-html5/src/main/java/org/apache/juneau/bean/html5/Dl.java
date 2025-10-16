@@ -98,7 +98,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#dl() dl()}
- * 		<li class='jm'>{@link HtmlBuilder#dl(Object, Object...) dl(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#dl(Object...) dl(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -123,10 +123,6 @@ public class Dl extends HtmlElementContainer {
 	public Dl(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Dl _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -136,6 +132,30 @@ public class Dl extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Dl accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dl attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dl attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Dl child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Dl children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -469,6 +489,12 @@ public class Dl extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Dl setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Dl spellcheck(Object value) {
 		super.spellcheck(value);
@@ -496,36 +522,6 @@ public class Dl extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Dl translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Dl child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Dl children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Dl setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Dl attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Dl attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

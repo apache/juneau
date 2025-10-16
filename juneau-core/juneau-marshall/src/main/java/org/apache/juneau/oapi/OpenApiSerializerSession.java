@@ -50,39 +50,8 @@ import org.apache.juneau.uon.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class OpenApiSerializerSession extends UonSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	// Cache these for faster lookup
-	private static final BeanContext BC = BeanContext.DEFAULT;
-	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
-	private static final ClassMeta<String[]> CM_StringArray = BC.getClassMeta(String[].class);
-	private static final ClassMeta<Calendar> CM_Calendar = BC.getClassMeta(Calendar.class);
-	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
-	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
-	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
-	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
-	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
-
-	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(OpenApiSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -100,14 +69,14 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public OpenApiSerializerSession build() {
-			return new OpenApiSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public OpenApiSerializerSession build() {
+			return new OpenApiSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -117,20 +86,20 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder encoding(boolean value) {
+			super.encoding(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -159,20 +128,14 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -195,20 +158,32 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -217,17 +192,86 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			super.useWhitespace(value);
 			return this;
 		}
+	}
+	private static class OapiStringBuilder {
+		static final AsciiSet EQ = AsciiSet.of("=\\");
+		static final AsciiSet PIPE = AsciiSet.of("|\\");
+		static final AsciiSet PIPE_OR_EQ = AsciiSet.of("|=\\");
+		static final AsciiSet COMMA = AsciiSet.of(",\\");
+		static final AsciiSet COMMA_OR_EQ = AsciiSet.of(",=\\");
 
-		@Override /* Overridden from Builder */
-		public Builder encoding(boolean value) {
-			super.encoding(value);
+		private final StringBuilder sb = new StringBuilder();
+		private final HttpPartCollectionFormat cf;
+		private boolean first = true;
+
+		OapiStringBuilder(HttpPartCollectionFormat cf) {
+			this.cf = cf;
+		}
+
+		@Override
+		public String toString() {
+			return sb.toString();
+		}
+
+		private void delim(HttpPartCollectionFormat cf) {
+			if (cf == PIPES)
+				sb.append('|');
+			else if (cf == SSV)
+				sb.append(' ');
+			else if (cf == TSV)
+				sb.append('\t');
+			else
+				sb.append(',');
+		}
+
+		OapiStringBuilder append(Object o) {
+			if (! first)
+				delim(cf);
+			first = false;
+			if (cf == PIPES)
+				sb.append(escapeChars(Utils.s(o), PIPE));
+			else if (cf == SSV || cf == TSV)
+				sb.append(Utils.s(o));
+			else
+				sb.append(escapeChars(Utils.s(o), COMMA));
+			return this;
+		}
+
+		OapiStringBuilder append(Object key, Object val) {
+			if (! first)
+				delim(cf);
+			first = false;
+			if (cf == PIPES)
+				sb.append(escapeChars(Utils.s(key), PIPE_OR_EQ)).append('=').append(escapeChars(Utils.s(val), PIPE_OR_EQ));
+			else if (cf == SSV || cf == TSV)
+				sb.append(escapeChars(Utils.s(key), EQ)).append('=').append(escapeChars(Utils.s(val), EQ));
+			else
+				sb.append(escapeChars(Utils.s(key), COMMA_OR_EQ)).append('=').append(escapeChars(Utils.s(val), COMMA_OR_EQ));
 			return this;
 		}
 	}
+	// Cache these for faster lookup
+	private static final BeanContext BC = BeanContext.DEFAULT;
+	private static final ClassMeta<byte[]> CM_ByteArray = BC.getClassMeta(byte[].class);
+	private static final ClassMeta<String[]> CM_StringArray = BC.getClassMeta(String[].class);
+	private static final ClassMeta<Calendar> CM_Calendar = BC.getClassMeta(Calendar.class);
+	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
+	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
+	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
+
+	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
+	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(OpenApiSerializer ctx) {
+		return new Builder(ctx);
+	}
 
 	private final OpenApiSerializer ctx;
 
@@ -239,15 +283,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	protected OpenApiSerializerSession(Builder builder) {
 		super(builder.encoding(false));
 		ctx = builder.ctx;
-	}
-
-	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		try {
-			out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
-		} catch (SchemaValidationException e) {
-			throw new SerializeException(e);
-		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -427,62 +462,23 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private static class OapiStringBuilder {
-		static final AsciiSet EQ = AsciiSet.of("=\\");
-		static final AsciiSet PIPE = AsciiSet.of("|\\");
-		static final AsciiSet PIPE_OR_EQ = AsciiSet.of("|=\\");
-		static final AsciiSet COMMA = AsciiSet.of(",\\");
-		static final AsciiSet COMMA_OR_EQ = AsciiSet.of(",=\\");
-
-		private final StringBuilder sb = new StringBuilder();
-		private final HttpPartCollectionFormat cf;
-		private boolean first = true;
-
-		OapiStringBuilder(HttpPartCollectionFormat cf) {
-			this.cf = cf;
+	@SuppressWarnings("rawtypes")
+	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
+		if (s == null)
+			s = DEFAULT_SCHEMA;
+		JsonList l = new JsonList();
+		HttpPartSchema items = s.getItems();
+		if (type.isArray()) {
+			for (int i = 0; i < Array.getLength(o); i++)
+				l.add(toObject(partType, Array.get(o, i), items));
+		} else if (type.isCollection()) {
+			((Collection<?>)o).forEach(x -> l.add(toObject(partType, x, items)));
+		} else {
+			l.add(toObject(partType, o, items));
 		}
-
-		private void delim(HttpPartCollectionFormat cf) {
-			if (cf == PIPES)
-				sb.append('|');
-			else if (cf == SSV)
-				sb.append(' ');
-			else if (cf == TSV)
-				sb.append('\t');
-			else
-				sb.append(',');
-		}
-
-		OapiStringBuilder append(Object o) {
-			if (! first)
-				delim(cf);
-			first = false;
-			if (cf == PIPES)
-				sb.append(escapeChars(Utils.s(o), PIPE));
-			else if (cf == SSV || cf == TSV)
-				sb.append(Utils.s(o));
-			else
-				sb.append(escapeChars(Utils.s(o), COMMA));
-			return this;
-		}
-
-		OapiStringBuilder append(Object key, Object val) {
-			if (! first)
-				delim(cf);
-			first = false;
-			if (cf == PIPES)
-				sb.append(escapeChars(Utils.s(key), PIPE_OR_EQ)).append('=').append(escapeChars(Utils.s(val), PIPE_OR_EQ));
-			else if (cf == SSV || cf == TSV)
-				sb.append(escapeChars(Utils.s(key), EQ)).append('=').append(escapeChars(Utils.s(val), EQ));
-			else
-				sb.append(escapeChars(Utils.s(key), COMMA_OR_EQ)).append('=').append(escapeChars(Utils.s(val), COMMA_OR_EQ));
-			return this;
-		}
-
-		@Override
-		public String toString() {
-			return sb.toString();
-		}
+		if (isSortCollections())
+			return sort(l);
+		return l;
 	}
 
 	private Map<String,Object> toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
@@ -503,25 +499,6 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		if (isSortMaps())
 			return sort(m);
 		return m;
-	}
-
-	@SuppressWarnings("rawtypes")
-	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
-		if (s == null)
-			s = DEFAULT_SCHEMA;
-		JsonList l = new JsonList();
-		HttpPartSchema items = s.getItems();
-		if (type.isArray()) {
-			for (int i = 0; i < Array.getLength(o); i++)
-				l.add(toObject(partType, Array.get(o, i), items));
-		} else if (type.isCollection()) {
-			((Collection<?>)o).forEach(x -> l.add(toObject(partType, x, items)));
-		} else {
-			l.add(toObject(partType, o, items));
-		}
-		if (isSortCollections())
-			return sort(l);
-		return l;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -569,6 +546,15 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		try {
 			return convertToType(in, type);
 		} catch (InvalidDataConversionException e) {
+			throw new SerializeException(e);
+		}
+	}
+
+	@Override /* Overridden from Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		try {
+			out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
+		} catch (SchemaValidationException e) {
 			throw new SerializeException(e);
 		}
 	}

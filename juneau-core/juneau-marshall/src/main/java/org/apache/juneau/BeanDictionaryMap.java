@@ -76,6 +76,19 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 */
 	protected BeanDictionaryMap() {}
 
+	private void assertValidParameter(Object o) {
+		if (o != null) {
+			if (o instanceof Class)
+				return;
+			if (isArray(o)) {
+				for (int i = 0; i < Array.getLength(o); i++)
+					assertValidParameter(Array.get(o, i));
+				return;
+			}
+		}
+		throw new BeanRuntimeException("Invalid object type passed to BeanDictionaryMap: ''{0}''.  Only objects of type Class or Object[] containing Class or Object[] objects can be used.");
+	}
+
 	/**
 	 * Add a dictionary name mapping for the specified class.
 	 *
@@ -85,22 +98,6 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 	 */
 	protected BeanDictionaryMap append(String typeName, Class<?> c) {
 		put(typeName, c);
-		return this;
-	}
-
-	/**
-	 * Add a dictionary name mapping for the specified map class with the specified key and value classes.
-	 *
-	 * @param typeName The dictionary name of the class.
-	 * @param mapClass The map implementation class.
-	 * @param keyClass The key class.
-	 * @param valueClass The value class.
-	 * @return This object.
-	 */
-	protected BeanDictionaryMap append(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {
-		assertValidParameter(keyClass);
-		assertValidParameter(valueClass);
-		put(typeName, new Object[]{mapClass, keyClass, valueClass});
 		return this;
 	}
 
@@ -118,16 +115,19 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
-	private void assertValidParameter(Object o) {
-		if (o != null) {
-			if (o instanceof Class)
-				return;
-			if (isArray(o)) {
-				for (int i = 0; i < Array.getLength(o); i++)
-					assertValidParameter(Array.get(o, i));
-				return;
-			}
-		}
-		throw new BeanRuntimeException("Invalid object type passed to BeanDictionaryMap: ''{0}''.  Only objects of type Class or Object[] containing Class or Object[] objects can be used.");
+	/**
+	 * Add a dictionary name mapping for the specified map class with the specified key and value classes.
+	 *
+	 * @param typeName The dictionary name of the class.
+	 * @param mapClass The map implementation class.
+	 * @param keyClass The key class.
+	 * @param valueClass The value class.
+	 * @return This object.
+	 */
+	protected BeanDictionaryMap append(String typeName, Class<? extends Map> mapClass, Object keyClass, Object valueClass) {
+		assertValidParameter(keyClass);
+		assertValidParameter(valueClass);
+		put(typeName, new Object[]{mapClass, keyClass, valueClass});
+		return this;
 	}
 }

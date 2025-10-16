@@ -137,51 +137,6 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class Parser extends BeanContextable {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Represents no Parser.
-	 */
-	public static abstract class Null extends Parser {
-		private Null(Builder builder) {
-			super(builder);
-		}
-	}
-
-	/**
-	 * Instantiates a builder of the specified parser class.
-	 *
-	 * <p>
-	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
-	 * or protected constructor of the class.
-	 *
-	 * @param c The builder to create.
-	 * @return A new builder.
-	 */
-	public static Builder createParserBuilder(Class<? extends Parser> c) {
-		return (Builder)Context.createBuilder(c);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -208,22 +163,6 @@ public class Parser extends BeanContextable {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(Parser copyFrom) {
-			super(copyFrom);
-			autoCloseStreams = copyFrom.autoCloseStreams;
-			strict = copyFrom.strict;
-			trimStrings = copyFrom.trimStrings;
-			unbuffered = copyFrom.unbuffered;
-			debugOutputLines = copyFrom.debugOutputLines;
-			listener = copyFrom.listener;
-			consumes = copyFrom.consumes;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -237,52 +176,43 @@ public class Parser extends BeanContextable {
 			consumes = copyFrom.consumes;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public Parser build() {
-			return build(Parser.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				autoCloseStreams,
-				strict,
-				trimStrings,
-				unbuffered,
-				debugOutputLines,
-				listener,
-				consumes
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Specifies the media type that this parser consumes.
+		 * Copy constructor.
 		 *
-		 * @param value The value for this setting.
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder consumes(String value) {
-			this.consumes = value;
+		protected Builder(Parser copyFrom) {
+			super(copyFrom);
+			autoCloseStreams = copyFrom.autoCloseStreams;
+			strict = copyFrom.strict;
+			trimStrings = copyFrom.trimStrings;
+			unbuffered = copyFrom.unbuffered;
+			debugOutputLines = copyFrom.debugOutputLines;
+			listener = copyFrom.listener;
+			consumes = copyFrom.consumes;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
 			return this;
 		}
 
-		/**
-		 * Returns the current value for the 'consumes' property.
-		 *
-		 * @return The current value for the 'consumes' property.
-		 */
-		public String getConsumes() {
-			return consumes;
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
 		}
 
 		/**
@@ -323,6 +253,188 @@ public class Parser extends BeanContextable {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext.Builder value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanDictionary(java.lang.Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Parser build() {
+			return build(Parser.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the media type that this parser consumes.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder consumes(String value) {
+			this.consumes = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
 		/**
 		 * Debug output lines.
 		 *
@@ -354,6 +466,143 @@ public class Parser extends BeanContextable {
 		 */
 		public Builder debugOutputLines(int value) {
 			debugOutputLines = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		/**
+		 * Returns the current value for the 'consumes' property.
+		 *
+		 * @return The current value for the 'consumes' property.
+		 */
+		public String getConsumes() {
+			return consumes;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				autoCloseStreams,
+				strict,
+				trimStrings,
+				unbuffered,
+				debugOutputLines,
+				listener,
+				consumes
+			);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
 			return this;
 		}
 
@@ -405,6 +654,60 @@ public class Parser extends BeanContextable {
 		 */
 		public Builder listener(Class<? extends ParserListener> value) {
 			listener = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanClasses(java.lang.Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
 			return this;
 		}
 
@@ -476,6 +779,36 @@ public class Parser extends BeanContextable {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
 		/**
 		 * Trim parsed strings.
 		 *
@@ -513,6 +846,30 @@ public class Parser extends BeanContextable {
 		 */
 		public Builder trimStrings(boolean value) {
 			trimStrings = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -576,413 +933,6 @@ public class Parser extends BeanContextable {
 			unbuffered = value;
 			return this;
 		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useEnumNames() {
@@ -996,10 +946,36 @@ public class Parser extends BeanContextable {
 			return this;
 		}
 	}
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Represents no Parser.
+	 */
+	public static abstract class Null extends Parser {
+		private Null(Builder builder) {
+			super(builder);
+		}
+	}
 
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a builder of the specified parser class.
+	 *
+	 * <p>
+	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
+	 * or protected constructor of the class.
+	 *
+	 * @param c The builder to create.
+	 * @return A new builder.
+	 */
+	public static Builder createParserBuilder(Class<? extends Parser> c) {
+		return (Builder)Context.createBuilder(c);
+	}
 	final boolean trimStrings, strict, autoCloseStreams, unbuffered;
 	final int debugOutputLines;
 	final String consumes;
@@ -1031,14 +1007,73 @@ public class Parser extends BeanContextable {
 		}
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this parser can handle the specified content type.
+	 *
+	 * @param contentType The content type to test.
+	 * @return <jk>true</jk> if this parser can handle the specified content type.
+	 */
+	public boolean canHandle(String contentType) {
+		if (contentType != null)
+			for (MediaType mt : getMediaTypes())
+				if (contentType.equals(mt.toString()))
+					return true;
+		return false;
+	}
 	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
+	@Override /* Overridden from Context */
+	public ParserSession.Builder createSession() {
+		return ParserSession.create(this);
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Abstract methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Workhorse method.
+	 *
+	 * <p>
+	 * Subclasses are expected to either implement this method or {@link ParserSession#doParse(ParserPipe, ClassMeta)}.
+	 *
+	 * @param session The current session.
+	 * @param pipe Where to get the input from.
+	 * @param type
+	 * 	The class type of the object to create.
+	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
+	 * 	For example, when parsing JSON text, it may return a <c>String</c>, <c>Number</c>,
+	 * 	<c>JsonMap</c>, etc...
+	 * @param <T> The class type of the object to create.
+	 * @return The parsed object.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Returns the media types handled based on the values passed to the <c>consumes</c> constructor parameter.
+	 *
+	 * @return The list of media types.  Never <jk>null</jk>.
+	 */
+	public final List<MediaType> getMediaTypes() {
+		return Utils.alist(consumesArray);
+	}
+
+	/**
+	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.
+	 *
+	 * @return The media type.
+	 */
+	public final MediaType getPrimaryMediaType() {
+		return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0];
+	}
+
+	@Override /* Overridden from Context */
+	public ParserSession getSession() {
+		return createSession().build();
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
@@ -1049,9 +1084,64 @@ public class Parser extends BeanContextable {
 		return true;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 *
+	 * <p>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
+	 */
+	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
+		return getSession().parse(input, type);
+	}
+
+	/**
+	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
+	 * object.
+	 *
+	 * <p>
+	 * This is mostly an internal method used by the framework.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by the underlying stream.
+	 */
+	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
+		return getSession().parse(input, type);
+	}
 
 	/**
 	 * Parses input into the specified object type.
@@ -1131,6 +1221,35 @@ public class Parser extends BeanContextable {
 	public final <T> T parse(Object input, Type type, Type...args) throws ParseException, IOException {
 		return getSession().parse(input, type, args);
 	}
+	/**
+	 * Same as {@link #parse(Object, Class)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, Class<T> type) throws ParseException {
+		return getSession().parse(input, type);
+	}
+
+	/**
+	 * Same as {@link #parse(Object, ClassMeta)} but since it's a {@link String} input doesn't throw an {@link IOException}.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	See {@link #parse(Object, Type, Type...)} for details.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
+		return getSession().parse(input, type);
+	}
 
 	/**
 	 * Same as {@link #parse(Object, Type, Type...)} but since it's a {@link String} input doesn't throw an {@link IOException}.
@@ -1152,132 +1271,54 @@ public class Parser extends BeanContextable {
 	public final <T> T parse(String input, Type type, Type...args) throws ParseException {
 		return getSession().parse(input, type, args);
 	}
-
 	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
+	 * argument.
 	 *
 	 * <p>
-	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
-	 *
-	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by the underlying stream.
-	 */
-	public final <T> T parse(Object input, Class<T> type) throws ParseException, IOException {
-		return getSession().parse(input, type);
-	}
-
-	/**
-	 * Same as {@link #parse(Object, Class)} but since it's a {@link String} input doesn't throw an {@link IOException}.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public final <T> T parse(String input, Class<T> type) throws ParseException {
-		return getSession().parse(input, type);
-	}
-
-	/**
-	 * Same as {@link #parse(Object, Type, Type...)} except the type has already been converted into a {@link ClassMeta}
-	 * object.
+	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
+	 * to the {@code Method.invoke(target, args)} method.
 	 *
 	 * <p>
-	 * This is mostly an internal method used by the framework.
+	 * Used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Used to parse argument strings in the {@link ObjectIntrospector#invokeMethod(Method, Reader)} method.
+	 * </ul>
 	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
-	 * @param type The object type to create.
-	 * @return The parsed object.
+	 * @param input The input.  Subclasses can support different input types.
+	 * @param argTypes Specifies the type of objects to create for each entry in the array.
+	 * @return An array of parsed objects.
 	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by the underlying stream.
 	 */
-	public final <T> T parse(Object input, ClassMeta<T> type) throws ParseException, IOException {
-		return getSession().parse(input, type);
+	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
+		if (argTypes == null || argTypes.length == 0)
+			return new Object[0];
+		return getSession().parseArgs(input, argTypes);
 	}
 
 	/**
-	 * Same as {@link #parse(Object, ClassMeta)} but since it's a {@link String} input doesn't throw an {@link IOException}.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	See {@link #parse(Object, Type, Type...)} for details.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public final <T> T parse(String input, ClassMeta<T> type) throws ParseException {
-		return getSession().parse(input, type);
-	}
-
-	@Override /* Overridden from Context */
-	public ParserSession.Builder createSession() {
-		return ParserSession.create(this);
-	}
-
-	@Override /* Overridden from Context */
-	public ParserSession getSession() {
-		return createSession().build();
-	}
-
-	/**
-	 * Workhorse method.
+	 * Parses the contents of the specified reader and loads the results into the specified collection.
 	 *
 	 * <p>
-	 * Subclasses are expected to either implement this method or {@link ParserSession#doParse(ParserPipe, ClassMeta)}.
+	 * Used in the following locations:
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		The various character-based constructors in {@link JsonList} (e.g.
+	 * 		{@link JsonList#JsonList(CharSequence,Parser)}.
+	 * </ul>
 	 *
-	 * @param session The current session.
-	 * @param pipe Where to get the input from.
-	 * @param type
-	 * 	The class type of the object to create.
-	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
-	 * 	For example, when parsing JSON text, it may return a <c>String</c>, <c>Number</c>,
-	 * 	<c>JsonMap</c>, etc...
-	 * @param <T> The class type of the object to create.
-	 * @return The parsed object.
-	 * @throws IOException Thrown by underlying stream.
+	 * @param <E> The element class type.
+	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
+	 * @param c The collection being loaded.
+	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
+	 * @return The same collection that was passed in to allow this method to be chained.
 	 * @throws ParseException Malformed input encountered.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 * @throws UnsupportedOperationException If not implemented.
 	 */
-	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		throw new UnsupportedOperationException();
+	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
+		return getSession().parseIntoCollection(input, c, elementType);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Optional methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Parses the contents of the specified reader and loads the results into the specified map.
@@ -1306,108 +1347,6 @@ public class Parser extends BeanContextable {
 	public final <K,V> Map<K,V> parseIntoMap(Object input, Map<K,V> m, Type keyType, Type valueType) throws ParseException {
 		return getSession().parseIntoMap(input, m, keyType, valueType);
 	}
-
-	/**
-	 * Parses the contents of the specified reader and loads the results into the specified collection.
-	 *
-	 * <p>
-	 * Used in the following locations:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		The various character-based constructors in {@link JsonList} (e.g.
-	 * 		{@link JsonList#JsonList(CharSequence,Parser)}.
-	 * </ul>
-	 *
-	 * @param <E> The element class type.
-	 * @param input The input.  See {@link #parse(Object, ClassMeta)} for supported input types.
-	 * @param c The collection being loaded.
-	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
-	 * @return The same collection that was passed in to allow this method to be chained.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws UnsupportedOperationException If not implemented.
-	 */
-	public final <E> Collection<E> parseIntoCollection(Object input, Collection<E> c, Type elementType) throws ParseException {
-		return getSession().parseIntoCollection(input, c, elementType);
-	}
-
-	/**
-	 * Parses the specified array input with each entry in the object defined by the {@code argTypes}
-	 * argument.
-	 *
-	 * <p>
-	 * Used for converting arrays (e.g. <js>"[arg1,arg2,...]"</js>) into an {@code Object[]} that can be passed
-	 * to the {@code Method.invoke(target, args)} method.
-	 *
-	 * <p>
-	 * Used in the following locations:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Used to parse argument strings in the {@link ObjectIntrospector#invokeMethod(Method, Reader)} method.
-	 * </ul>
-	 *
-	 * @param input The input.  Subclasses can support different input types.
-	 * @param argTypes Specifies the type of objects to create for each entry in the array.
-	 * @return An array of parsed objects.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public final Object[] parseArgs(Object input, Type[] argTypes) throws ParseException {
-		if (argTypes == null || argTypes.length == 0)
-			return new Object[0];
-		return getSession().parseArgs(input, argTypes);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the media types handled based on the values passed to the <c>consumes</c> constructor parameter.
-	 *
-	 * @return The list of media types.  Never <jk>null</jk>.
-	 */
-	public final List<MediaType> getMediaTypes() {
-		return Utils.alist(consumesArray);
-	}
-
-	/**
-	 * Returns the first media type handled based on the values passed to the <c>consumes</c> constructor parameter.
-	 *
-	 * @return The media type.
-	 */
-	public final MediaType getPrimaryMediaType() {
-		return consumesArray == null || consumesArray.length == 0 ? null : consumesArray[0];
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this parser can handle the specified content type.
-	 *
-	 * @param contentType The content type to test.
-	 * @return <jk>true</jk> if this parser can handle the specified content type.
-	 */
-	public boolean canHandle(String contentType) {
-		if (contentType != null)
-			for (MediaType mt : getMediaTypes())
-				if (contentType.equals(mt.toString()))
-					return true;
-		return false;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Auto-close streams.
-	 *
-	 * @see Parser.Builder#autoCloseStreams()
-	 * @return
-	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
-	 * 	after parsing is complete.
-	 */
-	protected final boolean isAutoCloseStreams() {
-		return autoCloseStreams;
-	}
-
 	/**
 	 * Debug output lines.
 	 *
@@ -1428,6 +1367,18 @@ public class Parser extends BeanContextable {
 	 */
 	protected final Class<? extends ParserListener> getListener() {
 		return listener;
+	}
+
+	/**
+	 * Auto-close streams.
+	 *
+	 * @see Parser.Builder#autoCloseStreams()
+	 * @return
+	 * 	<jk>true</jk> if <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * 	after parsing is complete.
+	 */
+	protected final boolean isAutoCloseStreams() {
+		return autoCloseStreams;
 	}
 
 	/**
@@ -1463,11 +1414,6 @@ public class Parser extends BeanContextable {
 	protected final boolean isUnbuffered() {
 		return unbuffered;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()

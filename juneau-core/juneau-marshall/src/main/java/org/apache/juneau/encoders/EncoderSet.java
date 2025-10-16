@@ -76,53 +76,19 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class EncoderSet {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * An identifier that the previous encoders in this group should be inherited.
-	 * <p>
-	 * Used by {@link Builder#set(Class...)}
-	 */
-	public static abstract class Inherit extends Encoder {}
-
-	/**
-	 * An identifier that the previous encoders in this group should not be inherited.
-	 * <p>
-	 * Used by {@link Builder#add(Class...)}
-	 */
-	public static abstract class NoInherit extends Encoder {}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
 	public static class Builder extends BeanBuilder<EncoderSet> {
+		private static String toString(Object o) {
+			if (o == null)
+				return "null";
+			if (o instanceof Class)
+				return "class:" + ((Class<?>)o).getSimpleName();
+			return "object:" + o.getClass().getSimpleName();
+		}
 		List<Object> entries;
+
 		Builder inheritFrom;
 
 		/**
@@ -144,24 +110,6 @@ public class EncoderSet {
 			super(copyFrom);
 			entries = copyOf(copyFrom.entries);
 		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected EncoderSet buildDefault() {
-			return new EncoderSet(this);
-		}
-
-		/**
-		 * Makes a copy of this builder.
-		 *
-		 * @return A new copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Registers the specified encoders with this group.
@@ -188,7 +136,69 @@ public class EncoderSet {
 			entries.addAll(0, l);
 			return this;
 		}
+		/**
+		 * Registers the specified encoders with this group.
+		 *
+		 * <p>
+		 * Entries are added to the beginning of the list.
+		 *
+		 * @param values The encoders to add to this group.
+		 * @return This object.
+		 */
+		public Builder add(Encoder...values) {
+			prependAll(entries, (Object[])values);
+			return this;
+		}
 
+		/**
+		 * Clears out any existing encoders in this group.
+		 *
+		 * @return This object.
+		 */
+		public Builder clear() {
+			entries.clear();
+			return this;
+		}
+
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from BeanBuilder */
+		public Builder impl(Object value) {
+			super.impl(value);
+			return this;
+		}
+
+		/**
+		 * Returns direct access to the {@link Encoder} objects and classes in this builder.
+		 *
+		 * <p>
+		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
+		 * as re-ordering/adding/removing entries.
+		 *
+		 * <p>
+		 * Note that it is up to the user to ensure that the list only contains {@link Encoder} objects and classes.
+		 *
+		 * @return The inner list of entries in this builder.
+		 */
+		public List<Object> inner() {
+			return entries;
+		}
+
+		/**
+		 * Returns <jk>true</jk> if this builder is empty.
+		 *
+		 * @return <jk>true</jk> if this builder is empty.
+		 */
+		public boolean isEmpty() {
+			return entries.isEmpty();
+		}
 		/**
 		 * Sets the encoders in this group.
 		 *
@@ -218,92 +228,68 @@ public class EncoderSet {
 			return this;
 		}
 
-		/**
-		 * Registers the specified encoders with this group.
-		 *
-		 * <p>
-		 * Entries are added to the beginning of the list.
-		 *
-		 * @param values The encoders to add to this group.
-		 * @return This object.
-		 */
-		public Builder add(Encoder...values) {
-			prependAll(entries, (Object[])values);
-			return this;
+		@Override /* Overridden from Object */
+		public String toString() {
+			return entries.stream().map(Builder::toString).collect(joining(",","[","]"));
 		}
-
-		/**
-		 * Clears out any existing encoders in this group.
-		 *
-		 * @return This object.
-		 */
-		public Builder clear() {
-			entries.clear();
-			return this;
-		}
-
-		/**
-		 * Returns <jk>true</jk> if this builder is empty.
-		 *
-		 * @return <jk>true</jk> if this builder is empty.
-		 */
-		public boolean isEmpty() {
-			return entries.isEmpty();
-		}
-
-		/**
-		 * Returns direct access to the {@link Encoder} objects and classes in this builder.
-		 *
-		 * <p>
-		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
-		 * as re-ordering/adding/removing entries.
-		 *
-		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Encoder} objects and classes.
-		 *
-		 * @return The inner list of entries in this builder.
-		 */
-		public List<Object> inner() {
-			return entries;
-		}
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-		//-------------------------------------------------------------------------------------------------------------
-		// Other methods
-		//-------------------------------------------------------------------------------------------------------------
 
-		@Override /* Overridden from Object */
-		public String toString() {
-			return entries.stream().map(Builder::toString).collect(joining(",","[","]"));
-		}
-
-		private static String toString(Object o) {
-			if (o == null)
-				return "null";
-			if (o instanceof Class)
-				return "class:" + ((Class<?>)o).getSimpleName();
-			return "object:" + o.getClass().getSimpleName();
+		@Override /* Overridden from BeanBuilder */
+		protected EncoderSet buildDefault() {
+			return new EncoderSet(this);
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * An identifier that the previous encoders in this group should be inherited.
+	 * <p>
+	 * Used by {@link Builder#set(Class...)}
+	 */
+	public static abstract class Inherit extends Encoder {}
+
+	/**
+	 * An identifier that the previous encoders in this group should not be inherited.
+	 * <p>
+	 * Used by {@link Builder#add(Class...)}
+	 */
+	public static abstract class NoInherit extends Encoder {}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder(BeanStore.INSTANCE);
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+	private static Encoder instantiate(BeanStore bs, Object o) {
+		if (o instanceof Encoder)
+			return (Encoder)o;
+		try {
+			return bs.createBean(Encoder.class).type((Class<?>)o).run();
+		} catch (ExecutableException e) {
+			throw asRuntimeException(e);
+		}
+	}
 
 	// Maps Accept-Encoding headers to matching encoders.
 	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
-
 	private final List<String> encodings;
 	private final Encoder[] encodingsEncoders;
+
 	private final Encoder[] entries;
 
 	/**
@@ -327,14 +313,15 @@ public class EncoderSet {
 		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
 	}
 
-	private static Encoder instantiate(BeanStore bs, Object o) {
-		if (o instanceof Encoder)
-			return (Encoder)o;
-		try {
-			return bs.createBean(Encoder.class).type((Class<?>)o).run();
-		} catch (ExecutableException e) {
-			throw asRuntimeException(e);
-		}
+	/**
+	 * Returns the encoder registered with the specified coding (e.g. <js>"gzip"</js>).
+	 *
+	 * @param encoding The coding string.
+	 * @return The encoder, or <jk>null</jk> if encoder isn't registered with that coding.
+	 */
+	public Encoder getEncoder(String encoding) {
+		EncoderMatch em = getEncoderMatch(encoding);
+		return (em == null ? null : em.getEncoder());
 	}
 
 	/**
@@ -364,17 +351,6 @@ public class EncoderSet {
 		}
 
 		return cache.get(acceptEncoding);
-	}
-
-	/**
-	 * Returns the encoder registered with the specified coding (e.g. <js>"gzip"</js>).
-	 *
-	 * @param encoding The coding string.
-	 * @return The encoder, or <jk>null</jk> if encoder isn't registered with that coding.
-	 */
-	public Encoder getEncoder(String encoding) {
-		EncoderMatch em = getEncoderMatch(encoding);
-		return (em == null ? null : em.getEncoder());
 	}
 
 	/**

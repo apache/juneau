@@ -33,8 +33,6 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class ResponseCodeArg implements RestOpArg {
 
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -46,6 +44,8 @@ public class ResponseCodeArg implements RestOpArg {
 			return new ResponseCodeArg(paramInfo);
 		return null;
 	}
+
+	private final Type type;
 
 	/**
 	 * Constructor.

@@ -93,6 +93,20 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
+	 * Adds a single value to the <property>examples</property> property.
+	 *
+	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
+	 * @param parameter The example.  Must not be <jk>null</jk>.
+	 * @return This object
+	 */
+	public Link addParameter(String mimeType, Object parameter) {
+		assertArgNotNull("mimeType", mimeType);
+		assertArgNotNull("parameter", parameter);
+		parameters = mapBuilder(parameters).sparse().add(mimeType, parameter).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -101,32 +115,18 @@ public class Link extends OpenApiElement {
 		return new Link(this);
 	}
 
-	/**
-	 * Bean property getter:  <property>operationRef</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getOperationRef() {
-		return operationRef;
-	}
-
-	/**
-	 * Bean property setter:  <property>operationRef</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Link setOperationRef(String value) {
-		operationRef = value;
-		return this;
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> toType(getDescription(), type);
+			case "operationRef" -> toType(getOperationRef(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "requestBody" -> toType(getRequestBody(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "server" -> toType(getServer(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	/**
@@ -142,18 +142,6 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>description</property>.
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Link setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>externalValue</property>.
 	 *
 	 * <p>
@@ -163,6 +151,97 @@ public class Link extends OpenApiElement {
 	 */
 	public String getOperationId() {
 		return operationId;
+	}
+
+	/**
+	 * Bean property getter:  <property>operationRef</property>.
+	 *
+	 * <p>
+	 * The identifying name of the contact person/organization.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getOperationRef() {
+		return operationRef;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,Object> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * Bean property getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 *
+	 * (Note: <js>"value"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getRequestBody() {
+		return requestBody;
+	}
+
+	/**
+	 * Bean property getter:  <property>additionalProperties</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Server getServer() {
+		return server;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(operationId != null, "operationId")
+			.addIf(operationRef != null, "operationRef")
+			.addIf(parameters != null, "parameters")
+			.addIf(requestBody != null, "requestBody")
+			.addIf(server != null, "server")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Link set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> setDescription(Utils.s(value));
+			case "operationId" -> setOperationId(Utils.s(value));
+			case "operationRef" -> setOperationRef(Utils.s(value));
+			case "parameters" -> setParameters(mapBuilder(String.class, Object.class).sparse().addAny(value).build());
+			case "requestBody" -> setRequestBody(value);
+			case "server" -> setServer(toType(value, Server.class));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Link setDescription(String value) {
+		description = value;
+		return this;
 	}
 
 	/**
@@ -183,19 +262,36 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>default</property>.
+	 * Bean property setter:  <property>operationRef</property>.
 	 *
 	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * The identifying name of the contact person/organization.
 	 *
-	 * (Note: <js>"value"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
 	 */
-	public Object getRequestBody() {
-		return requestBody;
+	public Link setOperationRef(String value) {
+		operationRef = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Keys must be MIME-type strings.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Link setParameters(Map<String,Object> value) {
+		parameters = copyOf(value);
+		return this;
 	}
 
 	/**
@@ -217,15 +313,6 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>additionalProperties</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Server getServer() {
-		return server;
-	}
-
-	/**
 	 * Bean property setter:  <property>additionalProperties</property>.
 	 *
 	 * @param value
@@ -236,93 +323,6 @@ public class Link extends OpenApiElement {
 	public Link setServer(Server value) {
 		server = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>examples</property>.
-	 *
-	 * <p>
-	 * An example of the response message.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,Object> getParameters() {
-		return parameters;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * <p>
-	 * An example of the response message.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Keys must be MIME-type strings.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Link setParameters(Map<String,Object> value) {
-		parameters = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>examples</property> property.
-	 *
-	 * @param mimeType The mime-type string.  Must not be <jk>null</jk>.
-	 * @param parameter The example.  Must not be <jk>null</jk>.
-	 * @return This object
-	 */
-	public Link addParameter(String mimeType, Object parameter) {
-		assertArgNotNull("mimeType", mimeType);
-		assertArgNotNull("parameter", parameter);
-		parameters = mapBuilder(parameters).sparse().add(mimeType, parameter).build();
-		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> toType(getDescription(), type);
-			case "operationRef" -> toType(getOperationRef(), type);
-			case "operationId" -> toType(getOperationId(), type);
-			case "requestBody" -> toType(getRequestBody(), type);
-			case "parameters" -> toType(getParameters(), type);
-			case "server" -> toType(getServer(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Link set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "operationId" -> setOperationId(Utils.s(value));
-			case "operationRef" -> setOperationRef(Utils.s(value));
-			case "parameters" -> setParameters(mapBuilder(String.class, Object.class).sparse().addAny(value).build());
-			case "requestBody" -> setRequestBody(value);
-			case "server" -> setServer(toType(value, Server.class));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(description != null, "description")
-			.addIf(operationId != null, "operationId")
-			.addIf(operationRef != null, "operationRef")
-			.addIf(parameters != null, "parameters")
-			.addIf(requestBody != null, "requestBody")
-			.addIf(server != null, "server")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

@@ -107,10 +107,6 @@ public class Ruby extends HtmlElementMixed {
 	public Ruby(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Ruby _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -120,6 +116,30 @@ public class Ruby extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Ruby accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Ruby attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Ruby attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Ruby child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Ruby children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -480,30 +500,6 @@ public class Ruby extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Ruby translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Ruby child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Ruby children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ruby attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ruby attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

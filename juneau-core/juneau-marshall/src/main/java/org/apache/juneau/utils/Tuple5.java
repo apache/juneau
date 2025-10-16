@@ -75,6 +75,11 @@ public class Tuple5<A,B,C,D,E> {
 		this.e = e;
 	}
 
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof Tuple5 && Utils.eq(this, (Tuple5<?,?,?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c) && Utils.eq(x.d,y.d) && Utils.eq(x.e,y.e));
+	}
+
 	/**
 	 * Returns the first object in this tuple.
 	 *
@@ -123,10 +128,5 @@ public class Tuple5<A,B,C,D,E> {
 	@Override /* Overridden from Object */
 	public int hashCode() {
 		return HashCode.of(a,b,c,d,e);
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return o instanceof Tuple5 && Utils.eq(this, (Tuple5<?,?,?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c) && Utils.eq(x.d,y.d) && Utils.eq(x.e,y.e));
 	}
 }

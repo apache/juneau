@@ -129,11 +129,6 @@ package org.apache.juneau.bean.html5;
 public class HtmlBuilder {
 
 	/**
-	 * Constructor.
-	 */
-	protected HtmlBuilder() {}
-
-	/**
 	 * Creates an empty {@link A} element.
 	 *
 	 * @return The new element.
@@ -2204,4 +2199,9 @@ public class HtmlBuilder {
 	public static final Wbr wbr() {
 		return new Wbr();
 	}
+
+	/**
+	 * Constructor.
+	 */
+	protected HtmlBuilder() {}
 }

@@ -46,28 +46,8 @@ import org.apache.juneau.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
+@SuppressWarnings("resource")
 public class FileStore extends ConfigStore {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default file store, all default values.*/
-	public static final FileStore DEFAULT = FileStore.create().build();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -93,6 +73,21 @@ public class FileStore extends ConfigStore {
 		/**
 		 * Copy constructor.
 		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+			directory = copyFrom.directory;
+			charset = copyFrom.charset;
+			enableWatcher = copyFrom.enableWatcher;
+			watcherSensitivity = copyFrom.watcherSensitivity;
+			updateOnWrite = copyFrom.updateOnWrite;
+			extensions = copyFrom.extensions;
+		}
+
+		/**
+		 * Copy constructor.
+		 *
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(FileStore copyFrom) {
@@ -106,24 +101,27 @@ public class FileStore extends ConfigStore {
 			extensions = copyFrom.extensions;
 		}
 
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder to copy from.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			directory = copyFrom.directory;
-			charset = copyFrom.charset;
-			enableWatcher = copyFrom.enableWatcher;
-			watcherSensitivity = copyFrom.watcherSensitivity;
-			updateOnWrite = copyFrom.updateOnWrite;
-			extensions = copyFrom.extensions;
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
 		}
 
 		@Override /* Overridden from Context.Builder */
@@ -131,28 +129,46 @@ public class FileStore extends ConfigStore {
 			return build(FileStore.class);
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
 
 		/**
-		 * Local file system directory.
+		 * Charset for external files.
 		 *
 		 * <p>
-		 * Identifies the path of the directory containing the configuration files.
+		 * Identifies the charset of external files.
 		 *
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.directory"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
-		 * 		<li><js>"."</js>
+		 * 		<li>System property <js>"ConfigFileStore.charset"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
+		 * 		<li>{@link Charset#defaultCharset()}
 		 * 	</ul>
 		 * @return This object.
 		 */
-		public Builder directory(String value) {
-			directory = value;
+		public Builder charset(Charset value) {
+			charset = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
 			return this;
 		}
 
@@ -178,23 +194,23 @@ public class FileStore extends ConfigStore {
 		}
 
 		/**
-		 * Charset for external files.
+		 * Local file system directory.
 		 *
 		 * <p>
-		 * Identifies the charset of external files.
+		 * Identifies the path of the directory containing the configuration files.
 		 *
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.charset"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_CHARSET"
-		 * 		<li>{@link Charset#defaultCharset()}
+		 * 		<li>System property <js>"ConfigFileStore.directory"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_DIRECTORY"
+		 * 		<li><js>"."</js>
 		 * 	</ul>
 		 * @return This object.
 		 */
-		public Builder charset(Charset value) {
-			charset = value;
+		public Builder directory(String value) {
+			directory = value;
 			return this;
 		}
 
@@ -224,27 +240,35 @@ public class FileStore extends ConfigStore {
 		}
 
 		/**
-		 * Watcher sensitivity.
+		 * File extensions.
 		 *
 		 * <p>
-		 * Determines how frequently the file system is polled for updates.
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This relies on internal Sun packages and may not work on all JVMs.
-		 * </ul>
+		 * Defines what file extensions to search for when the config name does not have an extension.
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>The default is the first value found:
+		 * 	The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.watcherSensitivity"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
-		 * 		<li>{@link WatcherSensitivity#MEDIUM}
+		 * 		<li>System property <js>"ConfigFileStore.extensions"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
+		 * 		<li><js>"cfg"</js>
 		 * 	</ul>
 		 * @return This object.
 		 */
-		public Builder watcherSensitivity(WatcherSensitivity value) {
-			watcherSensitivity = value;
+		public Builder extensions(String value) {
+			extensions = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
 			return this;
 		}
 
@@ -274,87 +298,93 @@ public class FileStore extends ConfigStore {
 		}
 
 		/**
-		 * File extensions.
+		 * Watcher sensitivity.
 		 *
 		 * <p>
-		 * Defines what file extensions to search for when the config name does not have an extension.
+		 * Determines how frequently the file system is polled for updates.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This relies on internal Sun packages and may not work on all JVMs.
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	The default is the first value found:
+		 * 	<br>The default is the first value found:
 		 * 	<ul>
-		 * 		<li>System property <js>"ConfigFileStore.extensions"
-		 * 		<li>Environment variable <js>"CONFIGFILESTORE_EXTENSIONS"
-		 * 		<li><js>"cfg"</js>
+		 * 		<li>System property <js>"ConfigFileStore.watcherSensitivity"
+		 * 		<li>Environment variable <js>"CONFIGFILESTORE_WATCHERSENSITIVITY"
+		 * 		<li>{@link WatcherSensitivity#MEDIUM}
 		 * 	</ul>
 		 * @return This object.
 		 */
-		public Builder extensions(String value) {
-			extensions = value;
-			return this;
-		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder watcherSensitivity(WatcherSensitivity value) {
+			watcherSensitivity = value;
 			return this;
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	class WatcherThread extends Thread {
+		private final WatchService watchService;
 
-	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
+		WatcherThread(File dir, WatcherSensitivity s) throws Exception {
+			watchService = FileSystems.getDefault().newWatchService();
+			var kinds = new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY};
+			var modifier = lookupModifier(s);
+			dir.toPath().register(watchService, kinds, modifier);
+		}
+
+		@Override /* Overridden from Thread */
+		public void interrupt() {
+			try {
+				watchService.close();
+			} catch (IOException e) {
+				throw asRuntimeException(e);
+			} finally {
+				super.interrupt();
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override /* Overridden from Thread */
+		public void run() {
+			try {
+				WatchKey key;
+				while ((key = watchService.take()) != null) {
+					for (var event : key.pollEvents()) {
+						var kind = event.kind();
+						if (kind != OVERFLOW)
+							FileStore.this.onFileEvent(((WatchEvent<Path>)event));
+					}
+					if (! key.reset())
+						break;
+				}
+			} catch (Exception e) {
+				throw asRuntimeException(e);
+			}
+		}
+
+		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
+			try {
+				return switch (s) {
+					case LOW    -> com.sun.nio.file.SensitivityWatchEventModifier.LOW;
+					case MEDIUM -> com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
+					case HIGH   -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
+				};
+			} catch (Exception e) {
+				/* Ignore */
+			}
+			return null;
+		}
+	}
+	/** Default file store, all default values.*/
+	public static final FileStore DEFAULT = FileStore.create().build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
 
 	final String directory, extensions;
@@ -393,6 +423,22 @@ public class FileStore extends ConfigStore {
 		}
 	}
 
+	@Override /* Overridden from Closeable */
+	public synchronized void close() {
+		if (watcher != null)
+			watcher.interrupt();
+	}
+
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	@Override /* Overridden from ConfigStore */
+	public synchronized boolean exists(String name) {
+		return Files.exists(resolveFile(name));
+	}
+
 	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) throws IOException {
 		name = resolveName(name);
@@ -427,6 +473,13 @@ public class FileStore extends ConfigStore {
 		}
 
 		return cache.get(name);
+	}
+
+	@Override /* Overridden from ConfigStore */
+	public synchronized FileStore update(String name, String newContents) {
+		cache.put(name, newContents);
+		super.update(name, newContents);
+		return this;
 	}
 
 	@Override /* Overridden from ConfigStore */
@@ -486,15 +539,45 @@ public class FileStore extends ConfigStore {
 		return null;
 	}
 
-	@Override /* Overridden from ConfigStore */
-	public synchronized boolean exists(String name) {
-		return Files.exists(resolveFile(name));
+	private synchronized boolean isWritable(Path p) {
+		try {
+			if (! Files.exists(p)) {
+				Files.createDirectories(p.getParent());
+				if (! Files.exists(p) && ! p.toFile().createNewFile()) {
+					throw new IOException("Could not create file: " + p);
+				}
+			}
+		} catch (IOException e) {
+			return false;
+		}
+		return Files.isWritable(p);
 	}
 
 	private Path resolveFile(String name) {
 		return dir.toPath().resolve(resolveName(name));
 	}
+	/**
+	 * Gets called when the watcher service on this store is triggered with a file system change.
+	 *
+	 * @param e The file system event.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
+		var fn = e.context().getFileName().toString();
 
+		var oldContents = cache.get(fn);
+		cache.remove(fn);
+		var newContents = read(fn);
+
+		if (! Utils.eq(oldContents, newContents)) {
+			update(fn, newContents);
+		}
+	}
+
+	@Override /* Overridden from Context */
+	protected JsonMap properties() {
+		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
+	}
 	@Override
 	protected String resolveName(String name) {
 		if (! nameCache.containsKey(name)) {
@@ -531,117 +614,5 @@ public class FileStore extends ConfigStore {
 			nameCache.put(name, n);
 		}
 		return nameCache.get(name);
-	}
-
-	private synchronized boolean isWritable(Path p) {
-		try {
-			if (! Files.exists(p)) {
-				Files.createDirectories(p.getParent());
-				if (! Files.exists(p) && ! p.toFile().createNewFile()) {
-					throw new IOException("Could not create file: " + p);
-				}
-			}
-		} catch (IOException e) {
-			return false;
-		}
-		return Files.isWritable(p);
-	}
-
-	@Override /* Overridden from ConfigStore */
-	public synchronized FileStore update(String name, String newContents) {
-		cache.put(name, newContents);
-		super.update(name, newContents);
-		return this;
-	}
-
-	@Override /* Overridden from Closeable */
-	public synchronized void close() {
-		if (watcher != null)
-			watcher.interrupt();
-	}
-
-	//---------------------------------------------------------------------------------------------
-	// WatcherThread
-	//---------------------------------------------------------------------------------------------
-
-	class WatcherThread extends Thread {
-		private final WatchService watchService;
-
-		WatcherThread(File dir, WatcherSensitivity s) throws Exception {
-			watchService = FileSystems.getDefault().newWatchService();
-			var kinds = new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY};
-			var modifier = lookupModifier(s);
-			dir.toPath().register(watchService, kinds, modifier);
-		}
-
-		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
-			try {
-				return switch (s) {
-					case LOW    -> com.sun.nio.file.SensitivityWatchEventModifier.LOW;
-					case MEDIUM -> com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
-					case HIGH   -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
-				};
-			} catch (Exception e) {
-				/* Ignore */
-			}
-			return null;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override /* Overridden from Thread */
-		public void run() {
-			try {
-				WatchKey key;
-				while ((key = watchService.take()) != null) {
-					for (var event : key.pollEvents()) {
-						var kind = event.kind();
-						if (kind != OVERFLOW)
-							FileStore.this.onFileEvent(((WatchEvent<Path>)event));
-					}
-					if (! key.reset())
-						break;
-				}
-			} catch (Exception e) {
-				throw asRuntimeException(e);
-			}
-		}
-
-		@Override /* Overridden from Thread */
-		public void interrupt() {
-			try {
-				watchService.close();
-			} catch (IOException e) {
-				throw asRuntimeException(e);
-			} finally {
-				super.interrupt();
-			}
-		}
-	}
-
-	/**
-	 * Gets called when the watcher service on this store is triggered with a file system change.
-	 *
-	 * @param e The file system event.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	protected synchronized void onFileEvent(WatchEvent<Path> e) throws IOException {
-		var fn = e.context().getFileName().toString();
-
-		var oldContents = cache.get(fn);
-		cache.remove(fn);
-		var newContents = read(fn);
-
-		if (! Utils.eq(oldContents, newContents)) {
-			update(fn, newContents);
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
 	}
 }

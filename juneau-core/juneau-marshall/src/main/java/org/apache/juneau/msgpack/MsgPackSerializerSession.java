@@ -42,26 +42,8 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class MsgPackSerializerSession extends OutputStreamSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(MsgPackSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -79,14 +61,14 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public MsgPackSerializerSession build() {
-			return new MsgPackSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public MsgPackSerializerSession build() {
+			return new MsgPackSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -96,20 +78,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -138,20 +108,14 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -174,31 +138,46 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
 		}
 	}
+	private static class SimpleMapEntry {
+		final Object key;
+		final Object value;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final MsgPackSerializer ctx;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	protected MsgPackSerializerSession(Builder builder) {
-		super(builder);
-		ctx = builder.ctx;
+		SimpleMapEntry(Object key, Object value) {
+			this.key = key;
+			this.value = value;
+		}
 	}
-
-	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(MsgPackSerializer ctx) {
+		return new Builder(ctx);
 	}
 
 	/*
@@ -211,6 +190,18 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		MsgPackOutputStream os = new MsgPackOutputStream(out.getOutputStream());
 		out.setOutputStream(os);
 		return os;
+	}
+
+	private final MsgPackSerializer ctx;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected MsgPackSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
 	}
 
 	/*
@@ -298,28 +289,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		return out;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		m = sort(m);
-
-		// The map size may change as we're iterating over it, so
-		// grab a snapshot of the entries in a separate list.
-		List<SimpleMapEntry> entries = Utils.listOfSize(m.size());
-		m.forEach((k,v) -> entries.add(new SimpleMapEntry(k, v)));
-
-		out.startMap(entries.size());
-
-		entries.forEach(x -> {
-			Object value = x.value;
-			Object key = generalize(x.key, keyType);
-			serializeAnything(out, key, keyType, null, null);
-			serializeAnything(out, value, valueType, null, null);
-		});
-	}
-
 	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws SerializeException {
 
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
@@ -359,23 +328,6 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		});
 	}
 
-	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
-		ClassMeta<?> aType = push2(v.getName(), v.getValue(), v.getClassMeta());
-		 if (aType != null)
-			 pop();
-		 return aType == null;
-	}
-
-	private static class SimpleMapEntry {
-		final Object key;
-		final Object value;
-
-		SimpleMapEntry(Object key, Object value) {
-			this.key = key;
-			this.value = value;
-		}
-	}
-
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
@@ -386,10 +338,39 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		l.forEach(x -> serializeAnything(out, x, elementType, "<iterator>", null));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		m = sort(m);
+
+		// The map size may change as we're iterating over it, so
+		// grab a snapshot of the entries in a separate list.
+		List<SimpleMapEntry> entries = Utils.listOfSize(m.size());
+		m.forEach((k,v) -> entries.add(new SimpleMapEntry(k, v)));
+
+		out.startMap(entries.size());
+
+		entries.forEach(x -> {
+			Object value = x.value;
+			Object key = generalize(x.key, keyType);
+			serializeAnything(out, key, keyType, null, null);
+			serializeAnything(out, value, valueType, null, null);
+		});
+	}
+
+	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
+		ClassMeta<?> aType = push2(v.getName(), v.getValue(), v.getClassMeta());
+		 if (aType != null)
+			 pop();
+		 return aType == null;
+	}
+
+	@Override /* Overridden from SerializerSession */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
+	}
 	@Override
 	protected boolean isAddBeanTypes() {
 		return ctx.isAddBeanTypes();

@@ -31,7 +31,12 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
+
+	private static boolean exists(String s) {
+		return s != null && ! "NONE".equals(s);
+	}
 
 	@Override /* Overridden from HtmlDocTemplate */
 	public void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
@@ -46,67 +51,55 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	}
 
 	/**
-	 * Renders the contents of the <code><xt>&lt;head&gt;</xt></code> element.
+	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;article&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+	protected void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
+		// <div class='outerdata'><div class='data' id='data'>...</div></div>
+		w.oTag(4, "div").attr("class","outerdata").append('>').nl(4);
+		w.oTag(5, "div").attr("class","data").attr("id", "data").append('>').nl(5);
 
-		String[] head = session.getHead();
-		for (int i = 0; i < head.length; i++)
-			w.sIf(i > 0).appendln(2, session.resolve(head[i]));
+		if (o == null) {
+			w.append(6, "<null/>").nl(6);
+		} else if (Utils.isEmpty(o)){
+			String m = session.getNoResultsMessage();
+			if (exists(m))
+				w.append(6, session.resolve(m)).nl(6);
+		} else {
+			session.indent = 6;
+			w.flush();
+			if (session.isResolveBodyVars()) {
+				w = new HtmlWriter(w) {
+					@Override
+					public HtmlWriter text(Object value, boolean preserveWhitespace) {
+						return super.text(session.resolve(Utils.s(value)), preserveWhitespace);
+					}
+				};
+			}
+			session.parentSerialize(w, o);
+		}
 
-		if (hasStyle(session)) {
-			w.sTag(2, "style").nl(2);
-			style(session, w, o);
-			w.ie(2).eTag("style").nl(2);
-		}
-		if (hasScript(session)) {
-			w.sTag(2, "script").nl(2);
-			script(session, w, o);
-			w.ie(2).eTag("script").nl(2);
-		}
+		w.ie(5).eTag("div").nl(5);
+		w.ie(4).eTag("div").nl(4);
 	}
 
 	/**
-	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
+	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		Flag addSpace = Flag.create();
-		for (String s : session.getStylesheet())
-			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
-		if (session.isNowrap())
-			w.appendln(3, "div.data * {white-space:nowrap;} ");
-		for (String s : session.getStyle())
-			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
-		session.forEachWidget(x -> {
-			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver())));
-		});
-	}
-
-	/**
-	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
-	 *
-	 * @param session The current serializer session.
-	 * @param w The writer being written to.
-	 * @param o The object being serialized.
-	 * @throws Exception Any exception can be thrown.
-	 */
-	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		Flag addSpace = Flag.create();
-		for (String s : session.getScript())
-			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
-		session.forEachWidget(x -> {
-			w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
-		});
+	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		String[] aside = session.getAside();
+		for (int i = 0; i < aside.length; i++)
+			w.sIf(i > 0).appendln(4, session.resolve(aside[i]));
 	}
 
 	/**
@@ -178,6 +171,110 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	}
 
 	/**
+	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code> element.
+	 *
+	 * @param session The current serializer session.
+	 * @param w The writer being written to.
+	 * @param o The object being serialized.
+	 * @throws Exception Any exception can be thrown.
+	 */
+	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		String[] footer = session.getFooter();
+		for (int i = 0; i < footer.length; i++)
+			w.sIf(i > 0).appendln(3, session.resolve(footer[i]));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code>
+	 * element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	protected boolean hasAside(HtmlDocSerializerSession session) {
+		return session.getAside().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code>
+	 * element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	protected boolean hasFooter(HtmlDocSerializerSession session) {
+		return session.getFooter().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code>
+	 * element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	protected boolean hasHeader(HtmlDocSerializerSession session) {
+		return session.getHeader().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code>
+	 * element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	protected boolean hasNav(HtmlDocSerializerSession session) {
+		return session.getNav().length > 0 || session.getNavLinks().length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	protected boolean hasScript(HtmlDocSerializerSession session) {
+		return true;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
+	 *
+	 * @param session The current serializer session.
+	 * @return A boolean flag.
+	 */
+	protected boolean hasStyle(HtmlDocSerializerSession session) {
+		return true;
+	}
+
+	/**
+	 * Renders the contents of the <code><xt>&lt;head&gt;</xt></code> element.
+	 *
+	 * @param session The current serializer session.
+	 * @param w The writer being written to.
+	 * @param o The object being serialized.
+	 * @throws Exception Any exception can be thrown.
+	 */
+	protected void head(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+
+		String[] head = session.getHead();
+		for (int i = 0; i < head.length; i++)
+			w.sIf(i > 0).appendln(2, session.resolve(head[i]));
+
+		if (hasStyle(session)) {
+			w.sTag(2, "style").nl(2);
+			style(session, w, o);
+			w.ie(2).eTag("style").nl(2);
+		}
+		if (hasScript(session)) {
+			w.sTag(2, "script").nl(2);
+			script(session, w, o);
+			w.ie(2).eTag("script").nl(2);
+		}
+	}
+
+	/**
 	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
@@ -231,136 +328,40 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	}
 
 	/**
-	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code> element.
+	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void aside(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String[] aside = session.getAside();
-		for (int i = 0; i < aside.length; i++)
-			w.sIf(i > 0).appendln(4, session.resolve(aside[i]));
+	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		Flag addSpace = Flag.create();
+		for (String s : session.getScript())
+			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
+		session.forEachWidget(x -> {
+			w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
+		});
 	}
 
 	/**
-	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;article&gt;</xt></code> element.
+	 * Renders the contents of the <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
 	 *
 	 * @param session The current serializer session.
 	 * @param w The writer being written to.
 	 * @param o The object being serialized.
 	 * @throws Exception Any exception can be thrown.
 	 */
-	protected void article(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		// To allow for page formatting using CSS, we encapsulate the data inside two div tags:
-		// <div class='outerdata'><div class='data' id='data'>...</div></div>
-		w.oTag(4, "div").attr("class","outerdata").append('>').nl(4);
-		w.oTag(5, "div").attr("class","data").attr("id", "data").append('>').nl(5);
-
-		if (o == null) {
-			w.append(6, "<null/>").nl(6);
-		} else if (Utils.isEmpty(o)){
-			String m = session.getNoResultsMessage();
-			if (exists(m))
-				w.append(6, session.resolve(m)).nl(6);
-		} else {
-			session.indent = 6;
-			w.flush();
-			if (session.isResolveBodyVars()) {
-				w = new HtmlWriter(w) {
-					@Override
-					public HtmlWriter text(Object value, boolean preserveWhitespace) {
-						return super.text(session.resolve(Utils.s(value)), preserveWhitespace);
-					}
-				};
-			}
-			session.parentSerialize(w, o);
-		}
-
-		w.ie(5).eTag("div").nl(5);
-		w.ie(4).eTag("div").nl(4);
-	}
-
-	/**
-	 * Renders the contents of the <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code> element.
-	 *
-	 * @param session The current serializer session.
-	 * @param w The writer being written to.
-	 * @param o The object being serialized.
-	 * @throws Exception Any exception can be thrown.
-	 */
-	protected void footer(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		String[] footer = session.getFooter();
-		for (int i = 0; i < footer.length; i++)
-			w.sIf(i > 0).appendln(3, session.resolve(footer[i]));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;style&gt;</xt></code> element.
-	 *
-	 * @param session The current serializer session.
-	 * @return A boolean flag.
-	 */
-	protected boolean hasStyle(HtmlDocSerializerSession session) {
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;head&gt;</xt>/<xt>&lt;script&gt;</xt></code> element.
-	 *
-	 * @param session The current serializer session.
-	 * @return A boolean flag.
-	 */
-	protected boolean hasScript(HtmlDocSerializerSession session) {
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;header&gt;</xt></code>
-	 * element.
-	 *
-	 * @param session The current serializer session.
-	 * @return A boolean flag.
-	 */
-	protected boolean hasHeader(HtmlDocSerializerSession session) {
-		return session.getHeader().length > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;nav&gt;</xt></code>
-	 * element.
-	 *
-	 * @param session The current serializer session.
-	 * @return A boolean flag.
-	 */
-	protected boolean hasNav(HtmlDocSerializerSession session) {
-		return session.getNav().length > 0 || session.getNavLinks().length > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;aside&gt;</xt></code>
-	 * element.
-	 *
-	 * @param session The current serializer session.
-	 * @return A boolean flag.
-	 */
-	protected boolean hasAside(HtmlDocSerializerSession session) {
-		return session.getAside().length > 0;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this page should render a <code><xt>&lt;body&gt;</xt>/<xt>&lt;footer&gt;</xt></code>
-	 * element.
-	 *
-	 * @param session The current serializer session.
-	 * @return A boolean flag.
-	 */
-	protected boolean hasFooter(HtmlDocSerializerSession session) {
-		return session.getFooter().length > 0;
-	}
-
-	private static boolean exists(String s) {
-		return s != null && ! "NONE".equals(s);
+	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
+		Flag addSpace = Flag.create();
+		for (String s : session.getStylesheet())
+			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
+		if (session.isNowrap())
+			w.appendln(3, "div.data * {white-space:nowrap;} ");
+		for (String s : session.getStyle())
+			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
+		session.forEachWidget(x -> {
+			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver())));
+		});
 	}
 }

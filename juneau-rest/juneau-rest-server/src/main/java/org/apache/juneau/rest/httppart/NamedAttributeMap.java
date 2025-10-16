@@ -26,11 +26,6 @@ import java.util.*;
  * </ul>
  */
 public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -51,11 +46,6 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	public static NamedAttributeMap of(NamedAttribute...values) {
 		return create().add(values);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -72,19 +62,6 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 	}
 
 	/**
-	 * Creates a copy of this list.
-	 *
-	 * @return A new copy of this list.
-	 */
-	public NamedAttributeMap copy() {
-		return new NamedAttributeMap(this);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Appends the specified rest matcher classes to the list.
 	 *
 	 * @param values The values to add.
@@ -94,5 +71,13 @@ public class NamedAttributeMap extends LinkedHashMap<String,NamedAttribute> {
 		for (NamedAttribute v : values)
 			put(v.getName(), v);
 		return this;
+	}
+	/**
+	 * Creates a copy of this list.
+	 *
+	 * @return A new copy of this list.
+	 */
+	public NamedAttributeMap copy() {
+		return new NamedAttributeMap(this);
 	}
 }

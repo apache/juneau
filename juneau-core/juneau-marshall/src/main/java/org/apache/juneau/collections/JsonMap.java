@@ -102,10 +102,30 @@ import org.apache.juneau.swap.*;
  * </ul>
  */
 public class JsonMap extends LinkedHashMap<String,Object> {
+	private static class UnmodifiableJsonMap extends JsonMap {
+		private static final long serialVersionUID = 1L;
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Static
-	//------------------------------------------------------------------------------------------------------------------
+		@SuppressWarnings("synthetic-access")
+		UnmodifiableJsonMap(JsonMap contents) {
+			if (contents != null)
+				contents.forEach(super::put);
+		}
+
+		@Override
+		public boolean isUnmodifiable() {
+			return true;
+		}
+
+		@Override
+		public Object put(String key, Object val) {
+			throw new UnsupportedOperationException("Not supported on read-only object.");
+		}
+
+		@Override
+		public Object remove(Object key) {
+			throw new UnsupportedOperationException("Not supported on read-only object.");
+		}
+	}
 
 	private static final long serialVersionUID = 1L;
 
@@ -163,6 +183,24 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Construct a map initialized with the specified key/value pairs.
+	 *
+	 * <p>
+	 * Same as {@link #of(Object...)} but calls {@link #filtered()} on the created map.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
+	 * </p>
+	 *
+	 * @param keyValuePairs A list of key/value pairs to add to this map.
+	 * @return A new map, never <jk>null</jk>.
+	 */
+	public static JsonMap filteredMap(Object... keyValuePairs) {
+		return new JsonMap(keyValuePairs).filtered();
+	}
+
+	/**
 	 * Construct a map initialized with the specified map.
 	 *
 	 * @param values
@@ -176,6 +214,21 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Construct a map initialized with the specified key/value pairs.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
+	 * </p>
+	 *
+	 * @param keyValuePairs A list of key/value pairs to add to this map.
+	 * @return A new map, never <jk>null</jk>.
+	 */
+	public static JsonMap of(Object... keyValuePairs) {
+		return new JsonMap(keyValuePairs);
+	}
+
+	/**
 	 * Construct a map initialized with the specified JSON string.
 	 *
 	 * @param json
@@ -186,22 +239,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public static JsonMap ofJson(CharSequence json) throws ParseException {
 		return json == null ? null : new JsonMap(json);
-	}
-
-	/**
-	 * Construct a map initialized with the specified string.
-	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use to parse the input.
-	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonMap ofText(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new JsonMap(in, p);
 	}
 
 	/**
@@ -221,6 +258,21 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * Construct a map initialized with the specified string.
 	 *
 	 * @param in
+	 * 	The input being parsed.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param p
+	 * 	The parser to use to parse the input.
+	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
+	 * @return A new map or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonMap ofText(CharSequence in, Parser p) throws ParseException {
+		return in == null ? null : new JsonMap(in, p);
+	}
+	/**
+	 * Construct a map initialized with the specified string.
+	 *
+	 * @param in
 	 * 	The reader containing the input being parsed.
 	 * 	<br>Can contain normal or simplified JSON.
 	 * @param p
@@ -232,47 +284,20 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	public static JsonMap ofText(Reader in, Parser p) throws ParseException {
 		return in == null ? null : new JsonMap(in);
 	}
-
-	/**
-	 * Construct a map initialized with the specified key/value pairs.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
-	 * </p>
-	 *
-	 * @param keyValuePairs A list of key/value pairs to add to this map.
-	 * @return A new map, never <jk>null</jk>.
+	/*
+	 * If c1 is a child of c2 or the same as c2, returns c1.
+	 * Otherwise, returns c2.
 	 */
-	public static JsonMap of(Object... keyValuePairs) {
-		return new JsonMap(keyValuePairs);
+	private static ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
+		if (c2 == null || c2.getInfo().isParentOf(c1.getInnerClass()))
+			return c1;
+		return c2;
 	}
-
-	/**
-	 * Construct a map initialized with the specified key/value pairs.
-	 *
-	 * <p>
-	 * Same as {@link #of(Object...)} but calls {@link #filtered()} on the created map.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
-	 * </p>
-	 *
-	 * @param keyValuePairs A list of key/value pairs to add to this map.
-	 * @return A new map, never <jk>null</jk>.
-	 */
-	public static JsonMap filteredMap(Object... keyValuePairs) {
-		return new JsonMap(keyValuePairs).filtered();
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//------------------------------------------------------------------------------------------------------------------
-
 	private transient BeanSession session;
 	private Map<String,Object> inner;
+
 	private transient ObjectRest objectRest;
+
 	private transient Predicate<Object> valueFilter = x -> true;
 
 	/**
@@ -287,20 +312,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap(BeanSession session) {
 		this.session = session;
-	}
-
-	/**
-	 * Construct a map initialized with the specified map.
-	 *
-	 * @param in
-	 * 	The map to copy.
-	 * 	<br>Can be <jk>null</jk>.
-	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
-	 */
-	public JsonMap(Map<?,?> in) {
-		this();
-		if (in != null)
-			in.forEach((k,v) -> put(k.toString(), v));
 	}
 
 	/**
@@ -335,6 +346,36 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
+	 * Construct a map initialized with the specified map.
+	 *
+	 * @param in
+	 * 	The map to copy.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Keys will be converted to strings using {@link Object#toString()}.
+	 */
+	public JsonMap(Map<?,?> in) {
+		this();
+		if (in != null)
+			in.forEach((k,v) -> put(k.toString(), v));
+	}
+
+	/**
+	 * Construct a map initialized with the specified key/value pairs.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
+	 * </p>
+	 *
+	 * @param keyValuePairs A list of key/value pairs to add to this map.
+	 */
+	public JsonMap(Object... keyValuePairs) {
+		if (keyValuePairs.length % 2 != 0)
+			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
+		for (int i = 0; i < keyValuePairs.length; i+=2)
+			put(Utils.s(keyValuePairs[i]), keyValuePairs[i+1]);
+	}
+	/**
 	 * Construct a map initialized with the specified reader containing JSON.
 	 *
 	 * @param json
@@ -361,76 +402,17 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		parse(in, p);
 	}
-
 	/**
-	 * Construct a map initialized with the specified key/value pairs.
+	 * Appends all the entries in the specified map to this map.
 	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
-	 * </p>
-	 *
-	 * @param keyValuePairs A list of key/value pairs to add to this map.
-	 */
-	public JsonMap(Object... keyValuePairs) {
-		if (keyValuePairs.length % 2 != 0)
-			throw new IllegalArgumentException("Odd number of parameters passed into JsonMap(Object...)");
-		for (int i = 0; i < keyValuePairs.length; i+=2)
-			put(Utils.s(keyValuePairs[i]), keyValuePairs[i+1]);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Initializers
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Set an inner map in this map to allow for chained get calls.
-	 *
-	 * <p>
-	 * If {@link #get(Object)} returns <jk>null</jk>, then {@link #get(Object)} will be called on the inner map.
-	 *
-	 * <p>
-	 * In addition to providing the ability to chain maps, this method also provides the ability to wrap an existing map
-	 * inside another map so that you can add entries to the outer map without affecting the values on the inner map.
-	 *
-	 * <p class='bjava'>
-	 * 	JsonMap <jv>map1</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:1}"</js>);
-	 * 	JsonMap <jv>map2</jv> = JsonMap.<jsm>of</jsm>().setInner(<jv>map1</jv>);
-	 * 	<jv>map2</jv>.put(<js>"foo"</js>, 2);                      <jc>// Overwrite the entry</jc>
-	 * 	<jk>int</jk> <jv>foo1</jv> = <jv>map1</jv>.getInt(<js>"foo"</js>);           <jc>// foo1 == 1 </jc>
-	 * 	<jk>int</jk> <jv>foo2</jv> = <jv>map2</jv>.getInt(<js>"foo"</js>);           <jc>// foo2 == 2 </jc>
-	 * </p>
-	 *
-	 * @param inner
-	 * 	The inner map.
-	 * 	Can be <jk>null</jk> to remove the inner map from an existing map.
+	 * @param values The map to copy.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public JsonMap inner(Map<String,Object> inner) {
-		this.inner = inner;
+	public JsonMap append(Map<String,Object> values) {
+		if (values != null)
+			super.putAll(values);
 		return this;
 	}
-
-	/**
-	 * Override the default bean session used for converting POJOs.
-	 *
-	 * <p>
-	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
-	 *
-	 * <p>
-	 * Useful if you're serializing/parsing beans with transforms defined.
-	 *
-	 * @param session The new bean session.
-	 * @return This object.
-	 */
-	public JsonMap session(BeanSession session) {
-		this.session = session;
-		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Appenders
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds an entry to this map.
@@ -445,14 +427,19 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Appends all the entries in the specified map to this map.
+	 * Adds the first value that matches the specified predicate.
 	 *
-	 * @param values The map to copy.  Can be <jk>null</jk>.
+	 * @param <T> The value types.
+	 * @param test The predicate to match against.
+	 * @param key The key.
+	 * @param values The values to test.
 	 * @return This object.
 	 */
-	public JsonMap append(Map<String,Object> values) {
-		if (values != null)
-			super.putAll(values);
+	@SafeVarargs
+	public final <T> JsonMap appendFirst(Predicate<T> test, String key, T...values) {
+		for (T v : values)
+			if (test(test, v))
+				return append(key, v);
 		return this;
 	}
 
@@ -484,23 +471,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Adds the first value that matches the specified predicate.
-	 *
-	 * @param <T> The value types.
-	 * @param test The predicate to match against.
-	 * @param key The key.
-	 * @param values The values to test.
-	 * @return This object.
-	 */
-	@SafeVarargs
-	public final <T> JsonMap appendFirst(Predicate<T> test, String key, T...values) {
-		for (T v : values)
-			if (test(test, v))
-				return append(key, v);
-		return this;
-	}
-
-	/**
 	 * Adds a value in this map if the entry does not exist or the current value is <jk>null</jk>.
 	 *
 	 * @param key The map key.
@@ -525,6 +495,227 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		if (o == null && predicate.test(value))
 			put(key, value);
 		return this;
+	}
+
+	/**
+	 * A synonym for {@link #toString()}
+	 *
+	 * @return This object as a JSON string.
+	 */
+	public String asJson() {
+		return toString();
+	}
+
+	/**
+	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT_READABLE}.
+	 *
+	 * @return This object serialized as a string.
+	 */
+	public String asReadableString() {
+		if (Json5Serializer.DEFAULT_READABLE == null)
+			return Utils.s(this);
+		return Json5Serializer.DEFAULT_READABLE.toString(this);
+	}
+	/**
+	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT}.
+	 *
+	 * @return This object serialized as a string.
+	 */
+	public String asString() {
+		if (Json5Serializer.DEFAULT == null)
+			return Utils.s(this);
+		return Json5Serializer.DEFAULT.toString(this);
+	}
+
+	/**
+	 * Serialize this object into a string using the specified serializer.
+	 *
+	 * @param serializer The serializer to use to convert this object to a string.
+	 * @return This object serialized as a string.
+	 */
+	public String asString(WriterSerializer serializer) {
+		return serializer.toString(this);
+	}
+
+	/**
+	 * Converts this map into an object of the specified type.
+	 *
+	 * <p>
+	 * If this map contains a <js>"_type"</js> entry, it must be the same as or a subclass of the <c>type</c>.
+	 *
+	 * @param <T> The class type to convert this map object to.
+	 * @param type The class type to convert this map object to.
+	 * @return The new object.
+	 * @throws ClassCastException
+	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T cast(Class<T> type) {
+		BeanSession bs = bs();
+		ClassMeta<?> c2 = bs.getClassMeta(type);
+		String typePropertyName = bs.getBeanTypePropertyName(c2);
+		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(typePropertyName));
+		ClassMeta<?> c = c1 == null ? c2 : narrowClassMeta(c1, c2);
+		if (c.isObject())
+			return (T)this;
+		return (T)cast2(c);
+	}
+
+	/**
+	 * Same as {@link #cast(Class)}, except allows you to specify a {@link ClassMeta} parameter.
+	 *
+	 * @param <T> The class type to convert this map object to.
+	 * @param cm The class type to convert this map object to.
+	 * @return The new object.
+	 * @throws ClassCastException
+	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
+	 */
+	@SuppressWarnings({"unchecked"})
+	public <T> T cast(ClassMeta<T> cm) {
+		BeanSession bs = bs();
+		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
+		ClassMeta<?> c = narrowClassMeta(c1, cm);
+		return (T)cast2(c);
+	}
+
+	@Override /* Overridden from Map */
+	public boolean containsKey(Object key) {
+		if (super.containsKey(key))
+			return true;
+		if (inner != null)
+			return inner.containsKey(key);
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
+	 *
+	 * <p>
+	 * Always returns <jk>false</jk> if the value is not a {@link CharSequence}.
+	 *
+	 * @param key The key.
+	 * @return <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
+	 */
+	public boolean containsKeyNotEmpty(String key) {
+		Object val = get(key);
+		if (val == null)
+			return false;
+		if (val instanceof CharSequence)
+			return ! Utils.isEmpty(val);
+		return false;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this map contains the specified key, ignoring the inner map if it exists.
+	 *
+	 * @param key The key to look up.
+	 * @return <jk>true</jk> if this map contains the specified key.
+	 */
+	public boolean containsOuterKey(Object key) {
+		return super.containsKey(key);
+	}
+
+	/**
+	 * Similar to {@link #remove(Object) remove(Object)}, but the key is a slash-delimited path used to traverse entries
+	 * in this POJO.
+	 *
+	 * <p>
+	 * For example, the following code is equivalent:
+	 * </p>
+	 * <p class='bjava'>
+	 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 *
+	 * 	<jc>// Long way</jc>
+	 * 	<jv>map</jv>.getMap(<js>"foo"</js>).getList(<js>"bar"</js>).getMap(0).remove(<js>"baz"</js>);
+	 *
+	 * 	<jc>// Using this method</jc>
+	 * 	<jv>map</jv>.deleteAt(<js>"foo/bar/0/baz"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
+	 *
+	 * @param path The path to the entry.
+	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public Object deleteAt(String path) {
+		return getObjectRest().delete(path);
+	}
+
+	@Override /* Overridden from Map */
+	public Set<Map.Entry<String,Object>> entrySet() {
+		if (inner == null)
+			return super.entrySet();
+
+		final Set<String> keySet = keySet();
+		final Iterator<String> keys = keySet.iterator();
+
+		return new AbstractSet<>() {
+
+			@Override /* Overridden from Iterable */
+			public Iterator<Map.Entry<String,Object>> iterator() {
+
+				return new Iterator<>() {
+
+					@Override /* Overridden from Iterator */
+					public boolean hasNext() {
+						return keys.hasNext();
+					}
+
+					@Override /* Overridden from Iterator */
+					public Map.Entry<String,Object> next() {
+						return new Map.Entry<>() {
+							String key = keys.next();
+
+							@Override /* Overridden from Map.Entry */
+							public String getKey() {
+								return key;
+							}
+
+							@Override /* Overridden from Map.Entry */
+							public Object getValue() {
+								return get(key);
+							}
+
+							@Override /* Overridden from Map.Entry */
+							public Object setValue(Object object) {
+								return put(key, object);
+							}
+						};
+					}
+
+					@Override /* Overridden from Iterator */
+					public void remove() {
+						throw new UnsupportedOperationException("Not supported on read-only object.");
+					}
+				};
+			}
+
+			@Override /* Overridden from Set */
+			public int size() {
+				return keySet.size();
+			}
+		};
+	}
+
+	/**
+	 * Returns a copy of this <c>JsonMap</c> without the specified keys.
+	 *
+	 * @param keys The keys of the entries not to copy.
+	 * @return A new map without the keys and values from this map.
+	 */
+	public JsonMap exclude(String...keys) {
+		JsonMap m2 = new JsonMap();
+		this.forEach((k,v) -> {
+			boolean exclude = false;
+			for (String kk : keys)
+				if (kk.equals(k))
+					exclude = true;
+			if (! exclude)
+				m2.put(k, v);
+		});
+		return m2;
 	}
 
 	/**
@@ -565,9 +756,157 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Retrievers
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the value for the first key in the list that has an entry in this map.
+	 *
+	 * <p>
+	 * Casts or converts the value to the specified class type.
+	 *
+	 * <p>
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
+	 *
+	 * @param type The class type to convert the value to.
+	 * @param <T> The class type to convert the value to.
+	 * @param keys The keys to look up in order.
+	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
+	 */
+	public <T> T find(Class<T> type, String...keys) {
+		for (String key : keys)
+			if (containsKey(key))
+				return get(key, type);
+		return null;
+	}
+
+	/**
+	 * Returns the value for the first key in the list that has an entry in this map.
+	 *
+	 * @param keys The keys to look up in order.
+	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
+	 */
+	public Object find(String...keys) {
+		for (String key : keys)
+			if (containsKey(key))
+				return get(key);
+		return null;
+	}
+
+	/**
+	 * Returns the first entry that exists converted to a {@link Boolean}.
+	 *
+	 * <p>
+	 * Shortcut for <code>find(Boolean.<jk>class</jk>, keys)</code>.
+	 *
+	 * @param keys The list of keys to look for.
+	 * @return
+	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
+	 * 	contains no mapping for any of the keys.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean findBoolean(String... keys) {
+		return find(Boolean.class, keys);
+	}
+
+	/**
+	 * Returns the first entry that exists converted to an {@link Integer}.
+	 *
+	 * <p>
+	 * Shortcut for <code>find(Integer.<jk>class</jk>, keys)</code>.
+	 *
+	 * @param keys The list of keys to look for.
+	 * @return
+	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
+	 * 	contains no mapping for any of the keys.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer findInt(String... keys) {
+		return find(Integer.class, keys);
+	}
+
+	/**
+	 * Searches for the specified key in this map ignoring case.
+	 *
+	 * @param key
+	 * 	The key to search for.
+	 * 	For performance reasons, it's preferable that the key be all lowercase.
+	 * @return The key, or <jk>null</jk> if map does not contain this key.
+	 */
+	public String findKeyIgnoreCase(String key) {
+		for (String k : keySet())
+			if (key.equalsIgnoreCase(k))
+				return k;
+		return null;
+	}
+
+	/**
+	 * Returns the first entry that exists converted to a {@link JsonList}.
+	 *
+	 * <p>
+	 * Shortcut for <code>find(JsonList.<jk>class</jk>, keys)</code>.
+	 *
+	 * @param keys The list of keys to look for.
+	 * @return
+	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
+	 * 	contains no mapping for any of the keys.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList findList(String... keys) {
+		return find(JsonList.class, keys);
+	}
+
+	/**
+	 * Returns the first entry that exists converted to a {@link Long}.
+	 *
+	 * <p>
+	 * Shortcut for <code>find(Long.<jk>class</jk>, keys)</code>.
+	 *
+	 * @param keys The list of keys to look for.
+	 * @return
+	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
+	 * 	contains no mapping for any of the keys.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Long findLong(String... keys) {
+		return find(Long.class, keys);
+	}
+
+	/**
+	 * Returns the first entry that exists converted to a {@link JsonMap}.
+	 *
+	 * <p>
+	 * Shortcut for <code>find(JsonMap.<jk>class</jk>, keys)</code>.
+	 *
+	 * @param keys The list of keys to look for.
+	 * @return
+	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
+	 * 	contains no mapping for any of the keys.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap findMap(String... keys) {
+		return find(JsonMap.class, keys);
+	}
+
+	/**
+	 * Returns the first entry that exists converted to a {@link String}.
+	 *
+	 * <p>
+	 * Shortcut for <code>find(String.<jk>class</jk>, keys)</code>.
+	 *
+	 * @param keys The list of keys to look for.
+	 * @return
+	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
+	 * 	contains no mapping for any of the keys.
+	 */
+	public String findString(String... keys) {
+		return find(String.class, keys);
+	}
+
+	@Override /* Overridden from Map */
+	public Object get(Object key) {
+		Object o = super.get(key);
+		if (o == null && inner != null)
+			o = inner.get(key);
+		return o;
+	}
 
 	/**
 	 * Same as {@link Map#get(Object) get()}, but casts or converts the value to the specified class type.
@@ -661,753 +1000,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Same as {@link Map#get(Object) get()}, but returns the default value if the key could not be found.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the entry doesn't exist.
-	 * @return The value, or the default value if the entry doesn't exist.
-	 */
-	public Object getWithDefault(String key, Object def) {
-		Object o = get(key);
-		return (o == null ? def : o);
-	}
-
-	/**
-	 * Same as {@link #get(String,Class)} but returns a default value if the value does not exist.
-	 *
-	 * @param key The key.
-	 * @param def The default value.  Can be <jk>null</jk>.
-	 * @param <T> The class type returned.
-	 * @param type The class type returned.
-	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
-	 */
-	public <T> T getWithDefault(String key, T def, Class<T> type) {
-		return getWithDefault(key, def, type, new Type[0]);
-	}
-
-	/**
-	 * Same as {@link #get(String,Type,Type...)} but returns a default value if the value does not exist.
-	 *
-	 * @param key The key.
-	 * @param def The default value.  Can be <jk>null</jk>.
-	 * @param <T> The class type returned.
-	 * @param type The class type returned.
-	 * @param args The class type parameters.
-	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
-	 */
-	public <T> T getWithDefault(String key, T def, Type type, Type...args) {
-		Object o = get(key);
-		if (o == null)
-			return def;
-		T t = bs().convertToType(o, type, args);
-		return t == null ? def : t;
-	}
-
-	/**
-	 * Searches for the specified key in this map ignoring case.
-	 *
-	 * @param key
-	 * 	The key to search for.
-	 * 	For performance reasons, it's preferable that the key be all lowercase.
-	 * @return The key, or <jk>null</jk> if map does not contain this key.
-	 */
-	public String findKeyIgnoreCase(String key) {
-		for (String k : keySet())
-			if (key.equalsIgnoreCase(k))
-				return k;
-		return null;
-	}
-
-	/**
-	 * Same as {@link Map#get(Object) get()}, but converts the raw value to the specified class type using the specified
-	 * POJO swap.
-	 *
-	 * @param key The key.
-	 * @param objectSwap The swap class used to convert the raw type to a transformed type.
-	 * @param <T> The transformed class type.
-	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <T> T getSwapped(String key, ObjectSwap<T,?> objectSwap) throws ParseException {
-		try {
-			Object o = super.get(key);
-			if (o == null)
-				return null;
-			ObjectSwap swap = objectSwap;
-			return (T) swap.unswap(bs(), o, null);
-		} catch (ParseException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new ParseException(e);
-		}
-	}
-
-	/**
-	 * Returns the value for the first key in the list that has an entry in this map.
-	 *
-	 * @param keys The keys to look up in order.
-	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
-	 */
-	public Object find(String...keys) {
-		for (String key : keys)
-			if (containsKey(key))
-				return get(key);
-		return null;
-	}
-
-	/**
-	 * Returns the value for the first key in the list that has an entry in this map.
-	 *
-	 * <p>
-	 * Casts or converts the value to the specified class type.
-	 *
-	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
-	 *
-	 * @param type The class type to convert the value to.
-	 * @param <T> The class type to convert the value to.
-	 * @param keys The keys to look up in order.
-	 * @return The value of the first entry whose key exists, or <jk>null</jk> if none of the keys exist in this map.
-	 */
-	public <T> T find(Class<T> type, String...keys) {
-		for (String key : keys)
-			if (containsKey(key))
-				return get(key, type);
-		return null;
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link String}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, String.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 */
-	public String getString(String key) {
-		return get(key, String.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link String}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, String[].<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 */
-	public String[] getStringArray(String key) {
-		return getStringArray(key, null);
-	}
-
-	/**
-	 * Same as {@link #getStringArray(String)} but returns a default value if the value cannot be found.
-	 *
-	 * @param key The map key.
-	 * @param def The default value if value is not found.
-	 * @return The value converted to a string array.
-	 */
-	public String[] getStringArray(String key, String[] def) {
-		Object s = get(key, Object.class);
-		if (s == null)
-			return def;
-		String[] r = null;
-		if (s instanceof Collection)
-			r = ArrayUtils.toStringArray((Collection<?>)s);
-		else if (s instanceof String[])
-			r = (String[])s;
-		else if (s instanceof Object[])
-			r = ArrayUtils.toStringArray(alist((Object[])s));
-		else
-			r = splita(Utils.s(s));
-		return (r.length == 0 ? def : r);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link String}.
-	 *
-	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, String.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 */
-	public String getString(String key, String defVal) {
-		return getWithDefault(key, defVal, String.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to an {@link Integer}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, Integer.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer getInt(String key) {
-		return get(key, Integer.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to an {@link Integer}.
-	 *
-	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, Integer.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer getInt(String key, Integer defVal) {
-		return getWithDefault(key, defVal, Integer.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Long}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, Long.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Long getLong(String key) {
-		return get(key, Long.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Long}.
-	 *
-	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, Long.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Long getLong(String key, Long defVal) {
-		return getWithDefault(key, defVal, Long.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Boolean}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, Boolean.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean getBoolean(String key) {
-		return get(key, Boolean.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Boolean}.
-	 *
-	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, Boolean.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean getBoolean(String key, Boolean defVal) {
-		return getWithDefault(key, defVal, Boolean.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Map}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, JsonMap.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap getMap(String key) {
-		return get(key, JsonMap.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link JsonMap}.
-	 *
-	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, JsonMap.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap getMap(String key, JsonMap defVal) {
-		return getWithDefault(key, defVal, JsonMap.class);
-	}
-
-	/**
-	 * Same as {@link #getMap(String)} but creates a new empty {@link JsonMap} if it doesn't already exist.
-	 *
-	 * @param key The key.
-	 * @param createIfNotExists If mapping doesn't already exist, create one with an empty {@link JsonMap}.
-	 * @return The converted value, or an empty value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap getMap(String key, boolean createIfNotExists) {
-		JsonMap m = getWithDefault(key, null, JsonMap.class);
-		if (m == null && createIfNotExists) {
-			m = new JsonMap();
-			put(key, m);
-		}
-		return m;
-	}
-
-	/**
-	 * Same as {@link #getMap(String, JsonMap)} except converts the keys and values to the specified types.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param key The key.
-	 * @param keyType The key type class.
-	 * @param valType The value type class.
-	 * @param def The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public <K,V> Map<K,V> getMap(String key, Class<K> keyType, Class<V> valType, Map<K,V> def) {
-		Object o = get(key);
-		if (o == null)
-			return def;
-		return bs().convertToType(o, Map.class, keyType, valType);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link JsonList}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(key, JsonList.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList getList(String key) {
-		return get(key, JsonList.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link JsonList}.
-	 *
-	 * <p>
-	 * Shortcut for <code>getWithDefault(key, defVal, JsonList.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList getList(String key, JsonList defVal) {
-		return getWithDefault(key, defVal, JsonList.class);
-	}
-
-	/**
-	 * Same as {@link #getList(String)} but creates a new empty {@link JsonList} if it doesn't already exist.
-	 *
-	 * @param key The key.
-	 * @param createIfNotExists If mapping doesn't already exist, create one with an empty {@link JsonList}.
-	 * @return The converted value, or an empty value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList getList(String key, boolean createIfNotExists) {
-		JsonList m = getWithDefault(key, null, JsonList.class);
-		if (m == null && createIfNotExists) {
-			m = new JsonList();
-			put(key, m);
-		}
-		return m;
-	}
-
-	/**
-	 * Same as {@link #getList(String, JsonList)} except converts the elements to the specified types.
-	 *
-	 * @param <E> The element type.
-	 * @param key The key.
-	 * @param elementType The element type class.
-	 * @param def The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public <E> List<E> getList(String key, Class<E> elementType, List<E> def) {
-		Object o = get(key);
-		if (o == null)
-			return def;
-		return bs().convertToType(o, List.class, elementType);
-	}
-
-	/**
-	 * Returns the first entry that exists converted to a {@link String}.
-	 *
-	 * <p>
-	 * Shortcut for <code>find(String.<jk>class</jk>, keys)</code>.
-	 *
-	 * @param keys The list of keys to look for.
-	 * @return
-	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
-	 * 	contains no mapping for any of the keys.
-	 */
-	public String findString(String... keys) {
-		return find(String.class, keys);
-	}
-
-	/**
-	 * Returns the first entry that exists converted to an {@link Integer}.
-	 *
-	 * <p>
-	 * Shortcut for <code>find(Integer.<jk>class</jk>, keys)</code>.
-	 *
-	 * @param keys The list of keys to look for.
-	 * @return
-	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
-	 * 	contains no mapping for any of the keys.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer findInt(String... keys) {
-		return find(Integer.class, keys);
-	}
-
-	/**
-	 * Returns the first entry that exists converted to a {@link Long}.
-	 *
-	 * <p>
-	 * Shortcut for <code>find(Long.<jk>class</jk>, keys)</code>.
-	 *
-	 * @param keys The list of keys to look for.
-	 * @return
-	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
-	 * 	contains no mapping for any of the keys.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Long findLong(String... keys) {
-		return find(Long.class, keys);
-	}
-
-	/**
-	 * Returns the first entry that exists converted to a {@link Boolean}.
-	 *
-	 * <p>
-	 * Shortcut for <code>find(Boolean.<jk>class</jk>, keys)</code>.
-	 *
-	 * @param keys The list of keys to look for.
-	 * @return
-	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
-	 * 	contains no mapping for any of the keys.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean findBoolean(String... keys) {
-		return find(Boolean.class, keys);
-	}
-
-	/**
-	 * Returns the first entry that exists converted to a {@link JsonMap}.
-	 *
-	 * <p>
-	 * Shortcut for <code>find(JsonMap.<jk>class</jk>, keys)</code>.
-	 *
-	 * @param keys The list of keys to look for.
-	 * @return
-	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
-	 * 	contains no mapping for any of the keys.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap findMap(String... keys) {
-		return find(JsonMap.class, keys);
-	}
-
-	/**
-	 * Returns the first entry that exists converted to a {@link JsonList}.
-	 *
-	 * <p>
-	 * Shortcut for <code>find(JsonList.<jk>class</jk>, keys)</code>.
-	 *
-	 * @param keys The list of keys to look for.
-	 * @return
-	 * 	The converted value of the first key in the list that has an entry in this map, or <jk>null</jk> if the map
-	 * 	contains no mapping for any of the keys.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList findList(String... keys) {
-		return find(JsonList.class, keys);
-	}
-
-	/**
-	 * Returns the first key in the map.
-	 *
-	 * @return The first key in the map, or <jk>null</jk> if the map is empty.
-	 */
-	public String getFirstKey() {
-		return isEmpty() ? null : keySet().iterator().next();
-	}
-
-	/**
-	 * Returns the class type of the object at the specified index.
-	 *
-	 * @param key The key into this map.
-	 * @return
-	 * 	The data type of the object at the specified key, or <jk>null</jk> if the value is null or does not exist.
-	 */
-	public ClassMeta<?> getClassMeta(String key) {
-		return bs().getClassMetaForObject(get(key));
-	}
-
-	/**
-	 * Equivalent to calling <c>get(class,key,def)</c> followed by <c>remove(key);</c>
-	 * @param key The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @param type The class type.
-	 *
-	 * @param <T> The class type.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public <T> T removeWithDefault(String key, T defVal, Class<T> type) {
-		T t = getWithDefault(key, defVal, type);
-		remove(key);
-		return t;
-	}
-
-	/**
-	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,String.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public String removeString(String key) {
-		return removeString(key, null);
-	}
-
-	/**
-	 * Equivalent to calling <code>removeWithDefault(key,def,String.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public String removeString(String key, String def) {
-		return removeWithDefault(key, def, String.class);
-	}
-
-	/**
-	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Integer.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer removeInt(String key) {
-		return removeInt(key, null);
-	}
-
-	/**
-	 * Equivalent to calling <code>removeWithDefault(key,def,Integer.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer removeInt(String key, Integer def) {
-		return removeWithDefault(key, def, Integer.class);
-	}
-
-	/**
-	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Boolean.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean removeBoolean(String key) {
-		return removeBoolean(key, null);
-	}
-
-	/**
-	 * Equivalent to calling <code>removeWithDefault(key,def,Boolean.<jk>class</jk>)</code>.
-	 *
-	 * @param key The key.
-	 * @param def The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean removeBoolean(String key, Boolean def) {
-		return removeWithDefault(key, def, Boolean.class);
-	}
-
-	/**
-	 * Convenience method for removing several keys at once.
-	 *
-	 * @param keys The list of keys to remove.
-	 */
-	public void removeAll(Collection<String> keys) {
-		keys.forEach(this::remove);
-	}
-
-	/**
-	 * Convenience method for removing several keys at once.
-	 *
-	 * @param keys The list of keys to remove.
-	 */
-	public void removeAll(String... keys) {
-		for (String k : keys)
-			remove(k);
-	}
-
-	/**
-	 * The opposite of {@link #removeAll(String...)}.
-	 *
-	 * <p>
-	 * Discards all keys from this map that aren't in the specified list.
-	 *
-	 * @param keys The keys to keep.
-	 * @return This map.
-	 */
-	public JsonMap keepAll(String...keys) {
-		for (Iterator<String> i = keySet().iterator(); i.hasNext();) {
-			boolean remove = true;
-			String key = i.next();
-			for (String k : keys) {
-				if (k.equals(key)) {
-					remove = false;
-					break;
-				}
-			}
-			if (remove)
-				i.remove();
-		}
-		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
-	 *
-	 * <p>
-	 * Always returns <jk>false</jk> if the value is not a {@link CharSequence}.
-	 *
-	 * @param key The key.
-	 * @return <jk>true</jk> if the map contains the specified entry and the value is not null nor an empty string.
-	 */
-	public boolean containsKeyNotEmpty(String key) {
-		Object val = get(key);
-		if (val == null)
-			return false;
-		if (val instanceof CharSequence)
-			return ! Utils.isEmpty(val);
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this map contains the specified key, ignoring the inner map if it exists.
-	 *
-	 * @param key The key to look up.
-	 * @return <jk>true</jk> if this map contains the specified key.
-	 */
-	public boolean containsOuterKey(Object key) {
-		return super.containsKey(key);
-	}
-
-	/**
-	 * Returns a copy of this <c>JsonMap</c> with only the specified keys.
-	 *
-	 * @param keys The keys of the entries to copy.
-	 * @return A new map with just the keys and values from this map.
-	 */
-	public JsonMap include(String...keys) {
-		JsonMap m2 = new JsonMap();
-		this.forEach((k,v) -> {
-			for (String kk : keys)
-				if (kk.equals(k))
-					m2.put(kk, v);
-		});
-		return m2;
-	}
-
-	/**
-	 * Returns a copy of this <c>JsonMap</c> without the specified keys.
-	 *
-	 * @param keys The keys of the entries not to copy.
-	 * @return A new map without the keys and values from this map.
-	 */
-	public JsonMap exclude(String...keys) {
-		JsonMap m2 = new JsonMap();
-		this.forEach((k,v) -> {
-			boolean exclude = false;
-			for (String kk : keys)
-				if (kk.equals(k))
-					exclude = true;
-			if (! exclude)
-				m2.put(k, v);
-		});
-		return m2;
-	}
-
-	/**
-	 * Converts this map into an object of the specified type.
-	 *
-	 * <p>
-	 * If this map contains a <js>"_type"</js> entry, it must be the same as or a subclass of the <c>type</c>.
-	 *
-	 * @param <T> The class type to convert this map object to.
-	 * @param type The class type to convert this map object to.
-	 * @return The new object.
-	 * @throws ClassCastException
-	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T cast(Class<T> type) {
-		BeanSession bs = bs();
-		ClassMeta<?> c2 = bs.getClassMeta(type);
-		String typePropertyName = bs.getBeanTypePropertyName(c2);
-		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(typePropertyName));
-		ClassMeta<?> c = c1 == null ? c2 : narrowClassMeta(c1, c2);
-		if (c.isObject())
-			return (T)this;
-		return (T)cast2(c);
-	}
-
-	/**
-	 * Same as {@link #cast(Class)}, except allows you to specify a {@link ClassMeta} parameter.
-	 *
-	 * @param <T> The class type to convert this map object to.
-	 * @param cm The class type to convert this map object to.
-	 * @return The new object.
-	 * @throws ClassCastException
-	 * 	If the <js>"_type"</js> entry is present and not assignable from <c>type</c>
-	 */
-	@SuppressWarnings({"unchecked"})
-	public <T> T cast(ClassMeta<T> cm) {
-		BeanSession bs = bs();
-		ClassMeta<?> c1 = bs.getBeanRegistry().getClassMeta((String)get(bs.getBeanTypePropertyName(cm)));
-		ClassMeta<?> c = narrowClassMeta(c1, cm);
-		return (T)cast2(c);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// POJO REST methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Same as {@link #get(String,Class) get(String,Class)}, but the key is a slash-delimited path used to traverse
 	 * entries in this POJO.
 	 *
@@ -1457,32 +1049,475 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Same as <c>put(String,Object)</c>, but the key is a slash-delimited path used to traverse entries in this
-	 * POJO.
+	 * Returns the {@link BeanSession} currently associated with this map.
 	 *
-	 * <p>
-	 * For example, the following code is equivalent:
-	 * </p>
-	 * <p class='bjava'>
-	 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"..."</js>);
-	 *
-	 * 	<jc>// Long way</jc>
-	 * 	<jv>map</jv>.getMap(<js>"foo"</js>).getList(<js>"bar"</js>).getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
-	 *
-	 * 	<jc>// Using this method</jc>
-	 * 	<jv>map</jv>.putAt(<js>"foo/bar/0/baz"</js>, 123);
-	 * </p>
-	 *
-	 * <p>
-	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
-	 *
-	 * @param path The path to the entry.
-	 * @param o The new value.
-	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
+	 * @return The {@link BeanSession} currently associated with this map.
 	 */
-	public Object putAt(String path, Object o) {
-		return getObjectRest().put(path, o);
+	public BeanSession getBeanSession() {
+		return session;
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Boolean}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, Boolean.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean getBoolean(String key) {
+		return get(key, Boolean.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Boolean}.
+	 *
+	 * <p>
+	 * Shortcut for <code>getWithDefault(key, defVal, Boolean.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean getBoolean(String key, Boolean defVal) {
+		return getWithDefault(key, defVal, Boolean.class);
+	}
+
+	/**
+	 * Returns the class type of the object at the specified index.
+	 *
+	 * @param key The key into this map.
+	 * @return
+	 * 	The data type of the object at the specified key, or <jk>null</jk> if the value is null or does not exist.
+	 */
+	public ClassMeta<?> getClassMeta(String key) {
+		return bs().getClassMetaForObject(get(key));
+	}
+
+	/**
+	 * Returns the first key in the map.
+	 *
+	 * @return The first key in the map, or <jk>null</jk> if the map is empty.
+	 */
+	public String getFirstKey() {
+		return isEmpty() ? null : keySet().iterator().next();
+	}
+
+	/**
+	 * Returns the specified entry value converted to an {@link Integer}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer getInt(String key) {
+		return get(key, Integer.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to an {@link Integer}.
+	 *
+	 * <p>
+	 * Shortcut for <code>getWithDefault(key, defVal, Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer getInt(String key, Integer defVal) {
+		return getWithDefault(key, defVal, Integer.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link JsonList}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, JsonList.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList getList(String key) {
+		return get(key, JsonList.class);
+	}
+
+	/**
+	 * Same as {@link #getList(String)} but creates a new empty {@link JsonList} if it doesn't already exist.
+	 *
+	 * @param key The key.
+	 * @param createIfNotExists If mapping doesn't already exist, create one with an empty {@link JsonList}.
+	 * @return The converted value, or an empty value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList getList(String key, boolean createIfNotExists) {
+		JsonList m = getWithDefault(key, null, JsonList.class);
+		if (m == null && createIfNotExists) {
+			m = new JsonList();
+			put(key, m);
+		}
+		return m;
+	}
+
+	/**
+	 * Same as {@link #getList(String, JsonList)} except converts the elements to the specified types.
+	 *
+	 * @param <E> The element type.
+	 * @param key The key.
+	 * @param elementType The element type class.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <E> List<E> getList(String key, Class<E> elementType, List<E> def) {
+		Object o = get(key);
+		if (o == null)
+			return def;
+		return bs().convertToType(o, List.class, elementType);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link JsonList}.
+	 *
+	 * <p>
+	 * Shortcut for <code>getWithDefault(key, defVal, JsonList.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList getList(String key, JsonList defVal) {
+		return getWithDefault(key, defVal, JsonList.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Long}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, Long.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Long getLong(String key) {
+		return get(key, Long.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Long}.
+	 *
+	 * <p>
+	 * Shortcut for <code>getWithDefault(key, defVal, Long.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Long getLong(String key, Long defVal) {
+		return getWithDefault(key, defVal, Long.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Map}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, JsonMap.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap getMap(String key) {
+		return get(key, JsonMap.class);
+	}
+
+	/**
+	 * Same as {@link #getMap(String)} but creates a new empty {@link JsonMap} if it doesn't already exist.
+	 *
+	 * @param key The key.
+	 * @param createIfNotExists If mapping doesn't already exist, create one with an empty {@link JsonMap}.
+	 * @return The converted value, or an empty value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap getMap(String key, boolean createIfNotExists) {
+		JsonMap m = getWithDefault(key, null, JsonMap.class);
+		if (m == null && createIfNotExists) {
+			m = new JsonMap();
+			put(key, m);
+		}
+		return m;
+	}
+
+	/**
+	 * Same as {@link #getMap(String, JsonMap)} except converts the keys and values to the specified types.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param key The key.
+	 * @param keyType The key type class.
+	 * @param valType The value type class.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <K,V> Map<K,V> getMap(String key, Class<K> keyType, Class<V> valType, Map<K,V> def) {
+		Object o = get(key);
+		if (o == null)
+			return def;
+		return bs().convertToType(o, Map.class, keyType, valType);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link JsonMap}.
+	 *
+	 * <p>
+	 * Shortcut for <code>getWithDefault(key, defVal, JsonMap.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap getMap(String key, JsonMap defVal) {
+		return getWithDefault(key, defVal, JsonMap.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link String}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, String.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 */
+	public String getString(String key) {
+		return get(key, String.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link String}.
+	 *
+	 * <p>
+	 * Shortcut for <code>getWithDefault(key, defVal, String.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 */
+	public String getString(String key, String defVal) {
+		return getWithDefault(key, defVal, String.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link String}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(key, String[].<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 */
+	public String[] getStringArray(String key) {
+		return getStringArray(key, null);
+	}
+
+	/**
+	 * Same as {@link #getStringArray(String)} but returns a default value if the value cannot be found.
+	 *
+	 * @param key The map key.
+	 * @param def The default value if value is not found.
+	 * @return The value converted to a string array.
+	 */
+	public String[] getStringArray(String key, String[] def) {
+		Object s = get(key, Object.class);
+		if (s == null)
+			return def;
+		String[] r = null;
+		if (s instanceof Collection)
+			r = ArrayUtils.toStringArray((Collection<?>)s);
+		else if (s instanceof String[])
+			r = (String[])s;
+		else if (s instanceof Object[])
+			r = ArrayUtils.toStringArray(alist((Object[])s));
+		else
+			r = splita(Utils.s(s));
+		return (r.length == 0 ? def : r);
+	}
+
+	/**
+	 * Same as {@link Map#get(Object) get()}, but converts the raw value to the specified class type using the specified
+	 * POJO swap.
+	 *
+	 * @param key The key.
+	 * @param objectSwap The swap class used to convert the raw type to a transformed type.
+	 * @param <T> The transformed class type.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <T> T getSwapped(String key, ObjectSwap<T,?> objectSwap) throws ParseException {
+		try {
+			Object o = super.get(key);
+			if (o == null)
+				return null;
+			ObjectSwap swap = objectSwap;
+			return (T) swap.unswap(bs(), o, null);
+		} catch (ParseException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ParseException(e);
+		}
+	}
+
+	/**
+	 * Same as {@link Map#get(Object) get()}, but returns the default value if the key could not be found.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the entry doesn't exist.
+	 * @return The value, or the default value if the entry doesn't exist.
+	 */
+	public Object getWithDefault(String key, Object def) {
+		Object o = get(key);
+		return (o == null ? def : o);
+	}
+
+	/**
+	 * Same as {@link #get(String,Class)} but returns a default value if the value does not exist.
+	 *
+	 * @param key The key.
+	 * @param def The default value.  Can be <jk>null</jk>.
+	 * @param <T> The class type returned.
+	 * @param type The class type returned.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T getWithDefault(String key, T def, Class<T> type) {
+		return getWithDefault(key, def, type, new Type[0]);
+	}
+
+	/**
+	 * Same as {@link #get(String,Type,Type...)} but returns a default value if the value does not exist.
+	 *
+	 * @param key The key.
+	 * @param def The default value.  Can be <jk>null</jk>.
+	 * @param <T> The class type returned.
+	 * @param type The class type returned.
+	 * @param args The class type parameters.
+	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public <T> T getWithDefault(String key, T def, Type type, Type...args) {
+		Object o = get(key);
+		if (o == null)
+			return def;
+		T t = bs().convertToType(o, type, args);
+		return t == null ? def : t;
+	}
+	/**
+	 * Returns a copy of this <c>JsonMap</c> with only the specified keys.
+	 *
+	 * @param keys The keys of the entries to copy.
+	 * @return A new map with just the keys and values from this map.
+	 */
+	public JsonMap include(String...keys) {
+		JsonMap m2 = new JsonMap();
+		this.forEach((k,v) -> {
+			for (String kk : keys)
+				if (kk.equals(k))
+					m2.put(kk, v);
+		});
+		return m2;
+	}
+
+	/**
+	 * Set an inner map in this map to allow for chained get calls.
+	 *
+	 * <p>
+	 * If {@link #get(Object)} returns <jk>null</jk>, then {@link #get(Object)} will be called on the inner map.
+	 *
+	 * <p>
+	 * In addition to providing the ability to chain maps, this method also provides the ability to wrap an existing map
+	 * inside another map so that you can add entries to the outer map without affecting the values on the inner map.
+	 *
+	 * <p class='bjava'>
+	 * 	JsonMap <jv>map1</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:1}"</js>);
+	 * 	JsonMap <jv>map2</jv> = JsonMap.<jsm>of</jsm>().setInner(<jv>map1</jv>);
+	 * 	<jv>map2</jv>.put(<js>"foo"</js>, 2);                      <jc>// Overwrite the entry</jc>
+	 * 	<jk>int</jk> <jv>foo1</jv> = <jv>map1</jv>.getInt(<js>"foo"</js>);           <jc>// foo1 == 1 </jc>
+	 * 	<jk>int</jk> <jv>foo2</jv> = <jv>map2</jv>.getInt(<js>"foo"</js>);           <jc>// foo2 == 2 </jc>
+	 * </p>
+	 *
+	 * @param inner
+	 * 	The inner map.
+	 * 	Can be <jk>null</jk> to remove the inner map from an existing map.
+	 * @return This object.
+	 */
+	public JsonMap inner(Map<String,Object> inner) {
+		this.inner = inner;
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this map is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this map is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return false;
+	}
+
+	/**
+	 * The opposite of {@link #removeAll(String...)}.
+	 *
+	 * <p>
+	 * Discards all keys from this map that aren't in the specified list.
+	 *
+	 * @param keys The keys to keep.
+	 * @return This map.
+	 */
+	public JsonMap keepAll(String...keys) {
+		for (Iterator<String> i = keySet().iterator(); i.hasNext();) {
+			boolean remove = true;
+			String key = i.next();
+			for (String k : keys) {
+				if (k.equals(key)) {
+					remove = false;
+					break;
+				}
+			}
+			if (remove)
+				i.remove();
+		}
+		return this;
+	}
+
+	@Override /* Overridden from Map */
+	public Set<String> keySet() {
+		if (inner == null)
+			return super.keySet();
+		LinkedHashSet<String> s = Utils.set();
+		s.addAll(inner.keySet());
+		s.addAll(super.keySet());
+		return s;
+	}
+	/**
+	 * Returns a modifiable copy of this map if it's unmodifiable.
+	 *
+	 * @return A modifiable copy of this map if it's unmodifiable, or this map if it is already modifiable.
+	 */
+	public JsonMap modifiable() {
+		if (isUnmodifiable())
+			return new JsonMap(this);
+		return this;
 	}
 
 	/**
@@ -1513,38 +1548,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return getObjectRest().post(path, o);
 	}
 
-	/**
-	 * Similar to {@link #remove(Object) remove(Object)}, but the key is a slash-delimited path used to traverse entries
-	 * in this POJO.
-	 *
-	 * <p>
-	 * For example, the following code is equivalent:
-	 * </p>
-	 * <p class='bjava'>
-	 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"..."</js>);
-	 *
-	 * 	<jc>// Long way</jc>
-	 * 	<jv>map</jv>.getMap(<js>"foo"</js>).getList(<js>"bar"</js>).getMap(0).remove(<js>"baz"</js>);
-	 *
-	 * 	<jc>// Using this method</jc>
-	 * 	<jv>map</jv>.deleteAt(<js>"foo/bar/0/baz"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
-	 *
-	 * @param path The path to the entry.
-	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
-	 */
-	public Object deleteAt(String path) {
-		return getObjectRest().delete(path);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Override
 	public Object put(String key, Object value) {
 		if (valueFilter.test(value))
@@ -1553,23 +1556,32 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Returns the {@link BeanSession} currently associated with this map.
+	 * Same as <c>put(String,Object)</c>, but the key is a slash-delimited path used to traverse entries in this
+	 * POJO.
 	 *
-	 * @return The {@link BeanSession} currently associated with this map.
-	 */
-	public BeanSession getBeanSession() {
-		return session;
-	}
-
-	/**
-	 * Sets the {@link BeanSession} currently associated with this map.
+	 * <p>
+	 * For example, the following code is equivalent:
+	 * </p>
+	 * <p class='bjava'>
+	 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
-	 * @param value The {@link BeanSession} currently associated with this map.
-	 * @return This object.
+	 * 	<jc>// Long way</jc>
+	 * 	<jv>map</jv>.getMap(<js>"foo"</js>).getList(<js>"bar"</js>).getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
+	 *
+	 * 	<jc>// Using this method</jc>
+	 * 	<jv>map</jv>.putAt(<js>"foo/bar/0/baz"</js>, 123);
+	 * </p>
+	 *
+	 * <p>
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
+	 *
+	 * @param path The path to the entry.
+	 * @param o The new value.
+	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
-	public JsonMap setBeanSession(BeanSession value) {
-		this.session = value;
-		return this;
+	public Object putAt(String path, Object o) {
+		return getObjectRest().put(path, o);
 	}
 
 	/**
@@ -1587,37 +1599,151 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Serialize this object into a string using the specified serializer.
+	 * Convenience method for removing several keys at once.
 	 *
-	 * @param serializer The serializer to use to convert this object to a string.
-	 * @return This object serialized as a string.
+	 * @param keys The list of keys to remove.
 	 */
-	public String asString(WriterSerializer serializer) {
-		return serializer.toString(this);
+	public void removeAll(Collection<String> keys) {
+		keys.forEach(this::remove);
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT}.
+	 * Convenience method for removing several keys at once.
 	 *
-	 * @return This object serialized as a string.
+	 * @param keys The list of keys to remove.
 	 */
-	public String asString() {
-		if (Json5Serializer.DEFAULT == null)
-			return Utils.s(this);
-		return Json5Serializer.DEFAULT.toString(this);
+	public void removeAll(String... keys) {
+		for (String k : keys)
+			remove(k);
 	}
 
 	/**
-	 * Serialize this object to Simplified JSON using {@link Json5Serializer#DEFAULT_READABLE}.
+	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Boolean.<jk>class</jk>)</code>.
 	 *
-	 * @return This object serialized as a string.
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public String asReadableString() {
-		if (Json5Serializer.DEFAULT_READABLE == null)
-			return Utils.s(this);
-		return Json5Serializer.DEFAULT_READABLE.toString(this);
+	public Boolean removeBoolean(String key) {
+		return removeBoolean(key, null);
 	}
 
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,def,Boolean.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean removeBoolean(String key, Boolean def) {
+		return removeWithDefault(key, def, Boolean.class);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer removeInt(String key) {
+		return removeInt(key, null);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,def,Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer removeInt(String key, Integer def) {
+		return removeWithDefault(key, def, Integer.class);
+	}
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,<jk>null</jk>,String.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public String removeString(String key) {
+		return removeString(key, null);
+	}
+
+	/**
+	 * Equivalent to calling <code>removeWithDefault(key,def,String.<jk>class</jk>)</code>.
+	 *
+	 * @param key The key.
+	 * @param def The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public String removeString(String key, String def) {
+		return removeWithDefault(key, def, String.class);
+	}
+
+	/**
+	 * Equivalent to calling <c>get(class,key,def)</c> followed by <c>remove(key);</c>
+	 * @param key The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @param type The class type.
+	 *
+	 * @param <T> The class type.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <T> T removeWithDefault(String key, T defVal, Class<T> type) {
+		T t = getWithDefault(key, defVal, type);
+		remove(key);
+		return t;
+	}
+
+	/**
+	 * Override the default bean session used for converting POJOs.
+	 *
+	 * <p>
+	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
+	 *
+	 * <p>
+	 * Useful if you're serializing/parsing beans with transforms defined.
+	 *
+	 * @param session The new bean session.
+	 * @return This object.
+	 */
+	public JsonMap session(BeanSession session) {
+		this.session = session;
+		return this;
+	}
+
+	/**
+	 * Sets the {@link BeanSession} currently associated with this map.
+	 *
+	 * @param value The {@link BeanSession} currently associated with this map.
+	 * @return This object.
+	 */
+	public JsonMap setBeanSession(BeanSession value) {
+		this.session = value;
+		return this;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return Json5.of(this);
+	}
+
+	/**
+	 * Returns an unmodifiable copy of this map if it's modifiable.
+	 *
+	 * @return An unmodifiable copy of this map if it's modifiable, or this map if it is already unmodifiable.
+	 */
+	public JsonMap unmodifiable() {
+		if (this instanceof UnmodifiableJsonMap)
+			return this;
+		return new UnmodifiableJsonMap(this);
+	}
 	/**
 	 * Convenience method for serializing this map to the specified <c>Writer</c> using the
 	 * {@link JsonSerializer#DEFAULT} serializer.
@@ -1632,83 +1758,10 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if this map is unmodifiable.
-	 *
-	 * @return <jk>true</jk> if this map is unmodifiable.
-	 */
-	public boolean isUnmodifiable() {
-		return false;
-	}
-
-	/**
-	 * Returns a modifiable copy of this map if it's unmodifiable.
-	 *
-	 * @return A modifiable copy of this map if it's unmodifiable, or this map if it is already modifiable.
-	 */
-	public JsonMap modifiable() {
-		if (isUnmodifiable())
-			return new JsonMap(this);
-		return this;
-	}
-
-	/**
-	 * Returns an unmodifiable copy of this map if it's modifiable.
-	 *
-	 * @return An unmodifiable copy of this map if it's modifiable, or this map if it is already unmodifiable.
-	 */
-	public JsonMap unmodifiable() {
-		if (this instanceof UnmodifiableJsonMap)
-			return this;
-		return new UnmodifiableJsonMap(this);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	private BeanSession bs() {
 		if (session == null)
 			session = BeanContext.DEFAULT_SESSION;
 		return session;
-	}
-
-	private ObjectRest getObjectRest() {
-		if (objectRest == null)
-			objectRest = new ObjectRest(this);
-		return objectRest;
-	}
-
-	/*
-	 * Combines the class specified by a "_type" attribute with the ClassMeta
-	 * passed in through the cast(ClassMeta) method.
-	 * The rule is that child classes supersede parent classes, and c2 supersedes c1
-	 * if one isn't the parent of another.
-	 */
-	private ClassMeta<?> narrowClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
-		if (c1 == null)
-			return c2;
-		ClassMeta<?> c = getNarrowedClassMeta(c1, c2);
-		if (c1.isMap()) {
-			ClassMeta<?> k = getNarrowedClassMeta(c1.getKeyType(), c2.getKeyType());
-			ClassMeta<?> v = getNarrowedClassMeta(c1.getValueType(), c2.getValueType());
-			return bs().getClassMeta(c.getInnerClass(), k, v);
-		}
-		if (c1.isCollection()) {
-			ClassMeta<?> e = getNarrowedClassMeta(c1.getElementType(), c2.getElementType());
-			return bs().getClassMeta(c.getInnerClass(), e);
-		}
-		return c;
-	}
-
-	/*
-	 * If c1 is a child of c2 or the same as c2, returns c1.
-	 * Otherwise, returns c2.
-	 */
-	private static ClassMeta<?> getNarrowedClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
-		if (c2 == null || c2.getInfo().isParentOf(c1.getInnerClass()))
-			return c1;
-		return c2;
 	}
 
 	/*
@@ -1774,135 +1827,37 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			cm.getInnerClass().getName());
 	}
 
+	private ObjectRest getObjectRest() {
+		if (objectRest == null)
+			objectRest = new ObjectRest(this);
+		return objectRest;
+	}
+
+	/*
+	 * Combines the class specified by a "_type" attribute with the ClassMeta
+	 * passed in through the cast(ClassMeta) method.
+	 * The rule is that child classes supersede parent classes, and c2 supersedes c1
+	 * if one isn't the parent of another.
+	 */
+	private ClassMeta<?> narrowClassMeta(ClassMeta<?> c1, ClassMeta<?> c2) {
+		if (c1 == null)
+			return c2;
+		ClassMeta<?> c = getNarrowedClassMeta(c1, c2);
+		if (c1.isMap()) {
+			ClassMeta<?> k = getNarrowedClassMeta(c1.getKeyType(), c2.getKeyType());
+			ClassMeta<?> v = getNarrowedClassMeta(c1.getValueType(), c2.getValueType());
+			return bs().getClassMeta(c.getInnerClass(), k, v);
+		}
+		if (c1.isCollection()) {
+			ClassMeta<?> e = getNarrowedClassMeta(c1.getElementType(), c2.getElementType());
+			return bs().getClassMeta(c.getInnerClass(), e);
+		}
+		return c;
+	}
+
 	private void parse(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		p.parseIntoMap(r, this, bs().string(), bs().object());
-	}
-
-	private static class UnmodifiableJsonMap extends JsonMap {
-		private static final long serialVersionUID = 1L;
-
-		@SuppressWarnings("synthetic-access")
-		UnmodifiableJsonMap(JsonMap contents) {
-			if (contents != null)
-				contents.forEach(super::put);
-		}
-
-		@Override
-		public Object put(String key, Object val) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
-		}
-
-		@Override
-		public Object remove(Object key) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
-		}
-
-		@Override
-		public boolean isUnmodifiable() {
-			return true;
-		}
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Overridden methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Map */
-	public Object get(Object key) {
-		Object o = super.get(key);
-		if (o == null && inner != null)
-			o = inner.get(key);
-		return o;
-	}
-
-	@Override /* Overridden from Map */
-	public boolean containsKey(Object key) {
-		if (super.containsKey(key))
-			return true;
-		if (inner != null)
-			return inner.containsKey(key);
-		return false;
-	}
-
-	@Override /* Overridden from Map */
-	public Set<String> keySet() {
-		if (inner == null)
-			return super.keySet();
-		LinkedHashSet<String> s = Utils.set();
-		s.addAll(inner.keySet());
-		s.addAll(super.keySet());
-		return s;
-	}
-
-	@Override /* Overridden from Map */
-	public Set<Map.Entry<String,Object>> entrySet() {
-		if (inner == null)
-			return super.entrySet();
-
-		final Set<String> keySet = keySet();
-		final Iterator<String> keys = keySet.iterator();
-
-		return new AbstractSet<>() {
-
-			@Override /* Overridden from Iterable */
-			public Iterator<Map.Entry<String,Object>> iterator() {
-
-				return new Iterator<>() {
-
-					@Override /* Overridden from Iterator */
-					public boolean hasNext() {
-						return keys.hasNext();
-					}
-
-					@Override /* Overridden from Iterator */
-					public Map.Entry<String,Object> next() {
-						return new Map.Entry<>() {
-							String key = keys.next();
-
-							@Override /* Overridden from Map.Entry */
-							public String getKey() {
-								return key;
-							}
-
-							@Override /* Overridden from Map.Entry */
-							public Object getValue() {
-								return get(key);
-							}
-
-							@Override /* Overridden from Map.Entry */
-							public Object setValue(Object object) {
-								return put(key, object);
-							}
-						};
-					}
-
-					@Override /* Overridden from Iterator */
-					public void remove() {
-						throw new UnsupportedOperationException("Not supported on read-only object.");
-					}
-				};
-			}
-
-			@Override /* Overridden from Set */
-			public int size() {
-				return keySet.size();
-			}
-		};
-	}
-
-	/**
-	 * A synonym for {@link #toString()}
-	 *
-	 * @return This object as a JSON string.
-	 */
-	public String asJson() {
-		return toString();
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return Json5.of(this);
 	}
 }

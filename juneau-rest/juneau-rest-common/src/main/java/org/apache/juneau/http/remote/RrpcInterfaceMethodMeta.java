@@ -34,21 +34,6 @@ import org.apache.juneau.reflect.*;
  */
 public class RrpcInterfaceMethodMeta {
 
-	private final String url, path;
-	private final Method method;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
-	 * @param m The Java method.
-	 */
-	public RrpcInterfaceMethodMeta(final String restUrl, Method m) {
-		this.method = m;
-		this.path =  m.getName() + '/' + getMethodArgsSignature(m);
-		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
-	}
-
 	/**
 	 * Given a Java method, returns the arguments signature.
 	 *
@@ -71,14 +56,31 @@ public class RrpcInterfaceMethodMeta {
 		sb.append(')');
 		return sb.toString();
 	}
+	private final String url, path;
+
+	private final Method method;
 
 	/**
-	 * Returns the absolute URL of the REST interface invoked by this Java method.
+	 * Constructor.
 	 *
-	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
+	 * @param restUrl The absolute URL of the REST interface backing the interface proxy.
+	 * @param m The Java method.
 	 */
-	public String getUri() {
-		return url;
+	public RrpcInterfaceMethodMeta(final String restUrl, Method m) {
+		this.method = m;
+		this.path =  m.getName() + '/' + getMethodArgsSignature(m);
+		this.url = trimSlashes(restUrl) + '/' + urlEncode(path);
+	}
+
+	/**
+	 * Returns the underlying Java method that this metadata is about.
+	 *
+	 * @return
+	 * 	The underlying Java method that this metadata is about.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public Method getJavaMethod() {
+		return method;
 	}
 
 	/**
@@ -94,13 +96,11 @@ public class RrpcInterfaceMethodMeta {
 	}
 
 	/**
-	 * Returns the underlying Java method that this metadata is about.
+	 * Returns the absolute URL of the REST interface invoked by this Java method.
 	 *
-	 * @return
-	 * 	The underlying Java method that this metadata is about.
-	 * 	<br>Never <jk>null</jk>.
+	 * @return The absolute URL of the REST interface, never <jk>null</jk>.
 	 */
-	public Method getJavaMethod() {
-		return method;
+	public String getUri() {
+		return url;
 	}
 }

@@ -108,105 +108,6 @@ public class Meter extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
-	 *
-	 * <p>
-	 * Low limit of high range.
-	 *
-	 * @param high
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Meter high(Object value) {
-		attr("high", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
-	 *
-	 * <p>
-	 * High limit of low range.
-	 *
-	 * @param low
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Meter low(Object value) {
-		attr("low", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
-	 *
-	 * <p>
-	 * Upper bound of range.
-	 *
-	 * @param max
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Meter max(Object value) {
-		attr("max", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
-	 *
-	 * <p>
-	 * Lower bound of range.
-	 *
-	 * @param min
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Meter min(Object value) {
-		attr("min", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
-	 *
-	 * <p>
-	 * Optimum value in gauge.
-	 *
-	 * @param optimum
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Meter optimum(Object value) {
-		attr("optimum", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
-	 *
-	 * <p>
-	 * Current value of the element.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Meter value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Meter _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -219,6 +120,29 @@ public class Meter extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Meter attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meter attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Meter child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Meter children(Object...value) {
+		super.children(value);
+		return this;
+	}
 	@Override /* Overridden from HtmlElement */
 	public Meter contenteditable(Object value) {
 		super.contenteditable(value);
@@ -237,6 +161,22 @@ public class Meter extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-high">high</a> attribute.
+	 *
+	 * <p>
+	 * Low limit of high range.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Meter high(Object value) {
+		attr("high", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Meter id(String value) {
 		super.id(value);
@@ -246,6 +186,54 @@ public class Meter extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Meter lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-low">low</a> attribute.
+	 *
+	 * <p>
+	 * High limit of low range.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Meter low(Object value) {
+		attr("low", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-max">max</a> attribute.
+	 *
+	 * <p>
+	 * Upper bound of range.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Meter max(Object value) {
+		attr("max", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-min">min</a> attribute.
+	 *
+	 * <p>
+	 * Lower bound of range.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Meter min(Object value) {
+		attr("min", value);
 		return this;
 	}
 
@@ -549,6 +537,22 @@ public class Meter extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-optimum">optimum</a> attribute.
+	 *
+	 * <p>
+	 * Optimum value in gauge.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Meter optimum(Object value) {
+		attr("optimum", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Meter spellcheck(Object value) {
 		super.spellcheck(value);
@@ -579,27 +583,19 @@ public class Meter extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Meter child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Meter children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meter attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Meter attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-meter-value">value</a> attribute.
+	 *
+	 * <p>
+	 * Current value of the element.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Meter value(Object value) {
+		attr("value", value);
 		return this;
 	}
 }

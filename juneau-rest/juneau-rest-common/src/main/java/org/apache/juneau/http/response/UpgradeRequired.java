@@ -60,21 +60,23 @@ public class UpgradeRequired extends BasicHttpException {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
 	 */
-	public UpgradeRequired(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public UpgradeRequired() {
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public UpgradeRequired() {
-		this((Throwable)null, REASON_PHRASE);
+	public UpgradeRequired(HttpResponse response) {
+		super(response);
+		assertStatusCode(response);
 	}
 
 	/**
@@ -99,15 +101,13 @@ public class UpgradeRequired extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public UpgradeRequired(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public UpgradeRequired(Throwable cause, String msg, Object...args) {
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
@@ -127,15 +127,15 @@ public class UpgradeRequired extends BasicHttpException {
 	public UpgradeRequired copy() {
 		return new UpgradeRequired(this);
 	}
-	@Override /* Overridden from BasicRuntimeException */
-	public UpgradeRequired setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	@Override /* Overridden from BasicHttpException */
+	public UpgradeRequired setContent(HttpEntity value) {
+		super.setContent(value);
 		return this;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public UpgradeRequired setUnmodifiable() {
-		super.setUnmodifiable();
+	@Override /* Overridden from BasicHttpException */
+	public UpgradeRequired setContent(String value) {
+		super.setContent(value);
 		return this;
 	}
 
@@ -152,6 +152,12 @@ public class UpgradeRequired extends BasicHttpException {
 	}
 
 	@Override /* Overridden from BasicHttpException */
+	public UpgradeRequired setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
 	public UpgradeRequired setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
@@ -160,6 +166,12 @@ public class UpgradeRequired extends BasicHttpException {
 	@Override /* Overridden from BasicHttpException */
 	public UpgradeRequired setLocale2(Locale value) {
 		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public UpgradeRequired setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 
@@ -180,7 +192,6 @@ public class UpgradeRequired extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpException */
 	public UpgradeRequired setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
@@ -192,21 +203,10 @@ public class UpgradeRequired extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
-	@Override /* Overridden from BasicHttpException */
-	public UpgradeRequired setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
 
-	@Override /* Overridden from BasicHttpException */
-	public UpgradeRequired setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public UpgradeRequired setContent(HttpEntity value) {
-		super.setContent(value);
+	@Override /* Overridden from BasicRuntimeException */
+	public UpgradeRequired setUnmodifiable() {
+		super.setUnmodifiable();
 		return this;
 	}
 }

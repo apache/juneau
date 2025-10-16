@@ -60,6 +60,17 @@ public class SerializerPipe implements Closeable {
 	private Charset charset;
 
 	/**
+	 * Stream-based constructor.
+	 *
+	 * @param output The object to pipe the serializer output to.
+	 */
+	SerializerPipe(Object output) {
+		this.output = output;
+		this.autoClose = false;
+		this.charset = null;
+	}
+
+	/**
 	 * Writer-based constructor.
 	 *
 	 * @param output The object to pipe the serializer output to.
@@ -75,14 +86,17 @@ public class SerializerPipe implements Closeable {
 	}
 
 	/**
-	 * Stream-based constructor.
-	 *
-	 * @param output The object to pipe the serializer output to.
+	 * Closes the output pipe.
 	 */
-	SerializerPipe(Object output) {
-		this.output = output;
-		this.autoClose = false;
-		this.charset = null;
+	@Override /* Overridden from Closeable */
+	public void close() {
+		try {
+			IOUtils.flush(writer, outputStream);
+			if (autoClose)
+				IOUtils.close(writer, outputStream);
+		} catch (IOException e) {
+			throw new BeanRuntimeException(e);
+		}
 	}
 
 	/**
@@ -116,6 +130,15 @@ public class SerializerPipe implements Closeable {
 			throw new IOException("Cannot convert object of type "+className(output)+" to an OutputStream.");
 
 		return new NoCloseOutputStream(outputStream);
+	}
+
+	/**
+	 * Returns the raw output object passed into this session.
+	 *
+	 * @return The raw output object passed into this session.
+	 */
+	public Object getRawOutput() {
+		return output;
 	}
 
 	/**
@@ -161,19 +184,6 @@ public class SerializerPipe implements Closeable {
 	}
 
 	/**
-	 * Overwrites the writer in this pipe.
-	 *
-	 * <p>
-	 * Used when wrapping the writer returned by {@link #getWriter()} so that the wrapped writer will be flushed
-	 * and closed when {@link #close()} is called.
-	 *
-	 * @param writer The wrapped writer.
-	 */
-	public void setWriter(Writer writer) {
-		this.writer = writer;
-	}
-
-	/**
 	 * Overwrites the output stream in this pipe.
 	 *
 	 * <p>
@@ -187,25 +197,15 @@ public class SerializerPipe implements Closeable {
 	}
 
 	/**
-	 * Returns the raw output object passed into this session.
+	 * Overwrites the writer in this pipe.
 	 *
-	 * @return The raw output object passed into this session.
+	 * <p>
+	 * Used when wrapping the writer returned by {@link #getWriter()} so that the wrapped writer will be flushed
+	 * and closed when {@link #close()} is called.
+	 *
+	 * @param writer The wrapped writer.
 	 */
-	public Object getRawOutput() {
-		return output;
-	}
-
-	/**
-	 * Closes the output pipe.
-	 */
-	@Override /* Overridden from Closeable */
-	public void close() {
-		try {
-			IOUtils.flush(writer, outputStream);
-			if (autoClose)
-				IOUtils.close(writer, outputStream);
-		} catch (IOException e) {
-			throw new BeanRuntimeException(e);
-		}
+	public void setWriter(Writer writer) {
+		this.writer = writer;
 	}
 }

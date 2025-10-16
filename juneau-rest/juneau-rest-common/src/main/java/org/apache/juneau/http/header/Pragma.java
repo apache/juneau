@@ -75,11 +75,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Pragma")
 public class Pragma extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Pragma";
 
@@ -109,11 +104,6 @@ public class Pragma extends BasicStringHeader {
 	public static Pragma of(Supplier<String> value) {
 		return value == null ? null : new Pragma(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -65,6 +65,7 @@ public class Utils {
 	 * @param o The object to traverse.
 	 * @return A list containing all accumulated elements.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> List<T> accumulate(Object o) {
 		var l = list();
 		traverse(o, l::add);
@@ -91,6 +92,7 @@ public class Utils {
 	 * @param componentType The component type of the array.
 	 * @return A new array.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
 		if (value == null)
 			return null;
@@ -225,25 +227,10 @@ public class Utils {
 	 * @return The same object.
 	 * @throws IllegalArgumentException Thrown if the specified string is <jk>null</jk> or blank.
 	 */
+	@SuppressWarnings("null")
 	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
 		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
 		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
-	 *
-	 * @param <T> The element type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same object.
-	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
-	 */
-	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
-		for (int i = 0; i < o.length; i++)
-			assertArg(o[i] != null, "Argument ''{0}'' parameter {1} cannot be null.", name, i);
 		return o;
 	}
 
@@ -257,11 +244,29 @@ public class Utils {
 	 * @return The value cast to the specified array type.
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
+	@SuppressWarnings("unchecked")
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (var i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
 				throw new IllegalArgumentException("Arg "+name+" did not have arg of type "+type.getName()+" at index "+i+": "+value[i].getName());
 		return (Class<E>[])value;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException} if the specified varargs array or any of its elements are <jk>null</jk>.
+	 *
+	 * @param <T> The element type.
+	 * @param name The argument name.
+	 * @param o The object to check.
+	 * @return The same object.
+	 * @throws IllegalArgumentException Thrown if the specified varargs array or any of its elements are <jk>null</jk>.
+	 */
+	@SuppressWarnings("null")
+	public static final <T> T[] assertVarargsNotNull(String name, T[] o) throws IllegalArgumentException {
+		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		for (int i = 0; i < o.length; i++)
+			assertArg(o[i] != null, "Argument ''{0}'' parameter {1} cannot be null.", name, i);
+		return o;
 	}
 
 	/**
@@ -288,6 +293,16 @@ public class Utils {
 		if (c.isInstance(o))
 			return c.cast(o);
 		return null;
+	}
+
+	/**
+	 * Gets the fully qualified class name of the specified object.
+	 *
+	 * @param o The object to get the class name for.
+	 * @return The fully qualified class name, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
+	public static String classNameOf(Object o) {
+		return o == null ? null : o.getClass().getName();
 	}
 
 	/**
@@ -359,6 +374,7 @@ public class Utils {
 	 * @param type The component type class.
 	 * @return An empty array of the specified type.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T[] ea(Class<T> type) {
 		return (T[])Array.newInstance(type, 0);
 	}
@@ -438,16 +454,6 @@ public class Utils {
 	 */
 	public static <T> T env(String name, T def) {
 		return env(name).map(x -> toType(x, def)).orElse(def);
-	}
-
-	/**
-	 * Converts a property name to an environment variable name.
-	 *
-	 * @param name The property name to convert.
-	 * @return The environment variable name (uppercase with dots replaced by underscores).
-	 */
-	private static String envName(String name) {
-		return PROPERTY_TO_ENV.computeIfAbsent(name, x->x.toUpperCase().replace(".", "_"));
 	}
 
 	/**
@@ -642,6 +648,29 @@ public class Utils {
 	 */
 	public static boolean isArray(Object o) {
 		return o != null && o.getClass().isArray();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object can be converted to a list.
+	 *
+	 * <p>
+	 * The following types are considered convertible:
+	 * <ul>
+	 * 	<li>Collections
+	 * 	<li>Iterables
+	 * 	<li>Iterators
+	 * 	<li>Enumerations
+	 * 	<li>Streams
+	 * 	<li>Maps
+	 * 	<li>Optional
+	 * 	<li>Arrays
+	 * </ul>
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the object can be converted to a list.
+	 */
+	public static boolean isConvertibleToList(Object o) {
+		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || o instanceof Map || o instanceof Optional || isArray(o));
 	}
 
 	/**
@@ -969,6 +998,7 @@ public class Utils {
 	 * @return A modifiable LinkedHashMap containing the specified key-value pairs.
 	 */
 	@SafeVarargs
+	@SuppressWarnings("unchecked")
 	public static <K,V> LinkedHashMap<K,V> map(Object...values) {  // NOSONAR
 		var m = new LinkedHashMap<K,V>();
 		for (var i = 0; i < values.length; i+=2) {
@@ -1334,6 +1364,16 @@ public class Utils {
 	}
 
 	/**
+	 * Helper method for creating StringBuilder objects.
+	 *
+	 * @param value The string value to wrap in a StringBuilder.
+	 * @return A new StringBuilder containing the specified value.
+	 */
+	public static StringBuilder sb(String value) {
+		return new StringBuilder(value);
+	}
+
+	/**
 	 * Shortcut for creating a modifiable set out of an array of values.
 	 *
 	 * @param <T> The element type.
@@ -1343,6 +1383,16 @@ public class Utils {
 	@SafeVarargs
 	public static <T> LinkedHashSet<T> set(T...values) {  // NOSONAR
 		return new LinkedHashSet<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Gets the simple class name of the specified object.
+	 *
+	 * @param o The object to get the simple class name for.
+	 * @return The simple class name, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
+	public static String simpleClassNameOf(Object o) {
+		return o == null ? null : o.getClass().getSimpleName();
 	}
 
 	/**
@@ -1668,6 +1718,7 @@ public class Utils {
 	 * Handles escapes and trims whitespace from tokens.
 	 *
 	 * @param s The input string.
+	 * @return
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
@@ -1719,6 +1770,7 @@ public class Utils {
 	 * Handles escapes and trims whitespace from tokens.
 	 *
 	 * @param s The input string.
+	 * @return
 	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * 	<br>An empty string results in an empty array.
 	 */
@@ -1938,10 +1990,6 @@ public class Utils {
 		throw runtimeException("Could not convert object of type {0} to a list", classNameOf(o));
 	}
 
-	public static boolean isConvertibleToList(Object o) {
-		return o != null && (o instanceof Collection || o instanceof Iterable || o instanceof Iterator || o instanceof Enumeration || o instanceof Stream || o instanceof Map || o instanceof Optional || isArray(o));
-	}
-
 	/**
 	 * Converts an array to a stream of objects.
 	 * @param array The array to convert.
@@ -1954,36 +2002,13 @@ public class Utils {
 	}
 
 	/**
-	 * Converts a string to the specified type using registered conversion functions.
-	 *
-	 * @param <T> The target type.
-	 * @param s The string to convert.
-	 * @param def The default value (used to determine the target type).
-	 * @return The converted value, or <jk>null</jk> if the string or default is <jk>null</jk>.
-	 * @throws RuntimeException If the type is not supported for conversion.
-	 */
-	@SuppressWarnings("rawtypes")
-	private static <T> T toType(String s, T def) {
-		if (s == null || def == null)
-			return null;
-		var c = (Class<T>)def.getClass();
-		if (c == String.class)
-			return (T)s;
-		if (c.isEnum())
-			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
-		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
-		if (f == null)
-			throw runtimeException("Invalid env type: {0}", c);
-		return f.apply(s);
-	}
-
-	/**
 	 * Traverses all elements in the specified object and executes a consumer for it.
 	 *
 	 * @param <T> The element type.
 	 * @param o The object to traverse.
 	 * @param c The consumer of the objects.
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> void traverse(Object o, Consumer<T> c) {
 		if (o == null)
 			return;
@@ -2037,36 +2062,40 @@ public class Utils {
 		return value == null ? null : Collections.unmodifiableSet(value);
 	}
 
+	/**
+	 * Converts a property name to an environment variable name.
+	 *
+	 * @param name The property name to convert.
+	 * @return The environment variable name (uppercase with dots replaced by underscores).
+	 */
+	private static String envName(String name) {
+		return PROPERTY_TO_ENV.computeIfAbsent(name, x->x.toUpperCase().replace(".", "_"));
+	}
+
+	/**
+	 * Converts a string to the specified type using registered conversion functions.
+	 *
+	 * @param <T> The target type.
+	 * @param s The string to convert.
+	 * @param def The default value (used to determine the target type).
+	 * @return The converted value, or <jk>null</jk> if the string or default is <jk>null</jk>.
+	 * @throws RuntimeException If the type is not supported for conversion.
+	 */
+	@SuppressWarnings({"unchecked","rawtypes"})
+	private static <T> T toType(String s, T def) {
+		if (s == null || def == null)
+			return null;
+		var c = (Class<T>)def.getClass();
+		if (c == String.class)
+			return (T)s;
+		if (c.isEnum())
+			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
+		var f = (Function<String,T>)ENV_FUNCTIONS.get(c);
+		if (f == null)
+			throw runtimeException("Invalid env type: {0}", c);
+		return f.apply(s);
+	}
+
 	/** Constructor - This class is meant to be subclasses. */
 	protected Utils() {}
-
-	/**
-	 * Helper method for creating StringBuilder objects.
-	 *
-	 * @param value The string value to wrap in a StringBuilder.
-	 * @return A new StringBuilder containing the specified value.
-	 */
-	public static StringBuilder sb(String value) {
-		return new StringBuilder(value);
-	}
-
-	/**
-	 * Gets the fully qualified class name of the specified object.
-	 *
-	 * @param o The object to get the class name for.
-	 * @return The fully qualified class name, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String classNameOf(Object o) {
-		return o == null ? null : o.getClass().getName();
-	}
-
-	/**
-	 * Gets the simple class name of the specified object.
-	 *
-	 * @param o The object to get the simple class name for.
-	 * @return The simple class name, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String simpleClassNameOf(Object o) {
-		return o == null ? null : o.getClass().getSimpleName();
-	}
 }

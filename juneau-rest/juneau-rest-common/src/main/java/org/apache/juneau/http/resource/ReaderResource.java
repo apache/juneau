@@ -31,11 +31,6 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 public class ReaderResource extends BasicResource {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -62,10 +57,22 @@ public class ReaderResource extends BasicResource {
 		super(copyFrom);
 	}
 
+	@Override /* Overridden from BasicResource */
+	public ReaderResource addHeader(String name, String value) {
+		super.addHeader(name, value);
+		return this;
+	}
+	@Override /* Overridden from BasicResource */
+	public ReaderResource addHeaders(Header...values) {
+		super.addHeaders(values);
+		return this;
+	}
+
 	@Override
 	public ReaderResource copy() {
 		return new ReaderResource(this);
 	}
+
 	@Override /* Overridden from BasicResource */
 	public ReaderResource setCached() throws IOException{
 		super.setCached();
@@ -97,13 +104,13 @@ public class ReaderResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentEncoding(String value) {
+	public ReaderResource setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentEncoding(ContentEncoding value) {
+	public ReaderResource setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -115,14 +122,26 @@ public class ReaderResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
+	public ReaderResource setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
 	public ReaderResource setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ReaderResource setContentType(ContentType value) {
-		super.setContentType(value);
+	public ReaderResource setHeader(String name, String value) {
+		super.setHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public ReaderResource setHeaders(Header...values) {
+		super.setHeaders(values);
 		return this;
 	}
 
@@ -135,30 +154,6 @@ public class ReaderResource extends BasicResource {
 	@Override /* Overridden from BasicResource */
 	public ReaderResource setUnmodifiable() {
 		super.setUnmodifiable();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ReaderResource addHeaders(Header...values) {
-		super.addHeaders(values);
 		return this;
 	}
 }

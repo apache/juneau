@@ -67,11 +67,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Server")
 public class Server extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Server";
 
@@ -101,11 +96,6 @@ public class Server extends BasicStringHeader {
 	public static Server of(Supplier<String> value) {
 		return value == null ? null : new Server(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -81,11 +81,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Content-Language")
 public class ContentLanguage extends BasicCsvHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Language";
 
@@ -127,11 +122,6 @@ public class ContentLanguage extends BasicCsvHeader {
 	public static ContentLanguage of(Supplier<String[]> value) {
 		return value == null ? null : new ContentLanguage(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

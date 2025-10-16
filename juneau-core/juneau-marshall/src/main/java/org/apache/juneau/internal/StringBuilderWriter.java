@@ -42,16 +42,6 @@ public class StringBuilderWriter extends Writer {
 	}
 
 	/**
-	 * Create a new string writer around an existing string builder.
-	 *
-	 * @param sb The string builder being wrapped.
-	 */
-	public StringBuilderWriter(StringBuilder sb) {
-		this.sb = sb;
-		lock = null;
-	}
-
-	/**
 	 * Create a new string writer using the specified initial string-builder size.
 	 *
 	 * @param initialSize
@@ -63,24 +53,20 @@ public class StringBuilderWriter extends Writer {
 		lock = null;
 	}
 
-	@Override /* Overridden from Writer */
-	public void write(int c) {
-		sb.append((char) c);
+	/**
+	 * Create a new string writer around an existing string builder.
+	 *
+	 * @param sb The string builder being wrapped.
+	 */
+	public StringBuilderWriter(StringBuilder sb) {
+		this.sb = sb;
+		lock = null;
 	}
 
 	@Override /* Overridden from Writer */
-	public void write(char cbuf[], int start, int length) {
-		sb.append(cbuf, start, length);
-	}
-
-	@Override /* Overridden from Writer */
-	public void write(String str) {
-		sb.append(str);
-	}
-
-	@Override /* Overridden from Writer */
-	public void write(String str, int off, int len) {
-		sb.append(str.substring(off, off + len));
+	public StringBuilderWriter append(char c) {
+		write(c);
+		return this;
 	}
 
 	@Override /* Overridden from Writer */
@@ -100,10 +86,10 @@ public class StringBuilderWriter extends Writer {
 	}
 
 	@Override /* Overridden from Writer */
-	public StringBuilderWriter append(char c) {
-		write(c);
-		return this;
-	}
+	public void close() throws IOException {}
+
+	@Override /* Overridden from Writer */
+	public void flush() {}
 
 	@Override /* Overridden from Object */
 	public String toString() {
@@ -111,8 +97,22 @@ public class StringBuilderWriter extends Writer {
 	}
 
 	@Override /* Overridden from Writer */
-	public void flush() {}
+	public void write(char cbuf[], int start, int length) {
+		sb.append(cbuf, start, length);
+	}
 
 	@Override /* Overridden from Writer */
-	public void close() throws IOException {}
+	public void write(int c) {
+		sb.append((char) c);
+	}
+
+	@Override /* Overridden from Writer */
+	public void write(String str) {
+		sb.append(str);
+	}
+
+	@Override /* Overridden from Writer */
+	public void write(String str, int off, int len) {
+		sb.append(str.substring(off, off + len));
+	}
 }

@@ -90,6 +90,9 @@ public class Link extends Common {
 	private String title;
 	private Integer length;
 
+	/** Bean constructor. */
+	public Link() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -100,14 +103,6 @@ public class Link extends Common {
 	public Link(String rel, String type, String href) {
 		setRel(rel).setType(type).setHref(href);
 	}
-
-	/** Bean constructor. */
-	public Link() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>href</property>.
 	 *
@@ -122,6 +117,91 @@ public class Link extends Common {
 	@Xml(format=ATTR)
 	public String getHref() {
 		return href;
+	}
+
+	/**
+	 * Bean property getter:  <property>hreflang</property>.
+	 *
+	 * <p>
+	 * Returns the language of the resource pointed to by the link.
+	 *
+	 * <p>
+	 * The value should be a language tag as defined by RFC 3066.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public String getHreflang() {
+		return hreflang;
+	}
+
+	/**
+	 * Bean property getter:  <property>length</property>.
+	 *
+	 * <p>
+	 * Returns an advisory size in bytes of the linked resource.
+	 *
+	 * <p>
+	 * This is particularly useful for enclosures (podcast episodes, video files, etc.) to
+	 * help clients decide whether to download the resource.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public Integer getLength() {
+		return length;
+	}
+
+	/**
+	 * Bean property getter:  <property>rel</property>.
+	 *
+	 * <p>
+	 * Returns the link relation type.
+	 *
+	 * <p>
+	 * The <c>rel</c> attribute indicates the type of relationship between the entry/feed and
+	 * the linked resource. When not specified, the default is "alternate".
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public String getRel() {
+		return rel;
+	}
+
+	/**
+	 * Bean property getter:  <property>title</property>.
+	 *
+	 * <p>
+	 * Returns human-readable information about the link.
+	 *
+	 * <p>
+	 * The title provides advisory information about the link, typically for display to users.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The content type of the target of this link.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public String getType() {
+		return type;
+	}
+
+	@Override /* Overridden from Common */
+	public Link setBase(Object value) {
+		super.setBase(value);
+		return this;
 	}
 
 	/**
@@ -147,20 +227,54 @@ public class Link extends Common {
 	}
 
 	/**
-	 * Bean property getter:  <property>rel</property>.
+	 * Bean property setter:  <property>hreflang</property>.
 	 *
 	 * <p>
-	 * Returns the link relation type.
+	 * Sets the language of the resource pointed to by the link.
 	 *
-	 * <p>
-	 * The <c>rel</c> attribute indicates the type of relationship between the entry/feed and
-	 * the linked resource. When not specified, the default is "alternate".
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://example.org/post1.html"</js>)
+	 * 		.setHreflang(<js>"en-US"</js>);
+	 * </p>
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value
+	 * 	The new value for this property (e.g., "en", "fr", "de", "en-US").
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	@Xml(format=ATTR)
-	public String getRel() {
-		return rel;
+	public Link setHreflang(String value) {
+		this.hreflang = value;
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Link setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>length</property>.
+	 *
+	 * <p>
+	 * Sets an advisory size in bytes of the linked resource.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Podcast episode with file size</jc>
+	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://example.org/episode1.mp3"</js>)
+	 * 		.setLength(24986239);  <jc>// ~24 MB</jc>
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property in bytes.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Link setLength(Integer value) {
+		this.length = value;
+		return this;
 	}
 
 	/**
@@ -190,18 +304,26 @@ public class Link extends Common {
 		this.rel = value;
 		return this;
 	}
-
 	/**
-	 * Bean property getter:  <property>type</property>.
+	 * Bean property setter:  <property>title</property>.
 	 *
 	 * <p>
-	 * The content type of the target of this link.
+	 * Sets human-readable information about the link.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"related"</js>, <js>"text/html"</js>, <js>"http://example.org/related"</js>)
+	 * 		.setTitle(<js>"Related Article"</js>);
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	@Xml(format=ATTR)
-	public String getType() {
-		return type;
+	public Link setTitle(String value) {
+		this.title = value;
+		return this;
 	}
 
 	/**
@@ -228,138 +350,6 @@ public class Link extends Common {
 	 */
 	public Link setType(String value) {
 		this.type = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>hreflang</property>.
-	 *
-	 * <p>
-	 * Returns the language of the resource pointed to by the link.
-	 *
-	 * <p>
-	 * The value should be a language tag as defined by RFC 3066.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=ATTR)
-	public String getHreflang() {
-		return hreflang;
-	}
-
-	/**
-	 * Bean property setter:  <property>hreflang</property>.
-	 *
-	 * <p>
-	 * Sets the language of the resource pointed to by the link.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://example.org/post1.html"</js>)
-	 * 		.setHreflang(<js>"en-US"</js>);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property (e.g., "en", "fr", "de", "en-US").
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link setHreflang(String value) {
-		this.hreflang = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>title</property>.
-	 *
-	 * <p>
-	 * Returns human-readable information about the link.
-	 *
-	 * <p>
-	 * The title provides advisory information about the link, typically for display to users.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=ATTR)
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Bean property setter:  <property>title</property>.
-	 *
-	 * <p>
-	 * Sets human-readable information about the link.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"related"</js>, <js>"text/html"</js>, <js>"http://example.org/related"</js>)
-	 * 		.setTitle(<js>"Related Article"</js>);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link setTitle(String value) {
-		this.title = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>length</property>.
-	 *
-	 * <p>
-	 * Returns an advisory size in bytes of the linked resource.
-	 *
-	 * <p>
-	 * This is particularly useful for enclosures (podcast episodes, video files, etc.) to
-	 * help clients decide whether to download the resource.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=ATTR)
-	public Integer getLength() {
-		return length;
-	}
-
-	/**
-	 * Bean property setter:  <property>length</property>.
-	 *
-	 * <p>
-	 * Sets an advisory size in bytes of the linked resource.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Podcast episode with file size</jc>
-	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://example.org/episode1.mp3"</js>)
-	 * 		.setLength(24986239);  <jc>// ~24 MB</jc>
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property in bytes.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link setLength(Integer value) {
-		this.length = value;
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Link setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Link setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

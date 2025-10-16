@@ -35,13 +35,6 @@ public interface JettyMicroserviceListener extends MicroserviceListener {
 	void onCreateServer(JettyMicroservice microservice);
 
 	/**
-	 * Called before the Jetty server is started.
-	 *
-	 * @param microservice Reference to microservice.
-	 */
-	void onStartServer(JettyMicroservice microservice);
-
-	/**
 	 * Called after the Jetty server is started.
 	 *
 	 * @param microservice Reference to microservice.
@@ -49,16 +42,23 @@ public interface JettyMicroserviceListener extends MicroserviceListener {
 	void onPostStartServer(JettyMicroservice microservice);
 
 	/**
-	 * Called before the Jetty server is stopped.
-	 *
-	 * @param microservice Reference to microservice.
-	 */
-	void onStopServer(JettyMicroservice microservice);
-
-	/**
 	 * Called after the Jetty server is stopped.
 	 *
 	 * @param microservice Reference to microservice.
 	 */
 	void onPostStopServer(JettyMicroservice microservice);
+
+	/**
+	 * Called before the Jetty server is started.
+	 *
+	 * @param microservice Reference to microservice.
+	 */
+	void onStartServer(JettyMicroservice microservice);
+
+	/**
+	 * Called before the Jetty server is stopped.
+	 *
+	 * @param microservice Reference to microservice.
+	 */
+	void onStopServer(JettyMicroservice microservice);
 }

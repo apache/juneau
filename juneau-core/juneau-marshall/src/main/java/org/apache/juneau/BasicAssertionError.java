@@ -33,6 +33,22 @@ public class BasicAssertionError extends AssertionError {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Finds the message.
+	 *
+	 * @param cause The cause.
+	 * @param msg The message.
+	 * @param def The default value if both above are <jk>null</jk>.
+	 * @return The resolved message.
+	 */
+	protected static final String getMessage(Throwable cause, String msg, String def) {
+		if (msg != null)
+			return msg;
+		if (cause != null)
+			return cause.getMessage();
+		return def;
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param message The {@link MessageFormat}-style message.
@@ -52,21 +68,5 @@ public class BasicAssertionError extends AssertionError {
 	public BasicAssertionError(Throwable cause, String message, Object...args) {
 		this(getMessage(cause, message, null), args);
 		initCause(cause);
-	}
-
-	/**
-	 * Finds the message.
-	 *
-	 * @param cause The cause.
-	 * @param msg The message.
-	 * @param def The default value if both above are <jk>null</jk>.
-	 * @return The resolved message.
-	 */
-	protected static final String getMessage(Throwable cause, String msg, String def) {
-		if (msg != null)
-			return msg;
-		if (cause != null)
-			return cause.getMessage();
-		return def;
 	}
 }

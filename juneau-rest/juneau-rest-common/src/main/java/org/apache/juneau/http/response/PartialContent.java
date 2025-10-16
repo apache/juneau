@@ -64,15 +64,6 @@ public class PartialContent extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public PartialContent(PartialContent copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -87,6 +78,15 @@ public class PartialContent extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public PartialContent(PartialContent copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -95,13 +95,13 @@ public class PartialContent extends BasicHttpResponse {
 		return new PartialContent(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setContent(String value) {
+	public PartialContent setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setContent(HttpEntity value) {
+	public PartialContent setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -119,14 +119,14 @@ public class PartialContent extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public PartialContent setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public PartialContent setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public PartialContent setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

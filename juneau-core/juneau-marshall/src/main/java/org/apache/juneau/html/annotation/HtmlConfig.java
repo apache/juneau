@@ -42,24 +42,6 @@ import org.apache.juneau.serializer.*;
 public @interface HtmlConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// HtmlCommon
-	//-------------------------------------------------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// HtmlSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
@@ -138,6 +120,58 @@ public @interface HtmlConfig {
 	String addKeyValueTableHeaders() default "";
 
 	/**
+	 * Don't look for link labels in URIs.
+	 *
+	 * <p>
+	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
+	 *
+	 * <p>
+	 * The parameter name can be changed via the {@link org.apache.juneau.html.HtmlSerializer.Builder#labelParameter(String)} property.
+	 *
+	 * <p>
+	 * The following shows the difference between the two generated outputs.
+	 * <br>Note that they're both hyperlinks, but the anchor text differs:
+	 *
+	 * <table class='styled'>
+	 * 	<tr>
+	 * 		<th><c>withLabels</c></th>
+	 * 		<th><c>withoutLabels</c></th>
+	 * 	</tr>
+	 * 	<tr>
+	 * 		<td>
+	 * 			<table class='unstyled'>
+	 * 				<tr><th>key</th><th>value</th></tr>
+	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
+	 * 			</table>
+	 * 		</td>
+	 * 		<td>
+	 * 			<table class='unstyled'>
+	 * 				<tr><th>key</th><th>value</th></tr>
+	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
+	 * 			</table>
+	 * 		</td>
+	 * 	</tr>
+	 * </table>
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#disableDetectLabelParameters()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableDetectLabelParameters() default "";
+
+	/**
 	 * Don't look for URLs in {@link String Strings}.
 	 *
 	 * <p>
@@ -208,56 +242,17 @@ public @interface HtmlConfig {
 	String labelParameter() default "";
 
 	/**
-	 * Don't look for link labels in URIs.
+	 * Optional rank for this config.
 	 *
 	 * <p>
-	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
-	 *
-	 * <p>
-	 * The parameter name can be changed via the {@link org.apache.juneau.html.HtmlSerializer.Builder#labelParameter(String)} property.
-	 *
-	 * <p>
-	 * The following shows the difference between the two generated outputs.
-	 * <br>Note that they're both hyperlinks, but the anchor text differs:
-	 *
-	 * <table class='styled'>
-	 * 	<tr>
-	 * 		<th><c>withLabels</c></th>
-	 * 		<th><c>withoutLabels</c></th>
-	 * 	</tr>
-	 * 	<tr>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 		<td>
-	 * 			<table class='unstyled'>
-	 * 				<tr><th>key</th><th>value</th></tr>
-	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
-	 * 			</table>
-	 * 		</td>
-	 * 	</tr>
-	 * </table>
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#disableDetectLabelParameters()}
-	 * </ul>
+	 * Can be used to override default ordering and application of config annotations.
 	 *
 	 * @return The annotation value.
 	 */
-	String disableDetectLabelParameters() default "";
+	int rank() default 0;
+	//-------------------------------------------------------------------------------------------------------------------
+	// HtmlSerializer
+	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Anchor text source.

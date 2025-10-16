@@ -51,11 +51,6 @@ import org.apache.juneau.bean.html5.*;
  * </ul>
  */
 public class Hyperlink extends A {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -66,11 +61,6 @@ public class Hyperlink extends A {
 	public static Hyperlink create(Object href, Object...children) {
 		return new Hyperlink(href, children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Creates an empty {@link A} element.
 	 */
@@ -86,16 +76,67 @@ public class Hyperlink extends A {
 	public Hyperlink(Object href, Object...children) {
 		super(href, children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	// A-specific attributes
+
+	@Override /* Overridden from A */
+	public Hyperlink _class(String value) {
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	// Global HTML attributes
+
+	@Override /* Overridden from A */
+	public Hyperlink contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink dir(String value) {
+		super.dir(value);
+		return this;
+	}
 
 	@Override /* Overridden from A */
 	public Hyperlink download(Object value) {
 		super.download(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
@@ -112,56 +153,6 @@ public class Hyperlink extends A {
 	}
 
 	@Override /* Overridden from A */
-	public Hyperlink rel(String value) {
-		super.rel(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink target(String value) {
-		super.target(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink type(String value) {
-		super.type(value);
-		return this;
-	}
-
-	// Global HTML attributes
-
-	@Override /* Overridden from A */
-	public Hyperlink _class(String value) {
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
 	public Hyperlink id(String value) {
 		super.id(value);
 		return this;
@@ -172,38 +163,6 @@ public class Hyperlink extends A {
 		super.lang(value);
 		return this;
 	}
-
-	@Override /* Overridden from A */
-	public Hyperlink spellcheck(Object value) {
-		super.spellcheck(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink style(String value) {
-		super.style(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink tabindex(Object value) {
-		super.tabindex(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink title(String value) {
-		super.title(value);
-		return this;
-	}
-
-	@Override /* Overridden from A */
-	public Hyperlink translate(Object value) {
-		super.translate(value);
-		return this;
-	}
-
-	// Event handler attributes
 
 	@Override /* Overridden from A */
 	public Hyperlink onabort(String value) {
@@ -228,6 +187,8 @@ public class Hyperlink extends A {
 		super.oncanplay(value);
 		return this;
 	}
+
+	// Event handler attributes
 
 	@Override /* Overridden from A */
 	public Hyperlink oncanplaythrough(String value) {
@@ -505,29 +466,53 @@ public class Hyperlink extends A {
 		return this;
 	}
 
+	@Override /* Overridden from A */
+	public Hyperlink rel(String value) {
+		super.rel(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink spellcheck(Object value) {
+		super.spellcheck(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink style(String value) {
+		super.style(value);
+		return this;
+	}
+
+	@Override /* Overridden from A */
+	public Hyperlink tabindex(Object value) {
+		super.tabindex(value);
+		return this;
+	}
+
 	// Child/attribute methods
 
 	@Override /* Overridden from A */
-	public Hyperlink child(Object value) {
-		super.child(value);
+	public Hyperlink target(String value) {
+		super.target(value);
 		return this;
 	}
 
 	@Override /* Overridden from A */
-	public Hyperlink children(Object...value) {
-		super.children(value);
+	public Hyperlink title(String value) {
+		super.title(value);
 		return this;
 	}
 
 	@Override /* Overridden from A */
-	public Hyperlink attr(String key, Object val) {
-		super.attr(key, val);
+	public Hyperlink translate(Object value) {
+		super.translate(value);
 		return this;
 	}
 
 	@Override /* Overridden from A */
-	public Hyperlink attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	public Hyperlink type(String value) {
+		super.type(value);
 		return this;
 	}
 }

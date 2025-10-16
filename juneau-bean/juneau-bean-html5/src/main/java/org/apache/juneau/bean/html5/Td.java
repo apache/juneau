@@ -80,59 +80,6 @@ public class Td extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
-	 *
-	 * <p>
-	 * Number of columns that the cell is to span.
-	 *
-	 * @param colspan
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Td colspan(Object value) {
-		attr("colspan", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the IDs of header cells that apply to this table cell. This creates a programmatic
-	 * relationship between the cell and its headers for accessibility purposes.
-	 *
-	 * <p>
-	 * Multiple IDs can be specified as a space-separated list.
-	 *
-	 * @param headers The IDs of header cells that apply to this cell.
-	 * @return This object.
-	 */
-	public Td headers(String value) {
-		attr("headers", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
-	 *
-	 * <p>
-	 * Number of rows that the cell is to span.
-	 *
-	 * @param rowspan
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Td rowspan(Object value) {
-		attr("rowspan", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Td _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -146,6 +93,45 @@ public class Td extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
+	public Td attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Td attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Td child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Td children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-colspan">colspan</a> attribute.
+	 *
+	 * <p>
+	 * Number of columns that the cell is to span.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Td colspan(Object value) {
+		attr("colspan", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
 	public Td contenteditable(Object value) {
 		super.contenteditable(value);
 		return this;
@@ -154,6 +140,24 @@ public class Td extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Td dir(String value) {
 		super.dir(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-headers">headers</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the IDs of header cells that apply to this table cell. This creates a programmatic
+	 * relationship between the cell and its headers for accessibility purposes.
+	 *
+	 * <p>
+	 * Multiple IDs can be specified as a space-separated list.
+	 *
+	 * @param value The IDs of header cells that apply to this cell.
+	 * @return This object.
+	 */
+	public Td headers(String value) {
+		attr("headers", value);
 		return this;
 	}
 
@@ -475,6 +479,22 @@ public class Td extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
+	 *
+	 * <p>
+	 * Number of rows that the cell is to span.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Td rowspan(Object value) {
+		attr("rowspan", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Td spellcheck(Object value) {
 		super.spellcheck(value);
@@ -502,30 +522,6 @@ public class Td extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Td translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Td child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Td children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Td attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Td attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

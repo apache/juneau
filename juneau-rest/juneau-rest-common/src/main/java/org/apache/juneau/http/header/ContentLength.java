@@ -69,13 +69,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Content-Length")
 public class ContentLength extends BasicLongHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Length";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ContentLength of(Long value) {
+		return value == null ? null : new ContentLength(value);
+	}
 
 	/**
 	 * Static creator.
@@ -87,18 +94,6 @@ public class ContentLength extends BasicLongHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLength of(String value) {
-		return value == null ? null : new ContentLength(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLength of(Long value) {
 		return value == null ? null : new ContentLength(value);
 	}
 
@@ -116,10 +111,16 @@ public class ContentLength extends BasicLongHeader {
 	public static ContentLength of(Supplier<Long> value) {
 		return value == null ? null : new ContentLength(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentLength(Long value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -130,17 +131,6 @@ public class ContentLength extends BasicLongHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ContentLength(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentLength(Long value) {
 		super(NAME, value);
 	}
 

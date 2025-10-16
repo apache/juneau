@@ -143,21 +143,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentPrimitiveArrayAssertion(T value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -183,19 +168,24 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		}
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentPrimitiveArrayAssertion(T value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from FluentObjectAssertion */
-	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
-		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
-	@Override /* Overridden from FluentBaseAssertion */
-	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, toString(), returns());
-	}
 
 	/**
 	 * Returns an object assertion on the item specified at the specified index.
@@ -224,22 +214,19 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : Array.getLength(value()), returns());
 	}
 
+	@Override /* Overridden from FluentBaseAssertion */
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, toString(), returns());
+	}
+
+	@Override /* Overridden from FluentObjectAssertion */
+	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Asserts that the contents of this list contain the specified values.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return This object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isHas(E...entries) throws AssertionError {
-		Utils.assertArgNotNull("entries", entries);
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
-	}
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -260,21 +247,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	/**
-	 * Asserts that at least one value in the array passes the specified test.
-	 *
-	 * @param test The predicate test.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isAny(Predicate<E> test) throws AssertionError {
-		Utils.assertArgNotNull("test", test);
-		for (int i = 0, j = length2(); i < j; i++)
-			if (test.test(at(i)))
-				return returns();
-		throw error(MSG_arrayDidntContainAnyMatchingValue, value());
-	}
-
-	/**
 	 * Asserts that all values in the array pass the specified test.
 	 *
 	 * @param test The predicate test.
@@ -290,6 +262,35 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	/**
+	 * Asserts that at least one value in the array passes the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isAny(Predicate<E> test) throws AssertionError {
+		Utils.assertArgNotNull("test", test);
+		for (int i = 0, j = length2(); i < j; i++)
+			if (test.test(at(i)))
+				return returns();
+		throw error(MSG_arrayDidntContainAnyMatchingValue, value());
+	}
+
+	/**
+	 * Asserts that the array contains the expected entry.
+	 *
+	 * @param entry The value to check for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isContains(E entry) throws AssertionError {
+		for (int i = 0, j = length2(); i < j; i++)
+			if (Utils.eq(at(i), entry))
+				return returns();
+		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
+	}
+
+	/**
 	 * Asserts that the collection exists and is empty.
 	 *
 	 * @return The fluent return object.
@@ -298,6 +299,34 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public R isEmpty() throws AssertionError {
 		if (length2() != 0)
 			throw error(MSG_arrayWasNotEmpty);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return This object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R isHas(E...entries) throws AssertionError {
+		Utils.assertArgNotNull("entries", entries);
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
+	}
+
+	/**
+	 * Asserts that the array does not contain the expected value.
+	 *
+	 * @param entry The value to check for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotContains(E entry) throws AssertionError {
+		for (var i = 0; i < length2(); i++)
+			if (Utils.eq(at(i), entry))
+				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
 		return returns();
 	}
 
@@ -323,34 +352,6 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	public R isSize(int size) throws AssertionError {
 		if (length2() != size)
 			throw error(MSG_arrayDidNotHaveExpectedSize, size, asLength());
-		return returns();
-	}
-
-	/**
-	 * Asserts that the array contains the expected entry.
-	 *
-	 * @param entry The value to check for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isContains(E entry) throws AssertionError {
-		for (int i = 0, j = length2(); i < j; i++)
-			if (Utils.eq(at(i), entry))
-				return returns();
-		throw error(MSG_arrayDidNotContainExpectedValue, entry, value());
-	}
-
-	/**
-	 * Asserts that the array does not contain the expected value.
-	 *
-	 * @param entry The value to check for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotContains(E entry) throws AssertionError {
-		for (var i = 0; i < length2(); i++)
-			if (Utils.eq(at(i), entry))
-				throw error(MSG_arrayContainedUnexpectedValue, entry, value());
 		return returns();
 	}
 
@@ -390,18 +391,19 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override
+	public String toString() {
+		if (valueIsNull())
+			return null;  // NOSONAR - Intentional.
+		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
+	}
+
+	@SuppressWarnings("unchecked")
 	private E at(int index) {
 		return valueIsNull() || index < 0 || index >= length2() ? null : (E)Array.get(value(), index);
 	}
 
 	private int length2() {
 		return Array.getLength(value());
-	}
-
-	@Override
-	public String toString() {
-		if (valueIsNull())
-			return null;  // NOSONAR - Intentional.
-		return STRINGIFIERS.get(value().getClass().getComponentType()).apply(value());
 	}
 }

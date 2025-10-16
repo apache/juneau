@@ -93,6 +93,18 @@ public class Img extends HtmlElementVoid {
 		src(src);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Img _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-alt">alt</a> attribute.
 	 *
@@ -103,11 +115,29 @@ public class Img extends HtmlElementVoid {
 	 * <p>
 	 * The alt text should be descriptive and convey the same information as the image.
 	 *
-	 * @param alt Alternative text for the image.
+	 * @param value Alternative text for the image.
 	 * @return This object.
 	 */
 	public Img alt(String value) {
 		attr("alt", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
@@ -125,11 +155,16 @@ public class Img extends HtmlElementVoid {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param crossorigin How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Img crossorigin(String value) {
 		attr("crossorigin", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Img dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -140,13 +175,25 @@ public class Img extends HtmlElementVoid {
 	 * <p>
 	 * Vertical dimension.
 	 *
-	 * @param height
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
 	public Img height(Object value) {
 		attr("height", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img id(String value) {
+		super.id(value);
 		return this;
 	}
 
@@ -164,110 +211,13 @@ public class Img extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param ismap
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Img ismap(Object value) {
 		attr("ismap", deminimize(value, "ismap"));
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Img src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies the name of an image map to use with this image. The value should correspond to
-	 * the name attribute of a map element that defines clickable areas on the image.
-	 *
-	 * <p>
-	 * The value should start with "#" followed by the name of the map element.
-	 *
-	 * @param usemap The name of the image map to use (e.g., "#mymap").
-	 * @return This object.
-	 */
-	public Img usemap(String value) {
-		attr("usemap", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Img width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Img _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Img id(String value) {
-		super.id(value);
 		return this;
 	}
 
@@ -583,6 +533,29 @@ public class Img extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-img-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Img src(Object value) {
+		attrUri("src", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Img style(String value) {
 		super.style(value);
@@ -607,15 +580,38 @@ public class Img extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Img attr(String key, Object val) {
-		super.attr(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies the name of an image map to use with this image. The value should correspond to
+	 * the name attribute of a map element that defines clickable areas on the image.
+	 *
+	 * <p>
+	 * The value should start with "#" followed by the name of the map element.
+	 *
+	 * @param value The name of the image map to use (e.g., "#mymap").
+	 * @return This object.
+	 */
+	public Img usemap(String value) {
+		attr("usemap", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Img attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Img width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

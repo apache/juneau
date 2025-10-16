@@ -59,26 +59,6 @@ import org.apache.juneau.rest.servlet.*;
 public abstract class RrpcServlet extends BasicRestServlet {
 
 	private final Map<String,RrpcInterfaceMeta> serviceMap = new ConcurrentHashMap<>();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Abstract methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the list of interfaces to their implementation objects.
-	 *
-	 * <p>
-	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.
-	 *
-	 * @return The service map.
-	 * @throws Exception Any exception.
-	 */
-	protected abstract Map<Class<?>,Object> getServiceMap() throws Exception;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// REST methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@RestGet(
 		path="/",
 		summary="List of available remote interfaces",
@@ -89,6 +69,62 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		for (Class<?> c : getServiceMap().keySet())
 			l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
 		return l;
+	}
+	@RestPost(
+		path="/{javaInterface}/{javaMethod}",
+		summary="Invoke an interface method",
+		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",
+		swagger=@OpSwagger(
+			parameters= {
+				"{",
+					"in: 'body',",
+					"description: 'Serialized array of Java objects',",
+					"schema: {",
+						"type': 'array'",
+					"},",
+					"examples: {",
+						"'application/json+lax': '[\\'foo\\', 123, true]'",
+					"}",
+				"}"
+			},
+			responses= {
+				"200:{ description:'The return object serialized', schema:{type:'any'},example:{foo:123} }",
+			}
+		)
+	)
+	@HtmlDocConfig(
+		nav= {
+			"<h5>Interface:  $RP{javaInterface}</h5>",
+			"<h5>Method:  $RP{javaMethod}</h5>"
+		}
+	)
+	public Object invoke(
+			Reader r,
+			ReaderParser p,
+			@Header("Content-Type") ContentType contentType,
+			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface,
+			@Path("javaMethod") @Schema(description="Java method name") String javaMethod
+		) throws UnsupportedMediaType, NotFound, Exception {
+
+		// Find the parser.
+		if (p == null)
+			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);
+		RrpcInterfaceMeta rim = getInterfaceClass(javaInterface);
+
+		// Find the service.
+		Object service = getServiceMap().get(rim.getJavaClass());
+		if (service == null)
+			throw new NotFound("Service not found");
+
+		// Find the method.
+		RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
+		if (rmm == null)
+			throw new NotFound("Method not found");
+
+		// Parse the args and invoke the method.
+		java.lang.reflect.Method m = rmm.getJavaMethod();
+		Object[] params = p.parseArgs(r, m.getGenericParameterTypes());
+		return m.invoke(service, params);
 	}
 
 	@RestGet(
@@ -156,71 +192,6 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		return div(form().id("form").action("request:/").method(POST).children(t));
 	}
 
-	@RestPost(
-		path="/{javaInterface}/{javaMethod}",
-		summary="Invoke an interface method",
-		description="Invoke a Java method by passing in the arguments as an array of serialized objects.\nThe returned object is then serialized to the response.",
-		swagger=@OpSwagger(
-			parameters= {
-				"{",
-					"in: 'body',",
-					"description: 'Serialized array of Java objects',",
-					"schema: {",
-						"type': 'array'",
-					"},",
-					"examples: {",
-						"'application/json+lax': '[\\'foo\\', 123, true]'",
-					"}",
-				"}"
-			},
-			responses= {
-				"200:{ description:'The return object serialized', schema:{type:'any'},example:{foo:123} }",
-			}
-		)
-	)
-	@HtmlDocConfig(
-		nav= {
-			"<h5>Interface:  $RP{javaInterface}</h5>",
-			"<h5>Method:  $RP{javaMethod}</h5>"
-		}
-	)
-	public Object invoke(
-			Reader r,
-			ReaderParser p,
-			@Header("Content-Type") ContentType contentType,
-			@Path("javaInterface") @Schema(description="Java interface name") String javaInterface,
-			@Path("javaMethod") @Schema(description="Java method name") String javaMethod
-		) throws UnsupportedMediaType, NotFound, Exception {
-
-		// Find the parser.
-		if (p == null)
-			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);
-		RrpcInterfaceMeta rim = getInterfaceClass(javaInterface);
-
-		// Find the service.
-		Object service = getServiceMap().get(rim.getJavaClass());
-		if (service == null)
-			throw new NotFound("Service not found");
-
-		// Find the method.
-		RrpcInterfaceMethodMeta rmm = getMethods(javaInterface).get(javaMethod);
-		if (rmm == null)
-			throw new NotFound("Method not found");
-
-		// Parse the args and invoke the method.
-		java.lang.reflect.Method m = rmm.getJavaMethod();
-		Object[] params = p.parseArgs(r, m.getGenericParameterTypes());
-		return m.invoke(service, params);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private Map<String,RrpcInterfaceMethodMeta> getMethods(String javaInterface) throws Exception {
-		return getInterfaceClass(javaInterface).getMethodsByPath();
-	}
-
 	/**
 	 * Return the <c>Class</c> given it's name if it exists in the services map.
 	 */
@@ -238,4 +209,18 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		}
 		return rm;
 	}
+	private Map<String,RrpcInterfaceMethodMeta> getMethods(String javaInterface) throws Exception {
+		return getInterfaceClass(javaInterface).getMethodsByPath();
+	}
+
+	/**
+	 * Returns the list of interfaces to their implementation objects.
+	 *
+	 * <p>
+	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.
+	 *
+	 * @return The service map.
+	 * @throws Exception Any exception.
+	 */
+	protected abstract Map<Class<?>,Object> getServiceMap() throws Exception;
 }

@@ -77,7 +77,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#legend() legend()}
- * 		<li class='jm'>{@link HtmlBuilder#legend(Object, Object...) legend(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#legend(Object...) legend(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -102,10 +102,6 @@ public class Legend extends HtmlElementMixed {
 	public Legend(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Legend _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -115,6 +111,30 @@ public class Legend extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Legend accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Legend attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Legend attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Legend child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Legend children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -475,30 +495,6 @@ public class Legend extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Legend translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Legend child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Legend children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Legend attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Legend attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

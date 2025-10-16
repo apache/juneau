@@ -81,6 +81,9 @@ public class Id extends Common {
 
 	private String text;
 
+	/** Bean constructor. */
+	public Id() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -89,14 +92,6 @@ public class Id extends Common {
 	public Id(String text) {
 		setText(text);
 	}
-
-	/** Bean constructor. */
-	public Id() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>text</property>.
 	 *
@@ -108,6 +103,17 @@ public class Id extends Common {
 	@Xml(format=TEXT)
 	public String getText() {
 		return text;
+	}
+
+	@Override /* Overridden from Common */
+	public Id setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+	@Override /* Overridden from Common */
+	public Id setLang(String value) {
+		super.setLang(value);
+		return this;
 	}
 
 	/**
@@ -123,22 +129,6 @@ public class Id extends Common {
 	 */
 	public Id setText(String value) {
 		this.text = value;
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Id setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Id setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

@@ -52,56 +52,34 @@ import org.apache.juneau.internal.*;
 public class TimeMatcherFactory extends MatcherFactory {
 
 	/**
-	 * Default reusable matcher.
+	 * Combines a Calendar with a precision identifier.
 	 */
-	public static final TimeMatcherFactory DEFAULT = new TimeMatcherFactory();
+	private static class CalendarP {
+		public Calendar c;
+		public int precision;
 
-	private final SimpleDateFormat[] formats;
+		public CalendarP(Date date, int precision) {
+			c = Calendar.getInstance();
+			c.setTime(date);
+			this.precision = precision;
+		}
 
-	/**
-	 * Constructor.
-	 */
-	protected TimeMatcherFactory() {
-		this.formats = getTimestampFormats();
-	}
+		public CalendarP copy() {
+			return new CalendarP(c.getTime(), precision);
+		}
 
-	/**
-	 * TODO
-	 *
-	 * @return TODO
-	 */
-	protected SimpleDateFormat[] getTimestampFormats() {
-		String[] s = getTimestampFormatStrings();
-		SimpleDateFormat[] a = new SimpleDateFormat[s.length];
-		for (int i = 0; i < s.length; i++)
-			a[i] = new SimpleDateFormat(s[i]);
-		return a;
-	}
+		public Calendar getCalendar() {
+			return c;
+		}
 
-	/**
-	 * TODO
-	 *
-	 * @return TODO
-	 */
-	protected String[] getTimestampFormatStrings() {
-		return new String[]{
-			"yyyy-MM-dd'T'HH:mm:ss",
-			"yyyy-MM-dd'T'HH:mm",
-			"yyyy-MM-dd'T'HH",
-			"yyyy-MM-dd",
-			"yyyy-MM",
-			"yyyy"
-		};
-	}
+		public CalendarP roll(int amount) {
+			return roll(precision, amount);
+		}
 
-	@Override
-	public boolean canMatch(ClassMeta<?> cm) {
-		return cm.isDateOrCalendar();
-	}
-
-	@Override
-	public AbstractMatcher create(String pattern) {
-		return new TimeMatcher(formats, pattern);
+		public CalendarP roll(int field, int amount) {
+			c.add(field, amount);
+			return this;
+		}
 	}
 
 	/**
@@ -378,13 +356,6 @@ public class TimeMatcherFactory extends MatcherFactory {
 		Calendar start;
 		Calendar end;
 
-		public TimestampRange(SimpleDateFormat[] formats, String start, String end) {
-			CalendarP start1 = parseDate(formats, start);
-			CalendarP end1 = parseDate(formats, end);
-			this.start = start1.copy().roll(MILLISECOND, -1).getCalendar();
-			this.end = end1.roll(1).getCalendar();
-		}
-
 		public TimestampRange(SimpleDateFormat[] formats, Equality eq, String singleDate) {
 			CalendarP singleDate1 = parseDate(formats, singleDate);
 			if (eq == Equality.GT) {
@@ -405,11 +376,23 @@ public class TimeMatcherFactory extends MatcherFactory {
 			}
 		}
 
+		public TimestampRange(SimpleDateFormat[] formats, String start, String end) {
+			CalendarP start1 = parseDate(formats, start);
+			CalendarP end1 = parseDate(formats, end);
+			this.start = start1.copy().roll(MILLISECOND, -1).getCalendar();
+			this.end = end1.roll(1).getCalendar();
+		}
+
 		public boolean matches(Calendar c) {
 			boolean b = (c.after(start) && c.before(end));
 			return b;
 		}
 	}
+
+	/**
+	 * Default reusable matcher.
+	 */
+	public static final TimeMatcherFactory DEFAULT = new TimeMatcherFactory();
 
 	private static int getPrecisionField(String pattern) {
 		if (pattern.indexOf('s') != -1)
@@ -452,34 +435,51 @@ public class TimeMatcherFactory extends MatcherFactory {
 		throw new BasicRuntimeException("Invalid date encountered:  ''{0}''", seg);
 	}
 
+	private final SimpleDateFormat[] formats;
+
 	/**
-	 * Combines a Calendar with a precision identifier.
+	 * Constructor.
 	 */
-	private static class CalendarP {
-		public Calendar c;
-		public int precision;
+	protected TimeMatcherFactory() {
+		this.formats = getTimestampFormats();
+	}
 
-		public CalendarP(Date date, int precision) {
-			c = Calendar.getInstance();
-			c.setTime(date);
-			this.precision = precision;
-		}
+	@Override
+	public boolean canMatch(ClassMeta<?> cm) {
+		return cm.isDateOrCalendar();
+	}
 
-		public CalendarP copy() {
-			return new CalendarP(c.getTime(), precision);
-		}
+	@Override
+	public AbstractMatcher create(String pattern) {
+		return new TimeMatcher(formats, pattern);
+	}
 
-		public CalendarP roll(int field, int amount) {
-			c.add(field, amount);
-			return this;
-		}
+	/**
+	 * TODO
+	 *
+	 * @return TODO
+	 */
+	protected SimpleDateFormat[] getTimestampFormats() {
+		String[] s = getTimestampFormatStrings();
+		SimpleDateFormat[] a = new SimpleDateFormat[s.length];
+		for (int i = 0; i < s.length; i++)
+			a[i] = new SimpleDateFormat(s[i]);
+		return a;
+	}
 
-		public CalendarP roll(int amount) {
-			return roll(precision, amount);
-		}
-
-		public Calendar getCalendar() {
-			return c;
-		}
+	/**
+	 * TODO
+	 *
+	 * @return TODO
+	 */
+	protected String[] getTimestampFormatStrings() {
+		return new String[]{
+			"yyyy-MM-dd'T'HH:mm:ss",
+			"yyyy-MM-dd'T'HH:mm",
+			"yyyy-MM-dd'T'HH",
+			"yyyy-MM-dd",
+			"yyyy-MM",
+			"yyyy"
+		};
 	}
 }

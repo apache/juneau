@@ -76,11 +76,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Allow")
 public class Allow extends BasicCsvHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Allow";
 
@@ -122,11 +117,6 @@ public class Allow extends BasicCsvHeader {
 	public static Allow of(Supplier<String[]> value) {
 		return value == null ? null : new Allow(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

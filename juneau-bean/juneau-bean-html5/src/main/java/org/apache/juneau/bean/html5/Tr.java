@@ -81,7 +81,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#tr() tr()}
- * 		<li class='jm'>{@link HtmlBuilder#tr(Object, Object...) tr(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#tr(Object...) tr(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -106,10 +106,6 @@ public class Tr extends HtmlElementContainer {
 	public Tr(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Tr _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -119,6 +115,30 @@ public class Tr extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Tr accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Tr attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Tr attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Tr child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Tr children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -452,6 +472,12 @@ public class Tr extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Tr setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Tr spellcheck(Object value) {
 		super.spellcheck(value);
@@ -479,36 +505,6 @@ public class Tr extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Tr translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Tr child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Tr children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Tr setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Tr attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Tr attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

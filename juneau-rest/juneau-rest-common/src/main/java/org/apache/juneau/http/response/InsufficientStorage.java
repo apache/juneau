@@ -60,21 +60,23 @@ public class InsufficientStorage extends BasicHttpException {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
 	 */
-	public InsufficientStorage(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public InsufficientStorage() {
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public InsufficientStorage() {
-		this((Throwable)null, REASON_PHRASE);
+	public InsufficientStorage(HttpResponse response) {
+		super(response);
+		assertStatusCode(response);
 	}
 
 	/**
@@ -99,15 +101,13 @@ public class InsufficientStorage extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public InsufficientStorage(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public InsufficientStorage(Throwable cause, String msg, Object...args) {
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
@@ -127,15 +127,15 @@ public class InsufficientStorage extends BasicHttpException {
 	public InsufficientStorage copy() {
 		return new InsufficientStorage(this);
 	}
-	@Override /* Overridden from BasicRuntimeException */
-	public InsufficientStorage setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage setContent(HttpEntity value) {
+		super.setContent(value);
 		return this;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public InsufficientStorage setUnmodifiable() {
-		super.setUnmodifiable();
+	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage setContent(String value) {
+		super.setContent(value);
 		return this;
 	}
 
@@ -152,6 +152,12 @@ public class InsufficientStorage extends BasicHttpException {
 	}
 
 	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
 	public InsufficientStorage setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
@@ -160,6 +166,12 @@ public class InsufficientStorage extends BasicHttpException {
 	@Override /* Overridden from BasicHttpException */
 	public InsufficientStorage setLocale2(Locale value) {
 		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public InsufficientStorage setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 
@@ -180,7 +192,6 @@ public class InsufficientStorage extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpException */
 	public InsufficientStorage setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
@@ -192,21 +203,10 @@ public class InsufficientStorage extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
-	@Override /* Overridden from BasicHttpException */
-	public InsufficientStorage setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
 
-	@Override /* Overridden from BasicHttpException */
-	public InsufficientStorage setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public InsufficientStorage setContent(HttpEntity value) {
-		super.setContent(value);
+	@Override /* Overridden from BasicRuntimeException */
+	public InsufficientStorage setUnmodifiable() {
+		super.setUnmodifiable();
 		return this;
 	}
 }

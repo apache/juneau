@@ -72,31 +72,14 @@ public class ContextBeanCreator<T> {
 	}
 
 	/**
-	 * Sets an already instantiated object on this creator.
+	 * Applies the specified annotations to all applicable serializer builders in this group.
 	 *
-	 * @param value The bean to set.
+	 * @param work The annotations to apply.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
-	public ContextBeanCreator<T> impl(Object value) {
-		this.impl = (T)value;
-		return this;
-	}
-
-	/**
-	 * Sets the implementation type of the bean.
-	 *
-	 * <p>
-	 * The class type must extend from {@link Context} and have a builder create method.
-	 *
-	 * @param value The bean type.
-	 * @return This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public ContextBeanCreator<T> type(Class<? extends T> value) {
-		builder = Context.createBuilder((Class<? extends Context>) value);
-		if (builder == null)
-			throw new IllegalArgumentException("Creator for class {0} not found." + value.getName());
+	public ContextBeanCreator<T> apply(AnnotationWorkList work) {
+		if (builder != null)
+			builder.apply(work);
 		return this;
 	}
 
@@ -142,18 +125,6 @@ public class ContextBeanCreator<T> {
 	}
 
 	/**
-	 * Applies the specified annotations to all applicable serializer builders in this group.
-	 *
-	 * @param work The annotations to apply.
-	 * @return This object.
-	 */
-	public ContextBeanCreator<T> apply(AnnotationWorkList work) {
-		if (builder != null)
-			builder.apply(work);
-		return this;
-	}
-
-	/**
 	 * Creates a new copy of this creator.
 	 *
 	 * @return A new copy of this creator.
@@ -174,5 +145,34 @@ public class ContextBeanCreator<T> {
 		if (builder != null)
 			return (T)builder.build();
 		return null;
+	}
+
+	/**
+	 * Sets an already instantiated object on this creator.
+	 *
+	 * @param value The bean to set.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public ContextBeanCreator<T> impl(Object value) {
+		this.impl = (T)value;
+		return this;
+	}
+
+	/**
+	 * Sets the implementation type of the bean.
+	 *
+	 * <p>
+	 * The class type must extend from {@link Context} and have a builder create method.
+	 *
+	 * @param value The bean type.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public ContextBeanCreator<T> type(Class<? extends T> value) {
+		builder = Context.createBuilder((Class<? extends Context>) value);
+		if (builder == null)
+			throw new IllegalArgumentException("Creator for class {0} not found." + value.getName());
+		return this;
 	}
 }

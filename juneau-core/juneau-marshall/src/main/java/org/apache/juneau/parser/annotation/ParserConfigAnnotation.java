@@ -31,6 +31,28 @@ import org.apache.juneau.svl.*;
 public class ParserConfigAnnotation {
 
 	/**
+	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.InputStreamParser.Builder}.
+	 */
+	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParser.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public InputStreamParserApply(VarResolverSession vr) {
+			super(ParserConfig.class, InputStreamParser.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParser.Builder b) {
+			ParserConfig a = ai.inner();
+
+			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
+		}
+	}
+
+	/**
 	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.Parser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<ParserConfig,Parser.Builder> {
@@ -54,28 +76,6 @@ public class ParserConfigAnnotation {
 			bool(a.strict()).ifPresent(x -> b.strict(x));
 			bool(a.trimStrings()).ifPresent(x -> b.trimStrings(x));
 			bool(a.unbuffered()).ifPresent(x -> b.unbuffered(x));
-		}
-	}
-
-	/**
-	 * Applies {@link ParserConfig} annotations to a {@link org.apache.juneau.parser.InputStreamParser.Builder}.
-	 */
-	public static class InputStreamParserApply extends AnnotationApplier<ParserConfig,InputStreamParser.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public InputStreamParserApply(VarResolverSession vr) {
-			super(ParserConfig.class, InputStreamParser.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParser.Builder b) {
-			ParserConfig a = ai.inner();
-
-			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
 		}
 	}
 

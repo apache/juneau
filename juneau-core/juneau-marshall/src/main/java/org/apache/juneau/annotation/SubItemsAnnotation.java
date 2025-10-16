@@ -34,75 +34,6 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public class SubItemsAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final SubItems DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(org.apache.juneau.annotation.SubItems a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Merges the contents of the specified annotation into the specified generic map.
-	 *
-	 * @param om The map to copy the contents to.
-	 * @param a The annotation to apply.
-	 * @return The same map with the annotation contents applied.
-	 * @throws ParseException Invalid JSON found in value.
-	 */
-	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
-		if (SubItemsAnnotation.empty(a))
-			return om;
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
-		return om
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(nem, "items", parseMap(a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendIf(ne, "$ref", a.$ref())
-		;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -122,15 +53,6 @@ public class SubItemsAnnotation {
 		 */
 		protected Builder() {
 			super(SubItems.class);
-		}
-
-		/**
-		 * Instantiates a new {@link SubItems @SubItems} object initialized with this builder.
-		 *
-		 * @return A new {@link SubItems @SubItems} object.
-		 */
-		public SubItems build() {
-			return new Impl(this);
 		}
 
 		/**
@@ -164,6 +86,15 @@ public class SubItemsAnnotation {
 		public Builder $ref(String value) {
 			this.$ref = value;
 			return this;
+		}
+
+		/**
+		 * Instantiates a new {@link SubItems @SubItems} object initialized with this builder.
+		 *
+		 * @return A new {@link SubItems @SubItems} object.
+		 */
+		public SubItems build() {
+			return new Impl(this);
 		}
 
 		/**
@@ -509,10 +440,6 @@ public class SubItemsAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements SubItems {
 
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
@@ -728,5 +655,63 @@ public class SubItemsAnnotation {
 		public boolean uniqueItems() {
 			return uniqueItems;
 		}
+	}
+
+	/** Default value */
+	public static final SubItems DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(org.apache.juneau.annotation.SubItems a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	/**
+	 * Merges the contents of the specified annotation into the specified generic map.
+	 *
+	 * @param om The map to copy the contents to.
+	 * @param a The annotation to apply.
+	 * @return The same map with the annotation contents applied.
+	 * @throws ParseException Invalid JSON found in value.
+	 */
+	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
+		if (SubItemsAnnotation.empty(a))
+			return om;
+		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		return om
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nem, "items", parseMap(a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendIf(ne, "$ref", a.$ref())
+		;
 	}
 }

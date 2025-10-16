@@ -42,25 +42,6 @@ public class ResponseStatusLine implements StatusLine {
 		this.inner = inner;
 	}
 
-	@Override /* Overridden from StatusLine */
-	public ProtocolVersion getProtocolVersion() {
-		return inner.getProtocolVersion();
-	}
-
-	@Override /* Overridden from StatusLine */
-	public int getStatusCode() {
-		return inner.getStatusCode();
-	}
-
-	@Override /* Overridden from StatusLine */
-	public String getReasonPhrase() {
-		return inner.getReasonPhrase();
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response status line.
 	 *
@@ -79,6 +60,20 @@ public class ResponseStatusLine implements StatusLine {
 		return new FluentResponseStatusLineAssertion<>(this, this);
 	}
 
+	@Override /* Overridden from StatusLine */
+	public ProtocolVersion getProtocolVersion() {
+		return inner.getProtocolVersion();
+	}
+
+	@Override /* Overridden from StatusLine */
+	public String getReasonPhrase() {
+		return inner.getReasonPhrase();
+	}
+	@Override /* Overridden from StatusLine */
+	public int getStatusCode() {
+		return inner.getStatusCode();
+	}
+
 	/**
 	 * Returns the response that created this object.
 	 *
@@ -87,11 +82,6 @@ public class ResponseStatusLine implements StatusLine {
 	public RestResponse response() {
 		return response;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Object */
 	public String toString() {
 		return inner.toString();

@@ -24,10 +24,6 @@ import java.nio.charset.*;
  */
 public class FileWriterBuilder {
 
-	private File file;
-	private Charset cs = Charset.defaultCharset();
-	private boolean append, buffered;
-
 	/**
 	 * Creates a new builder.
 	 *
@@ -36,7 +32,6 @@ public class FileWriterBuilder {
 	public static FileWriterBuilder create() {
 		return new FileWriterBuilder();
 	}
-
 	/**
 	 * Creates a new builder initialized with the specified file.
 	 *
@@ -46,7 +41,6 @@ public class FileWriterBuilder {
 	public static FileWriterBuilder create(File file) {
 		return new FileWriterBuilder().file(file);
 	}
-
 	/**
 	 * Creates a new builder initialized with the specified file path.
 	 *
@@ -57,53 +51,11 @@ public class FileWriterBuilder {
 		return new FileWriterBuilder().file(path);
 	}
 
-	/**
-	 * Sets the file being written to.
-	 *
-	 * @param file The file being written to.
-	 * @return This object.
-	 */
-	public FileWriterBuilder file(File file) {
-		this.file = file;
-		return this;
-	}
+	private File file;
 
-	/**
-	 * Sets the path of the file being written to.
-	 *
-	 * @param path The path of the file being written to.
-	 * @return This object.
-	 */
-	public FileWriterBuilder file(String path) {
-		this.file = new File(path);
-		return this;
-	}
+	private Charset cs = Charset.defaultCharset();
 
-	/**
-	 * Sets the character encoding of the file.
-	 *
-	 * @param cs
-	 * 	The character encoding.
-	 * 	The default is {@link Charset#defaultCharset()}.
-	 * @return This object.
-	 */
-	public FileWriterBuilder charset(Charset cs) {
-		this.cs = cs;
-		return this;
-	}
-
-	/**
-	 * Sets the character encoding of the file.
-	 *
-	 * @param cs
-	 * 	The character encoding.
-	 * 	The default is {@link Charset#defaultCharset()}.
-	 * @return This object.
-	 */
-	public FileWriterBuilder charset(String cs) {
-		this.cs = Charset.forName(cs);
-		return this;
-	}
+	private boolean append, buffered;
 
 	/**
 	 * Sets the append mode on the writer to <jk>true</jk>.
@@ -136,5 +88,53 @@ public class FileWriterBuilder {
 		if (buffered)
 			os = new BufferedOutputStream(os);
 		return new OutputStreamWriter(os, cs);
+	}
+
+	/**
+	 * Sets the character encoding of the file.
+	 *
+	 * @param cs
+	 * 	The character encoding.
+	 * 	The default is {@link Charset#defaultCharset()}.
+	 * @return This object.
+	 */
+	public FileWriterBuilder charset(Charset cs) {
+		this.cs = cs;
+		return this;
+	}
+
+	/**
+	 * Sets the character encoding of the file.
+	 *
+	 * @param cs
+	 * 	The character encoding.
+	 * 	The default is {@link Charset#defaultCharset()}.
+	 * @return This object.
+	 */
+	public FileWriterBuilder charset(String cs) {
+		this.cs = Charset.forName(cs);
+		return this;
+	}
+
+	/**
+	 * Sets the file being written to.
+	 *
+	 * @param file The file being written to.
+	 * @return This object.
+	 */
+	public FileWriterBuilder file(File file) {
+		this.file = file;
+		return this;
+	}
+
+	/**
+	 * Sets the path of the file being written to.
+	 *
+	 * @param path The path of the file being written to.
+	 * @return This object.
+	 */
+	public FileWriterBuilder file(String path) {
+		this.file = new File(path);
+		return this;
 	}
 }

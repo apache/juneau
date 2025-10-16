@@ -86,11 +86,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Connection")
 public class Connection extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Connection";
 
@@ -122,11 +117,6 @@ public class Connection extends BasicStringHeader {
 	public static Connection of(Supplier<String> value) {
 		return value == null ? null : new Connection(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

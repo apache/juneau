@@ -40,6 +40,77 @@ import org.apache.juneau.reflect.*;
  */
 public class HttpParts {
 
+	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
+		Value<String> n = Value.empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
+		Value<String> n = Value.empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
+		Value<String> n = Value.empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
+		Value<String> n = Value.empty();
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
+		return n.orElse(null);
+	};
+
+	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
+		ClassInfo ci = x.getInfo();
+		ConstructorInfo cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class));
+		if (cc == null)
+			cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class, String.class));
+		return cc;
+	};
+
+	/**
+	 * Creates a {@link BasicPart} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 *
+	 * @param pair The pair string.
+	 * @return A new {@link BasicPart} object.
+	 */
+	public static final BasicPart basicPart(String pair) {
+		return BasicPart.ofPair(pair);
+	}
+
+	/**
+	 * Creates a new {@link BasicPart} part.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return A new {@link BasicPart} object.
+	 */
+	public static final BasicPart basicPart(String name, Object value) {
+		return BasicPart.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicPart} part with a delayed value.
+	 *
+	 * <p>
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
+	 *
+	 * @param name The part name.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicPart} object.
+	 */
+	public static final BasicPart basicPart(String name, Supplier<?> value) {
+		return BasicPart.of(name, value);
+	}
+
 	/**
 	 * Creates a new {@link BasicBooleanPart} part.
 	 *
@@ -77,6 +148,39 @@ public class HttpParts {
 	 */
 	public static final BasicBooleanPart booleanPart(String name, Supplier<Boolean> value) {
 		return BasicBooleanPart.of(name, value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 */
+	public static boolean canCast(Object o) {
+		ClassInfo ci = ClassInfo.of(o);
+		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+	}
+
+	/**
+	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
+	 *
+	 * @param o
+	 * 	The object to cast or convert to a {@link NameValuePair}.
+	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static NameValuePair cast(Object o) {
+		if (o instanceof NameValuePair)
+			return (NameValuePair)o;
+		if (o instanceof Headerable) {
+			Header x = ((Headerable)o).asHeader();
+			return BasicPart.of(x.getName(), x.getValue());
+		}
+		if (o instanceof Map.Entry) {
+			Map.Entry e = (Map.Entry)o;
+			return BasicPart.of(Utils.s(e.getKey()), e.getValue());
+		}
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
 	}
 
 	/**
@@ -123,25 +227,6 @@ public class HttpParts {
 	}
 
 	/**
-	 * Creates a new {@link BasicDatePart} part.
-	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static final BasicDatePart datePart(String name, ZonedDateTime value) {
-		return BasicDatePart.of(name, value);
-	}
-
-	/**
 	 * Creates a new {@link BasicDatePart} part with a delayed value.
 	 *
 	 * <p>
@@ -161,6 +246,68 @@ public class HttpParts {
 	 */
 	public static final BasicDatePart datePart(String name, Supplier<ZonedDateTime> value) {
 		return BasicDatePart.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicDatePart} part.
+	 *
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
+	 * 		<li>{@link ZonedDateTime}
+	 * 		<li>{@link Calendar}
+	 * 		<li>Anything else - Converted to <c>String</c>.
+	 * 	</ul>
+	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 */
+	public static final BasicDatePart datePart(String name, ZonedDateTime value) {
+		return BasicDatePart.of(name, value);
+	}
+
+	/**
+	 * Returns the constructor for the specified type.
+	 *
+	 * <p>
+	 * Looks for one of the following constructors:
+	 * <ul class='javatree'>
+	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * </ul>
+	 *
+	 * @param type The header type to find the constructor on.
+	 * @return The constructor.  Never <jk>null</jk>.
+	 */
+	public static Optional<ConstructorInfo> getConstructor(ClassMeta<?> type) {
+		return type.getProperty("HttpPart.Constructor", CONSTRUCTOR_FUNCTION);
+	}
+
+	/**
+	 * Returns the name of the specified part type.
+	 *
+	 * <p>
+	 * Gets the name from one of the following annotations:
+	 * <ul class='javatreec'>
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	 * </ul>
+	 *
+	 * @param partType The part type.
+	 * @param type The type to check.
+	 * @return The part name.  Never <jk>null</jk>.
+	 */
+	public static Optional<String> getName(HttpPartType partType, ClassMeta<?> type) {
+		switch(partType) {
+			case FORMDATA: return type.getProperty("HttpPart.formData.name", FORMDATA_NAME_FUNCTION);
+			case HEADER: return type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
+			case PATH: return type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
+			case QUERY: return type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
+			default: return Utils.opte();
+		}
 	}
 
 	/**
@@ -203,6 +350,28 @@ public class HttpParts {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified type is a part type.
+	 *
+	 * <p>
+	 * A part type extends from either {@link org.apache.http.Header} or {@link org.apache.http.NameValuePair}
+	 * or is annotated with {@link org.apache.juneau.http.annotation.Header}, {@link org.apache.juneau.http.annotation.Query},
+	 * {@link org.apache.juneau.http.annotation.FormData}, or {@link org.apache.juneau.http.annotation.Path}.
+	 *
+	 * @param partType The part type.
+	 * @param type The type to check.
+	 * @return <jk>true</jk> if the specified type is a part type.
+	 */
+	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
+		switch(partType) {
+			case PATH:
+			case QUERY:
+			case FORMDATA: return type.getProperty("HttpPart.isNameValuePair", x->x.isChildOf(NameValuePair.class)).orElse(false);
+			case HEADER: return type.getProperty("HttpPart.isHeader", x->x.isChildOf(org.apache.http.Header.class)).orElse(false);
+			default: return false;
+		}
+	}
+
+	/**
 	 * Creates a new {@link BasicLongPart} part.
 	 *
 	 * @param name The part name.
@@ -240,142 +409,6 @@ public class HttpParts {
 	public static final BasicLongPart longPart(String name, Supplier<Long> value) {
 		return BasicLongPart.of(name, value);
 	}
-
-	/**
-	 * Creates a new {@link BasicUriPart} part.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static final BasicUriPart uriPart(String name, URI value) {
-		return BasicUriPart.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicUriPart} part with a delayed value.
-	 *
-	 * <p>
-	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static final BasicUriPart uriPart(String name, Supplier<URI> value) {
-		return BasicUriPart.of(name, value);
-	}
-
-	/**
-	 * Creates a {@link BasicPart} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
-	 *
-	 * @param pair The pair string.
-	 * @return A new {@link BasicPart} object.
-	 */
-	public static final BasicPart basicPart(String pair) {
-		return BasicPart.ofPair(pair);
-	}
-
-	/**
-	 * Creates a new {@link BasicPart} part.
-	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * @return A new {@link BasicPart} object.
-	 */
-	public static final BasicPart basicPart(String name, Object value) {
-		return BasicPart.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicPart} part with a delayed value.
-	 *
-	 * <p>
-	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
-	 *
-	 * @param name The part name.
-	 * @param value The part value supplier.
-	 * @return A new {@link BasicPart} object.
-	 */
-	public static final BasicPart basicPart(String name, Supplier<?> value) {
-		return BasicPart.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringPart} part.
-	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static final BasicStringPart stringPart(String name, String value) {
-		return BasicStringPart.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringPart} part with a delayed value.
-	 *
-	 * <p>
-	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
-	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static final BasicStringPart stringPart(String name, Supplier<String> value) {
-		return BasicStringPart.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link SerializedPart} part.
-	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any POJO.
-	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
-	 */
-	public static final SerializedPart serializedPart(String name, Object value) {
-		return SerializedPart.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link SerializedPart} part with a delayed value.
-	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be a supplier of any POJO.
-	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
-	 */
-	public static final SerializedPart serializedPart(String name, Supplier<?> value) {
-		return SerializedPart.of(name, value);
-	}
-
 	/**
 	 * Instantiates a new {@link org.apache.juneau.http.part.PartList}.
 	 *
@@ -418,141 +451,103 @@ public class HttpParts {
 		return PartList.ofPairs(pairs);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
-		return n.orElse(null);
-	};
-
-	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
-		return n.orElse(null);
-	};
-
-	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
-		return n.orElse(null);
-	};
-
-	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
-		Value<String> n = Value.empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> isNotEmpty(y.name()), y -> n.set(y.name()));
-		return n.orElse(null);
-	};
-
-	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
-		ClassInfo ci = x.getInfo();
-		ConstructorInfo cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class));
-		if (cc == null)
-			cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class, String.class));
-		return cc;
-	};
+	/**
+	 * Creates a new {@link SerializedPart} part.
+	 *
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value.
+	 * 	<br>Can be any POJO.
+	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
+	 */
+	public static final SerializedPart serializedPart(String name, Object value) {
+		return SerializedPart.of(name, value);
+	}
 
 	/**
-	 * Returns the name of the specified part type.
+	 * Creates a new {@link SerializedPart} part with a delayed value.
+	 *
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value supplier.
+	 * 	<br>Can be a supplier of any POJO.
+	 * @return A new {@link SerializedPart} object, never <jk>null</jk>.
+	 */
+	public static final SerializedPart serializedPart(String name, Supplier<?> value) {
+		return SerializedPart.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringPart} part.
+	 *
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 	</ul>
+	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 */
+	public static final BasicStringPart stringPart(String name, String value) {
+		return BasicStringPart.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringPart} part with a delayed value.
 	 *
 	 * <p>
-	 * Gets the name from one of the following annotations:
-	 * <ul class='javatreec'>
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
-	 * </ul>
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
-	 * @param partType The part type.
-	 * @param type The type to check.
-	 * @return The part name.  Never <jk>null</jk>.
+	 * @param name The part name.
+	 * @param value
+	 * 	The part value supplier.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 	</ul>
+	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static Optional<String> getName(HttpPartType partType, ClassMeta<?> type) {
-		switch(partType) {
-			case FORMDATA: return type.getProperty("HttpPart.formData.name", FORMDATA_NAME_FUNCTION);
-			case HEADER: return type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
-			case PATH: return type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
-			case QUERY: return type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
-			default: return Utils.opte();
-		}
+	public static final BasicStringPart stringPart(String name, Supplier<String> value) {
+		return BasicStringPart.of(name, value);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified type is a part type.
+	 * Creates a new {@link BasicUriPart} part with a delayed value.
 	 *
 	 * <p>
-	 * A part type extends from either {@link org.apache.http.Header} or {@link org.apache.http.NameValuePair}
-	 * or is annotated with {@link org.apache.juneau.http.annotation.Header}, {@link org.apache.juneau.http.annotation.Query},
-	 * {@link org.apache.juneau.http.annotation.FormData}, or {@link org.apache.juneau.http.annotation.Path}.
+	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
-	 * @param partType The part type.
-	 * @param type The type to check.
-	 * @return <jk>true</jk> if the specified type is a part type.
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value supplier.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 	</ul>
+	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static boolean isHttpPart(HttpPartType partType, ClassMeta<?> type) {
-		switch(partType) {
-			case PATH:
-			case QUERY:
-			case FORMDATA: return type.getProperty("HttpPart.isNameValuePair", x->x.isChildOf(NameValuePair.class)).orElse(false);
-			case HEADER: return type.getProperty("HttpPart.isHeader", x->x.isChildOf(org.apache.http.Header.class)).orElse(false);
-			default: return false;
-		}
+	public static final BasicUriPart uriPart(String name, Supplier<URI> value) {
+		return BasicUriPart.of(name, value);
 	}
 
 	/**
-	 * Returns the constructor for the specified type.
+	 * Creates a new {@link BasicUriPart} part.
 	 *
-	 * <p>
-	 * Looks for one of the following constructors:
-	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
-	 * </ul>
-	 *
-	 * @param type The header type to find the constructor on.
-	 * @return The constructor.  Never <jk>null</jk>.
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link String}
+	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
+	 * 	</ul>
+	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static Optional<ConstructorInfo> getConstructor(ClassMeta<?> type) {
-		return type.getProperty("HttpPart.Constructor", CONSTRUCTOR_FUNCTION);
-	}
-
-	/**
-	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
-	 *
-	 * @param o
-	 * 	The object to cast or convert to a {@link NameValuePair}.
-	 * @return Either the same object cast as a {@link NameValuePair} or converted to a {@link NameValuePair}.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static NameValuePair cast(Object o) {
-		if (o instanceof NameValuePair)
-			return (NameValuePair)o;
-		if (o instanceof Headerable) {
-			Header x = ((Headerable)o).asHeader();
-			return BasicPart.of(x.getName(), x.getValue());
-		}
-		if (o instanceof Map.Entry) {
-			Map.Entry e = (Map.Entry)o;
-			return BasicPart.of(Utils.s(e.getKey()), e.getValue());
-		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Part.", o == null ? null : o.getClass().getName());
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
-	 */
-	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+	public static final BasicUriPart uriPart(String name, URI value) {
+		return BasicUriPart.of(name, value);
 	}
 }

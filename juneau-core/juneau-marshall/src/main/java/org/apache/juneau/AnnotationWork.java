@@ -48,16 +48,6 @@ public class AnnotationWork {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the annotation in this work can be applied to the specified builder.
-	 *
-	 * @param builder The builder.
-	 * @return <jk>true</jk> if the annotation in this work can be applied to the specified builder.
-	 */
-	public boolean canApply(Object builder) {
-		return applier.canApply(builder);
-	}
-
-	/**
 	 * Calls {@link AnnotationApplier#apply(AnnotationInfo, Object)} on the specified builder.
 	 *
 	 * <p>
@@ -69,5 +59,15 @@ public class AnnotationWork {
 	public void apply(Object builder) {
 		if (canApply(builder))
 			applier.apply(annotation, builder);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the annotation in this work can be applied to the specified builder.
+	 *
+	 * @param builder The builder.
+	 * @return <jk>true</jk> if the annotation in this work can be applied to the specified builder.
+	 */
+	public boolean canApply(Object builder) {
+		return applier.canApply(builder);
 	}
 }

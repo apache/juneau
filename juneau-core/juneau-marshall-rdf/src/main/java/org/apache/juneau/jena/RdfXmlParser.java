@@ -28,11 +28,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class RdfXmlParser extends RdfParser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default XML parser, all default settings.*/
 	public static final RdfXmlParser DEFAULT = new RdfXmlParser(create());
 
@@ -44,11 +39,6 @@ public class RdfXmlParser extends RdfParser {
 	public static RdfParser.Builder create() {
 		return RdfParser.create().xml();
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

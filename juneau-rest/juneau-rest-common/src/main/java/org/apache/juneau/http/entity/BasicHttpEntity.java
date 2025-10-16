@@ -48,21 +48,12 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore
+@SuppressWarnings("resource")
 public class BasicHttpEntity implements HttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * An empty HttpEntity.
 	 */
 	public static final BasicHttpEntity EMPTY = new BasicHttpEntity().setUnmodifiable();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private boolean cached, chunked, unmodifiable;
 	private Object content;
 	private Supplier<?> contentSupplier;
@@ -76,17 +67,6 @@ public class BasicHttpEntity implements HttpEntity {
 	 * Constructor.
 	 */
 	public BasicHttpEntity() {
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param contentType The entity content type.
-	 * @param content The entity content.
-	 */
-	public BasicHttpEntity(ContentType contentType, Object content) {
-		this.contentType = contentType;
-		this.content = content;
 	}
 
 	/**
@@ -108,6 +88,71 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param contentType The entity content type.
+	 * @param content The entity content.
+	 */
+	public BasicHttpEntity(ContentType contentType, Object content) {
+		this.contentType = contentType;
+		this.content = content;
+	}
+
+	/**
+	 * Converts the contents of this entity as a byte array.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return The contents of this entity as a byte array.
+	 * @throws IOException If a problem occurred while trying to read the content.
+	 */
+	public byte[] asBytes() throws IOException {
+		return readBytes(getContent());
+	}
+	/**
+	 * Returns an assertion on the contents of this entity.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public FluentByteArrayAssertion<BasicHttpEntity> assertBytes() throws IOException {
+		return new FluentByteArrayAssertion<>(asBytes(), this);
+	}
+
+	/**
+	 * Returns an assertion on the contents of this entity.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public FluentStringAssertion<BasicHttpEntity> assertString() throws IOException {
+		return new FluentStringAssertion<>(asString(), this);
+	}
+
+	/**
+	 * Converts the contents of this entity as a string.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return The contents of this entity as a string.
+	 * @throws IOException If a problem occurred while trying to read the content.
+	 */
+	public String asString() throws IOException {
+		return read(getContent());
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public void consumeContent() throws IOException {}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * <p>
@@ -119,20 +164,66 @@ public class BasicHttpEntity implements HttpEntity {
 		return new BasicHttpEntity(this);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the charset to use when converting to and from stream-based resources.
+	 *
+	 * @return The charset to use when converting to and from stream-based resources.
+	 */
+	public Charset getCharset() {
+		return charset == null ? UTF8 : charset;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public InputStream getContent() throws IOException, UnsupportedOperationException {
+		return IOUtils.EMPTY_INPUT_STREAM;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public Header getContentEncoding() {
+		return contentEncoding;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public long getContentLength() {
+		return contentLength;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public Header getContentType() {
+		return contentType;
+	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns the maximum number of bytes to read or write to and from stream-based resources.
 	 *
-	 * @return This object.
+	 * @return The maximum number of bytes to read or write to and from stream-based resources.
 	 */
-	public BasicHttpEntity setUnmodifiable() {
-		unmodifiable = true;
-		return this;
+	public int getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this entity is cached in-memory.
+	 *
+	 * @return <jk>true</jk> if this entity is cached in-memory.
+	 */
+	public boolean isCached() {
+		return cached;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isChunked() {
+		return chunked;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isRepeatable() {
+		return false;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isStreaming() {
+		return false;
 	}
 
 	/**
@@ -145,97 +236,29 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
-	}
-
-	/**
-	 * Sets the content on this entity bean.
+	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
+	 * be read multiple times.
 	 *
-	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
+	 * @throws IOException If entity could not be read into memory.
 	 */
-	public BasicHttpEntity setContent(Object value) {
+	public BasicHttpEntity setCached() throws IOException {
 		assertModifiable();
-		this.content = value;
+		cached = true;
 		return this;
 	}
 
 	/**
-	 * Sets the content on this entity bean from a supplier.
+	 * Specifies the charset to use when converting to and from stream-based resources.
 	 *
-	 * <p>
-	 * Repeatable entities such as {@link StringEntity} use this to allow the entity content to be resolved at
-	 * serialization time.
-	 *
-	 * @param value The entity content, can be <jk>null</jk>.
+	 * @param value The new value.  If <jk>null</jk>, <c>UTF-8</c> is assumed.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setContent(Supplier<?> value) {
+	public BasicHttpEntity setCharset(Charset value) {
 		assertModifiable();
-		this.contentSupplier = value == null ? ()->null : value;
+		this.charset = value;
 		return this;
 	}
-
-	/**
-	 * Sets the content type on this entity bean.
-	 *
-	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
-	 * @return This object.
-	 */
-	public BasicHttpEntity setContentType(String value) {
-		return setContentType(ContentType.of(value));
-	}
-
-	/**
-	 * Sets the content type on this entity bean.
-	 *
-	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
-	 * @return This object.
-	 */
-	public BasicHttpEntity setContentType(ContentType value) {
-		assertModifiable();
-		contentType = value;
-		return this;
-	}
-
-	/**
-	 * Sets the content length on this entity bean.
-	 *
-	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
-	 * @return This object.
-	 */
-	public BasicHttpEntity setContentLength(long value) {
-		assertModifiable();
-		contentLength = value;
-		return this;
-	}
-
-	/**
-	 * Sets the content encoding header on this entity bean.
-	 *
-	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
-	 * @return This object.
-	 */
-	public BasicHttpEntity setContentEncoding(String value) {
-		return setContentEncoding(ContentEncoding.of(value));
-	}
-
-	/**
-	 * Sets the content encoding header on this entity bean.
-	 *
-	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
-	 * @return This object.
-	 */
-	public BasicHttpEntity setContentEncoding(ContentEncoding value) {
-		assertModifiable();
-		contentEncoding = value;
-		return this;
-	}
-
 	/**
 	 * Sets the 'chunked' flag value to <jk>true</jk>.
 	 *
@@ -268,46 +291,87 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	/**
-	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
-	 * be read multiple times.
+	 * Sets the content on this entity bean.
 	 *
+	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
-	 * @throws IOException If entity could not be read into memory.
 	 */
-	public BasicHttpEntity setCached() throws IOException {
+	public BasicHttpEntity setContent(Object value) {
 		assertModifiable();
-		cached = true;
+		this.content = value;
 		return this;
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this entity is cached in-memory.
+	 * Sets the content on this entity bean from a supplier.
 	 *
-	 * @return <jk>true</jk> if this entity is cached in-memory.
-	 */
-	public boolean isCached() {
-		return cached;
-	}
-
-	/**
-	 * Specifies the charset to use when converting to and from stream-based resources.
+	 * <p>
+	 * Repeatable entities such as {@link StringEntity} use this to allow the entity content to be resolved at
+	 * serialization time.
 	 *
-	 * @param value The new value.  If <jk>null</jk>, <c>UTF-8</c> is assumed.
+	 * @param value The entity content, can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public BasicHttpEntity setCharset(Charset value) {
+	public BasicHttpEntity setContent(Supplier<?> value) {
 		assertModifiable();
-		this.charset = value;
+		this.contentSupplier = value == null ? ()->null : value;
 		return this;
 	}
 
 	/**
-	 * Returns the charset to use when converting to and from stream-based resources.
+	 * Sets the content encoding header on this entity bean.
 	 *
-	 * @return The charset to use when converting to and from stream-based resources.
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
 	 */
-	public Charset getCharset() {
-		return charset == null ? UTF8 : charset;
+	public BasicHttpEntity setContentEncoding(ContentEncoding value) {
+		assertModifiable();
+		contentEncoding = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content encoding header on this entity bean.
+	 *
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public BasicHttpEntity setContentEncoding(String value) {
+		return setContentEncoding(ContentEncoding.of(value));
+	}
+
+	/**
+	 * Sets the content length on this entity bean.
+	 *
+	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
+	 * @return This object.
+	 */
+	public BasicHttpEntity setContentLength(long value) {
+		assertModifiable();
+		contentLength = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content type on this entity bean.
+	 *
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public BasicHttpEntity setContentType(ContentType value) {
+		assertModifiable();
+		contentType = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content type on this entity bean.
+	 *
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public BasicHttpEntity setContentType(String value) {
+		return setContentType(ContentType.of(value));
 	}
 
 	/**
@@ -326,43 +390,19 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	/**
-	 * Returns the maximum number of bytes to read or write to and from stream-based resources.
-	 *
-	 * @return The maximum number of bytes to read or write to and from stream-based resources.
-	 */
-	public int getMaxLength() {
-		return maxLength;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Converts the contents of this entity as a string.
-	 *
+	 * Specifies whether this bean should be unmodifiable.
 	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
 	 *
-	 * @return The contents of this entity as a string.
-	 * @throws IOException If a problem occurred while trying to read the content.
+	 * @return This object.
 	 */
-	public String asString() throws IOException {
-		return read(getContent());
+	public BasicHttpEntity setUnmodifiable() {
+		unmodifiable = true;
+		return this;
 	}
 
-	/**
-	 * Converts the contents of this entity as a byte array.
-	 *
-	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
-	 *
-	 * @return The contents of this entity as a byte array.
-	 * @throws IOException If a problem occurred while trying to read the content.
-	 */
-	public byte[] asBytes() throws IOException {
-		return readBytes(getContent());
-	}
+	@Override /* Overridden from HttpEntity */
+	public void writeTo(OutputStream outStream) throws IOException {}
 
 	/**
 	 * Same as {@link #asBytes()} but wraps {@link IOException IOExceptions} inside a {@link RuntimeException}.
@@ -378,29 +418,11 @@ public class BasicHttpEntity implements HttpEntity {
 	}
 
 	/**
-	 * Returns an assertion on the contents of this entity.
-	 *
-	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
-	 *
-	 * @return A new fluent assertion.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
 	 */
-	public FluentStringAssertion<BasicHttpEntity> assertString() throws IOException {
-		return new FluentStringAssertion<>(asString(), this);
-	}
-
-	/**
-	 * Returns an assertion on the contents of this entity.
-	 *
-	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
-	 *
-	 * @return A new fluent assertion.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
-	 */
-	public FluentByteArrayAssertion<BasicHttpEntity> assertBytes() throws IOException {
-		return new FluentByteArrayAssertion<>(asBytes(), this);
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
 	}
 
 	/**
@@ -430,45 +452,4 @@ public class BasicHttpEntity implements HttpEntity {
 	protected boolean isSupplied() {
 		return contentSupplier != null;
 	}
-
-	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return contentLength;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return false;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isChunked() {
-		return chunked;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public Header getContentType() {
-		return contentType;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public Header getContentEncoding() {
-		return contentEncoding;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return false;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public void consumeContent() throws IOException {}
-
-	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException {
-		return IOUtils.EMPTY_INPUT_STREAM;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public void writeTo(OutputStream outStream) throws IOException {}
 }

@@ -78,6 +78,18 @@ public class Area extends HtmlElementVoid {
 		shape(shape).coords(coords).href(href);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Area _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Area accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-alt">alt</a> attribute.
 	 *
@@ -88,11 +100,29 @@ public class Area extends HtmlElementVoid {
 	 * <p>
 	 * The alt text should be descriptive and convey the same information as the clickable area.
 	 *
-	 * @param alt Alternative text for the area.
+	 * @param value Alternative text for the area.
 	 * @return This object.
 	 */
 	public Area alt(String value) {
 		attr("alt", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Area attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Area attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Area contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
@@ -112,11 +142,17 @@ public class Area extends HtmlElementVoid {
 	 * 	<li><js>"default"</js> - No coordinates needed</li>
 	 * </ul>
 	 *
-	 * @param coords The coordinates defining the clickable area.
+	 * @param value The coordinates defining the clickable area.
 	 * @return This object.
 	 */
 	public Area coords(String value) {
 		attr("coords", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Area dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -126,13 +162,18 @@ public class Area extends HtmlElementVoid {
 	 * <p>
 	 * Whether to download the resource instead of navigating to it, and its file name if so.
 	 *
-	 * @param download
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Area download(Object value) {
 		attr("download", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Area hidden(Object value) {
+		super.hidden(value);
 		return this;
 	}
 
@@ -149,7 +190,7 @@ public class Area extends HtmlElementVoid {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param href
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link URL} or {@link String}.
 	 * @return This object.
@@ -176,146 +217,11 @@ public class Area extends HtmlElementVoid {
 	 * 	<li><js>"ja"</js> - Japanese</li>
 	 * </ul>
 	 *
-	 * @param hreflang The language code of the linked resource.
+	 * @param value The language code of the linked resource.
 	 * @return This object.
 	 */
 	public Area hreflang(String value) {
 		attr("hreflang", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the relationship between the current document and the linked resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 *  	<li><js>"alternate"</js> - Alternative version of the page</li>
-	 *  	<li><js>"author"</js> - Link to the author of the page</li>
-	 *  	<li><js>"bookmark"</js> - Permalink for bookmarking</li>
-	 *  	<li><js>"external"</js> - External link</li>
-	 *  	<li><js>"help"</js> - Link to help documentation</li>
-	 *  	<li><js>"license"</js> - Link to license information</li>
-	 *  	<li><js>"next"</js> - Next page in a sequence</li>
-	 *  	<li><js>"nofollow"</js> - Don't follow this link for SEO</li>
-	 *  	<li><js>"noreferrer"</js> - Don't send referrer information</li>
-	 *  	<li><js>"prev"</js> - Previous page in a sequence</li>
-	 *  	<li><js>"search"</js> - Link to search functionality</li>
-	 *  	<li><js>"tag"</js> - Tag for the current page</li>
-	 * </ul>
-	 *
-	 * @param rel The relationship between the document and linked resource.
-	 * @return This object.
-	 */
-	public Area rel(String value) {
-		attr("rel", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the shape of the clickable area in an image map.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 *  	<li><js>"rect"</js> - Rectangular area (default)</li>
-	 *  	<li><js>"circle"</js> - Circular area</li>
-	 *  	<li><js>"poly"</js> - Polygonal area</li>
-	 *  	<li><js>"default"</js> - Entire image area</li>
-	 * </ul>
-	 *
-	 * @param shape The shape of the clickable area.
-	 * @return This object.
-	 */
-	public Area shape(String value) {
-		attr("shape", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
-	 *
-	 * <p>
-	 * Specifies where to open the linked resource when the area is clicked.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 *  	<li><js>"_blank"</js> - Open in a new window/tab</li>
-	 *  	<li><js>"_self"</js> - Open in the same frame (default)</li>
-	 *  	<li><js>"_parent"</js> - Open in the parent frame</li>
-	 *  	<li><js>"_top"</js> - Open in the full body of the window</li>
-	 *  	<li><js>"framename"</js> - Open in a named frame</li>
-	 * </ul>
-	 *
-	 * @param target Where to open the linked resource.
-	 * @return This object.
-	 */
-	public Area target(String value) {
-		attr("target", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 *  	<li><js>"text/html"</js> - HTML document</li>
-	 *  	<li><js>"text/css"</js> - CSS stylesheet</li>
-	 *  	<li><js>"application/pdf"</js> - PDF document</li>
-	 *  	<li><js>"image/png"</js> - PNG image</li>
-	 *  	<li><js>"application/zip"</js> - ZIP archive</li>
-	 * </ul>
-	 *
-	 * @param type The MIME type of the linked resource.
-	 * @return This object.
-	 */
-	public Area type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Area _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Area accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Area contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Area dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Area hidden(Object value) {
-		super.hidden(value);
 		return this;
 	}
 
@@ -631,6 +537,60 @@ public class Area extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-rel">rel</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the relationship between the current document and the linked resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"alternate"</js> - Alternative version of the page</li>
+	 *  	<li><js>"author"</js> - Link to the author of the page</li>
+	 *  	<li><js>"bookmark"</js> - Permalink for bookmarking</li>
+	 *  	<li><js>"external"</js> - External link</li>
+	 *  	<li><js>"help"</js> - Link to help documentation</li>
+	 *  	<li><js>"license"</js> - Link to license information</li>
+	 *  	<li><js>"next"</js> - Next page in a sequence</li>
+	 *  	<li><js>"nofollow"</js> - Don't follow this link for SEO</li>
+	 *  	<li><js>"noreferrer"</js> - Don't send referrer information</li>
+	 *  	<li><js>"prev"</js> - Previous page in a sequence</li>
+	 *  	<li><js>"search"</js> - Link to search functionality</li>
+	 *  	<li><js>"tag"</js> - Tag for the current page</li>
+	 * </ul>
+	 *
+	 * @param value The relationship between the document and linked resource.
+	 * @return This object.
+	 */
+	public Area rel(String value) {
+		attr("rel", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-area-shape">shape</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the shape of the clickable area in an image map.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 *  	<li><js>"rect"</js> - Rectangular area (default)</li>
+	 *  	<li><js>"circle"</js> - Circular area</li>
+	 *  	<li><js>"poly"</js> - Polygonal area</li>
+	 *  	<li><js>"default"</js> - Entire image area</li>
+	 * </ul>
+	 *
+	 * @param value The shape of the clickable area.
+	 * @return This object.
+	 */
+	public Area shape(String value) {
+		attr("shape", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Area spellcheck(Object value) {
 		super.spellcheck(value);
@@ -649,6 +609,30 @@ public class Area extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-target">target</a> attribute.
+	 *
+	 * <p>
+	 * Specifies where to open the linked resource when the area is clicked.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"_blank"</js> - Open in a new window/tab</li>
+	 *  	<li><js>"_self"</js> - Open in the same frame (default)</li>
+	 *  	<li><js>"_parent"</js> - Open in the parent frame</li>
+	 *  	<li><js>"_top"</js> - Open in the full body of the window</li>
+	 *  	<li><js>"framename"</js> - Open in a named frame</li>
+	 * </ul>
+	 *
+	 * @param value Where to open the linked resource.
+	 * @return This object.
+	 */
+	public Area target(String value) {
+		attr("target", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Area title(String value) {
 		super.title(value);
@@ -661,15 +645,27 @@ public class Area extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Area attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Area attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/links.html#attr-hyperlink-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the MIME type of the linked resource. Helps browsers determine how to handle the resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"text/html"</js> - HTML document</li>
+	 *  	<li><js>"text/css"</js> - CSS stylesheet</li>
+	 *  	<li><js>"application/pdf"</js> - PDF document</li>
+	 *  	<li><js>"image/png"</js> - PNG image</li>
+	 *  	<li><js>"application/zip"</js> - ZIP archive</li>
+	 * </ul>
+	 *
+	 * @param value The MIME type of the linked resource.
+	 * @return This object.
+	 */
+	public Area type(String value) {
+		attr("type", value);
 		return this;
 	}
 }

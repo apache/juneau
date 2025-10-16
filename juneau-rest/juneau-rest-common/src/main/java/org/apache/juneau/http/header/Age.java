@@ -66,13 +66,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Age")
 public class Age extends BasicIntegerHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Age";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Age of(Integer value) {
+		return value == null ? null : new Age(value);
+	}
 
 	/**
 	 * Static creator.
@@ -84,18 +91,6 @@ public class Age extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Age of(String value) {
-		return value == null ? null : new Age(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Age of(Integer value) {
 		return value == null ? null : new Age(value);
 	}
 
@@ -113,10 +108,16 @@ public class Age extends BasicIntegerHeader {
 	public static Age of(Supplier<Integer> value) {
 		return value == null ? null : new Age(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Age(Integer value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -127,17 +128,6 @@ public class Age extends BasicIntegerHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Age(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Age(Integer value) {
 		super(NAME, value);
 	}
 

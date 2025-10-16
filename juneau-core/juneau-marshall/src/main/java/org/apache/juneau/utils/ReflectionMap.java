@@ -131,26 +131,6 @@ import org.apache.juneau.common.utils.*;
  * @param <V> The type of object in this map.
  */
 public class ReflectionMap<V> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static builder creator.
-	 *
-	 * @param <V> The type of object in this map.
-	 * @param c The type of object in this map.
-	 * @return A new instance of this object.
-	 */
-	public static <V> Builder<V> create(Class<V> c) {
-		return new Builder<>();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 * @param <V> The type of object in this map.
@@ -250,344 +230,6 @@ public class ReflectionMap<V> {
 			return new Builder<>(this);
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	final ClassEntry<V>[] classEntries;
-	final MethodEntry<V>[] methodEntries;
-	final FieldEntry<V>[] fieldEntries;
-	final ConstructorEntry<V>[] constructorEntries;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param b Initializer object.
-	 */
-	protected ReflectionMap(Builder<V> b) {
-		this.classEntries = b.classEntries.toArray(new ClassEntry[b.classEntries.size()]);
-		this.methodEntries = b.methodEntries.toArray(new MethodEntry[b.methodEntries.size()]);
-		this.fieldEntries = b.fieldEntries.toArray(new FieldEntry[b.fieldEntries.size()]);
-		this.constructorEntries = b.constructorEntries.toArray(new ConstructorEntry[b.constructorEntries.size()]);
-	}
-
-	static void splitNames(String key, Consumer<String> consumer) {
-		if (key.indexOf(',') == -1) {
-			consumer.accept(key);
-		} else {
-			int m = 0;
-			boolean escaped = false;
-			for (int i = 0; i < key.length(); i++) {
-				char c = key.charAt(i);
-				if (c == '(')
-					escaped = true;
-				else if (c == ')')
-					escaped = false;
-				else if (c == ',' && ! escaped) {
-					consumer.accept(key.substring(m, i).trim());
-					m = i+1;
-				}
-			}
-			consumer.accept(key.substring(m).trim());
-		}
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Class<?> c, Class<? extends V> ofType) {
-		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c))
-				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Class<?> c) {
-		return find(c, null);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
-		List<V> list = null;
-		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Class<?> c) {
-		List<V> list = null;
-		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c) && e.value != null)
-				list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified class.
-	 *
-	 * @param c The class to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append values to.
-	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
-	 */
-	public V[] appendAll(Class<?> c, Class<? extends V> ofType, V[] array) {
-		List<V> list = null;
-		for (ClassEntry<V> e : classEntries)
-			if (e.matches(c) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(array, list, e.value);
-		return lazyArray(array, list);
-	}
-
-	private static <V> List<V> lazyAdd(List<V> list, V v) {
-		if (list == null)
-			list = list();
-		list.add(v);
-		return list;
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Method m, Class<? extends V> ofType) {
-		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m))
-				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Method m) {
-		return find(m, null);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Method m, Class<? extends V> ofType) {
-		List<V> list = null;
-		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Method m) {
-		List<V> list = null;
-		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m) && e.value != null)
-				list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified method.
-	 *
-	 * @param m The method to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append values to.
-	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
-	 */
-	public V[] appendAll(Method m, Class<? extends V> ofType, V[] array) {
-		List<V> list = null;
-		for (MethodEntry<V> e : methodEntries)
-			if (e.matches(m) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(array, list, e.value);
-		return lazyArray(array, list);
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Field f, Class<? extends V> ofType) {
-		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f))
-				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Field f) {
-		return find(f, null);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Field f, Class<? extends V> ofType) {
-		List<V> list = null;
-		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Field f) {
-		List<V> list = null;
-		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f) && e.value != null)
-				list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified field.
-	 *
-	 * @param f The field to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append values to.
-	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
-	 */
-	public V[] appendAll(Field f, Class<? extends V> ofType, V[] array) {
-		List<V> list = null;
-		for (FieldEntry<V> e : fieldEntries)
-			if (e.matches(f) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(array, list, e.value);
-		return lazyArray(array, list);
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Constructor<?> c, Class<? extends V> ofType) {
-		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c))
-				if (ofType == null || ofType.isInstance(e.value))
-					return Utils.opt(e.value);
-		return Utils.opte();
-	}
-
-	/**
-	 * Finds first value in this map that matches the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @return The matching object.  Never <jk>null</jk>.
-	 */
-	public Optional<V> find(Constructor<?> c) {
-		return find(c, null);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
-		List<V> list = null;
-		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
-	 */
-	public List<V> findAll(Constructor<?> c) {
-		List<V> list = null;
-		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c) && e.value != null)
-				list = lazyAdd(list, e.value);
-		return lazyList(list);
-	}
-
-	/**
-	 * Finds all values in this map that matches the specified constructor.
-	 *
-	 * @param c The constructor to test for.
-	 * @param ofType Only return objects of the specified type.
-	 * @param array The array to append values to.
-	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
-	 */
-	public V[] appendAll(Constructor<?> c, Class<? extends V> ofType, V[] array) {
-		List<V> list = null;
-		for (ConstructorEntry<V> e : constructorEntries)
-			if (e.matches(c) && e.value != null)
-				if (ofType == null || ofType.isInstance(e.value))
-					list = lazyAdd(array, list, e.value);
-		return lazyArray(array, list);
-	}
-
 	static class ClassEntry<V> {
 		final String simpleName, fullName;
 		final V value;
@@ -613,7 +255,70 @@ public class ReflectionMap<V> {
 				.asString();
 		}
 	}
+	static class ConstructorEntry<V> {
+		String simpleClassName, fullClassName, args[];
+		V value;
 
+		ConstructorEntry(String name, V value) {
+			int i = name.indexOf('(');
+			this.args = splita(name.substring(i+1, name.length()-1));
+			name = name.substring(0, i).trim();
+			this.simpleClassName = simpleClassName(name);
+			this.fullClassName = name;
+			this.value = value;
+		}
+
+		public boolean matches(Constructor<?> m) {
+			if (m == null)
+				return false;
+			Class<?> c = m.getDeclaringClass();
+			return
+				classMatches(simpleClassName, fullClassName, c)
+				&& (argsMatch(args, m.getParameterTypes()));
+		}
+
+		@Override
+		public String toString() {
+			return filteredMap()
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("args", args)
+				.append("value", value)
+				.asString();
+		}
+	}
+	static class FieldEntry<V> {
+		String simpleClassName, fullClassName, fieldName;
+		V value;
+
+		FieldEntry(String name, V value) {
+			int i = name.lastIndexOf('.');
+			String s1 = name.substring(0, i), s2 = name.substring(i+1);
+			this.simpleClassName = simpleClassName(s1);
+			this.fullClassName = s1;
+			this.fieldName = s2;
+			this.value = value;
+		}
+
+		public boolean matches(Field f) {
+			if (f == null)
+				return false;
+			Class<?> c = f.getDeclaringClass();
+			return
+				classMatches(simpleClassName, fullClassName, c)
+				&& (Utils.eq(f.getName(), fieldName));
+		}
+
+		@Override
+		public String toString() {
+			return filteredMap()
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("fieldName", fieldName)
+				.append("value", value)
+				.asString();
+		}
+	}
 	static class MethodEntry<V> {
 		String simpleClassName, fullClassName, methodName, args[];
 		V value;
@@ -674,71 +379,42 @@ public class ReflectionMap<V> {
 				.asString();
 		}
 	}
-
-	static class ConstructorEntry<V> {
-		String simpleClassName, fullClassName, args[];
-		V value;
-
-		ConstructorEntry(String name, V value) {
-			int i = name.indexOf('(');
-			this.args = splita(name.substring(i+1, name.length()-1));
-			name = name.substring(0, i).trim();
-			this.simpleClassName = simpleClassName(name);
-			this.fullClassName = name;
-			this.value = value;
-		}
-
-		public boolean matches(Constructor<?> m) {
-			if (m == null)
-				return false;
-			Class<?> c = m.getDeclaringClass();
-			return
-				classMatches(simpleClassName, fullClassName, c)
-				&& (argsMatch(args, m.getParameterTypes()));
-		}
-
-		@Override
-		public String toString() {
-			return filteredMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("args", args)
-				.append("value", value)
-				.asString();
-		}
+	/**
+	 * Static builder creator.
+	 *
+	 * @param <V> The type of object in this map.
+	 * @param c The type of object in this map.
+	 * @return A new instance of this object.
+	 */
+	public static <V> Builder<V> create(Class<V> c) {
+		return new Builder<>();
 	}
 
-	static class FieldEntry<V> {
-		String simpleClassName, fullClassName, fieldName;
-		V value;
+	private static <V> List<V> lazyAdd(List<V> list, V v) {
+		if (list == null)
+			list = list();
+		list.add(v);
+		return list;
+	}
 
-		FieldEntry(String name, V value) {
-			int i = name.lastIndexOf('.');
-			String s1 = name.substring(0, i), s2 = name.substring(i+1);
-			this.simpleClassName = simpleClassName(s1);
-			this.fullClassName = s1;
-			this.fieldName = s2;
-			this.value = value;
-		}
+	private static <V> List<V> lazyAdd(V[] array, List<V> list, V v) {
+		if (list == null)
+			list = list(array);
+		list.add(v);
+		return list;
+	}
 
-		public boolean matches(Field f) {
-			if (f == null)
-				return false;
-			Class<?> c = f.getDeclaringClass();
-			return
-				classMatches(simpleClassName, fullClassName, c)
-				&& (Utils.eq(f.getName(), fieldName));
-		}
+	@SuppressWarnings("unchecked")
+	private static <V> V[] lazyArray(V[] array, List<V> list) {
+		if (list == null)
+			return array;
+		array = (V[])Array.newInstance(array.getClass().getComponentType(), list.size());
+		list.toArray(array);
+		return array;
+	}
 
-		@Override
-		public String toString() {
-			return filteredMap()
-				.append("simpleClassName", simpleClassName)
-				.append("fullClassName", fullClassName)
-				.append("fieldName", fieldName)
-				.append("value", value)
-				.asString();
-		}
+	private static <V> List<V> lazyList(List<V> list) {
+		return list == null ? Collections.emptyList() : list;
 	}
 
 	static boolean argsMatch(String[] names, Class<?>[] args) {
@@ -753,13 +429,6 @@ public class ReflectionMap<V> {
 				return false;
 		}
 		return true;
-	}
-
-	static String simpleClassName(String name) {
-		int i = name.indexOf('.');
-		if (i == -1)
-			return name;
-		return null;
 	}
 
 	static boolean classMatches(String simpleName, String fullName, Class<?> c) {
@@ -787,6 +456,341 @@ public class ReflectionMap<V> {
 		return false;
 	}
 
+	static String simpleClassName(String name) {
+		int i = name.indexOf('.');
+		if (i == -1)
+			return name;
+		return null;
+	}
+
+	static void splitNames(String key, Consumer<String> consumer) {
+		if (key.indexOf(',') == -1) {
+			consumer.accept(key);
+		} else {
+			int m = 0;
+			boolean escaped = false;
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.charAt(i);
+				if (c == '(')
+					escaped = true;
+				else if (c == ')')
+					escaped = false;
+				else if (c == ',' && ! escaped) {
+					consumer.accept(key.substring(m, i).trim());
+					m = i+1;
+				}
+			}
+			consumer.accept(key.substring(m).trim());
+		}
+	}
+
+	final ClassEntry<V>[] classEntries;
+
+	final MethodEntry<V>[] methodEntries;
+
+	final FieldEntry<V>[] fieldEntries;
+
+	final ConstructorEntry<V>[] constructorEntries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param b Initializer object.
+	 */
+	protected ReflectionMap(Builder<V> b) {
+		this.classEntries = b.classEntries.toArray(new ClassEntry[b.classEntries.size()]);
+		this.methodEntries = b.methodEntries.toArray(new MethodEntry[b.methodEntries.size()]);
+		this.fieldEntries = b.fieldEntries.toArray(new FieldEntry[b.fieldEntries.size()]);
+		this.constructorEntries = b.constructorEntries.toArray(new ConstructorEntry[b.constructorEntries.size()]);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append values to.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public V[] appendAll(Class<?> c, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append values to.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public V[] appendAll(Constructor<?> c, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append values to.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public V[] appendAll(Field f, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @param array The array to append values to.
+	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
+	 */
+	public V[] appendAll(Method m, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Class<?> c) {
+		return find(c, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Class<?> c, Class<? extends V> ofType) {
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Utils.opt(e.value);
+		return Utils.opte();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Constructor<?> c) {
+		return find(c, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Constructor<?> c, Class<? extends V> ofType) {
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Utils.opt(e.value);
+		return Utils.opte();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Field f) {
+		return find(f, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Field f, Class<? extends V> ofType) {
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Utils.opt(e.value);
+		return Utils.opte();
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Method m) {
+		return find(m, null);
+	}
+
+	/**
+	 * Finds first value in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return The matching object.  Never <jk>null</jk>.
+	 */
+	public Optional<V> find(Method m, Class<? extends V> ofType) {
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Utils.opt(e.value);
+		return Utils.opte();
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Class<?> c) {
+		List<V> list = null;
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified class.
+	 *
+	 * @param c The class to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
+		List<V> list = null;
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Constructor<?> c) {
+		List<V> list = null;
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified constructor.
+	 *
+	 * @param c The constructor to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
+		List<V> list = null;
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Field f) {
+		List<V> list = null;
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified field.
+	 *
+	 * @param f The field to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Field f, Class<? extends V> ofType) {
+		List<V> list = null;
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+	/**
+	 * Finds all values in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Method m) {
+		List<V> list = null;
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
+	/**
+	 * Finds all values in this map that matches the specified method.
+	 *
+	 * @param m The method to test for.
+	 * @param ofType Only return objects of the specified type.
+	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
+	 */
+	public List<V> findAll(Method m, Class<? extends V> ofType) {
+		List<V> list = null;
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
@@ -795,29 +799,5 @@ public class ReflectionMap<V> {
 			.append("fieldEntries", fieldEntries)
 			.append("constructorEntries", constructorEntries)
 			.asString();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static <V> List<V> lazyList(List<V> list) {
-		return list == null ? Collections.emptyList() : list;
-	}
-
-	private static <V> List<V> lazyAdd(V[] array, List<V> list, V v) {
-		if (list == null)
-			list = list(array);
-		list.add(v);
-		return list;
-	}
-
-	@SuppressWarnings("unchecked")
-	private static <V> V[] lazyArray(V[] array, List<V> list) {
-		if (list == null)
-			return array;
-		array = (V[])Array.newInstance(array.getClass().getComponentType(), list.size());
-		list.toArray(array);
-		return array;
 	}
 }

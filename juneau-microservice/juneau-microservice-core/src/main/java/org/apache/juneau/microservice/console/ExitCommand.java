@@ -35,13 +35,13 @@ public class ExitCommand extends ConsoleCommand {
 	private final Messages mb = Messages.of(ExitCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "exit";
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
+	public boolean execute(Scanner in, PrintWriter out, Args args) {
+		try {
+			Microservice.getInstance().stop().exit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 	@Override /* Overridden from ConsoleCommand */
@@ -50,12 +50,12 @@ public class ExitCommand extends ConsoleCommand {
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public boolean execute(Scanner in, PrintWriter out, Args args) {
-		try {
-			Microservice.getInstance().stop().exit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return true;
+	public String getInfo() {
+		return mb.getString("info");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getName() {
+		return "exit";
 	}
 }

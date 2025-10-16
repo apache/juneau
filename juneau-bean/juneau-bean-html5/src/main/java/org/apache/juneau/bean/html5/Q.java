@@ -57,7 +57,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#q() q()}
- * 		<li class='jm'>{@link HtmlBuilder#q(Object, Object...) q(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#q(Object...) q(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -83,6 +83,41 @@ public class Q extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Q _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Q accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Q attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Q attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Q child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Q children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/text-level-semantics.html#attr-q-cite">cite</a> attribute.
 	 *
@@ -93,26 +128,11 @@ public class Q extends HtmlElementMixed {
 	 * <p>
 	 * The URL should point to the original source of the quoted material.
 	 *
-	 * @param cite The URL of the source document for the quotation.
+	 * @param value The URL of the source document for the quotation.
 	 * @return This object.
 	 */
 	public Q cite(String value) {
 		attr("cite", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Q _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Q accesskey(String value) {
-		super.accesskey(value);
 		return this;
 	}
 
@@ -473,30 +493,6 @@ public class Q extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Q translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Q child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Q children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Q attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Q attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

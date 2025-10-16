@@ -42,10 +42,10 @@ import java.util.function.*;
 public interface Tuple3Function<A,B,C,R> {
 
 	@SuppressWarnings("javadoc")
-	R apply(A a, B b, C c);
-
-	@SuppressWarnings("javadoc")
 	default <V> Tuple3Function<A,B,C,V> andThen(Function<? super R, ? extends V> after) {
 		return (A a, B b, C c) -> after.apply(apply(a, b, c));
 	}
+
+	@SuppressWarnings("javadoc")
+	R apply(A a, B b, C c);
 }

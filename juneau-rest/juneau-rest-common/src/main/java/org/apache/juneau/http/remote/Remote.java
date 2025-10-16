@@ -37,23 +37,19 @@ import org.apache.juneau.http.header.*;
 public @interface Remote {
 
 	/**
-	 * REST service path.
+	 * Default request header list.
 	 *
-	 * <ul class='values'>
-	 * 	<li>An absolute URL.
-	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c>
-	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
-	 * </ul>
+	 * <p>
+	 * Specifies a supplier of headers to set on all requests.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * 		Supplier class must provide a public no-arg constructor.
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	String path() default "";
+	Class<? extends HeaderList> headerList() default HeaderList.Void.class;
 
 	/**
 	 * Default request headers.
@@ -72,19 +68,23 @@ public @interface Remote {
 	String[] headers() default {};
 
 	/**
-	 * Default request header list.
+	 * REST service path.
 	 *
-	 * <p>
-	 * Specifies a supplier of headers to set on all requests.
+	 * <ul class='values'>
+	 * 	<li>An absolute URL.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c>
+	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
+	 * </ul>
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Supplier class must provide a public no-arg constructor.
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
+	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends HeaderList> headerList() default HeaderList.Void.class;
+	String path() default "";
 
 	/**
 	 * Specifies the client version of this interface.

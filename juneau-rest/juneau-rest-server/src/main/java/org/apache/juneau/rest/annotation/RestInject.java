@@ -189,6 +189,19 @@ public @interface RestInject {
 	String[] description() default {};
 
 	/**
+	 * The short names of the methods that this annotation applies to.
+	 *
+	 * <p>
+	 * Can use <js>"*"</js> to apply to all methods.
+	 *
+	 * <p>
+	 * Ignored for class-level scope.
+	 *
+	 * @return The short names of the methods that this annotation applies to, or empty if class-scope.
+	 */
+	String[] methodScope() default {};
+
+	/**
 	 * The bean name to use to distinguish beans of the same type for different purposes.
 	 *
 	 * <p>
@@ -205,17 +218,4 @@ public @interface RestInject {
 	 * @return The bean name to use to distinguish beans of the same type for different purposes, or blank if bean type is unique.
 	 */
 	String value() default "";
-
-	/**
-	 * The short names of the methods that this annotation applies to.
-	 *
-	 * <p>
-	 * Can use <js>"*"</js> to apply to all methods.
-	 *
-	 * <p>
-	 * Ignored for class-level scope.
-	 *
-	 * @return The short names of the methods that this annotation applies to, or empty if class-scope.
-	 */
-	String[] methodScope() default {};
 }

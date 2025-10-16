@@ -65,6 +65,11 @@ public class NoCloseWriter extends Writer {
 		w.flush();
 	}
 
+	@Override /* Overridden from Object */
+	public String toString() {
+		return w.toString();
+	}
+
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf) throws IOException {
 		w.write(cbuf);
@@ -88,10 +93,5 @@ public class NoCloseWriter extends Writer {
 	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) throws IOException {
 		w.write(str, off, len);
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return w.toString();
 	}
 }

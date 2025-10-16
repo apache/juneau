@@ -45,32 +45,8 @@ import org.apache.juneau.swap.*;
 
  * </ul>
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
+@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
 public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	// Characters that need to be preceded with an escape character.
-	private static final AsciiSet escapedChars = AsciiSet.of("~'\u0001\u0002");
-
-	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(UonParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -90,9 +66,20 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			decoding = ctx.decoding;
 		}
 
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
 		@Override
 		public UonParserSession build() {
 			return new UonParserSession(this);
+		}
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
 		}
 
 		/**
@@ -105,33 +92,16 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			decoding = value;
 			return this;
 		}
+
 		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -160,26 +130,20 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -196,23 +160,70 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	// Characters that need to be preceded with an escape character.
+	private static final AsciiSet escapedChars = AsciiSet.of("~'\u0001\u0002");
+
+	private static final char AMP='\u0001', EQ='\u0002';  // Flags set in reader to denote & and = characters.
+	private static final AsciiSet endCharsParam = AsciiSet.of(""+AMP), endCharsNormal = AsciiSet.of(",)"+AMP);
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(UonParser ctx) {
+		return new Builder(ctx);
+	}
+	/*
+	 * Returns true if the next character in the stream is preceded by an escape '~' character.
+	 */
+	private static final boolean isInEscape(int c, ParserReader r, boolean prevIsInEscape) throws IOException {
+		if (c == '~' && ! prevIsInEscape) {
+			c = r.peek();
+			if (escapedChars.contains(c)) {
+				r.delete();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static void skipSpace(ParserReader r) throws IOException {
+		int c = 0;
+		while ((c = r.read()) != -1) {
+			if (c <= 2 || ! Character.isWhitespace(c)) {
+				r.unread();
+				return;
+			}
+		}
+	}
 
 	private final UonParser ctx;
+
 	private final boolean decoding;
 
 	/**
@@ -226,31 +237,19 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		decoding = builder.decoding;
 	}
 
-	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try (UonReader r = getUonReader(pipe, decoding)) {
-			T o = parseAnything(type, r, getOuter(), true, null);
-			validateEnd(r);
-			return o;
-		}
-	}
-
-	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		try (UonReader r = getUonReader(pipe, decoding)) {
-			m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
-			validateEnd(r);
-			return m;
-		}
-	}
-
-	@Override /* Overridden from ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		try (UonReader r = getUonReader(pipe, decoding)) {
-			c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
-			validateEnd(r);
-			return c;
-		}
+	/**
+	 * Creates a {@link UonReader} from the specified parser pipe.
+	 *
+	 * @param pipe The parser input.
+	 * @param decodeChars Whether the reader should automatically decode URL-encoded characters.
+	 * @return A new {@link UonReader} object.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
+		Reader r = pipe.getReader();
+		if (r instanceof UonReader)
+			return (UonReader)r;
+		return new UonReader(pipe, decodeChars);
 	}
 
 	@Override /* Overridden from HttpPartParser */
@@ -448,180 +447,15 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return (T)o;
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType,
-			BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
-
-		if (keyType == null)
-			keyType = (ClassMeta<K>)string();
-
-		int c = r.read();
-		if (c == -1 || c == AMP)
+	private Boolean parseBoolean(UonReader r) throws IOException, ParseException {
+		String s = parseString(r, false);
+		if (s == null || s.equals("null"))
 			return null;
-		if (c == 'n')
-			return (Map<K,V>)parseNull(r);
-		if (c != '(')
-			throw new ParseException(this, "Expected '(' at beginning of object.");
-
-		final int S1=1; // Looking for attrName start.
-		final int S2=2; // Found attrName end, looking for =.
-		final int S3=3; // Found =, looking for valStart.
-		final int S4=4; // Looking for , or )
-		boolean isInEscape = false;
-
-		int state = S1;
-		K currAttr = null;
-		while (c != -1 && c != AMP) {
-			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == ')')
-						return m;
-					if (Character.isWhitespace(c))
-						skipSpace(r);
-					else {
-						r.unread();
-						Object attr = parseAttr(r, decoding);
-						currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
-						state = S2;
-						c = 0; // Avoid isInEscape if c was '\'
-					}
-				} else if (state == S2) {
-					if (c == EQ || c == '=')
-						state = S3;
-					else if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						if (currAttr == null) {
-							// Value was '%00'
-							r.unread();
-							return null;
-						}
-						m.put(currAttr, null);
-						if (c == ')' || c == -1 || c == AMP)
-							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						V value = convertAttrToType(m, "", valueType);
-						m.put(currAttr, value);
-						if (c == -1 || c == ')' || c == AMP)
-							return m;
-						state = S1;
-					} else  {
-						V value = parseAnything(valueType, r.unread(), m, false, pMeta);
-						setName(valueType, value, currAttr);
-						m.put(currAttr, value);
-						state = S4;
-						c = 0; // Avoid isInEscape if c was '\'
-					}
-				} else if (state == S4) {
-					if (c == ',')
-						state = S1;
-					else if (c == ')' || c == -1 || c == AMP) {
-						return m;
-					}
-				}
-			}
-			isInEscape = isInEscape(c, r, isInEscape);
-		}
-		if (state == S1)
-			throw new ParseException(this, "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(this, "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(this, "Dangling '=' found in object entry");
-		if (state == S4)
-			throw new ParseException(this, "Could not find ')' marking end of object.");
-
-		return null; // Unreachable.
-	}
-
-	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
-
-		int c = r.readSkipWs();
-		if (c == -1 || c == AMP)
-			return null;
-		if (c == 'n')
-			return (Collection<E>)parseNull(r);
-
-		int argIndex = 0;
-
-		// If we're parsing a top-level parameter, we're allowed to have comma-delimited lists outside parenthesis (e.g. "&foo=1,2,3&bar=a,b,c")
-		// This is not allowed at lower levels since we use comma's as end delimiters.
-		boolean isInParens = (c == '@');
-		if (! isInParens) {
-			if (isUrlParamValue)
-				r.unread();
-			else
-				throw new ParseException(this, "Could not find '(' marking beginning of collection.");
-		} else {
-			r.read();  // NOSONAR - Intentional, we're skipping the '@' character.
-		}
-
-		if (isInParens) {
-			final int S1=1; // Looking for starting of first entry.
-			final int S2=2; // Looking for starting of subsequent entries.
-			final int S3=3; // Looking for , or ) after first entry.
-
-			int state = S1;
-			while (c != -1 && c != AMP) {
-				c = r.read();
-				if (state == S1 || state == S2) {
-					if (c == ')') {
-						if (state == S2) {
-							l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
-									r.unread(), l, false, pMeta));
-							r.read();  // NOSONAR - Intentional, we're skipping the ')' character.
-						}
-						return l;
-					} else if (Character.isWhitespace(c)) {
-						skipSpace(r);
-					} else {
-						l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
-								r.unread(), l, false, pMeta));
-						state = S3;
-					}
-				} else if (state == S3) {
-					if (c == ',') {
-						state = S2;
-					} else if (c == ')') {
-						return l;
-					}
-				}
-			}
-			if (state == S1 || state == S2)
-				throw new ParseException(this, "Could not find start of entry in array.");
-			if (state == S3)
-				throw new ParseException(this, "Could not find end of entry in array.");
-
-		} else {
-			final int S1=1; // Looking for starting of entry.
-			final int S2=2; // Looking for , or & or END after first entry.
-
-			int state = S1;
-			while (c != -1 && c != AMP) {
-				c = r.read();
-				if (state == S1) {
-					if (Character.isWhitespace(c)) {
-						skipSpace(r);
-					} else {
-						l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
-								r.unread(), l, false, pMeta));
-						state = S2;
-					}
-				} else if (state == S2) {
-					if (c == ',') {
-						state = S1;
-					} else if (Character.isWhitespace(c)) {
-						skipSpace(r);
-					} else if (c == AMP || c == -1) {
-						r.unread();
-						return l;
-					}
-				}
-			}
-		}
-
-		return null;  // Unreachable.
+		if (s.equalsIgnoreCase("true"))
+			return true;
+		if (s.equalsIgnoreCase("false"))
+			return false;
+		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
 	}
 
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
@@ -741,11 +575,285 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		return null; // Unreachable.
 	}
 
+	private <E> Collection<E> parseIntoCollection(UonReader r, Collection<E> l, ClassMeta<E> type, boolean isUrlParamValue, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+
+		int c = r.readSkipWs();
+		if (c == -1 || c == AMP)
+			return null;
+		if (c == 'n')
+			return (Collection<E>)parseNull(r);
+
+		int argIndex = 0;
+
+		// If we're parsing a top-level parameter, we're allowed to have comma-delimited lists outside parenthesis (e.g. "&foo=1,2,3&bar=a,b,c")
+		// This is not allowed at lower levels since we use comma's as end delimiters.
+		boolean isInParens = (c == '@');
+		if (! isInParens) {
+			if (isUrlParamValue)
+				r.unread();
+			else
+				throw new ParseException(this, "Could not find '(' marking beginning of collection.");
+		} else {
+			r.read();  // NOSONAR - Intentional, we're skipping the '@' character.
+		}
+
+		if (isInParens) {
+			final int S1=1; // Looking for starting of first entry.
+			final int S2=2; // Looking for starting of subsequent entries.
+			final int S3=3; // Looking for , or ) after first entry.
+
+			int state = S1;
+			while (c != -1 && c != AMP) {
+				c = r.read();
+				if (state == S1 || state == S2) {
+					if (c == ')') {
+						if (state == S2) {
+							l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
+									r.unread(), l, false, pMeta));
+							r.read();  // NOSONAR - Intentional, we're skipping the ')' character.
+						}
+						return l;
+					} else if (Character.isWhitespace(c)) {
+						skipSpace(r);
+					} else {
+						l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
+								r.unread(), l, false, pMeta));
+						state = S3;
+					}
+				} else if (state == S3) {
+					if (c == ',') {
+						state = S2;
+					} else if (c == ')') {
+						return l;
+					}
+				}
+			}
+			if (state == S1 || state == S2)
+				throw new ParseException(this, "Could not find start of entry in array.");
+			if (state == S3)
+				throw new ParseException(this, "Could not find end of entry in array.");
+
+		} else {
+			final int S1=1; // Looking for starting of entry.
+			final int S2=2; // Looking for , or & or END after first entry.
+
+			int state = S1;
+			while (c != -1 && c != AMP) {
+				c = r.read();
+				if (state == S1) {
+					if (Character.isWhitespace(c)) {
+						skipSpace(r);
+					} else {
+						l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(),
+								r.unread(), l, false, pMeta));
+						state = S2;
+					}
+				} else if (state == S2) {
+					if (c == ',') {
+						state = S1;
+					} else if (Character.isWhitespace(c)) {
+						skipSpace(r);
+					} else if (c == AMP || c == -1) {
+						r.unread();
+						return l;
+					}
+				}
+			}
+		}
+
+		return null;  // Unreachable.
+	}
+
+	private <K,V> Map<K,V> parseIntoMap(UonReader r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType,
+			BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+
+		if (keyType == null)
+			keyType = (ClassMeta<K>)string();
+
+		int c = r.read();
+		if (c == -1 || c == AMP)
+			return null;
+		if (c == 'n')
+			return (Map<K,V>)parseNull(r);
+		if (c != '(')
+			throw new ParseException(this, "Expected '(' at beginning of object.");
+
+		final int S1=1; // Looking for attrName start.
+		final int S2=2; // Found attrName end, looking for =.
+		final int S3=3; // Found =, looking for valStart.
+		final int S4=4; // Looking for , or )
+		boolean isInEscape = false;
+
+		int state = S1;
+		K currAttr = null;
+		while (c != -1 && c != AMP) {
+			c = r.read();
+			if (! isInEscape) {
+				if (state == S1) {
+					if (c == ')')
+						return m;
+					if (Character.isWhitespace(c))
+						skipSpace(r);
+					else {
+						r.unread();
+						Object attr = parseAttr(r, decoding);
+						currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
+						state = S2;
+						c = 0; // Avoid isInEscape if c was '\'
+					}
+				} else if (state == S2) {
+					if (c == EQ || c == '=')
+						state = S3;
+					else if (c == -1 || c == ',' || c == ')' || c == AMP) {
+						if (currAttr == null) {
+							// Value was '%00'
+							r.unread();
+							return null;
+						}
+						m.put(currAttr, null);
+						if (c == ')' || c == -1 || c == AMP)
+							return m;
+						state = S1;
+					}
+				} else if (state == S3) {
+					if (c == -1 || c == ',' || c == ')' || c == AMP) {
+						V value = convertAttrToType(m, "", valueType);
+						m.put(currAttr, value);
+						if (c == -1 || c == ')' || c == AMP)
+							return m;
+						state = S1;
+					} else  {
+						V value = parseAnything(valueType, r.unread(), m, false, pMeta);
+						setName(valueType, value, currAttr);
+						m.put(currAttr, value);
+						state = S4;
+						c = 0; // Avoid isInEscape if c was '\'
+					}
+				} else if (state == S4) {
+					if (c == ',')
+						state = S1;
+					else if (c == ')' || c == -1 || c == AMP) {
+						return m;
+					}
+				}
+			}
+			isInEscape = isInEscape(c, r, isInEscape);
+		}
+		if (state == S1)
+			throw new ParseException(this, "Could not find attribute name on object.");
+		if (state == S2)
+			throw new ParseException(this, "Could not find '=' following attribute name on object.");
+		if (state == S3)
+			throw new ParseException(this, "Dangling '=' found in object entry");
+		if (state == S4)
+			throw new ParseException(this, "Could not find ')' marking end of object.");
+
+		return null; // Unreachable.
+	}
+
 	private Object parseNull(UonReader r) throws IOException, ParseException {
 		String s = parseString(r, false);
 		if ("ull".equals(s))
 			return null;
 		throw new ParseException(this, "Unexpected character sequence: ''{0}''", s);
+	}
+
+	private Number parseNumber(UonReader r, Class<? extends Number> c) throws IOException, ParseException {
+		String s = parseString(r, false);
+		if (s == null)
+			return null;
+		return StringUtils.parseNumber(s, c);
+	}
+
+	/*
+	 * Parses a string of the form "'foo'"
+	 * All whitespace within parenthesis are preserved.
+	 */
+	private String parsePString(UonReader r) throws IOException, ParseException {
+
+		r.read(); // Skip first quote, NOSONAR - Intentional.
+		r.mark();
+		int c = 0;
+
+		boolean isInEscape = false;
+		while (c != -1) {
+			c = r.read();
+			if (! isInEscape) {
+				if (c == '\'')
+					return trim(r.getMarked(0, -1));
+			}
+			if (c == EQ)
+				r.replace('=');
+			isInEscape = isInEscape(c, r, isInEscape);
+		}
+		throw new ParseException(this, "Unmatched parenthesis");
+	}
+
+	/*
+	 * Call this method after you've finished a parsing a string to make sure that if there's any
+	 * remainder in the input, that it consists only of whitespace and comments.
+	 */
+	private void validateEnd(UonReader r) throws IOException, ParseException {
+		if (! isValidateEnd())
+			return;
+		while (true) {
+			int c = r.read();
+			if (c == -1)
+				return;
+			if (! Character.isWhitespace(c))
+				throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
+		}
+	}
+
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try (UonReader r = getUonReader(pipe, decoding)) {
+			T o = parseAnything(type, r, getOuter(), true, null);
+			validateEnd(r);
+			return o;
+		}
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
+		try (UonReader r = getUonReader(pipe, decoding)) {
+			c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
+			validateEnd(r);
+			return c;
+		}
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
+		try (UonReader r = getUonReader(pipe, decoding)) {
+			m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
+			validateEnd(r);
+			return m;
+		}
+	}
+
+	/**
+	 * Decode <js>"%xx"</js> sequences.
+	 *
+	 * @see UonParser.Builder#decoding()
+	 * @return
+	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
+	 * 	before being passed to this parser.
+	 */
+	protected final boolean isDecoding() {
+		return decoding;
+	}
+
+	/**
+	 * Validate end.
+	 *
+	 * @see UonParser.Builder#validateEnd()
+	 * @return
+	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
+	 * 	the stream consists of only comments or whitespace.
+	 */
+	protected final boolean isValidateEnd() {
+		return ctx.isValidateEnd();
 	}
 
 	/**
@@ -762,7 +870,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		attr = parseAttrName(r, encoded);
 		return attr;
 	}
-
 	/**
 	 * Parses an attribute name from the specified reader.
 	 *
@@ -819,20 +926,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		throw new ParseException(this, "Unexpected condition.");
 	}
 
-	/*
-	 * Returns true if the next character in the stream is preceded by an escape '~' character.
-	 */
-	private static final boolean isInEscape(int c, ParserReader r, boolean prevIsInEscape) throws IOException {
-		if (c == '~' && ! prevIsInEscape) {
-			c = r.peek();
-			if (escapedChars.contains(c)) {
-				r.delete();
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/**
 	 * Parses a string value from the specified reader.
 	 *
@@ -882,124 +975,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 		return ("null".equals(s) ? null : trim(s));
 	}
-
-	private static final AsciiSet endCharsParam = AsciiSet.of(""+AMP), endCharsNormal = AsciiSet.of(",)"+AMP);
-
-	/*
-	 * Parses a string of the form "'foo'"
-	 * All whitespace within parenthesis are preserved.
-	 */
-	private String parsePString(UonReader r) throws IOException, ParseException {
-
-		r.read(); // Skip first quote, NOSONAR - Intentional.
-		r.mark();
-		int c = 0;
-
-		boolean isInEscape = false;
-		while (c != -1) {
-			c = r.read();
-			if (! isInEscape) {
-				if (c == '\'')
-					return trim(r.getMarked(0, -1));
-			}
-			if (c == EQ)
-				r.replace('=');
-			isInEscape = isInEscape(c, r, isInEscape);
-		}
-		throw new ParseException(this, "Unmatched parenthesis");
-	}
-
-	private Boolean parseBoolean(UonReader r) throws IOException, ParseException {
-		String s = parseString(r, false);
-		if (s == null || s.equals("null"))
-			return null;
-		if (s.equalsIgnoreCase("true"))
-			return true;
-		if (s.equalsIgnoreCase("false"))
-			return false;
-		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
-	}
-
-	private Number parseNumber(UonReader r, Class<? extends Number> c) throws IOException, ParseException {
-		String s = parseString(r, false);
-		if (s == null)
-			return null;
-		return StringUtils.parseNumber(s, c);
-	}
-
-	/*
-	 * Call this method after you've finished a parsing a string to make sure that if there's any
-	 * remainder in the input, that it consists only of whitespace and comments.
-	 */
-	private void validateEnd(UonReader r) throws IOException, ParseException {
-		if (! isValidateEnd())
-			return;
-		while (true) {
-			int c = r.read();
-			if (c == -1)
-				return;
-			if (! Character.isWhitespace(c))
-				throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
-		}
-	}
-
-	private static void skipSpace(ParserReader r) throws IOException {
-		int c = 0;
-		while ((c = r.read()) != -1) {
-			if (c <= 2 || ! Character.isWhitespace(c)) {
-				r.unread();
-				return;
-			}
-		}
-	}
-
-	/**
-	 * Creates a {@link UonReader} from the specified parser pipe.
-	 *
-	 * @param pipe The parser input.
-	 * @param decodeChars Whether the reader should automatically decode URL-encoded characters.
-	 * @return A new {@link UonReader} object.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public final UonReader getUonReader(ParserPipe pipe, boolean decodeChars) throws IOException {
-		Reader r = pipe.getReader();
-		if (r instanceof UonReader)
-			return (UonReader)r;
-		return new UonReader(pipe, decodeChars);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Decode <js>"%xx"</js> sequences.
-	 *
-	 * @see UonParser.Builder#decoding()
-	 * @return
-	 * 	<jk>true</jk> if URI encoded characters should be decoded, <jk>false</jk> if they've already been decoded
-	 * 	before being passed to this parser.
-	 */
-	protected final boolean isDecoding() {
-		return decoding;
-	}
-
-	/**
-	 * Validate end.
-	 *
-	 * @see UonParser.Builder#validateEnd()
-	 * @return
-	 * 	<jk>true</jk> if after parsing a POJO from the input, verifies that the remaining input in
-	 * 	the stream consists of only comments or whitespace.
-	 */
-	protected final boolean isValidateEnd() {
-		return ctx.isValidateEnd();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("decoding", decoding);

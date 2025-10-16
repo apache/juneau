@@ -102,12 +102,38 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
+	 * Adds a single value to the <property>examples</property> property.
+	 *
+	 * @param name The mime-type string.  Must not be <jk>null</jk>.
+	 * @param description The example.  Must not be <jk>null</jk>.
+	 * @return This object
+	 */
+	public OAuthFlow addScope(String name, String description) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("description", description);
+		scopes = mapBuilder(scopes).sparse().add(name, description).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
 	 */
 	public OAuthFlow copy() {
 		return new OAuthFlow(this);
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "refreshUrl" -> toType(getRefreshUrl(), type);
+			case "tokenUrl" -> toType(getTokenUrl(), type);
+			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
+			case "scopes" -> toType(getScopes(), type);
+			default -> super.get(property, type);
+		};
 	}
 
 	/**
@@ -120,6 +146,68 @@ public class OAuthFlow extends OpenApiElement {
 	 */
 	public String getAuthorizationUrl() {
 		return authorizationUrl;
+	}
+
+	/**
+	 * Bean property getter:  <property>externalValue</property>.
+	 *
+	 * <p>
+	 * The email address of the contact person/organization.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getRefreshUrl() {
+		return refreshUrl;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,String> getScopes() {
+		return scopes;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getTokenUrl() {
+		return tokenUrl;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(authorizationUrl != null, "authorizationUrl")
+			.addIf(refreshUrl != null, "refreshUrl")
+			.addIf(scopes != null, "scopes")
+			.addIf(tokenUrl != null, "tokenUrl")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public OAuthFlow set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
+			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
+			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "tokenUrl" -> setTokenUrl(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -136,42 +224,6 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow setAuthorizationUrl(String value) {
 		authorizationUrl = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getTokenUrl() {
-		return tokenUrl;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public OAuthFlow setTokenUrl(String value) {
-		tokenUrl = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>externalValue</property>.
-	 *
-	 * <p>
-	 * The email address of the contact person/organization.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getRefreshUrl() {
-		return refreshUrl;
 	}
 
 	/**
@@ -192,18 +244,6 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>examples</property>.
-	 *
-	 * <p>
-	 * An example of the response message.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,String> getScopes() {
-		return scopes;
-	}
-
-	/**
 	 * Bean property setter:  <property>examples</property>.
 	 *
 	 * <p>
@@ -221,55 +261,15 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Adds a single value to the <property>examples</property> property.
-	 *
-	 * @param name The mime-type string.  Must not be <jk>null</jk>.
-	 * @param description The example.  Must not be <jk>null</jk>.
+	 * Bean property setter:  <property>description</property>.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public OAuthFlow addScope(String name, String description) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("description", description);
-		scopes = mapBuilder(scopes).sparse().add(name, description).build();
+	public OAuthFlow setTokenUrl(String value) {
+		tokenUrl = value;
 		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "refreshUrl" -> toType(getRefreshUrl(), type);
-			case "tokenUrl" -> toType(getTokenUrl(), type);
-			case "authorizationUrl" -> toType(getAuthorizationUrl(), type);
-			case "scopes" -> toType(getScopes(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public OAuthFlow set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "authorizationUrl" -> setAuthorizationUrl(Utils.s(value));
-			case "refreshUrl" -> setRefreshUrl(Utils.s(value));
-			case "scopes" -> setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			case "tokenUrl" -> setTokenUrl(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(authorizationUrl != null, "authorizationUrl")
-			.addIf(refreshUrl != null, "refreshUrl")
-			.addIf(scopes != null, "scopes")
-			.addIf(tokenUrl != null, "tokenUrl")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

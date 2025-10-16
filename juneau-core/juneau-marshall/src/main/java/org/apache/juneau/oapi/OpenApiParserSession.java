@@ -49,37 +49,6 @@ import org.apache.juneau.uon.*;
  * </ul>
  */
 public class OpenApiParserSession extends UonParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	// Cache these for faster lookup
-	private static final BeanContext BC = BeanContext.DEFAULT;
-	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
-	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
-	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
-	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
-	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
-	private static final ClassMeta<JsonList> CM_JsonList = BC.getClassMeta(JsonList.class);
-	private static final ClassMeta<JsonMap> CM_JsonMap = BC.getClassMeta(JsonMap.class);
-
-	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(OpenApiParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -97,14 +66,14 @@ public class OpenApiParserSession extends UonParserSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public OpenApiParserSession build() {
-			return new OpenApiParserSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public OpenApiParserSession build() {
+			return new OpenApiParserSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -114,20 +83,20 @@ public class OpenApiParserSession extends UonParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder decoding(boolean value) {
+			super.decoding(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -156,26 +125,20 @@ public class OpenApiParserSession extends UonParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -192,28 +155,50 @@ public class OpenApiParserSession extends UonParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder decoding(boolean value) {
-			super.decoding(value);
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
 			return this;
 		}
 	}
+	// Cache these for faster lookup
+	private static final BeanContext BC = BeanContext.DEFAULT;
+	private static final ClassMeta<Long> CM_Long = BC.getClassMeta(Long.class);
+	private static final ClassMeta<Integer> CM_Integer = BC.getClassMeta(Integer.class);
+	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
+	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
+	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
+	private static final ClassMeta<JsonList> CM_JsonList = BC.getClassMeta(JsonList.class);
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	private static final ClassMeta<JsonMap> CM_JsonMap = BC.getClassMeta(JsonMap.class);
 
+	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(OpenApiParser ctx) {
+		return new Builder(ctx);
+	}
 	private final OpenApiParser ctx;
 
 	/**
@@ -251,11 +236,6 @@ public class OpenApiParserSession extends UonParserSession {
 			t = (T)Utils.opt(t);
 
 		return t;
-	}
-
-	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		return parseInner(null, HttpPartSchema.DEFAULT, pipe.asString(), type);
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -506,5 +486,10 @@ public class OpenApiParserSession extends UonParserSession {
 		} catch (InvalidDataConversionException e) {
 			throw new ParseException(e.getMessage());
 		}
+	}
+
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		return parseInner(null, HttpPartSchema.DEFAULT, pipe.asString(), type);
 	}
 }

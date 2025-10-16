@@ -58,11 +58,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Proxy-Authenticate")
 public class ProxyAuthenticate extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Proxy-Authenticate";
 
@@ -92,11 +87,6 @@ public class ProxyAuthenticate extends BasicStringHeader {
 	public static ProxyAuthenticate of(Supplier<String> value) {
 		return value == null ? null : new ProxyAuthenticate(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

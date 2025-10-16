@@ -34,12 +34,11 @@ public class ExecutableException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ExecutableException(Throwable causedBy, String message, Object...args) {
-		super(causedBy, message, args);
+	public ExecutableException(String message, Object...args) {
+		super(message, args);
 	}
 
 	/**
@@ -54,11 +53,12 @@ public class ExecutableException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
+	 * @param causedBy The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ExecutableException(String message, Object...args) {
-		super(message, args);
+	public ExecutableException(Throwable causedBy, String message, Object...args) {
+		super(causedBy, message, args);
 	}
 
 	/**

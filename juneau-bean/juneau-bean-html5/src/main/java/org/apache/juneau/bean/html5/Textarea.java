@@ -74,7 +74,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#textarea() textarea()}
- * 		<li class='jm'>{@link HtmlBuilder#textarea(Object, Object...) textarea(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#textarea(String, String) textarea(String, String)}
  * 	</ul>
  * </ul>
  * </p>
@@ -102,6 +102,30 @@ public class Textarea extends HtmlElementRawText {
 		name(name).text(text);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Textarea _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a> attribute.
 	 *
@@ -120,7 +144,7 @@ public class Textarea extends HtmlElementRawText {
 	 * 	<li><js>"new-password"</js> - Autocomplete for new password</li>
 	 * </ul>
 	 *
-	 * @param autocomplete Autocomplete behavior for the form field.
+	 * @param value Autocomplete behavior for the form field.
 	 * @return This object.
 	 */
 	public Textarea autocomplete(String value) {
@@ -134,7 +158,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
 	 *
-	 * @param autofocus
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -151,11 +175,23 @@ public class Textarea extends HtmlElementRawText {
 	 * Specifies the visible width of the textarea in characters. This is a hint for the browser
 	 * and may not be exactly followed depending on the font and styling.
 	 *
-	 * @param cols The visible width of the textarea in characters.
+	 * @param value The visible width of the textarea in characters.
 	 * @return This object.
 	 */
 	public Textarea cols(Object value) {
 		attr("cols", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -170,7 +206,7 @@ public class Textarea extends HtmlElementRawText {
 	 * This is useful for forms that need to preserve text direction information when submitted.
 	 * The hidden field will contain either "ltr" or "rtl" based on the textarea's direction.
 	 *
-	 * @param dirname The name of the hidden field for directionality information.
+	 * @param value The name of the hidden field for directionality information.
 	 * @return This object.
 	 */
 	public Textarea dirname(String value) {
@@ -192,7 +228,7 @@ public class Textarea extends HtmlElementRawText {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -212,11 +248,23 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this textarea.
+	 * @param value The ID of the form element to associate with this textarea.
 	 * @return This object.
 	 */
 	public Textarea form(String value) {
 		attr("form", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea id(String value) {
+		super.id(value);
 		return this;
 	}
 
@@ -239,11 +287,16 @@ public class Textarea extends HtmlElementRawText {
 	 * 	<li><js>"search"</js> - Search keyboard</li>
 	 * </ul>
 	 *
-	 * @param inputmode The type of virtual keyboard to display.
+	 * @param value The type of virtual keyboard to display.
 	 * @return This object.
 	 */
 	public Textarea inputmode(String value) {
 		attr("inputmode", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Textarea lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
@@ -253,7 +306,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * Maximum length of value.
 	 *
-	 * @param maxlength
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
@@ -269,7 +322,7 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * Minimum length of value.
 	 *
-	 * @param minlength
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
@@ -289,144 +342,11 @@ public class Textarea extends HtmlElementRawText {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param name The name of the form control for submission and API access.
+	 * @param value The name of the form control for submission and API access.
 	 * @return This object.
 	 */
 	public Textarea name(String value) {
 		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-placeholder">placeholder</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Provides a hint to the user about what to enter in the textarea. The placeholder text is displayed
-	 * when the textarea is empty and disappears when the user starts typing.
-	 *
-	 * <p>
-	 * The placeholder should be a brief, helpful description of the expected input.
-	 *
-	 * @param placeholder The placeholder text to display when the textarea is empty.
-	 * @return This object.
-	 */
-	public Textarea placeholder(String value) {
-		attr("placeholder", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly">readonly</a> attribute.
-	 *
-	 * <p>
-	 * Whether to allow the value to be edited by the user.
-	 *
-	 * @param readonly
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Textarea readonly(Object value) {
-		attr("readonly", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-required">required</a> attribute.
-	 *
-	 * <p>
-	 * Whether the control is required for form submission.
-	 *
-	 * @param required
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Textarea required(Object value) {
-		attr("required", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the visible height of the textarea in lines. This is a hint for the browser
-	 * and may not be exactly followed depending on the font and styling.
-	 *
-	 * @param rows The visible height of the textarea in lines.
-	 * @return This object.
-	 */
-	public Textarea rows(Number value) {
-		attr("rows", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-wrap">wrap</a> attribute.
-	 *
-	 * <p>
-	 * Specifies how the text in the textarea should be wrapped when the form is submitted.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"soft"</js> - Text is wrapped in the display but not in the submitted value (default)</li>
-	 * 	<li><js>"hard"</js> - Text is wrapped in both display and submitted value</li>
-	 * 	<li><js>"off"</js> - Text is not wrapped</li>
-	 * </ul>
-	 *
-	 * @param wrap How the text should be wrapped for form submission.
-	 * @return This object.
-	 */
-	public Textarea wrap(String value) {
-		attr("wrap", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Textarea _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -730,6 +650,72 @@ public class Textarea extends HtmlElementRawText {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-placeholder">placeholder</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Provides a hint to the user about what to enter in the textarea. The placeholder text is displayed
+	 * when the textarea is empty and disappears when the user starts typing.
+	 *
+	 * <p>
+	 * The placeholder should be a brief, helpful description of the expected input.
+	 *
+	 * @param value The placeholder text to display when the textarea is empty.
+	 * @return This object.
+	 */
+	public Textarea placeholder(String value) {
+		attr("placeholder", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-readonly">readonly</a> attribute.
+	 *
+	 * <p>
+	 * Whether to allow the value to be edited by the user.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Textarea readonly(Object value) {
+		attr("readonly", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-required">required</a> attribute.
+	 *
+	 * <p>
+	 * Whether the control is required for form submission.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Textarea required(Object value) {
+		attr("required", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-rows">rows</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the visible height of the textarea in lines. This is a hint for the browser
+	 * and may not be exactly followed depending on the font and styling.
+	 *
+	 * @param value The visible height of the textarea in lines.
+	 * @return This object.
+	 */
+	public Textarea rows(Number value) {
+		attr("rows", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Textarea spellcheck(Object value) {
 		super.spellcheck(value);
@@ -748,6 +734,12 @@ public class Textarea extends HtmlElementRawText {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementRawText */
+	public Textarea text(Object value) {
+		super.text(value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Textarea title(String value) {
 		super.title(value);
@@ -760,21 +752,25 @@ public class Textarea extends HtmlElementRawText {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementRawText */
-	public Textarea text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Textarea attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-textarea-wrap">wrap</a> attribute.
+	 *
+	 * <p>
+	 * Specifies how the text in the textarea should be wrapped when the form is submitted.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"soft"</js> - Text is wrapped in the display but not in the submitted value (default)</li>
+	 * 	<li><js>"hard"</js> - Text is wrapped in both display and submitted value</li>
+	 * 	<li><js>"off"</js> - Text is not wrapped</li>
+	 * </ul>
+	 *
+	 * @param value How the text should be wrapped for form submission.
+	 * @return This object.
+	 */
+	public Textarea wrap(String value) {
+		attr("wrap", value);
 		return this;
 	}
 }

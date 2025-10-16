@@ -44,36 +44,23 @@ import jakarta.servlet.http.*;
 public abstract class RestObject {
 
 	private AtomicReference<RestContext> context = new AtomicReference<>();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Context methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Sets the context object for this servlet.
+	 * Returns the current thread-local HTTP request.
 	 *
-	 * @param context Sets the context object on this servlet.
-	 * @throws ServletException If error occurred during post-initialiation.
+	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
-	protected void setContext(RestContext context) throws ServletException {
-		this.context.set(context);
+	public synchronized RestRequest getRequest() {
+		return getContext().getLocalSession().getOpSession().getRequest();
 	}
 
 	/**
-	 * Returns the read-only context object that contains all the configuration information about this resource.
+	 * Returns the current thread-local HTTP response.
 	 *
-	 * @return The context information on this servlet.
+	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
-	protected RestContext getContext() {
-		if (context.get() == null)
-			throw new InternalServerError("RestContext object not set on resource.");
-		return context.get();
+	public synchronized RestResponse getResponse() {
+		return getContext().getLocalSession().getOpSession().getResponse();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Convenience logger methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Log a message.
 	 *
@@ -123,26 +110,24 @@ public abstract class RestObject {
 			logger = Logger.getLogger(className(this));
 		logger.log(level, cause, msg);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the current thread-local HTTP request.
+	 * Returns the read-only context object that contains all the configuration information about this resource.
 	 *
-	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
+	 * @return The context information on this servlet.
 	 */
-	public synchronized RestRequest getRequest() {
-		return getContext().getLocalSession().getOpSession().getRequest();
+	protected RestContext getContext() {
+		if (context.get() == null)
+			throw new InternalServerError("RestContext object not set on resource.");
+		return context.get();
 	}
 
 	/**
-	 * Returns the current thread-local HTTP response.
+	 * Sets the context object for this servlet.
 	 *
-	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
+	 * @param context Sets the context object on this servlet.
+	 * @throws ServletException If error occurred during post-initialiation.
 	 */
-	public synchronized RestResponse getResponse() {
-		return getContext().getLocalSession().getOpSession().getResponse();
+	protected void setContext(RestContext context) throws ServletException {
+		this.context.set(context);
 	}
 }

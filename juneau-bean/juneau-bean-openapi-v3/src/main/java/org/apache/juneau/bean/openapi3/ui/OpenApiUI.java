@@ -40,6 +40,16 @@ import org.apache.juneau.swap.*;
  */
 public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
+	private static class Session {
+		final int resolveRefsMaxDepth;
+		final OpenApi openApi;
+
+		Session(OpenApi openApi) {
+			this.openApi = openApi.copy();
+			this.resolveRefsMaxDepth = 1;
+		}
+	}
+
 	static final FileFinder RESOURCES = FileFinder
 		.create(BeanStore.INSTANCE)
 		.cp(OpenApiUI.class, null, true)
@@ -50,21 +60,29 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options", "head", "patch", "trace");
 
 	/**
+	 * Replaces newlines with <br> elements.
+	 */
+	private static List<Object> toBRL(String s) {
+		if (s == null)
+			return null;  // NOSONAR - Intentionally returning null.
+		if (s.indexOf(',') == -1)
+			return singletonList(s);
+		var l = Utils.list();
+		var sa = s.split("\n");
+		for (var i = 0; i < sa.length; i++) {
+			if (i > 0)
+				l.add(br());
+			l.add(sa[i]);
+		}
+		return l;
+	}
+
+	/**
 	 * This UI applies to HTML requests only.
 	 */
 	@Override
 	public org.apache.juneau.MediaType[] forMediaTypes() {
 		return new org.apache.juneau.MediaType[] {org.apache.juneau.MediaType.HTML};
-	}
-
-	private static class Session {
-		final int resolveRefsMaxDepth;
-		final OpenApi openApi;
-
-		Session(OpenApi openApi) {
-			this.openApi = openApi.copy();
-			this.resolveRefsMaxDepth = 1;
-		}
 	}
 
 	@Override
@@ -104,6 +122,82 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		}
 
 		return outer;
+	}
+
+	private void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
+		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) ||
+			(t != null && op.getTags() != null && op.getTags().contains(t.getName()))) {
+			tagBlockContents.child(opBlock(s, path, method, op));
+		}
+	}
+
+	private Div examples(Session s, Parameter pi) {
+		var m = new JsonMap();
+
+		try {
+			var si = pi.getSchema();
+			if (si != null)
+				m.put("model", si.copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (m.isEmpty())
+			return null;
+
+		return examplesDiv(m);
+	}
+
+	private Div examples(Session s, Response ri) {
+		var m = new JsonMap();
+		try {
+			var content = ri.getContent();
+			if (content != null) {
+				// For OpenAPI 3.0, content is a map of media types to MediaType objects
+				content.forEach((mediaType, mediaTypeObj) -> {
+					if (mediaTypeObj.getSchema() != null) {
+						try {
+							var schema = mediaTypeObj.getSchema().copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth);
+							m.put(mediaType, schema);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (m.isEmpty())
+			return null;
+
+		return examplesDiv(m);
+	}
+
+	private Div examplesDiv(JsonMap m) {
+		if (m.isEmpty())
+			return null;
+
+		Select select = null;
+		if (m.size() > 1) {
+			select = select().onchange("selectExample(this)")._class("example-select");
+		}
+
+		var div = div(select)._class("examples");
+
+		if (select != null)
+			select.child(option("model","model"));
+		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
+
+		var select2 = select;
+		m.forEach((k,v) -> {
+			if (select2 != null)
+				select2.child(option(k, k));
+			div.child(div(v.toString().replace("\\n", "\n"))._class("example").attr("data-name", k));
+		});
+
+		return div;
 	}
 
 	// Creates the informational summary before the ops.
@@ -157,52 +251,56 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return table;
 	}
 
-	// Creates the "pet  Everything about your Pets  ext-link" header.
-	private HtmlElement tagBlockSummary(Tag t) {
-		var ed = t.getExternalDocs();
+	private Div headers(Response ri) {
+		if (ri.getHeaders() == null)
+			return null;
 
-		var content = ed != null && ed.getDescription() != null ? ed.getDescription() : (ed != null ? ed.getUrl() : null);
-		return div()._class("tag-block-summary").children(
-			span(t.getName())._class("name"),
-			span(toBRL(t.getDescription()))._class("description"),
-			ed != null && ed.getUrl() != null ? span(a(ed.getUrl(), content))._class("extdocs") : null
-		).onclick("toggleTagBlock(this)");
+		var sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");
+
+		var headers = div(
+			div("Headers:")._class("section-name"),
+			sectionTable
+		)._class("headers");
+
+		ri.getHeaders().forEach((k,v) ->
+			sectionTable.child(
+				tr(
+					td(k)._class("name"),
+					td(toBRL(v.getDescription()))._class("description"),
+					td(v.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
+				)
+			)
+		);
+
+		return headers;
 	}
 
-	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
-	private Div tagBlockContents(Session s, Tag t) {
-		var tagBlockContents = div()._class("tag-block-contents");
-
-		if (s.openApi.getPaths() != null) {
-			s.openApi.getPaths().forEach((path, pathItem) -> {
-				// Check each HTTP method in the path item
-				if (pathItem.getGet() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "get", pathItem.getGet(), t);
-				if (pathItem.getPut() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "put", pathItem.getPut(), t);
-				if (pathItem.getPost() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "post", pathItem.getPost(), t);
-				if (pathItem.getDelete() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "delete", pathItem.getDelete(), t);
-				if (pathItem.getOptions() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "options", pathItem.getOptions(), t);
-				if (pathItem.getHead() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "head", pathItem.getHead(), t);
-				if (pathItem.getPatch() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "patch", pathItem.getPatch(), t);
-				if (pathItem.getTrace() != null)
-					addOperationIfTagMatches(tagBlockContents, s, path, "trace", pathItem.getTrace(), t);
-			});
-		}
-
-		return tagBlockContents;
+	private Div modelBlock(String modelName, SchemaInfo model) {
+		return div()._class("op-block op-block-closed model").children(
+			modelBlockSummary(modelName, model),
+			div(model)._class("op-block-contents")
+		);
 	}
 
-	private void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
-		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) ||
-			(t != null && op.getTags() != null && op.getTags().contains(t.getName()))) {
-			tagBlockContents.child(opBlock(s, path, method, op));
+	private HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
+		return div()._class("op-block-summary").children(
+			span(modelName)._class("method-button"),
+			model.getDescription() != null ? span(toBRL(model.getDescription()))._class("summary") : null
+		).onclick("toggleOpBlock(this)");
+	}
+
+	// Creates the contents under the "Model" header.
+	private Div modelsBlockContents(Session s) {
+		var modelBlockContents = div()._class("tag-block-contents");
+		if (s.openApi.getComponents() != null && s.openApi.getComponents().getSchemas() != null) {
+			s.openApi.getComponents().getSchemas().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
 		}
+		return modelBlockContents;
+	}
+
+	// Creates the "Model" header.
+	private HtmlElement modelsBlockSummary() {
+		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
 	}
 
 	private Div opBlock(Session s, String path, String opName, Operation op) {
@@ -280,142 +378,44 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return tableContainer;
 	}
 
-	private Div headers(Response ri) {
-		if (ri.getHeaders() == null)
-			return null;
+	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
+	private Div tagBlockContents(Session s, Tag t) {
+		var tagBlockContents = div()._class("tag-block-contents");
 
-		var sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");
-
-		var headers = div(
-			div("Headers:")._class("section-name"),
-			sectionTable
-		)._class("headers");
-
-		ri.getHeaders().forEach((k,v) ->
-			sectionTable.child(
-				tr(
-					td(k)._class("name"),
-					td(toBRL(v.getDescription()))._class("description"),
-					td(v.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
-				)
-			)
-		);
-
-		return headers;
-	}
-
-	private Div examples(Session s, Parameter pi) {
-		var m = new JsonMap();
-
-		try {
-			var si = pi.getSchema();
-			if (si != null)
-				m.put("model", si.copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth));
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (s.openApi.getPaths() != null) {
+			s.openApi.getPaths().forEach((path, pathItem) -> {
+				// Check each HTTP method in the path item
+				if (pathItem.getGet() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "get", pathItem.getGet(), t);
+				if (pathItem.getPut() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "put", pathItem.getPut(), t);
+				if (pathItem.getPost() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "post", pathItem.getPost(), t);
+				if (pathItem.getDelete() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "delete", pathItem.getDelete(), t);
+				if (pathItem.getOptions() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "options", pathItem.getOptions(), t);
+				if (pathItem.getHead() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "head", pathItem.getHead(), t);
+				if (pathItem.getPatch() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "patch", pathItem.getPatch(), t);
+				if (pathItem.getTrace() != null)
+					addOperationIfTagMatches(tagBlockContents, s, path, "trace", pathItem.getTrace(), t);
+			});
 		}
 
-		if (m.isEmpty())
-			return null;
-
-		return examplesDiv(m);
+		return tagBlockContents;
 	}
 
-	private Div examples(Session s, Response ri) {
-		var m = new JsonMap();
-		try {
-			var content = ri.getContent();
-			if (content != null) {
-				// For OpenAPI 3.0, content is a map of media types to MediaType objects
-				content.forEach((mediaType, mediaTypeObj) -> {
-					if (mediaTypeObj.getSchema() != null) {
-						try {
-							var schema = mediaTypeObj.getSchema().copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth);
-							m.put(mediaType, schema);
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				});
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	// Creates the "pet  Everything about your Pets  ext-link" header.
+	private HtmlElement tagBlockSummary(Tag t) {
+		var ed = t.getExternalDocs();
 
-		if (m.isEmpty())
-			return null;
-
-		return examplesDiv(m);
-	}
-
-	private Div examplesDiv(JsonMap m) {
-		if (m.isEmpty())
-			return null;
-
-		Select select = null;
-		if (m.size() > 1) {
-			select = select().onchange("selectExample(this)")._class("example-select");
-		}
-
-		var div = div(select)._class("examples");
-
-		if (select != null)
-			select.child(option("model","model"));
-		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
-
-		var select2 = select;
-		m.forEach((k,v) -> {
-			if (select2 != null)
-				select2.child(option(k, k));
-			div.child(div(v.toString().replace("\\n", "\n"))._class("example").attr("data-name", k));
-		});
-
-		return div;
-	}
-
-	// Creates the "Model" header.
-	private HtmlElement modelsBlockSummary() {
-		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
-	}
-
-	// Creates the contents under the "Model" header.
-	private Div modelsBlockContents(Session s) {
-		var modelBlockContents = div()._class("tag-block-contents");
-		if (s.openApi.getComponents() != null && s.openApi.getComponents().getSchemas() != null) {
-			s.openApi.getComponents().getSchemas().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
-		}
-		return modelBlockContents;
-	}
-
-	private Div modelBlock(String modelName, SchemaInfo model) {
-		return div()._class("op-block op-block-closed model").children(
-			modelBlockSummary(modelName, model),
-			div(model)._class("op-block-contents")
-		);
-	}
-
-	private HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
-		return div()._class("op-block-summary").children(
-			span(modelName)._class("method-button"),
-			model.getDescription() != null ? span(toBRL(model.getDescription()))._class("summary") : null
-		).onclick("toggleOpBlock(this)");
-	}
-
-	/**
-	 * Replaces newlines with <br> elements.
-	 */
-	private static List<Object> toBRL(String s) {
-		if (s == null)
-			return null;  // NOSONAR - Intentionally returning null.
-		if (s.indexOf(',') == -1)
-			return singletonList(s);
-		var l = Utils.list();
-		var sa = s.split("\n");
-		for (var i = 0; i < sa.length; i++) {
-			if (i > 0)
-				l.add(br());
-			l.add(sa[i]);
-		}
-		return l;
+		var content = ed != null && ed.getDescription() != null ? ed.getDescription() : (ed != null ? ed.getUrl() : null);
+		return div()._class("tag-block-summary").children(
+			span(t.getName())._class("name"),
+			span(toBRL(t.getDescription()))._class("description"),
+			ed != null && ed.getUrl() != null ? span(a(ed.getUrl(), content))._class("extdocs") : null
+		).onclick("toggleTagBlock(this)");
 	}
 }

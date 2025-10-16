@@ -162,62 +162,6 @@ import org.apache.juneau.utils.*;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/*
-	 * The default package pattern exclusion list.
-	 * Any beans in packages in this list will not be considered beans.
-	 */
-	private static final String[] DEFAULT_NOTBEAN_PACKAGES = {
-		"java.lang",
-		"java.lang.annotation",
-		"java.lang.ref",
-		"java.lang.reflect",
-		"java.io",
-		"java.net",
-		"java.nio.*",
-		"java.util.*"
-	};
-
-	/*
-	 * The default bean class exclusion list.
-	 * Anything in this list will not be considered beans.
-	 */
-	private static final Class<?>[] DEFAULT_NOTBEAN_CLASSES = {
-		Map.class,
-		Collection.class,
-		Reader.class,
-		Writer.class,
-		InputStream.class,
-		OutputStream.class,
-		Throwable.class
-	};
-
-	/** Default config.  All default settings. */
-	public static final BeanContext DEFAULT = create().build();
-
-	/** Default config.  All default settings except sort bean properties. */
-	public static final BeanContext DEFAULT_SORTED = create().sortProperties().build();
-
-	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
-	public  static final BeanSession DEFAULT_SESSION = DEFAULT.createSession().unmodifiable().build();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -225,6 +169,19 @@ public class BeanContext extends Context {
 
 		private static final Cache<HashKey,BeanContext> CACHE = Cache.of(HashKey.class, BeanContext.class).build();
 
+		private static Set<Class<?>> classSet() {
+			return new TreeSet<>(Comparator.comparing(Class::getName));
+		}
+		private static Set<Class<?>> classSet(Collection<Class<?>> copy) {
+			return classSet(copy, false);
+		}
+		private static Set<Class<?>> classSet(Collection<Class<?>> copy, boolean nullIfEmpty) {
+			if (copy == null || (nullIfEmpty && copy.isEmpty()))
+				return null;
+			Set<Class<?>> x = classSet();
+			x.addAll(copy);
+			return x;
+		}
 		Visibility beanClassVisibility, beanConstructorVisibility, beanMethodVisibility, beanFieldVisibility;
 		boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
 			beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
@@ -236,8 +193,11 @@ public class BeanContext extends Context {
 		TimeZone timeZone;
 		Class<? extends PropertyNamer> propertyNamer;
 		List<Class<?>> beanDictionary;
+
 		List<Object> swaps;
+
 		Set<Class<?>> notBeanClasses;
+
 		Set<String> notBeanPackages;
 
 		/**
@@ -356,65 +316,28 @@ public class BeanContext extends Context {
 			propertyNamer = copyFrom.propertyNamer;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public BeanContext build() {
-			return cache(CACHE).build(BeanContext.class);
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				beanClassVisibility,
-				beanConstructorVisibility,
-				beanMethodVisibility,
-				beanFieldVisibility,
-				beanDictionary,
-				swaps,
-				notBeanClasses,
-				notBeanPackages,
-				integer(
-					disableBeansRequireSomeProperties,
-					beanMapPutReturnsOldValue,
-					beansRequireDefaultConstructor,
-					beansRequireSerializable,
-					beansRequireSettersForGetters,
-					disableIgnoreTransientFields,
-					disableIgnoreUnknownNullBeanProperties,
-					disableIgnoreMissingSetters,
-					disableInterfaceProxies,
-					findFluentSetters,
-					ignoreInvocationExceptionsOnGetters,
-					ignoreInvocationExceptionsOnSetters,
-					ignoreUnknownBeanProperties,
-					ignoreUnknownEnumValues,
-					sortProperties,
-					useEnumNames,
-					useJavaBeanIntrospector
-				),
-				typePropertyName,
-				mediaType,
-				timeZone,
-				locale,
-				propertyNamer
-			);
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
 		}
-
-		private int integer(boolean...values) {
-			int n = 0;
-			for (boolean b : values)
-				n = (n << 1) | (b ? 1 : 0);
-			return n;
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Minimum bean class visibility.
@@ -506,6 +429,128 @@ public class BeanContext extends Context {
 		 */
 		public Builder beanConstructorVisibility(Visibility value) {
 			beanConstructorVisibility = value;
+			return this;
+		}
+
+		/**
+		 * Returns the bean dictionary list.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #beanDictionary(Class...)}.
+		 *
+		 * @return The bean dictionary list.
+		 * @see #beanDictionary(Class...)
+		 */
+		public List<Class<?>> beanDictionary() {
+			if (beanDictionary == null)
+				beanDictionary = Utils.list();
+			return beanDictionary;
+		}
+
+		/**
+		 * Bean dictionary.
+		 *
+		 * <p>
+		 * The list of classes that make up the bean dictionary in this bean context.
+		 *
+		 * <p>
+		 * Values are prepended to the list so that later calls can override classes of earlier calls.
+		 *
+		 * <p>
+		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+		 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
+		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
+		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
+		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
+		 *
+		 * <p>
+		 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
+		 *
+		 * <p>
+		 * Values can consist of any of the following types:
+		 * <ul>
+		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
+		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+		 * 	<li>Any array or collection of the objects above.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jk>public class</jk> Foo {...}
+		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<jk>public class</jk> Bar {...}
+		 *
+		 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+		 * 		.addBeanTypes()
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Parse bean.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <p>
+		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
+		 *
+		 * <p class='bjava'>
+		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
+		 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
+		 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
+		 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
+		 * 	}
+		 * </p>
+		 *
+		 * <p>
+		 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
+		 * <p class='bjava'>
+		 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
+		 * 	ReaderParser <jv>parser</jv> = HtmlParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Parse an HTML body into HTML beans.</jc>
+		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
+		 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+		 * </ul>
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * @return This object.
+		 */
+		public Builder beanDictionary(Class<?>...values) {
+			return beanDictionary(alist(values));
+		}
+
+		/**
+		 * Same as {@link #beanDictionary(Class...)} but allows you to pass in a collection of classes.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * @return This object.
+		 * @see #beanDictionary(Class...)
+		 */
+		public Builder beanDictionary(Collection<Class<?>> values) {
+			beanDictionary().addAll(0, values);
 			return this;
 		}
 
@@ -708,228 +753,6 @@ public class BeanContext extends Context {
 		 */
 		public Builder beanMethodVisibility(Visibility value) {
 			beanMethodVisibility = value;
-			return this;
-		}
-
-		/**
-		 * Beans require no-arg constructors.
-		 *
-		 * <p>
-		 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
-		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean without a no-arg constructor.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 *
-		 * 		<jc>// A property method.</jc>
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 *
-		 * 		<jc>// A no-arg constructor</jc>
-		 * 		<jk>public</jk> MyBean(String <jv>foo</jv>) {
-		 * 			<jk>this</jk>.<jf>foo</jf> = <jv>foo</jv>;
-		 * 		}
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> <js>"bar"</js>;
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beansRequireDefaultConstructor()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  "bar"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder beansRequireDefaultConstructor() {
-			return beansRequireDefaultConstructor(true);
-		}
-
-		/**
-		 * Same as {@link #beansRequireDefaultConstructor()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder beansRequireDefaultConstructor(boolean value) {
-			beansRequireDefaultConstructor = value;
-			return this;
-		}
-
-		/**
-		 * Beans require Serializable interface.
-		 *
-		 * <p>
-		 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
-		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean without a Serializable interface.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 *
-		 * 		<jc>// A property method.</jc>
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> <js>"bar"</js>;
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beansRequireSerializable()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  "bar"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder beansRequireSerializable() {
-			return beansRequireSerializable(true);
-		}
-
-		/**
-		 * Same as {@link #beansRequireSerializable()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder beansRequireSerializable(boolean value) {
-			beansRequireSerializable = value;
-			return this;
-		}
-
-		/**
-		 * Beans require setters for getters.
-		 *
-		 * <p>
-		 * When enabled, ignore read-only properties (properties with getters but not setters).
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean without a Serializable interface.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 *
-		 * 		<jc>// A read/write property.</jc>
-		 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
-		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) { ... }
-		 *
-		 * 		<jc>// A read-only property.</jc>
-		 * 		<jk>public</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beansRequireSettersForGetters()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder beansRequireSettersForGetters() {
-			return beansRequireSettersForGetters(true);
-		}
-
-		/**
-		 * Same as {@link #beansRequireSettersForGetters()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder beansRequireSettersForGetters(boolean value) {
-			beansRequireSettersForGetters = value;
-			return this;
-		}
-
-		/**
-		 * Beans don't require at least one property.
-		 *
-		 * <p>
-		 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
-		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-		 *
-		 * <p>
-		 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with no properties.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.disableBeansRequireSomeProperties()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
-		 * 		even if it has no properties.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableBeansRequireSomeProperties() {
-			return disableBeansRequireSomeProperties(true);
-		}
-
-		/**
-		 * Same as {@link #disableBeansRequireSomeProperties()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder disableBeansRequireSomeProperties(boolean value) {
-			disableBeansRequireSomeProperties = value;
 			return this;
 		}
 
@@ -1605,125 +1428,201 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Bean dictionary.
+		 * Beans require no-arg constructors.
 		 *
 		 * <p>
-		 * The list of classes that make up the bean dictionary in this bean context.
-		 *
-		 * <p>
-		 * Values are prepended to the list so that later calls can override classes of earlier calls.
-		 *
-		 * <p>
-		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-		 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
-		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
-		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
-		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
-		 *
-		 * <p>
-		 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
-		 *
-		 * <p>
-		 * Values can consist of any of the following types:
-		 * <ul>
-		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
-		 * 	<li>Any array or collection of the objects above.
-		 * </ul>
+		 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
+		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-		 * 	<jk>public class</jk> Bar {...}
-		 *
-		 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-		 * 		.addBeanTypes()
-		 * 		.build();
-		 *
-		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+		 * 	<jc>// A bean without a no-arg constructor.</jc>
 		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+		 *
+		 * 		<jc>// A property method.</jc>
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 *
+		 * 		<jc>// A no-arg constructor</jc>
+		 * 		<jk>public</jk> MyBean(String <jv>foo</jv>) {
+		 * 			<jk>this</jk>.<jf>foo</jf> = <jv>foo</jv>;
+		 * 		}
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>public</jk> String toString() {
+		 * 			<jk>return</jk> <js>"bar"</js>;
+		 * 		}
 		 * 	}
 		 *
-		 * 	<jc>// Parse bean.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <p>
-		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
-		 *
-		 * <p class='bjava'>
-		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
-		 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
-		 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
-		 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
-		 * 	}
-		 * </p>
-		 *
-		 * <p>
-		 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
-		 * <p class='bjava'>
-		 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
-		 * 	ReaderParser <jv>parser</jv> = HtmlParser
+		 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
+		 * 		.beansRequireDefaultConstructor()
 		 * 		.build();
 		 *
-		 * 	<jc>// Parse an HTML body into HTML beans.</jc>
-		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+		 * 	<jc>// Produces:  "bar"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#dictionary()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Beanp#dictionary()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#dictionary_replace()}
-		 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * @param values
-		 * 	The values to add to this setting.
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireDefaultConstructor()}
+		 * </ul>
+		 *
 		 * @return This object.
 		 */
-		public Builder beanDictionary(Class<?>...values) {
-			return beanDictionary(alist(values));
+		public Builder beansRequireDefaultConstructor() {
+			return beansRequireDefaultConstructor(true);
 		}
 
 		/**
-		 * Same as {@link #beanDictionary(Class...)} but allows you to pass in a collection of classes.
+		 * Same as {@link #beansRequireDefaultConstructor()} but allows you to explicitly specify the value.
 		 *
-		 * @param values
-		 * 	The values to add to this setting.
+		 * @param value The value for this setting.
 		 * @return This object.
-		 * @see #beanDictionary(Class...)
 		 */
-		public Builder beanDictionary(Collection<Class<?>> values) {
-			beanDictionary().addAll(0, values);
+		public Builder beansRequireDefaultConstructor(boolean value) {
+			beansRequireDefaultConstructor = value;
 			return this;
 		}
 
 		/**
-		 * Returns the bean dictionary list.
+		 * Beans require Serializable interface.
 		 *
 		 * <p>
-		 * Gives access to the inner list if you need to make more than simple additions via {@link #beanDictionary(Class...)}.
+		 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
+		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
-		 * @return The bean dictionary list.
-		 * @see #beanDictionary(Class...)
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean without a Serializable interface.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 *
+		 * 		<jc>// A property method.</jc>
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>public</jk> String toString() {
+		 * 			<jk>return</jk> <js>"bar"</js>;
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beansRequireSerializable()
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  "bar"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#beansRequireSerializable()}
+		 * </ul>
+		 *
+		 * @return This object.
 		 */
-		public List<Class<?>> beanDictionary() {
-			if (beanDictionary == null)
-				beanDictionary = Utils.list();
-			return beanDictionary;
+		public Builder beansRequireSerializable() {
+			return beansRequireSerializable(true);
+		}
+
+		/**
+		 * Same as {@link #beansRequireSerializable()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder beansRequireSerializable(boolean value) {
+			beansRequireSerializable = value;
+			return this;
+		}
+
+		/**
+		 * Beans require setters for getters.
+		 *
+		 * <p>
+		 * When enabled, ignore read-only properties (properties with getters but not setters).
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean without a Serializable interface.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 *
+		 * 		<jc>// A read/write property.</jc>
+		 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
+		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) { ... }
+		 *
+		 * 		<jc>// A read-only property.</jc>
+		 * 		<jk>public</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beansRequireSettersForGetters()
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder beansRequireSettersForGetters() {
+			return beansRequireSettersForGetters(true);
+		}
+
+		/**
+		 * Same as {@link #beansRequireSettersForGetters()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder beansRequireSettersForGetters(boolean value) {
+			beansRequireSettersForGetters = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public BeanContext build() {
+			return cache(CACHE).build(BeanContext.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
 		}
 
 		/**
@@ -1774,290 +1673,54 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * POJO example.
+		 * Beans don't require at least one property.
 		 *
 		 * <p>
-		 * Specifies an example of the specified class.
+		 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
+		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <p>
-		 * Examples are used in cases such as POJO examples in Swagger documents.
+		 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().setFoo(<js>"foo"</js>).setBar(123))
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shorthand method for the following code:
-		 * <p class='bjava'>
-		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
-		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
-		 * </ul>
-		 *
-		 * <p>
-		 * POJO examples can also be defined on classes via the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
-		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
-		 * </ul>
-		 *
-		 * @param <T> The POJO class.
-		 * @param pojoClass The POJO class.
-		 * @param o
-		 * 	An instance of the POJO class used for examples.
-		 * @return This object.
-		 */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledAnnotation.create(pojoClass).example(Json5.of(o)).build());
-		}
-
-		/**
-		 * POJO example.
-		 *
-		 * <p>
-		 * Specifies an example in JSON of the specified class.
-		 *
-		 * <p>
-		 * Examples are used in cases such as POJO examples in Swagger documents.
-		 *
-		 * <p>
-		 * Setting applies to specified class and all subclasses.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.example(MyBean.<jk>class</jk>, <js>"{foo:'bar'}"</js>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * <p>
-		 * This is a shorthand method for the following code:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(<jv>json</jv>).build())
-		 * </p>
-		 *
-		 * <p>
-		 * POJO examples can also be defined on classes via the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Marshalled#example()}
-		 * </ul>
-		 *
-		 * @param <T> The POJO class type.
-		 * @param pojoClass The POJO class.
-		 * @param json The JSON 5 representation of the example.
-		 * @return This object.
-		 */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			return annotations(MarshalledAnnotation.create(pojoClass).example(json).build());
-		}
-
-		/**
-		 * Find fluent setters.
-		 *
-		 * <p>
-		 * When enabled, fluent setters are detected on beans during parsing.
-		 *
-		 * <p>
-		 * Fluent setters must have the following attributes:
-		 * <ul>
-		 * 	<li>Public.
-		 * 	<li>Not static.
-		 * 	<li>Take in one parameter.
-		 * 	<li>Return the bean itself.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a fluent setter.</jc>
+		 * 	<jc>// A bean with no properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
 		 * 	}
 		 *
-		 * 	<jc>// Create a parser that finds fluent setters.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.findFluentSetters()
-		 * 		.build();
-		 *
-		 * 	<jc>// Parse into bean using fluent setter.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
-		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder findFluentSetters() {
-			return findFluentSetters(true);
-		}
-
-		/**
-		 * Same as {@link #findFluentSetters()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder findFluentSetters(boolean value) {
-			findFluentSetters = value;
-			return this;
-		}
-
-		/**
-		 * Find fluent setters.
-		 *
-		 * <p>
-		 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a fluent setter.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
-		 * 	}
-		 *
-		 * 	<jc>// Create a parser that finds fluent setters.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.findFluentSetters(MyBean.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Parse into bean using fluent setter.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
-		 * 	<li class='jm'>{@link #findFluentSetters()}
-		 * </ul>
-		 *
-		 * @param on The class that this applies to.
-		 * @return This object.
-		 */
-		public Builder findFluentSetters(Class<?> on) {
-			return annotations(BeanAnnotation.create(on).findFluentSetters(true).build());
-		}
-
-		/**
-		 * Ignore invocation errors on getters.
-		 *
-		 * <p>
-		 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
-		 * Otherwise, a {@code BeanRuntimeException} is thrown.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a property that throws an exception.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String getFoo() {
-		 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
+		 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.ingoreInvocationExceptionsOnGetters()
+		 * 		.disableBeansRequireSomeProperties()
 		 * 		.build();
 		 *
-		 * 	<jc>// Exception is ignored.</jc>
+		 * 	<jc>// Produces:  {}</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
+		 * 		even if it has no properties.
+		 * </ul>
+		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
 		 * @return This object.
 		 */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			return ignoreInvocationExceptionsOnGetters(true);
+		public Builder disableBeansRequireSomeProperties() {
+			return disableBeansRequireSomeProperties(true);
 		}
 
 		/**
-		 * Same as {@link #ignoreInvocationExceptionsOnGetters()} but allows you to explicitly specify the value.
+		 * Same as {@link #disableBeansRequireSomeProperties()} but allows you to explicitly specify the value.
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder ignoreInvocationExceptionsOnGetters(boolean value) {
-			ignoreInvocationExceptionsOnGetters = value;
-			return this;
-		}
-
-		/**
-		 * Ignore invocation errors on setters.
-		 *
-		 * <p>
-		 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
-		 * Otherwise, a {@code BeanRuntimeException} is thrown.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a property that throws an exception.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) {
-		 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.ignoreInvocationExceptionsOnSetters()
-		 * 		.build();
-		 *
-		 * 	<jc>// Exception is ignored.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			return ignoreInvocationExceptionsOnSetters(true);
-		}
-
-		/**
-		 * Same as {@link #ignoreInvocationExceptionsOnSetters()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder ignoreInvocationExceptionsOnSetters(boolean value) {
-			ignoreInvocationExceptionsOnSetters = value;
+		public Builder disableBeansRequireSomeProperties(boolean value) {
+			disableBeansRequireSomeProperties = value;
 			return this;
 		}
 
@@ -2161,6 +1824,407 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * Don't ignore unknown properties with null values.
+		 *
+		 * <p>
+		 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
+		 * Otherwise it will be silently ignored.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a single property.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.disableIgnoreUnknownNullBeanProperties()
+		 * 		.build();
+		 *
+		 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			return disableIgnoreUnknownNullBeanProperties(true);
+		}
+
+		/**
+		 * Same as {@link #disableIgnoreUnknownNullBeanProperties()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder disableIgnoreUnknownNullBeanProperties(boolean value) {
+			disableIgnoreUnknownNullBeanProperties = value;
+			return this;
+		}
+
+		/**
+		 * Don't use interface proxies.
+		 *
+		 * <p>
+		 * When enabled, interfaces will be instantiated as proxy classes through the use of an
+		 * {@link InvocationHandler} if there is no other way of instantiating them.
+		 * Otherwise, throws a {@link BeanRuntimeException}.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder disableInterfaceProxies() {
+			return disableInterfaceProxies(true);
+		}
+
+		/**
+		 * Same as {@link #disableInterfaceProxies()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder disableInterfaceProxies(boolean value) {
+			disableInterfaceProxies = value;
+			return this;
+		}
+
+		/**
+		 * POJO example.
+		 *
+		 * <p>
+		 * Specifies an example in JSON of the specified class.
+		 *
+		 * <p>
+		 * Examples are used in cases such as POJO examples in Swagger documents.
+		 *
+		 * <p>
+		 * Setting applies to specified class and all subclasses.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.example(MyBean.<jk>class</jk>, <js>"{foo:'bar'}"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shorthand method for the following code:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(<jv>json</jv>).build())
+		 * </p>
+		 *
+		 * <p>
+		 * POJO examples can also be defined on classes via the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>A static field annotated with {@link Example @Example}.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Marshalled#example()}
+		 * </ul>
+		 *
+		 * @param <T> The POJO class type.
+		 * @param pojoClass The POJO class.
+		 * @param json The JSON 5 representation of the example.
+		 * @return This object.
+		 */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			return annotations(MarshalledAnnotation.create(pojoClass).example(json).build());
+		}
+
+		/**
+		 * POJO example.
+		 *
+		 * <p>
+		 * Specifies an example of the specified class.
+		 *
+		 * <p>
+		 * Examples are used in cases such as POJO examples in Swagger documents.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().setFoo(<js>"foo"</js>).setBar(123))
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shorthand method for the following code:
+		 * <p class='bjava'>
+		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
+		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
+		 * </ul>
+		 *
+		 * <p>
+		 * POJO examples can also be defined on classes via the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
+		 * 	<li>A static field annotated with {@link Example @Example}.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * </ul>
+		 *
+		 * @param <T> The POJO class.
+		 * @param pojoClass The POJO class.
+		 * @param o
+		 * 	An instance of the POJO class used for examples.
+		 * @return This object.
+		 */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			return annotations(MarshalledAnnotation.create(pojoClass).example(Json5.of(o)).build());
+		}
+
+		/**
+		 * Find fluent setters.
+		 *
+		 * <p>
+		 * When enabled, fluent setters are detected on beans during parsing.
+		 *
+		 * <p>
+		 * Fluent setters must have the following attributes:
+		 * <ul>
+		 * 	<li>Public.
+		 * 	<li>Not static.
+		 * 	<li>Take in one parameter.
+		 * 	<li>Return the bean itself.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a fluent setter.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser that finds fluent setters.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.findFluentSetters()
+		 * 		.build();
+		 *
+		 * 	<jc>// Parse into bean using fluent setter.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
+		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.Bean#findFluentSetters()}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#findFluentSetters()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder findFluentSetters() {
+			return findFluentSetters(true);
+		}
+
+		/**
+		 * Same as {@link #findFluentSetters()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder findFluentSetters(boolean value) {
+			findFluentSetters = value;
+			return this;
+		}
+
+		/**
+		 * Find fluent setters.
+		 *
+		 * <p>
+		 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a fluent setter.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser that finds fluent setters.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.findFluentSetters(MyBean.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Parse into bean using fluent setter.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>);
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#findFluentSetters()}
+		 * 	<li class='jm'>{@link #findFluentSetters()}
+		 * </ul>
+		 *
+		 * @param on The class that this applies to.
+		 * @return This object.
+		 */
+		public Builder findFluentSetters(Class<?> on) {
+			return annotations(BeanAnnotation.create(on).findFluentSetters(true).build());
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				beanClassVisibility,
+				beanConstructorVisibility,
+				beanMethodVisibility,
+				beanFieldVisibility,
+				beanDictionary,
+				swaps,
+				notBeanClasses,
+				notBeanPackages,
+				integer(
+					disableBeansRequireSomeProperties,
+					beanMapPutReturnsOldValue,
+					beansRequireDefaultConstructor,
+					beansRequireSerializable,
+					beansRequireSettersForGetters,
+					disableIgnoreTransientFields,
+					disableIgnoreUnknownNullBeanProperties,
+					disableIgnoreMissingSetters,
+					disableInterfaceProxies,
+					findFluentSetters,
+					ignoreInvocationExceptionsOnGetters,
+					ignoreInvocationExceptionsOnSetters,
+					ignoreUnknownBeanProperties,
+					ignoreUnknownEnumValues,
+					sortProperties,
+					useEnumNames,
+					useJavaBeanIntrospector
+				),
+				typePropertyName,
+				mediaType,
+				timeZone,
+				locale,
+				propertyNamer
+			);
+		}
+
+		/**
+		 * Ignore invocation errors on getters.
+		 *
+		 * <p>
+		 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
+		 * Otherwise, a {@code BeanRuntimeException} is thrown.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a property that throws an exception.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String getFoo() {
+		 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that ignores bean getter exceptions.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.ingoreInvocationExceptionsOnGetters()
+		 * 		.build();
+		 *
+		 * 	<jc>// Exception is ignored.</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnGetters()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			return ignoreInvocationExceptionsOnGetters(true);
+		}
+
+		/**
+		 * Same as {@link #ignoreInvocationExceptionsOnGetters()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder ignoreInvocationExceptionsOnGetters(boolean value) {
+			ignoreInvocationExceptionsOnGetters = value;
+			return this;
+		}
+
+		/**
+		 * Ignore invocation errors on setters.
+		 *
+		 * <p>
+		 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
+		 * Otherwise, a {@code BeanRuntimeException} is thrown.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a property that throws an exception.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) {
+		 * 			<jk>throw new</jk> RuntimeException(<js>"foo"</js>);
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser that ignores bean setter exceptions.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.ignoreInvocationExceptionsOnSetters()
+		 * 		.build();
+		 *
+		 * 	<jc>// Exception is ignored.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreInvocationExceptionsOnSetters()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			return ignoreInvocationExceptionsOnSetters(true);
+		}
+
+		/**
+		 * Same as {@link #ignoreInvocationExceptionsOnSetters()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder ignoreInvocationExceptionsOnSetters(boolean value) {
+			ignoreInvocationExceptionsOnSetters = value;
+			return this;
+		}
+
+		/**
 		 * Ignore unknown properties.
 		 *
 		 * <p>
@@ -2232,48 +2296,9 @@ public class BeanContext extends Context {
 			return this;
 		}
 
-		/**
-		 * Don't ignore unknown properties with null values.
-		 *
-		 * <p>
-		 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
-		 * Otherwise it will be silently ignored.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a single property.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.disableIgnoreUnknownNullBeanProperties()
-		 * 		.build();
-		 *
-		 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableIgnoreUnknownNullBeanProperties()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			return disableIgnoreUnknownNullBeanProperties(true);
-		}
-
-		/**
-		 * Same as {@link #disableIgnoreUnknownNullBeanProperties()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder disableIgnoreUnknownNullBeanProperties(boolean value) {
-			disableIgnoreUnknownNullBeanProperties = value;
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -2530,6 +2555,21 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * Returns the list of not-bean classes.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanClasses(Class...)}.
+		 *
+		 * @return The list of not-bean classes.
+		 * @see #notBeanClasses(Class...)
+		 */
+		public Set<Class<?>> notBeanClasses() {
+			if (notBeanClasses == null)
+				notBeanClasses = classSet();
+			return notBeanClasses;
+		}
+
+		/**
 		 * Bean class exclusions.
 		 *
 		 * <p>
@@ -2600,18 +2640,31 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Returns the list of not-bean classes.
+		 * Returns the list of not-bean Java package names.
 		 *
 		 * <p>
-		 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanClasses(Class...)}.
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanPackages(String...)}.
 		 *
-		 * @return The list of not-bean classes.
-		 * @see #notBeanClasses(Class...)
+		 * @return The list of not-bean Java package names.
+		 * @see #notBeanPackages(String...)
 		 */
-		public Set<Class<?>> notBeanClasses() {
-			if (notBeanClasses == null)
-				notBeanClasses = classSet();
-			return notBeanClasses;
+		public Set<String> notBeanPackages() {
+			if (notBeanPackages == null)
+				notBeanPackages = new TreeSet<>();
+			return notBeanPackages;
+		}
+
+		/**
+		 * Same as {@link #notBeanPackages(String...)} but allows you to pass in a collection of classes.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * @return This object.
+		 * @see #notBeanPackages(String...)
+		 */
+		public Builder notBeanPackages(Collection<String> values) {
+			notBeanPackages().addAll(values);
+			return this;
 		}
 
 		/**
@@ -2655,31 +2708,42 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Same as {@link #notBeanPackages(String...)} but allows you to pass in a collection of classes.
-		 *
-		 * @param values
-		 * 	The values to add to this setting.
-		 * @return This object.
-		 * @see #notBeanPackages(String...)
-		 */
-		public Builder notBeanPackages(Collection<String> values) {
-			notBeanPackages().addAll(values);
-			return this;
-		}
-
-		/**
-		 * Returns the list of not-bean Java package names.
+		 * Bean property namer
 		 *
 		 * <p>
-		 * Gives access to the inner list if you need to make more than simple additions via {@link #notBeanPackages(String...)}.
+		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
 		 *
-		 * @return The list of not-bean Java package names.
-		 * @see #notBeanPackages(String...)
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a single property.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names for the MyBean class only.</jc>
+		 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.propertyNamer(MyBean.<jk>class</jk>, PropertyNamerDLC.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
+		 * 	<li class='jm'>{@link #propertyNamer(Class)}
+		 * </ul>
+		 *
+		 * @param on The class that the namer applies to.
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link BasicPropertyNamer}.
+		 * @return This object.
 		 */
-		public Set<String> notBeanPackages() {
-			if (notBeanPackages == null)
-				notBeanPackages = new TreeSet<>();
-			return notBeanPackages;
+		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
+			return annotations(BeanAnnotation.create(on).propertyNamer(value).build());
 		}
 
 		/**
@@ -2722,45 +2786,6 @@ public class BeanContext extends Context {
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
 			propertyNamer = value;
 			return this;
-		}
-
-		/**
-		 * Bean property namer
-		 *
-		 * <p>
-		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a single property.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names for the MyBean class only.</jc>
-		 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.propertyNamer(MyBean.<jk>class</jk>, PropertyNamerDLC.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
-		 * 	<li class='jm'>{@link #propertyNamer(Class)}
-		 * </ul>
-		 *
-		 * @param on The class that the namer applies to.
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link BasicPropertyNamer}.
-		 * @return This object.
-		 */
-		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-			return annotations(BeanAnnotation.create(on).propertyNamer(value).build());
 		}
 
 		/**
@@ -2902,6 +2927,85 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object.
+		 * @return This object.
+		 */
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			return swap(normalClass, swappedClass, swapFunction, null);
+		}
+
+		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object during serialization.
+		 * @param unswapFunction The function to convert the object during parsing.
+		 * @return This object.
+		 */
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, unswapFunction));
+			return this;
+		}
+
+		/**
+		 * Returns the bean swaps list.
+		 *
+		 * <p>
+		 * Gives access to the inner list if you need to make more than simple additions via {@link #swaps(Class...)}.
+		 *
+		 * @return The bean swaps list.
+		 * @see #swaps(Class...)
+		 */
+		public List<Object> swaps() {
+			if (swaps == null)
+				swaps = Utils.list();
+			return swaps;
+		}
+		/**
+		 * Same as {@link #swaps(Object...)} but explicitly specifies an array of classes to avoid compilation warnings.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Values can consist of any of the following types:
+		 * 	<ul>
+		 * 		<li>Any subclass of {@link ObjectSwap}.
+		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+		 * 	</ul>
+		 * @return This object.
+		 */
+		public Builder swaps(Class<?>...values) {
+			swaps().addAll(0, accumulate(values));
+			return this;
+		}
+
+		/**
 		 * Java object swaps.
 		 *
 		 * <p>
@@ -2988,86 +3092,6 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Same as {@link #swaps(Object...)} but explicitly specifies an array of classes to avoid compilation warnings.
-		 *
-		 * @param values
-		 * 	The values to add to this setting.
-		 * 	<br>Values can consist of any of the following types:
-		 * 	<ul>
-		 * 		<li>Any subclass of {@link ObjectSwap}.
-		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-		 * 	</ul>
-		 * @return This object.
-		 */
-		public Builder swaps(Class<?>...values) {
-			swaps().addAll(0, accumulate(values));
-			return this;
-		}
-
-		/**
-		 * A shortcut for defining a {@link FunctionalSwap}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param <T> The object type being swapped out.
-		 * @param <S> The object type being swapped in.
-		 * @param normalClass The object type being swapped out.
-		 * @param swappedClass The object type being swapped in.
-		 * @param swapFunction The function to convert the object.
-		 * @return This object.
-		 */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			return swap(normalClass, swappedClass, swapFunction, null);
-		}
-
-		/**
-		 * A shortcut for defining a {@link FunctionalSwap}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param <T> The object type being swapped out.
-		 * @param <S> The object type being swapped in.
-		 * @param normalClass The object type being swapped out.
-		 * @param swappedClass The object type being swapped in.
-		 * @param swapFunction The function to convert the object during serialization.
-		 * @param unswapFunction The function to convert the object during parsing.
-		 * @return This object.
-		 */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			swaps().add(0, new FunctionalSwap<>(normalClass, swappedClass, swapFunction, unswapFunction));
-			return this;
-		}
-
-		/**
-		 * Returns the bean swaps list.
-		 *
-		 * <p>
-		 * Gives access to the inner list if you need to make more than simple additions via {@link #swaps(Class...)}.
-		 *
-		 * @return The bean swaps list.
-		 * @see #swaps(Class...)
-		 */
-		public List<Object> swaps() {
-			if (swaps == null)
-				swaps = Utils.list();
-			return swaps;
-		}
-
-		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>
@@ -3105,6 +3129,12 @@ public class BeanContext extends Context {
 		 */
 		public Builder timeZone(TimeZone value) {
 			timeZone = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
 			return this;
 		}
 
@@ -3151,6 +3181,50 @@ public class BeanContext extends Context {
 		 */
 		public Builder typeName(Class<?> on, String value) {
 			return annotations(BeanAnnotation.create(on).typeName(value).build());
+		}
+
+		/**
+		 * Bean type property name.
+		 *
+		 * <p>
+		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jk>public class</jk> Foo {...}
+		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<jk>public class</jk> Bar {...}
+		 *
+		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.typePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
+		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
+		 * </ul>
+		 *
+		 * @param on The class the type property name applies to.
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is <js>"_type"</js>.
+		 * @return This object.
+		 */
+		public Builder typePropertyName(Class<?> on, String value) {
+			return annotations(BeanAnnotation.create(on).typePropertyName(value).build());
 		}
 
 		/**
@@ -3210,50 +3284,6 @@ public class BeanContext extends Context {
 		}
 
 		/**
-		 * Bean type property name.
-		 *
-		 * <p>
-		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-		 * 	<jk>public class</jk> Bar {...}
-		 *
-		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.typePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
-		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
-		 * </ul>
-		 *
-		 * @param on The class the type property name applies to.
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is <js>"_type"</js>.
-		 * @return This object.
-		 */
-		public Builder typePropertyName(Class<?> on, String value) {
-			return annotations(BeanAnnotation.create(on).typePropertyName(value).build());
-		}
-
-		/**
 		 * Use enum names.
 		 *
 		 * <p>
@@ -3303,36 +3333,6 @@ public class BeanContext extends Context {
 			useEnumNames = value;
 			return this;
 		}
-
-		/**
-		 * Don't use interface proxies.
-		 *
-		 * <p>
-		 * When enabled, interfaces will be instantiated as proxy classes through the use of an
-		 * {@link InvocationHandler} if there is no other way of instantiating them.
-		 * Otherwise, throws a {@link BeanRuntimeException}.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#disableInterfaceProxies()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableInterfaceProxies() {
-			return disableInterfaceProxies(true);
-		}
-
-		/**
-		 * Same as {@link #disableInterfaceProxies()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder disableInterfaceProxies(boolean value) {
-			disableInterfaceProxies = value;
-			return this;
-		}
-
 		/**
 		 * Use Java Introspector.
 		 *
@@ -3365,84 +3365,60 @@ public class BeanContext extends Context {
 			useJavaBeanIntrospector = value;
 			return this;
 		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
 
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-		//-----------------------------------------------------------------------------------------------------------------
-		// Helpers
-		//-----------------------------------------------------------------------------------------------------------------
-
-		private static Set<Class<?>> classSet() {
-			return new TreeSet<>(Comparator.comparing(Class::getName));
-		}
-
-		private static Set<Class<?>> classSet(Collection<Class<?>> copy) {
-			return classSet(copy, false);
-		}
-
-		private static Set<Class<?>> classSet(Collection<Class<?>> copy, boolean nullIfEmpty) {
-			if (copy == null || (nullIfEmpty && copy.isEmpty()))
-				return null;
-			Set<Class<?>> x = classSet();
-			x.addAll(copy);
-			return x;
+		private int integer(boolean...values) {
+			int n = 0;
+			for (boolean b : values)
+				n = (n << 1) | (b ? 1 : 0);
+			return n;
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/*
+	 * The default package pattern exclusion list.
+	 * Any beans in packages in this list will not be considered beans.
+	 */
+	private static final String[] DEFAULT_NOTBEAN_PACKAGES = {
+		"java.lang",
+		"java.lang.annotation",
+		"java.lang.ref",
+		"java.lang.reflect",
+		"java.io",
+		"java.net",
+		"java.nio.*",
+		"java.util.*"
+	};
 
+	/*
+	 * The default bean class exclusion list.
+	 * Anything in this list will not be considered beans.
+	 */
+	private static final Class<?>[] DEFAULT_NOTBEAN_CLASSES = {
+		Map.class,
+		Collection.class,
+		Reader.class,
+		Writer.class,
+		InputStream.class,
+		OutputStream.class,
+		Throwable.class
+	};
+
+	/** Default config.  All default settings. */
+	public static final BeanContext DEFAULT = create().build();
+
+	/** Default config.  All default settings except sort bean properties. */
+	public static final BeanContext DEFAULT_SORTED = create().sortProperties().build();
+
+	/** Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).*/
+	public  static final BeanSession DEFAULT_SESSION = DEFAULT.createSession().unmodifiable().build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final boolean
 		beansRequireDefaultConstructor,
 		beansRequireSerializable,
@@ -3570,94 +3546,6 @@ public class BeanContext extends Context {
 		defaultSession = createSession().unmodifiable().build();
 	}
 
-	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
-	}
-
-	@Override /* Overridden from Context */
-	public BeanSession.Builder createSession() {
-		return BeanSession.create(this);
-	}
-
-	@Override /* Overridden from Context */
-	public BeanSession getSession() {
-		return defaultSession;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
-	 *
-	 * <p>
-	 * Useful for testing purposes.
-	 *
-	 * @param bc The bean context to compare to.
-	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
-	 */
-	public final boolean hasSameCache(BeanContext bc) {
-		return bc.cmCache == this.cmCache;
-	}
-
-	/**
-	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
-	 *
-	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().toBeanMap(<jv>object</jv>);</c>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param object The object to wrap in a map interface.  Must not be null.
-	 * @return The wrapped object.
-	 * @see BeanSession#toBeanMap(Object)
-	 */
-	public <T> BeanMap<T> toBeanMap(T object) {
-		return defaultSession.toBeanMap(object);
-	}
-
-	/**
-	 * Creates a new {@link BeanMap} object (a modifiable {@link Map}) of the given class with uninitialized
-	 * property values.
-	 *
-	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().newBeanMap(<jv>_class</jv>);</c>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class of the object being wrapped.
-	 * @param c The name of the class to create a new instance of.
-	 * @return A new instance of the class.
-	 * @see BeanSession#newBeanMap(Class)
-	 */
-	public <T> BeanMap<T> newBeanMap(Class<T> c) {
-		return defaultSession.newBeanMap(c);
-	}
-
-	/**
-	 * Converts the specified value to the specified class type.
-	 *
-	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().convertToType(<jv>value</jv>, <jv>type</jv>);</c>
-	 *
-	 * @param <T> The class type to convert the value to.
-	 * @param value The value to convert.
-	 * @param type The class type to convert the value to.
-	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
-	 * @return The converted value.
-	 * @see BeanSession#convertToType(Object, Class)
-	 */
-	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
-		return defaultSession.convertToType(value, type);
-	}
-
 	/**
 	 * Same as {@link #convertToType(Object, Class)}, except used for instantiating inner member classes that must
 	 * be instantiated within another class instance.
@@ -3680,6 +3568,23 @@ public class BeanContext extends Context {
 	}
 
 	/**
+	 * Converts the specified value to the specified class type.
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().convertToType(<jv>value</jv>, <jv>type</jv>);</c>
+	 *
+	 * @param <T> The class type to convert the value to.
+	 * @param value The value to convert.
+	 * @param type The class type to convert the value to.
+	 * @throws InvalidDataConversionException If the specified value cannot be converted to the specified type.
+	 * @return The converted value.
+	 * @see BeanSession#convertToType(Object, Class)
+	 */
+	public final <T> T convertToType(Object value, Class<T> type) throws InvalidDataConversionException {
+		return defaultSession.convertToType(value, type);
+	}
+
+	/**
 	 * Same as {@link #convertToType(Object, Class)}, but allows for complex data types consisting of collections or maps.
 	 *
 	 * <p>
@@ -3697,42 +3602,59 @@ public class BeanContext extends Context {
 		return (T)defaultSession.convertToMemberType(null, value, getClassMeta(type, args));
 	}
 
-	/**
-	 * Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
-	 * specified on this context class.
-	 *
-	 * @param c The class type being tested.
-	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
-	 */
-	protected final boolean isNotABean(Class<?> c) {
-		if (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
-			return true;
-		Package p = c.getPackage();
-		if (p != null) {
-			for (String p2 : notBeanPackageNames)
-				if (p.getName().equals(p2))
-					return true;
-			for (String p2 : notBeanPackagePrefixes)
-				if (p.getName().startsWith(p2))
-					return true;
-		}
-		ClassInfo ci = ClassInfo.of(c);
-		for (Class exclude : notBeanClassesArray)
-			if (ci.isChildOf(exclude))
-				return true;
-		return false;
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	@Override /* Overridden from Context */
+	public BeanSession.Builder createSession() {
+		return BeanSession.create(this);
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified object is a bean.
+	 * Minimum bean class visibility.
 	 *
-	 * @param o The object to test.
-	 * @return <jk>true</jk> if the specified object is a bean.  <jk>false</jk> if the bean is <jk>null</jk>.
+	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
+	 * @return
+	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
 	 */
-	public boolean isBean(Object o) {
-		if (o == null)
-			return false;
-		return getClassMetaForObject(o).isBean();
+	public final Visibility getBeanClassVisibility() {
+		return beanClassVisibility;
+	}
+
+	/**
+	 * Minimum bean constructor visibility.
+	 *
+	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
+	 * @return
+	 * 	Only look for constructors with this specified minimum visibility.
+	 */
+	public final Visibility getBeanConstructorVisibility() {
+		return beanConstructorVisibility;
+	}
+
+	/**
+	 * Bean dictionary.
+	 *
+	 * @see BeanContext.Builder#beanDictionary()
+	 * @return
+	 * 	The list of classes that make up the bean dictionary in this bean context.
+	 */
+	public final List<Class<?>> getBeanDictionary() {
+		return beanDictionary;
+	}
+
+	/**
+	 * Minimum bean field visibility.
+	 *
+	 *
+	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
+	 * @return
+	 * 	Only look for bean fields with this specified minimum visibility.
+	 */
+	public final Visibility getBeanFieldVisibility() {
+		return beanFieldVisibility;
 	}
 
 	/**
@@ -3751,6 +3673,28 @@ public class BeanContext extends Context {
 	}
 
 	/**
+	 * Minimum bean method visibility.
+	 *
+	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
+	 * @return
+	 * 	Only look for bean methods with this specified minimum visibility.
+	 */
+	public final Visibility getBeanMethodVisibility() {
+		return beanMethodVisibility;
+	}
+
+	/**
+	 * Bean type property name.
+	 *
+	 * @see BeanContext.Builder#typePropertyName(String)
+	 * @return
+	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
+	 */
+	public final String getBeanTypePropertyName() {
+		return typePropertyName;
+	}
+
+	/**
 	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
 	 *
 	 * @param <T> The class type being wrapped.
@@ -3761,38 +3705,6 @@ public class BeanContext extends Context {
 	 */
 	public final <T> ClassMeta<T> getClassMeta(Class<T> type) {
 		return getClassMeta(type, true);
-	}
-
-	/**
-	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
-	 *
-	 * @param <T> The class type being wrapped.
-	 * @param type The class to resolve.
-	 * @param waitForInit
-	 * 	When enabled, wait for the ClassMeta constructor to finish before returning.
-	 * @return
-	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
-	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
-	 */
-	final <T> ClassMeta<T> getClassMeta(Class<T> type, boolean waitForInit) {
-
-		// This can happen if we have transforms defined against String or Object.
-		if (cmCache == null)
-			return null;
-
-		ClassMeta<T> cm = cmCache.get(type);
-		if (cm == null) {
-
-			synchronized (this) {
-				// Make sure someone didn't already set it while this thread was blocked.
-				cm = cmCache.get(type);
-				if (cm == null)
-					cm = new ClassMeta<>(type, this, findObjectSwaps(type), findChildObjectSwaps(type));
-			}
-		}
-		if (waitForInit)
-			cm.waitForInit();
-		return cm;
 	}
 
 	/**
@@ -3850,6 +3762,383 @@ public class BeanContext extends Context {
 		return (ClassMeta<T>) getTypedClassMeta(cma, 0);
 	}
 
+	/**
+	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
+	 *
+	 * @param <T> The class of the object being passed in.
+	 * @param o The class to find the class type for.
+	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
+	 */
+	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
+		if (o == null)
+			return null;
+		return (ClassMeta<T>)getClassMeta(o.getClass());
+	}
+
+	/**
+	 * Locale.
+	 *
+	 * @see BeanContext.Builder#locale(Locale)
+	 * @return
+	 * 	The default locale for serializer and parser sessions.
+	 */
+	public final Locale getDefaultLocale() {
+		return locale;
+	}
+
+	/**
+	 * Media type.
+	 *
+	 * @see BeanContext.Builder#mediaType(MediaType)
+	 * @return
+	 * 	The default media type value for serializer and parser sessions.
+	 */
+	public final MediaType getDefaultMediaType() {
+		return mediaType;
+	}
+
+	/**
+	 * Time zone.
+	 *
+	 * @see BeanContext.Builder#timeZone(TimeZone)
+	 * @return
+	 * 	The default timezone for serializer and parser sessions.
+	 */
+	public final TimeZone getDefaultTimeZone() {
+		return timeZone;
+	}
+
+	/**
+	 * Bean package exclusions.
+	 *
+	 * @see BeanContext.Builder#notBeanPackages(String...)
+	 * @return
+	 * 	The list of fully-qualified package names to exclude from being classified as beans.
+	 */
+	public final String[] getNotBeanPackagesNames() {
+		return notBeanPackageNames;
+	}
+
+	/**
+	 * Bean property namer.
+	 *
+	 * @see BeanContext.Builder#propertyNamer(Class)
+	 * @return
+	 * 	The interface used to calculate bean property names.
+	 */
+	public final PropertyNamer getPropertyNamer() {
+		return propertyNamerBean;
+	}
+
+	@Override /* Overridden from Context */
+	public BeanSession getSession() {
+		return defaultSession;
+	}
+
+	/**
+	 * Java object swaps.
+	 *
+	 * @see BeanContext.Builder#swaps(Class...)
+	 * @return
+	 * 	The list POJO swaps defined.
+	 */
+	public final ObjectSwap<?,?>[] getSwaps() {
+		return swapArray;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
+	 *
+	 * <p>
+	 * Useful for testing purposes.
+	 *
+	 * @param bc The bean context to compare to.
+	 * @return <jk>true</jk> if the bean contexts have equivalent settings and thus share caches.
+	 */
+	public final boolean hasSameCache(BeanContext bc) {
+		return bc.cmCache == this.cmCache;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is a bean.
+	 *
+	 * @param o The object to test.
+	 * @return <jk>true</jk> if the specified object is a bean.  <jk>false</jk> if the bean is <jk>null</jk>.
+	 */
+	public boolean isBean(Object o) {
+		if (o == null)
+			return false;
+		return getClassMetaForObject(o).isBean();
+	}
+
+	/**
+	 * BeanMap.put() returns old property value.
+	 *
+	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
+	 * @return
+	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
+	 * 	<br>Otherwise, it returns <jk>null</jk>.
+	 */
+	public final boolean isBeanMapPutReturnsOldValue() {
+		return beanMapPutReturnsOldValue;
+	}
+
+	/**
+	 * Beans require no-arg constructors.
+	 *
+	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
+	 * @return
+	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
+	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 */
+	public final boolean isBeansRequireDefaultConstructor() {
+		return beansRequireDefaultConstructor;
+	}
+
+	/**
+	 * Beans require Serializable interface.
+	 *
+	 * @see BeanContext.Builder#beansRequireSerializable()
+	 * @return
+	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
+	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 */
+	public final boolean isBeansRequireSerializable() {
+		return beansRequireSerializable;
+	}
+
+	/**
+	 * Beans require setters for getters.
+	 *
+	 * @see BeanContext.Builder#beansRequireSettersForGetters()
+	 * @return
+	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
+	 * 	<br>Otherwise, they are ignored.
+	 */
+	public final boolean isBeansRequireSettersForGetters() {
+		return beansRequireSettersForGetters;
+	}
+	/**
+	 * Beans require at least one property.
+	 *
+	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
+	 * @return
+	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
+	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
+	 */
+	public final boolean isBeansRequireSomeProperties() {
+		return beansRequireSomeProperties;
+	}
+
+	/**
+	 * Find fluent setters.
+	 *
+	 * <h5 class='section'>Description:</h5>
+	 * <p>
+	 *
+	 * @see BeanContext.Builder#findFluentSetters()
+	 * @return
+	 * 	<jk>true</jk> if fluent setters are detected on beans.
+	 */
+	public final boolean isFindFluentSetters() {
+		return findFluentSetters;
+	}
+
+	/**
+	 * Ignore invocation errors on getters.
+	 *
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
+	 */
+	public final boolean isIgnoreInvocationExceptionsOnGetters() {
+		return ignoreInvocationExceptionsOnGetters;
+	}
+
+	/**
+	 * Ignore invocation errors on setters.
+	 *
+	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
+	 * @return
+	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
+	 */
+	public final boolean isIgnoreInvocationExceptionsOnSetters() {
+		return ignoreInvocationExceptionsOnSetters;
+	}
+
+	/**
+	 * Silently ignore missing setters.
+	 *
+	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
+	 */
+	public final boolean isIgnoreMissingSetters() {
+		return ignoreMissingSetters;
+	}
+
+	/**
+	 * Ignore unknown properties.
+	 *
+	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
+	 * @return
+	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
+	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
+	 */
+	public final boolean isIgnoreUnknownBeanProperties() {
+		return ignoreUnknownBeanProperties;
+	}
+
+	/**
+	 * Ignore unknown enum values.
+	 *
+	 * @see BeanContext.Builder#ignoreUnknownEnumValues()
+	 * @return
+	 * 	<jk>true</jk> if unknown enum values should be set as <jk>null</jk> instead of throwing an exception.
+	 */
+	public final boolean isIgnoreUnknownEnumValues() {
+		return ignoreUnknownEnumValues;
+	}
+
+	/**
+	 * Ignore unknown properties with null values.
+	 *
+	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
+	 * @return
+	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
+	 */
+	public final boolean isIgnoreUnknownNullBeanProperties() {
+		return ignoreUnknownNullBeanProperties;
+	}
+
+	/**
+	 * Sort bean properties.
+	 *
+	 * @see BeanContext.Builder#sortProperties()
+	 * @return
+	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
+	 */
+	public final boolean isSortProperties() {
+		return sortProperties;
+	}
+
+	/**
+	 * Use enum names.
+	 *
+	 * @see BeanContext.Builder#useEnumNames()
+	 * @return
+	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
+	 */
+	public final boolean isUseEnumNames() {
+		return useEnumNames;
+	}
+
+	/**
+	 * Use interface proxies.
+	 *
+	 * @see BeanContext.Builder#disableInterfaceProxies()
+	 * @return
+	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
+	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
+	 */
+	public final boolean isUseInterfaceProxies() {
+		return useInterfaceProxies;
+	}
+
+	/**
+	 * Use Java Introspector.
+	 *
+	 * @see BeanContext.Builder#useJavaBeanIntrospector()
+	 * @return
+	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
+	 */
+	public final boolean isUseJavaBeanIntrospector() {
+		return useJavaBeanIntrospector;
+	}
+
+	/**
+	 * Creates a new {@link BeanMap} object (a modifiable {@link Map}) of the given class with uninitialized
+	 * property values.
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().newBeanMap(<jv>_class</jv>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param c The name of the class to create a new instance of.
+	 * @return A new instance of the class.
+	 * @see BeanSession#newBeanMap(Class)
+	 */
+	public <T> BeanMap<T> newBeanMap(Class<T> c) {
+		return defaultSession.newBeanMap(c);
+	}
+
+	/**
+	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
+	 *
+	 * <p>
+	 * This is a shortcut for the following code:  <c>createSession().build().toBeanMap(<jv>object</jv>);</c>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Construct a bean map around a bean instance</jc>
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
+	 * </p>
+	 *
+	 * @param <T> The class of the object being wrapped.
+	 * @param object The object to wrap in a map interface.  Must not be null.
+	 * @return The wrapped object.
+	 * @see BeanSession#toBeanMap(Object)
+	 */
+	public <T> BeanMap<T> toBeanMap(T object) {
+		return defaultSession.toBeanMap(object);
+	}
+
+	/**
+	 * Checks whether a class has a {@link ObjectSwap} associated with it in this bean context.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link ObjectSwap} associated with it.
+	 */
+	private final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
+		if (c == null || swapArray.length == 0)
+			return null;
+		List<ObjectSwap> l = null;
+		for (ObjectSwap f : swapArray) {
+			if (f.getNormalClass().isChildOf(c)) {
+				if (l == null)
+					l = Utils.list();
+				l.add(f);
+			}
+		}
+		return l == null ? null : l.toArray(new ObjectSwap[l.size()]);
+	}
+
+	/**
+	 * Returns the {@link ObjectSwap} associated with the specified class, or <jk>null</jk> if there is no POJO swap
+	 * associated with the class.
+	 *
+	 * @param <T> The class associated with the swap.
+	 * @param c The class associated with the swap.
+	 * @return The swap associated with the class, or null if there is no association.
+	 */
+	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
+		// Note:  On first
+		if (c != null) {
+			List<ObjectSwap> l = Utils.list();
+			for (ObjectSwap f : swapArray)
+				if (f.getNormalClass().isParentOf(c))
+					l.add(f);
+			return l.isEmpty() ? null : l.toArray(new ObjectSwap[l.size()]);
+		}
+		return null;
+	}
+
 	/*
 	 * Resolves the 'genericized' class meta at the specified position in the ClassMeta array.
 	 */
@@ -3866,61 +4155,291 @@ public class BeanContext extends Context {
 		return cm;
 	}
 
-	final ClassMeta resolveClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
+	private ClassMeta<?> resolveType(Type...t) {
+		for (Type tt : t) {
+			if (tt != null) {
+				ClassMeta<?> cm = getClassMeta(tt);
+				if (tt != cmObject)
+					return cm;
+			}
+		}
+		return cmObject;
+	}
+
+	/**
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
+	 *
+	 * <p>
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
+	 *
+	 * <p>
+	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
+	 * avoid a hashmap lookup.
+	 *
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
+	 */
+	protected final ClassMeta<Class> _class() {
+		return cmClass;
+	}
+
+	/**
+	 * Returns the lookup table for resolving bean types by name.
+	 *
+	 * @return The lookup table for resolving bean types by name.
+	 */
+	protected final BeanRegistry getBeanRegistry() {
+		return beanRegistry;
+	}
+
+	/**
+	 * Returns the serializer to use for serializing beans when using the {@link BeanSession#convertToType(Object, Class)}
+	 * and related methods.
+	 *
+	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
+	 */
+	protected WriterSerializer getBeanToStringSerializer() {
+		if (beanToStringSerializer == null) {
+			if (JsonSerializer.DEFAULT == null)
+				return null;
+			this.beanToStringSerializer = JsonSerializer.create().beanContext(this).sq().simpleAttrs().build();
+		}
+		return beanToStringSerializer;
+	}
+
+	/**
+	 * Bean class exclusions.
+	 *
+	 * @see BeanContext.Builder#notBeanClasses(Class...)
+	 * @return
+	 * 	The list of classes that are explicitly not beans.
+	 */
+	protected final Class<?>[] getNotBeanClasses() {
+		return notBeanClassesArray;
+	}
+
+	/**
+	 * Bean package exclusions.
+	 *
+	 * @see BeanContext.Builder#notBeanPackages(String...)
+	 * @return
+	 * 	The list of package name prefixes to exclude from being classified as beans.
+	 */
+	protected final String[] getNotBeanPackagesPrefixes() {
+		return notBeanPackagePrefixes;
+	}
+
+	/**
+	 * Ignore transient fields.
+	 *
+	 * @see BeanContext.Builder#disableIgnoreTransientFields()
+	 * @return
+	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
+	 */
+	protected final boolean isIgnoreTransientFields() {
+		return ignoreTransientFields;
+	}
+
+	/**
+	 * Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
+	 * specified on this context class.
+	 *
+	 * @param c The class type being tested.
+	 * @return <jk>true</jk> if the specified class matches any of the exclusion parameters.
+	 */
+	protected final boolean isNotABean(Class<?> c) {
+		if (c.isArray() || c.isPrimitive() || c.isEnum() || c.isAnnotation())
+			return true;
+		Package p = c.getPackage();
+		if (p != null) {
+			for (String p2 : notBeanPackageNames)
+				if (p.getName().equals(p2))
+					return true;
+			for (String p2 : notBeanPackagePrefixes)
+				if (p.getName().startsWith(p2))
+					return true;
+		}
+		ClassInfo ci = ClassInfo.of(c);
+		for (Class exclude : notBeanClassesArray)
+			if (ci.isChildOf(exclude))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
+	 *
+	 * <p>
+	 * This <c>ClassMeta</c> is often used to represent "any object type" when an object type is not known.
+	 *
+	 * <p>
+	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
+	 * avoid a hashmap lookup.
+	 *
+	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
+	 */
+	protected final ClassMeta<Object> object() {
+		return cmObject;
+	}
+
+	@Override /* Overridden from Context */
+	protected JsonMap properties() {
+		return filteredMap()
+			.append("id", System.identityHashCode(this))
+			.append("beanClassVisibility", beanClassVisibility)
+			.append("beanConstructorVisibility", beanConstructorVisibility)
+			.append("beanDictionary", beanDictionary)
+			.append("beanFieldVisibility", beanFieldVisibility)
+			.append("beanMethodVisibility", beanMethodVisibility)
+			.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
+			.append("beansRequireSerializable", beansRequireSerializable)
+			.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
+			.append("beansRequireSomeProperties", beansRequireSomeProperties)
+			.append("ignoreTransientFields", ignoreTransientFields)
+			.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
+			.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+			.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
+			.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+			.append("notBeanClasses", notBeanClasses)
+			.append("notBeanPackageNames", notBeanPackageNames)
+			.append("notBeanPackagePrefixes", notBeanPackagePrefixes)
+			.append("swaps", swaps)
+			.append("sortProperties", sortProperties)
+			.append("useEnumNames", useEnumNames)
+			.append("useInterfaceProxies", useInterfaceProxies)
+			.append("useJavaBeanIntrospector", useJavaBeanIntrospector);
+	}
+
+	/**
+	 * Used for determining the class type on a method or field where a {@code @Beanp} annotation may be present.
+	 *
+	 * @param <T> The class type we're wrapping.
+	 * @param p The property annotation on the type if there is one.
+	 * @param t The type.
+	 * @param typeVarImpls
+	 * 	Contains known resolved type parameters on the specified class so that we can result
+	 * 	{@code ParameterizedTypes} and {@code TypeVariables}.
+	 * 	Can be <jk>null</jk> if the information is not known.
+	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
+	 */
+	protected final <T> ClassMeta<T> resolveClassMeta(Beanp p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
+		ClassMeta<T> cm = resolveClassMeta(t, typeVarImpls);
+		ClassMeta<T> cm2 = cm;
+
+		if (p != null) {
+
+			if (isNotVoid(p.type()))
+				cm2 = resolveClassMeta(p.type(), typeVarImpls);
+
+			if (cm2.isMap()) {
+				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class, Object.class} : p.params());
+				if (pParams.length != 2)
+					throw new BasicRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
+				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
+				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
+				if (keyType.isObject() && valueType.isObject())
+					return cm2;
+				return new ClassMeta<>(cm2, keyType, valueType, null);
+			}
+
+			if (cm2.isCollection() || cm2.isOptional()) {
+				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class} : p.params());
+				if (pParams.length != 1)
+					throw new BasicRuntimeException("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, (cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
+				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
+				if (elementType.isObject())
+					return cm2;
+				return new ClassMeta<>(cm2, null, null, elementType);
+			}
+
+			return cm2;
+		}
+
+		return cm;
+	}
+
+	/**
+	 * Returns a reusable {@link ClassMeta} representation for the class <c>String</c>.
+	 *
+	 * <p>
+	 * This <c>ClassMeta</c> is often used to represent key types in maps.
+	 *
+	 * <p>
+	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
+	 * avoid a hashmap lookup.
+	 *
+	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
+	 */
+	protected final ClassMeta<String> string() {
+		return cmString;
+	}
+
+	final ClassMeta[] findParameters(Type o, Class c) {
 		if (o == null)
+			o = c;
+
+		// Loop until we find a ParameterizedType
+		if (! (o instanceof ParameterizedType)) {
+			loop: do {
+				o = c.getGenericSuperclass();
+				if (o instanceof ParameterizedType)
+					break loop;
+				for (Type t : c.getGenericInterfaces()) {
+					o = t;
+					if (o instanceof ParameterizedType)
+						break loop;
+				}
+				c = c.getSuperclass();
+			} while (c != null);
+		}
+
+		if (o instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)o;
+			if (! pt.getRawType().equals(Enum.class)) {
+				List<ClassMeta<?>> l = new LinkedList<>();
+				for (Type pt2 : pt.getActualTypeArguments()) {
+					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
+						return null;
+					l.add(resolveClassMeta(pt2, null));
+				}
+				if (l.isEmpty())
+					return null;
+				return l.toArray(new ClassMeta[l.size()]);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Construct a {@code ClassMeta} wrapper around a {@link Class} object.
+	 *
+	 * @param <T> The class type being wrapped.
+	 * @param type The class to resolve.
+	 * @param waitForInit
+	 * 	When enabled, wait for the ClassMeta constructor to finish before returning.
+	 * @return
+	 * 	If the class is not an array, returns a cached {@link ClassMeta} object.
+	 * 	Otherwise, returns a new {@link ClassMeta} object every time.
+	 */
+	final <T> ClassMeta<T> getClassMeta(Class<T> type, boolean waitForInit) {
+
+		// This can happen if we have transforms defined against String or Object.
+		if (cmCache == null)
 			return null;
 
-		if (o instanceof ClassMeta) {
-			ClassMeta<?> cm = (ClassMeta)o;
+		ClassMeta<T> cm = cmCache.get(type);
+		if (cm == null) {
 
-			// This classmeta could have been created by a different context.
-			// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
-			if (cm.getBeanContext() == this)
-				return cm;
-			if (cm.isMap())
-				return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
-			if (cm.isCollection() || cm.isOptional())
-				return getClassMeta(cm.innerClass, cm.getElementType());
-			return getClassMeta(cm.innerClass);
-		}
-
-		Class c = resolve(o, typeVarImpls);
-
-		// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable
-		// These should just resolve to Object.
-		if (c == null)
-			return object();
-
-		ClassMeta rawType = getClassMeta(c);
-
-		// If this is a Map or Collection, and the parameter types aren't part
-		// of the class definition itself (e.g. class AddressBook extends List<Person>),
-		// then we need to figure out the parameters.
-		if (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
-			ClassMeta[] params = findParameters(o, c);
-			if (params == null)
-				return rawType;
-			if (rawType.isMap()) {
-				if (params.length != 2 || (params[0].isObject() && params[1].isObject()))
-					return rawType;
-				return new ClassMeta(rawType, params[0], params[1], null);
-			}
-			if (rawType.isCollection() || rawType.isOptional()) {
-				if (params.length != 1 || params[0].isObject())
-					return rawType;
-				return new ClassMeta(rawType, null, null, params[0]);
+			synchronized (this) {
+				// Make sure someone didn't already set it while this thread was blocked.
+				cm = cmCache.get(type);
+				if (cm == null)
+					cm = new ClassMeta<>(type, this, findObjectSwaps(type), findChildObjectSwaps(type));
 			}
 		}
-
-		if (rawType.isArray()) {
-			if (o instanceof GenericArrayType) {
-				GenericArrayType gat = (GenericArrayType)o;
-				ClassMeta elementType = resolveClassMeta(gat.getGenericComponentType(), typeVarImpls);
-				return new ClassMeta(rawType, null, null, elementType);
-			}
-		}
-
-		return rawType;
+		if (waitForInit)
+			cm.waitForInit();
+		return cm;
 	}
 
 	/**
@@ -3978,613 +4497,60 @@ public class BeanContext extends Context {
 		}
 		return null;
 	}
-
-	final ClassMeta[] findParameters(Type o, Class c) {
-		if (o == null)
-			o = c;
-
-		// Loop until we find a ParameterizedType
-		if (! (o instanceof ParameterizedType)) {
-			loop: do {
-				o = c.getGenericSuperclass();
-				if (o instanceof ParameterizedType)
-					break loop;
-				for (Type t : c.getGenericInterfaces()) {
-					o = t;
-					if (o instanceof ParameterizedType)
-						break loop;
-				}
-				c = c.getSuperclass();
-			} while (c != null);
-		}
-
-		if (o instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)o;
-			if (! pt.getRawType().equals(Enum.class)) {
-				List<ClassMeta<?>> l = new LinkedList<>();
-				for (Type pt2 : pt.getActualTypeArguments()) {
-					if (pt2 instanceof WildcardType || pt2 instanceof TypeVariable)
-						return null;
-					l.add(resolveClassMeta(pt2, null));
-				}
-				if (l.isEmpty())
-					return null;
-				return l.toArray(new ClassMeta[l.size()]);
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Shortcut for calling {@code getClassMeta(o.getClass())}.
-	 *
-	 * @param <T> The class of the object being passed in.
-	 * @param o The class to find the class type for.
-	 * @return The ClassMeta object, or <jk>null</jk> if {@code o} is <jk>null</jk>.
-	 */
-	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
+	final ClassMeta resolveClassMeta(Type o, Map<Class<?>,Class<?>[]> typeVarImpls) {
 		if (o == null)
 			return null;
-		return (ClassMeta<T>)getClassMeta(o.getClass());
-	}
 
-	/**
-	 * Used for determining the class type on a method or field where a {@code @Beanp} annotation may be present.
-	 *
-	 * @param <T> The class type we're wrapping.
-	 * @param p The property annotation on the type if there is one.
-	 * @param t The type.
-	 * @param typeVarImpls
-	 * 	Contains known resolved type parameters on the specified class so that we can result
-	 * 	{@code ParameterizedTypes} and {@code TypeVariables}.
-	 * 	Can be <jk>null</jk> if the information is not known.
-	 * @return The new {@code ClassMeta} object wrapped around the {@code Type} object.
-	 */
-	protected final <T> ClassMeta<T> resolveClassMeta(Beanp p, Type t, Map<Class<?>,Class<?>[]> typeVarImpls) {
-		ClassMeta<T> cm = resolveClassMeta(t, typeVarImpls);
-		ClassMeta<T> cm2 = cm;
+		if (o instanceof ClassMeta) {
+			ClassMeta<?> cm = (ClassMeta)o;
 
-		if (p != null) {
-
-			if (isNotVoid(p.type()))
-				cm2 = resolveClassMeta(p.type(), typeVarImpls);
-
-			if (cm2.isMap()) {
-				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class, Object.class} : p.params());
-				if (pParams.length != 2)
-					throw new BasicRuntimeException("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
-				ClassMeta<?> keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
-				ClassMeta<?> valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
-				if (keyType.isObject() && valueType.isObject())
-					return cm2;
-				return new ClassMeta<>(cm2, keyType, valueType, null);
-			}
-
-			if (cm2.isCollection() || cm2.isOptional()) {
-				Class<?>[] pParams = (p.params().length == 0 ? new Class[]{Object.class} : p.params());
-				if (pParams.length != 1)
-					throw new BasicRuntimeException("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, (cm2.isCollection() ? "Collection" : cm2.isOptional() ? "Optional" : "Array"));
-				ClassMeta<?> elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
-				if (elementType.isObject())
-					return cm2;
-				return new ClassMeta<>(cm2, null, null, elementType);
-			}
-
-			return cm2;
+			// This classmeta could have been created by a different context.
+			// Need to re-resolve it to pick up ObjectSwaps and stuff on this context.
+			if (cm.getBeanContext() == this)
+				return cm;
+			if (cm.isMap())
+				return getClassMeta(cm.innerClass, cm.getKeyType(), cm.getValueType());
+			if (cm.isCollection() || cm.isOptional())
+				return getClassMeta(cm.innerClass, cm.getElementType());
+			return getClassMeta(cm.innerClass);
 		}
 
-		return cm;
-	}
+		Class c = resolve(o, typeVarImpls);
 
-	private ClassMeta<?> resolveType(Type...t) {
-		for (Type tt : t) {
-			if (tt != null) {
-				ClassMeta<?> cm = getClassMeta(tt);
-				if (tt != cmObject)
-					return cm;
+		// This can happen when trying to resolve the "E getFirst()" method on LinkedList, whose type is a TypeVariable
+		// These should just resolve to Object.
+		if (c == null)
+			return object();
+
+		ClassMeta rawType = getClassMeta(c);
+
+		// If this is a Map or Collection, and the parameter types aren't part
+		// of the class definition itself (e.g. class AddressBook extends List<Person>),
+		// then we need to figure out the parameters.
+		if (rawType.isMap() || rawType.isCollection() || rawType.isOptional()) {
+			ClassMeta[] params = findParameters(o, c);
+			if (params == null)
+				return rawType;
+			if (rawType.isMap()) {
+				if (params.length != 2 || (params[0].isObject() && params[1].isObject()))
+					return rawType;
+				return new ClassMeta(rawType, params[0], params[1], null);
+			}
+			if (rawType.isCollection() || rawType.isOptional()) {
+				if (params.length != 1 || params[0].isObject())
+					return rawType;
+				return new ClassMeta(rawType, null, null, params[0]);
 			}
 		}
-		return cmObject;
-	}
 
-	/**
-	 * Returns the {@link ObjectSwap} associated with the specified class, or <jk>null</jk> if there is no POJO swap
-	 * associated with the class.
-	 *
-	 * @param <T> The class associated with the swap.
-	 * @param c The class associated with the swap.
-	 * @return The swap associated with the class, or null if there is no association.
-	 */
-	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
-		// Note:  On first
-		if (c != null) {
-			List<ObjectSwap> l = Utils.list();
-			for (ObjectSwap f : swapArray)
-				if (f.getNormalClass().isParentOf(c))
-					l.add(f);
-			return l.isEmpty() ? null : l.toArray(new ObjectSwap[l.size()]);
-		}
-		return null;
-	}
-
-	/**
-	 * Checks whether a class has a {@link ObjectSwap} associated with it in this bean context.
-	 *
-	 * @param c The class to check.
-	 * @return <jk>true</jk> if the specified class or one of its subclasses has a {@link ObjectSwap} associated with it.
-	 */
-	private final ObjectSwap[] findChildObjectSwaps(Class<?> c) {
-		if (c == null || swapArray.length == 0)
-			return null;
-		List<ObjectSwap> l = null;
-		for (ObjectSwap f : swapArray) {
-			if (f.getNormalClass().isChildOf(c)) {
-				if (l == null)
-					l = Utils.list();
-				l.add(f);
+		if (rawType.isArray()) {
+			if (o instanceof GenericArrayType) {
+				GenericArrayType gat = (GenericArrayType)o;
+				ClassMeta elementType = resolveClassMeta(gat.getGenericComponentType(), typeVarImpls);
+				return new ClassMeta(rawType, null, null, elementType);
 			}
 		}
-		return l == null ? null : l.toArray(new ObjectSwap[l.size()]);
-	}
 
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>Object</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent "any object type" when an object type is not known.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(Object.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>Object</c> class.
-	 */
-	protected final ClassMeta<Object> object() {
-		return cmObject;
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>String</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent key types in maps.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(String.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
-	 */
-	protected final ClassMeta<String> string() {
-		return cmString;
-	}
-
-	/**
-	 * Returns a reusable {@link ClassMeta} representation for the class <c>Class</c>.
-	 *
-	 * <p>
-	 * This <c>ClassMeta</c> is often used to represent key types in maps.
-	 *
-	 * <p>
-	 * This method is identical to calling <code>getClassMeta(Class.<jk>class</jk>)</code> but uses a cached copy to
-	 * avoid a hashmap lookup.
-	 *
-	 * @return The {@link ClassMeta} object associated with the <c>String</c> class.
-	 */
-	protected final ClassMeta<Class> _class() {
-		return cmClass;
-	}
-
-	/**
-	 * Returns the lookup table for resolving bean types by name.
-	 *
-	 * @return The lookup table for resolving bean types by name.
-	 */
-	protected final BeanRegistry getBeanRegistry() {
-		return beanRegistry;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Minimum bean class visibility.
-	 *
-	 * @see BeanContext.Builder#beanClassVisibility(Visibility)
-	 * @return
-	 * 	Classes are not considered beans unless they meet the minimum visibility requirements.
-	 */
-	public final Visibility getBeanClassVisibility() {
-		return beanClassVisibility;
-	}
-
-	/**
-	 * Minimum bean constructor visibility.
-	 *
-	 * @see BeanContext.Builder#beanConstructorVisibility(Visibility)
-	 * @return
-	 * 	Only look for constructors with this specified minimum visibility.
-	 */
-	public final Visibility getBeanConstructorVisibility() {
-		return beanConstructorVisibility;
-	}
-
-	/**
-	 * Bean dictionary.
-	 *
-	 * @see BeanContext.Builder#beanDictionary()
-	 * @return
-	 * 	The list of classes that make up the bean dictionary in this bean context.
-	 */
-	public final List<Class<?>> getBeanDictionary() {
-		return beanDictionary;
-	}
-
-	/**
-	 * Minimum bean field visibility.
-	 *
-	 *
-	 * @see BeanContext.Builder#beanFieldVisibility(Visibility)
-	 * @return
-	 * 	Only look for bean fields with this specified minimum visibility.
-	 */
-	public final Visibility getBeanFieldVisibility() {
-		return beanFieldVisibility;
-	}
-
-	/**
-	 * BeanMap.put() returns old property value.
-	 *
-	 * @see BeanContext.Builder#beanMapPutReturnsOldValue()
-	 * @return
-	 * 	<jk>true</jk> if the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property values.
-	 * 	<br>Otherwise, it returns <jk>null</jk>.
-	 */
-	public final boolean isBeanMapPutReturnsOldValue() {
-		return beanMapPutReturnsOldValue;
-	}
-
-	/**
-	 * Minimum bean method visibility.
-	 *
-	 * @see BeanContext.Builder#beanMethodVisibility(Visibility)
-	 * @return
-	 * 	Only look for bean methods with this specified minimum visibility.
-	 */
-	public final Visibility getBeanMethodVisibility() {
-		return beanMethodVisibility;
-	}
-
-	/**
-	 * Beans require no-arg constructors.
-	 *
-	 * @see BeanContext.Builder#beansRequireDefaultConstructor()
-	 * @return
-	 * 	<jk>true</jk> if a Java class must implement a default no-arg constructor to be considered a bean.
-	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 */
-	public final boolean isBeansRequireDefaultConstructor() {
-		return beansRequireDefaultConstructor;
-	}
-
-	/**
-	 * Beans require Serializable interface.
-	 *
-	 * @see BeanContext.Builder#beansRequireSerializable()
-	 * @return
-	 * 	<jk>true</jk> if a Java class must implement the {@link Serializable} interface to be considered a bean.
-	 * 	<br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 */
-	public final boolean isBeansRequireSerializable() {
-		return beansRequireSerializable;
-	}
-
-	/**
-	 * Beans require setters for getters.
-	 *
-	 * @see BeanContext.Builder#beansRequireSettersForGetters()
-	 * @return
-	 * 	<jk>true</jk> if only getters that have equivalent setters will be considered as properties on a bean.
-	 * 	<br>Otherwise, they are ignored.
-	 */
-	public final boolean isBeansRequireSettersForGetters() {
-		return beansRequireSettersForGetters;
-	}
-
-	/**
-	 * Beans require at least one property.
-	 *
-	 * @see BeanContext.Builder#disableBeansRequireSomeProperties()
-	 * @return
-	 * 	<jk>true</jk> if a Java class doesn't need to contain at least 1 property to be considered a bean.
-	 * 	<br>Otherwise, the bean is serialized as a string using the {@link Object#toString()} method.
-	 */
-	public final boolean isBeansRequireSomeProperties() {
-		return beansRequireSomeProperties;
-	}
-
-	/**
-	 * Bean type property name.
-	 *
-	 * @see BeanContext.Builder#typePropertyName(String)
-	 * @return
-	 * The name of the bean property used to store the dictionary name of a bean type so that the parser knows the data type to reconstruct.
-	 */
-	public final String getBeanTypePropertyName() {
-		return typePropertyName;
-	}
-
-	/**
-	 * Find fluent setters.
-	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
-	 *
-	 * @see BeanContext.Builder#findFluentSetters()
-	 * @return
-	 * 	<jk>true</jk> if fluent setters are detected on beans.
-	 */
-	public final boolean isFindFluentSetters() {
-		return findFluentSetters;
-	}
-
-	/**
-	 * Ignore invocation errors on getters.
-	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnGetters()
-	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean getter methods are silently ignored.
-	 */
-	public final boolean isIgnoreInvocationExceptionsOnGetters() {
-		return ignoreInvocationExceptionsOnGetters;
-	}
-
-	/**
-	 * Ignore invocation errors on setters.
-	 *
-	 * @see BeanContext.Builder#ignoreInvocationExceptionsOnSetters()
-	 * @return
-	 * 	<jk>true</jk> if errors thrown when calling bean setter methods are silently ignored.
-	 */
-	public final boolean isIgnoreInvocationExceptionsOnSetters() {
-		return ignoreInvocationExceptionsOnSetters;
-	}
-
-	/**
-	 * Silently ignore missing setters.
-	 *
-	 * @see BeanContext.Builder#disableIgnoreMissingSetters()
-	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a bean property without a setter should throw a {@link BeanRuntimeException}.
-	 */
-	public final boolean isIgnoreMissingSetters() {
-		return ignoreMissingSetters;
-	}
-
-	/**
-	 * Ignore transient fields.
-	 *
-	 * @see BeanContext.Builder#disableIgnoreTransientFields()
-	 * @return
-	 * 	<jk>true</jk> if fields and methods marked as transient should not be ignored.
-	 */
-	protected final boolean isIgnoreTransientFields() {
-		return ignoreTransientFields;
-	}
-
-	/**
-	 * Ignore unknown properties.
-	 *
-	 * @see BeanContext.Builder#ignoreUnknownBeanProperties()
-	 * @return
-	 * 	<jk>true</jk> if trying to set a value on a non-existent bean property is silently ignored.
-	 * 	<br>Otherwise, a {@code RuntimeException} is thrown.
-	 */
-	public final boolean isIgnoreUnknownBeanProperties() {
-		return ignoreUnknownBeanProperties;
-	}
-
-	/**
-	 * Ignore unknown enum values.
-	 *
-	 * @see BeanContext.Builder#ignoreUnknownEnumValues()
-	 * @return
-	 * 	<jk>true</jk> if unknown enum values should be set as <jk>null</jk> instead of throwing an exception.
-	 */
-	public final boolean isIgnoreUnknownEnumValues() {
-		return ignoreUnknownEnumValues;
-	}
-
-	/**
-	 * Ignore unknown properties with null values.
-	 *
-	 * @see BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()
-	 * @return
-	 * 	<jk>true</jk> if trying to set a <jk>null</jk> value on a non-existent bean property should throw a {@link BeanRuntimeException}.
-	 */
-	public final boolean isIgnoreUnknownNullBeanProperties() {
-		return ignoreUnknownNullBeanProperties;
-	}
-
-	/**
-	 * Bean class exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanClasses(Class...)
-	 * @return
-	 * 	The list of classes that are explicitly not beans.
-	 */
-	protected final Class<?>[] getNotBeanClasses() {
-		return notBeanClassesArray;
-	}
-
-	/**
-	 * Bean package exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
-	 * @return
-	 * 	The list of fully-qualified package names to exclude from being classified as beans.
-	 */
-	public final String[] getNotBeanPackagesNames() {
-		return notBeanPackageNames;
-	}
-
-	/**
-	 * Bean package exclusions.
-	 *
-	 * @see BeanContext.Builder#notBeanPackages(String...)
-	 * @return
-	 * 	The list of package name prefixes to exclude from being classified as beans.
-	 */
-	protected final String[] getNotBeanPackagesPrefixes() {
-		return notBeanPackagePrefixes;
-	}
-
-	/**
-	 * Java object swaps.
-	 *
-	 * @see BeanContext.Builder#swaps(Class...)
-	 * @return
-	 * 	The list POJO swaps defined.
-	 */
-	public final ObjectSwap<?,?>[] getSwaps() {
-		return swapArray;
-	}
-
-	/**
-	 * Bean property namer.
-	 *
-	 * @see BeanContext.Builder#propertyNamer(Class)
-	 * @return
-	 * 	The interface used to calculate bean property names.
-	 */
-	public final PropertyNamer getPropertyNamer() {
-		return propertyNamerBean;
-	}
-
-	/**
-	 * Sort bean properties.
-	 *
-	 * @see BeanContext.Builder#sortProperties()
-	 * @return
-	 * 	<jk>true</jk> if all bean properties will be serialized and access in alphabetical order.
-	 */
-	public final boolean isSortProperties() {
-		return sortProperties;
-	}
-
-	/**
-	 * Use enum names.
-	 *
-	 * @see BeanContext.Builder#useEnumNames()
-	 * @return
-	 * 	<jk>true</jk> if enums are always serialized by name, not using {@link Object#toString()}.
-	 */
-	public final boolean isUseEnumNames() {
-		return useEnumNames;
-	}
-
-	/**
-	 * Use interface proxies.
-	 *
-	 * @see BeanContext.Builder#disableInterfaceProxies()
-	 * @return
-	 * 	<jk>true</jk> if interfaces will be instantiated as proxy classes through the use of an
-	 * 	{@link InvocationHandler} if there is no other way of instantiating them.
-	 */
-	public final boolean isUseInterfaceProxies() {
-		return useInterfaceProxies;
-	}
-
-	/**
-	 * Use Java Introspector.
-	 *
-	 * @see BeanContext.Builder#useJavaBeanIntrospector()
-	 * @return
-	 * 	<jk>true</jk> if the built-in Java bean introspector should be used for bean introspection.
-	 */
-	public final boolean isUseJavaBeanIntrospector() {
-		return useJavaBeanIntrospector;
-	}
-
-	/**
-	 * Locale.
-	 *
-	 * @see BeanContext.Builder#locale(Locale)
-	 * @return
-	 * 	The default locale for serializer and parser sessions.
-	 */
-	public final Locale getDefaultLocale() {
-		return locale;
-	}
-
-	/**
-	 * Media type.
-	 *
-	 * @see BeanContext.Builder#mediaType(MediaType)
-	 * @return
-	 * 	The default media type value for serializer and parser sessions.
-	 */
-	public final MediaType getDefaultMediaType() {
-		return mediaType;
-	}
-
-	/**
-	 * Time zone.
-	 *
-	 * @see BeanContext.Builder#timeZone(TimeZone)
-	 * @return
-	 * 	The default timezone for serializer and parser sessions.
-	 */
-	public final TimeZone getDefaultTimeZone() {
-		return timeZone;
-	}
-
-	/**
-	 * Returns the serializer to use for serializing beans when using the {@link BeanSession#convertToType(Object, Class)}
-	 * and related methods.
-	 *
-	 * @return The serializer.  May be <jk>null</jk> if all initialization has occurred.
-	 */
-	protected WriterSerializer getBeanToStringSerializer() {
-		if (beanToStringSerializer == null) {
-			if (JsonSerializer.DEFAULT == null)
-				return null;
-			this.beanToStringSerializer = JsonSerializer.create().beanContext(this).sq().simpleAttrs().build();
-		}
-		return beanToStringSerializer;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Context */
-	protected JsonMap properties() {
-		return filteredMap()
-			.append("id", System.identityHashCode(this))
-			.append("beanClassVisibility", beanClassVisibility)
-			.append("beanConstructorVisibility", beanConstructorVisibility)
-			.append("beanDictionary", beanDictionary)
-			.append("beanFieldVisibility", beanFieldVisibility)
-			.append("beanMethodVisibility", beanMethodVisibility)
-			.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
-			.append("beansRequireSerializable", beansRequireSerializable)
-			.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
-			.append("beansRequireSomeProperties", beansRequireSomeProperties)
-			.append("ignoreTransientFields", ignoreTransientFields)
-			.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
-			.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-			.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-			.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-			.append("notBeanClasses", notBeanClasses)
-			.append("notBeanPackageNames", notBeanPackageNames)
-			.append("notBeanPackagePrefixes", notBeanPackagePrefixes)
-			.append("swaps", swaps)
-			.append("sortProperties", sortProperties)
-			.append("useEnumNames", useEnumNames)
-			.append("useInterfaceProxies", useInterfaceProxies)
-			.append("useJavaBeanIntrospector", useJavaBeanIntrospector);
+		return rawType;
 	}
 }

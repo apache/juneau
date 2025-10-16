@@ -35,63 +35,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class HtmlLinkAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final HtmlLink DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link HtmlLink} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Apply extends AnnotationApplier<HtmlLink,Context.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Apply(VarResolverSession vr) {
+			super(HtmlLink.class, Context.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<HtmlLink> ai, Context.Builder b) {
+			HtmlLink a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link HtmlLink @HtmlLink annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		HtmlLink[] value();
 	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static HtmlLink copy(HtmlLink a, VarResolverSession r) {
-		return
-			create()
-			.nameProperty(r.resolve(a.nameProperty()))
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.uriProperty(r.resolve(a.uriProperty()))
-			.build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -144,10 +126,6 @@ public class HtmlLinkAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationTImpl implements HtmlLink {
 
 		private final String nameProperty, uriProperty;
@@ -170,51 +148,48 @@ public class HtmlLinkAnnotation {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final HtmlLink DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link HtmlLink} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
 	 */
-	public static class Apply extends AnnotationApplier<HtmlLink,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(HtmlLink.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<HtmlLink> ai, Context.Builder b) {
-			HtmlLink a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static HtmlLink copy(HtmlLink a, VarResolverSession r) {
+		return
+			create()
+			.nameProperty(r.resolve(a.nameProperty()))
+			.on(r.resolve(a.on()))
+			.onClass(a.onClass())
+			.uriProperty(r.resolve(a.uriProperty()))
+			.build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link HtmlLink @HtmlLink annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		HtmlLink[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

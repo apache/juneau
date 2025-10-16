@@ -36,34 +36,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class MethodExecStore {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -82,14 +54,10 @@ public class MethodExecStore {
 		}
 
 		@Override /* Overridden from BeanBuilder */
-		protected MethodExecStore buildDefault() {
-			return new MethodExecStore(this);
+		public Builder impl(Object value) {
+			super.impl(value);
+			return this;
 		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Specifies a subclass of {@link MethodExecStats} to use for individual method statistics.
 		 *
@@ -130,22 +98,34 @@ public class MethodExecStore {
 			return this;
 		}
 		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected MethodExecStore buildDefault() {
+			return new MethodExecStore(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder(BeanStore.INSTANCE);
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final ThrownStore thrownStore;
 	private final BeanStore beanStore;
 	private final Class<? extends MethodExecStats> statsImplClass;
@@ -160,6 +140,32 @@ public class MethodExecStore {
 		this.beanStore = builder.beanStore();
 		this.thrownStore = builder.thrownStore != null ? builder.thrownStore : beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new);
 		this.statsImplClass = builder.statsImplClass;
+	}
+
+	/**
+	 * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.
+	 *
+	 * @return A report of all method execution times ordered by .
+	 */
+	public String getReport() {
+		StringBuilder sb = new StringBuilder()
+			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
+			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
+		getStatsByTotalTime()
+			.stream()
+			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
+			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
+		return sb.toString();
+
+	}
+
+	/**
+	 * Returns all the statistics in this store.
+	 *
+	 * @return All the statistics in this store.
+	 */
+	public Collection<MethodExecStats> getStats() {
+		return db.values();
 	}
 
 	/**
@@ -187,38 +193,12 @@ public class MethodExecStore {
 	}
 
 	/**
-	 * Returns all the statistics in this store.
-	 *
-	 * @return All the statistics in this store.
-	 */
-	public Collection<MethodExecStats> getStats() {
-		return db.values();
-	}
-
-	/**
 	 * Returns timing information on all method executions on this class.
 	 *
 	 * @return A list of timing statistics ordered by average execution time descending.
 	 */
 	public List<MethodExecStats> getStatsByTotalTime() {
 		return getStats().stream().sorted(Comparator.comparingLong(MethodExecStats::getTotalTime).reversed()).collect(toList());
-	}
-
-	/**
-	 * Returns the timing information returned by {@link #getStatsByTotalTime()} in a readable format.
-	 *
-	 * @return A report of all method execution times ordered by .
-	 */
-	public String getReport() {
-		StringBuilder sb = new StringBuilder()
-			.append(" Method                         Runs      Running   Errors   Avg          Total     \n")
-			.append("------------------------------ --------- --------- -------- ------------ -----------\n");
-		getStatsByTotalTime()
-			.stream()
-			.sorted(Comparator.comparingDouble(MethodExecStats::getTotalTime).reversed())
-			.forEach(x -> sb.append(String.format("%30s %9d %9d %9d %10dms %10dms\n", x.getMethod(), x.getRuns(), x.getRunning(), x.getErrors(), x.getAvgTime(), x.getTotalTime())));
-		return sb.toString();
-
 	}
 
 	/**

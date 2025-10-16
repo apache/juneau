@@ -40,12 +40,55 @@ public class MethodInvoker {
 	}
 
 	/**
+	 * Convenience method for calling <c>inner().getDeclaringClass()</c>
+	 *
+	 * @return The declaring class of the method.
+	 */
+	public ClassInfo getDeclaringClass() {
+		return m.getDeclaringClass();
+	}
+
+	/**
+	 * Convenience method for calling <c>inner().getName()</c>
+	 *
+	 * @return The name of the method.
+	 */
+	public String getFullName() {
+		return m.getFullName();
+	}
+
+	/**
+	 * Returns the stats of this method invoker.
+	 *
+	 * @return The stats of this method invoker.
+	 */
+	public MethodExecStats getStats() {
+		return stats;
+	}
+
+	/**
 	 * Returns the inner method.
 	 *
 	 * @return The inner method.
 	 */
 	public MethodInfo inner() {
 		return m;
+	}
+
+	/**
+	 * Invokes the wrapped method using parameters from the specified bean store.
+	 *
+	 * @param beanStore The bean store to use to resolve parameters.
+	 * @param o The object to invoke the method on.
+	 * @return The result of invoking the method.
+	 * @throws IllegalAccessException If method cannot be accessed.
+	 * @throws IllegalArgumentException If wrong arguments were passed to method.
+	 * @throws InvocationTargetException If method threw an exception.
+	 */
+	public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		if (beanStore.hasAllParams(m))
+			return invoke(o, beanStore.getParams(m));
+		throw new IllegalArgumentException("Could not find prerequisites to invoke method '"+getFullName()+"': "+beanStore.getMissingParams(m));
 	}
 
 	/**
@@ -72,48 +115,5 @@ public class MethodInvoker {
 		} finally {
 			stats.finished(System.nanoTime() - startTime);
 		}
-	}
-
-	/**
-	 * Invokes the wrapped method using parameters from the specified bean store.
-	 *
-	 * @param beanStore The bean store to use to resolve parameters.
-	 * @param o The object to invoke the method on.
-	 * @return The result of invoking the method.
-	 * @throws IllegalAccessException If method cannot be accessed.
-	 * @throws IllegalArgumentException If wrong arguments were passed to method.
-	 * @throws InvocationTargetException If method threw an exception.
-	 */
-	public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		if (beanStore.hasAllParams(m))
-			return invoke(o, beanStore.getParams(m));
-		throw new IllegalArgumentException("Could not find prerequisites to invoke method '"+getFullName()+"': "+beanStore.getMissingParams(m));
-	}
-
-	/**
-	 * Convenience method for calling <c>inner().getDeclaringClass()</c>
-	 *
-	 * @return The declaring class of the method.
-	 */
-	public ClassInfo getDeclaringClass() {
-		return m.getDeclaringClass();
-	}
-
-	/**
-	 * Convenience method for calling <c>inner().getName()</c>
-	 *
-	 * @return The name of the method.
-	 */
-	public String getFullName() {
-		return m.getFullName();
-	}
-
-	/**
-	 * Returns the stats of this method invoker.
-	 *
-	 * @return The stats of this method invoker.
-	 */
-	public MethodExecStats getStats() {
-		return stats;
 	}
 }

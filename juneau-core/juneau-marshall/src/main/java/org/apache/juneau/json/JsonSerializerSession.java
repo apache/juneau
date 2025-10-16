@@ -42,26 +42,8 @@ import org.apache.juneau.swap.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class JsonSerializerSession extends WriterSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(JsonSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -79,14 +61,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public JsonSerializerSession build() {
-			return new JsonSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public JsonSerializerSession build() {
+			return new JsonSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -96,20 +78,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -138,20 +114,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -174,20 +144,32 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -197,11 +179,15 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(JsonSerializer ctx) {
+		return new Builder(ctx);
+	}
 	private final JsonSerializer ctx;
 
 	/**
@@ -214,25 +200,142 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		this.ctx = builder.ctx;
 	}
 
+	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+		int i = indent;
+		out.w('{');
+
+		Flag addComma = Flag.create();
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			out.cr(i).attr(pm.getName()).w(':').s(i).stringValue(typeName);
+			addComma.set();
+		}
+
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			if (thrown != null)
+				onBeanGetterException(pMeta, thrown);
+
+			if (canIgnoreValue(cMeta, key, value))
+				return;
+
+			addComma.ifSet(()->out.append(',').smi(i)).set();
+
+			out.cr(i).attr(key).w(':').s(i);
+
+			serializeAnything(out, value, cMeta, key, pMeta);
+		});
+
+		out.cre(i-1).w('}');
+		return out;
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
+
+		ClassMeta<?> elementType = type.getElementType();
+
+		out.w('[');
+		Flag addComma = Flag.create();
+		forEachEntry(c, x -> {
+			addComma.ifSet(()->out.w(',').smi(indent)).set();
+			out.cr(indent);
+			serializeAnything(out, x, elementType, "<iterator>", null);
+		});
+
+		out.cre(indent-1).w(']');
+		return out;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		int i = indent;
+		out.w('{');
+
+		Flag addComma = Flag.create();
+		forEachEntry(m, x -> {
+			addComma.ifSet(()->out.w(',').smi(i)).set();
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
+			out.cr(i).attr(toString(key)).w(':').s(i);
+			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
+		});
+
+		out.cre(i-1).w('}');
+
+		return out;
+	}
+
 	@Override /* Overridden from SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getJsonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}
 
 	/**
-	 * Method that can be called from subclasses to serialize an object to JSON.
+	 * Returns the language-specific metadata on the specified class.
 	 *
-	 * <p>
-	 * Used by {@link JsonSchemaSerializerSession} for serializing examples to JSON.
-	 *
-	 * @param o The object to serialize.
-	 * @return The serialized object.
-	 * @throws Exception Error occurred.
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
 	 */
-	protected String serializeJson(Object o) throws Exception {
-		StringWriter sw = new StringWriter();
-		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
-		return sw.toString();
+	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonClassMeta(cm);
+	}
+
+	/**
+	 * Converts the specified output target object to an {@link JsonWriter}.
+	 *
+	 * @param out The output target object.
+	 * @return The output target object wrapped in an {@link JsonWriter}.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	protected final JsonWriter getJsonWriter(SerializerPipe out) throws IOException {
+		Object output = out.getRawOutput();
+		if (output instanceof JsonWriter)
+			return (JsonWriter)output;
+		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
+			isSimpleAttrs(), isTrimStrings(), getUriResolver());
+		out.setWriter(w);
+		return w;
+	}
+
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see JsonSerializer.Builder#addBeanTypesJson()
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	@Override
+	protected final boolean isAddBeanTypes() {
+		return ctx.isAddBeanTypes();
+	}
+	/**
+	 * Prefix solidus <js>'/'</js> characters with escapes.
+	 *
+	 * @see JsonSerializer.Builder#escapeSolidus()
+	 * @return
+	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
+	 */
+	protected final boolean isEscapeSolidus() {
+		return ctx.isEscapeSolidus();
+	}
+
+	/**
+	 * Simple JSON attributes.
+	 *
+	 * @see JsonSerializer.Builder#simpleAttrs()
+	 * @return
+	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
+	 * 	<br>Otherwise, they are always quoted.
+	 */
+	protected final boolean isSimpleAttrs() {
+		return ctx.isSimpleAttrs();
 	}
 
 	/**
@@ -333,146 +436,19 @@ public class JsonSerializerSession extends WriterSerializerSession {
 			pop();
 		return out;
 	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		int i = indent;
-		out.w('{');
-
-		Flag addComma = Flag.create();
-		forEachEntry(m, x -> {
-			addComma.ifSet(()->out.w(',').smi(i)).set();
-			Object value = x.getValue();
-			Object key = generalize(x.getKey(), keyType);
-			out.cr(i).attr(toString(key)).w(':').s(i);
-			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
-		});
-
-		out.cre(i-1).w('}');
-
-		return out;
-	}
-
-	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
-		int i = indent;
-		out.w('{');
-
-		Flag addComma = Flag.create();
-		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
-
-		if (typeName != null) {
-			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
-			out.cr(i).attr(pm.getName()).w(':').s(i).stringValue(typeName);
-			addComma.set();
-		}
-
-		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
-			ClassMeta<?> cMeta = pMeta.getClassMeta();
-			if (thrown != null)
-				onBeanGetterException(pMeta, thrown);
-
-			if (canIgnoreValue(cMeta, key, value))
-				return;
-
-			addComma.ifSet(()->out.append(',').smi(i)).set();
-
-			out.cr(i).attr(key).w(':').s(i);
-
-			serializeAnything(out, value, cMeta, key, pMeta);
-		});
-
-		out.cre(i-1).w('}');
-		return out;
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> elementType = type.getElementType();
-
-		out.w('[');
-		Flag addComma = Flag.create();
-		forEachEntry(c, x -> {
-			addComma.ifSet(()->out.w(',').smi(indent)).set();
-			out.cr(indent);
-			serializeAnything(out, x, elementType, "<iterator>", null);
-		});
-
-		out.cre(indent-1).w(']');
-		return out;
-	}
-
 	/**
-	 * Converts the specified output target object to an {@link JsonWriter}.
+	 * Method that can be called from subclasses to serialize an object to JSON.
 	 *
-	 * @param out The output target object.
-	 * @return The output target object wrapped in an {@link JsonWriter}.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	protected final JsonWriter getJsonWriter(SerializerPipe out) throws IOException {
-		Object output = out.getRawOutput();
-		if (output instanceof JsonWriter)
-			return (JsonWriter)output;
-		JsonWriter w = new JsonWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), getQuoteChar(),
-			isSimpleAttrs(), isTrimStrings(), getUriResolver());
-		out.setWriter(w);
-		return w;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Add <js>"_type"</js> properties when needed.
+	 * <p>
+	 * Used by {@link JsonSchemaSerializerSession} for serializing examples to JSON.
 	 *
-	 * @see JsonSerializer.Builder#addBeanTypesJson()
-	 * @return
-	 * 	<jk>true</jk> if <js>"_type"</js> properties will be added to beans if their type cannot be inferred
-	 * 	through reflection.
+	 * @param o The object to serialize.
+	 * @return The serialized object.
+	 * @throws Exception Error occurred.
 	 */
-	@Override
-	protected final boolean isAddBeanTypes() {
-		return ctx.isAddBeanTypes();
-	}
-
-	/**
-	 * Prefix solidus <js>'/'</js> characters with escapes.
-	 *
-	 * @see JsonSerializer.Builder#escapeSolidus()
-	 * @return
-	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
-	 */
-	protected final boolean isEscapeSolidus() {
-		return ctx.isEscapeSolidus();
-	}
-
-	/**
-	 * Simple JSON attributes.
-	 *
-	 * @see JsonSerializer.Builder#simpleAttrs()
-	 * @return
-	 * 	<jk>true</jk> if JSON attribute names will only be quoted when necessary.
-	 * 	<br>Otherwise, they are always quoted.
-	 */
-	protected final boolean isSimpleAttrs() {
-		return ctx.isSimpleAttrs();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
-		return ctx.getJsonClassMeta(cm);
+	protected String serializeJson(Object o) throws Exception {
+		StringWriter sw = new StringWriter();
+		serializeAnything(getJsonWriter(createPipe(sw)).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
+		return sw.toString();
 	}
 }

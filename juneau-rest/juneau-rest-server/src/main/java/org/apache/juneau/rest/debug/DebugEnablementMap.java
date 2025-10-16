@@ -27,24 +27,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class DebugEnablementMap extends ReflectionMap<Enablement> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static builder creator.
-	 *
-	 * @return A new instance of the builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -61,11 +43,14 @@ public class DebugEnablementMap extends ReflectionMap<Enablement> {
 			return new DebugEnablementMap(this);
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static builder creator.
+	 *
+	 * @return A new instance of the builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	/**
 	 * Constructor.
 	 *

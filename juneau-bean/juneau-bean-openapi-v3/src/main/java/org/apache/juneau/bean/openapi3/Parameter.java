@@ -124,256 +124,6 @@ public class Parameter extends OpenApiElement {
 		return new Parameter(this);
 	}
 
-	/**
-	 * Returns the parameter name.
-	 *
-	 * @return The parameter name.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Sets the parameter name.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setName(String value) {
-		this.name = value;
-		return this;
-	}
-
-	/**
-	 * Returns the parameter location.
-	 *
-	 * @return The parameter location.
-	 */
-	public String getIn() {
-		return in;
-	}
-
-	/**
-	 * Sets the parameter location.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setIn(String value) {
-		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_IN)
-			);
-		this.in = value;
-		return this;
-	}
-
-	/**
-	 * Returns the description.
-	 *
-	 * @return The description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Sets the description.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setDescription(String value) {
-		this.description = value;
-		return this;
-	}
-
-	/**
-	 * Returns the style.
-	 *
-	 * @return The style.
-	 */
-	public String getStyle() {
-		return style;
-	}
-
-	/**
-	 * Sets the style.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setStyle(String value) {
-		if (isStrict() && ! contains(value, VALID_STYLES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_STYLES)
-			);
-		this.style = value;
-		return this;
-	}
-
-	/**
-	 * Returns the required flag.
-	 *
-	 * @return The required flag.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
-	 * Sets the required flag.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setRequired(Boolean value) {
-		this.required = value;
-		return this;
-	}
-
-	/**
-	 * Returns the deprecated flag.
-	 *
-	 * @return The deprecated flag.
-	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
-
-	/**
-	 * Sets the deprecated flag.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setDeprecated(Boolean value) {
-		this.deprecated = value;
-		return this;
-	}
-
-	/**
-	 * Returns the allow empty value flag.
-	 *
-	 * @return The allow empty value flag.
-	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
-
-	/**
-	 * Sets the allow empty value flag.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setAllowEmptyValue(Boolean value) {
-		this.allowEmptyValue = value;
-		return this;
-	}
-
-	/**
-	 * Returns the explode flag.
-	 *
-	 * @return The explode flag.
-	 */
-	public Boolean getExplode() {
-		return explode;
-	}
-
-	/**
-	 * Sets the explode flag.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setExplode(Boolean value) {
-		this.explode = value;
-		return this;
-	}
-
-	/**
-	 * Returns the allow reserved flag.
-	 *
-	 * @return The allow reserved flag.
-	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
-	}
-
-	/**
-	 * Sets the allow reserved flag.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setAllowReserved(Boolean value) {
-		this.allowReserved = value;
-		return this;
-	}
-
-	/**
-	 * Returns the schema.
-	 *
-	 * @return The schema.
-	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Sets the schema.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setSchema(SchemaInfo value) {
-		this.schema = value;
-		return this;
-	}
-
-	/**
-	 * Returns the example.
-	 *
-	 * @return The example.
-	 */
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Sets the example.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setExample(Object value) {
-		this.example = value;
-		return this;
-	}
-
-	/**
-	 * Returns the examples map.
-	 *
-	 * @return The examples map.
-	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
-
-	/**
-	 * Sets the examples map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public Parameter setExamples(Map<String,Example> value) {
-		this.examples = value;
-		return this;
-	}
-
 	@Override /* Overridden from OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -392,6 +142,133 @@ public class Parameter extends OpenApiElement {
 			case "examples" -> toType(getExamples(), type);
 			default -> super.get(property, type);
 		};
+	}
+
+	/**
+	 * Returns the allow empty value flag.
+	 *
+	 * @return The allow empty value flag.
+	 */
+	public Boolean getAllowEmptyValue() {
+		return allowEmptyValue;
+	}
+
+	/**
+	 * Returns the allow reserved flag.
+	 *
+	 * @return The allow reserved flag.
+	 */
+	public Boolean getAllowReserved() {
+		return allowReserved;
+	}
+
+	/**
+	 * Returns the deprecated flag.
+	 *
+	 * @return The deprecated flag.
+	 */
+	public Boolean getDeprecated() {
+		return deprecated;
+	}
+
+	/**
+	 * Returns the description.
+	 *
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Returns the example.
+	 *
+	 * @return The example.
+	 */
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Returns the examples map.
+	 *
+	 * @return The examples map.
+	 */
+	public Map<String,Example> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Returns the explode flag.
+	 *
+	 * @return The explode flag.
+	 */
+	public Boolean getExplode() {
+		return explode;
+	}
+
+	/**
+	 * Returns the parameter location.
+	 *
+	 * @return The parameter location.
+	 */
+	public String getIn() {
+		return in;
+	}
+
+	/**
+	 * Returns the parameter name.
+	 *
+	 * @return The parameter name.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Returns the required flag.
+	 *
+	 * @return The required flag.
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+
+	/**
+	 * Returns the schema.
+	 *
+	 * @return The schema.
+	 */
+	public SchemaInfo getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Returns the style.
+	 *
+	 * @return The style.
+	 */
+	public String getStyle() {
+		return style;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(allowEmptyValue != null, "allowEmptyValue")
+			.addIf(allowReserved != null, "allowReserved")
+			.addIf(description != null, "description")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(example != null, "example")
+			.addIf(examples != null, "examples")
+			.addIf(explode != null, "explode")
+			.addIf(in != null, "in")
+			.addIf(name != null, "name")
+			.addIf(required != null, "required")
+			.addIf(schema != null, "schema")
+			.addIf(style != null, "style")
+			.build();
+		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */
@@ -417,23 +294,146 @@ public class Parameter extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(allowEmptyValue != null, "allowEmptyValue")
-			.addIf(allowReserved != null, "allowReserved")
-			.addIf(description != null, "description")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(example != null, "example")
-			.addIf(examples != null, "examples")
-			.addIf(explode != null, "explode")
-			.addIf(in != null, "in")
-			.addIf(name != null, "name")
-			.addIf(required != null, "required")
-			.addIf(schema != null, "schema")
-			.addIf(style != null, "style")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets the allow empty value flag.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setAllowEmptyValue(Boolean value) {
+		this.allowEmptyValue = value;
+		return this;
+	}
+
+	/**
+	 * Sets the allow reserved flag.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setAllowReserved(Boolean value) {
+		this.allowReserved = value;
+		return this;
+	}
+
+	/**
+	 * Sets the deprecated flag.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setDeprecated(Boolean value) {
+		this.deprecated = value;
+		return this;
+	}
+
+	/**
+	 * Sets the description.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setDescription(String value) {
+		this.description = value;
+		return this;
+	}
+
+	/**
+	 * Sets the example.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setExample(Object value) {
+		this.example = value;
+		return this;
+	}
+
+	/**
+	 * Sets the examples map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setExamples(Map<String,Example> value) {
+		this.examples = value;
+		return this;
+	}
+
+	/**
+	 * Sets the explode flag.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setExplode(Boolean value) {
+		this.explode = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parameter location.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setIn(String value) {
+		if (isStrict() && ! contains(value, VALID_IN))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
+				value, Json5.of(VALID_IN)
+			);
+		this.in = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parameter name.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setName(String value) {
+		this.name = value;
+		return this;
+	}
+
+	/**
+	 * Sets the required flag.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setRequired(Boolean value) {
+		this.required = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setSchema(SchemaInfo value) {
+		this.schema = value;
+		return this;
+	}
+
+	/**
+	 * Sets the style.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public Parameter setStyle(String value) {
+		if (isStrict() && ! contains(value, VALID_STYLES))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}",
+				value, Json5.of(VALID_STYLES)
+			);
+		this.style = value;
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */

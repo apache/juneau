@@ -42,19 +42,34 @@ import org.apache.juneau.msgpack.*;
 public @interface OpenApiConfig {
 
 	/**
-	 * Optional rank for this config.
+	 * Default collection format for HTTP parts.
 	 *
 	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()}.
+	 *
+	 * <ul class='values javatree'>
+	 * 	<li class='jc'>{@link HttpPartCollectionFormat}
+	 * 	<ul>
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+	 * 	</ul>
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
+	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
+	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	int rank() default 0;
-
+	String collectionFormat() default "";
 	//-------------------------------------------------------------------------------------------------------------------
-	// OpenApiCommon
+	// OpenApiParser
 	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Default format for HTTP parts.
 	 *
@@ -89,37 +104,12 @@ public @interface OpenApiConfig {
 	String format() default "";
 
 	/**
-	 * Default collection format for HTTP parts.
+	 * Optional rank for this config.
 	 *
 	 * <p>
-	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()}.
-	 *
-	 * <ul class='values javatree'>
-	 * 	<li class='jc'>{@link HttpPartCollectionFormat}
-	 * 	<ul>
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-	 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
-	 * 	</ul>
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
-	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
-	 * </ul>
+	 * Can be used to override default ordering and application of config annotations.
 	 *
 	 * @return The annotation value.
 	 */
-	String collectionFormat() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// OpenApiSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// OpenApiParser
-	//-------------------------------------------------------------------------------------------------------------------
+	int rank() default 0;
 }

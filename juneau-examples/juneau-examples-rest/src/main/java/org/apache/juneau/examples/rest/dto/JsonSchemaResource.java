@@ -69,6 +69,19 @@ public class JsonSchemaResource extends BasicRestServlet {
 
 	private JsonSchema schema;     // The schema document
 
+	/**
+	 * [HTTP GET /dto/jsonSchema]
+	 * Get the JSON-Schema document.
+	 *
+	 * @return The JSON-Schema document.
+	 */
+	@RestGet(
+		summary="Get the JSON-Schema document"
+	)
+	public JsonSchema get() {
+		return schema;
+	}
+
 	@Override /* Servlet */
 	@SuppressWarnings("deprecation")
 	public void init() {
@@ -90,19 +103,6 @@ public class JsonSchemaResource extends BasicRestServlet {
 		} catch (Exception e) {
 			throw new IllegalStateException(e);
 		}
-	}
-
-	/**
-	 * [HTTP GET /dto/jsonSchema]
-	 * Get the JSON-Schema document.
-	 *
-	 * @return The JSON-Schema document.
-	 */
-	@RestGet(
-		summary="Get the JSON-Schema document"
-	)
-	public JsonSchema get() {
-		return schema;
 	}
 
 	/**

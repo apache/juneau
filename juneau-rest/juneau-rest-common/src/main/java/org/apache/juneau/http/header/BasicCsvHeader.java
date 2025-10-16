@@ -42,11 +42,6 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicCsvHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -94,11 +89,6 @@ public class BasicCsvHeader extends BasicHeader {
 	public static BasicCsvHeader of(String name, Supplier<String[]> value) {
 		return value == null ? null : new BasicCsvHeader(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String[] value;
 	private final Supplier<String[]> supplier;
 
@@ -151,11 +141,6 @@ public class BasicCsvHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.join(value(), ", ");
-	}
-
 	/**
 	 * Returns the header value as an array wrapped in an {@link Optional}.
 	 *
@@ -166,18 +151,6 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public Optional<String[]> asArray() {
 		return Utils.opt(copyOf(value()));
-	}
-
-	/**
-	 * Returns the header value as an array.
-	 *
-	 * <p>
-	 * The array is a copy of the value of this header.
-	 *
-	 * @return The header value as an array.  Can be <jk>null</jk>.
-	 */
-	public String[] toArray() {
-		return copyOf(value());
 	}
 
 	/**
@@ -193,15 +166,13 @@ public class BasicCsvHeader extends BasicHeader {
 	}
 
 	/**
-	 * Returns the header value as a list.
+	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
-	 * <p>
-	 * The list is unmodifiable.
-	 *
-	 * @return The header value as a list.  Can be <jk>null</jk>.
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
 	 */
-	public List<String> toList() {
-		return u(alist(value()));
+	public FluentListAssertion<String,BasicCsvHeader> assertList() {
+		return new FluentListAssertion<>(u(alist(value())), this);
 	}
 
 	/**
@@ -247,14 +218,9 @@ public class BasicCsvHeader extends BasicHeader {
 		return false;
 	}
 
-	/**
-	 * Provides the ability to perform fluent-style assertions on this header.
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public FluentListAssertion<String,BasicCsvHeader> assertList() {
-		return new FluentListAssertion<>(u(alist(value())), this);
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.join(value(), ", ");
 	}
 
 	/**
@@ -269,6 +235,30 @@ public class BasicCsvHeader extends BasicHeader {
 	public String[] orElse(String[] other) {
 		String[] x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as an array.
+	 *
+	 * <p>
+	 * The array is a copy of the value of this header.
+	 *
+	 * @return The header value as an array.  Can be <jk>null</jk>.
+	 */
+	public String[] toArray() {
+		return copyOf(value());
+	}
+
+	/**
+	 * Returns the header value as a list.
+	 *
+	 * <p>
+	 * The list is unmodifiable.
+	 *
+	 * @return The header value as a list.  Can be <jk>null</jk>.
+	 */
+	public List<String> toList() {
+		return u(alist(value()));
 	}
 
 	private String[] value() {

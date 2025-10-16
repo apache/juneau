@@ -118,10 +118,33 @@ public class Table extends HtmlElementContainer {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Table _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Table accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Table attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Table attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-table-border">border</a> attribute.
 	 *
-	 * @param border
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
@@ -131,18 +154,15 @@ public class Table extends HtmlElementContainer {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Table _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
+	@Override /* Overridden from HtmlElementContainer */
+	public Table child(Object value) {
+		super.child(value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Table accesskey(String value) {
-		super.accesskey(value);
+	@Override /* Overridden from HtmlElementContainer */
+	public Table children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -476,6 +496,12 @@ public class Table extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Table setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Table spellcheck(Object value) {
 		super.spellcheck(value);
@@ -503,36 +529,6 @@ public class Table extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Table translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Table child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Table children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Table setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Table attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Table attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

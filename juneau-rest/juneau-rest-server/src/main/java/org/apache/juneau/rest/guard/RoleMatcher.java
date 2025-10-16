@@ -54,11 +54,146 @@ import org.apache.juneau.internal.*;
  */
 public class RoleMatcher {
 
-	private final Exp exp;
+	static class And extends Exp {
+		Exp[] clauses;
+
+		And(List<Exp> clauses) {
+			this.clauses = clauses.toArray(new Exp[clauses.size()]);
+		}
+
+		@Override /* Overridden from Object */
+		public String toString() {
+			return "(& " + Utils.join(clauses, " ") + ')';
+		}
+
+		@Override /* Overridden from Exp */
+		void appendTokens(Set<String> set) {
+			for (Exp clause : clauses)
+				clause.appendTokens(set);
+		}
+
+		@Override /* Overridden from Exp */
+		boolean matches(Set<String> roles) {
+			for (Exp e : clauses)
+				if (! e.matches(roles))
+					return false;
+			return true;
+		}
+	}
+	static class Eq extends Exp {
+		final String operand;
+
+		Eq(String operand) {
+			this.operand = operand;
+		}
+
+		@Override /* Overridden from Object */
+		public String toString() {
+			return "[= " + operand + "]";
+		}
+
+		@Override /* Overridden from Exp */
+		void appendTokens(Set<String> set) {
+			set.add(operand);
+		}
+
+		@Override /* Overridden from Exp */
+		boolean matches(Set<String> roles) {
+			for (String role : roles)
+				if (operand.equals(role))
+					return true;
+			return false;
+		}
+	}
+
+	abstract static class Exp {
+
+		void appendTokens(Set<String> set) {}
+
+		abstract boolean matches(Set<String> roles);
+	}
+
+	static class Match extends Exp {
+		final Pattern p;
+		final String operand;
+
+		Match(String operand) {
+			this.operand = operand;
+			p = Utils.getMatchPattern3(operand);
+		}
+
+		@Override /* Overridden from Object */
+		public String toString() {
+			return "[* " + p.pattern().replaceAll("\\\\[QE]", "") + "]";
+		}
+
+		@Override /* Overridden from Exp */
+		void appendTokens(Set<String> set) {
+			set.add(operand);
+		}
+
+		@Override /* Overridden from Exp */
+		boolean matches(Set<String> roles) {
+			for (String role : roles)
+				if (p.matcher(role).matches())
+					return true;
+			return false;
+		}
+	}
+
+	static class Never extends Exp {
+		@Override /* Overridden from Object */
+		public String toString() {
+			return "(NEVER)";
+		}
+
+		@Override
+		boolean matches(Set<String> roles) {
+			return false;
+		}
+	}
+
+	static class Or extends Exp {
+		Exp[] clauses;
+
+		Or(List<Exp> clauses) {
+			this.clauses = clauses.toArray(new Exp[clauses.size()]);
+		}
+
+		@Override /* Overridden from Object */
+		public String toString() {
+			return "(| " + Utils.join(clauses, " ") + ')';
+		}
+
+		@Override /* Overridden from Exp */
+		void appendTokens(Set<String> set) {
+			for (Exp clause : clauses)
+				clause.appendTokens(set);
+		}
+
+		@Override
+		boolean matches(Set<String> roles) {
+			for (Exp e : clauses)
+				if (e.matches(roles))
+					return true;
+			return false;
+		}
+	}
+
 	private static final AsciiSet
 		WS = AsciiSet.of(" \t"),
 		OP = AsciiSet.of(",|&"),
 		META = AsciiSet.of("*?");
+
+	private static Exp parseOperand(String operand) {
+		boolean hasMeta = false;
+		for (int i = 0; i < operand.length() && ! hasMeta; i++) {
+			char c = operand.charAt(i);
+			hasMeta |= META.contains(c);
+		}
+		return hasMeta ? new Match(operand) : new Eq(operand);
+	}
+	private final Exp exp;
 
 	/**
 	 * Constructor.
@@ -68,6 +203,17 @@ public class RoleMatcher {
 	 */
 	public RoleMatcher(String expression) throws ParseException {
 		this.exp = parse(expression);
+	}
+
+	/**
+	 * Returns all the tokens used in this expression.
+	 *
+	 * @return All the tokens used in this expression.
+	 */
+	public Set<String> getRolesInExpression() {
+		Set<String> set = new TreeSet<>();
+		exp.appendTokens(set);
+		return set;
 	}
 
 	/**
@@ -85,17 +231,6 @@ public class RoleMatcher {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return exp.toString();
-	}
-
-	/**
-	 * Returns all the tokens used in this expression.
-	 *
-	 * @return All the tokens used in this expression.
-	 */
-	public Set<String> getRolesInExpression() {
-		Set<String> set = new TreeSet<>();
-		exp.appendTokens(set);
-		return set;
 	}
 
 	private Exp parse(String expression) throws ParseException {
@@ -220,145 +355,5 @@ public class RoleMatcher {
 		if (ors.size() == 1)
 			return ors.get(0);
 		return new Or(ors);
-	}
-
-	private static Exp parseOperand(String operand) {
-		boolean hasMeta = false;
-		for (int i = 0; i < operand.length() && ! hasMeta; i++) {
-			char c = operand.charAt(i);
-			hasMeta |= META.contains(c);
-		}
-		return hasMeta ? new Match(operand) : new Eq(operand);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Expression classes
-	//-----------------------------------------------------------------------------------------------------------------
-
-	abstract static class Exp {
-
-		abstract boolean matches(Set<String> roles);
-
-		void appendTokens(Set<String> set) {}
-	}
-
-	static class Never extends Exp {
-		@Override
-		boolean matches(Set<String> roles) {
-			return false;
-		}
-
-		@Override /* Overridden from Object */
-		public String toString() {
-			return "(NEVER)";
-		}
-	}
-
-	static class And extends Exp {
-		Exp[] clauses;
-
-		And(List<Exp> clauses) {
-			this.clauses = clauses.toArray(new Exp[clauses.size()]);
-		}
-
-		@Override /* Overridden from Exp */
-		boolean matches(Set<String> roles) {
-			for (Exp e : clauses)
-				if (! e.matches(roles))
-					return false;
-			return true;
-		}
-
-		@Override /* Overridden from Exp */
-		void appendTokens(Set<String> set) {
-			for (Exp clause : clauses)
-				clause.appendTokens(set);
-		}
-
-		@Override /* Overridden from Object */
-		public String toString() {
-			return "(& " + Utils.join(clauses, " ") + ')';
-		}
-	}
-
-	static class Or extends Exp {
-		Exp[] clauses;
-
-		Or(List<Exp> clauses) {
-			this.clauses = clauses.toArray(new Exp[clauses.size()]);
-		}
-
-		@Override
-		boolean matches(Set<String> roles) {
-			for (Exp e : clauses)
-				if (e.matches(roles))
-					return true;
-			return false;
-		}
-
-		@Override /* Overridden from Exp */
-		void appendTokens(Set<String> set) {
-			for (Exp clause : clauses)
-				clause.appendTokens(set);
-		}
-
-		@Override /* Overridden from Object */
-		public String toString() {
-			return "(| " + Utils.join(clauses, " ") + ')';
-		}
-	}
-
-	static class Eq extends Exp {
-		final String operand;
-
-		Eq(String operand) {
-			this.operand = operand;
-		}
-
-		@Override /* Overridden from Exp */
-		boolean matches(Set<String> roles) {
-			for (String role : roles)
-				if (operand.equals(role))
-					return true;
-			return false;
-		}
-
-		@Override /* Overridden from Exp */
-		void appendTokens(Set<String> set) {
-			set.add(operand);
-		}
-
-		@Override /* Overridden from Object */
-		public String toString() {
-			return "[= " + operand + "]";
-		}
-	}
-
-	static class Match extends Exp {
-		final Pattern p;
-		final String operand;
-
-		Match(String operand) {
-			this.operand = operand;
-			p = Utils.getMatchPattern3(operand);
-		}
-
-		@Override /* Overridden from Exp */
-		boolean matches(Set<String> roles) {
-			for (String role : roles)
-				if (p.matcher(role).matches())
-					return true;
-			return false;
-		}
-
-		@Override /* Overridden from Exp */
-		void appendTokens(Set<String> set) {
-			set.add(operand);
-		}
-
-		@Override /* Overridden from Object */
-		public String toString() {
-			return "[* " + p.pattern().replaceAll("\\\\[QE]", "") + "]";
-		}
 	}
 }

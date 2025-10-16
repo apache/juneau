@@ -127,19 +127,8 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentBeanListAssertion(List<E> value, R returns) {
-		this(null, value, returns);
+	private static BeanMap<?> beanMap(Object o) {
+		return BeanMap.of(o);
 	}
 
 	/**
@@ -168,15 +157,18 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
-	 * a new {@link FluentListAssertion} containing maps.
+	 * Constructor.
 	 *
-	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
-	 * @return This object.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
-	public FluentListAssertion<Map<String,Object>,R> asPropertyMaps(String...names) {
-		String[] n = Utils.splita(names, ',');
-		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).toList(), returns());
+	public FluentBeanListAssertion(List<E> value, R returns) {
+		this(null, value, returns);
 	}
 
 	/**
@@ -187,6 +179,18 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	 */
 	public FluentListAssertion<Object,R> asProperty(String name) {
 		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).get(name)).toList(), returns());
+	}
+
+	/**
+	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
+	 * a new {@link FluentListAssertion} containing maps.
+	 *
+	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
+	 * @return This object.
+	 */
+	public FluentListAssertion<Map<String,Object>,R> asPropertyMaps(String...names) {
+		String[] n = Utils.splita(names, ',');
+		return new FluentListAssertion<>(this, value().stream().map(x -> beanMap(x).getProperties(n)).toList(), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -224,8 +228,4 @@ public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private static BeanMap<?> beanMap(Object o) {
-		return BeanMap.of(o);
-	}
 }

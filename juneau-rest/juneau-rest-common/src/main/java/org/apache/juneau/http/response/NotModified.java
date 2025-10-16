@@ -64,15 +64,6 @@ public class NotModified extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public NotModified(NotModified copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -87,6 +78,15 @@ public class NotModified extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public NotModified(NotModified copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -95,13 +95,13 @@ public class NotModified extends BasicHttpResponse {
 		return new NotModified(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public NotModified setContent(String value) {
+	public NotModified setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NotModified setContent(HttpEntity value) {
+	public NotModified setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -119,14 +119,14 @@ public class NotModified extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NotModified setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public NotModified setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NotModified setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public NotModified setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

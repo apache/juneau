@@ -50,6 +50,15 @@ public class SeeOtherRoot extends SeeOther {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	public SeeOtherRoot(SeeOtherRoot copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Constructor with no redirect.
 	 * <p>
 	 * Used for end-to-end interfaces.
@@ -61,23 +70,19 @@ public class SeeOtherRoot extends SeeOther {
 		setContent(content);
 	}
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The object to copy.
-	 */
-	public SeeOtherRoot(SeeOtherRoot copyFrom) {
-		super(copyFrom);
+	@Override /* Overridden from SeeOther */
+	public SeeOtherRoot copy() {
+		return new SeeOtherRoot(this);
 	}
 
 	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setContent(String value) {
+	public SeeOtherRoot setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setContent(HttpEntity value) {
+	public SeeOtherRoot setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -95,14 +100,14 @@ public class SeeOtherRoot extends SeeOther {
 	}
 
 	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public SeeOtherRoot setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public SeeOtherRoot setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 
@@ -164,10 +169,5 @@ public class SeeOtherRoot extends SeeOther {
 	public SeeOtherRoot setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
-	}
-
-	@Override /* Overridden from SeeOther */
-	public SeeOtherRoot copy() {
-		return new SeeOtherRoot(this);
 	}
 }

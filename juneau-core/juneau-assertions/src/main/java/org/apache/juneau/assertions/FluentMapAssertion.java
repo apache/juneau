@@ -125,21 +125,6 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentMapAssertion(Map<K,V> value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -160,9 +145,37 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentMapAssertion(Map<K,V> value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns an integer assertion on the size of this map.
+	 *
+	 * <p>
+	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
+	 * (meaning {@link FluentIntegerAssertion#isExists()} returns <jk>false</jk>).
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentIntegerAssertion<R> asSize() {
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
+	}
 
 	@Override /* Overridden from FluentObjectAssertion */
 	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {  // NOSONAR - Intentional.
@@ -184,24 +197,12 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	/**
-	 * Returns a {@link FluentListAssertion} of the values of the specified keys.
-	 *
-	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#isExists()} returns <jk>false</jk>).
-	 *
-	 * @param keys The keys of the values to retrieve from the map.
-	 * @return A new assertion.
-	 */
-	public FluentListAssertion<Object,R> asValues(K...keys) {
-		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(this::get).collect(toList()), returns());
-	}
-
-	/**
 	 * Extracts a subset of this map.
 	 *
 	 * @param keys The entries to extract.
 	 * @return This object.
 	 */
+	@SuppressWarnings("unchecked")
 	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
@@ -213,45 +214,22 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	/**
-	 * Returns an integer assertion on the size of this map.
+	 * Returns a {@link FluentListAssertion} of the values of the specified keys.
 	 *
-	 * <p>
 	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
-	 * (meaning {@link FluentIntegerAssertion#isExists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentObjectAssertion#isExists()} returns <jk>false</jk>).
 	 *
+	 * @param keys The keys of the values to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> asSize() {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
+	@SuppressWarnings("unchecked")
+	public FluentListAssertion<Object,R> asValues(K...keys) {
+		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(this::get).collect(toList()), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Asserts that the map exists and is empty.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isEmpty() throws AssertionError {
-		if (! value().isEmpty())
-			throw error(MSG_mapWasNotEmpty);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the map exists and is not empty.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isNotEmpty() throws AssertionError {
-		if (value().isEmpty())
-			throw error(MSG_mapWasEmpty);
-		return returns();
-	}
 
 	/**
 	 * Asserts that the map contains the expected key.
@@ -267,6 +245,18 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	/**
+	 * Asserts that the map exists and is empty.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isEmpty() throws AssertionError {
+		if (! value().isEmpty())
+			throw error(MSG_mapWasNotEmpty);
+		return returns();
+	}
+
+	/**
 	 * Asserts that the map contains the expected key.
 	 *
 	 * @param name The key name to check for.
@@ -277,6 +267,18 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		if (! value().containsKey(name))
 			return returns();
 		throw error(MSG_mapContainedUnexpectedKey, name, value());
+	}
+
+	/**
+	 * Asserts that the map exists and is not empty.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		if (value().isEmpty())
+			throw error(MSG_mapWasEmpty);
+		return returns();
 	}
 
 	/**

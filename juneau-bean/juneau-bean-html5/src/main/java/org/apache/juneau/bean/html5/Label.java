@@ -73,6 +73,12 @@ public class Label extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Label _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-label-for">for</a> attribute.
 	 *
@@ -83,11 +89,52 @@ public class Label extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form control element in the same document.
 	 *
-	 * @param _for The ID of the form control to associate with this label.
+	 * @param value The ID of the form control to associate with this label.
 	 * @return This object.
 	 */
 	public Label _for(String value) {  // NOSONAR - Intentional naming.
 		attr("for", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Label accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Label attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Label attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Label child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Label children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Label contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Label dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -101,38 +148,11 @@ public class Label extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this label.
+	 * @param value The ID of the form element to associate with this label.
 	 * @return This object.
 	 */
 	public Label form(String value) {
 		attr("form", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Label _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Label accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Label contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Label dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -481,30 +501,6 @@ public class Label extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Label translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Label child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Label children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Label attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Label attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

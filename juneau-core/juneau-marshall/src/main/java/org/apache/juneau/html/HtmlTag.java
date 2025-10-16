@@ -69,17 +69,6 @@ enum HtmlTag {
 	xP(-18, "</p>"),
 	xHTML(-19, "</html>");
 
-	private Map<Integer,HtmlTag> cache = new HashMap<>();
-
-	int id;
-	String label;
-
-	HtmlTag(int id, String label) {
-		this.id = id;
-		this.label = label;
-		cache.put(id, this);
-	}
-
 	static HtmlTag forEvent(ParserSession session, XMLStreamReader r) throws ParseException {
 		int et = r.getEventType();
 		if (et == START_ELEMENT)
@@ -140,10 +129,16 @@ enum HtmlTag {
 			t = (end ? xHTML : HTML);
 		return t;
 	}
+	private Map<Integer,HtmlTag> cache = new HashMap<>();
 
-	@Override /* Overridden from Object */
-	public String toString() {
-		return label;
+	int id;
+
+	String label;
+
+	HtmlTag(int id, String label) {
+		this.id = id;
+		this.label = label;
+		cache.put(id, this);
 	}
 
 	public boolean isOneOf(HtmlTag...tags) {
@@ -151,5 +146,10 @@ enum HtmlTag {
 			if (tag == this)
 				return true;
 		return false;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return label;
 	}
 }

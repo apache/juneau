@@ -84,6 +84,9 @@ public class Category extends Common {
 	private URI scheme;
 	private String label;
 
+	/** Bean constructor. */
+	public Category() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -92,42 +95,17 @@ public class Category extends Common {
 	public Category(String term) {
 		setTerm(term);
 	}
-
-	/** Bean constructor. */
-	public Category() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Bean property getter:  <property>term</property>.
+	 * Bean property getter:  <property>label</property>.
 	 *
 	 * <p>
-	 * The category term.
+	 * The category label.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	@Xml(format=ATTR)
-	public String getTerm() {
-		return term;
-	}
-
-	/**
-	 * Bean property setter:  <property>term</property>.
-	 *
-	 * <p>
-	 * The category term.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	@Xml(format=ATTR)
-	public Category setTerm(String value) {
-		this.term = value;
-		return this;
+	public String getLabel() {
+		return label;
 	}
 
 	/**
@@ -143,6 +121,46 @@ public class Category extends Common {
 		return scheme;
 	}
 
+	/**
+	 * Bean property getter:  <property>term</property>.
+	 *
+	 * <p>
+	 * The category term.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=ATTR)
+	public String getTerm() {
+		return term;
+	}
+
+	@Override /* Overridden from Common */
+	public Category setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>scheme</property>.
+	 *
+	 * <p>
+	 * The category label.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Category setLabel(String value) {
+		this.label = value;
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Category setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
 	/**
 	 * Bean property setter:  <property>scheme</property>.
 	 *
@@ -164,47 +182,19 @@ public class Category extends Common {
 	}
 
 	/**
-	 * Bean property getter:  <property>label</property>.
+	 * Bean property setter:  <property>term</property>.
 	 *
 	 * <p>
-	 * The category label.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=ATTR)
-	public String getLabel() {
-		return label;
-	}
-
-	/**
-	 * Bean property setter:  <property>scheme</property>.
-	 *
-	 * <p>
-	 * The category label.
+	 * The category term.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Category setLabel(String value) {
-		this.label = value;
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Category setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Category setLang(String value) {
-		super.setLang(value);
+	@Xml(format=ATTR)
+	public Category setTerm(String value) {
+		this.term = value;
 		return this;
 	}
 }

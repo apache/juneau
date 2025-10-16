@@ -48,18 +48,13 @@ public class App {
 	}
 
 	/**
-	 * Our root REST bean.
-	 * <p>
-	 * Note that this must extend from {@link SpringRestServlet} so that child resources can be resolved as Spring
-	 * beans.
-	 * <p>
-	 * All REST objects are attached to this bean using the {@link Rest#children()} annotation.
+	 * Optionally return an injectable message provider for the {@link HelloWorldResource} class.
 	 *
-	 * @return The root resources REST bean.
+	 * @return The message provider for the hello-world REST bean.
 	 */
 	@Bean
-	public RootResources getRootResources() {
-		return new RootResources();
+	public HelloWorldMessageProvider getHelloWorldMessageProvider() {
+		return new HelloWorldMessageProvider("Hello Spring injection user!");
 	}
 
 	/**
@@ -73,13 +68,18 @@ public class App {
 	}
 
 	/**
-	 * Optionally return an injectable message provider for the {@link HelloWorldResource} class.
+	 * Our root REST bean.
+	 * <p>
+	 * Note that this must extend from {@link SpringRestServlet} so that child resources can be resolved as Spring
+	 * beans.
+	 * <p>
+	 * All REST objects are attached to this bean using the {@link Rest#children()} annotation.
 	 *
-	 * @return The message provider for the hello-world REST bean.
+	 * @return The root resources REST bean.
 	 */
 	@Bean
-	public HelloWorldMessageProvider getHelloWorldMessageProvider() {
-		return new HelloWorldMessageProvider("Hello Spring injection user!");
+	public RootResources getRootResources() {
+		return new RootResources();
 	}
 
 	/**

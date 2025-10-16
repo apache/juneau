@@ -69,10 +69,6 @@ public class PartBeanMeta<T> {
 
 	private static final ConcurrentHashMap<Class<?>,PartBeanMeta<?>> CACHE = new ConcurrentHashMap<>();
 
-	private final Class<T> type;
-	private final Constructor<T> constructor;
-	private final HttpPartSchema schema;
-
 	/**
 	 * Finds the part bean meta for the specified type.
 	 *
@@ -89,6 +85,10 @@ public class PartBeanMeta<T> {
 		}
 		return (PartBeanMeta<T>)m;
 	}
+	private final Class<T> type;
+	private final Constructor<T> constructor;
+
+	private final HttpPartSchema schema;
 
 	private PartBeanMeta(Class<T> type) {
 		this.type = type;
@@ -112,19 +112,6 @@ public class PartBeanMeta<T> {
 			this.schema = HttpPartSchema.create(Path.class, type);
 		else
 			this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
-	}
-
-	/**
-	 * Returns schema information about this part.
-	 *
-	 * <p>
-	 * This is information pulled from {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path} annotations
-	 * on the class.
-	 *
-	 * @return The schema information.
-	 */
-	public HttpPartSchema getSchema() {
-		return schema;
 	}
 
 	/**
@@ -177,5 +164,18 @@ public class PartBeanMeta<T> {
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}
+	}
+
+	/**
+	 * Returns schema information about this part.
+	 *
+	 * <p>
+	 * This is information pulled from {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path} annotations
+	 * on the class.
+	 *
+	 * @return The schema information.
+	 */
+	public HttpPartSchema getSchema() {
+		return schema;
 	}
 }

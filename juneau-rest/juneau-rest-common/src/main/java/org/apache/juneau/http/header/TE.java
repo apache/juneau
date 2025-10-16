@@ -97,11 +97,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("TE")
 public class TE extends BasicStringRangesHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "TE";
 
@@ -146,11 +141,6 @@ public class TE extends BasicStringRangesHeader {
 	public static TE of(Supplier<StringRanges> value) {
 		return value == null ? null : new TE(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -72,7 +72,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#ol() ol()}
- * 		<li class='jm'>{@link HtmlBuilder#ol(Object, Object...) ol(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#ol(Object...) ol(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -98,74 +98,6 @@ public class Ol extends HtmlElementContainer {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed">reversed</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Number the list backwards..
-	 *
-	 * <p>
-	 * This attribute uses deminimized values:
-	 * <ul>
-	 * 	<li><jk>false</jk> - Attribute is not added</li>
-	 * 	<li><jk>true</jk> - Attribute is added as <js>"reversed"</js></li>
-	 * 	<li>Other values - Passed through as-is</li>
-	 * </ul>
-	 *
-	 * @param reversed
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Ol reversed(Object value) {
-		attr("reversed", deminimize(value, "reversed"));
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start">start</a> attribute.
-	 *
-	 * <p>
-	 * Ordinal value of the first item.
-	 *
-	 * @param start
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Ol start(Object value) {
-		attr("start", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the type of numbering to use for the ordered list items.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"1"</js> - Decimal numbers (1, 2, 3, ...) - default</li>
-	 * 	<li><js>"a"</js> - Lowercase letters (a, b, c, ...)</li>
-	 * 	<li><js>"A"</js> - Uppercase letters (A, B, C, ...)</li>
-	 * 	<li><js>"i"</js> - Lowercase Roman numerals (i, ii, iii, ...)</li>
-	 * 	<li><js>"I"</js> - Uppercase Roman numerals (I, II, III, ...)</li>
-	 * </ul>
-	 *
-	 * @param type The type of numbering for the ordered list.
-	 * @return This object.
-	 */
-	public Ol type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Ol _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -175,6 +107,29 @@ public class Ol extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Ol accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Ol attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Ol attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Ol child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Ol children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -508,9 +463,56 @@ public class Ol extends HtmlElementContainer {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-reversed">reversed</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Number the list backwards..
+	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"reversed"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Ol reversed(Object value) {
+		attr("reversed", deminimize(value, "reversed"));
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Ol setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Ol spellcheck(Object value) {
 		super.spellcheck(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-start">start</a> attribute.
+	 *
+	 * <p>
+	 * Ordinal value of the first item.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Ol start(Object value) {
+		attr("start", value);
 		return this;
 	}
 
@@ -538,33 +540,27 @@ public class Ol extends HtmlElementContainer {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementContainer */
-	public Ol child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Ol children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Ol setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ol attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ol attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-ol-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the type of numbering to use for the ordered list items.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"1"</js> - Decimal numbers (1, 2, 3, ...) - default</li>
+	 * 	<li><js>"a"</js> - Lowercase letters (a, b, c, ...)</li>
+	 * 	<li><js>"A"</js> - Uppercase letters (A, B, C, ...)</li>
+	 * 	<li><js>"i"</js> - Lowercase Roman numerals (i, ii, iii, ...)</li>
+	 * 	<li><js>"I"</js> - Uppercase Roman numerals (I, II, III, ...)</li>
+	 * </ul>
+	 *
+	 * @param value The type of numbering for the ordered list.
+	 * @return This object.
+	 */
+	public Ol type(String value) {
+		attr("type", value);
 		return this;
 	}
 }

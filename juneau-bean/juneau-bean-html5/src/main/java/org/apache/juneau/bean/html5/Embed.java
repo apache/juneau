@@ -88,89 +88,6 @@ public class Embed extends HtmlElementVoid {
 		src(src);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Vertical dimension.
-	 *
-	 * @param height
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Embed height(Object value) {
-		attr("height", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Embed src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the MIME type of the embedded resource. Helps browsers determine how to handle the resource.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"application/pdf"</js> - PDF document</li>
-	 * 	<li><js>"application/x-shockwave-flash"</js> - Flash content</li>
-	 * 	<li><js>"image/svg+xml"</js> - SVG image</li>
-	 * 	<li><js>"video/mp4"</js> - MP4 video</li>
-	 * 	<li><js>"audio/mp3"</js> - MP3 audio</li>
-	 * </ul>
-	 *
-	 * @param type The MIME type of the embedded resource.
-	 * @return This object.
-	 */
-	public Embed type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Embed width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Embed _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -184,6 +101,17 @@ public class Embed extends HtmlElementVoid {
 	}
 
 	@Override /* Overridden from HtmlElement */
+	public Embed attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Embed attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
 	public Embed contenteditable(Object value) {
 		super.contenteditable(value);
 		return this;
@@ -192,6 +120,23 @@ public class Embed extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Embed dir(String value) {
 		super.dir(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Vertical dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Embed height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -519,6 +464,29 @@ public class Embed extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Embed src(Object value) {
+		attrUri("src", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Embed style(String value) {
 		super.style(value);
@@ -543,15 +511,43 @@ public class Embed extends HtmlElementVoid {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Embed attr(String key, Object val) {
-		super.attr(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-embed-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the MIME type of the embedded resource. Helps browsers determine how to handle the resource.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"application/pdf"</js> - PDF document</li>
+	 * 	<li><js>"application/x-shockwave-flash"</js> - Flash content</li>
+	 * 	<li><js>"image/svg+xml"</js> - SVG image</li>
+	 * 	<li><js>"video/mp4"</js> - MP4 video</li>
+	 * 	<li><js>"audio/mp3"</js> - MP3 audio</li>
+	 * </ul>
+	 *
+	 * @param value The MIME type of the embedded resource.
+	 * @return This object.
+	 */
+	public Embed type(String value) {
+		attr("type", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Embed attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Embed width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

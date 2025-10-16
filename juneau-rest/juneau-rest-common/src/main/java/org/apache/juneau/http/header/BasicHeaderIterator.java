@@ -55,27 +55,14 @@ public class BasicHeaderIterator implements HeaderIterator {
 		this.currentIndex = findNext(-1);
 	}
 
-	private int findNext(int pos) {
-
-		int from = pos;
-
-		int to = entries.length - 1;
-		boolean found = false;
-		while (!found && (from < to)) {
-			from++;
-			found = filter(from);
-		}
-
-		return found ? from : -1;
-	}
-
-	private boolean filter(int index) {
-		return (name == null) || eq(name, entries[index].getName());
-	}
-
 	@Override /* Overridden from HeaderIterator */
 	public boolean hasNext() {
 		return (currentIndex >= 0);
+	}
+
+	@Override /* Overridden from HeaderIterator */
+	public final Object next() throws NoSuchElementException {
+		return nextHeader();
 	}
 
 	@Override /* Overridden from HeaderIterator */
@@ -91,11 +78,6 @@ public class BasicHeaderIterator implements HeaderIterator {
 		return entries[current];
 	}
 
-	@Override /* Overridden from HeaderIterator */
-	public final Object next() throws NoSuchElementException {
-		return nextHeader();
-	}
-
 	/**
 	 * Not supported.
 	 */
@@ -106,5 +88,23 @@ public class BasicHeaderIterator implements HeaderIterator {
 
 	private boolean eq(String s1, String s2) {
 		return Utils.eq(!caseSensitive, s1, s2);
+	}
+
+	private boolean filter(int index) {
+		return (name == null) || eq(name, entries[index].getName());
+	}
+
+	private int findNext(int pos) {
+
+		int from = pos;
+
+		int to = entries.length - 1;
+		boolean found = false;
+		while (!found && (from < to)) {
+			from++;
+			found = filter(from);
+		}
+
+		return found ? from : -1;
 	}
 }

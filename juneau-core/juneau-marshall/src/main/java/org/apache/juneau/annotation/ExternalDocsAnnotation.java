@@ -32,55 +32,6 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 public class ExternalDocsAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final ExternalDocs DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(ExternalDocs a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Merges the contents of the specified annotation into the specified generic map.
-	 *
-	 * @param m The map to copy the contents to.
-	 * @param a The annotation to apply.
-	 * @return The same map with the annotation contents applied.
-	 * @throws ParseException Invalid JSON found in value.
-	 */
-	public static JsonMap merge(JsonMap m, ExternalDocs a) throws ParseException {
-		if (ExternalDocsAnnotation.empty(a))
-			return m;
-		Predicate<String> ne = Utils::isNotEmpty;
-		return m
-			.appendIf(ne, "description", joinnl(a.description()))
-			.appendIf(ne, "url", a.url())
-		;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -121,10 +72,6 @@ public class ExternalDocsAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements ExternalDocs {
 
 		private final String url;
@@ -139,5 +86,43 @@ public class ExternalDocsAnnotation {
 		public String url() {
 			return url;
 		}
+	}
+
+	/** Default value */
+	public static final ExternalDocs DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(ExternalDocs a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	/**
+	 * Merges the contents of the specified annotation into the specified generic map.
+	 *
+	 * @param m The map to copy the contents to.
+	 * @param a The annotation to apply.
+	 * @return The same map with the annotation contents applied.
+	 * @throws ParseException Invalid JSON found in value.
+	 */
+	public static JsonMap merge(JsonMap m, ExternalDocs a) throws ParseException {
+		if (ExternalDocsAnnotation.empty(a))
+			return m;
+		Predicate<String> ne = Utils::isNotEmpty;
+		return m
+			.appendIf(ne, "description", joinnl(a.description()))
+			.appendIf(ne, "url", a.url())
+		;
 	}
 }

@@ -31,13 +31,9 @@ import org.apache.juneau.microservice.console.*;
 public class EchoCommand extends ConsoleCommand {
 
 	@Override /* ConsoleCommand */
-	public String getName() {
-		return "echo";
-	}
-
-	@Override /* ConsoleCommand */
-	public String getInfo() {
-		return "Echo command";
+	public boolean execute(Scanner in, PrintWriter out, Args args) {
+		out.println(args);
+		return false;
 	}
 
 	@Override /* ConsoleCommand */
@@ -46,8 +42,12 @@ public class EchoCommand extends ConsoleCommand {
 	}
 
 	@Override /* ConsoleCommand */
-	public boolean execute(Scanner in, PrintWriter out, Args args) {
-		out.println(args);
-		return false;
+	public String getInfo() {
+		return "Echo command";
+	}
+
+	@Override /* ConsoleCommand */
+	public String getName() {
+		return "echo";
 	}
 }

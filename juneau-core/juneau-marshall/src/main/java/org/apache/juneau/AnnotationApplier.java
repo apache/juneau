@@ -88,8 +88,26 @@ import org.apache.juneau.svl.*;
  */
 public abstract class AnnotationApplier<A extends Annotation, B> {
 
+	/**
+	 * Represents a no-op configuration apply.
+	 */
+	public static class NoOp extends AnnotationApplier<Annotation,Object> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param r The string resolver to use for resolving strings.
+		 */
+		public NoOp(VarResolverSession r) {
+			super(Annotation.class, Object.class, r);
+		}
+
+		@Override /* Overridden from ConfigApply */
+		public void apply(AnnotationInfo<Annotation> ai, Object b) { /* no-op */ }
+	}
 	private final VarResolverSession vr;
 	private final Class<A> ca;
+
 	private final Class<B> cb;
 
 	/**
@@ -114,6 +132,16 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	public abstract void apply(AnnotationInfo<A> annotationInfo, B builder);
 
 	/**
+	 * Resolves the specified string and converts it to a boolean.
+	 *
+	 * @param in The string containing variables to resolve.
+	 * @return The resolved boolean.
+	 */
+	public Optional<Boolean> bool(String in) {
+		return string(in).map(Boolean::parseBoolean);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this apply can be appied to the specified builder.
 	 *
 	 * @param builder The builder to check.
@@ -132,58 +160,10 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 		return cb;
 	}
 
-	/**
-	 * Returns the var resolver session for this apply.
-	 *
-	 * @return The var resolver session for this apply.
-	 */
-	protected VarResolverSession vr() {
-		return vr;
-	}
-
-	/**
-	 * Resolves the specified string.
-	 *
-	 * @param in The string containing variables to resolve.
-	 * @return An optional containing the specified string if it exists, or {@link Optional#empty()} if it does not.
-	 */
-	protected Optional<String> string(String in) {
-		in = vr.resolve(in);
-		return Utils.opt(Utils.isEmpty(in) ? null : in);
-	}
-
-	/**
-	 * Returns the specified value if it's simple name is not <js>"void"</js>.
-	 *
-	 * @param <T> The value to return.
-	 * @param in The value to return.
-	 * @return An optional containing the specified value.
-	 */
-	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return Utils.opt(in).filter(NOT_VOID);
-	}
-
-	/**
-	 * Returns the specified string array as an {@link Optional}.
-	 *
-	 * <p>
-	 * If the array is empty, then returns {@link Optional#empty()}.
-	 *
-	 * @param in The string array.
-	 * @return The array wrapped in an {@link Optional}.
-	 */
-	protected Optional<String[]> strings(String[] in) {
-		return Utils.opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty).toArray(String[]::new));
-	}
-
-	/**
-	 * Resolves the specified string as a comma-delimited list of strings.
-	 *
-	 * @param in The CDL string containing variables to resolve.
-	 * @return An array with resolved strings.
-	 */
-	protected Stream<String> stream(String[] in) {
-		return Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty);
+	private Character toCharacter(String in, String loc) {
+		if (in.length() != 1)
+			throw new ConfigException("Invalid syntax for character on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
+		return in.charAt(0);
 	}
 
 	/**
@@ -197,13 +177,37 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	}
 
 	/**
-	 * Resolves the specified string and converts it to a boolean.
+	 * Resolves the specified string and converts it to a Character.
 	 *
 	 * @param in The string containing variables to resolve.
-	 * @return The resolved boolean.
+	 * @param loc The annotation field name.
+	 * @return The resolved Character.
 	 */
-	public Optional<Boolean> bool(String in) {
-		return string(in).map(Boolean::parseBoolean);
+	protected Optional<Character> character(String in, String loc) {
+		return string(in).map(x -> toCharacter(x, loc));
+	}
+
+	/**
+	 * Resolves the specified string and converts it to a Charset.
+	 *
+	 * @param in The string containing variables to resolve.
+	 * @return The resolved Charset.
+	 */
+	protected Optional<Charset> charset(String in) {
+		return string(in).map(x -> "default".equalsIgnoreCase(x) ? Charset.defaultCharset() : Charset.forName(x));
+	}
+
+	/**
+	 * Returns the specified class array as an {@link Optional}.
+	 *
+	 * <p>
+	 * If the array is empty, then returns {@link Optional#empty()}.
+	 *
+	 * @param in The class array.
+	 * @return The array wrapped in an {@link Optional}.
+	 */
+	protected Optional<Class<?>[]> classes(Class<?>[] in) {
+		return Utils.opt(in.length == 0 ? null : in);
 	}
 
 	/**
@@ -222,60 +226,56 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	}
 
 	/**
-	 * Resolves the specified string and converts it to a Charset.
+	 * Resolves the specified string as a comma-delimited list of strings.
 	 *
-	 * @param in The string containing variables to resolve.
-	 * @return The resolved Charset.
+	 * @param in The CDL string containing variables to resolve.
+	 * @return An array with resolved strings.
 	 */
-	protected Optional<Charset> charset(String in) {
-		return string(in).map(x -> "default".equalsIgnoreCase(x) ? Charset.defaultCharset() : Charset.forName(x));
+	protected Stream<String> stream(String[] in) {
+		return Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty);
 	}
 
 	/**
-	 * Resolves the specified string and converts it to a Character.
+	 * Resolves the specified string.
 	 *
 	 * @param in The string containing variables to resolve.
-	 * @param loc The annotation field name.
-	 * @return The resolved Character.
+	 * @return An optional containing the specified string if it exists, or {@link Optional#empty()} if it does not.
 	 */
-	protected Optional<Character> character(String in, String loc) {
-		return string(in).map(x -> toCharacter(x, loc));
-	}
-
-	private Character toCharacter(String in, String loc) {
-		if (in.length() != 1)
-			throw new ConfigException("Invalid syntax for character on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
-		return in.charAt(0);
+	protected Optional<String> string(String in) {
+		in = vr.resolve(in);
+		return Utils.opt(Utils.isEmpty(in) ? null : in);
 	}
 
 	/**
-	 * Returns the specified class array as an {@link Optional}.
+	 * Returns the specified string array as an {@link Optional}.
 	 *
 	 * <p>
 	 * If the array is empty, then returns {@link Optional#empty()}.
 	 *
-	 * @param in The class array.
+	 * @param in The string array.
 	 * @return The array wrapped in an {@link Optional}.
 	 */
-	protected Optional<Class<?>[]> classes(Class<?>[] in) {
-		return Utils.opt(in.length == 0 ? null : in);
+	protected Optional<String[]> strings(String[] in) {
+		return Utils.opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::isNotEmpty).toArray(String[]::new));
 	}
 
 	/**
-	 * Represents a no-op configuration apply.
+	 * Returns the specified value if it's simple name is not <js>"void"</js>.
+	 *
+	 * @param <T> The value to return.
+	 * @param in The value to return.
+	 * @return An optional containing the specified value.
 	 */
-	public static class NoOp extends AnnotationApplier<Annotation,Object> {
+	protected <T> Optional<Class<T>> type(Class<T> in) {
+		return Utils.opt(in).filter(NOT_VOID);
+	}
 
-		/**
-		 * Constructor.
-		 *
-		 * @param r The string resolver to use for resolving strings.
-		 */
-		public NoOp(VarResolverSession r) {
-			super(Annotation.class, Object.class, r);
-		}
-
-		@Override /* Overridden from ConfigApply */
-		public void apply(AnnotationInfo<Annotation> ai, Object b) { /* no-op */ }
+	/**
+	 * Returns the var resolver session for this apply.
+	 *
+	 * @return The var resolver session for this apply.
+	 */
+	protected VarResolverSession vr() {
+		return vr;
 	}
 }

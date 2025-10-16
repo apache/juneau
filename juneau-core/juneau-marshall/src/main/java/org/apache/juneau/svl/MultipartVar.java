@@ -41,6 +41,12 @@ public abstract class MultipartVar extends SimpleVar {
 		super(name);
 	}
 
+	@Override /* Overridden from Var */
+	public String resolve(VarResolverSession session, String s) {
+		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : splita(s);
+		return resolve(session, s2);
+	}
+
 	/**
 	 * The interface that needs to be implemented for this interface.
 	 *
@@ -49,10 +55,4 @@ public abstract class MultipartVar extends SimpleVar {
 	 * @return The resolved variable.
 	 */
 	public abstract String resolve(VarResolverSession session, String[] args);
-
-	@Override /* Overridden from Var */
-	public String resolve(VarResolverSession session, String s) {
-		String[] s2 = s.indexOf(',') == -1 ? new String[]{s.trim()} : splita(s);
-		return resolve(session, s2);
-	}
 }

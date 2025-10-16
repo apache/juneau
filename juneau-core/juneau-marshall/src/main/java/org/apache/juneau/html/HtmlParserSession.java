@@ -52,27 +52,6 @@ import org.apache.juneau.xml.*;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class HtmlParserSession extends XmlParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static final Set<String> whitespaceElements = set("br","bs","sp","ff");
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(HtmlParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -90,14 +69,14 @@ public class HtmlParserSession extends XmlParserSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public HtmlParserSession build() {
-			return new HtmlParserSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public HtmlParserSession build() {
+			return new HtmlParserSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -107,20 +86,14 @@ public class HtmlParserSession extends XmlParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -149,26 +122,20 @@ public class HtmlParserSession extends XmlParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -185,21 +152,60 @@ public class HtmlParserSession extends XmlParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	private static final Set<String> whitespaceElements = set("br","bs","sp","ff");
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(HtmlParser ctx) {
+		return new Builder(ctx);
+	}
+	private static String getAttribute(XmlReader r, String name, String def) {
+		for (int i = 0; i < r.getAttributeCount(); i++)
+			if (r.getAttributeLocalName(i).equals(name))
+				return r.getAttributeValue(i);
+		return def;
+	}
+
+	private static Map<String,String> getAttributes(XmlReader r) {
+		Map<String,String> m = new TreeMap<>() ;
+		for (int i = 0; i < r.getAttributeCount(); i++)
+			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
+		return m;
+	}
+
+	private static int skipWs(XmlReader r)  throws XMLStreamException {
+		int event = r.getEventType();
+		while (event != START_ELEMENT && event != END_ELEMENT && event != END_DOCUMENT && r.isWhiteSpace())
+			event = r.next();
+		return event;
+	}
 
 	private final HtmlParser ctx;
 
@@ -213,26 +219,48 @@ public class HtmlParserSession extends XmlParserSession {
 		ctx = builder.ctx;
 	}
 
-	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try {
-			return parseAnything(type, getXmlReader(pipe), getOuter(), true, null);
-		} catch (XMLStreamException e) {
-			throw new ParseException(e);
+	/*
+	 * Reads the next tag.  Advances past anything that's not a start or end tag.  Throws an exception if
+	 * 	it's not one of the expected tags.
+	 * Precondition:  Must be pointing before the event we want to parse.
+	 * Postcondition:  Pointing at the tag just parsed.
+	 */
+	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws ParseException, XMLStreamException {
+		int et = r.next();
+
+		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
+			et = r.next();
+
+		if (et == END_DOCUMENT)
+			throw new ParseException(this, "Unexpected end of document.");
+
+		HtmlTag tag = HtmlTag.forEvent(this, r);
+		if (expected.length == 0)
+			return tag;
+		for (HtmlTag t : expected)
+			if (t == tag)
+				return tag;
+
+		throw new ParseException(this, "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
+	}
+
+	/*
+	 * Reads an anchor tag and converts it into a bean.
+	 */
+	private <T> T parseAnchor(XmlReader r, ClassMeta<T> beanType)
+			throws IOException, ParseException, XMLStreamException {
+		String href = r.getAttributeValue(null, "href");
+		String name = getElementText(r);
+		if (beanType != null && beanType.hasAnnotation(HtmlLink.class)) {
+			Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
+			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+			BeanMap<T> m = newBeanMap(beanType.getInnerClass());
+			m.put(uriProperty.orElse(""), href);
+			m.put(nameProperty.orElse(""), name);
+			return m.getBean();
 		}
-	}
-
-	@Override /* Overridden from ReaderParserSession */
-	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType)
-			throws Exception {
-		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType),
-			(ClassMeta<V>)getClassMeta(valueType), null);
-	}
-
-	@Override /* Overridden from ReaderParserSession */
-	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType)
-			throws Exception {
-		return parseIntoCollection(getXmlReader(pipe), c, getClassMeta(elementType), null);
+		return convertToType(href, beanType);
 	}
 
 	/*
@@ -439,56 +467,64 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	/*
-	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
+	 * Reads contents of <table> element.
+	 * Precondition:  Must be pointing at event following <table> event.
+	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private HtmlTag skipToData(XmlReader r) throws ParseException, XMLStreamException {
+	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		while (true) {
-			int event = r.next();
-			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
+			HtmlTag tag = nextTag(r, TR, xTABLE);
+			if (tag == xTABLE)
+				break;
+			tag = nextTag(r, TD, TH);
+			// Skip over the column headers.
+			if (tag == TH) {
+				skipTag(r);
 				r.nextTag();
-				event = r.getEventType();
-				boolean isEmpty = (event == END_ELEMENT);
-				// Skip until we find a start element, end document, or non-empty text.
-				if (! isEmpty)
-					event = skipWs(r);
-				if (event == END_DOCUMENT)
-					throw new ParseException(this, "Unexpected end of stream looking for data.");
-				return (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
+				skipTag(r);
+			} else {
+				String key = getElementText(r);
+				nextTag(r, TD);
+				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
+				if (pMeta == null) {
+					onUnknownProperty(key, m, parseAnything(object(), r, null, false, null));
+				} else {
+					ClassMeta<?> cm = pMeta.getClassMeta();
+					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
+					setName(cm, value, key);
+					try {
+						pMeta.set(m, key, value);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(pMeta, e);
+						throw e;
+					}
+				}
 			}
+			HtmlTag t = nextTag(r, xTD, xTR);
+			if (t == xTD)
+				nextTag(r, xTR);
 		}
-	}
-
-	private static String getAttribute(XmlReader r, String name, String def) {
-		for (int i = 0; i < r.getAttributeCount(); i++)
-			if (r.getAttributeLocalName(i).equals(name))
-				return r.getAttributeValue(i);
-		return def;
+		return m;
 	}
 
 	/*
-	 * Reads an anchor tag and converts it into a bean.
+	 * Reads contents of <ul> element.
+	 * Precondition:  Must be pointing at event following <ul> event.
+	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
 	 */
-	private <T> T parseAnchor(XmlReader r, ClassMeta<T> beanType)
-			throws IOException, ParseException, XMLStreamException {
-		String href = r.getAttributeValue(null, "href");
-		String name = getElementText(r);
-		if (beanType != null && beanType.hasAnnotation(HtmlLink.class)) {
-			Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
-			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-			beanType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
-			BeanMap<T> m = newBeanMap(beanType.getInnerClass());
-			m.put(uriProperty.orElse(""), href);
-			m.put(nameProperty.orElse(""), name);
-			return m.getBean();
+	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l,
+			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
+		int argIndex = 0;
+		while (true) {
+			HtmlTag tag = nextTag(r, LI, xUL, xLI);
+			if (tag == xLI)
+				tag = nextTag(r, LI, xUL, xLI);
+			if (tag == xUL)
+				break;
+			ClassMeta<?> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
+			l.add((E)parseAnything(elementType, r, l, false, pMeta));
 		}
-		return convertToType(href, beanType);
-	}
-
-	private static Map<String,String> getAttributes(XmlReader r) {
-		Map<String,String> m = new TreeMap<>() ;
-		for (int i = 0; i < r.getAttributeCount(); i++)
-			m.put(r.getAttributeLocalName(i), r.getAttributeValue(i));
-		return m;
+		return l;
 	}
 
 	/*
@@ -521,26 +557,6 @@ public class HtmlParserSession extends XmlParserSession {
 		}
 
 		return m;
-	}
-
-	/*
-	 * Reads contents of <ul> element.
-	 * Precondition:  Must be pointing at event following <ul> event.
-	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
-	 */
-	private <E> Collection<E> parseIntoCollection(XmlReader r, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException, XMLStreamException {
-		int argIndex = 0;
-		while (true) {
-			HtmlTag tag = nextTag(r, LI, xUL, xLI);
-			if (tag == xLI)
-				tag = nextTag(r, LI, xUL, xLI);
-			if (tag == xUL)
-				break;
-			ClassMeta<?> elementType = type.isArgs() ? type.getArg(argIndex++) : type.getElementType();
-			l.add((E)parseAnything(elementType, r, l, false, pMeta));
-		}
-		return l;
 	}
 
 	/*
@@ -648,72 +664,6 @@ public class HtmlParserSession extends XmlParserSession {
 	}
 
 	/*
-	 * Reads contents of <table> element.
-	 * Precondition:  Must be pointing at event following <table> event.
-	 * Postcondition:  Pointing at next START_ELEMENT or END_DOCUMENT event.
-	 */
-	private <T> BeanMap<T> parseIntoBean(XmlReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException, XMLStreamException {
-		while (true) {
-			HtmlTag tag = nextTag(r, TR, xTABLE);
-			if (tag == xTABLE)
-				break;
-			tag = nextTag(r, TD, TH);
-			// Skip over the column headers.
-			if (tag == TH) {
-				skipTag(r);
-				r.nextTag();
-				skipTag(r);
-			} else {
-				String key = getElementText(r);
-				nextTag(r, TD);
-				BeanPropertyMeta pMeta = m.getPropertyMeta(key);
-				if (pMeta == null) {
-					onUnknownProperty(key, m, parseAnything(object(), r, null, false, null));
-				} else {
-					ClassMeta<?> cm = pMeta.getClassMeta();
-					Object value = parseAnything(cm, r, m.getBean(false), false, pMeta);
-					setName(cm, value, key);
-					try {
-						pMeta.set(m, key, value);
-					} catch (BeanRuntimeException e) {
-						onBeanSetterException(pMeta, e);
-						throw e;
-					}
-				}
-			}
-			HtmlTag t = nextTag(r, xTD, xTR);
-			if (t == xTD)
-				nextTag(r, xTR);
-		}
-		return m;
-	}
-
-	/*
-	 * Reads the next tag.  Advances past anything that's not a start or end tag.  Throws an exception if
-	 * 	it's not one of the expected tags.
-	 * Precondition:  Must be pointing before the event we want to parse.
-	 * Postcondition:  Pointing at the tag just parsed.
-	 */
-	private HtmlTag nextTag(XmlReader r, HtmlTag...expected) throws ParseException, XMLStreamException {
-		int et = r.next();
-
-		while (et != START_ELEMENT && et != END_ELEMENT && et != END_DOCUMENT)
-			et = r.next();
-
-		if (et == END_DOCUMENT)
-			throw new ParseException(this, "Unexpected end of document.");
-
-		HtmlTag tag = HtmlTag.forEvent(this, r);
-		if (expected.length == 0)
-			return tag;
-		for (HtmlTag t : expected)
-			if (t == tag)
-				return tag;
-
-		throw new ParseException(this, "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
-	}
-
-	/*
 	 * Skips over the current element and advances to the next element.
 	 * <p>
 	 * Precondition:  Pointing to opening tag.
@@ -760,13 +710,91 @@ public class HtmlParserSession extends XmlParserSession {
 				tag, expected);
 	}
 
-	private static int skipWs(XmlReader r)  throws XMLStreamException {
-		int event = r.getEventType();
-		while (event != START_ELEMENT && event != END_ELEMENT && event != END_DOCUMENT && r.isWhiteSpace())
-			event = r.next();
-		return event;
+	/*
+	 * For parsing output from HtmlDocSerializer, this skips over the head, title, and links.
+	 */
+	private HtmlTag skipToData(XmlReader r) throws ParseException, XMLStreamException {
+		while (true) {
+			int event = r.next();
+			if (event == START_ELEMENT && "div".equals(r.getLocalName()) && "data".equals(r.getAttributeValue(null, "id"))) {
+				r.nextTag();
+				event = r.getEventType();
+				boolean isEmpty = (event == END_ELEMENT);
+				// Skip until we find a start element, end document, or non-empty text.
+				if (! isEmpty)
+					event = skipWs(r);
+				if (event == END_DOCUMENT)
+					throw new ParseException(this, "Unexpected end of stream looking for data.");
+				return (event == CHARACTERS ? null : HtmlTag.forString(r.getName().getLocalPart(), false));
+			}
+		}
 	}
 
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try {
+			return parseAnything(type, getXmlReader(pipe), getOuter(), true, null);
+		} catch (XMLStreamException e) {
+			throw new ParseException(e);
+		}
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType)
+			throws Exception {
+		return parseIntoCollection(getXmlReader(pipe), c, getClassMeta(elementType), null);
+	}
+
+	@Override /* Overridden from ReaderParserSession */
+	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType)
+			throws Exception {
+		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType),
+			(ClassMeta<V>)getClassMeta(valueType), null);
+	}
+
+	/**
+	 * Identical to {@link #parseText(XmlReader)} except assumes the current event is the opening tag.
+	 *
+	 * <p>
+	 * Precondition:  Pointing to opening tag.
+	 * Postcondition:  Pointing to closing tag.
+	 *
+	 * @param r The stream being read from.
+	 * @return The parsed string.
+	 * @throws XMLStreamException Thrown by underlying XML stream.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	@Override /* Overridden from XmlParserSession */
+	protected String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
+		r.next();
+		return parseText(r);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getHtmlBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
+		return ctx.getHtmlClassMeta(cm);
+	}
+
+	@Override /* Overridden from XmlParserSession */
+	protected boolean isWhitespaceElement(XmlReader r) {
+		String s = r.getLocalName();
+		return whitespaceElements.contains(s);
+	}
 	/**
 	 * Parses CHARACTERS data.
 	 *
@@ -858,30 +886,6 @@ public class HtmlParserSession extends XmlParserSession {
 		return s;
 	}
 
-	/**
-	 * Identical to {@link #parseText(XmlReader)} except assumes the current event is the opening tag.
-	 *
-	 * <p>
-	 * Precondition:  Pointing to opening tag.
-	 * Postcondition:  Pointing to closing tag.
-	 *
-	 * @param r The stream being read from.
-	 * @return The parsed string.
-	 * @throws XMLStreamException Thrown by underlying XML stream.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	@Override /* Overridden from XmlParserSession */
-	protected String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
-		r.next();
-		return parseText(r);
-	}
-
-	@Override /* Overridden from XmlParserSession */
-	protected boolean isWhitespaceElement(XmlReader r) {
-		String s = r.getLocalName();
-		return whitespaceElements.contains(s);
-	}
-
 	@Override /* Overridden from XmlParserSession */
 	protected String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
@@ -905,29 +909,5 @@ public class HtmlParserSession extends XmlParserSession {
 		} else {
 			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
 		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
-		return ctx.getHtmlClassMeta(cm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		return ctx.getHtmlBeanPropertyMeta(bpm);
 	}
 }

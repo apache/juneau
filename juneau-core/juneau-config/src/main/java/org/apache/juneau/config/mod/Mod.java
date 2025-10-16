@@ -22,18 +22,8 @@ import java.util.function.*;
  * Specifies an entry modifier that is used to encode during write and decode during read of config entries.
  */
 public class Mod {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** A no-op modifier. */
 	public static final Mod NO_OP = new Mod(' ', x -> x, x -> x, x -> true);
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final char id;
 	private final Function<String,String> removeFunction, applyFunction;
 	private final Function<String,Boolean> detectFunction;
@@ -60,25 +50,6 @@ public class Mod {
 	}
 
 	/**
-	 * Returns the modifier identifier character.
-	 *
-	 * @return The modifier identifier character.
-	 */
-	public char getId() {
-		return id;
-	}
-
-	/**
-	 * Detects whether this modification has been applied.
-	 *
-	 * @param value The entry value being tested.  Will never be <jk>null</jk>.
-	 * @return <jk>true</jk> if the modification has been made to the entry.
-	 */
-	public boolean isApplied(String value) {
-		return detectFunction.apply(value);
-	}
-
-	/**
 	 * Applies this modification to the specified entry value.
 	 *
 	 * <p>
@@ -89,19 +60,6 @@ public class Mod {
 	 */
 	public String apply(String value) {
 		return applyFunction.apply(value);
-	}
-
-	/**
-	 * Removes this modification to the specified entry value.
-	 *
-	 * <p>
-	 * Will only be called if {@link #isApplied(String)} returns <jk>true</jk>.
-	 *
-	 * @param value The entry value being read.  Will never be <jk>null</jk>.
-	 * @return The unmodified value.
-	 */
-	public String remove(String value) {
-		return removeFunction.apply(value);
 	}
 
 	/**
@@ -122,5 +80,37 @@ public class Mod {
 	 */
 	public final String doRemove(String value) {
 		return isApplied(value) ? remove(value) : value;
+	}
+
+	/**
+	 * Returns the modifier identifier character.
+	 *
+	 * @return The modifier identifier character.
+	 */
+	public char getId() {
+		return id;
+	}
+
+	/**
+	 * Detects whether this modification has been applied.
+	 *
+	 * @param value The entry value being tested.  Will never be <jk>null</jk>.
+	 * @return <jk>true</jk> if the modification has been made to the entry.
+	 */
+	public boolean isApplied(String value) {
+		return detectFunction.apply(value);
+	}
+
+	/**
+	 * Removes this modification to the specified entry value.
+	 *
+	 * <p>
+	 * Will only be called if {@link #isApplied(String)} returns <jk>true</jk>.
+	 *
+	 * @param value The entry value being read.  Will never be <jk>null</jk>.
+	 * @return The unmodified value.
+	 */
+	public String remove(String value) {
+		return removeFunction.apply(value);
 	}
 }

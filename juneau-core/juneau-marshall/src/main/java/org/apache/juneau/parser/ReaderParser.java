@@ -49,24 +49,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class ReaderParser extends Parser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -85,17 +67,6 @@ public class ReaderParser extends Parser {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(ReaderParser copyFrom) {
-			super(copyFrom);
-			fileCharset = copyFrom.fileCharset;
-			streamCharset = copyFrom.streamCharset;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -104,90 +75,17 @@ public class ReaderParser extends Parser {
 			streamCharset = copyFrom.streamCharset;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public ReaderParser build() {
-			return build(ReaderParser.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				fileCharset,
-				streamCharset
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * File charset.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * The character set to use for reading <c>Files</c> from the file system.
-		 *
-		 * <p>
-		 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.fileCharset(<js>"UTF-8"</js>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder fileCharset(Charset value) {
-			fileCharset = value;
-			return this;
+		protected Builder(ReaderParser copyFrom) {
+			super(copyFrom);
+			fileCharset = copyFrom.fileCharset;
+			streamCharset = copyFrom.streamCharset;
 		}
 
-		/**
-		 * Input stream charset.
-		 *
-		 * <p>
-		 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
-		 *
-		 * <p>
-		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
-		 * 		.build();
-		 *
-		 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is <js>"UTF-8"</js>.
-		 * @return This object.
-		 */
-		public Builder streamCharset(Charset value) {
-			streamCharset = value;
-			return this;
-		}
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -201,44 +99,24 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
+		public Builder autoCloseStreams() {
+			super.autoCloseStreams();
 			return this;
 		}
-
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder autoCloseStreams(boolean value) {
+			super.autoCloseStreams(value);
 			return this;
 		}
 
@@ -297,14 +175,14 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -315,14 +193,14 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -333,14 +211,14 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -351,14 +229,14 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -383,6 +261,46 @@ public class ReaderParser extends Parser {
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public ReaderParser build() {
+			return build(ReaderParser.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder consumes(String value) {
+			super.consumes(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debugOutputLines(int value) {
+			super.debugOutputLines(value);
 			return this;
 		}
 
@@ -423,14 +341,45 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		/**
+		 * File charset.
+		 *
+		 * <p>
+		 * The character set to use for reading <c>Files</c> from the file system.
+		 *
+		 * <p>
+		 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.fileCharset(<js>"UTF-8"</js>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
+		 * @return This object.
+		 */
+		public Builder fileCharset(Charset value) {
+			fileCharset = value;
 			return this;
 		}
 
@@ -444,6 +393,15 @@ public class ReaderParser extends Parser {
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				fileCharset,
+				streamCharset
+			);
 		}
 
 		@Override /* Overridden from Builder */
@@ -467,6 +425,12 @@ public class ReaderParser extends Parser {
 		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -495,6 +459,12 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
@@ -519,14 +489,14 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -548,93 +518,34 @@ public class ReaderParser extends Parser {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-			super.listener(value);
+		/**
+		 * Input stream charset.
+		 *
+		 * <p>
+		 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
+		 *
+		 * <p>
+		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.streamCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
+		 * 		.build();
+		 *
+		 * 	<jc>// Use it to read a UTF-8 encoded input stream.</jc>
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> FileInputStream(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default value is <js>"UTF-8"</js>.
+		 * @return This object.
+		 */
+		public Builder streamCharset(Charset value) {
+			streamCharset = value;
 			return this;
 		}
 
@@ -651,6 +562,36 @@ public class ReaderParser extends Parser {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
@@ -659,6 +600,30 @@ public class ReaderParser extends Parser {
 		@Override /* Overridden from Builder */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -673,12 +638,27 @@ public class ReaderParser extends Parser {
 			super.unbuffered(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final Charset streamCharset, fileCharset;
 
 	/**
@@ -692,11 +672,6 @@ public class ReaderParser extends Parser {
 		fileCharset = builder.fileCharset;
 	}
 
-	@Override /* Overridden from Parser */
-	public final boolean isReaderParser() {
-		return true;
-	}
-
 	@Override /* Overridden from Context */
 	public ReaderParserSession.Builder createSession() {
 		return ReaderParserSession.create(this);
@@ -707,10 +682,10 @@ public class ReaderParser extends Parser {
 		return createSession().build();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
+	@Override /* Overridden from Parser */
+	public final boolean isReaderParser() {
+		return true;
+	}
 	/**
 	 * File charset.
 	 *
@@ -732,11 +707,6 @@ public class ReaderParser extends Parser {
 	protected final Charset getStreamCharset() {
 		return streamCharset;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);

@@ -57,41 +57,6 @@ import org.apache.juneau.swaps.*;
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
-	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
-	private final BeanContext beanContext;                    // The context that created this meta.
-
-	private final String name;                                // The name of the property.
-	private final Field field;                                // The bean property field (if it has one).
-	private final Field innerField;                                // The bean property field (if it has one).
-	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
-	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
-	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
-
-	private final ClassMeta<?>
-		rawTypeMeta,                                           // The real class type of the bean property.
-		typeMeta;                                              // The transformed class type of the bean property.
-
-	private final String[] properties;                        // The value of the @Beanp(properties) annotation.
-	private final ObjectSwap swap;                              // ObjectSwap defined only via @Beanp annotation.
-
-	private final BeanRegistry beanRegistry;
-
-	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
-	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
-	private final boolean canRead, canWrite, readOnly, writeOnly;
-	private final int hashCode;
-
-	/**
-	 * Creates a builder for {@link #BeanPropertyMeta} objects.
-	 *
-	 * @param beanMeta The metadata on the bean
-	 * @param name The bean property name.
-	 * @return A new builder.
-	 */
-	public static Builder builder(BeanMeta<?> beanMeta, String name) {
-		return new Builder(beanMeta, name);
-	}
-
 	/**
 	 * BeanPropertyMeta builder class.
 	 */
@@ -117,18 +82,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		/**
-		 * Sets the raw metadata type for this bean property.
-		 *
-		 * @param rawMetaType The raw metadata type for this bean property.
-		 * @return This object.
-		 */
-		public Builder rawMetaType(ClassMeta<?> rawMetaType) {
-			this.rawTypeMeta = rawMetaType;
-			this.typeMeta = rawTypeMeta;
-			return this;
-		}
-
-		/**
 		 * Sets the bean registry to use with this bean property.
 		 *
 		 * @param beanRegistry The bean registry to use with this bean property.
@@ -136,6 +89,24 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		 */
 		public Builder beanRegistry(BeanRegistry beanRegistry) {
 			this.beanRegistry = beanRegistry;
+			return this;
+		}
+
+		/**
+		 * @return A new BeanPropertyMeta object using this builder.
+		 */
+		public BeanPropertyMeta build() {
+			return new BeanPropertyMeta(this);
+		}
+
+		/**
+		 * Sets the original bean property that this one is overriding.
+		 *
+		 * @param delegateFor The original bean property that this one is overriding.
+		 * @return This object.
+		 */
+		public Builder delegateFor(BeanPropertyMeta delegateFor) {
+			this.delegateFor = delegateFor;
 			return this;
 		}
 
@@ -151,14 +122,41 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 
 		/**
-		 * Sets the original bean property that this one is overriding.
+		 * Sets the raw metadata type for this bean property.
 		 *
-		 * @param delegateFor The original bean property that this one is overriding.
+		 * @param rawMetaType The raw metadata type for this bean property.
 		 * @return This object.
 		 */
-		public Builder delegateFor(BeanPropertyMeta delegateFor) {
-			this.delegateFor = delegateFor;
+		public Builder rawMetaType(ClassMeta<?> rawMetaType) {
+			this.rawTypeMeta = rawMetaType;
+			this.typeMeta = rawTypeMeta;
 			return this;
+		}
+
+		private ObjectSwap getPropertySwap(Beanp p) {
+			if (! p.format().isEmpty())
+				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
+			return null;
+		}
+
+		private ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
+			Class<?> c = s.value();
+			if (isVoid(c))
+				c = s.impl();
+			if (isVoid(c))
+				return null;
+			ClassInfo ci = ClassInfo.of(c);
+			if (ci.isChildOf(ObjectSwap.class)) {
+				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
+				if (ps.forMediaTypes() != null)
+					throw new UnsupportedOperationException("TODO - Media types on swaps not yet supported on bean properties.");
+				if (ps.withTemplate() != null)
+					throw new UnsupportedOperationException("TODO - Templates on swaps not yet supported on bean properties.");
+				return ps;
+			}
+			if (ci.isChildOf(Surrogate.class))
+				throw new UnsupportedOperationException("TODO - Surrogate swaps not yet supported on bean properties.");
+			throw new BasicRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", c);
 		}
 
 		Builder canRead() {
@@ -168,6 +166,41 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 		Builder canWrite() {
 			this.canWrite = true;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setAsConstructorArg() {
+			this.isConstructorArg = true;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
+			setAccessible(extraKeys);
+			this.extraKeys = extraKeys;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setField(Field field) {
+			setAccessible(field);
+			this.field = field;
+			this.innerField = field;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setGetter(Method getter) {
+			setAccessible(getter);
+			this.getter = getter;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setInnerField(Field innerField) {
+			this.innerField = innerField;
+			return this;
+		}
+
+		BeanPropertyMeta.Builder setSetter(Method setter) {
+			setAccessible(setter);
+			this.setter = setter;
 			return this;
 		}
 
@@ -316,75 +349,50 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return true;
 		}
 
-		/**
-		 * @return A new BeanPropertyMeta object using this builder.
-		 */
-		public BeanPropertyMeta build() {
-			return new BeanPropertyMeta(this);
-		}
-
-		private ObjectSwap getPropertySwap(Beanp p) {
-			if (! p.format().isEmpty())
-				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
-			return null;
-		}
-
-		private ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
-			Class<?> c = s.value();
-			if (isVoid(c))
-				c = s.impl();
-			if (isVoid(c))
-				return null;
-			ClassInfo ci = ClassInfo.of(c);
-			if (ci.isChildOf(ObjectSwap.class)) {
-				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
-				if (ps.forMediaTypes() != null)
-					throw new UnsupportedOperationException("TODO - Media types on swaps not yet supported on bean properties.");
-				if (ps.withTemplate() != null)
-					throw new UnsupportedOperationException("TODO - Templates on swaps not yet supported on bean properties.");
-				return ps;
-			}
-			if (ci.isChildOf(Surrogate.class))
-				throw new UnsupportedOperationException("TODO - Surrogate swaps not yet supported on bean properties.");
-			throw new BasicRuntimeException("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", c);
-		}
-
-		BeanPropertyMeta.Builder setGetter(Method getter) {
-			setAccessible(getter);
-			this.getter = getter;
-			return this;
-		}
-
-		BeanPropertyMeta.Builder setSetter(Method setter) {
-			setAccessible(setter);
-			this.setter = setter;
-			return this;
-		}
-
-		BeanPropertyMeta.Builder setField(Field field) {
-			setAccessible(field);
-			this.field = field;
-			this.innerField = field;
-			return this;
-		}
-
-		BeanPropertyMeta.Builder setInnerField(Field innerField) {
-			this.innerField = innerField;
-			return this;
-		}
-
-		BeanPropertyMeta.Builder setExtraKeys(Method extraKeys) {
-			setAccessible(extraKeys);
-			this.extraKeys = extraKeys;
-			return this;
-		}
-
-		BeanPropertyMeta.Builder setAsConstructorArg() {
-			this.isConstructorArg = true;
-			return this;
-		}
-
 	}
+	/**
+	 * Creates a builder for {@link #BeanPropertyMeta} objects.
+	 *
+	 * @param beanMeta The metadata on the bean
+	 * @param name The bean property name.
+	 * @return A new builder.
+	 */
+	public static Builder builder(BeanMeta<?> beanMeta, String name) {
+		return new Builder(beanMeta, name);
+	}
+
+	private static String findClassName(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Class)
+			return ((Class<?>)o).getName();
+		return o.getClass().getName();
+	}
+	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
+	private final BeanContext beanContext;                    // The context that created this meta.
+	private final String name;                                // The name of the property.
+	private final Field field;                                // The bean property field (if it has one).
+	private final Field innerField;                                // The bean property field (if it has one).
+
+	private final Method getter, setter, extraKeys;           // The bean property getter and setter.
+
+	private final boolean isUri;                              // True if this is a URL/URI or annotated with @URI.
+	private final boolean isDyna, isDynaGetterMap;            // This is a dyna property (i.e. name="*")
+
+	private final ClassMeta<?>
+		rawTypeMeta,                                           // The real class type of the bean property.
+		typeMeta;                                              // The transformed class type of the bean property.
+
+	private final String[] properties;                        // The value of the @Beanp(properties) annotation.
+	private final ObjectSwap swap;                              // ObjectSwap defined only via @Beanp annotation.
+	private final BeanRegistry beanRegistry;
+	private final Object overrideValue;                       // The bean property value (if it's an overridden delegate).
+
+	private final BeanPropertyMeta delegateFor;               // The bean property that this meta is a delegate for.
+
+	private final boolean canRead, canWrite, readOnly, writeOnly;
+
+	private final int hashCode;
 
 	/**
 	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
@@ -418,12 +426,279 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	/**
-	 * Returns the name of this bean property.
+	 * Adds a value to a {@link Collection} or array property.
 	 *
-	 * @return The name of the bean property.
+	 * <p>
+	 * Note that adding values to an array property is inefficient for large arrays since it must copy the array into a
+	 * larger array on each operation.
+	 *
+	 * @param m The bean of the field being set.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
+	 * @param value The value to add to the field.
+	 * @throws BeanRuntimeException If field is not a collection or array.
 	 */
-	public String getName() {
-		return name;
+	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
+
+		// Read-only beans get their properties stored in a cache.
+		if (m.bean == null) {
+			if (! m.propertyCache.containsKey(name))
+				m.propertyCache.put(name, new JsonList(m.getBeanSession()));
+			((JsonList)m.propertyCache.get(name)).add(value);
+			return;
+		}
+
+		BeanSession session = m.getBeanSession();
+
+		boolean isCollection = rawTypeMeta.isCollection();
+		boolean isArray = rawTypeMeta.isArray();
+
+		if (! (isCollection || isArray))
+			throw new BeanRuntimeException(beanMeta.c, "Attempt to add element to property ''{0}'' which is not a collection or array", name);
+
+		Object bean = m.getBean(true);
+
+		ClassMeta<?> elementType = rawTypeMeta.getElementType();
+
+		try {
+			Object v = session.convertToType(value, elementType);
+
+			if (isCollection) {
+				Collection c = (Collection)invokeGetter(bean, pName);
+
+				if (c != null) {
+					c.add(v);
+					return;
+				}
+
+				if (rawTypeMeta.canCreateNewInstance())
+					c = (Collection)rawTypeMeta.newInstance();
+				else
+					c = new JsonList(session);
+
+				c.add(v);
+
+				invokeSetter(bean, pName, c);
+
+			} else /* isArray() */ {
+
+				if (m.arrayPropertyCache == null)
+					m.arrayPropertyCache = new TreeMap<>();
+
+				List l = m.arrayPropertyCache.get(name);
+				if (l == null) {
+					l = new LinkedList();  // ArrayLists and LinkLists appear to perform equally.
+					m.arrayPropertyCache.put(name, l);
+
+					// Copy any existing array values into the temporary list.
+					Object oldArray = invokeGetter(bean, pName);
+					copyToList(oldArray, l);
+				}
+
+				// Add new entry to our array.
+				l.add(v);
+			}
+
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Adds a value to a {@link Map} or bean property.
+	 *
+	 * @param m The bean of the field being set.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
+	 * @param key The key to add to the field.
+	 * @param value The value to add to the field.
+	 * @throws BeanRuntimeException If field is not a map or array.
+	 */
+	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
+
+ 		// Read-only beans get their properties stored in a cache.
+		if (m.bean == null) {
+			if (! m.propertyCache.containsKey(name))
+				m.propertyCache.put(name, new JsonMap(m.getBeanSession()));
+			((JsonMap)m.propertyCache.get(name)).append(key.toString(), value);
+			return;
+		}
+
+		BeanSession session = m.getBeanSession();
+
+		boolean isMap = rawTypeMeta.isMap();
+		boolean isBean = rawTypeMeta.isBean();
+
+		if (! (isBean || isMap))
+			throw new BeanRuntimeException(beanMeta.c, "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
+
+		Object bean = m.getBean(true);
+
+		ClassMeta<?> elementType = rawTypeMeta.getElementType();
+
+		try {
+			Object v = session.convertToType(value, elementType);
+
+			if (isMap) {
+				Map map = (Map)invokeGetter(bean, pName);
+
+				if (map != null) {
+					map.put(key, v);
+					return;
+				}
+
+				if (rawTypeMeta.canCreateNewInstance())
+					map = (Map)rawTypeMeta.newInstance();
+				else
+					map = new JsonMap(session);
+
+				map.put(key, v);
+
+				invokeSetter(bean, pName, map);
+
+			} else /* isBean() */ {
+
+				Object b = invokeGetter(bean, pName);
+
+				if (b != null) {
+					BeanMap bm = session.toBeanMap(b);
+					bm.put(key, v);
+					return;
+				}
+
+				if (rawTypeMeta.canCreateNewInstance(m.getBean(false))) {
+					b = rawTypeMeta.newInstance();
+					BeanMap bm = session.toBeanMap(b);
+					bm.put(key, v);
+				}
+
+				invokeSetter(bean, pName, b);
+			}
+
+		} catch (BeanRuntimeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property can be read.
+	 *
+	 * @return <jk>true</jk> if this property can be read.
+	 */
+	public boolean canRead() {
+		return canRead;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property can be written.
+	 *
+	 * @return <jk>true</jk> if this property can be written.
+	 */
+	public boolean canWrite() {
+		return canWrite;
+	}
+
+	@Override /* Overridden from Comparable */
+	public int compareTo(BeanPropertyMeta o) {
+		return name.compareTo(o.name);
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x,y)->Utils.eq(x.name, y.name) && Utils.eq(x.beanMeta, y.beanMeta));
+	}
+
+	/**
+	 * Performs an action on all matching instances of the specified annotation on the getter/setter/field of the property.
+	 *
+	 * @param <A> The class to find annotations for.
+	 * @param a The class to find annotations for.
+	 * @param filter The filter to apply to the annotation.
+	 * @param action The action to perform against the annotation.
+	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
+		BeanContext bc = beanContext;
+		if (a != null) {
+			bc.forEachAnnotation(a, field, filter, action);
+			bc.forEachAnnotation(a, getter, filter, action);
+			bc.forEachAnnotation(a, setter, filter, action);
+		}
+		return this;
+	}
+
+	/**
+	 * Equivalent to calling {@link BeanMap#get(Object)}, but is faster since it avoids looking up the property meta.
+	 *
+	 * @param m The bean map to get the transformed value from.
+	 * @param pName
+	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
+	 * 	<br>Otherwise can be <jk>null</jk>.
+	 * @return
+	 * 	The property value.
+	 * 	<br>Returns <jk>null</jk> if this is a write-only property.
+	 */
+	public Object get(BeanMap<?> m, String pName) {
+		return m.meta.onReadProperty(m.bean, pName, getInner(m, pName));
+	}
+
+	/**
+	 * Returns all instances of the specified annotation in the hierarchy of this bean property.
+	 *
+	 * <p>
+	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all instances of the
+	 * specified annotation.
+	 *
+	 * <p>
+	 * This method now walks up the method inheritance hierarchy for getter and setter methods, ensuring that
+	 * annotations are properly inherited from overridden parent methods.
+	 *
+	 * @param <A> The class to find annotations for.
+	 * @param a The class to find annotations for.
+	 * @return A list of annotations ordered in parent-to-child order.  Never <jk>null</jk>.
+	 */
+	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
+		List<A> l = new LinkedList<>();
+		BeanContext bc = beanContext;
+		if (a == null)
+			return l;
+		getBeanMeta().getClassMeta().getInfo().forEachAnnotation(bc, a, x -> true, x -> l.add(x));
+		if (field != null) {
+			bc.forEachAnnotation(a, field, x -> true, x -> l.add(x));
+			ClassInfo.of(field.getType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
+		}
+		if (getter != null) {
+			// Walk up the inheritance hierarchy for the getter method
+			forEachParentMethod(getter, parentGetter -> {
+				bc.forEachAnnotation(a, parentGetter, x -> true, x -> l.add(x));
+			});
+			bc.forEachAnnotation(a, getter, x -> true, x -> l.add(x));
+			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
+		}
+		if (setter != null) {
+			// Walk up the inheritance hierarchy for the setter method
+			forEachParentMethod(setter, parentSetter -> {
+				bc.forEachAnnotation(a, parentSetter, x -> true, x -> l.add(x));
+			});
+			bc.forEachAnnotation(a, setter, x -> true, x -> l.add(x));
+			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
+		}
+		if (extraKeys != null) {
+			// Walk up the inheritance hierarchy for the extraKeys method
+			forEachParentMethod(extraKeys, parentExtraKeys -> {
+				bc.forEachAnnotation(a, parentExtraKeys, x -> true, x -> l.add(x));
+			});
+			bc.forEachAnnotation(a, extraKeys, x -> true, x -> l.add(x));
+			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
+		}
+
+		return l;
 	}
 
 	/**
@@ -433,57 +708,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public BeanMeta<?> getBeanMeta() {
 		return beanMeta;
-	}
-
-	/**
-	 * Returns the getter method for this property.
-	 *
-	 * @return The getter method for this bean property, or <jk>null</jk> if there is no getter method.
-	 */
-	public Method getGetter() {
-		return getter;
-	}
-
-	/**
-	 * Returns the setter method for this property.
-	 *
-	 * @return The setter method for this bean property, or <jk>null</jk> if there is no setter method.
-	 */
-	public Method getSetter() {
-		return setter;
-	}
-
-	/**
-	 * Returns the field for this property.
-	 *
-	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
-	 */
-	public Field getField() {
-		return field;
-	}
-
-	/**
-	 * Returns the field for this property even if the field is private.
-	 *
-	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
-	 */
-	public Field getInnerField() {
-		return innerField;
-	}
-
-	/**
-	 * Returns the {@link ClassMeta} of the class of this property.
-	 *
-	 * <p>
-	 * If this property or the property type class has a {@link ObjectSwap} associated with it, this method returns the
-	 * transformed class meta.
-	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
-	 * {@link #set(BeanMap,String,Object)} methods.
-	 *
-	 * @return The {@link ClassMeta} of the class of this property.
-	 */
-	public ClassMeta<?> getClassMeta() {
-		return typeMeta;
 	}
 
 	/**
@@ -503,39 +727,18 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this bean property is a URI.
+	 * Returns the {@link ClassMeta} of the class of this property.
 	 *
 	 * <p>
-	 * A bean property can be considered a URI if any of the following are true:
-	 * <ul>
-	 * 	<li>Property class type is {@link URL} or {@link URI}.
-	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
-	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
-	 * </ul>
+	 * If this property or the property type class has a {@link ObjectSwap} associated with it, this method returns the
+	 * transformed class meta.
+	 * This matches the class type that is used by the {@link #get(BeanMap,String)} and
+	 * {@link #set(BeanMap,String,Object)} methods.
 	 *
-	 * @return <jk>true</jk> if this bean property is a URI.
+	 * @return The {@link ClassMeta} of the class of this property.
 	 */
-	public boolean isUri() {
-		return isUri;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this bean property is named <js>"*"</js>.
-	 *
-	 * @return <jk>true</jk> if this bean property is named <js>"*"</js>.
-	 */
-	public boolean isDyna() {
-		return isDyna;
-	}
-
-	/**
-	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(properties)} annotation
-	 * on this property.
-	 *
-	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.
-	 */
-	public String[] getProperties() {
-		return properties;
+	public ClassMeta<?> getClassMeta() {
+		return typeMeta;
 	}
 
 	/**
@@ -548,44 +751,80 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	/**
-	 * Equivalent to calling {@link BeanMap#get(Object)}, but is faster since it avoids looking up the property meta.
+	 * Returns the {@link Map} object returned by the DynaBean getter.
 	 *
-	 * @param m The bean map to get the transformed value from.
-	 * @param pName
-	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
-	 * 	<br>Otherwise can be <jk>null</jk>.
+	 * <p>
+	 * The DynaBean property is the property whose name is <js>"*"</js> and returns a map of "extra" properties on the
+	 * bean.
+	 *
+	 * @param bean The bean.
 	 * @return
-	 * 	The property value.
-	 * 	<br>Returns <jk>null</jk> if this is a write-only property.
+	 * 	The map returned by the getter, or an empty map if the getter returned <jk>null</jk> or this isn't a DynaBean
+	 * 	property.
+	 * @throws IllegalArgumentException Thrown by method invocation.
+	 * @throws IllegalAccessException Thrown by method invocation.
+	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
-	public Object get(BeanMap<?> m, String pName) {
-		return m.meta.onReadProperty(m.bean, pName, getInner(m, pName));
+	public Map<String,Object> getDynaMap(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (isDyna) {
+			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
+				Map<String,Object> m = map();
+				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safe(()->m.put(x, getter.invoke(bean, x))));
+				return m;
+			}
+			if (getter != null && isDynaGetterMap)
+				return (Map)getter.invoke(bean);
+			if (field != null)
+				return (Map)field.get(bean);
+			throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
+		}
+		return Collections.EMPTY_MAP;
 	}
 
-	private Object getInner(BeanMap<?> m, String pName) {
-		try {
+	/**
+	 * Returns the field for this property.
+	 *
+	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
+	 */
+	public Field getField() {
+		return field;
+	}
 
-			if (writeOnly)
-				return null;
+	/**
+	 * Returns the getter method for this property.
+	 *
+	 * @return The getter method for this bean property, or <jk>null</jk> if there is no getter method.
+	 */
+	public Method getGetter() {
+		return getter;
+	}
 
-			if (overrideValue != null)
-				return overrideValue;
+	/**
+	 * Returns the field for this property even if the field is private.
+	 *
+	 * @return The field for this bean property, or <jk>null</jk> if there is no field associated with this bean property.
+	 */
+	public Field getInnerField() {
+		return innerField;
+	}
 
-			// Read-only beans have their properties stored in a cache until getBean() is called.
-			Object bean = m.bean;
-			if (bean == null)
-				return m.propertyCache.get(name);
+	/**
+	 * Returns the name of this bean property.
+	 *
+	 * @return The name of the bean property.
+	 */
+	public String getName() {
+		return name;
+	}
 
-			return toSerializedForm(m.getBeanSession(), getRaw(m, pName));
-
-		} catch (Throwable e) {
-			if (beanContext.isIgnoreInvocationExceptionsOnGetters()) {
-				if (rawTypeMeta.isPrimitive())
-					return rawTypeMeta.getPrimitiveDefault();
-				return null;
-			}
-			throw new BeanRuntimeException(e, beanMeta.c, "Exception occurred while getting property ''{0}''", name);
-		}
+	/**
+	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(properties)} annotation
+	 * on this property.
+	 *
+	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.
+	 */
+	public String[] getProperties() {
+		return properties;
 	}
 
 	/**
@@ -617,36 +856,55 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	}
 
 	/**
-	 * Converts a raw bean property value to serialized form.
-	 * Applies transforms and child property filters.
+	 * Returns the setter method for this property.
+	 *
+	 * @return The setter method for this bean property, or <jk>null</jk> if there is no setter method.
 	 */
-	Object toSerializedForm(BeanSession session, Object o) {
-		try {
-			o = transform(session, o);
-			if (o == null)
-				return null;
-			if (properties != null) {
-				if (rawTypeMeta.isArray()) {
-					Object[] a = (Object[])o;
-					List l = new DelegateList(rawTypeMeta);
-					ClassMeta childType = rawTypeMeta.getElementType();
-					for (Object c : a)
-						l.add(applyChildPropertiesFilter(session, childType, c));
-					return l;
-				} else if (rawTypeMeta.isCollection()) {
-					Collection c = (Collection)o;
-					List l = Utils.listOfSize(c.size());
-					ClassMeta childType = rawTypeMeta.getElementType();
-					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
-					return l;
-				} else {
-					return applyChildPropertiesFilter(session, rawTypeMeta, o);
-				}
-			}
-			return o;
-		} catch (SerializeException e) {
-			throw new BeanRuntimeException(e);
-		}
+	public Method getSetter() {
+		return setter;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return hashCode;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean property is named <js>"*"</js>.
+	 *
+	 * @return <jk>true</jk> if this bean property is named <js>"*"</js>.
+	 */
+	public boolean isDyna() {
+		return isDyna;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this property is read-only.
+	 *
+	 * <p>
+	 * This implies the property MIGHT be writable, but that parsers should not set a value for it.
+	 *
+	 * @return <jk>true</jk> if this property is read-only.
+	 */
+	public boolean isReadOnly() {
+		return readOnly;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean property is a URI.
+	 *
+	 * <p>
+	 * A bean property can be considered a URI if any of the following are true:
+	 * <ul>
+	 * 	<li>Property class type is {@link URL} or {@link URI}.
+	 * 	<li>Property class type is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
+	 * 	<li>Property getter, setter, or field is annotated with {@link org.apache.juneau.annotation.Uri @Uri}.
+	 * </ul>
+	 *
+	 * @return <jk>true</jk> if this bean property is a URI.
+	 */
+	public boolean isUri() {
+		return isUri;
 	}
 
 	/**
@@ -666,6 +924,144 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 */
 	public Object set(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
 		return setInner(m, pName, m.meta.onWriteProperty(m.bean, pName, value));
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return name + ": " + this.rawTypeMeta.getInnerClass().getName() + ", field=["+field+"], getter=["+getter+"], setter=["+setter+"]";
+	}
+
+	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
+		if (o == null)
+			return null;
+		if (cm.isBean())
+			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
+		if (cm.isMap())
+			return new FilteredMap(cm, (Map)o, properties);
+		if (cm.isObject()) {
+			if (o instanceof Map)
+				return new FilteredMap(cm, (Map)o, properties);
+			BeanMeta bm = beanContext.getBeanMeta(o.getClass());
+			if (bm != null)
+				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
+		}
+		return o;
+	}
+
+	/**
+	 * Walks up the class hierarchy to find parent methods that match the signature of the given method.
+	 * Executes the consumer for each parent method found, starting from the topmost parent down to
+	 * the immediate parent (but not including the method itself).
+	 *
+	 * @param method The method to find parents for.
+	 * @param consumer The action to perform for each parent method.
+	 */
+	private void forEachParentMethod(Method method, Consumer<Method> consumer) {
+		if (method == null)
+			return;
+
+		String methodName = method.getName();
+		Class<?>[] paramTypes = method.getParameterTypes();
+		Class<?> declaringClass = method.getDeclaringClass();
+
+		// Collect parent methods in a list (we'll reverse it to get parent-to-child order)
+		List<Method> parentMethods = new LinkedList<>();
+
+		// Walk up the class hierarchy
+		Class<?> currentClass = declaringClass.getSuperclass();
+		while (currentClass != null && currentClass != Object.class) {
+			try {
+				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
+				parentMethods.add(parentMethod);
+			} catch (NoSuchMethodException e) {
+				// No matching method in this parent class, continue up the hierarchy
+			}
+			currentClass = currentClass.getSuperclass();
+		}
+
+		// Also check interfaces
+		for (Class<?> iface : declaringClass.getInterfaces()) {
+			try {
+				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
+				parentMethods.add(ifaceMethod);
+			} catch (NoSuchMethodException e) {
+				// No matching method in this interface
+			}
+		}
+
+		// Process in reverse order (parent-to-child) to match the "ParentFirst" semantics
+		for (int i = parentMethods.size() - 1; i >= 0; i--) {
+			consumer.accept(parentMethods.get(i));
+		}
+	}
+
+	private Object getInner(BeanMap<?> m, String pName) {
+		try {
+
+			if (writeOnly)
+				return null;
+
+			if (overrideValue != null)
+				return overrideValue;
+
+			// Read-only beans have their properties stored in a cache until getBean() is called.
+			Object bean = m.bean;
+			if (bean == null)
+				return m.propertyCache.get(name);
+
+			return toSerializedForm(m.getBeanSession(), getRaw(m, pName));
+
+		} catch (Throwable e) {
+			if (beanContext.isIgnoreInvocationExceptionsOnGetters()) {
+				if (rawTypeMeta.isPrimitive())
+					return rawTypeMeta.getPrimitiveDefault();
+				return null;
+			}
+			throw new BeanRuntimeException(e, beanMeta.c, "Exception occurred while getting property ''{0}''", name);
+		}
+	}
+
+	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (isDyna) {
+			Map m = null;
+			if (getter != null) {
+				if (! isDynaGetterMap)
+					return getter.invoke(bean, pName);
+				m = (Map)getter.invoke(bean);
+			}
+			else if (field != null)
+				m = (Map)field.get(bean);
+			else
+				throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
+			return (m == null ? null : m.get(pName));
+		}
+		if (getter != null)
+			return getter.invoke(bean);
+		if (field != null)
+			return field.get(bean);
+		throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
+	}
+
+	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		if (isDyna) {
+			if (setter != null)
+				return setter.invoke(bean, pName, val);
+			Map m = null;
+			if (field != null)
+				m = (Map<String,Object>)field.get(bean);
+			else if (getter != null)
+				m = (Map<String,Object>)getter.invoke(bean);
+			else
+				throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
+			return (m == null ? null : m.put(pName, val));
+		}
+		if (setter != null)
+			return setter.invoke(bean, val);
+		if (field != null) {
+			field.set(bean, val);
+			return null;
+		}
+		throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
 	}
 
 	private Object setInner(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
@@ -846,377 +1242,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	private Object invokeGetter(Object bean, String pName) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		if (isDyna) {
-			Map m = null;
-			if (getter != null) {
-				if (! isDynaGetterMap)
-					return getter.invoke(bean, pName);
-				m = (Map)getter.invoke(bean);
-			}
-			else if (field != null)
-				m = (Map)field.get(bean);
-			else
-				throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
-			return (m == null ? null : m.get(pName));
-		}
-		if (getter != null)
-			return getter.invoke(bean);
-		if (field != null)
-			return field.get(bean);
-		throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
-	}
-
-	private Object invokeSetter(Object bean, String pName, Object val) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		if (isDyna) {
-			if (setter != null)
-				return setter.invoke(bean, pName, val);
-			Map m = null;
-			if (field != null)
-				m = (Map<String,Object>)field.get(bean);
-			else if (getter != null)
-				m = (Map<String,Object>)getter.invoke(bean);
-			else
-				throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
-			return (m == null ? null : m.put(pName, val));
-		}
-		if (setter != null)
-			return setter.invoke(bean, val);
-		if (field != null) {
-			field.set(bean, val);
-			return null;
-		}
-		throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}'' because no setter is defined on this property, and the existing property value is null", name, this.getClassMeta().getInnerClass().getName(), findClassName(val));
-	}
-
-	/**
-	 * Returns the {@link Map} object returned by the DynaBean getter.
-	 *
-	 * <p>
-	 * The DynaBean property is the property whose name is <js>"*"</js> and returns a map of "extra" properties on the
-	 * bean.
-	 *
-	 * @param bean The bean.
-	 * @return
-	 * 	The map returned by the getter, or an empty map if the getter returned <jk>null</jk> or this isn't a DynaBean
-	 * 	property.
-	 * @throws IllegalArgumentException Thrown by method invocation.
-	 * @throws IllegalAccessException Thrown by method invocation.
-	 * @throws InvocationTargetException Thrown by method invocation.
-	 */
-	public Map<String,Object> getDynaMap(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		if (isDyna) {
-			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
-				Map<String,Object> m = map();
-				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safe(()->m.put(x, getter.invoke(bean, x))));
-				return m;
-			}
-			if (getter != null && isDynaGetterMap)
-				return (Map)getter.invoke(bean);
-			if (field != null)
-				return (Map)field.get(bean);
-			throw new BeanRuntimeException(beanMeta.c, "Getter or public field not defined on property ''{0}''", name);
-		}
-		return Collections.EMPTY_MAP;
-	}
-
-	/**
-	 * Sets an array field on this bean.
-	 *
-	 * <p>
-	 * Works on both <c>Object</c> and primitive arrays.
-	 *
-	 * @param bean The bean of the field.
-	 * @param l The collection to use to set the array field.
-	 * @throws IllegalArgumentException Thrown by method invocation.
-	 * @throws IllegalAccessException Thrown by method invocation.
-	 * @throws InvocationTargetException Thrown by method invocation.
-	 */
-	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Object array = toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
-		invokeSetter(bean, name, array);
-	}
-
-	/**
-	 * Adds a value to a {@link Collection} or array property.
-	 *
-	 * <p>
-	 * Note that adding values to an array property is inefficient for large arrays since it must copy the array into a
-	 * larger array on each operation.
-	 *
-	 * @param m The bean of the field being set.
-	 * @param pName
-	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
-	 * 	<br>Otherwise can be <jk>null</jk>.
-	 * @param value The value to add to the field.
-	 * @throws BeanRuntimeException If field is not a collection or array.
-	 */
-	public void add(BeanMap<?> m, String pName, Object value) throws BeanRuntimeException {
-
-		// Read-only beans get their properties stored in a cache.
-		if (m.bean == null) {
-			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new JsonList(m.getBeanSession()));
-			((JsonList)m.propertyCache.get(name)).add(value);
-			return;
-		}
-
-		BeanSession session = m.getBeanSession();
-
-		boolean isCollection = rawTypeMeta.isCollection();
-		boolean isArray = rawTypeMeta.isArray();
-
-		if (! (isCollection || isArray))
-			throw new BeanRuntimeException(beanMeta.c, "Attempt to add element to property ''{0}'' which is not a collection or array", name);
-
-		Object bean = m.getBean(true);
-
-		ClassMeta<?> elementType = rawTypeMeta.getElementType();
-
-		try {
-			Object v = session.convertToType(value, elementType);
-
-			if (isCollection) {
-				Collection c = (Collection)invokeGetter(bean, pName);
-
-				if (c != null) {
-					c.add(v);
-					return;
-				}
-
-				if (rawTypeMeta.canCreateNewInstance())
-					c = (Collection)rawTypeMeta.newInstance();
-				else
-					c = new JsonList(session);
-
-				c.add(v);
-
-				invokeSetter(bean, pName, c);
-
-			} else /* isArray() */ {
-
-				if (m.arrayPropertyCache == null)
-					m.arrayPropertyCache = new TreeMap<>();
-
-				List l = m.arrayPropertyCache.get(name);
-				if (l == null) {
-					l = new LinkedList();  // ArrayLists and LinkLists appear to perform equally.
-					m.arrayPropertyCache.put(name, l);
-
-					// Copy any existing array values into the temporary list.
-					Object oldArray = invokeGetter(bean, pName);
-					copyToList(oldArray, l);
-				}
-
-				// Add new entry to our array.
-				l.add(v);
-			}
-
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Adds a value to a {@link Map} or bean property.
-	 *
-	 * @param m The bean of the field being set.
-	 * @param pName
-	 * 	The property name if this is a dyna property (i.e. <js>"*"</js>).
-	 * 	<br>Otherwise can be <jk>null</jk>.
-	 * @param key The key to add to the field.
-	 * @param value The value to add to the field.
-	 * @throws BeanRuntimeException If field is not a map or array.
-	 */
-	public void add(BeanMap<?> m, String pName, String key, Object value) throws BeanRuntimeException {
-
- 		// Read-only beans get their properties stored in a cache.
-		if (m.bean == null) {
-			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new JsonMap(m.getBeanSession()));
-			((JsonMap)m.propertyCache.get(name)).append(key.toString(), value);
-			return;
-		}
-
-		BeanSession session = m.getBeanSession();
-
-		boolean isMap = rawTypeMeta.isMap();
-		boolean isBean = rawTypeMeta.isBean();
-
-		if (! (isBean || isMap))
-			throw new BeanRuntimeException(beanMeta.c, "Attempt to add key/value to property ''{0}'' which is not a map or bean", name);
-
-		Object bean = m.getBean(true);
-
-		ClassMeta<?> elementType = rawTypeMeta.getElementType();
-
-		try {
-			Object v = session.convertToType(value, elementType);
-
-			if (isMap) {
-				Map map = (Map)invokeGetter(bean, pName);
-
-				if (map != null) {
-					map.put(key, v);
-					return;
-				}
-
-				if (rawTypeMeta.canCreateNewInstance())
-					map = (Map)rawTypeMeta.newInstance();
-				else
-					map = new JsonMap(session);
-
-				map.put(key, v);
-
-				invokeSetter(bean, pName, map);
-
-			} else /* isBean() */ {
-
-				Object b = invokeGetter(bean, pName);
-
-				if (b != null) {
-					BeanMap bm = session.toBeanMap(b);
-					bm.put(key, v);
-					return;
-				}
-
-				if (rawTypeMeta.canCreateNewInstance(m.getBean(false))) {
-					b = rawTypeMeta.newInstance();
-					BeanMap bm = session.toBeanMap(b);
-					bm.put(key, v);
-				}
-
-				invokeSetter(bean, pName, b);
-			}
-
-		} catch (BeanRuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Returns all instances of the specified annotation in the hierarchy of this bean property.
-	 *
-	 * <p>
-	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all instances of the
-	 * specified annotation.
-	 *
-	 * <p>
-	 * This method now walks up the method inheritance hierarchy for getter and setter methods, ensuring that
-	 * annotations are properly inherited from overridden parent methods.
-	 *
-	 * @param <A> The class to find annotations for.
-	 * @param a The class to find annotations for.
-	 * @return A list of annotations ordered in parent-to-child order.  Never <jk>null</jk>.
-	 */
-	public <A extends Annotation> List<A> getAllAnnotationsParentFirst(Class<A> a) {
-		List<A> l = new LinkedList<>();
-		BeanContext bc = beanContext;
-		if (a == null)
-			return l;
-		getBeanMeta().getClassMeta().getInfo().forEachAnnotation(bc, a, x -> true, x -> l.add(x));
-		if (field != null) {
-			bc.forEachAnnotation(a, field, x -> true, x -> l.add(x));
-			ClassInfo.of(field.getType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
-		}
-		if (getter != null) {
-			// Walk up the inheritance hierarchy for the getter method
-			forEachParentMethod(getter, parentGetter -> {
-				bc.forEachAnnotation(a, parentGetter, x -> true, x -> l.add(x));
-			});
-			bc.forEachAnnotation(a, getter, x -> true, x -> l.add(x));
-			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
-		}
-		if (setter != null) {
-			// Walk up the inheritance hierarchy for the setter method
-			forEachParentMethod(setter, parentSetter -> {
-				bc.forEachAnnotation(a, parentSetter, x -> true, x -> l.add(x));
-			});
-			bc.forEachAnnotation(a, setter, x -> true, x -> l.add(x));
-			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
-		}
-		if (extraKeys != null) {
-			// Walk up the inheritance hierarchy for the extraKeys method
-			forEachParentMethod(extraKeys, parentExtraKeys -> {
-				bc.forEachAnnotation(a, parentExtraKeys, x -> true, x -> l.add(x));
-			});
-			bc.forEachAnnotation(a, extraKeys, x -> true, x -> l.add(x));
-			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
-		}
-
-		return l;
-	}
-
-	/**
-	 * Walks up the class hierarchy to find parent methods that match the signature of the given method.
-	 * Executes the consumer for each parent method found, starting from the topmost parent down to
-	 * the immediate parent (but not including the method itself).
-	 *
-	 * @param method The method to find parents for.
-	 * @param consumer The action to perform for each parent method.
-	 */
-	private void forEachParentMethod(Method method, Consumer<Method> consumer) {
-		if (method == null)
-			return;
-
-		String methodName = method.getName();
-		Class<?>[] paramTypes = method.getParameterTypes();
-		Class<?> declaringClass = method.getDeclaringClass();
-
-		// Collect parent methods in a list (we'll reverse it to get parent-to-child order)
-		List<Method> parentMethods = new LinkedList<>();
-
-		// Walk up the class hierarchy
-		Class<?> currentClass = declaringClass.getSuperclass();
-		while (currentClass != null && currentClass != Object.class) {
-			try {
-				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
-				parentMethods.add(parentMethod);
-			} catch (NoSuchMethodException e) {
-				// No matching method in this parent class, continue up the hierarchy
-			}
-			currentClass = currentClass.getSuperclass();
-		}
-
-		// Also check interfaces
-		for (Class<?> iface : declaringClass.getInterfaces()) {
-			try {
-				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
-				parentMethods.add(ifaceMethod);
-			} catch (NoSuchMethodException e) {
-				// No matching method in this interface
-			}
-		}
-
-		// Process in reverse order (parent-to-child) to match the "ParentFirst" semantics
-		for (int i = parentMethods.size() - 1; i >= 0; i--) {
-			consumer.accept(parentMethods.get(i));
-		}
-	}
-
-	/**
-	 * Performs an action on all matching instances of the specified annotation on the getter/setter/field of the property.
-	 *
-	 * @param <A> The class to find annotations for.
-	 * @param a The class to find annotations for.
-	 * @param filter The filter to apply to the annotation.
-	 * @param action The action to perform against the annotation.
-	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
-	 */
-	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
-		BeanContext bc = beanContext;
-		if (a != null) {
-			bc.forEachAnnotation(a, field, filter, action);
-			bc.forEachAnnotation(a, getter, filter, action);
-			bc.forEachAnnotation(a, setter, filter, action);
-		}
-		return this;
-	}
-
 	private Object transform(BeanSession session, Object o) throws SerializeException {
 		try {
 			// First use swap defined via @Beanp.
@@ -1257,66 +1282,6 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		}
 	}
 
-	private Object applyChildPropertiesFilter(BeanSession session, ClassMeta cm, Object o) {
-		if (o == null)
-			return null;
-		if (cm.isBean())
-			return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
-		if (cm.isMap())
-			return new FilteredMap(cm, (Map)o, properties);
-		if (cm.isObject()) {
-			if (o instanceof Map)
-				return new FilteredMap(cm, (Map)o, properties);
-			BeanMeta bm = beanContext.getBeanMeta(o.getClass());
-			if (bm != null)
-				return new BeanMap(session, o, new BeanMetaFiltered(cm.getBeanMeta(), properties));
-		}
-		return o;
-	}
-
-	private static String findClassName(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Class)
-			return ((Class<?>)o).getName();
-		return o.getClass().getName();
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return name + ": " + this.rawTypeMeta.getInnerClass().getName() + ", field=["+field+"], getter=["+getter+"], setter=["+setter+"]";
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this property can be read.
-	 *
-	 * @return <jk>true</jk> if this property can be read.
-	 */
-	public boolean canRead() {
-		return canRead;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this property can be written.
-	 *
-	 * @return <jk>true</jk> if this property can be written.
-	 */
-	public boolean canWrite() {
-		return canWrite;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this property is read-only.
-	 *
-	 * <p>
-	 * This implies the property MIGHT be writable, but that parsers should not set a value for it.
-	 *
-	 * @return <jk>true</jk> if this property is read-only.
-	 */
-	public boolean isReadOnly() {
-		return readOnly;
-	}
-
 	/**
 	 * Returns <jk>true</jk> if this property is write-only.
 	 *
@@ -1329,18 +1294,53 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return writeOnly;
 	}
 
-	@Override /* Overridden from Comparable */
-	public int compareTo(BeanPropertyMeta o) {
-		return name.compareTo(o.name);
+	/**
+	 * Sets an array field on this bean.
+	 *
+	 * <p>
+	 * Works on both <c>Object</c> and primitive arrays.
+	 *
+	 * @param bean The bean of the field.
+	 * @param l The collection to use to set the array field.
+	 * @throws IllegalArgumentException Thrown by method invocation.
+	 * @throws IllegalAccessException Thrown by method invocation.
+	 * @throws InvocationTargetException Thrown by method invocation.
+	 */
+	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+		Object array = toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
+		invokeSetter(bean, name, array);
 	}
 
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x,y)->Utils.eq(x.name, y.name) && Utils.eq(x.beanMeta, y.beanMeta));
+	/**
+	 * Converts a raw bean property value to serialized form.
+	 * Applies transforms and child property filters.
+	 */
+	Object toSerializedForm(BeanSession session, Object o) {
+		try {
+			o = transform(session, o);
+			if (o == null)
+				return null;
+			if (properties != null) {
+				if (rawTypeMeta.isArray()) {
+					Object[] a = (Object[])o;
+					List l = new DelegateList(rawTypeMeta);
+					ClassMeta childType = rawTypeMeta.getElementType();
+					for (Object c : a)
+						l.add(applyChildPropertiesFilter(session, childType, c));
+					return l;
+				} else if (rawTypeMeta.isCollection()) {
+					Collection c = (Collection)o;
+					List l = Utils.listOfSize(c.size());
+					ClassMeta childType = rawTypeMeta.getElementType();
+					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
+					return l;
+				} else {
+					return applyChildPropertiesFilter(session, rawTypeMeta, o);
+				}
+			}
+			return o;
+		} catch (SerializeException e) {
+			throw new BeanRuntimeException(e);
+		}
 	}
 }

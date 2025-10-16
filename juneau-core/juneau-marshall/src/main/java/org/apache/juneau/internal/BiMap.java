@@ -30,26 +30,6 @@ import org.apache.juneau.utils.*;
  * @param <V> The value type.
  */
 public class BiMap<K,V> implements Map<K,V> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Create a new builder for this class.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @return A new builder.
-	 */
-	public static <K,V> Builder<K,V> create() {
-		return new Builder<>();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -73,6 +53,15 @@ public class BiMap<K,V> implements Map<K,V> {
 		}
 
 		/**
+		 * Build the differences.
+		 *
+		 * @return A new {@link BeanDiff} object.
+		 */
+		public BiMap<K,V> build() {
+			return new BiMap<>(this);
+		}
+
+		/**
 		 * Makes this map unmodifiable.
 		 *
 		 * @return This object.
@@ -82,21 +71,17 @@ public class BiMap<K,V> implements Map<K,V> {
 			return this;
 		}
 
-		/**
-		 * Build the differences.
-		 *
-		 * @return A new {@link BeanDiff} object.
-		 */
-		public BiMap<K,V> build() {
-			return new BiMap<>(this);
-		}
-
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create a new builder for this class.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @return A new builder.
+	 */
+	public static <K,V> Builder<K,V> create() {
+		return new Builder<>();
+	}
 	private final Map<K,V> forward;
 	private final Map<V,K> reverse;
 
@@ -112,24 +97,10 @@ public class BiMap<K,V> implements Map<K,V> {
 		this.reverse = builder.unmodifiable ? unmodifiableMap(reverse) : reverse;
 	}
 
-	/**
-	 * Gets the key that is currently mapped to the specified value.
-	 *
-	 * @param value The value to return.
-	 * @return The key matching the value.
-	 */
-	public K getKey(V value) {
-		return reverse.get(value);
-	}
-
 	@Override /* Overridden from Map */
-	public int size() {
-		return forward.size();
-	}
-
-	@Override /* Overridden from Map */
-	public boolean isEmpty() {
-		return forward.isEmpty();
+	public void clear() {
+		forward.clear();
+		reverse.clear();
 	}
 
 	@Override /* Overridden from Map */
@@ -143,14 +114,45 @@ public class BiMap<K,V> implements Map<K,V> {
 	}
 
 	@Override /* Overridden from Map */
+	public Set<Entry<K,V>> entrySet() {
+		return forward.entrySet();
+	}
+
+	@Override /* Overridden from Map */
 	public V get(Object key) {
 		return forward.get(key);
+	}
+
+	/**
+	 * Gets the key that is currently mapped to the specified value.
+	 *
+	 * @param value The value to return.
+	 * @return The key matching the value.
+	 */
+	public K getKey(V value) {
+		return reverse.get(value);
+	}
+
+	@Override /* Overridden from Map */
+	public boolean isEmpty() {
+		return forward.isEmpty();
+	}
+
+	@Override /* Overridden from Map */
+	public Set<K> keySet() {
+		return forward.keySet();
 	}
 
 	@Override /* Overridden from Map */
 	public V put(K key, V value) {
 		reverse.put(value, key);
 		return forward.put(key, value);
+	}
+
+	@Override /* Overridden from Map */
+	public void putAll(Map<? extends K,? extends V> m) {
+		forward.putAll(m);
+		m.entrySet().forEach(x -> reverse.put(x.getValue(), x.getKey()));
 	}
 
 	@Override /* Overridden from Map */
@@ -161,29 +163,12 @@ public class BiMap<K,V> implements Map<K,V> {
 	}
 
 	@Override /* Overridden from Map */
-	public void putAll(Map<? extends K,? extends V> m) {
-		forward.putAll(m);
-		m.entrySet().forEach(x -> reverse.put(x.getValue(), x.getKey()));
-	}
-
-	@Override /* Overridden from Map */
-	public void clear() {
-		forward.clear();
-		reverse.clear();
-	}
-
-	@Override /* Overridden from Map */
-	public Set<K> keySet() {
-		return forward.keySet();
+	public int size() {
+		return forward.size();
 	}
 
 	@Override /* Overridden from Map */
 	public Collection<V> values() {
 		return forward.values();
-	}
-
-	@Override /* Overridden from Map */
-	public Set<Entry<K,V>> entrySet() {
-		return forward.entrySet();
 	}
 }

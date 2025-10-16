@@ -52,31 +52,6 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  */
 public interface HttpPartSerializer {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Represent "no" part part serializer.
-	 *
-	 * <p>
-	 * Used to represent the absence of a part serializer in annotations.
-	 */
-	public interface Void extends HttpPartSerializer {}
-
-	/**
-	 * Instantiates a creator for a part serializer.
-	 * @return A new creator.
-	 */
-	static Creator creator() {
-		return new Creator();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Creator
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * A creator for a part serializer.
 	 */
@@ -90,6 +65,22 @@ public interface HttpPartSerializer {
 			super(builder);
 		}
 
+		/**
+		 * Associates an existing bean context builder with this part serializer.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Creator beanContext(BeanContext.Builder value) {
+			builder(BeanContextable.Builder.class).ifPresent(x -> x.beanContext(value));
+			return this;
+		}
+
+		@Override
+		public Creator copy() {
+			return new Creator(this);
+		}
+
 		@Override
 		public Creator impl(Object value) {
 			super.impl(value);
@@ -101,28 +92,22 @@ public interface HttpPartSerializer {
 			super.type(value);
 			return this;
 		}
-
-		@Override
-		public Creator copy() {
-			return new Creator(this);
-		}
-
-		/**
-		 * Associates an existing bean context builder with this part serializer.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Creator beanContext(BeanContext.Builder value) {
-			builder(BeanContextable.Builder.class).ifPresent(x -> x.beanContext(value));
-			return this;
-		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Represent "no" part part serializer.
+	 *
+	 * <p>
+	 * Used to represent the absence of a part serializer in annotations.
+	 */
+	public interface Void extends HttpPartSerializer {}
+	/**
+	 * Instantiates a creator for a part serializer.
+	 * @return A new creator.
+	 */
+	static Creator creator() {
+		return new Creator();
+	}
 	/**
 	 * Creates a new serializer session.
 	 *

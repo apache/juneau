@@ -31,8 +31,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class Version implements Comparable<Version> {
 
-	private int[] parts;
-
 	/**
 	 * Static creator.
 	 *
@@ -53,6 +51,8 @@ public class Version implements Comparable<Version> {
 			return null;
 		return new Version(value);
 	}
+
+	private int[] parts;
 
 	/**
 	 * Constructor
@@ -82,16 +82,47 @@ public class Version implements Comparable<Version> {
 		}
 	}
 
+	@Override
+	public int compareTo(Version v) {
+		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
+			int c = parts[i] - v.parts[i];
+			if (c != 0)
+				return c;
+		}
+		return parts.length - v.parts.length;
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof Version && equals((Version)o);
+	}
+
 	/**
-	 * Returns the version part at the specified zero-indexed value.
+	 * Returns <jk>true</jk> if the specified version is equal to this version.
 	 *
-	 * @param index The index of the version part.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2"</js>)));
+	 * </p>
+	 *
+	 * @param v The version to compare to.
+	 * @return <jk>true</jk> if the specified version is equal to this version.
+	 */
+	public boolean equals(Version v) {
+		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++)
+			if (v.parts[i] - parts[i] != 0)
+				return false;
+		return true;
+	}
+
+	/**
+	 * Returns the maintenance version part (i.e. part at index 2).
+	 *
 	 * @return The version part, never <jk>null</jk>.
 	 */
-	public Optional<Integer> getPart(int index) {
-		if (index < 0 || parts.length <= index)
-			return Utils.opte();
-		return Utils.opt(parts[index]);
+	public Optional<Integer> getMaintenance() {
+		return getPart(2);
 	}
 
 	/**
@@ -113,12 +144,15 @@ public class Version implements Comparable<Version> {
 	}
 
 	/**
-	 * Returns the maintenance version part (i.e. part at index 2).
+	 * Returns the version part at the specified zero-indexed value.
 	 *
+	 * @param index The index of the version part.
 	 * @return The version part, never <jk>null</jk>.
 	 */
-	public Optional<Integer> getMaintenance() {
-		return getPart(2);
+	public Optional<Integer> getPart(int index) {
+		if (index < 0 || parts.length <= index)
+			return Utils.opte();
+		return Utils.opt(parts[index]);
 	}
 
 	/**
@@ -211,42 +245,8 @@ public class Version implements Comparable<Version> {
 		return ! exclusive;
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified version is equal to this version.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
-	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2"</js>)));
-	 * </p>
-	 *
-	 * @param v The version to compare to.
-	 * @return <jk>true</jk> if the specified version is equal to this version.
-	 */
-	public boolean equals(Version v) {
-		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++)
-			if (v.parts[i] - parts[i] != 0)
-				return false;
-		return true;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return o instanceof Version && equals((Version)o);
-	}
-
 	@Override /* Overridden from Object */
 	public String toString() {
 		return Utils.join(parts, '.');
-	}
-
-	@Override
-	public int compareTo(Version v) {
-		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++) {
-			int c = parts[i] - v.parts[i];
-			if (c != 0)
-				return c;
-		}
-		return parts.length - v.parts.length;
 	}
 }

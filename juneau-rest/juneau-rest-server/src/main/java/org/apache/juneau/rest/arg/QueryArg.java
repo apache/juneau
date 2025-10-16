@@ -57,12 +57,6 @@ import org.apache.juneau.rest.httppart.*;
  * </ul>
  */
 public class QueryArg implements RestOpArg {
-	private final boolean multi;
-	private final HttpPartParser partParser;
-	private final HttpPartSchema schema;
-	private final String name, def;
-	private final ClassInfo type;
-
 	/**
 	 * Static creator.
 	 *
@@ -75,32 +69,6 @@ public class QueryArg implements RestOpArg {
 			return new QueryArg(paramInfo, annotations);
 		return null;
 	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param pi The Java method parameter being resolved.
-	 * @param annotations The annotations to apply to any new part parsers.
-	 */
-	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
-		// Get the query name from the parameter
-		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
-
-		// Check for class-level defaults and merge if found
-		Query mergedQuery = getMergedQuery(pi, name);
-
-		// Use merged query annotation for all lookups
-		this.def = mergedQuery != null && !mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
-		this.type = pi.getParameterType();
-		this.schema = mergedQuery != null ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
-		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
-		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
-
-		if (multi && ! type.isCollectionOrArray())
-			throw new ArgException(pi, "Use of multipart flag on @Query parameter that is not an array or Collection");
-	}
-
 	/**
 	 * Gets the merged @Query annotation combining class-level and parameter-level values.
 	 *
@@ -145,7 +113,6 @@ public class QueryArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelQuery, paramQuery);
 	}
-
 	/**
 	 * Merges two @Query annotations, with param-level taking precedence over class-level.
 	 *
@@ -164,7 +131,6 @@ public class QueryArg implements RestOpArg {
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
 	}
-
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -177,6 +143,40 @@ public class QueryArg implements RestOpArg {
 		if (!SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
+	}
+	private final boolean multi;
+
+	private final HttpPartParser partParser;
+
+	private final HttpPartSchema schema;
+
+	private final String name, def;
+
+	private final ClassInfo type;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param pi The Java method parameter being resolved.
+	 * @param annotations The annotations to apply to any new part parsers.
+	 */
+	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
+		// Get the query name from the parameter
+		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
+
+		// Check for class-level defaults and merge if found
+		Query mergedQuery = getMergedQuery(pi, name);
+
+		// Use merged query annotation for all lookups
+		this.def = mergedQuery != null && !mergedQuery.def().isEmpty() ? mergedQuery.def() : findDef(pi).orElse(null);
+		this.type = pi.getParameterType();
+		this.schema = mergedQuery != null ? HttpPartSchema.create(mergedQuery) : HttpPartSchema.create(Query.class, pi);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
+
+		if (multi && ! type.isCollectionOrArray())
+			throw new ArgException(pi, "Use of multipart flag on @Query parameter that is not an array or Collection");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

@@ -112,11 +112,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Accept-Language")
 public class AcceptLanguage extends BasicStringRangesHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Accept-Language";
 
@@ -161,11 +156,6 @@ public class AcceptLanguage extends BasicStringRangesHeader {
 	public static AcceptLanguage of(Supplier<StringRanges> value) {
 		return value == null ? null : new AcceptLanguage(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

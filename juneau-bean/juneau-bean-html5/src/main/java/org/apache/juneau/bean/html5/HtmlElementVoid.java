@@ -45,6 +45,18 @@ public class HtmlElementVoid extends HtmlElement {
 	}
 
 	@Override /* Overridden from HtmlElement */
+	public HtmlElementVoid attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementVoid attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
 	public HtmlElementVoid contenteditable(Object value) {
 		super.contenteditable(value);
 		return this;
@@ -401,18 +413,6 @@ public class HtmlElementVoid extends HtmlElement {
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementVoid translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementVoid attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementVoid attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

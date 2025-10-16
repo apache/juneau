@@ -53,18 +53,22 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class ResponseContent implements HttpEntity {
 
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
 		@Override
-		public boolean isRepeatable() {
-			return false;
+		public void consumeContent() throws IOException {}
+
+		@Override
+		public InputStream getContent() throws IOException, UnsupportedOperationException {
+			return new ByteArrayInputStream(new byte[0]);
 		}
 
 		@Override
-		public boolean isChunked() {
-			return false;
+		public Header getContentEncoding() {
+			return ResponseHeader.NULL_HEADER;
 		}
 
 		@Override
@@ -78,17 +82,14 @@ public class ResponseContent implements HttpEntity {
 		}
 
 		@Override
-		public Header getContentEncoding() {
-			return ResponseHeader.NULL_HEADER;
+		public boolean isChunked() {
+			return false;
 		}
 
 		@Override
-		public InputStream getContent() throws IOException, UnsupportedOperationException {
-			return new ByteArrayInputStream(new byte[0]);
+		public boolean isRepeatable() {
+			return false;
 		}
-
-		@Override
-		public void writeTo(OutputStream outstream) throws IOException {}
 
 		@Override
 		public boolean isStreaming() {
@@ -96,7 +97,7 @@ public class ResponseContent implements HttpEntity {
 		}
 
 		@Override
-		public void consumeContent() throws IOException {}
+		public void writeTo(OutputStream outstream) throws IOException {}
 	};
 
 	private final RestClient client;
@@ -124,433 +125,6 @@ public class ResponseContent implements HttpEntity {
 		this.parser = parser;
 		this.entity = Utils.firstNonNull(response.asHttpResponse().getEntity(), NULL_ENTITY);
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Setters
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Specifies the parser to use for this body.
-	 *
-	 * <p>
-	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.
-	 *
-	 * @param value
-	 * 	The new part parser to use for this body.
-	 * @return This object.
-	 */
-	public ResponseContent parser(Parser value) {
-		this.parser = value;
-		return this;
-	}
-
-	/**
-	 * Specifies the schema for this body.
-	 *
-	 * <p>
-	 * Used by schema-based parsers such as {@link OpenApiParser}.
-	 *
-	 * @param value The schema.
-	 * @return This object.
-	 */
-	public ResponseContent schema(HttpPartSchema value) {
-		this.schema = value;
-		return this;
-	}
-
-	/**
-	 * Causes the contents of the response body to be stored so that it can be repeatedly read.
-	 *
-	 * <p>
-	 * Calling this method allows methods that read the response body to be called multiple times.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Multiple calls to this method are ignored.
-	 * </ul>
-	 *
-	 * @return This object.
-	 */
-	public ResponseContent cache() {
-		this.cached = true;
-		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Raw streams
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the HTTP response message body as an input stream.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Once this input stream is exhausted, it will automatically be closed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @return
-	 * 	The HTTP response message body input stream, never <jk>null</jk>.
-	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty stream.
-	 * @throws IOException If a stream or illegal state exception was thrown.
-	 */
-	@SuppressWarnings("resource")
-	public InputStream asInputStream() throws IOException {
-		try {
-			if (body != null)
-				return new ByteArrayInputStream(body);
-
-			if (cached) {
-				body = readBytes(entity.getContent());
-				response.close();
-				return new ByteArrayInputStream(body);
-			}
-
-			if (isConsumed && ! entity.isRepeatable())
-				throw new IllegalStateException("Method cannot be called.  Response has already been consumed.  Consider using the RestResponse.cacheBody() method.");
-
-			HttpEntity e = response.asHttpResponse().getEntity();
-			InputStream is = e == null ? new ByteArrayInputStream(new byte[0]) : e.getContent();
-
-			is = new EofSensorInputStream(is, new EofSensorWatcher() {
-				@Override
-				public boolean eofDetected(InputStream wrapped) throws IOException {
-					response.close();
-					return true;
-				}
-				@Override
-				public boolean streamClosed(InputStream wrapped) throws IOException {
-					response.close();
-					return true;
-				}
-				@Override
-				public boolean streamAbort(InputStream wrapped) throws IOException {
-					response.close();
-					return true;
-				}
-			});
-
-			isConsumed = true;
-
-			return is;
-		} catch (UnsupportedOperationException e) {
-			throw new IOException(e);
-		}
-	}
-
-	/**
-	 * Returns the HTTP response message body as a reader based on the charset on the <code>Content-Type</code> response header.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 * 	<li class='note'>
-	 * 		Once this input stream is exhausted, it will automatically be closed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @return
-	 * 	The HTTP response message body reader, never <jk>null</jk>.
-	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
-	 * @throws IOException If an exception occurred.
-	 */
-	public Reader asReader() throws IOException {
-
-		// Figure out what the charset of the response is.
-		String cs = null;
-		String ct = getContentType().orElse(null);
-
-		// First look for "charset=" in Content-Type header of response.
-		if (ct != null)
-			if (ct.contains("charset="))
-				cs = ct.substring(ct.indexOf("charset=")+8).trim();
-
-		return asReader(cs == null ? IOUtils.UTF8 : Charset.forName(cs));
-	}
-
-	/**
-	 * Returns the HTTP response message body as a reader using the specified charset.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Once this input stream is exhausted, it will automatically be closed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @param charset
-	 * 	The charset to use for the reader.
-	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
-	 * @return
-	 * 	The HTTP response message body reader, never <jk>null</jk>.
-	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
-	 * @throws IOException If an exception occurred.
-	 */
-	public Reader asReader(Charset charset) throws IOException {
-		return new InputStreamReader(asInputStream(), charset == null ? IOUtils.UTF8 : charset);
-	}
-
-	/**
-	 * Returns the HTTP response message body as a byte array.
-	 *
-	 * 	The HTTP response message body reader, never <jk>null</jk>.
-	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty array.
-	 *
-	 * @return The HTTP response body as a byte array.
-	 * @throws RestCallException If an exception occurred.
-	 */
-	public byte[] asBytes() throws RestCallException {
-		if (body == null) {
-			try {
-				if (entity instanceof BasicHttpEntity) {
-					body = ((BasicHttpEntity)entity).asBytes();
-				} else {
-					body = readBytes(entity.getContent());
-				}
-			} catch (IOException e) {
-				throw new RestCallException(response, e, "Could not read response body.");
-			} finally {
-				response.close();
-			}
-		}
-		return body;
-	}
-
-	/**
-	 * Pipes the contents of the response to the specified output stream.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 *	<li class='note'>
-	 *		The output stream is not automatically closed.
-	 * 	<li class='note'>
-	 * 		Once the input stream is exhausted, it will automatically be closed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @param os The output stream to pipe the output to.
-	 * @return This object.
-	 * @throws IOException If an IO exception occurred.
-	 */
-	public RestResponse pipeTo(OutputStream os) throws IOException {
-		pipe(asInputStream(), os);
-		return response;
-	}
-
-	/**
-	 * Pipes the contents of the response to the specified writer.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 *	<li class='note'>
-	 *		The writer is not automatically closed.
-	 * 	<li class='note'>
-	 * 		Once the reader is exhausted, it will automatically be closed.
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @param w The writer to pipe the output to.
-	 * @return This object.
-	 * @throws IOException If an IO exception occurred.
-	 */
-	public RestResponse pipeTo(Writer w) throws IOException {
-		return pipeTo(w, false);
-	}
-
-	/**
-	 * Pipes the contents of the response to the specified writer.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 *	<li class='note'>
-	 *		The writer is not automatically closed.
-	 * 	<li class='note'>
-	 * 		Once the reader is exhausted, it will automatically be closed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @param w The writer to pipe the output to.
-	 * @param charset
-	 * 	The charset to use for the reader.
-	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
-	 * @return This object.
-	 * @throws IOException If an IO exception occurred.
-	 */
-	public RestResponse pipeTo(Writer w, Charset charset) throws IOException {
-		return pipeTo(w, charset, false);
-	}
-
-	/**
-	 * Pipes the contents of the response to the specified writer.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 *	<li class='note'>
-	 *		The writer is not automatically closed.
-	 * 	<li class='note'>
-	 * 		Once the reader is exhausted, it will automatically be closed.
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @param w The writer to write the output to.
-	 * @param byLines Flush the writers after every line of output.
-	 * @return This object.
-	 * @throws IOException If an IO exception occurred.
-	 */
-	public RestResponse pipeTo(Writer w, boolean byLines) throws IOException {
-		return pipeTo(w, null, byLines);
-	}
-
-	/**
-	 * Pipes the contents of the response to the specified writer.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 *	<li class='note'>
-	 *		The writer is not automatically closed.
-	 * 	<li class='note'>
-	 * 		Once the reader is exhausted, it will automatically be closed.
-	 *  <li class='note'>
-	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li class='note'>
-	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} to be thrown.
-	 * </ul>
-	 *
-	 * @param w The writer to pipe the output to.
-	 * @param byLines Flush the writers after every line of output.
-	 * @param charset
-	 * 	The charset to use for the reader.
-	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
-	 * @return This object.
-	 * @throws IOException If an IO exception occurred.
-	 */
-	public RestResponse pipeTo(Writer w, Charset charset, boolean byLines) throws IOException {
-		if (byLines)
-			pipeLines(asReader(charset), w);
-		else
-			pipe(asReader(charset), w);
-		return response;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Retrievers
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Parses HTTP body into the specified object type.
-	 *
-	 * <p>
-	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getContent().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getContent().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * <p>
-	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
-	 *
-	 * <p>
-	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
-	 *
-	 * <p>
-	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
-	 * 	<li class='note'>
-	 * 		You can also specify any of the following types:
-	 * 		<ul class='compact'>
-	 * 			<li>{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.
-	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
-	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
-	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
-	 * 			<li>Any type that takes in an {@link HttpResponse} object.
-	 * 		</ul>
-	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
-	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
-	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li class='note'>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
-	 */
-	public <T> T as(Type type, Type...args) throws RestCallException {
-		return as(getClassMeta(type, args));
-	}
-
 	/**
 	 * Same as {@link #as(Type,Type...)} except optimized for a non-parameterized class.
 	 *
@@ -740,6 +314,133 @@ public class ResponseContent implements HttpEntity {
 	}
 
 	/**
+	 * Parses HTTP body into the specified object type.
+	 *
+	 * <p>
+	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Parse into a linked-list of strings.</jc>
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of beans.</jc>
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getContent().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getContent().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of string keys/values.</jc>
+	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * <p>
+	 * <c>Collection</c> classes are assumed to be followed by zero or one objects indicating the element type.
+	 *
+	 * <p>
+	 * <c>Map</c> classes are assumed to be followed by zero or two meta objects indicating the key and value types.
+	 *
+	 * <p>
+	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
+	 * 	<li class='note'>
+	 * 		You can also specify any of the following types:
+	 * 		<ul class='compact'>
+	 * 			<li>{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
+	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
+	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
+	 * 			<li>Any type that takes in an {@link HttpResponse} object.
+	 * 		</ul>
+	 * 	<li class='note'>
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
+	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} will be thrown.
+	 * 	<li class='note'>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws RestCallException
+	 * 	<ul>
+	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * 		<li>If a connection error occurred.
+	 * 	</ul>
+	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
+	 */
+	public <T> T as(Type type, Type...args) throws RestCallException {
+		return as(getClassMeta(type, args));
+	}
+	/**
+	 * Same as {@link #asString()} but truncates the string to the specified length.
+	 *
+	 * <p>
+	 * If truncation occurs, the string will be suffixed with <js>"..."</js>.
+	 *
+	 * @param length The max length of the returned string.
+	 * @return The truncated string.
+	 * @throws RestCallException If a problem occurred trying to read from the reader.
+	 */
+	public String asAbbreviatedString(int length) throws RestCallException {
+		return StringUtils.abbreviate(asString(), length);
+	}
+
+	/**
+	 * Returns the HTTP response message body as a byte array.
+	 *
+	 * 	The HTTP response message body reader, never <jk>null</jk>.
+	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty array.
+	 *
+	 * @return The HTTP response body as a byte array.
+	 * @throws RestCallException If an exception occurred.
+	 */
+	public byte[] asBytes() throws RestCallException {
+		if (body == null) {
+			try {
+				if (entity instanceof BasicHttpEntity) {
+					body = ((BasicHttpEntity)entity).asBytes();
+				} else {
+					body = readBytes(entity.getContent());
+				}
+			} catch (IOException e) {
+				throw new RestCallException(response, e, "Could not read response body.");
+			} finally {
+				response.close();
+			}
+		}
+		return body;
+	}
+
+	/**
 	 * Same as {@link #as(Class)} but allows you to run the call asynchronously.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -822,71 +523,6 @@ public class ResponseContent implements HttpEntity {
 	}
 
 	/**
-	 * Returns the contents of this body as a string.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li class='note'>
-	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li class='note'>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return The response as a string.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public String asString() throws RestCallException {
-		cache();
-		try (Reader r = asReader()) {
-			return read(r);
-		} catch (IOException e) {
-			response.close();
-			throw new RestCallException(response, e, "Could not read response body.");
-		}
-	}
-
-	/**
-	 * Same as {@link #asString()} but allows you to run the call asynchronously.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li class='note'>
-	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li class='note'>
-	 * 		The input stream is automatically closed after this call.
-	 * </ul>
-	 *
-	 * @return The future object.
-	 * @throws RestCallException If the executor service was not defined.
-	 * @see
-	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
-	 * 	{@link Future Futures}.
-	 */
-	public Future<String> asStringFuture() throws RestCallException {
-		return client.getExecutorService().submit(this::asString);
-	}
-
-	/**
-	 * Same as {@link #asString()} but truncates the string to the specified length.
-	 *
-	 * <p>
-	 * If truncation occurs, the string will be suffixed with <js>"..."</js>.
-	 *
-	 * @param length The max length of the returned string.
-	 * @return The truncated string.
-	 * @throws RestCallException If a problem occurred trying to read from the reader.
-	 */
-	public String asAbbreviatedString(int length) throws RestCallException {
-		return StringUtils.abbreviate(asString(), length);
-	}
-
-	/**
 	 * Returns the HTTP body content as a simple hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -902,53 +538,65 @@ public class ResponseContent implements HttpEntity {
 	}
 
 	/**
-	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
+	 * Returns the HTTP response message body as an input stream.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	01 23 45 67 89 AB CD EF
-	 * </p>
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Once this input stream is exhausted, it will automatically be closed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
 	 *
-	 * @return The incoming input from the connection as a plain string.
-	 * @throws RestCallException If a problem occurred trying to read from the reader.
+	 * @return
+	 * 	The HTTP response message body input stream, never <jk>null</jk>.
+	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty stream.
+	 * @throws IOException If a stream or illegal state exception was thrown.
 	 */
-	public String asSpacedHex() throws RestCallException {
-		return toSpacedHex(asBytes());
-	}
+	@SuppressWarnings("resource")
+	public InputStream asInputStream() throws IOException {
+		try {
+			if (body != null)
+				return new ByteArrayInputStream(body);
 
-	/**
-	 * Parses the output from the body into the specified type and then wraps that in a {@link ObjectRest}.
-	 *
-	 * <p>
-	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
-	 *
-	 * @param innerType The class type of the POJO being wrapped.
-	 * @return The parsed output wrapped in a {@link ObjectRest}.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public ObjectRest asObjectRest(Class<?> innerType) throws RestCallException {
-		return new ObjectRest(as(innerType));
-	}
+			if (cached) {
+				body = readBytes(entity.getContent());
+				response.close();
+				return new ByteArrayInputStream(body);
+			}
 
-	/**
-	 * Converts the output from the connection into an {@link JsonMap} and then wraps that in a {@link ObjectRest}.
-	 *
-	 * <p>
-	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
-	 *
-	 * @return The parsed output wrapped in a {@link ObjectRest}.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public ObjectRest asObjectRest() throws RestCallException {
-		return asObjectRest(JsonMap.class);
+			if (isConsumed && ! entity.isRepeatable())
+				throw new IllegalStateException("Method cannot be called.  Response has already been consumed.  Consider using the RestResponse.cacheBody() method.");
+
+			HttpEntity e = response.asHttpResponse().getEntity();
+			InputStream is = e == null ? new ByteArrayInputStream(new byte[0]) : e.getContent();
+
+			is = new EofSensorInputStream(is, new EofSensorWatcher() {
+				@Override
+				public boolean eofDetected(InputStream wrapped) throws IOException {
+					response.close();
+					return true;
+				}
+				@Override
+				public boolean streamAbort(InputStream wrapped) throws IOException {
+					response.close();
+					return true;
+				}
+				@Override
+				public boolean streamClosed(InputStream wrapped) throws IOException {
+					response.close();
+					return true;
+				}
+			});
+
+			isConsumed = true;
+
+			return is;
+		} catch (UnsupportedOperationException e) {
+			throw new IOException(e);
+		}
 	}
 
 	/**
@@ -1019,7 +667,6 @@ public class ResponseContent implements HttpEntity {
 	public Matcher asMatcher(String regex) throws RestCallException {
 		return asMatcher(regex, 0);
 	}
-
 	/**
 	 * Converts the contents of the response body to a string and then matches the specified pattern against it.
 	 *
@@ -1057,9 +704,140 @@ public class ResponseContent implements HttpEntity {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Converts the output from the connection into an {@link JsonMap} and then wraps that in a {@link ObjectRest}.
+	 *
+	 * <p>
+	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
+	 *
+	 * @return The parsed output wrapped in a {@link ObjectRest}.
+	 * @throws RestCallException
+	 * 	<ul>
+	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * 		<li>If a connection error occurred.
+	 * 	</ul>
+	 */
+	public ObjectRest asObjectRest() throws RestCallException {
+		return asObjectRest(JsonMap.class);
+	}
+
+	/**
+	 * Parses the output from the body into the specified type and then wraps that in a {@link ObjectRest}.
+	 *
+	 * <p>
+	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
+	 *
+	 * @param innerType The class type of the POJO being wrapped.
+	 * @return The parsed output wrapped in a {@link ObjectRest}.
+	 * @throws RestCallException
+	 * 	<ul>
+	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * 		<li>If a connection error occurred.
+	 * 	</ul>
+	 */
+	public ObjectRest asObjectRest(Class<?> innerType) throws RestCallException {
+		return new ObjectRest(as(innerType));
+	}
+
+	/**
+	 * Returns the HTTP response message body as a reader based on the charset on the <code>Content-Type</code> response header.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 * 	<li class='note'>
+	 * 		Once this input stream is exhausted, it will automatically be closed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @return
+	 * 	The HTTP response message body reader, never <jk>null</jk>.
+	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
+	 * @throws IOException If an exception occurred.
+	 */
+	public Reader asReader() throws IOException {
+
+		// Figure out what the charset of the response is.
+		String cs = null;
+		String ct = getContentType().orElse(null);
+
+		// First look for "charset=" in Content-Type header of response.
+		if (ct != null)
+			if (ct.contains("charset="))
+				cs = ct.substring(ct.indexOf("charset=")+8).trim();
+
+		return asReader(cs == null ? IOUtils.UTF8 : Charset.forName(cs));
+	}
+
+	/**
+	 * Returns the HTTP response message body as a reader using the specified charset.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Once this input stream is exhausted, it will automatically be closed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @param charset
+	 * 	The charset to use for the reader.
+	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
+	 * @return
+	 * 	The HTTP response message body reader, never <jk>null</jk>.
+	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty reader.
+	 * @throws IOException If an exception occurred.
+	 */
+	public Reader asReader(Charset charset) throws IOException {
+		return new InputStreamReader(asInputStream(), charset == null ? IOUtils.UTF8 : charset);
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asBytes()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentByteArrayAssertion<ResponseContent> assertBytes() {
+		return new FluentResponseBodyAssertion<>(this, this).asBytes();
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>)</c>.
+	 *
+	 * @param <T> The object type to create.
+	 * @param type The object type to create.
+	 * @return A new fluent assertion.
+	 */
+	public <T> FluentAnyAssertion<T,ResponseContent> assertObject(Class<T> type) {
+		return new FluentResponseBodyAssertion<>(this, this).as(type);
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The object type to create.
+	 * @param type The object type to create.
+	 * @param args Optional type arguments.
+	 * @return A new fluent assertion.
+	 */
+	public <T> FluentAnyAssertion<Object,ResponseContent> assertObject(Type type, Type...args) {
+		return new FluentResponseBodyAssertion<>(this, this).as(type, args);
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asString()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentStringAssertion<ResponseContent> assertString() {
+		return new FluentResponseBodyAssertion<>(this, this).asString();
+	}
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
@@ -1135,92 +913,136 @@ public class ResponseContent implements HttpEntity {
 	}
 
 	/**
-	 * Shortcut for calling <c>assertValue().asString()</c>.
+	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
 	 *
-	 * @return A new fluent assertion.
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	01 23 45 67 89 AB CD EF
+	 * </p>
+	 *
+	 * @return The incoming input from the connection as a plain string.
+	 * @throws RestCallException If a problem occurred trying to read from the reader.
 	 */
-	public FluentStringAssertion<ResponseContent> assertString() {
-		return new FluentResponseBodyAssertion<>(this, this).asString();
+	public String asSpacedHex() throws RestCallException {
+		return toSpacedHex(asBytes());
 	}
 
 	/**
-	 * Shortcut for calling <c>assertValue().asBytes()</c>.
-	 *
-	 * @return A new fluent assertion.
-	 */
-	public FluentByteArrayAssertion<ResponseContent> assertBytes() {
-		return new FluentResponseBodyAssertion<>(this, this).asBytes();
-	}
-
-	/**
-	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>)</c>.
-	 *
-	 * @param <T> The object type to create.
-	 * @param type The object type to create.
-	 * @return A new fluent assertion.
-	 */
-	public <T> FluentAnyAssertion<T,ResponseContent> assertObject(Class<T> type) {
-		return new FluentResponseBodyAssertion<>(this, this).as(type);
-	}
-
-	/**
-	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The object type to create.
-	 * @param type The object type to create.
-	 * @param args Optional type arguments.
-	 * @return A new fluent assertion.
-	 */
-	public <T> FluentAnyAssertion<Object,ResponseContent> assertObject(Type type, Type...args) {
-		return new FluentResponseBodyAssertion<>(this, this).as(type, args);
-	}
-
-	/**
-	 * Returns the response that created this object.
-	 *
-	 * @return The response that created this object.
-	 */
-	public RestResponse response() {
-		return response;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// HttpEntity passthrough methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Tells if the entity is capable of producing its data more than once.
-	 *
-	 * <p>
-	 * A repeatable entity's {@link #getContent()} and {@link #writeTo(OutputStream)} methods can be called more than
-	 * once whereas a non-repeatable entity's can not.
+	 * Returns the contents of this body as a string.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 *	<li class='note'>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}).
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li class='note'>
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
+	 * 	<li class='note'>
+	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
-	 * @return <jk>true</jk> if the entity is repeatable, <jk>false</jk> otherwise.
+	 * @return The response as a string.
+	 * @throws RestCallException
+	 * 	<ul>
+	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
+	 * 		<li>If a connection error occurred.
+	 * 	</ul>
 	 */
-	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return cached || entity.isRepeatable();
+	public String asString() throws RestCallException {
+		cache();
+		try (Reader r = asReader()) {
+			return read(r);
+		} catch (IOException e) {
+			response.close();
+			throw new RestCallException(response, e, "Could not read response body.");
+		}
 	}
 
 	/**
-	 * Tells about chunked encoding for this entity.
+	 * Same as {@link #asString()} but allows you to run the call asynchronously.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li class='note'>
+	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
+	 * 	<li class='note'>
+	 * 		The input stream is automatically closed after this call.
+	 * </ul>
+	 *
+	 * @return The future object.
+	 * @throws RestCallException If the executor service was not defined.
+	 * @see
+	 * 	RestClient.Builder#executorService(ExecutorService, boolean) for defining the executor service for creating
+	 * 	{@link Future Futures}.
+	 */
+	public Future<String> asStringFuture() throws RestCallException {
+		return client.getExecutorService().submit(this::asString);
+	}
+
+	/**
+	 * Causes the contents of the response body to be stored so that it can be repeatedly read.
 	 *
 	 * <p>
-	 * The primary purpose of this method is to indicate whether chunked encoding should be used when the entity is sent.
-	 * <br>For entities that are received, it can also indicate whether the entity was received with chunked encoding.
+	 * Calling this method allows methods that read the response body to be called multiple times.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Multiple calls to this method are ignored.
+	 * </ul>
+	 *
+	 * @return This object.
+	 */
+	public ResponseContent cache() {
+		this.cached = true;
+		return this;
+	}
+
+	/**
+	 * This method is called to indicate that the content of this entity is no longer required.
 	 *
 	 * <p>
-	 * The behavior of wrapping entities is implementation dependent, but should respect the primary purpose.
+	 * This method is of particular importance for entities being received from a connection.
+	 * <br>The entity needs to be consumed completely in order to re-use the connection with keep-alive.
 	 *
-	 * @return <jk>true</jk> if chunked encoding is preferred for this entity, or <jk>false</jk> if it is not.
+	 * @throws IOException If an I/O error occurs.
+	 * @deprecated Use standard java convention to ensure resource deallocation by calling {@link InputStream#close()} on
+	 * the input stream returned by {@link #getContent()}
 	 */
 	@Override /* Overridden from HttpEntity */
-	public boolean isChunked() {
-		return entity.isChunked();
+	@Deprecated
+	public void consumeContent() throws IOException {
+		entity.consumeContent();
+	}
+
+	/**
+	 * Returns a content stream of the entity.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method is equivalent to {@link #asInputStream()} which is the preferred method for fluent-style coding.
+	 * 	<li class='note'>This input stream will auto-close once the end of stream has been reached.
+	 * 	<li class='note'>It is up to the caller to properly close this stream if not fully consumed.
+	 * 	<li class='note'>This method can be called multiple times if the entity is repeatable or the cache flag is set on this object.
+	 * 	<li class='note'>Calling this method multiple times on a non-repeatable or cached body will throw a {@link IllegalStateException}.
+	 * 		Note that this is different from the HttpClient specs for this method.
+	 * </ul>
+	 *
+	 * @return Content stream of the entity.
+	 */
+	@Override /* Overridden from HttpEntity */
+	public InputStream getContent() throws IOException, UnsupportedOperationException {
+		return asInputStream();
+	}
+	/**
+	 * Obtains the Content-Encoding header, if known.
+	 *
+	 * <p>
+	 * This is the header that should be used when sending the entity, or the one that was received with the entity.
+	 * <br>Wrapping entities that modify the content encoding should adjust this header accordingly.
+	 *
+	 * @return The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.
+	 */
+	@Override /* Overridden from HttpEntity */
+	public ResponseHeader getContentEncoding() {
+		return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding());
 	}
 
 	/**
@@ -1250,50 +1072,38 @@ public class ResponseContent implements HttpEntity {
 	}
 
 	/**
-	 * Obtains the Content-Encoding header, if known.
+	 * Tells about chunked encoding for this entity.
 	 *
 	 * <p>
-	 * This is the header that should be used when sending the entity, or the one that was received with the entity.
-	 * <br>Wrapping entities that modify the content encoding should adjust this header accordingly.
+	 * The primary purpose of this method is to indicate whether chunked encoding should be used when the entity is sent.
+	 * <br>For entities that are received, it can also indicate whether the entity was received with chunked encoding.
 	 *
-	 * @return The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.
+	 * <p>
+	 * The behavior of wrapping entities is implementation dependent, but should respect the primary purpose.
+	 *
+	 * @return <jk>true</jk> if chunked encoding is preferred for this entity, or <jk>false</jk> if it is not.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public ResponseHeader getContentEncoding() {
-		return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding());
+	public boolean isChunked() {
+		return entity.isChunked();
 	}
 
 	/**
-	 * Returns a content stream of the entity.
+	 * Tells if the entity is capable of producing its data more than once.
+	 *
+	 * <p>
+	 * A repeatable entity's {@link #getContent()} and {@link #writeTo(OutputStream)} methods can be called more than
+	 * once whereas a non-repeatable entity's can not.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method is equivalent to {@link #asInputStream()} which is the preferred method for fluent-style coding.
-	 * 	<li class='note'>This input stream will auto-close once the end of stream has been reached.
-	 * 	<li class='note'>It is up to the caller to properly close this stream if not fully consumed.
-	 * 	<li class='note'>This method can be called multiple times if the entity is repeatable or the cache flag is set on this object.
-	 * 	<li class='note'>Calling this method multiple times on a non-repeatable or cached body will throw a {@link IllegalStateException}.
-	 * 		Note that this is different from the HttpClient specs for this method.
+	 *	<li class='note'>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}).
 	 * </ul>
 	 *
-	 * @return Content stream of the entity.
+	 * @return <jk>true</jk> if the entity is repeatable, <jk>false</jk> otherwise.
 	 */
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException {
-		return asInputStream();
-	}
-
-	/**
-	 * Writes the entity content out to the output stream.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>This method is equivalent to {@link #pipeTo(OutputStream)} which is the preferred method for fluent-style coding.
-	 * </ul>
-	 *
-	 * @param outstream The output stream to write entity content to.
-	 */
-	@Override /* Overridden from HttpEntity */
-	public void writeTo(OutputStream outstream) throws IOException {
-		pipeTo(outstream);
+	public boolean isRepeatable() {
+		return cached || entity.isRepeatable();
 	}
 
 	/**
@@ -1309,27 +1119,197 @@ public class ResponseContent implements HttpEntity {
 	public boolean isStreaming() {
 		return cached ? false : entity.isStreaming();
 	}
-
 	/**
-	 * This method is called to indicate that the content of this entity is no longer required.
+	 * Specifies the parser to use for this body.
 	 *
 	 * <p>
-	 * This method is of particular importance for entities being received from a connection.
-	 * <br>The entity needs to be consumed completely in order to re-use the connection with keep-alive.
+	 * If not specified, uses the parser defined on the client set via {@link RestClient.Builder#parser(Class)}.
 	 *
-	 * @throws IOException If an I/O error occurs.
-	 * @deprecated Use standard java convention to ensure resource deallocation by calling {@link InputStream#close()} on
-	 * the input stream returned by {@link #getContent()}
+	 * @param value
+	 * 	The new part parser to use for this body.
+	 * @return This object.
 	 */
-	@Override /* Overridden from HttpEntity */
-	@Deprecated
-	public void consumeContent() throws IOException {
-		entity.consumeContent();
+	public ResponseContent parser(Parser value) {
+		this.parser = value;
+		return this;
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Pipes the contents of the response to the specified output stream.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 *	<li class='note'>
+	 *		The output stream is not automatically closed.
+	 * 	<li class='note'>
+	 * 		Once the input stream is exhausted, it will automatically be closed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @param os The output stream to pipe the output to.
+	 * @return This object.
+	 * @throws IOException If an IO exception occurred.
+	 */
+	public RestResponse pipeTo(OutputStream os) throws IOException {
+		pipe(asInputStream(), os);
+		return response;
+	}
+
+	/**
+	 * Pipes the contents of the response to the specified writer.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 *	<li class='note'>
+	 *		The writer is not automatically closed.
+	 * 	<li class='note'>
+	 * 		Once the reader is exhausted, it will automatically be closed.
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @param w The writer to pipe the output to.
+	 * @return This object.
+	 * @throws IOException If an IO exception occurred.
+	 */
+	public RestResponse pipeTo(Writer w) throws IOException {
+		return pipeTo(w, false);
+	}
+
+	/**
+	 * Pipes the contents of the response to the specified writer.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 *	<li class='note'>
+	 *		The writer is not automatically closed.
+	 * 	<li class='note'>
+	 * 		Once the reader is exhausted, it will automatically be closed.
+	 * 	<li class='note'>
+	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @param w The writer to write the output to.
+	 * @param byLines Flush the writers after every line of output.
+	 * @return This object.
+	 * @throws IOException If an IO exception occurred.
+	 */
+	public RestResponse pipeTo(Writer w, boolean byLines) throws IOException {
+		return pipeTo(w, null, byLines);
+	}
+
+	/**
+	 * Pipes the contents of the response to the specified writer.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 *	<li class='note'>
+	 *		The writer is not automatically closed.
+	 * 	<li class='note'>
+	 * 		Once the reader is exhausted, it will automatically be closed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @param w The writer to pipe the output to.
+	 * @param charset
+	 * 	The charset to use for the reader.
+	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
+	 * @return This object.
+	 * @throws IOException If an IO exception occurred.
+	 */
+	public RestResponse pipeTo(Writer w, Charset charset) throws IOException {
+		return pipeTo(w, charset, false);
+	}
+
+	/**
+	 * Pipes the contents of the response to the specified writer.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 *	<li class='note'>
+	 *		The writer is not automatically closed.
+	 * 	<li class='note'>
+	 * 		Once the reader is exhausted, it will automatically be closed.
+	 *  <li class='note'>
+	 *		This method can be called multiple times if {@link #cache()} has been called.
+	 *  <li class='note'>
+	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
+	 *		with an inner {@link IllegalStateException} to be thrown.
+	 * </ul>
+	 *
+	 * @param w The writer to pipe the output to.
+	 * @param byLines Flush the writers after every line of output.
+	 * @param charset
+	 * 	The charset to use for the reader.
+	 * 	<br>If <jk>null</jk>, <js>"UTF-8"</js> is used.
+	 * @return This object.
+	 * @throws IOException If an IO exception occurred.
+	 */
+	public RestResponse pipeTo(Writer w, Charset charset, boolean byLines) throws IOException {
+		if (byLines)
+			pipeLines(asReader(charset), w);
+		else
+			pipe(asReader(charset), w);
+		return response;
+	}
+
+	/**
+	 * Returns the response that created this object.
+	 *
+	 * @return The response that created this object.
+	 */
+	public RestResponse response() {
+		return response;
+	}
+
+	/**
+	 * Specifies the schema for this body.
+	 *
+	 * <p>
+	 * Used by schema-based parsers such as {@link OpenApiParser}.
+	 *
+	 * @param value The schema.
+	 * @return This object.
+	 */
+	public ResponseContent schema(HttpPartSchema value) {
+		this.schema = value;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		try {
+			return asString();
+		} catch (RestCallException e) {
+			return e.getLocalizedMessage();
+		}
+	}
+	/**
+	 * Writes the entity content out to the output stream.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This method is equivalent to {@link #pipeTo(OutputStream)} which is the preferred method for fluent-style coding.
+	 * </ul>
+	 *
+	 * @param outstream The output stream to write entity content to.
+	 */
+	@Override /* Overridden from HttpEntity */
+	public void writeTo(OutputStream outstream) throws IOException {
+		pipeTo(outstream);
+	}
 
 	private BeanContext getBeanContext() {
 		return parser == null ? BeanContext.DEFAULT : parser.getBeanContext();
@@ -1341,14 +1321,5 @@ public class ResponseContent implements HttpEntity {
 
 	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
 		return getBeanContext().getClassMeta(type, args);
-	}
-
-	@Override
-	public String toString() {
-		try {
-			return asString();
-		} catch (RestCallException e) {
-			return e.getLocalizedMessage();
-		}
 	}
 }

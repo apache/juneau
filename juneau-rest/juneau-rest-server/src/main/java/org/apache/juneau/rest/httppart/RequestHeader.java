@@ -109,6 +109,15 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
+	 * Returns the value of this header as a {@link BasicBooleanHeader}.
+	 *
+	 * @return The value of this header as a {@link BasicBooleanHeader}, never <jk>null</jk>.
+	 */
+	public BasicBooleanHeader asBooleanHeader() {
+		return new BasicBooleanHeader(getName(), getValue());
+	}
+
+	/**
 	 * Returns the value of this header as a {@link BasicCsvHeader}.
 	 *
 	 * @return The value of this header as a  {@link BasicCsvHeader}, never <jk>null</jk>.
@@ -127,21 +136,21 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicEntityTagsHeader}.
-	 *
-	 * @return The value of this header as a {@link BasicEntityTagsHeader}, never <jk>null</jk>.
-	 */
-	public BasicEntityTagsHeader asEntityTagsHeader() {
-		return new BasicEntityTagsHeader(getName(), getValue());
-	}
-
-	/**
 	 * Returns the value of this header as a {@link BasicEntityTagHeader}.
 	 *
 	 * @return The value of this header as a {@link BasicEntityTagHeader}, never <jk>null</jk>.
 	 */
 	public BasicEntityTagHeader asEntityTagHeader() {
 		return new BasicEntityTagHeader(getName(), getValue());
+	}
+
+	/**
+	 * Returns the value of this header as a {@link BasicEntityTagsHeader}.
+	 *
+	 * @return The value of this header as a {@link BasicEntityTagsHeader}, never <jk>null</jk>.
+	 */
+	public BasicEntityTagsHeader asEntityTagsHeader() {
+		return new BasicEntityTagsHeader(getName(), getValue());
 	}
 
 	/**
@@ -154,30 +163,12 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicBooleanHeader}.
-	 *
-	 * @return The value of this header as a {@link BasicBooleanHeader}, never <jk>null</jk>.
-	 */
-	public BasicBooleanHeader asBooleanHeader() {
-		return new BasicBooleanHeader(getName(), getValue());
-	}
-
-	/**
 	 * Returns the value of this header as a {@link BasicLongHeader}.
 	 *
 	 * @return The value of this header as a {@link BasicLongHeader}, never <jk>null</jk>.
 	 */
 	public BasicLongHeader asLongHeader() {
 		return new BasicLongHeader(getName(), getValue());
-	}
-
-	/**
-	 * Returns the value of this header as a {@link BasicStringRangesHeader}.
-	 *
-	 * @return The value of this header as a {@link BasicStringRangesHeader}, never <jk>null</jk>.
-	 */
-	public BasicStringRangesHeader asStringRangesHeader() {
-		return new BasicStringRangesHeader(getName(), getValue());
 	}
 
 	/**
@@ -190,12 +181,27 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
+	 * Returns the value of this header as a {@link BasicStringRangesHeader}.
+	 *
+	 * @return The value of this header as a {@link BasicStringRangesHeader}, never <jk>null</jk>.
+	 */
+	public BasicStringRangesHeader asStringRangesHeader() {
+		return new BasicStringRangesHeader(getName(), getValue());
+	}
+
+	/**
 	 * Returns the value of this header as a {@link BasicUriHeader}.
 	 *
 	 * @return The value of this header as a {@link BasicUriHeader}, never <jk>null</jk>.
 	 */
 	public BasicUriHeader asUriHeader() {
 		return new BasicUriHeader(getName(), getValue());
+	}
+
+	@Override /* Overridden from RequestHttpPart */
+	public RequestHeader def(String def) {
+		super.def(def);
+		return this;
 	}
 
 	/**
@@ -209,14 +215,9 @@ public class RequestHeader extends RequestHttpPart implements Header {
 		return new HeaderElement[0];
 	}
 
-	@Override /* Overridden from Object */
-	public String toString() {
-		return getName() + ": " + getValue();
-	}
-
 	@Override /* Overridden from RequestHttpPart */
-	public RequestHeader def(String def) {
-		super.def(def);
+	public RequestHeader parser(HttpPartParserSession value) {
+		super.parser(value);
 		return this;
 	}
 
@@ -226,9 +227,8 @@ public class RequestHeader extends RequestHttpPart implements Header {
 		return this;
 	}
 
-	@Override /* Overridden from RequestHttpPart */
-	public RequestHeader parser(HttpPartParserSession value) {
-		super.parser(value);
-		return this;
+	@Override /* Overridden from Object */
+	public String toString() {
+		return getName() + ": " + getValue();
 	}
 }

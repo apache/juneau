@@ -28,37 +28,36 @@ import org.apache.juneau.common.utils.*;
  */
 public class ConfigEvent {
 
-	private final ConfigEventType type;
-	private final String config, section, key, value, comment;
-	private final List<String> preLines;
-	private final String modifiers;
-
 	/**
-	 * Constructor.
-	 * @param type - The event type.
-	 * @param config - The configuration name.
-	 * @param section - The section name.
-	 * @param key - The entry name.
-	 * @param value - The entry value.
-	 * @param modifiers - The entry modifiers.
-	 * @param comment - Optional comment string to add on the same line as the entry.
-	 * @param preLines - Optional comment lines that occur before this entry.
+	 * Removes a value from a configuration.
+	 *
+	 * @param config
+	 * 	The configuration name.
+	 * @param section
+	 * 	The section name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param key
+	 * 	The entry name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return
+	 * 	A new {@link ConfigEvent} object.
 	 */
-	protected ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
-		this.type = type;
-		this.config = config;
-		this.section = section;
-		this.key = key;
-		this.value = value;
-		this.comment = comment;
-		this.preLines = preLines;
-		this.modifiers = modifiers;
+	public static ConfigEvent removeEntry(String config, String section, String key) {
+		return new ConfigEvent(REMOVE_ENTRY, config, section, key, null, null, null, null);
 	}
-
-	//---------------------------------------------------------------------------------------------
-	// Static
-	//---------------------------------------------------------------------------------------------
-
+	/**
+	 * Removes a section from the config.
+	 *
+	 * @param config
+	 * 	The configuration name.
+	 * @param section
+	 * 	The section name.
+	 * @return
+	 * 	A new {@link ConfigEvent} object.
+	 */
+	public static ConfigEvent removeSection(String config, String section) {
+		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null, null);
+	}
 	/**
 	 * Sets or replaces a value in a configuration.
 	 *
@@ -86,25 +85,6 @@ public class ConfigEvent {
 	public static ConfigEvent setEntry(String config, String section, String key, String value, String modifiers, String comment, List<String> prelines) {
 		return new ConfigEvent(SET_ENTRY, config, section, key, value, modifiers, comment, prelines);
 	}
-
-	/**
-	 * Removes a value from a configuration.
-	 *
-	 * @param config
-	 * 	The configuration name.
-	 * @param section
-	 * 	The section name.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param key
-	 * 	The entry name.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @return
-	 * 	A new {@link ConfigEvent} object.
-	 */
-	public static ConfigEvent removeEntry(String config, String section, String key) {
-		return new ConfigEvent(REMOVE_ENTRY, config, section, key, null, null, null, null);
-	}
-
 	/**
 	 * Adds a new empty section to the config.
 	 *
@@ -122,31 +102,41 @@ public class ConfigEvent {
 		return new ConfigEvent(SET_SECTION, config, section, null, null, null, null, prelines);
 	}
 
+	private final ConfigEventType type;
+	private final String config, section, key, value, comment;
+
+	private final List<String> preLines;
+
+	private final String modifiers;
+
 	/**
-	 * Removes a section from the config.
-	 *
-	 * @param config
-	 * 	The configuration name.
-	 * @param section
-	 * 	The section name.
-	 * @return
-	 * 	A new {@link ConfigEvent} object.
+	 * Constructor.
+	 * @param type - The event type.
+	 * @param config - The configuration name.
+	 * @param section - The section name.
+	 * @param key - The entry name.
+	 * @param value - The entry value.
+	 * @param modifiers - The entry modifiers.
+	 * @param comment - Optional comment string to add on the same line as the entry.
+	 * @param preLines - Optional comment lines that occur before this entry.
 	 */
-	public static ConfigEvent removeSection(String config, String section) {
-		return new ConfigEvent(REMOVE_SECTION, config, section, null, null, null, null, null);
+	protected ConfigEvent(ConfigEventType type, String config, String section, String key, String value, String modifiers, String comment, List<String> preLines) {
+		this.type = type;
+		this.config = config;
+		this.section = section;
+		this.key = key;
+		this.value = value;
+		this.comment = comment;
+		this.preLines = preLines;
+		this.modifiers = modifiers;
 	}
-
-	//---------------------------------------------------------------------------------------------
-	// Instance
-	//---------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the event type.
+	 * Returns the entry comment.
 	 *
-	 * @return The event type.
+	 * @return The entry comment.
 	 */
-	public ConfigEventType getType() {
-		return type;
+	public String getComment() {
+		return comment;
 	}
 
 	/**
@@ -159,15 +149,6 @@ public class ConfigEvent {
 	}
 
 	/**
-	 * Returns the section name.
-	 *
-	 * @return The section name.
-	 */
-	public String getSection() {
-		return section;
-	}
-
-	/**
 	 * Returns the entry name.
 	 *
 	 * @return The entry name.
@@ -177,21 +158,14 @@ public class ConfigEvent {
 	}
 
 	/**
-	 * Returns the entry value.
+	 * Returns the modifiers on this entry.
 	 *
-	 * @return The entry value.
+	 * @return
+	 * 	The modifier characters.
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	public String getValue() {
-		return value;
-	}
-
-	/**
-	 * Returns the entry comment.
-	 *
-	 * @return The entry comment.
-	 */
-	public String getComment() {
-		return comment;
+	public String getModifiers() {
+		return modifiers;
 	}
 
 	/**
@@ -204,14 +178,30 @@ public class ConfigEvent {
 	}
 
 	/**
-	 * Returns the modifiers on this entry.
+	 * Returns the section name.
 	 *
-	 * @return
-	 * 	The modifier characters.
-	 * 	<br>Never <jk>null</jk>.
+	 * @return The section name.
 	 */
-	public String getModifiers() {
-		return modifiers;
+	public String getSection() {
+		return section;
+	}
+
+	/**
+	 * Returns the event type.
+	 *
+	 * @return The event type.
+	 */
+	public ConfigEventType getType() {
+		return type;
+	}
+
+	/**
+	 * Returns the entry value.
+	 *
+	 * @return The entry value.
+	 */
+	public String getValue() {
+		return value;
 	}
 
 	@Override /* Overridden from Object */

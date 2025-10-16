@@ -82,20 +82,40 @@ public class Verify {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Overrides the default error message produced by the verification.
+	 * Verifies that this object is equal to the specified object.
 	 *
-	 * @param msg The error message.
-	 * @param args Optional message arguments.
-	 * @return This object.
+	 * @param expected The object to test against for equality.
+	 * @return An error message if the object is not equal to the specified object, otherwise <jk>null</jk>.
 	 */
-	public Verify msg(String msg, Object args) {
-		this.msg = () -> StringUtils.format(msg, args);
-		return this;
+	public String is(Object expected) {
+		if (expected == o)
+			return null;
+		if (expected == null || o == null || ! expected.equals(o))
+			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
+		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Verifies that this object is equal to {@link Boolean#FALSE}.
+	 *
+	 * @return An error message if the object is not false, otherwise <jk>null</jk>.
+	 */
+	public String isFalse() {
+		return is(false);
+	}
+
+	/**
+	 * Verifies that this object is equal to {@link Boolean#TRUE}.
+	 *
+	 * @return An error message if the object is not true, otherwise <jk>null</jk>.
+	 */
+	public String isTrue() {
+		return is(true);
+	}
 
 	/**
 	 * Verifies that this object is of the specified type.
@@ -111,34 +131,14 @@ public class Verify {
 	}
 
 	/**
-	 * Verifies that this object is equal to the specified object.
+	 * Overrides the default error message produced by the verification.
 	 *
-	 * @param expected The object to test against for equality.
-	 * @return An error message if the object is not equal to the specified object, otherwise <jk>null</jk>.
+	 * @param msg The error message.
+	 * @param args Optional message arguments.
+	 * @return This object.
 	 */
-	public String is(Object expected) {
-		if (expected == o)
-			return null;
-		if (expected == null || o == null || ! expected.equals(o))
-			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
-		return null;
-	}
-
-	/**
-	 * Verifies that this object is equal to {@link Boolean#TRUE}.
-	 *
-	 * @return An error message if the object is not true, otherwise <jk>null</jk>.
-	 */
-	public String isTrue() {
-		return is(true);
-	}
-
-	/**
-	 * Verifies that this object is equal to {@link Boolean#FALSE}.
-	 *
-	 * @return An error message if the object is not false, otherwise <jk>null</jk>.
-	 */
-	public String isFalse() {
-		return is(false);
+	public Verify msg(String msg, Object args) {
+		this.msg = () -> StringUtils.format(msg, args);
+		return this;
 	}
 }

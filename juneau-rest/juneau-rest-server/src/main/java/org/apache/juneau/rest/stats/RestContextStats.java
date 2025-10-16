@@ -47,6 +47,15 @@ public class RestContextStats {
 	}
 
 	/**
+	 * Returns statistics on all method executions.
+	 *
+	 * @return Statistics on all method executions.
+	 */
+	public Collection<MethodExecStats> getMethodStats() {
+		return methodStats;
+	}
+
+	/**
 	 * Returns the time this REST resource class was started.
 	 *
 	 * @return The time this REST resource class was started.
@@ -64,14 +73,5 @@ public class RestContextStats {
 	public String getUpTime() {
 		long s = Duration.between(startTime, Instant.now()).getSeconds();
 		return String.format("%dh:%02dm:%02ds", s / 3600, (s % 3600) / 60, (s % 60));
-	}
-
-	/**
-	 * Returns statistics on all method executions.
-	 *
-	 * @return Statistics on all method executions.
-	 */
-	public Collection<MethodExecStats> getMethodStats() {
-		return methodStats;
 	}
 }

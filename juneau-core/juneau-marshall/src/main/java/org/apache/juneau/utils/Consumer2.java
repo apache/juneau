@@ -28,14 +28,6 @@ import java.util.function.*;
 public interface Consumer2<A,B> {
 
 	/**
-	 * Performs this operation on the given arguments.
-	 *
-	 * @param a Argument 1.
-	 * @param b Argument 2.
-	 */
-	void apply(A a, B b);
-
-	/**
 	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
 	 *
 	 * @param <V> The return type.
@@ -48,4 +40,12 @@ public interface Consumer2<A,B> {
 			after.apply(a, b);
 		};
 	}
+
+	/**
+	 * Performs this operation on the given arguments.
+	 *
+	 * @param a Argument 1.
+	 * @param b Argument 2.
+	 */
+	void apply(A a, B b);
 }

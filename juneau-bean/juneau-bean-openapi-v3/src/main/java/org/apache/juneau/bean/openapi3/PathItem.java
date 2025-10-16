@@ -114,246 +114,6 @@ public class PathItem extends OpenApiElement {
 	}
 
 	/**
-	 * Returns the summary.
-	 *
-	 * @return The summary.
-	 */
-	public String getSummary() {
-		return summary;
-	}
-
-	/**
-	 * Sets the summary.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setSummary(String value) {
-		this.summary = value;
-		return this;
-	}
-
-	/**
-	 * Returns the description.
-	 *
-	 * @return The description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Sets the description.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setDescription(String value) {
-		this.description = value;
-		return this;
-	}
-
-	/**
-	 * Returns the GET operation.
-	 *
-	 * @return The GET operation.
-	 */
-	public Operation getGet() {
-		return get;
-	}
-
-	/**
-	 * Sets the GET operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setGet(Operation value) {
-		this.get = value;
-		return this;
-	}
-
-	/**
-	 * Returns the PUT operation.
-	 *
-	 * @return The PUT operation.
-	 */
-	public Operation getPut() {
-		return put;
-	}
-
-	/**
-	 * Sets the PUT operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setPut(Operation value) {
-		this.put = value;
-		return this;
-	}
-
-	/**
-	 * Returns the POST operation.
-	 *
-	 * @return The POST operation.
-	 */
-	public Operation getPost() {
-		return post;
-	}
-
-	/**
-	 * Sets the POST operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setPost(Operation value) {
-		this.post = value;
-		return this;
-	}
-
-	/**
-	 * Returns the DELETE operation.
-	 *
-	 * @return The DELETE operation.
-	 */
-	public Operation getDelete() {
-		return delete;
-	}
-
-	/**
-	 * Sets the DELETE operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setDelete(Operation value) {
-		this.delete = value;
-		return this;
-	}
-
-	/**
-	 * Returns the OPTIONS operation.
-	 *
-	 * @return The OPTIONS operation.
-	 */
-	public Operation getOptions() {
-		return options;
-	}
-
-	/**
-	 * Sets the OPTIONS operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setOptions(Operation value) {
-		this.options = value;
-		return this;
-	}
-
-	/**
-	 * Returns the HEAD operation.
-	 *
-	 * @return The HEAD operation.
-	 */
-	public Operation getHead() {
-		return head;
-	}
-
-	/**
-	 * Sets the HEAD operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setHead(Operation value) {
-		this.head = value;
-		return this;
-	}
-
-	/**
-	 * Returns the PATCH operation.
-	 *
-	 * @return The PATCH operation.
-	 */
-	public Operation getPatch() {
-		return patch;
-	}
-
-	/**
-	 * Sets the PATCH operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setPatch(Operation value) {
-		this.patch = value;
-		return this;
-	}
-
-	/**
-	 * Returns the TRACE operation.
-	 *
-	 * @return The TRACE operation.
-	 */
-	public Operation getTrace() {
-		return trace;
-	}
-
-	/**
-	 * Sets the TRACE operation.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setTrace(Operation value) {
-		this.trace = value;
-		return this;
-	}
-
-	/**
-	 * Returns the servers list.
-	 *
-	 * @return The servers list.
-	 */
-	public List<Server> getServers() {
-		return servers;
-	}
-
-	/**
-	 * Sets the servers list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setServers(List<Server> value) {
-		this.servers = value;
-		return this;
-	}
-
-	/**
-	 * Returns the parameters list.
-	 *
-	 * @return The parameters list.
-	 */
-	public List<Parameter> getParameters() {
-		return parameters;
-	}
-
-	/**
-	 * Sets the parameters list.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public PathItem setParameters(List<Parameter> value) {
-		this.parameters = value;
-		return this;
-	}
-
-	/**
 	 * Creates a copy of this object.
 	 *
 	 * @return A copy of this object.
@@ -382,6 +142,133 @@ public class PathItem extends OpenApiElement {
 		};
 	}
 
+	/**
+	 * Returns the DELETE operation.
+	 *
+	 * @return The DELETE operation.
+	 */
+	public Operation getDelete() {
+		return delete;
+	}
+
+	/**
+	 * Returns the description.
+	 *
+	 * @return The description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Returns the GET operation.
+	 *
+	 * @return The GET operation.
+	 */
+	public Operation getGet() {
+		return get;
+	}
+
+	/**
+	 * Returns the HEAD operation.
+	 *
+	 * @return The HEAD operation.
+	 */
+	public Operation getHead() {
+		return head;
+	}
+
+	/**
+	 * Returns the OPTIONS operation.
+	 *
+	 * @return The OPTIONS operation.
+	 */
+	public Operation getOptions() {
+		return options;
+	}
+
+	/**
+	 * Returns the parameters list.
+	 *
+	 * @return The parameters list.
+	 */
+	public List<Parameter> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * Returns the PATCH operation.
+	 *
+	 * @return The PATCH operation.
+	 */
+	public Operation getPatch() {
+		return patch;
+	}
+
+	/**
+	 * Returns the POST operation.
+	 *
+	 * @return The POST operation.
+	 */
+	public Operation getPost() {
+		return post;
+	}
+
+	/**
+	 * Returns the PUT operation.
+	 *
+	 * @return The PUT operation.
+	 */
+	public Operation getPut() {
+		return put;
+	}
+
+	/**
+	 * Returns the servers list.
+	 *
+	 * @return The servers list.
+	 */
+	public List<Server> getServers() {
+		return servers;
+	}
+
+	/**
+	 * Returns the summary.
+	 *
+	 * @return The summary.
+	 */
+	public String getSummary() {
+		return summary;
+	}
+
+	/**
+	 * Returns the TRACE operation.
+	 *
+	 * @return The TRACE operation.
+	 */
+	public Operation getTrace() {
+		return trace;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(delete != null, "delete")
+			.addIf(description != null, "description")
+			.addIf(get != null, "get")
+			.addIf(head != null, "head")
+			.addIf(options != null, "options")
+			.addIf(patch != null, "patch")
+			.addIf(parameters != null, "parameters")
+			.addIf(post != null, "post")
+			.addIf(put != null, "put")
+			.addIf(servers != null, "servers")
+			.addIf(summary != null, "summary")
+			.addIf(trace != null, "trace")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
 	@Override /* Overridden from OpenApiElement */
 	public PathItem set(String property, Object value) {
 		assertArgNotNull("property", property);
@@ -405,23 +292,136 @@ public class PathItem extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(delete != null, "delete")
-			.addIf(description != null, "description")
-			.addIf(get != null, "get")
-			.addIf(head != null, "head")
-			.addIf(options != null, "options")
-			.addIf(patch != null, "patch")
-			.addIf(parameters != null, "parameters")
-			.addIf(post != null, "post")
-			.addIf(put != null, "put")
-			.addIf(servers != null, "servers")
-			.addIf(summary != null, "summary")
-			.addIf(trace != null, "trace")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets the DELETE operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setDelete(Operation value) {
+		this.delete = value;
+		return this;
+	}
+
+	/**
+	 * Sets the description.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setDescription(String value) {
+		this.description = value;
+		return this;
+	}
+
+	/**
+	 * Sets the GET operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setGet(Operation value) {
+		this.get = value;
+		return this;
+	}
+
+	/**
+	 * Sets the HEAD operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setHead(Operation value) {
+		this.head = value;
+		return this;
+	}
+
+	/**
+	 * Sets the OPTIONS operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setOptions(Operation value) {
+		this.options = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parameters list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setParameters(List<Parameter> value) {
+		this.parameters = value;
+		return this;
+	}
+
+	/**
+	 * Sets the PATCH operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setPatch(Operation value) {
+		this.patch = value;
+		return this;
+	}
+
+	/**
+	 * Sets the POST operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setPost(Operation value) {
+		this.post = value;
+		return this;
+	}
+
+	/**
+	 * Sets the PUT operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setPut(Operation value) {
+		this.put = value;
+		return this;
+	}
+
+	/**
+	 * Sets the servers list.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setServers(List<Server> value) {
+		this.servers = value;
+		return this;
+	}
+
+	/**
+	 * Sets the summary.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setSummary(String value) {
+		this.summary = value;
+		return this;
+	}
+
+	/**
+	 * Sets the TRACE operation.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public PathItem setTrace(Operation value) {
+		this.trace = value;
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */

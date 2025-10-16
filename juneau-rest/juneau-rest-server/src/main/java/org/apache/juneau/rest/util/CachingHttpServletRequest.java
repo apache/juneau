@@ -29,9 +29,8 @@ import jakarta.servlet.http.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {
-
-	private final byte[] content;
 
 	/**
 	 * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already.
@@ -46,6 +45,8 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 		return new CachingHttpServletRequest(req);
 	}
 
+	private final byte[] content;
+
 	/**
 	 * Constructor.
 	 *
@@ -57,11 +58,6 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 		this.content = readBytes(req.getInputStream());
 	}
 
-	@Override
-	public ServletInputStream getInputStream() {
-		return new BoundedServletInputStream(content);
-	}
-
 	/**
 	 * Returns the content of the servlet request without consuming the stream.
 	 *
@@ -69,5 +65,10 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	 */
 	public byte[] getContent() {
 		return content;
+	}
+
+	@Override
+	public ServletInputStream getInputStream() {
+		return new BoundedServletInputStream(content);
 	}
 }

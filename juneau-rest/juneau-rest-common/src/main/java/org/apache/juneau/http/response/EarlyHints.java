@@ -94,13 +94,13 @@ public class EarlyHints extends BasicHttpResponse {
 		return new EarlyHints(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public EarlyHints setContent(String value) {
+	public EarlyHints setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public EarlyHints setContent(HttpEntity value) {
+	public EarlyHints setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class EarlyHints extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public EarlyHints setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public EarlyHints setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public EarlyHints setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public EarlyHints setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

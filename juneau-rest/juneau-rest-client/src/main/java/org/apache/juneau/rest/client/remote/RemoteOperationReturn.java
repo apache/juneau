@@ -98,12 +98,12 @@ public class RemoteOperationReturn {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the return is wrapped in a {@link Future}.
+	 * Specifies whether the return value is the body of the request or the HTTP status.
 	 *
-	 * @return <jk>true</jk> if the return is wrapped in a {@link Future}.
+	 * @return The type of value returned.
 	 */
-	public boolean isFuture() {
-		return isFuture;
+	public RemoteReturn getReturnValue() {
+		return returnValue;
 	}
 
 	/**
@@ -116,11 +116,11 @@ public class RemoteOperationReturn {
 	}
 
 	/**
-	 * Specifies whether the return value is the body of the request or the HTTP status.
+	 * Returns <jk>true</jk> if the return is wrapped in a {@link Future}.
 	 *
-	 * @return The type of value returned.
+	 * @return <jk>true</jk> if the return is wrapped in a {@link Future}.
 	 */
-	public RemoteReturn getReturnValue() {
-		return returnValue;
+	public boolean isFuture() {
+		return isFuture;
 	}
 }

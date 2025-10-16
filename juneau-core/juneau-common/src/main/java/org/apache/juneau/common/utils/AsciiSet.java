@@ -22,39 +22,48 @@ import java.util.*;
  * Stores a set of ASCII characters for quick lookup.
  */
 public class AsciiSet {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates an ASCII set with the specified characters.
-	 *
-	 * @param chars The characters to keep in this store.
-	 * @return A new object.
-	 */
-	public static AsciiSet of(String chars) {
-		return new Builder().chars(chars).build();
-	}
-
-	/**
-	 * Creates a builder for an ASCII set.
-	 *
-	 * @return A new builder.
-	 */
-	public static AsciiSet.Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
 	public static class Builder {
 		final boolean[] store = new boolean[128];
+
+		/**
+		 * Create a new {@link AsciiSet} object with the contents of this builder.
+		 *
+		 * @return A new {link AsciiSet} object.
+		 */
+		public AsciiSet build() {
+			return new AsciiSet(store);
+		}
+
+		/**
+		 * Adds a set of characters to this set.
+		 *
+		 * @param chars The characters to keep in this store.
+		 * @return This object.
+		 */
+		public Builder chars(char...chars) {
+			for (var i = 0; i < chars.length; i++)
+				if (chars[i] < 128)
+					store[chars[i]] = true;
+			return this;
+		}
+
+		/**
+		 * Adds a set of characters to this set.
+		 *
+		 * @param chars The characters to keep in this store.
+		 * @return This object.
+		 */
+		public AsciiSet.Builder chars(String chars) {
+			for (var i = 0; i < chars.length(); i++) {
+				var c = chars.charAt(i);
+				if (c < 128)
+					store[c] = true;
+			}
+			return this;
+		}
 
 		/**
 		 * Adds a range of characters to this set.
@@ -84,64 +93,29 @@ public class AsciiSet {
 			}
 			return this;
 		}
-
-		/**
-		 * Adds a set of characters to this set.
-		 *
-		 * @param chars The characters to keep in this store.
-		 * @return This object.
-		 */
-		public AsciiSet.Builder chars(String chars) {
-			for (var i = 0; i < chars.length(); i++) {
-				var c = chars.charAt(i);
-				if (c < 128)
-					store[c] = true;
-			}
-			return this;
-		}
-
-		/**
-		 * Adds a set of characters to this set.
-		 *
-		 * @param chars The characters to keep in this store.
-		 * @return This object.
-		 */
-		public Builder chars(char...chars) {
-			for (var i = 0; i < chars.length; i++)
-				if (chars[i] < 128)
-					store[chars[i]] = true;
-			return this;
-		}
-
-		/**
-		 * Create a new {@link AsciiSet} object with the contents of this builder.
-		 *
-		 * @return A new {link AsciiSet} object.
-		 */
-		public AsciiSet build() {
-			return new AsciiSet(store);
-		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a builder for an ASCII set.
+	 *
+	 * @return A new builder.
+	 */
+	public static AsciiSet.Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Creates an ASCII set with the specified characters.
+	 *
+	 * @param chars The characters to keep in this store.
+	 * @return A new object.
+	 */
+	public static AsciiSet of(String chars) {
+		return new Builder().chars(chars).build();
+	}
 	private final boolean[] store;
 
 	AsciiSet(boolean[] store) {
 		this.store = Arrays.copyOf(store, store.length);
-	}
-
-	/**
-	 * Copies an existing {@link AsciiSet} so that you can augment it with additional values.
-	 *
-	 * @return A builder initialized to the same characters in the copied set.
-	 */
-	public AsciiSet.Builder copy() {
-		var b = new Builder();
-		System.arraycopy(store, 0, b.store, 0, 128);
-		return b;
 	}
 
 	/**
@@ -152,18 +126,6 @@ public class AsciiSet {
 	 */
 	public boolean contains(char c) {
 		if (c > 127)
-			return false;
-		return store[c];
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified character is in this store.
-	 *
-	 * @param c The character to check.
-	 * @return <jk>true</jk> if the specified character is in this store.
-	 */
-	public boolean contains(int c) {
-		if (c < 0 || c > 127)
 			return false;
 		return store[c];
 	}
@@ -184,6 +146,18 @@ public class AsciiSet {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the specified character is in this store.
+	 *
+	 * @param c The character to check.
+	 * @return <jk>true</jk> if the specified character is in this store.
+	 */
+	public boolean contains(int c) {
+		if (c < 0 || c > 127)
+			return false;
+		return store[c];
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the specified string contains only characters in this set.
 	 *
 	 * @param s The string to test.
@@ -199,5 +173,16 @@ public class AsciiSet {
 			if (! contains(s.charAt(i)))
 				return false;
 		return true;
+	}
+
+	/**
+	 * Copies an existing {@link AsciiSet} so that you can augment it with additional values.
+	 *
+	 * @return A builder initialized to the same characters in the copied set.
+	 */
+	public AsciiSet.Builder copy() {
+		var b = new Builder();
+		System.arraycopy(store, 0, b.store, 0, 128);
+		return b;
 	}
 }

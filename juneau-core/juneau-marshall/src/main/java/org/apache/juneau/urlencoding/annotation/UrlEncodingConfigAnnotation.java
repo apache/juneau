@@ -31,28 +31,6 @@ import org.apache.juneau.urlencoding.*;
 public class UrlEncodingConfigAnnotation {
 
 	/**
-	 * Applies {@link UrlEncodingConfig} annotations to a {@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder}.
-	 */
-	public static class SerializerApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingSerializer.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public SerializerApply(VarResolverSession vr) {
-			super(UrlEncodingConfig.class, UrlEncodingSerializer.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingSerializer.Builder b) {
-			UrlEncodingConfig a = ai.inner();
-
-			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));
-		}
-	}
-
-	/**
 	 * Applies {@link UrlEncodingConfig} annotations to a {@link org.apache.juneau.urlencoding.UrlEncodingParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingParser.Builder> {
@@ -68,6 +46,28 @@ public class UrlEncodingConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingParser.Builder b) {
+			UrlEncodingConfig a = ai.inner();
+
+			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));
+		}
+	}
+
+	/**
+	 * Applies {@link UrlEncodingConfig} annotations to a {@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder}.
+	 */
+	public static class SerializerApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public SerializerApply(VarResolverSession vr) {
+			super(UrlEncodingConfig.class, UrlEncodingSerializer.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<UrlEncodingConfig> ai, UrlEncodingSerializer.Builder b) {
 			UrlEncodingConfig a = ai.inner();
 
 			bool(a.expandedParams()).ifPresent(x -> b.expandedParams(x));

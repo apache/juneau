@@ -89,7 +89,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#ul() ul()}
- * 		<li class='jm'>{@link HtmlBuilder#ul(Object, Object...) ul(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#ul(Object...) ul(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -114,10 +114,6 @@ public class Ul extends HtmlElementContainer {
 	public Ul(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Ul _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -127,6 +123,30 @@ public class Ul extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Ul accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Ul attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Ul attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Ul child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Ul children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -460,6 +480,12 @@ public class Ul extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Ul setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Ul spellcheck(Object value) {
 		super.spellcheck(value);
@@ -487,36 +513,6 @@ public class Ul extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Ul translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Ul child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Ul children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Ul setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ul attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ul attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

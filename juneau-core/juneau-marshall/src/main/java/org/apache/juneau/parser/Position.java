@@ -38,6 +38,17 @@ public class Position {
 	/**
 	 * Constructor.
 	 *
+	 * @param position The current byte position.
+	 */
+	public Position(int position) {
+		this.line = -1;
+		this.column = -1;
+		this.position = position;
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param line The current line number.
 	 * @param column The current column number.
 	 */
@@ -48,14 +59,30 @@ public class Position {
 	}
 
 	/**
-	 * Constructor.
+	 * Returns the current column.
 	 *
-	 * @param position The current byte position.
+	 * @return The current column, or <c>-1</c> if not specified.
 	 */
-	public Position(int position) {
-		this.line = -1;
-		this.column = -1;
-		this.position = position;
+	public int getColumn() {
+		return column;
+	}
+
+	/**
+	 * Returns the current line.
+	 *
+	 * @return The current line, or <c>-1</c> if not specified.
+	 */
+	public int getLine() {
+		return line;
+	}
+
+	/**
+	 * Returns the current byte position.
+	 *
+	 * @return The current byte position, or <c>-1</c> if not specified.
+	 */
+	public int getPosition() {
+		return position;
 	}
 
 	@Override /* Overridden from Object */
@@ -70,32 +97,5 @@ public class Position {
 		if (l.isEmpty())
 			l.add("unknown");
 		return Utils.join(l, ", ");
-	}
-
-	/**
-	 * Returns the current line.
-	 *
-	 * @return The current line, or <c>-1</c> if not specified.
-	 */
-	public int getLine() {
-		return line;
-	}
-
-	/**
-	 * Returns the current column.
-	 *
-	 * @return The current column, or <c>-1</c> if not specified.
-	 */
-	public int getColumn() {
-		return column;
-	}
-
-	/**
-	 * Returns the current byte position.
-	 *
-	 * @return The current byte position, or <c>-1</c> if not specified.
-	 */
-	public int getPosition() {
-		return position;
 	}
 }

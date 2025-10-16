@@ -74,6 +74,57 @@ public class AnnotationUtils {
 			.sum();
 	}
 
+	private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {
+		if (a1.length != a2.length)
+			return false;
+		for (int i = 0; i < a1.length; i++)
+			if (! equals(a1[i], a2[i]))
+				return false;
+		return true;
+	}
+
+	private static boolean arrayMemberEquals(Class<?> componentType, Object o1, Object o2) {
+		if (componentType.isAnnotation())
+			return annotationArrayMemberEquals((Annotation[]) o1, (Annotation[]) o2);
+		if (componentType.equals(Byte.TYPE))
+			return Arrays.equals((byte[]) o1, (byte[]) o2);
+		if (componentType.equals(Short.TYPE))
+			return Arrays.equals((short[]) o1, (short[]) o2);
+		if (componentType.equals(Integer.TYPE))
+			return Arrays.equals((int[]) o1, (int[]) o2);
+		if (componentType.equals(Character.TYPE))
+			return Arrays.equals((char[]) o1, (char[]) o2);
+		if (componentType.equals(Long.TYPE))
+			return Arrays.equals((long[]) o1, (long[]) o2);
+		if (componentType.equals(Float.TYPE))
+			return Arrays.equals((float[]) o1, (float[]) o2);
+		if (componentType.equals(Double.TYPE))
+			return Arrays.equals((double[]) o1, (double[]) o2);
+		if (componentType.equals(Boolean.TYPE))
+			return Arrays.equals((boolean[]) o1, (boolean[]) o2);
+		return Arrays.equals((Object[]) o1, (Object[]) o2);
+	}
+
+	private static int arrayMemberHash(Class<?> componentType, Object o) {
+		if (componentType.equals(Byte.TYPE))
+			return Arrays.hashCode((byte[]) o);
+		if (componentType.equals(Short.TYPE))
+			return Arrays.hashCode((short[]) o);
+		if (componentType.equals(Integer.TYPE))
+			return Arrays.hashCode((int[]) o);
+		if (componentType.equals(Character.TYPE))
+			return Arrays.hashCode((char[]) o);
+		if (componentType.equals(Long.TYPE))
+			return Arrays.hashCode((long[]) o);
+		if (componentType.equals(Float.TYPE))
+			return Arrays.hashCode((float[]) o);
+		if (componentType.equals(Double.TYPE))
+			return Arrays.hashCode((double[]) o);
+		if (componentType.equals(Boolean.TYPE))
+			return Arrays.hashCode((boolean[]) o);
+		return Arrays.hashCode((Object[]) o);
+	}
+
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
 		return alist(type.getDeclaredMethods())
 			.stream()
@@ -102,56 +153,5 @@ public class AnnotationUtils {
 		if (type.isAnnotation())
 			return equals((Annotation) o1, (Annotation) o2);
 		return o1.equals(o2);
-	}
-
-	private static boolean arrayMemberEquals(Class<?> componentType, Object o1, Object o2) {
-		if (componentType.isAnnotation())
-			return annotationArrayMemberEquals((Annotation[]) o1, (Annotation[]) o2);
-		if (componentType.equals(Byte.TYPE))
-			return Arrays.equals((byte[]) o1, (byte[]) o2);
-		if (componentType.equals(Short.TYPE))
-			return Arrays.equals((short[]) o1, (short[]) o2);
-		if (componentType.equals(Integer.TYPE))
-			return Arrays.equals((int[]) o1, (int[]) o2);
-		if (componentType.equals(Character.TYPE))
-			return Arrays.equals((char[]) o1, (char[]) o2);
-		if (componentType.equals(Long.TYPE))
-			return Arrays.equals((long[]) o1, (long[]) o2);
-		if (componentType.equals(Float.TYPE))
-			return Arrays.equals((float[]) o1, (float[]) o2);
-		if (componentType.equals(Double.TYPE))
-			return Arrays.equals((double[]) o1, (double[]) o2);
-		if (componentType.equals(Boolean.TYPE))
-			return Arrays.equals((boolean[]) o1, (boolean[]) o2);
-		return Arrays.equals((Object[]) o1, (Object[]) o2);
-	}
-
-	private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {
-		if (a1.length != a2.length)
-			return false;
-		for (int i = 0; i < a1.length; i++)
-			if (! equals(a1[i], a2[i]))
-				return false;
-		return true;
-	}
-
-	private static int arrayMemberHash(Class<?> componentType, Object o) {
-		if (componentType.equals(Byte.TYPE))
-			return Arrays.hashCode((byte[]) o);
-		if (componentType.equals(Short.TYPE))
-			return Arrays.hashCode((short[]) o);
-		if (componentType.equals(Integer.TYPE))
-			return Arrays.hashCode((int[]) o);
-		if (componentType.equals(Character.TYPE))
-			return Arrays.hashCode((char[]) o);
-		if (componentType.equals(Long.TYPE))
-			return Arrays.hashCode((long[]) o);
-		if (componentType.equals(Float.TYPE))
-			return Arrays.hashCode((float[]) o);
-		if (componentType.equals(Double.TYPE))
-			return Arrays.hashCode((double[]) o);
-		if (componentType.equals(Boolean.TYPE))
-			return Arrays.hashCode((boolean[]) o);
-		return Arrays.hashCode((Object[]) o);
 	}
 }

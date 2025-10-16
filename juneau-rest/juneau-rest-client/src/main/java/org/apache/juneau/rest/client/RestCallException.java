@@ -37,79 +37,6 @@ public class RestCallException extends HttpException {
 
 	private static final long serialVersionUID = 1L;
 
-	private final int statusCode;
-	private final Thrown thrown;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param response The HTTP response.  Can be <jk>null</jk>.
-	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
-		this(
-			(response == null ? 0 : response.getStatusCode()),
-			(response == null ? Thrown.EMPTY : response.getHeader("Thrown").as(Thrown.class).orElse(null)),
-			cause, message, args
-		);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param statusCode The HTTP response status code.  Use <c>0</c> if no connection could be made.
-	 * @param thrown The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk>.
-	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public RestCallException(int statusCode, Thrown thrown, Throwable cause, String message, Object...args) {
-		super(format(message,args),cause);
-		this.statusCode = statusCode;
-		this.thrown = thrown;
-	}
-
-	/**
-	 * Returns the value of the <js>"Thrown"</js> header on the response.
-	 *
-	 * @return The value of the <js>"Thrown"</js> header on the response, never <jk>null</jk>.
-	 */
-	public Thrown getThrown() {
-		return thrown;
-	}
-
-	/**
-	 * Returns the HTTP response status code.
-	 *
-	 * @return The response status code.  If a connection could not be made at all, returns <c>0</c>.
-	 */
-	public int getResponseCode() {
-		return statusCode;
-	}
-
-	/**
-	 * Similar to {@link #getCause()} but searches until it finds the throwable of the specified type.
-	 *
-	 * @param <T> The throwable type.
-	 * @param c The throwable type.
-	 * @return The cause of the specified type, or <jk>null</jk> of not found.
-	 */
-	public <T extends Throwable> T getCause(Class<T> c) {
-		return ThrowableUtils.getCause(c, this);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//------------------------------------------------------------------------------------------------------------------
-
-	private static String format(String msg, Object...args) {
-		if (args.length == 0)
-			return clean(msg);
-		return clean(StringUtils.format(msg, args));
-	}
-
 	// HttpException has a bug involving ASCII control characters so just replace them with spaces.
 	private static String clean(String message) {
 		message = emptyIfNull(message);
@@ -129,5 +56,73 @@ public class RestCallException extends HttpException {
 		}
 
 		return sb.toString();
+	}
+	private static String format(String msg, Object...args) {
+		if (args.length == 0)
+			return clean(msg);
+		return clean(StringUtils.format(msg, args));
+	}
+
+	private final int statusCode;
+
+	private final Thrown thrown;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param statusCode The HTTP response status code.  Use <c>0</c> if no connection could be made.
+	 * @param thrown The value of the <js>"Thrown"</js> header on the response.  Can be <jk>null</jk>.
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public RestCallException(int statusCode, Thrown thrown, Throwable cause, String message, Object...args) {
+		super(format(message,args),cause);
+		this.statusCode = statusCode;
+		this.thrown = thrown;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param response The HTTP response.  Can be <jk>null</jk>.
+	 * @param cause The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public RestCallException(RestResponse response, Throwable cause, String message, Object...args) {
+		this(
+			(response == null ? 0 : response.getStatusCode()),
+			(response == null ? Thrown.EMPTY : response.getHeader("Thrown").as(Thrown.class).orElse(null)),
+			cause, message, args
+		);
+	}
+
+	/**
+	 * Similar to {@link #getCause()} but searches until it finds the throwable of the specified type.
+	 *
+	 * @param <T> The throwable type.
+	 * @param c The throwable type.
+	 * @return The cause of the specified type, or <jk>null</jk> of not found.
+	 */
+	public <T extends Throwable> T getCause(Class<T> c) {
+		return ThrowableUtils.getCause(c, this);
+	}
+	/**
+	 * Returns the HTTP response status code.
+	 *
+	 * @return The response status code.  If a connection could not be made at all, returns <c>0</c>.
+	 */
+	public int getResponseCode() {
+		return statusCode;
+	}
+
+	/**
+	 * Returns the value of the <js>"Thrown"</js> header on the response.
+	 *
+	 * @return The value of the <js>"Thrown"</js> header on the response, never <jk>null</jk>.
+	 */
+	public Thrown getThrown() {
+		return thrown;
 	}
 }

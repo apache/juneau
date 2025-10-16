@@ -31,9 +31,22 @@ import org.apache.juneau.common.utils.*;
 public class OpenApiBuilder {
 
 	/**
-	 * Constructor.
+	 * Creates an empty {@link Callback} element.
+	 *
+	 * @return The new element.
 	 */
-	private OpenApiBuilder() {}
+	public static final Callback callback() {
+		return new Callback();
+	}
+
+	/**
+	 * Creates an empty {@link Components} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Components components() {
+		return new Components();
+	}
 
 	/**
 	 * Creates an empty {@link Contact} element.
@@ -69,6 +82,53 @@ public class OpenApiBuilder {
 	 */
 	public static final Contact contact(String name, Object url, String email) {
 		return contact().setName(name).setUrl(StringUtils.toURI(url)).setEmail(email);
+	}
+
+	/**
+	 * Creates an empty {@link Discriminator} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Discriminator discriminator() {
+		return new Discriminator();
+	}
+
+	/**
+	 * Creates a {@link Discriminator} element with the specified {@link Discriminator#setPropertyName(String) propertyName} attribute.
+	 *
+	 * @param propertyName The {@link Discriminator#setPropertyName(String) propertyName} attribute.
+	 * @return The new element.
+	 */
+	public static final Discriminator discriminator(String propertyName) {
+		return discriminator().setPropertyName(propertyName);
+	}
+
+	/**
+	 * Creates an empty {@link Encoding} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Encoding encoding() {
+		return new Encoding();
+	}
+
+	/**
+	 * Creates an {@link Encoding} element with the specified {@link Encoding#setContentType(String) contentType} attribute.
+	 *
+	 * @param contentType The {@link Encoding#setContentType(String) contentType} attribute.
+	 * @return The new element.
+	 */
+	public static final Encoding encoding(String contentType) {
+		return encoding().setContentType(contentType);
+	}
+
+	/**
+	 * Creates an empty {@link Example} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Example example() {
+		return new Example();
 	}
 
 	/**
@@ -201,6 +261,42 @@ public class OpenApiBuilder {
 	}
 
 	/**
+	 * Creates an empty {@link Link} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Link link() {
+		return new Link();
+	}
+
+	/**
+	 * Creates an empty {@link MediaType} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final MediaType mediaType() {
+		return new MediaType();
+	}
+
+	/**
+	 * Creates an empty {@link OAuthFlow} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final OAuthFlow oAuthFlow() {
+		return new OAuthFlow();
+	}
+
+	/**
+	 * Creates an empty {@link OAuthFlows} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final OAuthFlows oAuthFlows() {
+		return new OAuthFlows();
+	}
+
+	/**
 	 * Creates an empty {@link OpenApi} element.
 	 *
 	 * @return The new element.
@@ -217,91 +313,6 @@ public class OpenApiBuilder {
 	 */
 	public static final OpenApi openApi(Info info) {
 		return openApi().setInfo(info);
-	}
-
-	/**
-	 * Creates an empty {@link SchemaInfo} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final SchemaInfo schemaInfo() {
-		return new SchemaInfo();
-	}
-
-	/**
-	 * Creates an {@link SchemaInfo} element with the specified {@link SchemaInfo#setType(String) type} attribute.
-	 *
-	 * @param type The {@link SchemaInfo#setType(String) type} attribute.
-	 * @return The new element.
-	 */
-	public static final SchemaInfo schemaInfo(String type) {
-		return schemaInfo().setType(type);
-	}
-
-	/**
-	 * Creates an empty {@link SecuritySchemeInfo} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final SecuritySchemeInfo securitySchemeInfo() {
-		return new SecuritySchemeInfo();
-	}
-
-	/**
-	 * Creates an {@link SecuritySchemeInfo} element with the specified {@link SecuritySchemeInfo#setType(String) type} attribute.
-	 *
-	 * @param type The {@link SecuritySchemeInfo#setType(String) type} attribute.
-	 * @return The new element.
-	 */
-	public static final SecuritySchemeInfo securitySchemeInfo(String type) {
-		return securitySchemeInfo().setType(type);
-	}
-
-	/**
-	 * Creates an empty {@link Server} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final Server server() {
-		return new Server();
-	}
-
-	/**
-	 * Creates an {@link Server} element with the specified {@link Server#setUrl(URI) url} attribute.
-	 *
-	 * @param url The {@link Server#setUrl(URI) url} attribute.
-	 * @return The new element.
-	 */
-	public static final Server server(URI url) {
-		return server().setUrl(url);
-	}
-
-	/**
-	 * Creates an empty {@link Tag} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final Tag tag() {
-		return new Tag();
-	}
-
-	/**
-	 * Creates an {@link Tag} element with the specified {@link Tag#setName(String) name} attribute.
-	 *
-	 * @param name The {@link Tag#setName(String) name} attribute.
-	 * @return The new element.
-	 */
-	public static final Tag tag(String name) {
-		return tag().setName(name);
-	}
-
-	/**
-	 * Creates an empty {@link Xml} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final Xml xml() {
-		return new Xml();
 	}
 
 	/**
@@ -343,6 +354,15 @@ public class OpenApiBuilder {
 	}
 
 	/**
+	 * Creates an empty {@link RequestBodyInfo} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final RequestBodyInfo requestBodyInfo() {
+		return new RequestBodyInfo();
+	}
+
+	/**
 	 * Creates an empty {@link Response} element.
 	 *
 	 * @return The new element.
@@ -362,12 +382,22 @@ public class OpenApiBuilder {
 	}
 
 	/**
-	 * Creates an empty {@link Components} element.
+	 * Creates an empty {@link SchemaInfo} element.
 	 *
 	 * @return The new element.
 	 */
-	public static final Components components() {
-		return new Components();
+	public static final SchemaInfo schemaInfo() {
+		return new SchemaInfo();
+	}
+
+	/**
+	 * Creates an {@link SchemaInfo} element with the specified {@link SchemaInfo#setType(String) type} attribute.
+	 *
+	 * @param type The {@link SchemaInfo#setType(String) type} attribute.
+	 * @return The new element.
+	 */
+	public static final SchemaInfo schemaInfo(String type) {
+		return schemaInfo().setType(type);
 	}
 
 	/**
@@ -380,104 +410,41 @@ public class OpenApiBuilder {
 	}
 
 	/**
-	 * Creates an empty {@link RequestBodyInfo} element.
+	 * Creates an empty {@link SecuritySchemeInfo} element.
 	 *
 	 * @return The new element.
 	 */
-	public static final RequestBodyInfo requestBodyInfo() {
-		return new RequestBodyInfo();
+	public static final SecuritySchemeInfo securitySchemeInfo() {
+		return new SecuritySchemeInfo();
 	}
 
 	/**
-	 * Creates an empty {@link Example} element.
+	 * Creates an {@link SecuritySchemeInfo} element with the specified {@link SecuritySchemeInfo#setType(String) type} attribute.
 	 *
+	 * @param type The {@link SecuritySchemeInfo#setType(String) type} attribute.
 	 * @return The new element.
 	 */
-	public static final Example example() {
-		return new Example();
+	public static final SecuritySchemeInfo securitySchemeInfo(String type) {
+		return securitySchemeInfo().setType(type);
 	}
 
 	/**
-	 * Creates an empty {@link Link} element.
+	 * Creates an empty {@link Server} element.
 	 *
 	 * @return The new element.
 	 */
-	public static final Link link() {
-		return new Link();
+	public static final Server server() {
+		return new Server();
 	}
 
 	/**
-	 * Creates an empty {@link Callback} element.
+	 * Creates an {@link Server} element with the specified {@link Server#setUrl(URI) url} attribute.
 	 *
+	 * @param url The {@link Server#setUrl(URI) url} attribute.
 	 * @return The new element.
 	 */
-	public static final Callback callback() {
-		return new Callback();
-	}
-
-	/**
-	 * Creates an empty {@link Discriminator} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final Discriminator discriminator() {
-		return new Discriminator();
-	}
-
-	/**
-	 * Creates a {@link Discriminator} element with the specified {@link Discriminator#setPropertyName(String) propertyName} attribute.
-	 *
-	 * @param propertyName The {@link Discriminator#setPropertyName(String) propertyName} attribute.
-	 * @return The new element.
-	 */
-	public static final Discriminator discriminator(String propertyName) {
-		return discriminator().setPropertyName(propertyName);
-	}
-
-	/**
-	 * Creates an empty {@link Encoding} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final Encoding encoding() {
-		return new Encoding();
-	}
-
-	/**
-	 * Creates an {@link Encoding} element with the specified {@link Encoding#setContentType(String) contentType} attribute.
-	 *
-	 * @param contentType The {@link Encoding#setContentType(String) contentType} attribute.
-	 * @return The new element.
-	 */
-	public static final Encoding encoding(String contentType) {
-		return encoding().setContentType(contentType);
-	}
-
-	/**
-	 * Creates an empty {@link MediaType} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final MediaType mediaType() {
-		return new MediaType();
-	}
-
-	/**
-	 * Creates an empty {@link OAuthFlow} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final OAuthFlow oAuthFlow() {
-		return new OAuthFlow();
-	}
-
-	/**
-	 * Creates an empty {@link OAuthFlows} element.
-	 *
-	 * @return The new element.
-	 */
-	public static final OAuthFlows oAuthFlows() {
-		return new OAuthFlows();
+	public static final Server server(URI url) {
+		return server().setUrl(url);
 	}
 
 	/**
@@ -498,4 +465,37 @@ public class OpenApiBuilder {
 	public static final ServerVariable serverVariable(String defaultValue) {
 		return serverVariable().setDefault(defaultValue);
 	}
+
+	/**
+	 * Creates an empty {@link Tag} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Tag tag() {
+		return new Tag();
+	}
+
+	/**
+	 * Creates an {@link Tag} element with the specified {@link Tag#setName(String) name} attribute.
+	 *
+	 * @param name The {@link Tag#setName(String) name} attribute.
+	 * @return The new element.
+	 */
+	public static final Tag tag(String name) {
+		return tag().setName(name);
+	}
+
+	/**
+	 * Creates an empty {@link Xml} element.
+	 *
+	 * @return The new element.
+	 */
+	public static final Xml xml() {
+		return new Xml();
+	}
+
+	/**
+	 * Constructor.
+	 */
+	private OpenApiBuilder() {}
 }

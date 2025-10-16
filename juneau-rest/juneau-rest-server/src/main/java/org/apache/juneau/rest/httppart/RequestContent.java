@@ -94,7 +94,7 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","resource"})
 public class RequestContent {
 
 	private byte[] content;
@@ -115,87 +115,6 @@ public class RequestContent {
 	 */
 	public RequestContent(RestRequest req) {
 		this.req = req;
-	}
-
-	/**
-	 * Sets the encoders to use for decoding this content.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public RequestContent encoders(EncoderSet value) {
-		this.encoders = value;
-		return this;
-	}
-
-	/**
-	 * Sets the parsers to use for parsing this content.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public RequestContent parsers(ParserSet value) {
-		this.parsers = value;
-		return this;
-	}
-
-	/**
-	 * Sets the schema for this content.
-	 *
-	 * @param schema The new schema for this content.
-	 * @return This object.
-	 */
-	public RequestContent setSchema(HttpPartSchema schema) {
-		this.schema = schema;
-		return this;
-	}
-
-	/**
-	 * Sets the max input value for this content.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public RequestContent maxInput(long value) {
-		this.maxInput = value;
-		return this;
-	}
-
-	/**
-	 * Sets the media type of this content.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public RequestContent mediaType(MediaType value) {
-		this.mediaType = value;
-		return this;
-	}
-
-	/**
-	 * Sets the parser to use for this content.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public RequestContent parser(Parser value) {
-		this.parser = value;
-		return this;
-	}
-
-	/**
-	 * Sets the contents of this content.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public RequestContent content(byte[] value) {
-		this.content = value;
-		return this;
-	}
-
-	boolean isLoaded() {
-		return content != null;
 	}
 
 	/**
@@ -342,22 +261,6 @@ public class RequestContent {
 	 * @return The incoming input from the connection as a plain string.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	public String asString() throws IOException {
-		cache();
-		return new String(content, UTF8);
-	}
-
-	/**
-	 * Returns the HTTP content content as a plain string.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
-	 * </ul>
-	 *
-	 * @return The incoming input from the connection as a plain string.
-	 * @throws IOException If a problem occurred trying to read from the reader.
-	 */
 	public byte[] asBytes() throws IOException {
 		cache();
 		return content;
@@ -396,37 +299,62 @@ public class RequestContent {
 	}
 
 	/**
-	 * Returns the HTTP content content as a {@link Reader}.
+	 * Returns the HTTP content content as a plain string.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
-	 * 	<li class='note'>
-	 * 		Automatically handles GZipped input streams.
 	 * </ul>
 	 *
-	 * @return The content contents as a reader.
-	 * @throws IOException Thrown by underlying stream.
+	 * @return The incoming input from the connection as a plain string.
+	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	public BufferedReader getReader() throws IOException {
-		Reader r = getUnbufferedReader();
-		if (r instanceof BufferedReader)
-			return (BufferedReader)r;
-		int len = req.getHttpServletRequest().getContentLength();
-		int buffSize = len <= 0 ? 8192 : Math.max(len, 8192);
-		return new BufferedReader(r, buffSize);
+	public String asString() throws IOException {
+		cache();
+		return new String(content, UTF8);
 	}
 
 	/**
-	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};
+	 * Caches the content in memory for reuse.
 	 *
-	 * @return An unbuffered reader.
-	 * @throws IOException Thrown by underlying stream.
+	 * @return This object.
+	 * @throws IOException If error occurs while reading stream.
 	 */
-	protected Reader getUnbufferedReader() throws IOException {
-		if (content != null)
-			return new CharSequenceReader(new String(content, UTF8));
-		return new InputStreamReader(getInputStream(), req.getCharset());
+	public RequestContent cache() throws IOException {
+		if (content == null)
+			content = readBytes(getInputStream());
+		return this;
+	}
+
+	/**
+	 * Sets the contents of this content.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestContent content(byte[] value) {
+		this.content = value;
+		return this;
+	}
+
+	/**
+	 * Sets the encoders to use for decoding this content.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestContent encoders(EncoderSet value) {
+		this.encoders = value;
+		return this;
+	}
+
+	/**
+	 * Returns the content length of the content.
+	 *
+	 * @return The content length of the content in bytes.
+	 */
+	public int getContentLength() {
+		return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
 	}
 
 	/**
@@ -465,13 +393,112 @@ public class RequestContent {
 		return Utils.opt(mt).map(x -> parsers.getParserMatch(x));
 	}
 
-	private MediaType getMediaType() {
-		if (mediaType != null)
-			return mediaType;
-		Optional<ContentType> ct = req.getHeader(ContentType.class);
-		if (!ct.isPresent() && content != null)
-			return MediaType.UON;
-		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
+	/**
+	 * Returns the HTTP content content as a {@link Reader}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
+	 * 	<li class='note'>
+	 * 		Automatically handles GZipped input streams.
+	 * </ul>
+	 *
+	 * @return The content contents as a reader.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public BufferedReader getReader() throws IOException {
+		Reader r = getUnbufferedReader();
+		if (r instanceof BufferedReader)
+			return (BufferedReader)r;
+		int len = req.getHttpServletRequest().getContentLength();
+		int buffSize = len <= 0 ? 8192 : Math.max(len, 8192);
+		return new BufferedReader(r, buffSize);
+	}
+
+	/**
+	 * Sets the max input value for this content.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestContent maxInput(long value) {
+		this.maxInput = value;
+		return this;
+	}
+
+	/**
+	 * Sets the media type of this content.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestContent mediaType(MediaType value) {
+		this.mediaType = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parser to use for this content.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestContent parser(Parser value) {
+		this.parser = value;
+		return this;
+	}
+
+	/**
+	 * Sets the parsers to use for parsing this content.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestContent parsers(ParserSet value) {
+		this.parsers = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema for this content.
+	 *
+	 * @param schema The new schema for this content.
+	 * @return This object.
+	 */
+	public RequestContent setSchema(HttpPartSchema schema) {
+		this.schema = schema;
+		return this;
+	}
+
+	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
+		return req.getBeanSession().getClassMeta(type);
+	}
+
+	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
+		return req.getBeanSession().getClassMeta(type, args);
+	}
+
+	private Encoder getEncoder() throws UnsupportedMediaType {
+		if (encoder == null) {
+			String ce = req.getHeaderParam("content-encoding").orElse(null);
+			if (isNotEmpty(ce)) {
+				ce = ce.trim();
+				encoder = encoders.getEncoder(ce);
+				if (encoder == null)
+					throw new UnsupportedMediaType(
+						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
+						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings())
+					);
+			}
+
+			if (encoder != null)
+				contentLength = -1;
+		}
+		// Note that if this is the identity encoder, we want to return null
+		// so that we don't needlessly wrap the input stream.
+		if (encoder == IdentityEncoder.INSTANCE)
+			return null;
+		return encoder;
 	}
 
 	private <T> T getInner(ClassMeta<T> cm) throws BadRequest, UnsupportedMediaType, InternalServerError {
@@ -488,6 +515,15 @@ public class RequestContent {
 		} catch (Exception e) {
 			throw new InternalServerError(e, "Exception occurred while parsing request content.");
 		}
+	}
+
+	private MediaType getMediaType() {
+		if (mediaType != null)
+			return mediaType;
+		Optional<ContentType> ct = req.getHeader(ContentType.class);
+		if (!ct.isPresent() && content != null)
+			return MediaType.UON;
+		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
 	}
 
 	/* Workhorse method */
@@ -547,60 +583,19 @@ public class RequestContent {
 			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes())
 		);
 	}
-
-	private Encoder getEncoder() throws UnsupportedMediaType {
-		if (encoder == null) {
-			String ce = req.getHeaderParam("content-encoding").orElse(null);
-			if (isNotEmpty(ce)) {
-				ce = ce.trim();
-				encoder = encoders.getEncoder(ce);
-				if (encoder == null)
-					throw new UnsupportedMediaType(
-						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings())
-					);
-			}
-
-			if (encoder != null)
-				contentLength = -1;
-		}
-		// Note that if this is the identity encoder, we want to return null
-		// so that we don't needlessly wrap the input stream.
-		if (encoder == IdentityEncoder.INSTANCE)
-			return null;
-		return encoder;
-	}
-
 	/**
-	 * Returns the content length of the content.
+	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};
 	 *
-	 * @return The content length of the content in bytes.
+	 * @return An unbuffered reader.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public int getContentLength() {
-		return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
+	protected Reader getUnbufferedReader() throws IOException {
+		if (content != null)
+			return new CharSequenceReader(new String(content, UTF8));
+		return new InputStreamReader(getInputStream(), req.getCharset());
 	}
 
-	/**
-	 * Caches the content in memory for reuse.
-	 *
-	 * @return This object.
-	 * @throws IOException If error occurs while reading stream.
-	 */
-	public RequestContent cache() throws IOException {
-		if (content == null)
-			content = readBytes(getInputStream());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private <T> ClassMeta<T> getClassMeta(Type type, Type...args) {
-		return req.getBeanSession().getClassMeta(type, args);
-	}
-
-	private <T> ClassMeta<T> getClassMeta(Class<T> type) {
-		return req.getBeanSession().getClassMeta(type);
+	boolean isLoaded() {
+		return content != null;
 	}
 }

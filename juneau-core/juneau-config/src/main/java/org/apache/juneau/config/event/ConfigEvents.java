@@ -29,16 +29,6 @@ public class ConfigEvents extends ArrayList<ConfigEvent> {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Returns <jk>true</jk> if the specified section was modified in this list of events.
-	 *
-	 * @param name The section name.
-	 * @return <jk>true</jk> if the specified section was modified in this list of events.
-	 */
-	public boolean isSectionModified(String name) {
-		return stream().anyMatch(x -> eq(name, x.getSection()));
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the specified key was modified in this list of events.
 	 *
 	 * @param section The section name.
@@ -47,5 +37,15 @@ public class ConfigEvents extends ArrayList<ConfigEvent> {
 	 */
 	public boolean isKeyModified(String section, String key) {
 		return stream().anyMatch(x -> eq(section, x.getSection()) && eq(key, x.getKey()));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified section was modified in this list of events.
+	 *
+	 * @param name The section name.
+	 * @return <jk>true</jk> if the specified section was modified in this list of events.
+	 */
+	public boolean isSectionModified(String name) {
+		return stream().anyMatch(x -> eq(name, x.getSection()));
 	}
 }

@@ -44,12 +44,6 @@ import org.apache.juneau.urlencoding.*;
  * </ul>
  */
 public class SerializedPart extends BasicPart {
-	private final Object value;
-	private HttpPartType type;
-	private HttpPartSerializerSession serializer;
-	private HttpPartSchema schema = HttpPartSchema.DEFAULT;
-	private boolean skipIfEmpty;
-
 	/**
 	 * Instantiates a new instance of this object.
 	 *
@@ -62,7 +56,6 @@ public class SerializedPart extends BasicPart {
 	public static SerializedPart of(String name, Object value) {
 		return new SerializedPart(name, value, null, null, null, false);
 	}
-
 	/**
 	 * Instantiates a new instance of this object.
 	 *
@@ -75,6 +68,13 @@ public class SerializedPart extends BasicPart {
 	public static SerializedPart of(String name, Supplier<?> value) {
 		return new SerializedPart(name, value, null, null, null, false);
 	}
+	private final Object value;
+	private HttpPartType type;
+	private HttpPartSerializerSession serializer;
+
+	private HttpPartSchema schema = HttpPartSchema.DEFAULT;
+
+	private boolean skipIfEmpty;
 
 	/**
 	 * Constructor.
@@ -114,6 +114,11 @@ public class SerializedPart extends BasicPart {
 		this.skipIfEmpty = copyFrom.skipIfEmpty;
 	}
 
+	@Override /* Overridden from Headerable */
+	public SerializedHeader asHeader() {
+		return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);
+	}
+
 	/**
 	 * Creates a copy of this object.
 	 *
@@ -124,13 +129,53 @@ public class SerializedPart extends BasicPart {
 	}
 
 	/**
-	 * Sets the HTTP part type.
+	 * Copies this bean and sets the serializer and schema on it.
+	 *
+	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
+	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
+	 * @return Either a new bean with the serializer set, or this bean if
+	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
+	 */
+	public SerializedPart copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {
+		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
+			SerializedPart p = copy();
+			if (serializer != null)
+				p.serializer(serializer);
+			if (schema != null)
+				p.schema(schema);
+			return p;
+		}
+		return this;
+	}
+
+	@Override /* Overridden from NameValuePair */
+	public String getValue() {
+		try {
+			Object v = unwrap(value);
+			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
+			String def = schema.getDefault();
+			if (v == null) {
+				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
+					return null;
+			}
+			if (Utils.isEmpty(Utils.s(v)) && skipIfEmpty && def == null)
+				return null;
+			return serializer == null ? Utils.s(v) : serializer.serialize(type, schema, v);
+		} catch (SchemaValidationException e) {
+			throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
+		} catch (SerializeException e) {
+			throw new BasicRuntimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());
+		}
+	}
+
+	/**
+	 * Sets the schema object that defines the format of the output.
 	 *
 	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	public SerializedPart type(HttpPartType value) {
-		type = value;
+	public SerializedPart schema(HttpPartSchema value) {
+		this.schema = value;
 		return this;
 	}
 
@@ -158,37 +203,6 @@ public class SerializedPart extends BasicPart {
 	}
 
 	/**
-	 * Sets the schema object that defines the format of the output.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public SerializedPart schema(HttpPartSchema value) {
-		this.schema = value;
-		return this;
-	}
-
-	/**
-	 * Copies this bean and sets the serializer and schema on it.
-	 *
-	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
-	 * @param schema The new schema for the bean.  Can be <jk>null</jk>.
-	 * @return Either a new bean with the serializer set, or this bean if
-	 * 	both values are <jk>null</jk> or the serializer and schema were already set.
-	 */
-	public SerializedPart copyWith(HttpPartSerializerSession serializer, HttpPartSchema schema) {
-		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
-			SerializedPart p = copy();
-			if (serializer != null)
-				p.serializer(serializer);
-			if (schema != null)
-				p.schema(schema);
-			return p;
-		}
-		return this;
-	}
-
-	/**
 	 * Don't serialize this pair if the value is <jk>null</jk> or an empty string.
 	 *
 	 * @return This object.
@@ -208,29 +222,15 @@ public class SerializedPart extends BasicPart {
 		return this;
 	}
 
-	@Override /* Overridden from Headerable */
-	public SerializedHeader asHeader() {
-		return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);
-	}
-
-	@Override /* Overridden from NameValuePair */
-	public String getValue() {
-		try {
-			Object v = unwrap(value);
-			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
-			String def = schema.getDefault();
-			if (v == null) {
-				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
-					return null;
-			}
-			if (Utils.isEmpty(Utils.s(v)) && skipIfEmpty && def == null)
-				return null;
-			return serializer == null ? Utils.s(v) : serializer.serialize(type, schema, v);
-		} catch (SchemaValidationException e) {
-			throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
-		} catch (SerializeException e) {
-			throw new BasicRuntimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());
-		}
+	/**
+	 * Sets the HTTP part type.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public SerializedPart type(HttpPartType value) {
+		type = value;
+		return this;
 	}
 
 	private Object unwrap(Object o) {

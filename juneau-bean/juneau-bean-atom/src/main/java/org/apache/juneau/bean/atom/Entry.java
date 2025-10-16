@@ -115,6 +115,9 @@ public class Entry extends CommonEntry {
 	private Source source;
 	private Text summary;
 
+	/** Bean constructor. */
+	public Entry() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -136,14 +139,6 @@ public class Entry extends CommonEntry {
 	public Entry(String id, String title, String updated) {
 		super(id, title, updated);
 	}
-
-	/** Bean constructor. */
-	public Entry() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>content</property>.
 	 *
@@ -159,6 +154,75 @@ public class Entry extends CommonEntry {
 	 */
 	public Content getContent() {
 		return content;
+	}
+
+	/**
+	 * Bean property getter:  <property>published</property>.
+	 *
+	 * <p>
+	 * Returns the time when this entry was first published or made available.
+	 *
+	 * <p>
+	 * This differs from the updated time in that it represents the original publication date,
+	 * which typically doesn't change even when the entry is modified. The updated timestamp
+	 * reflects the last modification time.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Calendar getPublished() {
+		return published;
+	}
+
+	/**
+	 * Bean property getter:  <property>source</property>.
+	 *
+	 * <p>
+	 * Returns metadata about the source feed if this entry was copied from another feed.
+	 *
+	 * <p>
+	 * When an entry is copied or aggregated from another feed, the source element preserves
+	 * metadata from the original feed. This is useful for attribution and tracking the origin
+	 * of syndicated content.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Source getSource() {
+		return source;
+	}
+
+	/**
+	 * Bean property getter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * Returns a short summary, abstract, or excerpt of the entry.
+	 *
+	 * <p>
+	 * The summary is typically used in feed readers to give users a preview of the entry's
+	 * content without loading the full content. It's especially useful when content is not
+	 * inline or is very long.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Text getSummary() {
+		return summary;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Entry setAuthors(Person...value) {
+		super.setAuthors(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Entry setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Entry setCategories(Category...value) {
+		super.setCategories(value);
+		return this;
 	}
 
 	/**
@@ -202,21 +266,33 @@ public class Entry extends CommonEntry {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>published</property>.
-	 *
-	 * <p>
-	 * Returns the time when this entry was first published or made available.
-	 *
-	 * <p>
-	 * This differs from the updated time in that it represents the original publication date,
-	 * which typically doesn't change even when the entry is modified. The updated timestamp
-	 * reflects the last modification time.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Calendar getPublished() {
-		return published;
+	@Override /* Overridden from CommonEntry */
+	public Entry setContributors(Person...value) {
+		super.setContributors(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Entry setId(Id value) {
+		super.setId(value);
+		return this;
+	}
+	@Override /* Overridden from CommonEntry */
+	public Entry setId(String value) {
+		super.setId(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Entry setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Entry setLinks(Link...value) {
+		super.setLinks(value);
+		return this;
 	}
 
 	/**
@@ -263,21 +339,16 @@ public class Entry extends CommonEntry {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>source</property>.
-	 *
-	 * <p>
-	 * Returns metadata about the source feed if this entry was copied from another feed.
-	 *
-	 * <p>
-	 * When an entry is copied or aggregated from another feed, the source element preserves
-	 * metadata from the original feed. This is useful for attribution and tracking the origin
-	 * of syndicated content.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Source getSource() {
-		return source;
+	@Override /* Overridden from CommonEntry */
+	public Entry setRights(String value) {
+		super.setRights(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Entry setRights(Text value) {
+		super.setRights(value);
+		return this;
 	}
 
 	/**
@@ -308,20 +379,19 @@ public class Entry extends CommonEntry {
 	}
 
 	/**
-	 * Bean property getter:  <property>summary</property>.
+	 * Bean property fluent setter:  <property>summary</property>.
 	 *
 	 * <p>
-	 * Returns a short summary, abstract, or excerpt of the entry.
+	 * Sets a short summary, abstract, or excerpt of the entry as plain text.
 	 *
-	 * <p>
-	 * The summary is typically used in feed readers to give users a preview of the entry's
-	 * content without loading the full content. It's especially useful when content is not
-	 * inline or is very long.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public Text getSummary() {
-		return summary;
+	public Entry setSummary(String value) {
+		setSummary(new Text(value));
+		return this;
 	}
 
 	/**
@@ -349,86 +419,6 @@ public class Entry extends CommonEntry {
 		return this;
 	}
 
-	/**
-	 * Bean property fluent setter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * Sets a short summary, abstract, or excerpt of the entry as plain text.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Entry setSummary(String value) {
-		setSummary(new Text(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Entry setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Entry setLang(String value) {
-		super.setLang(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setAuthors(Person...value) {
-		super.setAuthors(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setCategories(Category...value) {
-		super.setCategories(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setContributors(Person...value) {
-		super.setContributors(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setId(String value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setId(Id value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setLinks(Link...value) {
-		super.setLinks(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setRights(String value) {
-		super.setRights(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Entry setRights(Text value) {
-		super.setRights(value);
-		return this;
-	}
-
 	@Override /* Overridden from CommonEntry */
 	public Entry setTitle(String value) {
 		super.setTitle(value);
@@ -442,13 +432,13 @@ public class Entry extends CommonEntry {
 	}
 
 	@Override /* Overridden from CommonEntry */
-	public Entry setUpdated(String value) {
+	public Entry setUpdated(Calendar value) {
 		super.setUpdated(value);
 		return this;
 	}
 
 	@Override /* Overridden from CommonEntry */
-	public Entry setUpdated(Calendar value) {
+	public Entry setUpdated(String value) {
 		super.setUpdated(value);
 		return this;
 	}

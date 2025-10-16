@@ -65,11 +65,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Location")
 public class Location extends BasicUriHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Location";
 
@@ -83,18 +78,6 @@ public class Location extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Location of(String value) {
-		return value == null ? null : new Location(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Location of(URI value) {
 		return value == null ? null : new Location(value);
 	}
 
@@ -113,10 +96,17 @@ public class Location extends BasicUriHeader {
 		return value == null ? null : new Location(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Location of(URI value) {
+		return value == null ? null : new Location(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -126,17 +116,6 @@ public class Location extends BasicUriHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Location(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Location(URI value) {
 		super(NAME, value);
 	}
 
@@ -151,6 +130,17 @@ public class Location extends BasicUriHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Location(Supplier<URI> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Location(URI value) {
 		super(NAME, value);
 	}
 }

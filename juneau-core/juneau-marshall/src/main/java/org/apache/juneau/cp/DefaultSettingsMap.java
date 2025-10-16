@@ -36,11 +36,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class DefaultSettingsMap {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -49,19 +44,7 @@ public class DefaultSettingsMap {
 	public static DefaultSettingsMap create() {
 		return new DefaultSettingsMap();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Map<String,Object> entries;
-
-	/**
-	 * Constructor.
-	 */
-	protected DefaultSettingsMap() {
-		entries = map();
-	}
 
 	/**
 	 * Copy constructor
@@ -73,15 +56,19 @@ public class DefaultSettingsMap {
 	}
 
 	/**
-	 * Sets the specified setting value.
-	 *
-	 * @param name The setting name.
-	 * @param value The setting value.
-	 * @return This object.
+	 * Constructor.
 	 */
-	public DefaultSettingsMap set(String name, Object value) {
-		entries.put(name, value);
-		return this;
+	protected DefaultSettingsMap() {
+		entries = map();
+	}
+
+	/**
+	 * Creates a copy of this map.
+	 *
+	 * @return A copy of this map.
+	 */
+	public DefaultSettingsMap copy() {
+		return new DefaultSettingsMap(this);
 	}
 
 	/**
@@ -98,11 +85,14 @@ public class DefaultSettingsMap {
 	}
 
 	/**
-	 * Creates a copy of this map.
+	 * Sets the specified setting value.
 	 *
-	 * @return A copy of this map.
+	 * @param name The setting name.
+	 * @param value The setting value.
+	 * @return This object.
 	 */
-	public DefaultSettingsMap copy() {
-		return new DefaultSettingsMap(this);
+	public DefaultSettingsMap set(String name, Object value) {
+		entries.put(name, value);
+		return this;
 	}
 }

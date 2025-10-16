@@ -95,12 +95,48 @@ public class Discriminator extends OpenApiElement {
 	}
 
 	/**
+	 * Adds one or more values to the <property>mapping</property> property.
+	 *
+	 * @param key The key.  Must not be <jk>null</jk>.
+	 * @param value The value.  Must not be <jk>null</jk>.
+	 * @return This object
+	 */
+	public Discriminator addMapping(String key, String value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
+		mapping = mapBuilder(mapping).sparse().add(key, value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
 	 */
 	public Discriminator copy() {
 		return new Discriminator(this);
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "propertyName" -> toType(getPropertyName(), type);
+			case "mapping" -> toType(getMapping(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>mapping</property>.
+	 *
+	 * <p>
+	 * The URL for the target documentation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,String> getMapping() {
+		return mapping;
 	}
 
 	/**
@@ -115,32 +151,26 @@ public class Discriminator extends OpenApiElement {
 		return propertyName;
 	}
 
-	/**
-	 * Bean property setter:  <property>propertyName</property>.
-	 *
-	 * <p>
-	 * A short description of the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Discriminator setPropertyName(String value) {
-		propertyName = value;
-		return this;
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(mapping != null, "mapping")
+			.addIf(propertyName != null, "propertyName")
+			.build();
+		return new MultiSet<>(s, super.keySet());
 	}
 
-	/**
-	 * Bean property getter:  <property>mapping</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,String> getMapping() {
-		return mapping;
+	@Override /* Overridden from OpenApiElement */
+	public Discriminator set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "mapping" -> setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "propertyName" -> setPropertyName(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -162,49 +192,19 @@ public class Discriminator extends OpenApiElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>mapping</property> property.
+	 * Bean property setter:  <property>propertyName</property>.
 	 *
-	 * @param key The key.  Must not be <jk>null</jk>.
-	 * @param value The value.  Must not be <jk>null</jk>.
+	 * <p>
+	 * A short description of the target documentation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Discriminator addMapping(String key, String value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
-		mapping = mapBuilder(mapping).sparse().add(key, value).build();
+	public Discriminator setPropertyName(String value) {
+		propertyName = value;
 		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "propertyName" -> toType(getPropertyName(), type);
-			case "mapping" -> toType(getMapping(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Discriminator set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "mapping" -> setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
-			case "propertyName" -> setPropertyName(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(mapping != null, "mapping")
-			.addIf(propertyName != null, "propertyName")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

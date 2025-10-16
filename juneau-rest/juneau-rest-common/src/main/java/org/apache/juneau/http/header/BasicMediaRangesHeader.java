@@ -39,27 +39,7 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicMediaRangesHeader extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicMediaRangesHeader of(String name, String value) {
-		return value == null ? null : new BasicMediaRangesHeader(name, value);
-	}
 
 	/**
 	 * Static creator.
@@ -75,13 +55,39 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 		return value == null ? null : new BasicMediaRangesHeader(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicMediaRangesHeader of(String name, String value) {
+		return value == null ? null : new BasicMediaRangesHeader(name, value);
+	}
 	private final String stringValue;
 	private final MediaRanges value;
 	private final Supplier<MediaRanges> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicMediaRangesHeader(String name, MediaRanges value) {
+		super(name, Utils.s(value));
+		this.stringValue = null;
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -97,22 +103,6 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 		super(name, value);
 		this.stringValue = value;
 		this.value = parse(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicMediaRangesHeader(String name, MediaRanges value) {
-		super(name, Utils.s(value));
-		this.stringValue = null;
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -145,12 +135,35 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	/**
-	 * Returns the header value as a {@link MediaRanges}.
+	 * Returns the {@link MediaRange} at the specified index.
 	 *
-	 * @return The header value as a {@link MediaRanges}.  Can be <jk>null</jk>.
+	 * @param index The index position of the media range.
+	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
-	public MediaRanges toMediaRanges() {
-		return value();
+	public MediaRange getRange(int index) {
+		MediaRanges x = value();
+		return x == null ? null : x.getRange(index);
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return stringValue != null ? stringValue : Utils.s(value());
+	}
+
+	/**
+	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
+	 * presence of a subtype fragment.
+	 *
+	 * <p>
+	 * For example, given the header <js>"text/json+activity"</js>, calling
+	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
+	 *
+	 * @param part The media type subtype fragment.
+	 * @return <jk>true</jk> if subtype fragment exists.
+	 */
+	public boolean hasSubtypePart(String part) {
+		MediaRanges x = value();
+		return x == null ? false : x.hasSubtypePart(part);
 	}
 
 	/**
@@ -177,38 +190,6 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	}
 
 	/**
-	 * Returns the {@link MediaRange} at the specified index.
-	 *
-	 * @param index The index position of the media range.
-	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
-	 */
-	public MediaRange getRange(int index) {
-		MediaRanges x = value();
-		return x == null ? null : x.getRange(index);
-	}
-
-	/**
-	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
-	 * presence of a subtype fragment.
-	 *
-	 * <p>
-	 * For example, given the header <js>"text/json+activity"</js>, calling
-	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
-	 *
-	 * @param part The media type subtype fragment.
-	 * @return <jk>true</jk> if subtype fragment exists.
-	 */
-	public boolean hasSubtypePart(String part) {
-		MediaRanges x = value();
-		return x == null ? false : x.hasSubtypePart(part);
-	}
-
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return stringValue != null ? stringValue : Utils.s(value());
-	}
-
-	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
@@ -220,6 +201,15 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 	public MediaRanges orElse(MediaRanges other) {
 		MediaRanges x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link MediaRanges}.
+	 *
+	 * @return The header value as a {@link MediaRanges}.  Can be <jk>null</jk>.
+	 */
+	public MediaRanges toMediaRanges() {
+		return value();
 	}
 
 	private MediaRanges parse(String value) {

@@ -36,47 +36,6 @@ import org.apache.juneau.annotation.*;
  */
 @Bean(properties="type,properties")
 public class BeanDescription {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param c The bean being described.
-	 * @return A new bean description.
-	 */
-	public static BeanDescription of(Class<?> c) {
-		return new BeanDescription(c);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** The bean class type. */
-	public String type;
-
-	/** The bean properties. */
-	public BeanPropertyDescription[] properties;
-
-	/**
-	 * Constructor
-	 *
-	 * @param c The bean class type.
-	 */
-	public BeanDescription(Class<?> c) {
-		type = c.getName();
-		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
-		if (bm == null)
-			throw new BasicRuntimeException("Class ''{0}'' is not a valid bean.", c);
-		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
-		int i = 0;
-		for (BeanPropertyMeta pm : bm.getPropertyMetas())
-			properties[i++] = new BeanPropertyDescription(pm.getName(), pm.getClassMeta());
-	}
-
 	/**
 	 * Information about a bean property.
 	 */
@@ -98,5 +57,36 @@ public class BeanDescription {
 			this.name = name;
 			this.type = type.getSerializedClassMeta(null).toString();
 		}
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param c The bean being described.
+	 * @return A new bean description.
+	 */
+	public static BeanDescription of(Class<?> c) {
+		return new BeanDescription(c);
+	}
+
+	/** The bean class type. */
+	public String type;
+
+	/** The bean properties. */
+	public BeanPropertyDescription[] properties;
+
+	/**
+	 * Constructor
+	 *
+	 * @param c The bean class type.
+	 */
+	public BeanDescription(Class<?> c) {
+		type = c.getName();
+		BeanMeta<?> bm = BeanContext.DEFAULT.getBeanMeta(c);
+		if (bm == null)
+			throw new BasicRuntimeException("Class ''{0}'' is not a valid bean.", c);
+		properties = new BeanPropertyDescription[bm.getPropertyMetas().size()];
+		int i = 0;
+		for (BeanPropertyMeta pm : bm.getPropertyMetas())
+			properties[i++] = new BeanPropertyDescription(pm.getName(), pm.getClassMeta());
 	}
 }

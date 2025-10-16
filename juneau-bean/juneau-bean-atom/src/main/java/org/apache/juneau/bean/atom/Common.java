@@ -77,11 +77,6 @@ public abstract class Common {
 
 	private URI base;
 	private String lang;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>base</property>.
 	 *
@@ -98,6 +93,24 @@ public abstract class Common {
 	@Xml(prefix="xml", format=ATTR)
 	public URI getBase() {
 		return base;
+	}
+
+	/**
+	 * Bean property getter:  <property>lang</property>.
+	 *
+	 * <p>
+	 * Returns the natural language of the element's content (xml:lang attribute).
+	 *
+	 * <p>
+	 * The language tag should be a language identifier as defined by RFC 3066. This attribute
+	 * is inherited by child elements, so it need only be specified on the highest-level
+	 * element where it applies.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(prefix="xml", format=ATTR)
+	public String getLang() {
+		return lang;
 	}
 
 	/**
@@ -124,24 +137,6 @@ public abstract class Common {
 	public Common setBase(Object value) {
 		this.base = toURI(value);
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>lang</property>.
-	 *
-	 * <p>
-	 * Returns the natural language of the element's content (xml:lang attribute).
-	 *
-	 * <p>
-	 * The language tag should be a language identifier as defined by RFC 3066. This attribute
-	 * is inherited by child elements, so it need only be specified on the highest-level
-	 * element where it applies.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(prefix="xml", format=ATTR)
-	public String getLang() {
-		return lang;
 	}
 
 	/**

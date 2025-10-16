@@ -216,223 +216,6 @@ import java.util.stream.*;
 @SuppressWarnings("rawtypes")
 public class BasicBeanConverter implements BeanConverter {
 
-	public static final BasicBeanConverter DEFAULT = builder().defaultSettings().build();
-
-	public static final String
-		SETTING_nullValue = "nullValue",
-		SETTING_selfValue = "selfValue",
-		SETTING_fieldSeparator = "fieldSeparator",
-		SETTING_collectionPrefix = "collectionPrefix",
-		SETTING_collectionSuffix = "collectionSuffix",
-		SETTING_mapPrefix = "mapPrefix",
-		SETTING_mapSuffix = "mapSuffix",
-		SETTING_mapEntrySeparator = "mapEntrySeparator",
-		SETTING_calendarFormat = "calendarFormat",
-		SETTING_classNameFormat = "classNameFormat";
-
-	private final List<StringifierEntry<?>> stringifiers;
-	private final List<ListifierEntry<?>> listifiers;
-	private final List<SwapperEntry<?>> swappers;
-	private final List<PropertyExtractor> propertyExtractors;
-	private final Map<String,Object> settings;
-
-	private final ConcurrentHashMap<Class,Optional<Stringifier<?>>> stringifierMap = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Class,Optional<Listifier<?>>> listifierMap = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Class,Optional<Swapper<?>>> swapperMap = new ConcurrentHashMap<>();
-
-	protected BasicBeanConverter(Builder b) {
-		stringifiers = new ArrayList<>(b.stringifiers);
-		listifiers = new ArrayList<>(b.listifiers);
-		swappers = new ArrayList<>(b.swappers);
-		propertyExtractors = new ArrayList<>(b.propertyExtractors);
-		settings = new HashMap<>(b.settings);
-		Collections.reverse(stringifiers);
-		Collections.reverse(listifiers);
-		Collections.reverse(swappers);
-		Collections.reverse(propertyExtractors);
-	}
-
-	/**
-	 * Creates a new builder for configuring a BasicBeanConverter instance.
-	 *
-	 * <p>The builder allows registration of custom stringifiers, listifiers, and swappers,
-	 * as well as configuration of various formatting settings before building the converter.</p>
-	 *
-	 * @return A new Builder instance
-	 */
-	public static Builder builder() {
-		return new Builder();
-	}
-
-	@Override
-	public String stringify(Object o) {
-		o = swap(o);
-		if (o == null)
-			return getSetting(SETTING_nullValue, null);
-		var c = o.getClass();
-		var stringifier = stringifierMap.computeIfAbsent(c, this::findStringifier);
-		if (stringifier.isEmpty()) {
-			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> safeToString(o2));
-			stringifierMap.putIfAbsent(c, stringifier);
-		}
-		var o2 = o;
-		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(Utils::safeToString).orElse(null);
-	}
-
-	@Override
-	public Object swap(Object o) {
-		if (o == null) return null;
-		var c = o.getClass();
-		var swapper = swapperMap.computeIfAbsent(c, this::findSwapper);
-		if (swapper.isPresent())
-			return swap(swapper.map(x -> (Swapper)x).map(x -> x.apply(this, o)).orElse(null));
-		return o;
-	}
-
-	@Override
-	public List<Object> listify(Object o) {
-		assertArgNotNull("o", o);
-		o = swap(o);
-		if (o instanceof List)
-			return (List<Object>)o;
-		var c = o.getClass();
-		if (c.isArray())
-			return arrayToList(o);
-		var o2 = o;
-		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2)).orElseThrow(()->new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", t(o2))));
-	}
-
-	@Override
-	public boolean canListify(Object o) {
-		o = swap(o);
-		if (o == null)
-			return false;
-		var c = o.getClass();
-		return o instanceof List || c.isArray() || listifierMap.computeIfAbsent(c, this::findListifier).isPresent();
-	}
-
-	@Override
-	public Object getProperty(Object object, String name) {
-		var o = swap(object);
-		return propertyExtractors
-			.stream()
-			.filter(x -> x.canExtract(this, o, name))
-			.findFirst()
-			.orElseThrow(()->new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName())))
-			.extract(this, o, name);
-	}
-
-	@Override
-	public String getNested(Object o, NestedTokenizer.Token token) {
-		assertArgNotNull("token", token);
-
-		if (o == null) return getSetting(SETTING_nullValue, null);
-
-		// Handle #{...} syntax for iterating over collections/arrays
-		if (eq("#", token.getValue()) && canListify(o)) {
-			return listify(o).stream().map(x -> token.getNested().stream().map(x2 -> getNested(x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
-		}
-
-		// Original logic for regular property access
-		var pn = token.getValue();
-		var selfValue = getSetting(SETTING_selfValue, "<self>");
-
-		// Handle special values
-		Object e;
-		if (pn.equals(selfValue)) {
-			e = o; // Return the object itself
-		} else {
-			e = ofNullable(getProperty(o, pn)).orElse(null);
-		}
-		if (e == null || ! token.hasNested()) return stringify(e);
-		return token.getNested().stream().map(x -> getNested(e, x)).map(this::stringify).collect(joining(",","{","}"));
-	}
-
-	private Optional<Stringifier<?>> findStringifier(Class<?> c) {
-		if (c == null)
-			return empty();
-		var s = stringifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
-		if (s != null)
-			return of(s.function);
-		return findStringifier(c.getSuperclass());
-	}
-
-	private Optional<Listifier<?>> findListifier(Class<?> c) {
-		if (c == null)
-			return empty();
-		var l = listifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
-		if (l != null)
-			return of(l.function);
-		return findListifier(c.getSuperclass());
-	}
-
-	private Optional<Swapper<?>> findSwapper(Class<?> c) {
-		if (c == null)
-			return empty();
-		var s = swappers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
-		if (s != null)
-			return of(s.function);
-		return findSwapper(c.getSuperclass());
-	}
-
-	@Override
-	public <T> T getSetting(String key, T def) {
-		return (T)settings.getOrDefault(key, def);
-	}
-
-	/**
-	 * Builder class for configuring BasicBeanConverter instances.
-	 *
-	 * <p>This builder provides a fluent interface for registering custom type handlers
-	 * and configuring conversion settings. All registration methods support method chaining
-	 * for convenient configuration.</p>
-	 *
-	 * <h5 class='section'>Handler Registration:</h5>
-	 * <ul>
-	 *    <li><b>Stringifiers:</b> Custom string conversion logic for specific types</li>
-	 *    <li><b>Listifiers:</b> Custom list conversion logic for collection-like types</li>
-	 *    <li><b>Swappers:</b> Pre-processing transformation logic for wrapper types</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Registration Order:</h5>
-	 * <p>Handlers are checked in reverse registration order (last registered wins).
-	 * This allows overriding default handlers by registering more specific ones later.</p>
-	 *
-	 * <h5 class='section'>Inheritance Support:</h5>
-	 * <p>All handlers support class inheritance and interface implementation.
-	 * When looking up a handler, the system checks:</p>
-	 * <ol>
-	 *    <li>Exact class match</li>
-	 *    <li>Interface matches (in order of interface declaration)</li>
-	 *    <li>Superclass matches (walking up the inheritance hierarchy)</li>
-	 * </ol>
-	 *
-	 * <h5 class='section'>Usage Example:</h5>
-	 * <p class='bjava'>
-	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *       .defaultSettings()
-	 *       <jc>// Custom stringification for LocalDateTime</jc>
-	 *       .addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
-	 *          <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>))
-	 *
-	 *       <jc>// Custom collection handling for custom type</jc>
-	 *       .addListifier(MyIterable.<jk>class</jk>, (<jp>iter</jp>, <jp>conv</jp>) ->
-	 *          <jp>iter</jp>.stream().collect(toList()))
-	 *
-	 *       <jc>// Custom transformation for wrapper type</jc>
-	 *       .addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
-	 *          <jp>lazy</jp>.isComputed() ? <jp>lazy</jp>.get() : <jk>null</jk>)
-	 *
-	 *       <jc>// Configure settings</jc>
-	 *       .addSetting(<jsf>SETTING_nullValue</jsf>, <js>"&lt;null&gt;"</js>)
-	 *       .addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
-	 *
-	 *       <jc>// Add default handlers for common types</jc>
-	 *       .defaultSettings()
-	 *       .build();
-	 * </p>
-	 */
-
 	/**
 	 * Builder for creating customized BasicBeanConverter instances.
 	 *
@@ -489,28 +272,6 @@ public class BasicBeanConverter implements BeanConverter {
 		private List<PropertyExtractor> propertyExtractors = new ArrayList<>();
 
 		/**
-		 * Adds a configuration setting to the converter.
-		 *
-		 * @param key The setting key (use SETTING_* constants)
-		 * @param value The setting value
-		 * @return This builder for method chaining
-		 */
-		public Builder addSetting(String key, Object value) { settings.put(key, value); return this; }
-
-		/**
-		 * Registers a custom stringifier for a specific type.
-		 *
-		 * <p>Stringifiers convert objects to their string representations. The BiFunction
-		 * receives the object to convert and the converter instance for recursive calls.</p>
-		 *
-		 * @param <T> The type to handle
-		 * @param c The class to register the stringifier for
-		 * @param s The stringification function
-		 * @return This builder for method chaining
-		 */
-		public <T> Builder addStringifier(Class<T> c, Stringifier<T> s) { stringifiers.add(new StringifierEntry<>(c, s)); return this; }
-
-		/**
 		 * Registers a custom listifier for a specific type.
 		 *
 		 * <p>Listifiers convert collection-like objects to List&lt;Object&gt;. The BiFunction
@@ -522,20 +283,6 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @return This builder for method chaining
 		 */
 		public <T> Builder addListifier(Class<T> c, Listifier<T> l) { listifiers.add(new ListifierEntry<>(c, l)); return this; }
-
-		/**
-		 * Registers a custom swapper for a specific type.
-		 *
-		 * <p>Swappers pre-process objects before conversion. Common uses include
-		 * unwrapping Optional values, calling Supplier methods, or extracting values
-		 * from wrapper objects.</p>
-		 *
-		 * @param <T> The type to handle
-		 * @param c The class to register the swapper for
-		 * @param s The swapping function
-		 * @return This builder for method chaining
-		 */
-		public <T> Builder addSwapper(Class<T> c, Swapper<T> s) { swappers.add(new SwapperEntry<>(c, s)); return this; }
 
 		/**
 		 * Registers a custom property extractor for specialized property access logic.
@@ -579,6 +326,55 @@ public class BasicBeanConverter implements BeanConverter {
 		 * @see PropertyExtractors
 		 */
 		public Builder addPropertyExtractor(PropertyExtractor e) { propertyExtractors.add(e); return this; }
+
+		/**
+		 * Adds a configuration setting to the converter.
+		 *
+		 * @param key The setting key (use SETTING_* constants)
+		 * @param value The setting value
+		 * @return This builder for method chaining
+		 */
+		public Builder addSetting(String key, Object value) { settings.put(key, value); return this; }
+
+		/**
+		 * Registers a custom stringifier for a specific type.
+		 *
+		 * <p>Stringifiers convert objects to their string representations. The BiFunction
+		 * receives the object to convert and the converter instance for recursive calls.</p>
+		 *
+		 * @param <T> The type to handle
+		 * @param c The class to register the stringifier for
+		 * @param s The stringification function
+		 * @return This builder for method chaining
+		 */
+		public <T> Builder addStringifier(Class<T> c, Stringifier<T> s) { stringifiers.add(new StringifierEntry<>(c, s)); return this; }
+
+		/**
+		 * Registers a custom swapper for a specific type.
+		 *
+		 * <p>Swappers pre-process objects before conversion. Common uses include
+		 * unwrapping Optional values, calling Supplier methods, or extracting values
+		 * from wrapper objects.</p>
+		 *
+		 * @param <T> The type to handle
+		 * @param c The class to register the swapper for
+		 * @param s The swapping function
+		 * @return This builder for method chaining
+		 */
+		public <T> Builder addSwapper(Class<T> c, Swapper<T> s) { swappers.add(new SwapperEntry<>(c, s)); return this; }
+
+		/**
+		 * Builds the configured BasicBeanConverter instance.
+		 *
+		 * <p>This method creates a new BasicBeanConverter with all registered handlers
+		 * and settings. The builder can be reused to create multiple converters with
+		 * the same configuration.</p>
+		 *
+		 * @return A new BasicBeanConverter instance
+		 */
+		public BasicBeanConverter build() {
+			return new BasicBeanConverter(this);
+		}
 
 		/**
 		 * Adds default handlers and settings for common Java types.
@@ -647,29 +443,6 @@ public class BasicBeanConverter implements BeanConverter {
 
 			return this;
 		}
-
-		/**
-		 * Builds the configured BasicBeanConverter instance.
-		 *
-		 * <p>This method creates a new BasicBeanConverter with all registered handlers
-		 * and settings. The builder can be reused to create multiple converters with
-		 * the same configuration.</p>
-		 *
-		 * @return A new BasicBeanConverter instance
-		 */
-		public BasicBeanConverter build() {
-			return new BasicBeanConverter(this);
-		}
-	}
-
-	static class StringifierEntry<T> {
-		private Class<T> forClass;
-		private Stringifier<T> function;
-
-		private StringifierEntry(Class<T> forClass, Stringifier function) {
-			this.forClass = forClass;
-			this.function = function;
-		}
 	}
 
 	static class ListifierEntry<T> {
@@ -682,6 +455,16 @@ public class BasicBeanConverter implements BeanConverter {
 		}
 	}
 
+	static class StringifierEntry<T> {
+		private Class<T> forClass;
+		private Stringifier<T> function;
+
+		@SuppressWarnings("unchecked")
+		private StringifierEntry(Class<T> forClass, Stringifier function) {
+			this.forClass = forClass;
+			this.function = function;
+		}
+	}
 	static class SwapperEntry<T> {
 		private Class<T> forClass;
 		private Swapper<T> function;
@@ -690,5 +473,267 @@ public class BasicBeanConverter implements BeanConverter {
 			this.forClass = forClass;
 			this.function = function;
 		}
+	}
+
+	/**
+	 * Default converter instance with standard settings and handlers.
+	 *
+	 * <p>This pre-configured instance provides comprehensive support for all common Java types
+	 * with sensible default settings. It's suitable for most BCT testing scenarios and can be
+	 * used directly without building a custom converter.</p>
+	 *
+	 * <h5 class='section'>Included Support:</h5>
+	 * <ul>
+	 *    <li><b>Collections:</b> List, Set, Queue with bracket formatting</li>
+	 *    <li><b>Maps:</b> Map, Properties with brace formatting</li>
+	 *    <li><b>Arrays:</b> All array types with bracket formatting</li>
+	 *    <li><b>Dates:</b> Date, Calendar with ISO-8601 formatting</li>
+	 *    <li><b>Files/Streams:</b> File, InputStream, Reader content extraction</li>
+	 *    <li><b>Reflection:</b> Class, Method, Constructor readable signatures</li>
+	 *    <li><b>Enums:</b> name() representation</li>
+	 *    <li><b>Wrappers:</b> Optional, Supplier, Future unwrapping</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Default Settings:</h5>
+	 * <ul>
+	 *    <li><code>nullValue</code> = <js>"&lt;null&gt;"</js></li>
+	 *    <li><code>selfValue</code> = <js>"&lt;self&gt;"</js></li>
+	 *    <li><code>classNameFormat</code> = <js>"simple"</js></li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Example:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Use default converter for assertions</jc>
+	 *    <jk>var</jk> <jv>result</jv> = BasicBeanConverter.<jsf>DEFAULT</jsf>.stringify(<jv>myObject</jv>);
+	 *    <jk>var</jk> <jv>city</jv> = BasicBeanConverter.<jsf>DEFAULT</jsf>.getProperty(<jv>user</jv>, <js>"address.city"</js>);
+	 * </p>
+	 *
+	 * @see #builder()
+	 * @see Builder#defaultSettings()
+	 */
+	public static final BasicBeanConverter DEFAULT = builder().defaultSettings().build();
+
+	@SuppressWarnings("javadoc")
+	public static final String
+		SETTING_nullValue = "nullValue",
+		SETTING_selfValue = "selfValue",
+		SETTING_fieldSeparator = "fieldSeparator",
+		SETTING_collectionPrefix = "collectionPrefix",
+		SETTING_collectionSuffix = "collectionSuffix",
+		SETTING_mapPrefix = "mapPrefix",
+		SETTING_mapSuffix = "mapSuffix",
+		SETTING_mapEntrySeparator = "mapEntrySeparator",
+		SETTING_calendarFormat = "calendarFormat",
+		SETTING_classNameFormat = "classNameFormat";
+
+	/**
+	 * Creates a new builder for configuring a BasicBeanConverter instance.
+	 *
+	 * <p>The builder allows registration of custom stringifiers, listifiers, and swappers,
+	 * as well as configuration of various formatting settings before building the converter.</p>
+	 *
+	 * @return A new Builder instance
+	 */
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	private final List<StringifierEntry<?>> stringifiers;
+	private final List<ListifierEntry<?>> listifiers;
+	private final List<SwapperEntry<?>> swappers;
+
+	private final List<PropertyExtractor> propertyExtractors;
+
+	private final Map<String,Object> settings;
+
+	private final ConcurrentHashMap<Class,Optional<Stringifier<?>>> stringifierMap = new ConcurrentHashMap<>();
+
+	private final ConcurrentHashMap<Class,Optional<Listifier<?>>> listifierMap = new ConcurrentHashMap<>();
+
+	private final ConcurrentHashMap<Class,Optional<Swapper<?>>> swapperMap = new ConcurrentHashMap<>();
+
+	protected BasicBeanConverter(Builder b) {
+		stringifiers = new ArrayList<>(b.stringifiers);
+		listifiers = new ArrayList<>(b.listifiers);
+		swappers = new ArrayList<>(b.swappers);
+		propertyExtractors = new ArrayList<>(b.propertyExtractors);
+		settings = new HashMap<>(b.settings);
+		Collections.reverse(stringifiers);
+		Collections.reverse(listifiers);
+		Collections.reverse(swappers);
+		Collections.reverse(propertyExtractors);
+	}
+
+	@Override
+	public boolean canListify(Object o) {
+		o = swap(o);
+		if (o == null)
+			return false;
+		var c = o.getClass();
+		return o instanceof List || c.isArray() || listifierMap.computeIfAbsent(c, this::findListifier).isPresent();
+	}
+
+	@Override
+	public String getNested(Object o, NestedTokenizer.Token token) {
+		assertArgNotNull("token", token);
+
+		if (o == null) return getSetting(SETTING_nullValue, null);
+
+		// Handle #{...} syntax for iterating over collections/arrays
+		if (eq("#", token.getValue()) && canListify(o)) {
+			return listify(o).stream().map(x -> token.getNested().stream().map(x2 -> getNested(x, x2)).collect(joining(",","{","}"))).collect(joining(",","[","]"));
+		}
+
+		// Original logic for regular property access
+		var pn = token.getValue();
+		var selfValue = getSetting(SETTING_selfValue, "<self>");
+
+		// Handle special values
+		Object e;
+		if (pn.equals(selfValue)) {
+			e = o; // Return the object itself
+		} else {
+			e = ofNullable(getProperty(o, pn)).orElse(null);
+		}
+		if (e == null || ! token.hasNested()) return stringify(e);
+		return token.getNested().stream().map(x -> getNested(e, x)).map(this::stringify).collect(joining(",","{","}"));
+	}
+
+	@Override
+	public Object getProperty(Object object, String name) {
+		var o = swap(object);
+		return propertyExtractors
+			.stream()
+			.filter(x -> x.canExtract(this, o, name))
+			.findFirst()
+			.orElseThrow(()->new RuntimeException(f("Could not find extractor for object of type {0}", o.getClass().getName())))
+			.extract(this, o, name);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public <T> T getSetting(String key, T def) {
+		return (T)settings.getOrDefault(key, def);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Object> listify(Object o) {
+		assertArgNotNull("o", o);
+		o = swap(o);
+		if (o instanceof List)
+			return (List<Object>)o;
+		var c = o.getClass();
+		if (c.isArray())
+			return arrayToList(o);
+		var o2 = o;
+		return listifierMap.computeIfAbsent(c, this::findListifier).map(x -> (Listifier)x).map(x -> (List<Object>)x.apply(this, o2)).orElseThrow(()->new IllegalArgumentException(f("Object of type {0} could not be converted to a list.", t(o2))));
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public String stringify(Object o) {
+		o = swap(o);
+		if (o == null)
+			return getSetting(SETTING_nullValue, null);
+		var c = o.getClass();
+		var stringifier = stringifierMap.computeIfAbsent(c, this::findStringifier);
+		if (stringifier.isEmpty()) {
+			stringifier = of(canListify(o) ? (bc, o2) -> bc.stringify(bc.listify(o2)) : (bc, o2) -> safeToString(o2));
+			stringifierMap.putIfAbsent(c, stringifier);
+		}
+		var o2 = o;
+		return stringifier.map(x -> (Stringifier)x).map(x -> x.apply(this, o2)).map(Utils::safeToString).orElse(null);
+	}
+
+	/**
+	 * Builder class for configuring BasicBeanConverter instances.
+	 *
+	 * <p>This builder provides a fluent interface for registering custom type handlers
+	 * and configuring conversion settings. All registration methods support method chaining
+	 * for convenient configuration.</p>
+	 *
+	 * <h5 class='section'>Handler Registration:</h5>
+	 * <ul>
+	 *    <li><b>Stringifiers:</b> Custom string conversion logic for specific types</li>
+	 *    <li><b>Listifiers:</b> Custom list conversion logic for collection-like types</li>
+	 *    <li><b>Swappers:</b> Pre-processing transformation logic for wrapper types</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Registration Order:</h5>
+	 * <p>Handlers are checked in reverse registration order (last registered wins).
+	 * This allows overriding default handlers by registering more specific ones later.</p>
+	 *
+	 * <h5 class='section'>Inheritance Support:</h5>
+	 * <p>All handlers support class inheritance and interface implementation.
+	 * When looking up a handler, the system checks:</p>
+	 * <ol>
+	 *    <li>Exact class match</li>
+	 *    <li>Interface matches (in order of interface declaration)</li>
+	 *    <li>Superclass matches (walking up the inheritance hierarchy)</li>
+	 * </ol>
+	 *
+	 * <h5 class='section'>Usage Example:</h5>
+	 * <p class='bjava'>
+	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *       .defaultSettings()
+	 *       <jc>// Custom stringification for LocalDateTime</jc>
+	 *       .addStringifier(LocalDateTime.<jk>class</jk>, (<jp>dt</jp>, <jp>conv</jp>) ->
+	 *          <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_LOCAL_DATE_TIME</jsf>))
+	 *
+	 *       <jc>// Custom collection handling for custom type</jc>
+	 *       .addListifier(MyIterable.<jk>class</jk>, (<jp>iter</jp>, <jp>conv</jp>) ->
+	 *          <jp>iter</jp>.stream().collect(toList()))
+	 *
+	 *       <jc>// Custom transformation for wrapper type</jc>
+	 *       .addSwapper(LazyValue.<jk>class</jk>, (<jp>lazy</jp>, <jp>conv</jp>) ->
+	 *          <jp>lazy</jp>.isComputed() ? <jp>lazy</jp>.get() : <jk>null</jk>)
+	 *
+	 *       <jc>// Configure settings</jc>
+	 *       .addSetting(<jsf>SETTING_nullValue</jsf>, <js>"&lt;null&gt;"</js>)
+	 *       .addSetting(<jsf>SETTING_fieldSeparator</jsf>, <js>" | "</js>)
+	 *
+	 *       <jc>// Add default handlers for common types</jc>
+	 *       .defaultSettings()
+	 *       .build();
+	 * </p>
+	 */
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Object swap(Object o) {
+		if (o == null) return null;
+		var c = o.getClass();
+		var swapper = swapperMap.computeIfAbsent(c, this::findSwapper);
+		if (swapper.isPresent())
+			return swap(swapper.map(x -> (Swapper)x).map(x -> x.apply(this, o)).orElse(null));
+		return o;
+	}
+
+	private Optional<Listifier<?>> findListifier(Class<?> c) {
+		if (c == null)
+			return empty();
+		var l = listifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
+		if (l != null)
+			return of(l.function);
+		return findListifier(c.getSuperclass());
+	}
+
+	private Optional<Stringifier<?>> findStringifier(Class<?> c) {
+		if (c == null)
+			return empty();
+		var s = stringifiers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
+		if (s != null)
+			return of(s.function);
+		return findStringifier(c.getSuperclass());
+	}
+
+	private Optional<Swapper<?>> findSwapper(Class<?> c) {
+		if (c == null)
+			return empty();
+		var s = swappers.stream().filter(x -> x.forClass.isAssignableFrom(c)).findFirst().orElse(null);
+		if (s != null)
+			return of(s.function);
+		return findSwapper(c.getSuperclass());
 	}
 }

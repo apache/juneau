@@ -41,20 +41,20 @@ public class SimpleNoOpLock extends ReentrantReadWriteLock {
 	}
 
 	/**
-	 * Construct a write lock.
-	 *
-	 * @return A new closeable write lock.
-	 */
-	public SimpleLock write(){
-		return new SimpleLock(writeLock());
-	}
-
-	/**
 	 * Construct a read lock.
 	 *
 	 * @return A new closeable read lock.
 	 */
 	public SimpleLock read(){
 		return new SimpleLock(readLock());
+	}
+
+	/**
+	 * Construct a write lock.
+	 *
+	 * @return A new closeable write lock.
+	 */
+	public SimpleLock write(){
+		return new SimpleLock(writeLock());
 	}
 }

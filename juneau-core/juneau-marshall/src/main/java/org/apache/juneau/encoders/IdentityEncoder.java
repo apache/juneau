@@ -41,6 +41,14 @@ public class IdentityEncoder extends Encoder {
 	/** Constructor. */
 	public IdentityEncoder() {}
 
+	/**
+	 * Returns <code>[<js>"identity"</js>]</code>.
+	 */
+	@Override /* Overridden from Encoder */
+	public String[] getCodings() {
+		return new String[]{"identity"};
+	}
+
 	@Override /* Overridden from Encoder */
 	public InputStream getInputStream(InputStream is) throws IOException {
 		return is;
@@ -49,13 +57,5 @@ public class IdentityEncoder extends Encoder {
 	@Override /* Overridden from Encoder */
 	public OutputStream getOutputStream(OutputStream os) throws IOException {
 		return os;
-	}
-
-	/**
-	 * Returns <code>[<js>"identity"</js>]</code>.
-	 */
-	@Override /* Overridden from Encoder */
-	public String[] getCodings() {
-		return new String[]{"identity"};
 	}
 }

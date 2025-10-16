@@ -33,14 +33,10 @@ import java.util.zip.*;
  */
 public class GzipEncoder extends Encoder {
 
-	@Override /* Overridden from Encoder */
-	public OutputStream getOutputStream(OutputStream os) throws IOException {
-		return new FinishableGZIPOutputStream(os);
-	}
-
-	@Override /* Overridden from Encoder */
-	public InputStream getInputStream(InputStream is) throws IOException {
-		return new GZIPInputStream(is);
+	private static class FinishableGZIPOutputStream extends GZIPOutputStream implements Finishable {
+		FinishableGZIPOutputStream(OutputStream out) throws IOException {
+			super(out);
+		}
 	}
 
 	/**
@@ -51,9 +47,13 @@ public class GzipEncoder extends Encoder {
 		return new String[]{"gzip"};
 	}
 
-	private static class FinishableGZIPOutputStream extends GZIPOutputStream implements Finishable {
-		FinishableGZIPOutputStream(OutputStream out) throws IOException {
-			super(out);
-		}
+	@Override /* Overridden from Encoder */
+	public InputStream getInputStream(InputStream is) throws IOException {
+		return new GZIPInputStream(is);
+	}
+
+	@Override /* Overridden from Encoder */
+	public OutputStream getOutputStream(OutputStream os) throws IOException {
+		return new FinishableGZIPOutputStream(os);
 	}
 }

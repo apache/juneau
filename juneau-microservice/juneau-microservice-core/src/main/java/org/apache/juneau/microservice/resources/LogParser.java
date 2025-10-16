@@ -30,11 +30,106 @@ import java.util.regex.*;
  * names.
  */
 public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.Entry>, Closeable {
+	/**
+	 * Represents a single line from the log file.
+	 */
+	@SuppressWarnings("javadoc")
+	public class Entry {
+		public Date date;
+		public String severity, logger;
+		protected String line, text;
+		protected String thread;
+		protected List<String> additionalText;
+		protected boolean isRecord;
+
+		Entry(String line) throws IOException {
+			try {
+				this.line = line;
+				Matcher m = formatter.getLogEntryPattern().matcher(line);
+				if (m.matches()) {
+					isRecord = true;
+					String s = formatter.getField("date", m);
+					if (s != null)
+						date = formatter.getDateFormat().parse(s);
+					thread = formatter.getField("thread", m);
+					severity = formatter.getField("level", m);
+					logger = formatter.getField("logger", m);
+					text = formatter.getField("msg", m);
+					if (logger != null && logger.indexOf('.') > -1)
+						logger = logger.substring(logger.lastIndexOf('.')+1);
+				}
+			} catch (ParseException e) {
+				throw new IOException(e);
+			}
+		}
+
+		public Writer appendHtml(Writer w) throws IOException {
+			w.append(toHtml(line)).append("<br>");
+			if (additionalText != null)
+				for (String t : additionalText)
+					w.append(toHtml(t)).append("<br>");
+			return w;
+		}
+
+		public String getText() {
+			if (additionalText == null)
+				return text;
+			int i = text.length();
+			for (String s : additionalText)
+				i += s.length() + 1;
+			StringBuilder sb = new StringBuilder(i);
+			sb.append(text);
+			for (String s : additionalText)
+				sb.append('\n').append(s);
+			return sb.toString();
+		}
+
+		public String getThread() {
+			return thread;
+		}
+
+		protected Writer append(Writer w) throws IOException {
+			w.append(line).append('\n');
+			if (additionalText != null)
+				for (String t : additionalText)
+					w.append(t).append('\n');
+			return w;
+		}
+
+		void addText(String t) {
+			if (additionalText == null)
+				additionalText = new LinkedList<>();
+			additionalText.add(t);
+		}
+
+		boolean matches() {
+			if (! isRecord)
+				return false;
+			if (start != null && date.before(start))
+				return false;
+			if (end != null && date.after(end))
+				return false;
+			if (threadFilter != null && ! threadFilter.equals(thread))
+				return false;
+			if (loggerFilter != null && ! loggerFilter.contains(logger))
+				return false;
+			if (severityFilter != null && ! severityFilter.contains(severity))
+				return false;
+			return true;
+		}
+	}
+	static String toHtml(String s) {
+		if (s.indexOf('<') != -1)
+			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
+		return s;
+	}
 	private BufferedReader br;
 	LogEntryFormatter formatter;
 	Date start, end;
 	Set<String> loggerFilter, severityFilter;
+
 	String threadFilter;
+
 	private Entry next;
 
 	/**
@@ -69,9 +164,19 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		}
 	}
 
+	@Override /* Overridden from Closeable */
+	public void close() throws IOException {
+		br.close();
+	}
+
 	@Override /* Overridden from Iterator */
 	public boolean hasNext() {
 		return next != null;
+	}
+
+	@Override /* Overridden from Iterable */
+	public Iterator<Entry> iterator() {
+		return this;
 	}
 
 	@Override /* Overridden from Iterator */
@@ -103,22 +208,13 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		throw new NoSuchMethodError();
 	}
 
-	@Override /* Overridden from Iterable */
-	public Iterator<Entry> iterator() {
-		return this;
-	}
-
-	@Override /* Overridden from Closeable */
-	public void close() throws IOException {
-		br.close();
-	}
-
 	/**
 	 * Serializes the contents of the parsed log file to the specified writer and then closes the underlying reader.
 	 *
 	 * @param w The writer to write the log file to.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings("resource")
 	public void writeTo(Writer w) throws IOException {
 		try {
 			if (! hasNext())
@@ -128,100 +224,5 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		} finally {
 			close();
 		}
-	}
-
-	/**
-	 * Represents a single line from the log file.
-	 */
-	@SuppressWarnings("javadoc")
-	public class Entry {
-		public Date date;
-		public String severity, logger;
-		protected String line, text;
-		protected String thread;
-		protected List<String> additionalText;
-		protected boolean isRecord;
-
-		Entry(String line) throws IOException {
-			try {
-				this.line = line;
-				Matcher m = formatter.getLogEntryPattern().matcher(line);
-				if (m.matches()) {
-					isRecord = true;
-					String s = formatter.getField("date", m);
-					if (s != null)
-						date = formatter.getDateFormat().parse(s);
-					thread = formatter.getField("thread", m);
-					severity = formatter.getField("level", m);
-					logger = formatter.getField("logger", m);
-					text = formatter.getField("msg", m);
-					if (logger != null && logger.indexOf('.') > -1)
-						logger = logger.substring(logger.lastIndexOf('.')+1);
-				}
-			} catch (ParseException e) {
-				throw new IOException(e);
-			}
-		}
-
-		void addText(String t) {
-			if (additionalText == null)
-				additionalText = new LinkedList<>();
-			additionalText.add(t);
-		}
-
-		public String getText() {
-			if (additionalText == null)
-				return text;
-			int i = text.length();
-			for (String s : additionalText)
-				i += s.length() + 1;
-			StringBuilder sb = new StringBuilder(i);
-			sb.append(text);
-			for (String s : additionalText)
-				sb.append('\n').append(s);
-			return sb.toString();
-		}
-
-		public String getThread() {
-			return thread;
-		}
-
-		public Writer appendHtml(Writer w) throws IOException {
-			w.append(toHtml(line)).append("<br>");
-			if (additionalText != null)
-				for (String t : additionalText)
-					w.append(toHtml(t)).append("<br>");
-			return w;
-		}
-
-		protected Writer append(Writer w) throws IOException {
-			w.append(line).append('\n');
-			if (additionalText != null)
-				for (String t : additionalText)
-					w.append(t).append('\n');
-			return w;
-		}
-
-		boolean matches() {
-			if (! isRecord)
-				return false;
-			if (start != null && date.before(start))
-				return false;
-			if (end != null && date.after(end))
-				return false;
-			if (threadFilter != null && ! threadFilter.equals(thread))
-				return false;
-			if (loggerFilter != null && ! loggerFilter.contains(logger))
-				return false;
-			if (severityFilter != null && ! severityFilter.contains(severity))
-				return false;
-			return true;
-		}
-	}
-
-	static String toHtml(String s) {
-		if (s.indexOf('<') != -1)
-			return s.replaceAll("<", "&lt;");//$NON-NLS-2$
-		return s;
 	}
 }

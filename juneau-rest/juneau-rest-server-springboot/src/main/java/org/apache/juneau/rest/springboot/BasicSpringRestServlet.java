@@ -51,20 +51,8 @@ import org.apache.juneau.rest.stats.*;
 @Rest
 public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicRestOperations, BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BasicRestConfig methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from BasicRestConfig */
-	public Swagger getSwagger(RestRequest req) {
-		return req.getSwagger().orElseThrow(NotFound::new);
-	}
-
-	@Override /* Overridden from BasicRestConfig */
-	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
-		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
-	}
+	public void error() {}
 
 	@Override /* Overridden from BasicRestConfig */
 	public HttpResource getFavIcon() {
@@ -73,10 +61,17 @@ public abstract class BasicSpringRestServlet extends SpringRestServlet implement
 	}
 
 	@Override /* Overridden from BasicRestConfig */
-	public void error() {}
+	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
+		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
+	}
 
 	@Override /* Overridden from BasicRestConfig */
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
+	}
+
+	@Override /* Overridden from BasicRestConfig */
+	public Swagger getSwagger(RestRequest req) {
+		return req.getSwagger().orElseThrow(NotFound::new);
 	}
 }

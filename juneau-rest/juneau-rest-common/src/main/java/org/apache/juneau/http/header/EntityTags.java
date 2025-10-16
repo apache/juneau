@@ -30,24 +30,10 @@ import org.apache.juneau.internal.*;
  */
 @BeanIgnore
 public class EntityTags {
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Represents an empty entity tags object. */
 	public static final EntityTags EMPTY = new EntityTags("");
 
 	private static final Cache<String,EntityTags> CACHE = Cache.of(String.class, EntityTags.class).build();
-
-	/**
-	 * Returns a parsed entity tags header value.
-	 *
-	 * @param value The raw header value.
-	 * @return A parsed header value.
-	 */
-	public static EntityTags of(String value) {
-		return Utils.isEmpty(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
-	}
 
 	/**
 	 * Returns a parsed entity tags header value.
@@ -59,22 +45,17 @@ public class EntityTags {
 		return value == null ? null : new EntityTags(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Returns a parsed entity tags header value.
+	 *
+	 * @param value The raw header value.
+	 * @return A parsed header value.
+	 */
+	public static EntityTags of(String value) {
+		return Utils.isEmpty(value) ? EMPTY : CACHE.get(value, ()->new EntityTags(value));
+	}
 	private final EntityTag[] value;
 	private final String string;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value The header value.
-	 */
-	public EntityTags(String value) {
-		this.string = value;
-		this.value = parse(value);
-	}
 
 	/**
 	 * Constructor.
@@ -86,26 +67,14 @@ public class EntityTags {
 		this.value = copyOf(value);
 	}
 
-	private EntityTag[] parse(String value) {
-		if (value == null)
-			return null;
-		String[] s = splita(value);
-		EntityTag[] v = new EntityTag[s.length];
-		for (int i = 0; i < s.length; i++)
-			v[i] = EntityTag.of(s[i]);
-		return v;
-	}
-
 	/**
-	 * Returns the entity tags in this object as a list.
+	 * Constructor.
 	 *
-	 * <p>
-	 * Returns an unmodifiable list.
-	 *
-	 * @return The entity tags in this object as a list.  Can be <jk>null</jk>.
+	 * @param value The header value.
 	 */
-	public List<EntityTag> toList() {
-		return u(alist(value));
+	public EntityTags(String value) {
+		this.string = value;
+		this.value = parse(value);
 	}
 
 	/**
@@ -120,8 +89,30 @@ public class EntityTags {
 		return copyOf(value);
 	}
 
+	/**
+	 * Returns the entity tags in this object as a list.
+	 *
+	 * <p>
+	 * Returns an unmodifiable list.
+	 *
+	 * @return The entity tags in this object as a list.  Can be <jk>null</jk>.
+	 */
+	public List<EntityTag> toList() {
+		return u(alist(value));
+	}
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
+	}
+
+	private EntityTag[] parse(String value) {
+		if (value == null)
+			return null;
+		String[] s = splita(value);
+		EntityTag[] v = new EntityTag[s.length];
+		for (int i = 0; i < s.length; i++)
+			v[i] = EntityTag.of(s[i]);
+		return v;
 	}
 }

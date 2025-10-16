@@ -31,11 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicBooleanPart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -64,11 +59,6 @@ public class BasicBooleanPart extends BasicPart {
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Boolean value;
 	private final Supplier<Boolean> supplier;
 
@@ -87,18 +77,6 @@ public class BasicBooleanPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.  Must not be <jk>null</jk>.
-	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
-	 */
-	public BasicBooleanPart(String name, Supplier<Boolean> value) {
-		super(name, value);
-		this.value = null;
-		this.supplier = value;
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * <p>
 	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
 	 * Otherwise parses using {@link Boolean#valueOf(String)}.
@@ -112,9 +90,16 @@ public class BasicBooleanPart extends BasicPart {
 		this.supplier = null;
 	}
 
-	@Override /* Overridden from NameValuePair */
-	public String getValue() {
-		return Utils.s(value());
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicBooleanPart(String name, Supplier<Boolean> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	/**
@@ -127,15 +112,6 @@ public class BasicBooleanPart extends BasicPart {
 	}
 
 	/**
-	 * Returns The part value as a {@link Boolean}.
-	 *
-	 * @return The part value as a {@link Boolean}, or <jk>null</jk> if the value <jk>null</jk>.
-	 */
-	public Boolean toBoolean() {
-		return value();
-	}
-
-	/**
 	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
@@ -143,6 +119,11 @@ public class BasicBooleanPart extends BasicPart {
 	 */
 	public FluentBooleanAssertion<BasicBooleanPart> assertBoolean() {
 		return new FluentBooleanAssertion<>(value(), this);
+	}
+
+	@Override /* Overridden from NameValuePair */
+	public String getValue() {
+		return Utils.s(value());
 	}
 
 	/**
@@ -157,6 +138,15 @@ public class BasicBooleanPart extends BasicPart {
 	public Boolean orElse(Boolean other) {
 		Boolean x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns The part value as a {@link Boolean}.
+	 *
+	 * @return The part value as a {@link Boolean}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public Boolean toBoolean() {
+		return value();
 	}
 
 	private Boolean value() {

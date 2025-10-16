@@ -50,6 +50,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>See Also:</h5><ul>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class BasicFileFinder implements FileFinder {
 
 	private static final ResourceBundle.Control RB_CONTROL = ResourceBundle.Control.getControl(Control.FORMAT_DEFAULT);
@@ -93,24 +94,36 @@ public class BasicFileFinder implements FileFinder {
 		this.excludePatterns = new String[0];
 		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// FileFinder methods
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof BasicFileFinder && Utils.eq(this, (BasicFileFinder)o, (x,y)->Utils.eq(x.hashCode, y.hashCode) && Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.roots, y.roots) && Utils.eq(x.cachingLimit, y.cachingLimit) && Utils.eq(x.includePatterns, y.includePatterns) && Utils.eq(x.excludePatterns, y.excludePatterns));
+	}
 
 	@Override /* Overridden from FileFinder */
 	public final Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 		return find(name, locale);
 	}
-
 	@Override /* Overridden from FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
 		return Utils.opt(read(find(name, locale).orElse(null)));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation methods
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override
+	public int hashCode() {
+		return hashCode;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return filteredMap()
+			.append("class", getClass().getSimpleName())
+			.append("roots", roots)
+			.append("cachingLimit", cachingLimit)
+			.append("include", includePatterns)
+			.append("exclude", excludePatterns)
+			.append("hashCode", hashCode)
+			.asReadableString();
+	}
 
 	/**
 	 * The main implementation method for finding files.
@@ -228,24 +241,6 @@ public class BasicFileFinder implements FileFinder {
 	}
 
 	/**
-	 * Checks for path malformations such as use of <js>".."</js> which can be used to open up security holes.
-	 *
-	 * <p>
-	 * Default implementation returns <jk>true</jk> if the path is any of the following:
-	 * <ul>
-	 * 	<li>Is blank or <jk>null</jk>.
-	 * 	<li>Contains <js>".."</js> (to prevent traversing out of working directory).
-	 * 	<li>Contains <js>"%"</js> (to prevent URI trickery).
-	 * </ul>
-	 *
-	 * @param path The path to check.
-	 * @return <jk>true</jk> if the path is invalid.
-	 */
-	protected boolean isInvalidPath(String path) {
-		return Utils.isEmpty(path) || path.contains("..") || path.contains("%");
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the file should be ignored based on file name.
 	 *
 	 * @param name The name to check.
@@ -261,25 +256,21 @@ public class BasicFileFinder implements FileFinder {
 		return true;
 	}
 
-	@Override
-	public int hashCode() {
-		return hashCode;
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		return o instanceof BasicFileFinder && Utils.eq(this, (BasicFileFinder)o, (x,y)->Utils.eq(x.hashCode, y.hashCode) && Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.roots, y.roots) && Utils.eq(x.cachingLimit, y.cachingLimit) && Utils.eq(x.includePatterns, y.includePatterns) && Utils.eq(x.excludePatterns, y.excludePatterns));
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return filteredMap()
-			.append("class", getClass().getSimpleName())
-			.append("roots", roots)
-			.append("cachingLimit", cachingLimit)
-			.append("include", includePatterns)
-			.append("exclude", excludePatterns)
-			.append("hashCode", hashCode)
-			.asReadableString();
+	/**
+	 * Checks for path malformations such as use of <js>".."</js> which can be used to open up security holes.
+	 *
+	 * <p>
+	 * Default implementation returns <jk>true</jk> if the path is any of the following:
+	 * <ul>
+	 * 	<li>Is blank or <jk>null</jk>.
+	 * 	<li>Contains <js>".."</js> (to prevent traversing out of working directory).
+	 * 	<li>Contains <js>"%"</js> (to prevent URI trickery).
+	 * </ul>
+	 *
+	 * @param path The path to check.
+	 * @return <jk>true</jk> if the path is invalid.
+	 */
+	protected boolean isInvalidPath(String path) {
+		return Utils.isEmpty(path) || path.contains("..") || path.contains("%");
 	}
 }

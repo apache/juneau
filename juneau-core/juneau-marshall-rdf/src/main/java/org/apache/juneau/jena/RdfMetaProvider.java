@@ -29,14 +29,6 @@ import org.apache.juneau.xml.*;
 public interface RdfMetaProvider extends XmlMetaProvider {
 
 	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	RdfClassMeta getRdfClassMeta(ClassMeta<?> cm);
-
-	/**
 	 * Returns the language-specific metadata on the specified bean.
 	 *
 	 * @param bm The bean to return the metadata on.
@@ -51,4 +43,12 @@ public interface RdfMetaProvider extends XmlMetaProvider {
 	 * @return The metadata.
 	 */
 	RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm);
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	RdfClassMeta getRdfClassMeta(ClassMeta<?> cm);
 }

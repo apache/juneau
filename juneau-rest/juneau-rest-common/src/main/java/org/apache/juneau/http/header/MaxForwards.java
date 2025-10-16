@@ -67,13 +67,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Max-Forwards")
 public class MaxForwards extends BasicIntegerHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Max-Forwards";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static MaxForwards of(Integer value) {
+		return value == null ? null : new MaxForwards(value);
+	}
 
 	/**
 	 * Static creator.
@@ -85,18 +92,6 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static MaxForwards of(String value) {
-		return value == null ? null : new MaxForwards(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static MaxForwards of(Integer value) {
 		return value == null ? null : new MaxForwards(value);
 	}
 
@@ -114,10 +109,16 @@ public class MaxForwards extends BasicIntegerHeader {
 	public static MaxForwards of(Supplier<Integer> value) {
 		return value == null ? null : new MaxForwards(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public MaxForwards(Integer value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -128,17 +129,6 @@ public class MaxForwards extends BasicIntegerHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public MaxForwards(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public MaxForwards(Integer value) {
 		super(NAME, value);
 	}
 

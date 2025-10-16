@@ -31,11 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicIntegerPart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -64,11 +59,6 @@ public class BasicIntegerPart extends BasicPart {
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Integer value;
 	private final Supplier<Integer> supplier;
 
@@ -87,18 +77,6 @@ public class BasicIntegerPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.  Must not be <jk>null</jk>.
-	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
-	 */
-	public BasicIntegerPart(String name, Supplier<Integer> value) {
-		super(name, value);
-		this.value = null;
-		this.supplier = value;
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * <p>
 	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
 	 * Otherwise parses using {@link Integer#valueOf(String)}.
@@ -112,9 +90,16 @@ public class BasicIntegerPart extends BasicPart {
 		this.supplier = null;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicIntegerPart(String name, Supplier<Integer> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	/**
@@ -127,15 +112,6 @@ public class BasicIntegerPart extends BasicPart {
 	}
 
 	/**
-	 * Returns The part value as an {@link Integer}.
-	 *
-	 * @return The part value as an {@link Integer}, or <jk>null</jk> if the value <jk>null</jk>.
-	 */
-	public Integer toInteger() {
-		return value();
-	}
-
-	/**
 	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
@@ -143,6 +119,11 @@ public class BasicIntegerPart extends BasicPart {
 	 */
 	public FluentIntegerAssertion<BasicIntegerPart> assertInteger() {
 		return new FluentIntegerAssertion<>(value(), this);
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
 	}
 
 	/**
@@ -157,6 +138,15 @@ public class BasicIntegerPart extends BasicPart {
 	public Integer orElse(Integer other) {
 		Integer x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns The part value as an {@link Integer}.
+	 *
+	 * @return The part value as an {@link Integer}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public Integer toInteger() {
+		return value();
 	}
 
 	private Integer value() {

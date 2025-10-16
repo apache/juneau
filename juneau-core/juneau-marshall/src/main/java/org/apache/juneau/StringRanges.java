@@ -63,15 +63,29 @@ import org.apache.juneau.internal.*;
  */
 @BeanIgnore
 public class StringRanges {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Represents an empty string ranges object. */
 	public static final StringRanges EMPTY = new StringRanges("");
 
 	private static final Cache<String,StringRanges> CACHE = Cache.of(String.class, StringRanges.class).build();
+
+	/**
+	 * Compares two StringRanges for equality.
+	 *
+	 * <p>
+	 * The values are first compared according to <c>qValue</c> values.
+	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
+	 * ascending order, with the <js>"*"</js> type demoted last in that order.
+	 */
+	private static final Comparator<StringRange> RANGE_COMPARATOR = (o1, o2) -> {
+		// Compare q-values.
+		int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
+		if (qCompare != 0)
+			return qCompare;
+
+		// Compare media-types.
+		// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
+		return o2.toString().compareTo(o1.toString());
+	};
 
 	/**
 	 * Returns a parsed string range header value.
@@ -82,7 +96,6 @@ public class StringRanges {
 	public static StringRanges of(String value) {
 		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new StringRanges(value));
 	}
-
 	/**
 	 * Returns a parsed string range header value.
 	 *
@@ -92,13 +105,28 @@ public class StringRanges {
 	public static StringRanges of(StringRange...value) {
 		return value == null ? null : new StringRanges(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	private static HeaderElement[] parse(String value) {
+		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
+	}
 
 	private final StringRange[] value;
+
 	private final String string;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param e The parsed string range header value.
+	 */
+	public StringRanges(HeaderElement...e) {
+
+		value = new StringRange[e.length];
+		for (int i = 0; i < e.length; i++)
+			value[i] = new StringRange(e[i]);
+		Arrays.sort(value, RANGE_COMPARATOR);
+
+		this.string = value.length == 1 ? value[0].toString() : Utils.join(value, ", ");
+	}
 
 	/**
 	 * Constructor.
@@ -120,38 +148,28 @@ public class StringRanges {
 	}
 
 	/**
-	 * Constructor.
+	 * Performs an action on the string ranges that make up this object.
 	 *
-	 * @param e The parsed string range header value.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public StringRanges(HeaderElement...e) {
-
-		value = new StringRange[e.length];
-		for (int i = 0; i < e.length; i++)
-			value[i] = new StringRange(e[i]);
-		Arrays.sort(value, RANGE_COMPARATOR);
-
-		this.string = value.length == 1 ? value[0].toString() : Utils.join(value, ", ");
+	public StringRanges forEachRange(Consumer<StringRange> action) {
+		for (StringRange r : value)
+			action.accept(r);
+		return this;
 	}
 
 	/**
-	 * Compares two StringRanges for equality.
+	 * Returns the {@link MediaRange} at the specified index.
 	 *
-	 * <p>
-	 * The values are first compared according to <c>qValue</c> values.
-	 * Should those values be equal, the <c>type</c> is then lexicographically compared (case-insensitive) in
-	 * ascending order, with the <js>"*"</js> type demoted last in that order.
+	 * @param index The index position of the media range.
+	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
-	private static final Comparator<StringRange> RANGE_COMPARATOR = (o1, o2) -> {
-		// Compare q-values.
-		int qCompare = Float.compare(o2.getQValue(), o1.getQValue());
-		if (qCompare != 0)
-			return qCompare;
-
-		// Compare media-types.
-		// Note that '*' comes alphabetically before letters, so just do a reverse-alphabetical comparison.
-		return o2.toString().compareTo(o1.toString());
-	};
+	public StringRange getRange(int index) {
+		if (index < 0 || index >= value.length)
+			return null;
+		return value[index];
+	}
 
 	/**
 	 * Given a list of media types, returns the best match for this string range header.
@@ -202,40 +220,12 @@ public class StringRanges {
 	}
 
 	/**
-	 * Returns the {@link MediaRange} at the specified index.
-	 *
-	 * @param index The index position of the media range.
-	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
-	 */
-	public StringRange getRange(int index) {
-		if (index < 0 || index >= value.length)
-			return null;
-		return value[index];
-	}
-
-	/**
 	 * Returns the string ranges that make up this object.
 	 *
 	 * @return The string ranges that make up this object.
 	 */
 	public List<StringRange> toList() {
 		return alist(value);
-	}
-
-	/**
-	 * Performs an action on the string ranges that make up this object.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public StringRanges forEachRange(Consumer<StringRange> action) {
-		for (StringRange r : value)
-			action.accept(r);
-		return this;
-	}
-
-	private static HeaderElement[] parse(String value) {
-		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
 
 	@Override /* Overridden from Object */

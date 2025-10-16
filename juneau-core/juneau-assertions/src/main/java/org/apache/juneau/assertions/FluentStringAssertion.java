@@ -158,21 +158,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	private boolean javaStrings;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentStringAssertion(String value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -191,6 +176,21 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public FluentStringAssertion(Assertion creator, String value, R returns) {
 		super(creator, value, returns);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentStringAssertion(String value, R returns) {
+		this(null, value, returns);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -215,22 +215,40 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Overridden from FluentObjectAssertion */
-	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {  // NOSONAR - Intentional.
-		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
+	/**
+	 * Converts the text to lowercase.
+	 *
+	 * @return This object.
+	 */
+	public FluentStringAssertion<R> asLc() {
+		return asTransformed(x->x == null ? null : x.toLowerCase());
 	}
 
 	/**
-	 * Performs the specified regular expression replacement on the underlying string.
+	 * Returns the length of this string as an integer assertion.
 	 *
-	 * @param regex The regular expression to which this string is to be matched.
-	 * @param replacement The string to be substituted for each match.
 	 * @return This object.
 	 */
-	public FluentStringAssertion<R> asReplaceAll(String regex, String replacement) {
-		Utils.assertArgNotNull("regex", regex);
-		Utils.assertArgNotNull("replacement", replacement);
-		return asTransformed(x -> x == null ? null : x.replaceAll(regex, replacement));
+	public FluentIntegerAssertion<R> asLength() {
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().length(), returns());
+	}
+
+	/**
+	 * Splits the string into lines.
+	 *
+	 * @return This object.
+	 */
+	public FluentListAssertion<String,R> asLines() {
+		return asSplit("[\r\n]+");
+	}
+
+	/**
+	 * Removes any newlines from the string.
+	 *
+	 * @return This object.
+	 */
+	public FluentStringAssertion<R> asOneLine() {
+		return asTransformed(x->x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*","  "));
 	}
 
 	/**
@@ -247,39 +265,16 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * URL-decodes the text in this assertion.
+	 * Performs the specified regular expression replacement on the underlying string.
 	 *
+	 * @param regex The regular expression to which this string is to be matched.
+	 * @param replacement The string to be substituted for each match.
 	 * @return This object.
 	 */
-	public FluentStringAssertion<R> asUrlDecode() {
-		return asTransformed(StringUtils::urlDecode);
-	}
-
-	/**
-	 * Converts the text to lowercase.
-	 *
-	 * @return This object.
-	 */
-	public FluentStringAssertion<R> asLc() {
-		return asTransformed(x->x == null ? null : x.toLowerCase());
-	}
-
-	/**
-	 * Converts the text to uppercase.
-	 *
-	 * @return This object.
-	 */
-	public FluentStringAssertion<R> asUc() {
-		return asTransformed(x->x == null ? null : x.toUpperCase());
-	}
-
-	/**
-	 * Splits the string into lines.
-	 *
-	 * @return This object.
-	 */
-	public FluentListAssertion<String,R> asLines() {
-		return asSplit("[\r\n]+");
+	public FluentStringAssertion<R> asReplaceAll(String regex, String replacement) {
+		Utils.assertArgNotNull("regex", regex);
+		Utils.assertArgNotNull("replacement", replacement);
+		return asTransformed(x -> x == null ? null : x.replaceAll(regex, replacement));
 	}
 
 	/**
@@ -293,22 +288,9 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : Arrays.asList(value().trim().split(regex)), returns());
 	}
 
-	/**
-	 * Returns the length of this string as an integer assertion.
-	 *
-	 * @return This object.
-	 */
-	public FluentIntegerAssertion<R> asLength() {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().length(), returns());
-	}
-
-	/**
-	 * Removes any newlines from the string.
-	 *
-	 * @return This object.
-	 */
-	public FluentStringAssertion<R> asOneLine() {
-		return asTransformed(x->x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*","  "));
+	@Override /* Overridden from FluentObjectAssertion */
+	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {  // NOSONAR - Intentional.
+		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
 	/**
@@ -318,6 +300,24 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public FluentStringAssertion<R> asTrimmed() {
 		return new FluentStringAssertion<>(this, valueIsNull() ? null : value().trim(), returns());
+	}
+
+	/**
+	 * Converts the text to uppercase.
+	 *
+	 * @return This object.
+	 */
+	public FluentStringAssertion<R> asUc() {
+		return asTransformed(x->x == null ? null : x.toUpperCase());
+	}
+
+	/**
+	 * URL-decodes the text in this assertion.
+	 *
+	 * @return This object.
+	 */
+	public FluentStringAssertion<R> asUrlDecode() {
+		return asTransformed(StringUtils::urlDecode);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -354,17 +354,60 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Asserts that the text equals the specified value.
+	 * Asserts that the text contains all of the specified substrings.
+	 *
+	 * @param values The values to check against.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isContains(String...values) throws AssertionError {
+		Utils.assertArgNotNull("values", values);
+		var s = orElse(null);
+		for (var substring : values)
+			if (substring != null && ! StringUtils.contains(s, substring))
+				throw error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text is empty.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEmpty() throws AssertionError {
+		var s = orElse(null);
+		if (s != null && ! s.isEmpty())
+			throw error(MSG_stringWasNotEmpty, fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text ends with the specified string.
+	 *
+	 * @param string The string to test for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isEndsWith(String string) {
+		Utils.assertArgNotNull("string", string);
+		var s = value();
+		if (! s.endsWith(string))
+			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text equals the specified value ignoring case.
 	 *
 	 * @param value The value to check against.
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	@Override
-	public R isNot(String value) throws AssertionError {
+	public R isIc(String value) throws AssertionError {
 		var s = orElse(null);
-		if (Utils.eq(value, s))
-			throw error(MSG_stringEqualedUnexpected, fix(s));
+		if (Utils.neic(value, s))
+			throw error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
 		return returns();
 	}
 
@@ -396,6 +439,124 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		var s = value();
 		if (Utils.ne(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text matches the specified pattern containing <js>"*"</js> meta characters.
+	 *
+	 * <p>
+	 * The <js>"*"</js> meta character can be used to represent zero or more characters..
+	 *
+	 * @param searchPattern The search pattern.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isMatches(String searchPattern) throws AssertionError {
+		Utils.assertArgNotNull("searchPattern", searchPattern);
+		return isPattern(Utils.getMatchPattern3(searchPattern));
+	}
+
+	/**
+	 * Asserts that the text equals the specified value.
+	 *
+	 * @param value The value to check against.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@Override
+	public R isNot(String value) throws AssertionError {
+		var s = orElse(null);
+		if (Utils.eq(value, s))
+			throw error(MSG_stringEqualedUnexpected, fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text doesn't contain any of the specified substrings.
+	 *
+	 * @param values The values to check against.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotContains(String...values) throws AssertionError {
+		Utils.assertArgNotNull("values", values);
+		var s = orElse(null);
+		for (var substring : values)
+			if (substring != null && StringUtils.contains(s, substring))
+				throw error(MSG_stringContainedUnexpectedSubstring, fix(substring), fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text is not null or empty.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotEmpty() throws AssertionError {
+		var s = orElse(null);
+		if (s == null)
+			throw error(MSG_stringWasNull);
+		if (s.isEmpty())
+			throw error(MSG_stringWasEmpty);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text does not equal the specified value ignoring case.
+	 *
+	 * @param value The value to check against.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotIc(String value) throws AssertionError {
+		var s = orElse(null);
+		if (Utils.eqic(value, s))
+			throw error(MSG_stringEqualedUnexpected, fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text matches the specified regular expression pattern.
+	 *
+	 * @param pattern The pattern to test for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isPattern(Pattern pattern) throws AssertionError {
+		Utils.assertArgNotNull("pattern", pattern);
+		var s = value();
+		if (! pattern.matcher(s).matches())
+			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
+		return returns();
+	}
+
+	/**
+	 * Asserts that the text matches the specified regular expression.
+	 *
+	 * @param regex The pattern to test for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isPattern(String regex) throws AssertionError {
+		return isPattern(regex, 0);
+	}
+
+	/**
+	 * Asserts that the text matches the specified regular expression.
+	 *
+	 * @param regex The pattern to test for.
+	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isPattern(String regex, int flags) throws AssertionError {
+		Utils.assertArgNotNull("regex", regex);
+		var p = Pattern.compile(regex, flags);
+		var s = value();
+		if (! p.matcher(s).matches())
+			throw error(MSG_stringDidNotMatchExpectedPattern, fix(regex), fix(s));
 		return returns();
 	}
 
@@ -442,152 +603,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	/**
-	 * Asserts that the text equals the specified value ignoring case.
-	 *
-	 * @param value The value to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isIc(String value) throws AssertionError {
-		var s = orElse(null);
-		if (Utils.neic(value, s))
-			throw error(MSG_stringDifferedAtPosition, diffPositionIc(value, s), fix(value), fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text does not equal the specified value ignoring case.
-	 *
-	 * @param value The value to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotIc(String value) throws AssertionError {
-		var s = orElse(null);
-		if (Utils.eqic(value, s))
-			throw error(MSG_stringEqualedUnexpected, fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text contains all of the specified substrings.
-	 *
-	 * @param values The values to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isContains(String...values) throws AssertionError {
-		Utils.assertArgNotNull("values", values);
-		var s = orElse(null);
-		for (var substring : values)
-			if (substring != null && ! StringUtils.contains(s, substring))
-				throw error(MSG_stringDidNotContainExpectedSubstring, fix(substring), fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text doesn't contain any of the specified substrings.
-	 *
-	 * @param values The values to check against.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotContains(String...values) throws AssertionError {
-		Utils.assertArgNotNull("values", values);
-		var s = orElse(null);
-		for (var substring : values)
-			if (substring != null && StringUtils.contains(s, substring))
-				throw error(MSG_stringContainedUnexpectedSubstring, fix(substring), fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text is empty.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEmpty() throws AssertionError {
-		var s = orElse(null);
-		if (s != null && ! s.isEmpty())
-			throw error(MSG_stringWasNotEmpty, fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text is not null or empty.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotEmpty() throws AssertionError {
-		var s = orElse(null);
-		if (s == null)
-			throw error(MSG_stringWasNull);
-		if (s.isEmpty())
-			throw error(MSG_stringWasEmpty);
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text matches the specified pattern containing <js>"*"</js> meta characters.
-	 *
-	 * <p>
-	 * The <js>"*"</js> meta character can be used to represent zero or more characters..
-	 *
-	 * @param searchPattern The search pattern.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isMatches(String searchPattern) throws AssertionError {
-		Utils.assertArgNotNull("searchPattern", searchPattern);
-		return isPattern(Utils.getMatchPattern3(searchPattern));
-	}
-
-	/**
-	 * Asserts that the text matches the specified regular expression.
-	 *
-	 * @param regex The pattern to test for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isPattern(String regex) throws AssertionError {
-		return isPattern(regex, 0);
-	}
-
-	/**
-	 * Asserts that the text matches the specified regular expression.
-	 *
-	 * @param regex The pattern to test for.
-	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isPattern(String regex, int flags) throws AssertionError {
-		Utils.assertArgNotNull("regex", regex);
-		var p = Pattern.compile(regex, flags);
-		var s = value();
-		if (! p.matcher(s).matches())
-			throw error(MSG_stringDidNotMatchExpectedPattern, fix(regex), fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text matches the specified regular expression pattern.
-	 *
-	 * @param pattern The pattern to test for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isPattern(Pattern pattern) throws AssertionError {
-		Utils.assertArgNotNull("pattern", pattern);
-		var s = value();
-		if (! pattern.matcher(s).matches())
-			throw error(MSG_stringDidNotMatchExpectedPattern, fix(pattern.pattern()), fix(s));
-		return returns();
-	}
-
-	/**
 	 * Asserts that the text starts with the specified string.
 	 *
 	 * @param string The string to test for.
@@ -599,21 +614,6 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		var s = value();
 		if (! s.startsWith(string))
 			throw error(MSG_stringDidNotStartWithExpected, fix(string), fix(s));
-		return returns();
-	}
-
-	/**
-	 * Asserts that the text ends with the specified string.
-	 *
-	 * @param string The string to test for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isEndsWith(String string) {
-		Utils.assertArgNotNull("string", string);
-		var s = value();
-		if (! s.endsWith(string))
-			throw error(MSG_stringDidNotEndWithExpected, fix(string), fix(s));
 		return returns();
 	}
 

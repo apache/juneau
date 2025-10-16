@@ -118,21 +118,6 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentThrowableAssertion(T value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -153,130 +138,24 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentThrowableAssertion(T value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from FluentObjectAssertion */
-	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
-		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
-	/**
-	 * Returns an assertion against the throwable message.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception
-	 *	// with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
-	 * 		.asMessage()
-	 * 		.isPattern(<js>".*foobar.*"</js>);
-	 * </p>
-	 *
-	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
-	 */
-	public FluentStringAssertion<R> asMessage() {
-		return new FluentStringAssertion<>(this, map(Throwable::getMessage).orElse(null), returns());
-	}
-
-	/**
-	 * Returns an assertion against the throwable message and all caused-by messages.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with
-	 * 	// 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
-	 * 		.asMessages()
-	 * 		.isPattern(<js>".*foobar.*"</js>);
-	 * </p>
-	 *
-	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
-	 */
-	public FluentListAssertion<String,R> asMessages() {
-		List<String> l = null;
-		Throwable t = orElse(null);
-		if (t != null) {
-			if (t.getCause() == null)
-				l = singletonList(t.getMessage());
-			else {
-				l = list();
-				while (t != null) {
-					l.add(t.getMessage());
-					t = t.getCause();
-				}
-			}
-		}
-		return new FluentListAssertion<>(this, l, returns());
-	}
-
-	/**
-	 * Returns an assertion against the throwable localized message.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with
-	 * 	// 'foobar' somewhere in the localized messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
-	 * 		.asLocalizedMessage()
-	 * 		.isPattern(<js>".*foobar.*"</js>);
-	 * </p>
-	 *
-	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
-	 */
-	public FluentStringAssertion<R> asLocalizedMessage() {
-		return new FluentStringAssertion<>(this, map(Throwable::getLocalizedMessage).orElse(null), returns());
-	}
-
-	/**
-	 * Returns an assertion against the throwable message and all caused-by messages.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with
-	 * 	// 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
-	 * 		.asLocalizedMessages()
-	 * 		.isPattern(<js>".*foobar.*"</js>);
-	 * </p>
-	 *
-	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
-	 */
-	public FluentListAssertion<String,R> asLocalizedMessages() {
-		List<String> l = null;
-		Throwable t = orElse(null);
-		if (t != null) {
-			if (t.getCause() == null)
-				l = singletonList(t.getMessage());
-			else {
-				l = list();
-				while (t != null) {
-					l.add(t.getLocalizedMessage());
-					t = t.getCause();
-				}
-			}
-		}
-		return new FluentListAssertion<>(this, l, returns());
-	}
-
-	/**
-	 * Returns an assertion against the throwable localized message.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with
-	 * 	// 'foobar' somewhere in the stack trace. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
-	 * 		.asStackTrace()
-	 * 		.isPattern(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
-	 */
-	public FluentStringListAssertion<R> asStackTrace() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : Arrays.asList(getStackTrace(value())), returns());
-	}
 
 	/**
 	 * Returns an assertion against the caused-by throwable.
@@ -349,30 +228,130 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		return new FluentThrowableAssertion<>(this, (X)null, returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Asserts that this throwable is of the specified type.
+	 * Returns an assertion against the throwable localized message.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the localized messages. </jc>
 	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
-	 * 		.isType(RuntimeException.<jk>class</jk>);
+	 * 		.asLocalizedMessage()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
-	 * @param parent The type.
-	 * @return The fluent return object.
+	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
 	 */
-	@Override
-	public R isType(Class<?> parent) {
-		Utils.assertArgNotNull("parent", parent);
-		if (! parent.isInstance(value()))
-			throw error(MSG_exceptionWasNotExpectedType, className(parent), className(value()));
-		return returns();
+	public FluentStringAssertion<R> asLocalizedMessage() {
+		return new FluentStringAssertion<>(this, map(Throwable::getLocalizedMessage).orElse(null), returns());
 	}
+
+	/**
+	 * Returns an assertion against the throwable message and all caused-by messages.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asLocalizedMessages()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
+	 * </p>
+	 *
+	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
+	 */
+	public FluentListAssertion<String,R> asLocalizedMessages() {
+		List<String> l = null;
+		Throwable t = orElse(null);
+		if (t != null) {
+			if (t.getCause() == null)
+				l = singletonList(t.getMessage());
+			else {
+				l = list();
+				while (t != null) {
+					l.add(t.getLocalizedMessage());
+					t = t.getCause();
+				}
+			}
+		}
+		return new FluentListAssertion<>(this, l, returns());
+	}
+
+	/**
+	 * Returns an assertion against the throwable message.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Asserts that the specified method throws an exception
+	 *	// with 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asMessage()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
+	 * </p>
+	 *
+	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
+	 */
+	public FluentStringAssertion<R> asMessage() {
+		return new FluentStringAssertion<>(this, map(Throwable::getMessage).orElse(null), returns());
+	}
+
+	/**
+	 * Returns an assertion against the throwable message and all caused-by messages.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asMessages()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
+	 * </p>
+	 *
+	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
+	 */
+	public FluentListAssertion<String,R> asMessages() {
+		List<String> l = null;
+		Throwable t = orElse(null);
+		if (t != null) {
+			if (t.getCause() == null)
+				l = singletonList(t.getMessage());
+			else {
+				l = list();
+				while (t != null) {
+					l.add(t.getMessage());
+					t = t.getCause();
+				}
+			}
+		}
+		return new FluentListAssertion<>(this, l, returns());
+	}
+
+	/**
+	 * Returns an assertion against the throwable localized message.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the stack trace. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asStackTrace()
+	 * 		.isPattern(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
+	 */
+	public FluentStringListAssertion<R> asStackTrace() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : Arrays.asList(getStackTrace(value())), returns());
+	}
+
+	@Override /* Overridden from FluentObjectAssertion */
+	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Asserts that this throwable is exactly the specified type.
@@ -410,6 +389,27 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	public R isExists() {
 		if (valueIsNull())
 			throw error(MSG_exceptionWasNotThrown);
+		return returns();
+	}
+
+	/**
+	 * Asserts that this throwable is of the specified type.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.isType(RuntimeException.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param parent The type.
+	 * @return The fluent return object.
+	 */
+	@Override
+	public R isType(Class<?> parent) {
+		Utils.assertArgNotNull("parent", parent);
+		if (! parent.isInstance(value()))
+			throw error(MSG_exceptionWasNotExpectedType, className(parent), className(value()));
 		return returns();
 	}
 

@@ -24,10 +24,6 @@ import java.nio.charset.*;
  */
 public class FileReaderBuilder {
 
-	private File file;
-	private Charset cs = Charset.defaultCharset();
-	private boolean allowNoFile;
-
 	/**
 	 * Creates a new builder.
 	 *
@@ -36,7 +32,6 @@ public class FileReaderBuilder {
 	public static FileReaderBuilder create() {
 		return new FileReaderBuilder();
 	}
-
 	/**
 	 * Creates a new builder initialized with the specified file.
 	 *
@@ -46,27 +41,33 @@ public class FileReaderBuilder {
 	public static FileReaderBuilder create(File file) {
 		return new FileReaderBuilder().file(file);
 	}
+	private File file;
+
+	private Charset cs = Charset.defaultCharset();
+
+	private boolean allowNoFile;
 
 	/**
-	 * Sets the file being written from.
+	 * If called and the file is <jk>null</jk> or non-existent, then the {@link #build()} command will return an empty
+	 * reader instead of a {@link FileNotFoundException}.
 	 *
-	 * @param file The file being written from.
 	 * @return This object.
 	 */
-	public FileReaderBuilder file(File file) {
-		this.file = file;
+	public FileReaderBuilder allowNoFile() {
+		this.allowNoFile = true;
 		return this;
 	}
 
 	/**
-	 * Sets the path of the file being written from.
+	 * Creates a new File reader.
 	 *
-	 * @param path The path of the file being written from.
-	 * @return This object.
+	 * @return A new File reader.
+	 * @throws FileNotFoundException If file could not be found.
 	 */
-	public FileReaderBuilder file(String path) {
-		this.file = new File(path);
-		return this;
+	public Reader build() throws FileNotFoundException {
+		if (allowNoFile && (file == null || ! file.exists()))
+			return new StringReader("");
+		return new InputStreamReader(new FileInputStream(file), cs);
 	}
 
 	/**
@@ -96,25 +97,24 @@ public class FileReaderBuilder {
 	}
 
 	/**
-	 * If called and the file is <jk>null</jk> or non-existent, then the {@link #build()} command will return an empty
-	 * reader instead of a {@link FileNotFoundException}.
+	 * Sets the file being written from.
 	 *
+	 * @param file The file being written from.
 	 * @return This object.
 	 */
-	public FileReaderBuilder allowNoFile() {
-		this.allowNoFile = true;
+	public FileReaderBuilder file(File file) {
+		this.file = file;
 		return this;
 	}
 
 	/**
-	 * Creates a new File reader.
+	 * Sets the path of the file being written from.
 	 *
-	 * @return A new File reader.
-	 * @throws FileNotFoundException If file could not be found.
+	 * @param path The path of the file being written from.
+	 * @return This object.
 	 */
-	public Reader build() throws FileNotFoundException {
-		if (allowNoFile && (file == null || ! file.exists()))
-			return new StringReader("");
-		return new InputStreamReader(new FileInputStream(file), cs);
+	public FileReaderBuilder file(String path) {
+		this.file = new File(path);
+		return this;
 	}
 }

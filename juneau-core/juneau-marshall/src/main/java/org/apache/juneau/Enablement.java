@@ -43,6 +43,15 @@ public enum Enablement {
 	 */
 	NEVER;
 
+	private static final Map<String,Enablement> MAP = new HashMap<>();
+
+	static {
+		MAP.put("TRUE",ALWAYS);
+		MAP.put("ALWAYS",ALWAYS);
+		MAP.put("FALSE",NEVER);
+		MAP.put("NEVER",NEVER);
+		MAP.put("CONDITIONAL",CONDITIONAL);
+	}
 	/**
 	 * Retrieves this enum using case-insensitive matching.
 	 *
@@ -51,28 +60,6 @@ public enum Enablement {
 	 */
 	public static Enablement fromString(String s) {
 		return MAP.get(emptyIfNull(s).toUpperCase());
-	}
-
-	private static final Map<String,Enablement> MAP = new HashMap<>();
-	static {
-		MAP.put("TRUE",ALWAYS);
-		MAP.put("ALWAYS",ALWAYS);
-		MAP.put("FALSE",NEVER);
-		MAP.put("NEVER",NEVER);
-		MAP.put("CONDITIONAL",CONDITIONAL);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this enum is one of the specified values.
-	 *
-	 * @param values The values to check against.
-	 * @return <jk>true</jk> if this enum is one of the specified values.
-	 */
-	public boolean isOneOf(Enablement...values) {
-		for (Enablement v : values)
-			 if (this == v)
-				 return true;
-		return false;
 	}
 
 	/**
@@ -87,5 +74,18 @@ public enum Enablement {
 		if (this == NEVER)
 			return false;
 		return def;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this enum is one of the specified values.
+	 *
+	 * @param values The values to check against.
+	 * @return <jk>true</jk> if this enum is one of the specified values.
+	 */
+	public boolean isOneOf(Enablement...values) {
+		for (Enablement v : values)
+			 if (this == v)
+				 return true;
+		return false;
 	}
 }

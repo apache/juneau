@@ -44,25 +44,6 @@ import org.apache.juneau.swap.*;
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class MsgPackParserSession extends InputStreamParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(MsgPackParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -80,14 +61,14 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public MsgPackParserSession build() {
-			return new MsgPackParserSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public MsgPackParserSession build() {
+			return new MsgPackParserSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -97,20 +78,8 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -139,26 +108,20 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -173,12 +136,34 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			super.schemaDefault(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(MsgPackParser ctx) {
+		return new Builder(ctx);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -186,13 +171,6 @@ public class MsgPackParserSession extends InputStreamParserSession {
 	 */
 	protected MsgPackParserSession(Builder builder) {
 		super(builder);
-	}
-
-	@Override /* Overridden from ParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-		try (MsgPackInputStream is = new MsgPackInputStream(pipe)) {
-			return parseAnything(type, is, getOuter(), null);
-		}
 	}
 
 	/*
@@ -354,5 +332,12 @@ public class MsgPackParserSession extends InputStreamParserSession {
 			setParent(eType, o, outer);
 
 		return (T)o;
+	}
+
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		try (MsgPackInputStream is = new MsgPackInputStream(pipe)) {
+			return parseAnything(type, is, getOuter(), null);
+		}
 	}
 }

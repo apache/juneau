@@ -49,11 +49,6 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class Json5 extends CharMarshaller {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Default reusable instance.
 	 */
@@ -68,49 +63,44 @@ public class Json5 extends CharMarshaller {
 	 * Default reusable instance, readable format.
 	 */
 	public static final Json5 DEFAULT_READABLE = new Json5(Json5Serializer.DEFAULT_READABLE, Json5Parser.DEFAULT);
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Constructor.
+	 * Serializes a Java object to a JSON 5 string.
 	 *
-	 * @param s
-	 * 	The serializer to use for serializing output.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use for parsing input.
-	 * 	<br>Must not be <jk>null</jk>.
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
+	 *
+	 * @param object The object to serialize.
+	 * @return
+	 * 	The serialized object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public Json5(Json5Serializer s, Json5Parser p) {
-		super(s, p);
+	public static String of(Object object) throws SerializeException {
+		return DEFAULT.write(object);
 	}
 
 	/**
-	 * Constructor.
+	 * Serializes a Java object to a JSON 5 output.
 	 *
 	 * <p>
-	 * Uses {@link Json5Serializer#DEFAULT} and {@link Json5Parser#DEFAULT}.
-	 */
-	public Json5() {
-		this(Json5Serializer.DEFAULT, Json5Parser.DEFAULT);
-	}
-
-	/**
-	 * Parses a JSON 5 input string to the specified type.
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
 	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
+	 * @param object The object to serialize.
+	 * @param output
+	 * 	The output object.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
+	 * 	</ul>
+	 * @return The output object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static <T> T to(String input, Class<T> type) throws ParseException {
-		return DEFAULT.read(input, type);
+	public static Object of(Object object, Object output) throws SerializeException, IOException {
+		DEFAULT.write(object, output);
+		return output;
 	}
 
 	/**
@@ -141,29 +131,6 @@ public class Json5 extends CharMarshaller {
 	 */
 	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
 		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses a JSON 5 input string to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public static <T> T to(String input, Type type, Type...args) throws ParseException {
-		return DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -204,42 +171,65 @@ public class Json5 extends CharMarshaller {
 	}
 
 	/**
-	 * Serializes a Java object to a JSON 5 string.
+	 * Parses a JSON 5 input string to the specified type.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
 	 *
-	 * @param object The object to serialize.
-	 * @return
-	 * 	The serialized object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
 	 */
-	public static String of(Object object) throws SerializeException {
-		return DEFAULT.write(object);
+	public static <T> T to(String input, Class<T> type) throws ParseException {
+		return DEFAULT.read(input, type);
 	}
 
 	/**
-	 * Serializes a Java object to a JSON 5 output.
+	 * Parses a JSON 5 input string to the specified Java type.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
 	 *
-	 * @param object The object to serialize.
-	 * @param output
-	 * 	The output object.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
-	 * 	</ul>
-	 * @return The output object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 * @throws IOException Thrown by underlying stream.
+	 * @param <T> The class type of the object to create.
+	 * @param input The input.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public static Object of(Object object, Object output) throws SerializeException, IOException {
-		DEFAULT.write(object, output);
-		return output;
+	public static <T> T to(String input, Type type, Type...args) throws ParseException {
+		return DEFAULT.read(input, type, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Uses {@link Json5Serializer#DEFAULT} and {@link Json5Parser#DEFAULT}.
+	 */
+	public Json5() {
+		this(Json5Serializer.DEFAULT, Json5Parser.DEFAULT);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param s
+	 * 	The serializer to use for serializing output.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param p
+	 * 	The parser to use for parsing input.
+	 * 	<br>Must not be <jk>null</jk>.
+	 */
+	public Json5(Json5Serializer s, Json5Parser p) {
+		super(s, p);
 	}
 }

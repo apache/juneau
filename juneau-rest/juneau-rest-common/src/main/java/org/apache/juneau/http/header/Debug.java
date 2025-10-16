@@ -43,11 +43,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Debug")
 public class Debug extends BasicBooleanHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Debug";
 
@@ -59,11 +54,10 @@ public class Debug extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug of(String value) {
+	public static Debug of(Boolean value) {
 		return value == null ? null : new Debug(value);
 	}
 
@@ -72,10 +66,11 @@ public class Debug extends BasicBooleanHeader {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
-	public static Debug of(Boolean value) {
+	public static Debug of(String value) {
 		return value == null ? null : new Debug(value);
 	}
 
@@ -93,10 +88,16 @@ public class Debug extends BasicBooleanHeader {
 	public static Debug of(Supplier<Boolean> value) {
 		return value == null ? null : new Debug(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Debug(Boolean value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -107,17 +108,6 @@ public class Debug extends BasicBooleanHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Debug(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Debug(Boolean value) {
 		super(NAME, value);
 	}
 

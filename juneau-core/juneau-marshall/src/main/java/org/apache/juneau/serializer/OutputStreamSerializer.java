@@ -40,24 +40,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class OutputStreamSerializer extends Serializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -75,16 +57,6 @@ public class OutputStreamSerializer extends Serializer {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(OutputStreamSerializer copyFrom) {
-			super(copyFrom);
-			binaryFormat = copyFrom.binaryFormat;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -92,59 +64,44 @@ public class OutputStreamSerializer extends Serializer {
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public OutputStreamSerializer build() {
-			return build(OutputStreamSerializer.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				binaryFormat
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Binary output format.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
-		 * when converting the resulting byte array to a string.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
-		 * 	OutputStreamSerializer <jv>serializer</jv> = MsgPackSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.binaryFormat(<jsf>BASE64</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// The bean we want to serialize.</jc>
-		 * 	<jk>public class</jk> MyBean {...}
-		 *
-		 * 	<jc>// MessagePack will generate BASE64-encoded string.</jc>
-		 * 	String <jv>msgPack</jv> = <jv>serializer</jv>.serializeToString(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is {@link BinaryFormat#HEX}.
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder binaryFormat(BinaryFormat value) {
-			binaryFormat = value;
+		protected Builder(OutputStreamSerializer copyFrom) {
+			super(copyFrom);
+			binaryFormat = copyFrom.binaryFormat;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder addRootType(boolean value) {
+			super.addRootType(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -158,44 +115,14 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -254,14 +181,14 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -272,14 +199,14 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -290,14 +217,14 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -308,14 +235,14 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -340,6 +267,78 @@ public class OutputStreamSerializer extends Serializer {
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		/**
+		 * Binary output format.
+		 *
+		 * <p>
+		 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
+		 * when converting the resulting byte array to a string.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
+		 * 	OutputStreamSerializer <jv>serializer</jv> = MsgPackSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.binaryFormat(<jsf>BASE64</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// The bean we want to serialize.</jc>
+		 * 	<jk>public class</jk> MyBean {...}
+		 *
+		 * 	<jc>// MessagePack will generate BASE64-encoded string.</jc>
+		 * 	String <jv>msgPack</jv> = <jv>serializer</jv>.serializeToString(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link BinaryFormat#HEX}.
+		 * @return This object.
+		 */
+		public Builder binaryFormat(BinaryFormat value) {
+			binaryFormat = value;
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public OutputStreamSerializer build() {
+			return build(OutputStreamSerializer.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
 			return this;
 		}
 
@@ -380,14 +379,14 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
 			return this;
 		}
 
@@ -403,6 +402,14 @@ public class OutputStreamSerializer extends Serializer {
 			return this;
 		}
 
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				binaryFormat
+			);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
@@ -412,6 +419,18 @@ public class OutputStreamSerializer extends Serializer {
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions(boolean value) {
+			super.ignoreRecursions(value);
 			return this;
 		}
 
@@ -428,6 +447,12 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
@@ -436,6 +461,12 @@ public class OutputStreamSerializer extends Serializer {
 		@Override /* Overridden from Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
 			return this;
 		}
 
@@ -452,8 +483,32 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder keepNullProperties(boolean value) {
+			super.keepNullProperties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
 			return this;
 		}
 
@@ -476,14 +531,44 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder produces(String value) {
+			super.produces(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortCollections(boolean value) {
+			super.sortCollections(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortMaps(boolean value) {
+			super.sortMaps(value);
 			return this;
 		}
 
@@ -518,13 +603,13 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
+		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -532,150 +617,6 @@ public class OutputStreamSerializer extends Serializer {
 		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions() {
-			super.ignoreRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions(boolean value) {
-			super.ignoreRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder initialDepth(int value) {
-			super.initialDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder accept(String value) {
-			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes() {
-			super.addBeanTypes();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes(boolean value) {
-			super.addBeanTypes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType() {
-			super.addRootType();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType(boolean value) {
-			super.addRootType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder keepNullProperties() {
-			super.keepNullProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder keepNullProperties(boolean value) {
-			super.keepNullProperties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
-			super.listener(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder produces(String value) {
-			super.produces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortCollections() {
-			super.sortCollections();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortCollections(boolean value) {
-			super.sortCollections(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortMaps() {
-			super.sortMaps();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortMaps(boolean value) {
-			super.sortMaps(value);
 			return this;
 		}
 
@@ -716,6 +657,30 @@ public class OutputStreamSerializer extends Serializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
@@ -732,12 +697,27 @@ public class OutputStreamSerializer extends Serializer {
 			super.uriResolution(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final BinaryFormat binaryFormat;
 
 	/**
@@ -778,11 +758,6 @@ public class OutputStreamSerializer extends Serializer {
 	public final byte[] serialize(Object o) throws SerializeException {
 		return getSession().serialize(o);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Binary output format.
 	 *
@@ -793,11 +768,6 @@ public class OutputStreamSerializer extends Serializer {
 	protected final BinaryFormat getBinaryFormat() {
 		return binaryFormat;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);

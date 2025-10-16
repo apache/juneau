@@ -58,6 +58,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class ParserPipe implements Closeable {
 
 	private final Object input;
@@ -71,6 +72,46 @@ public class ParserPipe implements Closeable {
 	private boolean doClose;
 	private BinaryFormat binaryFormat;
 	private Positionable positionable;
+
+	/**
+	 * Shortcut constructor, typically for straight string input.
+	 *
+	 * <p>
+	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>);</code>
+	 *
+	 * @param input The input object.
+	 */
+	public ParserPipe(Object input) {
+		this(input, false, false, false, false, null, null);
+	}
+
+	/**
+	 * Constructor for stream-based parsers.
+	 *
+	 * @param input The parser input object.
+	 * @param debug
+	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
+	 * 	method.
+	 * 	This allows the contents of the pipe to be accessed when a problem occurs.
+	 * @param autoCloseStreams
+	 * 	Automatically close {@link InputStream InputStreams} and {@link Reader Readers} when passed in as input.
+	 * @param unbuffered
+	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
+	 * 	multiple times.
+	 * 	<br>Otherwise, we read character data into a reusable buffer.
+	 * @param binaryFormat The binary format of input strings when converted to bytes.
+	 */
+	public ParserPipe(Object input, boolean debug, boolean autoCloseStreams, boolean unbuffered, BinaryFormat binaryFormat) {
+		this.input = input;
+		this.debug = debug;
+		this.strict = false;
+		this.autoCloseStreams = autoCloseStreams;
+		this.unbuffered = unbuffered;
+		this.charset = null;
+		if (input instanceof CharSequence)
+			this.inputString = input.toString();
+		this.binaryFormat = binaryFormat;
+	}
 
 	/**
 	 * Constructor for reader-based parsers.
@@ -112,43 +153,50 @@ public class ParserPipe implements Closeable {
 	}
 
 	/**
-	 * Constructor for stream-based parsers.
+	 * Returns the contents of this pipe as a string.
 	 *
-	 * @param input The parser input object.
-	 * @param debug
-	 * 	If <jk>true</jk>, the input contents will be copied locally and accessible via the {@link #getInputAsString()}
-	 * 	method.
-	 * 	This allows the contents of the pipe to be accessed when a problem occurs.
-	 * @param autoCloseStreams
-	 * 	Automatically close {@link InputStream InputStreams} and {@link Reader Readers} when passed in as input.
-	 * @param unbuffered
-	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
-	 * 	multiple times.
-	 * 	<br>Otherwise, we read character data into a reusable buffer.
-	 * @param binaryFormat The binary format of input strings when converted to bytes.
+	 * @return The contents of this pipe as a string.
+	 * @throws IOException If thrown from inner reader.
 	 */
-	public ParserPipe(Object input, boolean debug, boolean autoCloseStreams, boolean unbuffered, BinaryFormat binaryFormat) {
-		this.input = input;
-		this.debug = debug;
-		this.strict = false;
-		this.autoCloseStreams = autoCloseStreams;
-		this.unbuffered = unbuffered;
-		this.charset = null;
-		if (input instanceof CharSequence)
-			this.inputString = input.toString();
-		this.binaryFormat = binaryFormat;
+	public String asString() throws IOException {
+		if (inputString == null)
+			inputString = read(getReader());
+		return inputString;
+	}
+
+	@Override /* Overridden from Closeable */
+	public void close() {
+		try {
+			if (doClose)
+				IOUtils.close(reader, inputStream);
+		} catch (IOException e) {
+			throw new BeanRuntimeException(e);
+		}
 	}
 
 	/**
-	 * Shortcut constructor, typically for straight string input.
+	 * Returns the contents of this pipe as a buffered reader.
 	 *
 	 * <p>
-	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>);</code>
+	 * If the reader passed into this pipe is already a buffered reader, that reader will be returned.
 	 *
-	 * @param input The input object.
+	 * @return The contents of this pipe as a buffered reader.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public ParserPipe(Object input) {
-		this(input, false, false, false, false, null, null);
+	public Reader getBufferedReader() throws IOException {
+		return toBufferedReader(getReader());
+	}
+
+	/**
+	 * Returns the input to this parser as a plain string.
+	 *
+	 * <p>
+	 * This method only returns a value if {@link org.apache.juneau.Context.Builder#debug()} is enabled.
+	 *
+	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
+	 */
+	public String getInputAsString() {
+		return inputString;
 	}
 
 	/**
@@ -198,13 +246,20 @@ public class ParserPipe implements Closeable {
 		return inputStream;
 	}
 
-	private byte[] convertFromString(String in) {
-		switch(binaryFormat) {
-			case BASE64: return base64Decode(in);
-			case HEX: return fromHex(in);
-			case SPACED_HEX: return fromSpacedHex(in);
-			default:	return new byte[0];
-		}
+	/**
+	 * Converts this pipe into a {@link ParserReader}.
+	 *
+	 * @return The converted pipe.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public ParserReader getParserReader() throws IOException {
+		if (input == null)
+			return null;
+		if (input instanceof ParserReader)
+			parserReader = (ParserReader)input;
+		else
+			parserReader = new ParserReader(this);
+		return parserReader;
 	}
 
 	/**
@@ -275,59 +330,6 @@ public class ParserPipe implements Closeable {
 	}
 
 	/**
-	 * Returns the contents of this pipe as a buffered reader.
-	 *
-	 * <p>
-	 * If the reader passed into this pipe is already a buffered reader, that reader will be returned.
-	 *
-	 * @return The contents of this pipe as a buffered reader.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public Reader getBufferedReader() throws IOException {
-		return toBufferedReader(getReader());
-	}
-
-	/**
-	 * Returns the input to this parser as a plain string.
-	 *
-	 * <p>
-	 * This method only returns a value if {@link org.apache.juneau.Context.Builder#debug()} is enabled.
-	 *
-	 * @return The input as a string, or <jk>null</jk> if debug mode not enabled.
-	 */
-	public String getInputAsString() {
-		return inputString;
-	}
-
-	/**
-	 * Returns the contents of this pipe as a string.
-	 *
-	 * @return The contents of this pipe as a string.
-	 * @throws IOException If thrown from inner reader.
-	 */
-	public String asString() throws IOException {
-		if (inputString == null)
-			inputString = read(getReader());
-		return inputString;
-	}
-
-	/**
-	 * Converts this pipe into a {@link ParserReader}.
-	 *
-	 * @return The converted pipe.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public ParserReader getParserReader() throws IOException {
-		if (input == null)
-			return null;
-		if (input instanceof ParserReader)
-			parserReader = (ParserReader)input;
-		else
-			parserReader = new ParserReader(this);
-		return parserReader;
-	}
-
-	/**
 	 * Returns <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
 	 *
 	 * @return <jk>true</jk> if the contents passed into this pipe was a {@link CharSequence}.
@@ -348,6 +350,15 @@ public class ParserPipe implements Closeable {
 		this.positionable = positionable;
 	}
 
+	private byte[] convertFromString(String in) {
+		switch(binaryFormat) {
+			case BASE64: return base64Decode(in);
+			case HEX: return fromHex(in);
+			case SPACED_HEX: return fromSpacedHex(in);
+			default:	return new byte[0];
+		}
+	}
+
 	Position getPosition() {
 		if (positionable == null)
 			return Position.UNKNOWN;
@@ -355,15 +366,5 @@ public class ParserPipe implements Closeable {
 		if (p == null)
 			return Position.UNKNOWN;
 		return p;
-	}
-
-	@Override /* Overridden from Closeable */
-	public void close() {
-		try {
-			if (doClose)
-				IOUtils.close(reader, inputStream);
-		} catch (IOException e) {
-			throw new BeanRuntimeException(e);
-		}
 	}
 }

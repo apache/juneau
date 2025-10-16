@@ -58,6 +58,26 @@ public class SerializeException extends BasicRuntimeException {
 		return new SerializeException(e);
 	}
 
+	private static String getMessage(SerializerSession session, String msg, Object... args) {
+		msg = format(msg, args);
+		if (session != null) {
+			Map<String,Object> m = session.getLastLocation();
+			if (m != null && ! m.isEmpty())
+				msg = "Serialize exception occurred at " + Json5Serializer.DEFAULT.toString(m) + ".  " + msg;
+		}
+		return msg;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param session The serializer session to extract information from.
+	 * @param causedBy The inner exception.
+	 */
+	public SerializeException(SerializerSession session, Exception causedBy) {
+		super(causedBy, getMessage(session, causedBy.getMessage()));
+	}
+
 	/**
 	 * Constructor.
 	 *
@@ -82,30 +102,10 @@ public class SerializeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param session The serializer session to extract information from.
-	 * @param causedBy The inner exception.
-	 */
-	public SerializeException(SerializerSession session, Exception causedBy) {
-		super(causedBy, getMessage(session, causedBy.getMessage()));
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param causedBy The inner exception.
 	 */
 	public SerializeException(Throwable causedBy) {
 		super(causedBy, getMessage(null, causedBy.getMessage()));
-	}
-
-	private static String getMessage(SerializerSession session, String msg, Object... args) {
-		msg = format(msg, args);
-		if (session != null) {
-			Map<String,Object> m = session.getLastLocation();
-			if (m != null && ! m.isEmpty())
-				msg = "Serialize exception occurred at " + Json5Serializer.DEFAULT.toString(m) + ".  " + msg;
-		}
-		return msg;
 	}
 
 	/**

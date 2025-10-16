@@ -73,6 +73,19 @@ public class AtomFeedResource extends BasicRestServlet {
 
 	private Feed feed;     // The root resource object
 
+	/**
+	 * [HTTP GET /dto/atom]
+	 * Get the sample ATOM feed
+	 *
+	 * @return The sample ATOM feed.
+	 */
+	@RestGet(
+		summary="Get the sample ATOM feed"
+	)
+	public Feed get() {
+		return feed;
+	}
+
 	@Override /* Servlet */
 	public void init() {
 		try {
@@ -110,19 +123,6 @@ public class AtomFeedResource extends BasicRestServlet {
 		} catch (Exception e) {
 			throw new IllegalStateException(e);
 		}
-	}
-
-	/**
-	 * [HTTP GET /dto/atom]
-	 * Get the sample ATOM feed
-	 *
-	 * @return The sample ATOM feed.
-	 */
-	@RestGet(
-		summary="Get the sample ATOM feed"
-	)
-	public Feed get() {
-		return feed;
 	}
 
 	/**

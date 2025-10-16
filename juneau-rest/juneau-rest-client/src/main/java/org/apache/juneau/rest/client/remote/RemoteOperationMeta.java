@@ -47,44 +47,6 @@ import org.apache.juneau.reflect.*;
  */
 public class RemoteOperationMeta {
 
-	private final String httpMethod;
-	private final String fullPath;
-	private final RemoteOperationArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
-	private final RemoteOperationBeanArg[] requestArgs;
-	private final RemoteOperationArg contentArg;
-	private final RemoteOperationReturn methodReturn;
-	private final Class<?>[] exceptions;
-
-	// Method-level annotations with defaults (9.2.0)
-	private final Map<String,String> pathDefaults, queryDefaults, headerDefaults, formDataDefaults;
-	private final String contentDefault;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param parentPath The absolute URI of the REST interface backing the interface proxy.
-	 * @param m The Java method.
-	 * @param defaultMethod The default HTTP method if not specified through annotation.
-	 */
-	public RemoteOperationMeta(final String parentPath, Method m, String defaultMethod) {
-		Builder b = new Builder(parentPath, m, defaultMethod);
-		this.httpMethod = b.httpMethod;
-		this.fullPath = b.fullPath;
-		this.pathArgs = b.pathArgs.toArray(new RemoteOperationArg[b.pathArgs.size()]);
-		this.queryArgs = b.queryArgs.toArray(new RemoteOperationArg[b.queryArgs.size()]);
-		this.formDataArgs = b.formDataArgs.toArray(new RemoteOperationArg[b.formDataArgs.size()]);
-		this.headerArgs = b.headerArgs.toArray(new RemoteOperationArg[b.headerArgs.size()]);
-		this.requestArgs = b.requestArgs.toArray(new RemoteOperationBeanArg[b.requestArgs.size()]);
-		this.contentArg = b.bodyArg;
-		this.methodReturn = b.methodReturn;
-		this.exceptions = m.getExceptionTypes();
-		this.pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
-		this.queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
-		this.headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
-		this.formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
-		this.contentDefault = b.contentDefault;
-	}
-
 	private static class Builder {
 		String httpMethod, fullPath, path;
 		List<RemoteOperationArg>
@@ -185,43 +147,19 @@ public class RemoteOperationMeta {
 		// Helper methods to process method-level annotations with defaults (9.2.0)
 		// These handle both individual annotations and repeated annotation arrays
 
-		private void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
-			// Check for individual @Header annotations
-			mi.getAnnotationList().forEach(Header.class, null, x -> {
-				Header h = x.inner();
-				String name = firstNonEmpty(h.name(), h.value());
-				String def = h.def();
-				if (isNotEmpty(name) && isNotEmpty(def)) {
-					defaults.put(name, def);
+		private void processContentDefaults(MethodInfo mi) {
+			mi.getAnnotationList().forEach(Content.class, null, x -> {
+				Content c = x.inner();
+				String def = c.def();
+				if (isNotEmpty(def)) {
+					contentDefault = def;
 				}
 			});
-			// Check for @Header.Array (repeated annotations)
-			mi.getAnnotationList().forEach(HeaderAnnotation.Array.class, null, x -> {
-				for (Header h : x.inner().value()) {
-					String name = firstNonEmpty(h.name(), h.value());
-					String def = h.def();
-					if (isNotEmpty(name) && isNotEmpty(def)) {
-						defaults.put(name, def);
-					}
-				}
-			});
-		}
-
-		private void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
-			mi.getAnnotationList().forEach(Query.class, null, x -> {
-				Query q = x.inner();
-				String name = firstNonEmpty(q.name(), q.value());
-				String def = q.def();
-				if (isNotEmpty(name) && isNotEmpty(def)) {
-					defaults.put(name, def);
-				}
-			});
-			mi.getAnnotationList().forEach(QueryAnnotation.Array.class, null, x -> {
-				for (Query q : x.inner().value()) {
-					String name = firstNonEmpty(q.name(), q.value());
-					String def = q.def();
-					if (isNotEmpty(name) && isNotEmpty(def)) {
-						defaults.put(name, def);
+			mi.getAnnotationList().forEach(ContentAnnotation.Array.class, null, x -> {
+				for (Content c : x.inner().value()) {
+					String def = c.def();
+					if (isNotEmpty(def)) {
+						contentDefault = def;
 					}
 				}
 			});
@@ -240,6 +178,28 @@ public class RemoteOperationMeta {
 				for (FormData fd : x.inner().value()) {
 					String name = firstNonEmpty(fd.name(), fd.value());
 					String def = fd.def();
+					if (isNotEmpty(name) && isNotEmpty(def)) {
+						defaults.put(name, def);
+					}
+				}
+			});
+		}
+
+		private void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
+			// Check for individual @Header annotations
+			mi.getAnnotationList().forEach(Header.class, null, x -> {
+				Header h = x.inner();
+				String name = firstNonEmpty(h.name(), h.value());
+				String def = h.def();
+				if (isNotEmpty(name) && isNotEmpty(def)) {
+					defaults.put(name, def);
+				}
+			});
+			// Check for @Header.Array (repeated annotations)
+			mi.getAnnotationList().forEach(HeaderAnnotation.Array.class, null, x -> {
+				for (Header h : x.inner().value()) {
+					String name = firstNonEmpty(h.name(), h.value());
+					String def = h.def();
 					if (isNotEmpty(name) && isNotEmpty(def)) {
 						defaults.put(name, def);
 					}
@@ -267,64 +227,74 @@ public class RemoteOperationMeta {
 			});
 		}
 
-		private void processContentDefaults(MethodInfo mi) {
-			mi.getAnnotationList().forEach(Content.class, null, x -> {
-				Content c = x.inner();
-				String def = c.def();
-				if (isNotEmpty(def)) {
-					contentDefault = def;
+		private void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
+			mi.getAnnotationList().forEach(Query.class, null, x -> {
+				Query q = x.inner();
+				String name = firstNonEmpty(q.name(), q.value());
+				String def = q.def();
+				if (isNotEmpty(name) && isNotEmpty(def)) {
+					defaults.put(name, def);
 				}
 			});
-			mi.getAnnotationList().forEach(ContentAnnotation.Array.class, null, x -> {
-				for (Content c : x.inner().value()) {
-					String def = c.def();
-					if (isNotEmpty(def)) {
-						contentDefault = def;
+			mi.getAnnotationList().forEach(QueryAnnotation.Array.class, null, x -> {
+				for (Query q : x.inner().value()) {
+					String name = firstNonEmpty(q.name(), q.value());
+					String def = q.def();
+					if (isNotEmpty(name) && isNotEmpty(def)) {
+						defaults.put(name, def);
 					}
 				}
 			});
 		}
 	}
+	private final String httpMethod;
+	private final String fullPath;
+	private final RemoteOperationArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
+	private final RemoteOperationBeanArg[] requestArgs;
+	private final RemoteOperationArg contentArg;
+	private final RemoteOperationReturn methodReturn;
+
+	private final Class<?>[] exceptions;
+	// Method-level annotations with defaults (9.2.0)
+	private final Map<String,String> pathDefaults, queryDefaults, headerDefaults, formDataDefaults;
+
+	private final String contentDefault;
 
 	/**
-	 * Returns the value of the {@link RemoteOp#method() @RemoteOp(method)} annotation on this Java method.
+	 * Constructor.
 	 *
-	 * @return The value of the annotation, never <jk>null</jk>.
+	 * @param parentPath The absolute URI of the REST interface backing the interface proxy.
+	 * @param m The Java method.
+	 * @param defaultMethod The default HTTP method if not specified through annotation.
 	 */
-	public String getHttpMethod() {
-		return httpMethod;
+	public RemoteOperationMeta(final String parentPath, Method m, String defaultMethod) {
+		Builder b = new Builder(parentPath, m, defaultMethod);
+		this.httpMethod = b.httpMethod;
+		this.fullPath = b.fullPath;
+		this.pathArgs = b.pathArgs.toArray(new RemoteOperationArg[b.pathArgs.size()]);
+		this.queryArgs = b.queryArgs.toArray(new RemoteOperationArg[b.queryArgs.size()]);
+		this.formDataArgs = b.formDataArgs.toArray(new RemoteOperationArg[b.formDataArgs.size()]);
+		this.headerArgs = b.headerArgs.toArray(new RemoteOperationArg[b.headerArgs.size()]);
+		this.requestArgs = b.requestArgs.toArray(new RemoteOperationBeanArg[b.requestArgs.size()]);
+		this.contentArg = b.bodyArg;
+		this.methodReturn = b.methodReturn;
+		this.exceptions = m.getExceptionTypes();
+		this.pathDefaults = Collections.unmodifiableMap(b.pathDefaults);
+		this.queryDefaults = Collections.unmodifiableMap(b.queryDefaults);
+		this.headerDefaults = Collections.unmodifiableMap(b.headerDefaults);
+		this.formDataDefaults = Collections.unmodifiableMap(b.formDataDefaults);
+		this.contentDefault = b.contentDefault;
 	}
 
 	/**
-	 * Returns the absolute URI of the REST interface invoked by this Java method.
-	 *
-	 * @return The absolute URI of the REST interface, never <jk>null</jk>.
-	 */
-	public String getFullPath() {
-		return fullPath;
-	}
-
-	/**
-	 * Performs an action on the {@link Path @Path} annotated arguments on this Java method.
+	 * Performs an action on the exceptions thrown by this method.
 	 *
 	 * @param action The action to perform.
 	 * @return This object.
 	 */
-	public RemoteOperationMeta forEachPathArg(Consumer<RemoteOperationArg> action) {
-		for (RemoteOperationArg a : pathArgs)
-			action.accept(a);
-		return this;
-	}
-
-	/**
-	 * Performs an action on the {@link Query @Query} annotated arguments on this Java method.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public RemoteOperationMeta forEachQueryArg(Consumer<RemoteOperationArg> action) {
-		for (RemoteOperationArg a : queryArgs)
-			action.accept(a);
+	public RemoteOperationMeta forEachException(Consumer<Class<?>> action) {
+		for (Class<?> e : exceptions)
+			action.accept(e);
 		return this;
 	}
 
@@ -353,6 +323,30 @@ public class RemoteOperationMeta {
 	}
 
 	/**
+	 * Performs an action on the {@link Path @Path} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachPathArg(Consumer<RemoteOperationArg> action) {
+		for (RemoteOperationArg a : pathArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
+	 * Performs an action on the {@link Query @Query} annotated arguments on this Java method.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public RemoteOperationMeta forEachQueryArg(Consumer<RemoteOperationArg> action) {
+		for (RemoteOperationArg a : queryArgs)
+			action.accept(a);
+		return this;
+	}
+
+	/**
 	 * Performs an action on the {@link Request @Request} annotated arguments on this Java method.
 	 *
 	 * @param action The action to perform.
@@ -374,46 +368,13 @@ public class RemoteOperationMeta {
 	}
 
 	/**
-	 * Returns whether the method returns the HTTP response body or status code.
+	 * Returns the default value for a {@link Content @Content} annotation on the method.
 	 *
-	 * @return Whether the method returns the HTTP response body or status code.
-	 */
-	public RemoteOperationReturn getReturns() {
-		return methodReturn;
-	}
-
-	/**
-	 * Performs an action on the exceptions thrown by this method.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public RemoteOperationMeta forEachException(Consumer<Class<?>> action) {
-		for (Class<?> e : exceptions)
-			action.accept(e);
-		return this;
-	}
-
-	/**
-	 * Returns the default value for a {@link Header @Header} annotation on the method.
-	 *
-	 * @param name The header name.
 	 * @return The default value, or <jk>null</jk> if not specified.
 	 * @since 9.2.0
 	 */
-	public String getHeaderDefault(String name) {
-		return headerDefaults.get(name);
-	}
-
-	/**
-	 * Returns the default value for a {@link Query @Query} annotation on the method.
-	 *
-	 * @param name The query parameter name.
-	 * @return The default value, or <jk>null</jk> if not specified.
-	 * @since 9.2.0
-	 */
-	public String getQueryDefault(String name) {
-		return queryDefaults.get(name);
+	public String getContentDefault() {
+		return contentDefault;
 	}
 
 	/**
@@ -428,6 +389,35 @@ public class RemoteOperationMeta {
 	}
 
 	/**
+	 * Returns the absolute URI of the REST interface invoked by this Java method.
+	 *
+	 * @return The absolute URI of the REST interface, never <jk>null</jk>.
+	 */
+	public String getFullPath() {
+		return fullPath;
+	}
+
+	/**
+	 * Returns the default value for a {@link Header @Header} annotation on the method.
+	 *
+	 * @param name The header name.
+	 * @return The default value, or <jk>null</jk> if not specified.
+	 * @since 9.2.0
+	 */
+	public String getHeaderDefault(String name) {
+		return headerDefaults.get(name);
+	}
+
+	/**
+	 * Returns the value of the {@link RemoteOp#method() @RemoteOp(method)} annotation on this Java method.
+	 *
+	 * @return The value of the annotation, never <jk>null</jk>.
+	 */
+	public String getHttpMethod() {
+		return httpMethod;
+	}
+
+	/**
 	 * Returns the default value for a {@link Path @Path} annotation on the method.
 	 *
 	 * @param name The path parameter name.
@@ -439,12 +429,22 @@ public class RemoteOperationMeta {
 	}
 
 	/**
-	 * Returns the default value for a {@link Content @Content} annotation on the method.
+	 * Returns the default value for a {@link Query @Query} annotation on the method.
 	 *
+	 * @param name The query parameter name.
 	 * @return The default value, or <jk>null</jk> if not specified.
 	 * @since 9.2.0
 	 */
-	public String getContentDefault() {
-		return contentDefault;
+	public String getQueryDefault(String name) {
+		return queryDefaults.get(name);
+	}
+
+	/**
+	 * Returns whether the method returns the HTTP response body or status code.
+	 *
+	 * @return Whether the method returns the HTTP response body or status code.
+	 */
+	public RemoteOperationReturn getReturns() {
+		return methodReturn;
 	}
 }

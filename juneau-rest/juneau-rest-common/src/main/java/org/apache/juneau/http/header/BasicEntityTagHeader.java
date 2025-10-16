@@ -40,12 +40,21 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicEntityTagHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicEntityTagHeader of(String name, EntityTag value) {
+		return value == null ? null : new BasicEntityTagHeader(name, value);
+	}
 
 	/**
 	 * Static creator.
@@ -59,20 +68,6 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicEntityTagHeader of(String name, String value) {
-		return value == null ? null : new BasicEntityTagHeader(name, value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicEntityTagHeader of(String name, EntityTag value) {
 		return value == null ? null : new BasicEntityTagHeader(name, value);
 	}
 
@@ -92,13 +87,23 @@ public class BasicEntityTagHeader extends BasicHeader {
 	public static BasicEntityTagHeader of(String name, Supplier<EntityTag> value) {
 		return value == null ? null : new BasicEntityTagHeader(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final EntityTag value;
 	private final Supplier<EntityTag> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicEntityTagHeader(String name, EntityTag value) {
+		super(name, value);
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -113,21 +118,6 @@ public class BasicEntityTagHeader extends BasicHeader {
 	public BasicEntityTagHeader(String name, String value) {
 		super(name, value);
 		this.value = EntityTag.of(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicEntityTagHeader(String name, EntityTag value) {
-		super(name, value);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -149,11 +139,6 @@ public class BasicEntityTagHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
-
 	/**
 	 * Returns the header value as an {@link EntityTag} wrapped in an {@link Optional}.
 	 *
@@ -163,13 +148,9 @@ public class BasicEntityTagHeader extends BasicHeader {
 		return Utils.opt(value());
 	}
 
-	/**
-	 * Returns the header value as an {@link EntityTag}.
-	 *
-	 * @return The header value as an {@link EntityTag}.  Can be <jk>null</jk>.
-	 */
-	public EntityTag toEntityTag() {
-		return value();
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
 	}
 
 	/**
@@ -184,6 +165,15 @@ public class BasicEntityTagHeader extends BasicHeader {
 	public EntityTag orElse(EntityTag other) {
 		EntityTag x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as an {@link EntityTag}.
+	 *
+	 * @return The header value as an {@link EntityTag}.  Can be <jk>null</jk>.
+	 */
+	public EntityTag toEntityTag() {
+		return value();
 	}
 
 	private EntityTag value() {

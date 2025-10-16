@@ -92,12 +92,312 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class CallLogger {
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
+		Logger logger;
+		ThrownStore thrownStore;
+		List<CallLoggerRule> normalRules = Utils.list(), debugRules = Utils.list();
+		Enablement enabled;
+		Predicate<HttpServletRequest> enabledTest;
+		CallLoggingDetail requestDetail, responseDetail;
+		Level level;
 
-	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BeanStore.INSTANCE).build();
+		/**
+		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
+		 */
+		protected Builder(BeanStore beanStore) {
+			logger = Logger.getLogger(env(SP_logger, "global"));
+			enabled = env(SP_enabled, ALWAYS);
+			enabledTest = x -> false;
+			requestDetail = env(SP_requestDetail, STATUS_LINE);
+			responseDetail = env(SP_responseDetail, STATUS_LINE);
+			level = env(SP_level).map(Level::parse).orElse(OFF);
+		}
+		/**
+		 * Instantiates a new call logger based on the settings in this builder.
+		 *
+		 * @return A new call logger.
+		 */
+		public CallLogger build() {
+			return new CallLogger(this);
+		}
+
+		/**
+		 * Adds logging rules to use when debug mode is enabled.
+		 *
+		 * <p>
+		 * Logging rules are matched in the order they are added.  The first to match wins.
+		 *
+		 * @param values The logging rules to add to the list of rules.
+		 * @return This object.
+		 */
+		public Builder debugRules(CallLoggerRule...values) {
+			for (CallLoggerRule rule : values)
+				debugRules.add(rule);
+			return this;
+		}
+
+		/**
+		 * Shortcut for calling <c>enabled(<jsf>NEVER</jsf>)</c>.
+		 *
+		 * @return This object.
+		 */
+		public Builder disabled() {
+			return enabled(NEVER);
+		}
+
+		/**
+		 * Specifies the default logging enablement setting.
+		 *
+		 * <p>
+		 * This specifies the default logging enablement value if not set on the first matched rule or if no rules match.
+		 *
+		 * <p>
+		 * If not specified, the setting is determined via the following:
+		 * <ul>
+		 * 	<li><js>{@link CallLogger#SP_enabled "juneau.restLogger.enabled"} system property.
+		 * 	<li><js>{@link CallLogger#SP_enabled "JUNEAU_RESTLOGGER_ENABLED"} environment variable.
+		 * 	<li><js>"ALWAYS"</js>.
+		 * </ul>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link Enablement#ALWAYS ALWAYS} (default) - Logging is enabled.
+		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
+		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledTest(Predicate)} test.
+		 * </ul>
+		 *
+		 * <p>
+		 * @param value
+		 * 	The default enablement flag value.  Can be <jk>null</jk> to use the default.
+		 * @return This object.
+		 */
+		public Builder enabled(Enablement value) {
+			enabled = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the default logging enablement test predicate.
+		 *
+		 * <p>
+		 * This specifies the default logging enablement test if not set on the first matched rule or if no rules match.
+		 *
+		 * <p>
+		 * This setting has no effect if the enablement setting is not {@link Enablement#CONDITIONAL CONDITIONALLY}.
+		 *
+		 * <p>
+		 * The default if not specified is <c><jv>x</jv> -&gt; <jk>false</jk></c> (never log).
+		 *
+		 * @param value
+		 * 	The default enablement flag value.  Can be <jk>null</jk> to use the default.
+		 * @return This object.
+		 */
+		public Builder enabledTest(Predicate<HttpServletRequest> value) {
+			enabledTest = value;
+			return this;
+		}
+		/**
+		 * The default logging level to use for logging the request/response.
+		 *
+		 * <p>
+		 * This specifies the default logging level if not set on the first matched rule or if no rules match.
+		 *
+		 * <p>
+		 * If not specified, the setting is determined via the following:
+		 * <ul>
+		 * 	<li><js>{@link CallLogger#SP_level "juneau.restLogger.level"} system property.
+		 * 	<li><js>{@link CallLogger#SP_level "JUNEAU_RESTLOGGER_level"} environment variable.
+		 * 	<li><js>"OFF"</js>.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property, or <jk>null</jk> to use the default value.
+		 * @return This object.
+		 */
+		public Builder level(Level value) {
+			level = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the logger to use for logging the request.
+		 *
+		 * <p>
+		 * If not specified, the logger name is determined in the following order:
+		 * <ol>
+		 * 	<li><js>{@link CallLogger#SP_logger "juneau.restLogger.logger"} system property.
+		 * 	<li><js>{@link CallLogger#SP_logger "JUNEAU_RESTLOGGER_LOGGER"} environment variable.
+		 * 	<li><js>"global"</js>.
+		 * </ol>
+		 *
+		 * <p>
+		 * The {@link CallLogger#getLogger()} method can also be overridden to provide different logic.
+		 *
+		 * @param value
+		 * 	The logger to use for logging the request.
+		 * @return This object.
+		 */
+		public Builder logger(Logger value) {
+			logger = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the logger to use for logging the request.
+		 *
+		 * <p>
+		 * Shortcut for calling <c>logger(Logger.<jsm>getLogger</jsm>(value))</c>.
+		 *
+		 * <p>
+		 * If not specified, the logger name is determined in the following order:
+		 * <ol>
+		 * 	<li><js>{@link CallLogger#SP_logger "juneau.restLogger.logger"} system property.
+		 * 	<li><js>{@link CallLogger#SP_logger "JUNEAU_RESTLOGGER_LOGGER"} environment variable.
+		 * 	<li><js>"global"</js>.
+		 * </ol>
+		 *
+		 * <p>
+		 * The {@link CallLogger#getLogger()} method can also be overridden to provide different logic.
+		 *
+		 * @param value
+		 * 	The logger to use for logging the request.
+		 * @return This object.
+		 */
+		public Builder logger(String value) {
+			logger = value == null ? null :Logger.getLogger(value);
+			return this;
+		}
+
+		/**
+		 * Same as {@link #logger(Logger)} but only sets the value if it's currently <jk>null</jk>.
+		 *
+		 * @param value The logger to use for logging the request.
+		 * @return This object.
+		 */
+		public Builder loggerOnce(Logger value) {
+			if (logger == null)
+				logger = value;
+			return this;
+		}
+
+		/**
+		 * Adds logging rules to use when debug mode is not enabled.
+		 *
+		 * <p>
+		 * Logging rules are matched in the order they are added.  The first to match wins.
+		 *
+		 * @param values The logging rules to add to the list of rules.
+		 * @return This object.
+		 */
+		public Builder normalRules(CallLoggerRule...values) {
+			for (CallLoggerRule rule : values)
+				normalRules.add(rule);
+			return this;
+		}
+
+		/**
+		 * The default level of detail to log on a request.
+		 *
+		 * <p>
+		 * This specifies the default level of request detail if not set on the first matched rule or if no rules match.
+		 *
+		 * <p>
+		 * If not specified, the setting is determined via the following:
+		 * <ul>
+		 * 	<li><js>{@link CallLogger#SP_requestDetail "juneau.restLogger.requestDetail"} system property.
+		 * 	<li><js>{@link CallLogger#SP_requestDetail "JUNEAU_RESTLOGGER_requestDetail"} environment variable.
+		 * 	<li><js>"STATUS_LINE"</js>.
+		 * </ul>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property, or <jk>null</jk> to use the default.
+		 * @return This object.
+		 */
+		public Builder requestDetail(CallLoggingDetail value) {
+			requestDetail = value;
+			return this;
+		}
+
+		/**
+		 * The default level of detail to log on a response.
+		 *
+		 * <p>
+		 * This specifies the default level of response detail if not set on the first matched rule or if no rules match.
+		 *
+		 * <p>
+		 * If not specified, the setting is determined via the following:
+		 * <ul>
+		 * 	<li><js>{@link CallLogger#SP_responseDetail "juneau.restLogger.responseDetail"} system property.
+		 * 	<li><js>{@link CallLogger#SP_responseDetail "JUNEAU_RESTLOGGER_responseDetail"} environment variable.
+		 * 	<li><js>"STATUS_LINE"</js>.
+		 * </ul>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property, or <jk>null</jk> to use the default.
+		 * @return This object.
+		 */
+		public Builder responseDetail(CallLoggingDetail value) {
+			responseDetail = value;
+			return this;
+		}
+
+		/**
+		 * Shortcut for adding the same rules as normal and debug rules.
+		 *
+		 * <p>
+		 * Logging rules are matched in the order they are added.  The first to match wins.
+		 *
+		 * @param values The logging rules to add to the list of rules.
+		 * @return This object.
+		 */
+		public Builder rules(CallLoggerRule...values) {
+			return normalRules(values).debugRules(values);
+		}
+
+		/**
+		 * Specifies the thrown exception store to use for getting stack trace information (hash IDs and occurrence counts).
+		 *
+		 * @param value
+		 * 	The stack trace store.
+		 * 	<br>If <jk>null</jk>, stack trace information will not be logged.
+		 * @return This object.
+		 */
+		public Builder thrownStore(ThrownStore value) {
+			thrownStore = value;
+			return this;
+		}
+
+		/**
+		 * Same as {@link #thrownStore(ThrownStore)} but only sets the value if it's currently <jk>null</jk>.
+		 *
+		 * @param value
+		 * 	The stack trace store.
+		 * 	<br>If <jk>null</jk>, stack trace information will not be logged.
+		 * @return This object.
+		 */
+		public Builder thrownStoreOnce(ThrownStore value) {
+			if (thrownStore == null)
+				thrownStore = value;
+			return this;
+		}
+	}
 
 	/** Represents no logger */
 	public abstract class Void extends CallLogger {
@@ -105,6 +405,8 @@ public class CallLogger {
 			super(beanStore);
 		}
 	}
+
+	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BeanStore.INSTANCE).build();
 
 	/**
 	 * System property name for the default logger name to use for {@link CallLogger} objects.
@@ -172,7 +474,6 @@ public class CallLogger {
 	 * </ul>
 	 */
 	public static final String SP_level = "juneau.restLogger.level";
-
 	/**
 	 * Static creator.
 	 *
@@ -182,331 +483,6 @@ public class CallLogger {
 	public static Builder create(BeanStore beanStore) {
 		return new Builder(beanStore);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Builder class.
-	 */
-	public static class Builder {
-
-		Logger logger;
-		ThrownStore thrownStore;
-		List<CallLoggerRule> normalRules = Utils.list(), debugRules = Utils.list();
-		Enablement enabled;
-		Predicate<HttpServletRequest> enabledTest;
-		CallLoggingDetail requestDetail, responseDetail;
-		Level level;
-
-		/**
-		 * Constructor.
-		 *
-		 * @param beanStore The bean store to use for creating beans.
-		 */
-		protected Builder(BeanStore beanStore) {
-			logger = Logger.getLogger(env(SP_logger, "global"));
-			enabled = env(SP_enabled, ALWAYS);
-			enabledTest = x -> false;
-			requestDetail = env(SP_requestDetail, STATUS_LINE);
-			responseDetail = env(SP_responseDetail, STATUS_LINE);
-			level = env(SP_level).map(Level::parse).orElse(OFF);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Specifies the logger to use for logging the request.
-		 *
-		 * <p>
-		 * If not specified, the logger name is determined in the following order:
-		 * <ol>
-		 * 	<li><js>{@link CallLogger#SP_logger "juneau.restLogger.logger"} system property.
-		 * 	<li><js>{@link CallLogger#SP_logger "JUNEAU_RESTLOGGER_LOGGER"} environment variable.
-		 * 	<li><js>"global"</js>.
-		 * </ol>
-		 *
-		 * <p>
-		 * The {@link CallLogger#getLogger()} method can also be overridden to provide different logic.
-		 *
-		 * @param value
-		 * 	The logger to use for logging the request.
-		 * @return This object.
-		 */
-		public Builder logger(Logger value) {
-			logger = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the logger to use for logging the request.
-		 *
-		 * <p>
-		 * Shortcut for calling <c>logger(Logger.<jsm>getLogger</jsm>(value))</c>.
-		 *
-		 * <p>
-		 * If not specified, the logger name is determined in the following order:
-		 * <ol>
-		 * 	<li><js>{@link CallLogger#SP_logger "juneau.restLogger.logger"} system property.
-		 * 	<li><js>{@link CallLogger#SP_logger "JUNEAU_RESTLOGGER_LOGGER"} environment variable.
-		 * 	<li><js>"global"</js>.
-		 * </ol>
-		 *
-		 * <p>
-		 * The {@link CallLogger#getLogger()} method can also be overridden to provide different logic.
-		 *
-		 * @param value
-		 * 	The logger to use for logging the request.
-		 * @return This object.
-		 */
-		public Builder logger(String value) {
-			logger = value == null ? null :Logger.getLogger(value);
-			return this;
-		}
-
-		/**
-		 * Same as {@link #logger(Logger)} but only sets the value if it's currently <jk>null</jk>.
-		 *
-		 * @param value The logger to use for logging the request.
-		 * @return This object.
-		 */
-		public Builder loggerOnce(Logger value) {
-			if (logger == null)
-				logger = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the thrown exception store to use for getting stack trace information (hash IDs and occurrence counts).
-		 *
-		 * @param value
-		 * 	The stack trace store.
-		 * 	<br>If <jk>null</jk>, stack trace information will not be logged.
-		 * @return This object.
-		 */
-		public Builder thrownStore(ThrownStore value) {
-			thrownStore = value;
-			return this;
-		}
-
-		/**
-		 * Same as {@link #thrownStore(ThrownStore)} but only sets the value if it's currently <jk>null</jk>.
-		 *
-		 * @param value
-		 * 	The stack trace store.
-		 * 	<br>If <jk>null</jk>, stack trace information will not be logged.
-		 * @return This object.
-		 */
-		public Builder thrownStoreOnce(ThrownStore value) {
-			if (thrownStore == null)
-				thrownStore = value;
-			return this;
-		}
-		/**
-		 * Specifies the default logging enablement setting.
-		 *
-		 * <p>
-		 * This specifies the default logging enablement value if not set on the first matched rule or if no rules match.
-		 *
-		 * <p>
-		 * If not specified, the setting is determined via the following:
-		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_enabled "juneau.restLogger.enabled"} system property.
-		 * 	<li><js>{@link CallLogger#SP_enabled "JUNEAU_RESTLOGGER_ENABLED"} environment variable.
-		 * 	<li><js>"ALWAYS"</js>.
-		 * </ul>
-		 *
-		 * <ul class='values'>
-		 * 	<li>{@link Enablement#ALWAYS ALWAYS} (default) - Logging is enabled.
-		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
-		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledTest(Predicate)} test.
-		 * </ul>
-		 *
-		 * <p>
-		 * @param value
-		 * 	The default enablement flag value.  Can be <jk>null</jk> to use the default.
-		 * @return This object.
-		 */
-		public Builder enabled(Enablement value) {
-			enabled = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the default logging enablement test predicate.
-		 *
-		 * <p>
-		 * This specifies the default logging enablement test if not set on the first matched rule or if no rules match.
-		 *
-		 * <p>
-		 * This setting has no effect if the enablement setting is not {@link Enablement#CONDITIONAL CONDITIONALLY}.
-		 *
-		 * <p>
-		 * The default if not specified is <c><jv>x</jv> -&gt; <jk>false</jk></c> (never log).
-		 *
-		 * @param value
-		 * 	The default enablement flag value.  Can be <jk>null</jk> to use the default.
-		 * @return This object.
-		 */
-		public Builder enabledTest(Predicate<HttpServletRequest> value) {
-			enabledTest = value;
-			return this;
-		}
-
-		/**
-		 * Shortcut for calling <c>enabled(<jsf>NEVER</jsf>)</c>.
-		 *
-		 * @return This object.
-		 */
-		public Builder disabled() {
-			return enabled(NEVER);
-		}
-
-		/**
-		 * The default level of detail to log on a request.
-		 *
-		 * <p>
-		 * This specifies the default level of request detail if not set on the first matched rule or if no rules match.
-		 *
-		 * <p>
-		 * If not specified, the setting is determined via the following:
-		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_requestDetail "juneau.restLogger.requestDetail"} system property.
-		 * 	<li><js>{@link CallLogger#SP_requestDetail "JUNEAU_RESTLOGGER_requestDetail"} environment variable.
-		 * 	<li><js>"STATUS_LINE"</js>.
-		 * </ul>
-		 *
-		 * <ul class='values'>
-		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property, or <jk>null</jk> to use the default.
-		 * @return This object.
-		 */
-		public Builder requestDetail(CallLoggingDetail value) {
-			requestDetail = value;
-			return this;
-		}
-
-		/**
-		 * The default level of detail to log on a response.
-		 *
-		 * <p>
-		 * This specifies the default level of response detail if not set on the first matched rule or if no rules match.
-		 *
-		 * <p>
-		 * If not specified, the setting is determined via the following:
-		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_responseDetail "juneau.restLogger.responseDetail"} system property.
-		 * 	<li><js>{@link CallLogger#SP_responseDetail "JUNEAU_RESTLOGGER_responseDetail"} environment variable.
-		 * 	<li><js>"STATUS_LINE"</js>.
-		 * </ul>
-		 *
-		 * <ul class='values'>
-		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property, or <jk>null</jk> to use the default.
-		 * @return This object.
-		 */
-		public Builder responseDetail(CallLoggingDetail value) {
-			responseDetail = value;
-			return this;
-		}
-
-		/**
-		 * The default logging level to use for logging the request/response.
-		 *
-		 * <p>
-		 * This specifies the default logging level if not set on the first matched rule or if no rules match.
-		 *
-		 * <p>
-		 * If not specified, the setting is determined via the following:
-		 * <ul>
-		 * 	<li><js>{@link CallLogger#SP_level "juneau.restLogger.level"} system property.
-		 * 	<li><js>{@link CallLogger#SP_level "JUNEAU_RESTLOGGER_level"} environment variable.
-		 * 	<li><js>"OFF"</js>.
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property, or <jk>null</jk> to use the default value.
-		 * @return This object.
-		 */
-		public Builder level(Level value) {
-			level = value;
-			return this;
-		}
-
-		/**
-		 * Adds logging rules to use when debug mode is not enabled.
-		 *
-		 * <p>
-		 * Logging rules are matched in the order they are added.  The first to match wins.
-		 *
-		 * @param values The logging rules to add to the list of rules.
-		 * @return This object.
-		 */
-		public Builder normalRules(CallLoggerRule...values) {
-			for (CallLoggerRule rule : values)
-				normalRules.add(rule);
-			return this;
-		}
-
-		/**
-		 * Adds logging rules to use when debug mode is enabled.
-		 *
-		 * <p>
-		 * Logging rules are matched in the order they are added.  The first to match wins.
-		 *
-		 * @param values The logging rules to add to the list of rules.
-		 * @return This object.
-		 */
-		public Builder debugRules(CallLoggerRule...values) {
-			for (CallLoggerRule rule : values)
-				debugRules.add(rule);
-			return this;
-		}
-
-		/**
-		 * Shortcut for adding the same rules as normal and debug rules.
-		 *
-		 * <p>
-		 * Logging rules are matched in the order they are added.  The first to match wins.
-		 *
-		 * @param values The logging rules to add to the list of rules.
-		 * @return This object.
-		 */
-		public Builder rules(CallLoggerRule...values) {
-			return normalRules(values).debugRules(values);
-		}
-
-		/**
-		 * Instantiates a new call logger based on the settings in this builder.
-		 *
-		 * @return A new call logger.
-		 */
-		public CallLogger build() {
-			return new CallLogger(this);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Fluent setters
-		//-----------------------------------------------------------------------------------------------------------------
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Logger logger;
 	private final ThrownStore thrownStore;
 	private final CallLoggerRule[] normalRules, debugRules;
@@ -550,20 +526,6 @@ public class CallLogger {
 		this.requestDetail = builder.requestDetail;
 		this.responseDetail = builder.responseDetail;
 		this.level = builder.level;
-	}
-
-	/**
-	 * Initializer.
-	 * <p>
-	 * Subclasses should override this method to make modifications to the builder used to create this logger.
-	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
-	 * @return A new builder object.
-	 */
-	protected Builder init(BeanStore beanStore) {
-		return new Builder(beanStore)
-			.logger(beanStore.getBean(Logger.class).orElse(null))
-			.thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
 	}
 
 	/**
@@ -685,6 +647,52 @@ public class CallLogger {
 
 	}
 
+	@Override /* Overridden from Object */
+	public String toString() {
+		return filteredMap()
+			.append("logger", logger)
+			.append("thrownStore", thrownStore)
+			.append("enabled", enabled)
+			.append("level", level)
+			.append("requestDetail", requestDetail)
+			.append("responseDetail", responseDetail)
+			.append("normalRules", normalRules.length == 0 ? null : normalRules)
+			.append("debugRules", debugRules.length == 0 ? null : debugRules)
+			.asReadableString();
+	}
+
+	private byte[] getRequestContent(HttpServletRequest req) {
+		if (req instanceof CachingHttpServletRequest)
+			return ((CachingHttpServletRequest)req).getContent();
+		return Utils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
+	}
+
+	private byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
+		if (res instanceof CachingHttpServletResponse)
+			return ((CachingHttpServletResponse)res).getContent();
+		return Utils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);
+	}
+
+	private ThrownStats getThrownStats(Throwable e) {
+		if (e == null || thrownStore == null)
+			return null;
+		return thrownStore.getStats(e).orElse(null);
+	}
+	/**
+	 * Returns the logger to use for logging REST calls.
+	 *
+	 * <p>
+	 * Returns the logger specified in the builder, or {@link Logger#getGlobal()} if it wasn't specified.
+	 *
+	 * <p>
+	 * This method can be overridden in subclasses to provide a different logger.
+	 *
+	 * @return The logger to use for logging REST calls.
+	 */
+	protected Logger getLogger() {
+		return logger;
+	}
+
 	/**
 	 * Given the specified servlet request/response, find the rule that applies to it.
 	 *
@@ -700,6 +708,20 @@ public class CallLogger {
 			if (r.matches(req, res))
 				return r;
 		return DEFAULT_RULE;
+	}
+
+	/**
+	 * Initializer.
+	 * <p>
+	 * Subclasses should override this method to make modifications to the builder used to create this logger.
+	 *
+	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @return A new builder object.
+	 */
+	protected Builder init(BeanStore beanStore) {
+		return new Builder(beanStore)
+			.logger(beanStore.getBean(Logger.class).orElse(null))
+			.thrownStore(beanStore.getBean(ThrownStore.class).orElse(null));
 	}
 
 	/**
@@ -741,25 +763,6 @@ public class CallLogger {
 		return enabled.isEnabled(enabledTest.test(req));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the logger to use for logging REST calls.
-	 *
-	 * <p>
-	 * Returns the logger specified in the builder, or {@link Logger#getGlobal()} if it wasn't specified.
-	 *
-	 * <p>
-	 * This method can be overridden in subclasses to provide a different logger.
-	 *
-	 * @return The logger to use for logging REST calls.
-	 */
-	protected Logger getLogger() {
-		return logger;
-	}
-
 	/**
 	 * Logs the specified message to the logger.
 	 *
@@ -772,37 +775,5 @@ public class CallLogger {
 	 */
 	protected void log(Level level, String msg, Throwable e) {
 		getLogger().log(level, msg, e);
-	}
-
-	private byte[] getRequestContent(HttpServletRequest req) {
-		if (req instanceof CachingHttpServletRequest)
-			return ((CachingHttpServletRequest)req).getContent();
-		return Utils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
-	}
-
-	private byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
-		if (res instanceof CachingHttpServletResponse)
-			return ((CachingHttpServletResponse)res).getContent();
-		return Utils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);
-	}
-
-	private ThrownStats getThrownStats(Throwable e) {
-		if (e == null || thrownStore == null)
-			return null;
-		return thrownStore.getStats(e).orElse(null);
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return filteredMap()
-			.append("logger", logger)
-			.append("thrownStore", thrownStore)
-			.append("enabled", enabled)
-			.append("level", level)
-			.append("requestDetail", requestDetail)
-			.append("responseDetail", responseDetail)
-			.append("normalRules", normalRules.length == 0 ? null : normalRules)
-			.append("debugRules", debugRules.length == 0 ? null : debugRules)
-			.asReadableString();
 	}
 }

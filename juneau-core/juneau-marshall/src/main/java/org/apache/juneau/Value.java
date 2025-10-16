@@ -38,22 +38,6 @@ import org.apache.juneau.reflect.*;
  * @param <T> The value type.
  */
 public class Value<T> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param <T> The value type.
-	 * @param object The object being wrapped.
-	 * @return A new {@link Value} object.
-	 */
-	public static <T> Value<T> of(T object) {
-		return new Value<>(object);
-	}
-
 	/**
 	 * Static creator.
 	 *
@@ -89,17 +73,6 @@ public class Value<T> {
 	}
 
 	/**
-	 * Returns the unwrapped type.
-	 *
-	 * @param t The type to unwrap.
-	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
-	 */
-	public static Type unwrap(Type t) {
-		Type x = getParameterType(t);
-		return x != null ? x : t;
-	}
-
-	/**
 	 * Convenience method for checking if the specified type is this class.
 	 *
 	 * @param t The type to check.
@@ -111,10 +84,27 @@ public class Value<T> {
 			|| (t instanceof Class && Value.class.isAssignableFrom((Class<?>)t));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Static creator.
+	 *
+	 * @param <T> The value type.
+	 * @param object The object being wrapped.
+	 * @return A new {@link Value} object.
+	 */
+	public static <T> Value<T> of(T object) {
+		return new Value<>(object);
+	}
 
+	/**
+	 * Returns the unwrapped type.
+	 *
+	 * @param t The type to unwrap.
+	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
+	 */
+	public static Type unwrap(Type t) {
+		Type x = getParameterType(t);
+		return x != null ? x : t;
+	}
 	private T t;
 	private ValueListener<T> listener;
 
@@ -133,6 +123,54 @@ public class Value<T> {
 	}
 
 	/**
+	 * Returns the value.
+	 *
+	 * @return The value, or <jk>null</jk> if it is not set.
+	 */
+	public T get() {
+		return t;
+	}
+
+	/**
+	 * Returns the value and then unsets it.
+	 *
+	 * @return The value before it was unset.
+	 */
+	public T getAndUnset() {
+		T t2 = t;
+		t = null;
+		return t2;
+	}
+
+	/**
+	 * If a value is present, invoke the specified consumer with the value, otherwise do nothing.
+	 *
+	 * @param consumer Block to be executed if a value is present.
+	 */
+	public void ifPresent(Consumer<? super T> consumer) {
+		if (t != null)
+			consumer.accept(t);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the value is empty.
+	 *
+	 * @return <jk>true</jk> if the value is empty.
+	 */
+	public boolean isEmpty() {
+		return t == null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the value is set.
+	 *
+	 * @return <jk>true</jk> if the value is set.
+	 */
+	public boolean isPresent() {
+		return get() != null;
+	}
+
+	/**
 	 * Adds a listener for this value.
 	 *
 	 * @param listener The new listener for this value.
@@ -141,6 +179,60 @@ public class Value<T> {
 	public Value<T> listener(ValueListener<T> listener) {
 		this.listener = listener;
 		return this;
+	}
+
+	/**
+	 * Applies a mapping function against the contents of this value.
+	 *
+	 * @param <T2> The mapped value type.
+	 * @param mapper The mapping function.
+	 * @return The mapped value.
+	 */
+	public <T2> Value<T2> map(Function<? super T, T2> mapper) {
+		if (t != null)
+			return Value.of(mapper.apply(t));
+		return Value.empty();
+	}
+
+	/**
+	 * Returns the contents of this value or the default value if <jk>null</jk>.
+	 *
+	 * @param def The default value.
+	 * @return The contents of this value or the default value if <jk>null</jk>.
+	 */
+	public T orElse(T def) {
+		return t == null ? def : t;
+	}
+
+	/**
+	 * Return the value if present, otherwise invoke {@code other} and return
+	 * the result of that invocation.
+	 *
+	 * @param other a {@code Supplier} whose result is returned if no value
+	 * is present
+	 * @return the value if present otherwise the result of {@code other.get()}
+	 * @throws NullPointerException if value is not present and {@code other} is
+	 * null
+	 */
+	public T orElseGet(Supplier<? extends T> other) {
+		return t != null ? t : other.get();
+	}
+	/**
+	 * Return the contained value, if present, otherwise throw an exception
+	 * to be created by the provided supplier.
+	 *
+	 * @param <X> The exception type.
+	 * @param exceptionSupplier The supplier which will return the exception to
+	 * be thrown
+	 * @return the present value
+	 * @throws X if there is no value present
+	 * @throws NullPointerException if no value is present and
+	 * {@code exceptionSupplier} is null
+	 */
+	public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+		if (t != null)
+			return t;
+		throw exceptionSupplier.get();
 	}
 
 	/**
@@ -166,108 +258,6 @@ public class Value<T> {
 		if (isEmpty())
 			set(t);
 		return this;
-	}
-
-	/**
-	 * Returns the value.
-	 *
-	 * @return The value, or <jk>null</jk> if it is not set.
-	 */
-	public T get() {
-		return t;
-	}
-
-	/**
-	 * Returns the value and then unsets it.
-	 *
-	 * @return The value before it was unset.
-	 */
-	public T getAndUnset() {
-		T t2 = t;
-		t = null;
-		return t2;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the value is set.
-	 *
-	 * @return <jk>true</jk> if the value is set.
-	 */
-	public boolean isPresent() {
-		return get() != null;
-	}
-
-	/**
-	 * If a value is present, invoke the specified consumer with the value, otherwise do nothing.
-	 *
-	 * @param consumer Block to be executed if a value is present.
-	 */
-	public void ifPresent(Consumer<? super T> consumer) {
-		if (t != null)
-			consumer.accept(t);
-	}
-
-	/**
-	 * Applies a mapping function against the contents of this value.
-	 *
-	 * @param <T2> The mapped value type.
-	 * @param mapper The mapping function.
-	 * @return The mapped value.
-	 */
-	public <T2> Value<T2> map(Function<? super T, T2> mapper) {
-		if (t != null)
-			return Value.of(mapper.apply(t));
-		return Value.empty();
-	}
-
-	/**
-	 * Returns the contents of this value or the default value if <jk>null</jk>.
-	 *
-	 * @param def The default value.
-	 * @return The contents of this value or the default value if <jk>null</jk>.
-	 */
-	public T orElse(T def) {
-		return t == null ? def : t;
-	}
-	/**
-	 * Returns <jk>true</jk> if the value is empty.
-	 *
-	 * @return <jk>true</jk> if the value is empty.
-	 */
-	public boolean isEmpty() {
-		return t == null;
-	}
-
-	/**
-	 * Return the value if present, otherwise invoke {@code other} and return
-	 * the result of that invocation.
-	 *
-	 * @param other a {@code Supplier} whose result is returned if no value
-	 * is present
-	 * @return the value if present otherwise the result of {@code other.get()}
-	 * @throws NullPointerException if value is not present and {@code other} is
-	 * null
-	 */
-	public T orElseGet(Supplier<? extends T> other) {
-		return t != null ? t : other.get();
-	}
-
-	/**
-	 * Return the contained value, if present, otherwise throw an exception
-	 * to be created by the provided supplier.
-	 *
-	 * @param <X> The exception type.
-	 * @param exceptionSupplier The supplier which will return the exception to
-	 * be thrown
-	 * @return the present value
-	 * @throws X if there is no value present
-	 * @throws NullPointerException if no value is present and
-	 * {@code exceptionSupplier} is null
-	 */
-	public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-		if (t != null)
-			return t;
-		throw exceptionSupplier.get();
 	}
 
 	@Override /* Overridden from Object */

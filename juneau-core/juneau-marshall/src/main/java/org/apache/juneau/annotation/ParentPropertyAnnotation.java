@@ -33,50 +33,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class ParentPropertyAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final ParentProperty DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link ParentProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Applier extends AnnotationApplier<ParentProperty,BeanContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Applier(VarResolverSession vr) {
+			super(ParentProperty.class, BeanContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<ParentProperty> ai, BeanContext.Builder b) {
+			ParentProperty a = ai.inner();
+			if (isEmptyArray(a.on()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link ParentProperty @ParentProperty annotations}.
 	 */
-	public static Builder create(String...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static ParentProperty copy(ParentProperty a, VarResolverSession r) {
-		return
-			create()
-			.on(r.resolve(a.on()))
-			.build();
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		ParentProperty[] value();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -105,10 +100,6 @@ public class ParentPropertyAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationImpl implements ParentProperty {
 
 		Impl(Builder b) {
@@ -116,52 +107,36 @@ public class ParentPropertyAnnotation {
 			postConstruct();
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final ParentProperty DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link ParentProperty} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
 	 */
-	public static class Applier extends AnnotationApplier<ParentProperty,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(ParentProperty.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<ParentProperty> ai, BeanContext.Builder b) {
-			ParentProperty a = ai.inner();
-			if (isEmptyArray(a.on()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static ParentProperty copy(ParentProperty a, VarResolverSession r) {
+		return
+			create()
+			.on(r.resolve(a.on()))
+			.build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link ParentProperty @ParentProperty annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		ParentProperty[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

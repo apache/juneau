@@ -94,13 +94,13 @@ public class AlreadyReported extends BasicHttpResponse {
 		return new AlreadyReported(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public AlreadyReported setContent(String value) {
+	public AlreadyReported setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public AlreadyReported setContent(HttpEntity value) {
+	public AlreadyReported setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class AlreadyReported extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public AlreadyReported setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public AlreadyReported setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public AlreadyReported setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public AlreadyReported setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

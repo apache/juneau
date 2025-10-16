@@ -64,32 +64,6 @@ import org.apache.juneau.serializer.*;
 public @interface Rest {
 
 	/**
-	 * Disable content URL parameter.
-	 *
-	 * <p>
-	 * When enabled, the HTTP content content on PUT and POST requests can be passed in as text using the <js>"content"</js>
-	 * URL parameter.
-	 * <br>
-	 * For example:
-	 * <p class='burlenc'>
-	 *  ?content=(name='John%20Smith',age=45)
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableContentParam()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableContentParam() default "";
-
-	/**
 	 * Allowed header URL parameters.
 	 *
 	 * <p>
@@ -178,6 +152,23 @@ public @interface Rest {
 	String allowedMethodParams() default "";
 
 	/**
+	 * The resolver used for resolving instances of child resources and various other beans including:
+	 * <ul>
+	 * 	<li>{@link CallLogger}
+	 * 	<li>{@link SwaggerProvider}
+	 * 	<li>{@link FileFinder}
+	 * 	<li>{@link StaticFiles}
+	 * </ul>
+	 *
+	 * <p>
+	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
+	 * Spring beans to be injected into your REST resources.
+	 *
+	 * @return The annotation value.
+	 */
+	Class<? extends BeanStore> beanStore() default BeanStore.Void.class;
+
+	/**
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -206,23 +197,6 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends CallLogger> callLogger() default CallLogger.Void.class;
-
-	/**
-	 * The resolver used for resolving instances of child resources and various other beans including:
-	 * <ul>
-	 * 	<li>{@link CallLogger}
-	 * 	<li>{@link SwaggerProvider}
-	 * 	<li>{@link FileFinder}
-	 * 	<li>{@link StaticFiles}
-	 * </ul>
-	 *
-	 * <p>
-	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
-	 * Spring beans to be injected into your REST resources.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends BeanStore> beanStore() default BeanStore.Void.class;
 
 	/**
 	 * REST children.
@@ -669,6 +643,32 @@ public @interface Rest {
 	String[] description() default {};
 
 	/**
+	 * Disable content URL parameter.
+	 *
+	 * <p>
+	 * When enabled, the HTTP content content on PUT and POST requests can be passed in as text using the <js>"content"</js>
+	 * URL parameter.
+	 * <br>
+	 * For example:
+	 * <p class='burlenc'>
+	 *  ?content=(name='John%20Smith',age=45)
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableContentParam()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableContentParam() default "";
+
+	/**
 	 * Specifies the compression encoders for this resource.
 	 *
 	 * <p>
@@ -716,6 +716,27 @@ public @interface Rest {
 	Class<? extends Encoder>[] encoders() default {};
 
 	/**
+	 * Default form data parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link FormData @FormData} annotations on method parameters across all methods in this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		formDataParams={
+	 * 			<ja>@FormData</ja>(name=<js>"action"</js>, def=<js>"submit"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	FormData[] formDataParams() default {};
+
+	/**
 	 * Class-level guards.
 	 *
 	 * <p>
@@ -735,6 +756,28 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends RestGuard>[] guards() default {};
+
+	/**
+	 * Default header parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link Header @Header} annotations on method parameters across all methods in this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		headerParams={
+	 * 			<ja>@Header</ja>(name=<js>"Accept-Language"</js>, def=<js>"en-US"</js>),
+	 * 			<ja>@Header</ja>(name=<js>"X-API-Version"</js>, def=<js>"1.0"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	Header[] headerParams() default {};
 
 	/**
 	 * The maximum allowed input size (in bytes) on HTTP requests.
@@ -998,6 +1041,27 @@ public @interface Rest {
 	String path() default "";
 
 	/**
+	 * Default path parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link Path @Path} annotations on method parameters across all methods in this class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		pathParams={
+	 * 			<ja>@Path</ja>(name=<js>"version"</js>, def=<js>"v1"</js>)
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {...}
+	 * </p>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	Path[] pathParams() default {};
+
+	/**
 	 * Supported accept media types.
 	 *
 	 * <p>
@@ -1016,6 +1080,49 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String[] produces() default {};
+
+	/**
+	 * Default query parameter definitions.
+	 *
+	 * <p>
+	 * Provides default values for {@link Query @Query} annotations on method parameters across all methods in this class.
+	 * Values specified here are used as defaults when the same property is not explicitly defined on a method parameter's
+	 * {@link Query @Query} annotation.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Define common query parameters at class level</jc>
+	 * 	<ja>@Rest</ja>(
+	 * 		queryParams={
+	 * 			<ja>@Query</ja>(name=<js>"format"</js>, def=<js>"json"</js>, description=<js>"Output format"</js>),
+	 * 			<ja>@Query</ja>(name=<js>"verbose"</js>, def=<js>"false"</js>, schema=<ja>@Schema</ja>(type=<js>"boolean"</js>))
+	 * 		}
+	 * 	)
+	 * 	<jk>public class</jk> MyResource {
+	 *
+	 * 		<jc>// Method will inherit the default query parameter definitions</jc>
+	 * 		<ja>@RestGet</ja>
+	 * 		<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"format"</js>) String format, <ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> verbose) {...}
+	 *
+	 * 		<jc>// Can override defaults on a per-method basis</jc>
+	 * 		<ja>@RestGet</ja>
+	 * 		<jk>public</jk> String doGet2(<ja>@Query</ja>(name=<js>"format"</js>, def=<js>"xml"</js>) String format) {...}
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		These defaults apply to validation, parsing, and OpenAPI/Swagger documentation generation.
+	 * 	<li class='note'>
+	 * 		Method-level {@link Query @Query} annotations take precedence over class-level definitions.
+	 * 	<li class='note'>
+	 * 		The {@link Query#name() name} attribute must be specified for each query definition.
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 9.2.0
+	 */
+	Query[] queryParams() default {};
 
 	/**
 	 * Render response stack traces in responses.
@@ -1063,20 +1170,6 @@ public @interface Rest {
 	Class<? extends RestChildren> restChildrenClass() default RestChildren.Void.class;
 
 	/**
-	 * REST methods class.
-	 *
-	 * <p>
-	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestOperations> restOperationsClass() default RestOperations.Void.class;
-
-	/**
 	 * Java REST operation method parameter resolvers.
 	 *
 	 * <p>
@@ -1091,6 +1184,20 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends RestOpArg>[] restOpArgs() default {};
+
+	/**
+	 * REST methods class.
+	 *
+	 * <p>
+	 * Allows you to extend the {@link RestOperations} class to modify how any of the methods are implemented.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	Class<? extends RestOperations> restOperationsClass() default RestOperations.Void.class;
 
 	/**
 	 * Role guard.
@@ -1440,111 +1547,4 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String uriResolution() default "";
-
-	/**
-	 * Default query parameter definitions.
-	 *
-	 * <p>
-	 * Provides default values for {@link Query @Query} annotations on method parameters across all methods in this class.
-	 * Values specified here are used as defaults when the same property is not explicitly defined on a method parameter's
-	 * {@link Query @Query} annotation.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Define common query parameters at class level</jc>
-	 * 	<ja>@Rest</ja>(
-	 * 		queryParams={
-	 * 			<ja>@Query</ja>(name=<js>"format"</js>, def=<js>"json"</js>, description=<js>"Output format"</js>),
-	 * 			<ja>@Query</ja>(name=<js>"verbose"</js>, def=<js>"false"</js>, schema=<ja>@Schema</ja>(type=<js>"boolean"</js>))
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {
-	 *
-	 * 		<jc>// Method will inherit the default query parameter definitions</jc>
-	 * 		<ja>@RestGet</ja>
-	 * 		<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"format"</js>) String format, <ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> verbose) {...}
-	 *
-	 * 		<jc>// Can override defaults on a per-method basis</jc>
-	 * 		<ja>@RestGet</ja>
-	 * 		<jk>public</jk> String doGet2(<ja>@Query</ja>(name=<js>"format"</js>, def=<js>"xml"</js>) String format) {...}
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		These defaults apply to validation, parsing, and OpenAPI/Swagger documentation generation.
-	 * 	<li class='note'>
-	 * 		Method-level {@link Query @Query} annotations take precedence over class-level definitions.
-	 * 	<li class='note'>
-	 * 		The {@link Query#name() name} attribute must be specified for each query definition.
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 * @since 9.2.0
-	 */
-	Query[] queryParams() default {};
-
-	/**
-	 * Default header parameter definitions.
-	 *
-	 * <p>
-	 * Provides default values for {@link Header @Header} annotations on method parameters across all methods in this class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(
-	 * 		headerParams={
-	 * 			<ja>@Header</ja>(name=<js>"Accept-Language"</js>, def=<js>"en-US"</js>),
-	 * 			<ja>@Header</ja>(name=<js>"X-API-Version"</js>, def=<js>"1.0"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 * @since 9.2.0
-	 */
-	Header[] headerParams() default {};
-
-	/**
-	 * Default path parameter definitions.
-	 *
-	 * <p>
-	 * Provides default values for {@link Path @Path} annotations on method parameters across all methods in this class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(
-	 * 		pathParams={
-	 * 			<ja>@Path</ja>(name=<js>"version"</js>, def=<js>"v1"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 * @since 9.2.0
-	 */
-	Path[] pathParams() default {};
-
-	/**
-	 * Default form data parameter definitions.
-	 *
-	 * <p>
-	 * Provides default values for {@link FormData @FormData} annotations on method parameters across all methods in this class.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(
-	 * 		formDataParams={
-	 * 			<ja>@FormData</ja>(name=<js>"action"</js>, def=<js>"submit"</js>)
-	 * 		}
-	 * 	)
-	 * 	<jk>public class</jk> MyResource {...}
-	 * </p>
-	 *
-	 * @return The annotation value.
-	 * @since 9.2.0
-	 */
-	FormData[] formDataParams() default {};
 }

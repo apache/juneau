@@ -39,21 +39,21 @@ import org.apache.juneau.rest.*;
 public class BasicCallLogger extends CallLogger {
 
 	/**
-	 * Constructor using specific settings.
-	 *
-	 * @param beanStore The bean store containing injectable beans for this logger.
-	 */
-	public BasicCallLogger(BeanStore beanStore) {
-		super(beanStore);
-	}
-
-	/**
 	 * Constructor using default settings.
 	 * <p>
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicCallLogger() {
 		super(BeanStore.INSTANCE);
+	}
+
+	/**
+	 * Constructor using specific settings.
+	 *
+	 * @param beanStore The bean store containing injectable beans for this logger.
+	 */
+	public BasicCallLogger(BeanStore beanStore) {
+		super(beanStore);
 	}
 
 	@Override

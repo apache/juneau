@@ -41,24 +41,6 @@ import org.apache.juneau.urlencoding.*;
 public @interface UrlEncodingConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// UrlEncodingCommon
-	//-------------------------------------------------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// UrlEncodingSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
@@ -92,7 +74,16 @@ public @interface UrlEncodingConfig {
 	 */
 	String expandedParams() default "";
 
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
 	//-------------------------------------------------------------------------------------------------------------------
-	// UrlEncodingParser
+	// UrlEncodingSerializer
 	//-------------------------------------------------------------------------------------------------------------------
 }

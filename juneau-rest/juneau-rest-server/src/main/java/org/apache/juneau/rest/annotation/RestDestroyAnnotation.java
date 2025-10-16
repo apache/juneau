@@ -31,26 +31,22 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class RestDestroyAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final RestDestroy DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * A collection of {@link RestDestroy @RestDestroy annotations}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		RestDestroy[] value();
+	}
 
 	/**
 	 * Builder class.
@@ -78,11 +74,6 @@ public class RestDestroyAnnotation {
 		}
 
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationImpl implements RestDestroy {
 
 		Impl(Builder b) {
@@ -90,25 +81,14 @@ public class RestDestroyAnnotation {
 			postConstruct();
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final RestDestroy DEFAULT = create().build();
 	/**
-	 * A collection of {@link RestDestroy @RestDestroy annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		RestDestroy[] value();
+	public static Builder create() {
+		return new Builder();
 	}
 }

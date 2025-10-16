@@ -118,21 +118,6 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentByteArrayAssertion(byte[] value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -153,41 +138,24 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentByteArrayAssertion(byte[] value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Converts this byte array to a UTF-8 encoded string and returns it as a new assertion.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified byte array contains the string "foobar".</jc>
-	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString().is(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent string assertion.
-	 */
-	@Override
-	public FluentStringAssertion<R> asString() {
-		return asString(IOUtils.UTF8);
-	}
-
-	/**
-	 * Converts this byte array to a string and returns it as a new assertion.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates that the specified byte array contains the string "foobar" encoded in ASCII.</jc>
-	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);
-	 * </p>
-	 *
-	 * @param cs The charset to use to decode the string.
-	 * @return A new fluent string assertion.
-	 */
-	public FluentStringAssertion<R> asString(Charset cs) {
-		return new FluentStringAssertion<>(this, valueIsNull() ? null : new String(value(), cs), returns());
-	}
 
 	/**
 	 * Converts this byte array to a base-64 encoded string and returns it as a new assertion.
@@ -232,6 +200,38 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 */
 	public FluentStringAssertion<R> asSpacedHex() {
 		return new FluentStringAssertion<>(this, valueIsNull() ? null : toSpacedHex(value()), returns());
+	}
+
+	/**
+	 * Converts this byte array to a UTF-8 encoded string and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified byte array contains the string "foobar".</jc>
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString().is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	@Override
+	public FluentStringAssertion<R> asString() {
+		return asString(IOUtils.UTF8);
+	}
+
+	/**
+	 * Converts this byte array to a string and returns it as a new assertion.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates that the specified byte array contains the string "foobar" encoded in ASCII.</jc>
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);
+	 * </p>
+	 *
+	 * @param cs The charset to use to decode the string.
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringAssertion<R> asString(Charset cs) {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : new String(value(), cs), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

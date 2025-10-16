@@ -70,82 +70,16 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
-	 * Builds the map.
+	 * Adds a single entry to this map.
 	 *
-	 * @return A map conforming to the settings on this builder.
-	 */
-	public Map<K,V> build() {
-		if (sparse) {
-			if (map != null && map.isEmpty())
-				map = null;
-		} else {
-			if (map == null)
-				map = new LinkedHashMap<>();
-		}
-		if (map != null) {
-			if (comparator != null) {
-				Map<K,V> m2 = new TreeMap<>(comparator);
-				m2.putAll(map);
-				map = m2;
-			}
-			if (unmodifiable)
-				map = Collections.unmodifiableMap(map);
-		}
-		return map;
-	}
-
-	/**
-	 * When specified, the {@link #build()} method will return <jk>null</jk> if the map is empty.
-	 *
-	 * <p>
-	 * Otherwise {@link #build()} will never return <jk>null</jk>.
-	 *
+	 * @param key The map key.
+	 * @param value The map value.
 	 * @return This object.
 	 */
-	public MapBuilder<K,V> sparse() {
-		this.sparse = true;
-		return this;
-	}
-
-	/**
-	 * When specified, {@link #build()} will return an unmodifiable map.
-	 *
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> unmodifiable() {
-		this.unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Forces the existing set to be copied instead of appended to.
-	 *
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> copy() {
-		if (map != null)
-			map = new LinkedHashMap<>(map);
-		return this;
-	}
-
-	/**
-	 * Converts the set into a {@link SortedMap}.
-	 *
-	 * @return This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public MapBuilder<K,V> sorted() {
-		return sorted((Comparator<K>)Comparator.naturalOrder());
-	}
-
-	/**
-	 * Converts the set into a {@link SortedMap} using the specified comparator.
-	 *
-	 * @param comparator The comparator to use for sorting.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> sorted(Comparator<K> comparator) {
-		this.comparator = comparator;
+	public MapBuilder<K,V> add(K key, V value) {
+		if (map == null)
+			map = new LinkedHashMap<>();
+		map.put(key, value);
 		return this;
 	}
 
@@ -166,30 +100,6 @@ public class MapBuilder<K,V> {
 				map.putAll(value);
 		}
 		return this;
-	}
-
-	/**
-	 * Adds a single entry to this map.
-	 *
-	 * @param key The map key.
-	 * @param value The map value.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> add(K key, V value) {
-		if (map == null)
-			map = new LinkedHashMap<>();
-		map.put(key, value);
-		return this;
-	}
-
-	/**
-	 * Adds entries to this list via JSON object strings.
-	 *
-	 * @param values The JSON object strings to parse and add to this list.
-	 * @return This object.
-	 */
-	public MapBuilder<K,V> addJson(String...values) {
-		return addAny((Object[])values);
 	}
 
 	/**
@@ -228,6 +138,16 @@ public class MapBuilder<K,V> {
 	}
 
 	/**
+	 * Adds entries to this list via JSON object strings.
+	 *
+	 * @param values The JSON object strings to parse and add to this list.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> addJson(String...values) {
+		return addAny((Object[])values);
+	}
+
+	/**
 	 * Adds a list of key/value pairs to this map.
 	 *
 	 * @param pairs The pairs to add.
@@ -239,6 +159,86 @@ public class MapBuilder<K,V> {
 			throw new IllegalArgumentException("Odd number of parameters passed into AMap.ofPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			add((K)pairs[i], (V)pairs[i+1]);
+		return this;
+	}
+
+	/**
+	 * Builds the map.
+	 *
+	 * @return A map conforming to the settings on this builder.
+	 */
+	public Map<K,V> build() {
+		if (sparse) {
+			if (map != null && map.isEmpty())
+				map = null;
+		} else {
+			if (map == null)
+				map = new LinkedHashMap<>();
+		}
+		if (map != null) {
+			if (comparator != null) {
+				Map<K,V> m2 = new TreeMap<>(comparator);
+				m2.putAll(map);
+				map = m2;
+			}
+			if (unmodifiable)
+				map = Collections.unmodifiableMap(map);
+		}
+		return map;
+	}
+
+	/**
+	 * Forces the existing set to be copied instead of appended to.
+	 *
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> copy() {
+		if (map != null)
+			map = new LinkedHashMap<>(map);
+		return this;
+	}
+
+	/**
+	 * Converts the set into a {@link SortedMap}.
+	 *
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public MapBuilder<K,V> sorted() {
+		return sorted((Comparator<K>)Comparator.naturalOrder());
+	}
+
+	/**
+	 * Converts the set into a {@link SortedMap} using the specified comparator.
+	 *
+	 * @param comparator The comparator to use for sorting.
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> sorted(Comparator<K> comparator) {
+		this.comparator = comparator;
+		return this;
+	}
+
+	/**
+	 * When specified, the {@link #build()} method will return <jk>null</jk> if the map is empty.
+	 *
+	 * <p>
+	 * Otherwise {@link #build()} will never return <jk>null</jk>.
+	 *
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> sparse() {
+		this.sparse = true;
+		return this;
+	}
+
+	/**
+	 * When specified, {@link #build()} will return an unmodifiable map.
+	 *
+	 * @return This object.
+	 */
+	public MapBuilder<K,V> unmodifiable() {
+		this.unmodifiable = true;
 		return this;
 	}
 }

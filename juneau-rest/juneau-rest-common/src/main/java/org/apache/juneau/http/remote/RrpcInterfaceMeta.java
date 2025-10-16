@@ -75,15 +75,14 @@ public class RrpcInterfaceMeta {
 	}
 
 	/**
-	 * Returns a map of all methods on this interface proxy keyed by HTTP path.
+	 * Returns the Java class of this interface.
 	 *
 	 * @return
-	 * 	A map of all methods on this remote interface keyed by HTTP path.
-	 * 	<br>The keys never have leading slashes.
-	 * 	<br>The map is never <jk>null</jk>.
+	 * 	The Java class of this interface.
+	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() {
-		return methodsByPath;
+	public Class<?> getJavaClass() {
+		return c;
 	}
 
 	/**
@@ -107,14 +106,15 @@ public class RrpcInterfaceMeta {
 	}
 
 	/**
-	 * Returns the Java class of this interface.
+	 * Returns a map of all methods on this interface proxy keyed by HTTP path.
 	 *
 	 * @return
-	 * 	The Java class of this interface.
-	 * 	<br>Never <jk>null</jk>.
+	 * 	A map of all methods on this remote interface keyed by HTTP path.
+	 * 	<br>The keys never have leading slashes.
+	 * 	<br>The map is never <jk>null</jk>.
 	 */
-	public Class<?> getJavaClass() {
-		return c;
+	public Map<String,RrpcInterfaceMethodMeta> getMethodsByPath() {
+		return methodsByPath;
 	}
 
 	/**

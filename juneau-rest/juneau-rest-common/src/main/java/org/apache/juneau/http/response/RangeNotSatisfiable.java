@@ -61,21 +61,23 @@ public class RangeNotSatisfiable extends BasicHttpException {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
 	 */
-	public RangeNotSatisfiable(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public RangeNotSatisfiable() {
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public RangeNotSatisfiable() {
-		this((Throwable)null, REASON_PHRASE);
+	public RangeNotSatisfiable(HttpResponse response) {
+		super(response);
+		assertStatusCode(response);
 	}
 
 	/**
@@ -100,15 +102,13 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public RangeNotSatisfiable(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public RangeNotSatisfiable(Throwable cause, String msg, Object...args) {
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
@@ -128,15 +128,15 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	public RangeNotSatisfiable copy() {
 		return new RangeNotSatisfiable(this);
 	}
-	@Override /* Overridden from BasicRuntimeException */
-	public RangeNotSatisfiable setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	@Override /* Overridden from BasicHttpException */
+	public RangeNotSatisfiable setContent(HttpEntity value) {
+		super.setContent(value);
 		return this;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public RangeNotSatisfiable setUnmodifiable() {
-		super.setUnmodifiable();
+	@Override /* Overridden from BasicHttpException */
+	public RangeNotSatisfiable setContent(String value) {
+		super.setContent(value);
 		return this;
 	}
 
@@ -153,6 +153,12 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	}
 
 	@Override /* Overridden from BasicHttpException */
+	public RangeNotSatisfiable setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
 	public RangeNotSatisfiable setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
@@ -161,6 +167,12 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	@Override /* Overridden from BasicHttpException */
 	public RangeNotSatisfiable setLocale2(Locale value) {
 		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public RangeNotSatisfiable setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 
@@ -181,7 +193,6 @@ public class RangeNotSatisfiable extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpException */
 	public RangeNotSatisfiable setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
@@ -193,21 +204,10 @@ public class RangeNotSatisfiable extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
-	@Override /* Overridden from BasicHttpException */
-	public RangeNotSatisfiable setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
 
-	@Override /* Overridden from BasicHttpException */
-	public RangeNotSatisfiable setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public RangeNotSatisfiable setContent(HttpEntity value) {
-		super.setContent(value);
+	@Override /* Overridden from BasicRuntimeException */
+	public RangeNotSatisfiable setUnmodifiable() {
+		super.setUnmodifiable();
 		return this;
 	}
 }

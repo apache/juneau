@@ -111,6 +111,7 @@ import jakarta.servlet.http.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RequestFormParams extends ArrayList<RequestFormParam> {
 
 	private static final long serialVersionUID = 1L;
@@ -193,31 +194,54 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	}
 
 	/**
-	 * Sets the parser to use for part values.
+	 * Adds request parameter values.
 	 *
-	 * @param value The new value for this setting.
+	 * <p>
+	 * Parameters are added to the end.
+	 * <br>Existing parameters with the same name are not changed.
+	 *
+	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams parser(HttpPartParserSession value) {
-		this.parser = value;
-		forEach(x -> x.parser(parser));
+	public RequestFormParams add(NameValuePair...parameters) {
+		Utils.assertArgNotNull("parameters", parameters);
+		for (NameValuePair p : parameters)
+			if (p != null)
+				add(p.getName(), p.getValue());
 		return this;
 	}
 
 	/**
-	 * Sets case sensitivity for names in this list.
+	 * Adds a parameter value.
 	 *
-	 * @param value The new value for this setting.
-	 * @return This object (for method chaining).
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Existing parameter with the same name are not changed.
+	 *
+	 * @param part The parameter part.  Must not be <jk>null</jk>.
+	 * @return This object.
 	 */
-	public RequestFormParams caseSensitive(boolean value) {
-		this.caseSensitive = value;
+	public RequestFormParams add(Part part) {
+		Utils.assertArgNotNull("part", part);
+		add(new RequestFormParam(req, part).parser(parser));
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Basic operations.
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Adds a parameter value.
+	 *
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Existing parameter with the same name are not changed.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param value The parameter value.
+	 * @return This object.
+	 */
+	public RequestFormParams add(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		add(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
+		return this;
+	}
 
 	/**
 	 * Adds default entries to these parameters.
@@ -270,120 +294,33 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	}
 
 	/**
-	 * Adds a parameter value.
+	 * Converts this object to a query string.
 	 *
 	 * <p>
-	 * Parameter is added to the end.
-	 * <br>Existing parameter with the same name are not changed.
+	 * Returned query string does not start with <js>'?'</js>.
 	 *
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @param value The parameter value.
-	 * @return This object.
+	 * @return A new query string, or an empty string if this object is empty.
 	 */
-	public RequestFormParams add(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		add(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
-		return this;
+	public String asQueryString() {
+		StringBuilder sb = new StringBuilder();
+		for (RequestFormParam e : this) {
+			if (sb.length() > 0)
+				sb.append("&");
+			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
+		}
+		return sb.toString();
 	}
 
 	/**
-	 * Adds request parameter values.
+	 * Sets case sensitivity for names in this list.
 	 *
-	 * <p>
-	 * Parameters are added to the end.
-	 * <br>Existing parameters with the same name are not changed.
-	 *
-	 * @param parameters The parameter objects.  Must not be <jk>null</jk>.
-	 * @return This object.
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
 	 */
-	public RequestFormParams add(NameValuePair...parameters) {
-		Utils.assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters)
-			if (p != null)
-				add(p.getName(), p.getValue());
+	public RequestFormParams caseSensitive(boolean value) {
+		this.caseSensitive = value;
 		return this;
 	}
-
-	/**
-	 * Adds a parameter value.
-	 *
-	 * <p>
-	 * Parameter is added to the end.
-	 * <br>Existing parameter with the same name are not changed.
-	 *
-	 * @param part The parameter part.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestFormParams add(Part part) {
-		Utils.assertArgNotNull("part", part);
-		add(new RequestFormParam(req, part).parser(parser));
-		return this;
-	}
-
-	/**
-	 * Sets a parameter value.
-	 *
-	 * <p>
-	 * Parameter is added to the end.
-	 * <br>Any previous parameters with the same name are removed.
-	 *
-	 * @param name The parameter name.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The parameter value.
-	 * 	<br>Converted to a string using {@link Object#toString()}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestFormParams set(String name, Object value) {
-		Utils.assertArgNotNull("name", name);
-		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
-		return this;
-	}
-
-	/**
-	 * Sets request header values.
-	 *
-	 * <p>
-	 * Parameters are added to the end of the headers.
-	 * <br>Any previous parameters with the same name are removed.
-	 *
-	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestFormParams set(NameValuePair...parameters) {
-		Utils.assertArgNotNull("headers", parameters);
-		for (NameValuePair p : parameters)
-			remove(p);
-		for (NameValuePair p : parameters)
-			add(p);
-		return this;
-	}
-
-	/**
-	 * Remove parameters.
-	 *
-	 * @param name The parameter names.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestFormParams remove(String name) {
-		Utils.assertArgNotNull("name", name);
-		removeIf(x -> eq(x.getName(), name));
-		return this;
-	}
-
-	/**
-	 * Returns a copy of this object but only with the specified param names copied.
-	 *
-	 * @param names The list to include in the copy.
-	 * @return A new list object.
-	 */
-	public RequestFormParams subset(String...names) {
-		return new RequestFormParams(this, names);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Convenience getters.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns <jk>true</jk> if the parameters with the specified names are present.
@@ -410,6 +347,55 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	}
 
 	/**
+	 * Makes a copy of these parameters.
+	 *
+	 * @return A new parameters object.
+	 */
+	public RequestFormParams copy() {
+		return new RequestFormParams(this);
+	}
+
+	/**
+	 * Returns the form data parameter as the specified bean type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.FormData} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param type The bean type to create.
+	 * @return The bean, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
+		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(()->new BasicRuntimeException("@FormData(name) not found on class {0}", className(type)));
+		return get(name).as(type);
+	}
+	/**
+	 * Returns the last parameter with the specified name.
+	 *
+	 * <p>
+	 * This is equivalent to {@link #getLast(String)}.
+	 *
+	 * @param name The parameter name.
+	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 */
+	public RequestFormParam get(String name) {
+		List<RequestFormParam> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestFormParam(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0, j = l.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestFormParam(req, name, sb.toString()).parser(parser);
+	}
+
+	/**
 	 * Returns all the parameters with the specified name.
 	 *
 	 * @param name The parameter name.
@@ -417,38 +403,6 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	 */
 	public List<RequestFormParam> getAll(String name) {
 		return stream(name).collect(toList());
-	}
-
-	/**
-	 * Returns all headers with the specified name.
-	 *
-	 * @param name The header name.
-	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
-	 */
-	public Stream<RequestFormParam> stream(String name) {
-		return stream().filter(x -> eq(x.getName(), name));
-	}
-
-	/**
-	 * Returns all headers in sorted order.
-	 *
-	 * @return The stream of all headers in sorted order.
-	 */
-	public Stream<RequestFormParam> getSorted() {
-		Comparator<RequestFormParam> x;
-		if (caseSensitive)
-			x = Comparator.comparing(RequestFormParam::getName);
-		else
-			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
-		return stream().sorted(x);
-	}
-
-	/**
-	 * Returns all the unique header names in this list.
-	 * @return The list of all unique header names in this list.
-	 */
-	public List<String> getNames() {
-		return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**
@@ -484,81 +438,107 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 	}
 
 	/**
-	 * Returns the last parameter with the specified name.
-	 *
-	 * <p>
-	 * This is equivalent to {@link #getLast(String)}.
-	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
 	 */
-	public RequestFormParam get(String name) {
-		List<RequestFormParam> l = getAll(name);
-		if (l.isEmpty())
-			return new RequestFormParam(req, name, null).parser(parser);
-		if (l.size() == 1)
-			return l.get(0);
-		StringBuilder sb = new StringBuilder(128);
-		for (int i = 0, j = l.size(); i < j; i++) {
-			if (i > 0)
-				sb.append(", ");
-			sb.append(l.get(i).getValue());
-		}
-		return new RequestFormParam(req, name, sb.toString()).parser(parser);
+	public List<String> getNames() {
+		return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
 	}
 
 	/**
-	 * Returns the form data parameter as the specified bean type.
+	 * Returns all headers in sorted order.
 	 *
-	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.FormData} annotation
-	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
-	 *
-	 * @param <T> The bean type to create.
-	 * @param type The bean type to create.
-	 * @return The bean, never <jk>null</jk>.
+	 * @return The stream of all headers in sorted order.
 	 */
-	public <T> Optional<T> get(Class<T> type) {
-		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(FORMDATA, cm).orElseThrow(()->new BasicRuntimeException("@FormData(name) not found on class {0}", className(type)));
-		return get(name).as(type);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Converts this object to a query string.
-	 *
-	 * <p>
-	 * Returned query string does not start with <js>'?'</js>.
-	 *
-	 * @return A new query string, or an empty string if this object is empty.
-	 */
-	public String asQueryString() {
-		StringBuilder sb = new StringBuilder();
-		for (RequestFormParam e : this) {
-			if (sb.length() > 0)
-				sb.append("&");
-			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Makes a copy of these parameters.
-	 *
-	 * @return A new parameters object.
-	 */
-	public RequestFormParams copy() {
-		return new RequestFormParams(this);
-	}
-
-	private boolean eq(String s1, String s2) {
+	public Stream<RequestFormParam> getSorted() {
+		Comparator<RequestFormParam> x;
 		if (caseSensitive)
-			return Utils.eq(s1, s2);
-		return Utils.eqic(s1, s2);
+			x = Comparator.comparing(RequestFormParam::getName);
+		else
+			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
+	}
+
+	/**
+	 * Sets the parser to use for part values.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestFormParams parser(HttpPartParserSession value) {
+		this.parser = value;
+		forEach(x -> x.parser(parser));
+		return this;
+	}
+
+	/**
+	 * Remove parameters.
+	 *
+	 * @param name The parameter names.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestFormParams remove(String name) {
+		Utils.assertArgNotNull("name", name);
+		removeIf(x -> eq(x.getName(), name));
+		return this;
+	}
+
+	/**
+	 * Sets request header values.
+	 *
+	 * <p>
+	 * Parameters are added to the end of the headers.
+	 * <br>Any previous parameters with the same name are removed.
+	 *
+	 * @param parameters The parameters to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestFormParams set(NameValuePair...parameters) {
+		Utils.assertArgNotNull("headers", parameters);
+		for (NameValuePair p : parameters)
+			remove(p);
+		for (NameValuePair p : parameters)
+			add(p);
+		return this;
+	}
+
+	/**
+	 * Sets a parameter value.
+	 *
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Any previous parameters with the same name are removed.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The parameter value.
+	 * 	<br>Converted to a string using {@link Object#toString()}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestFormParams set(String name, Object value) {
+		Utils.assertArgNotNull("name", name);
+		set(new RequestFormParam(req, name, Utils.s(value)).parser(parser));
+		return this;
+	}
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public Stream<RequestFormParam> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
+	}
+
+	/**
+	 * Returns a copy of this object but only with the specified param names copied.
+	 *
+	 * @param names The list to include in the copy.
+	 * @return A new list object.
+	 */
+	public RequestFormParams subset(String...names) {
+		return new RequestFormParams(this, names);
 	}
 
 	@Override /* Overridden from Object */
@@ -567,5 +547,11 @@ public class RequestFormParams extends ArrayList<RequestFormParam> {
 		for (String n : getNames())
 			m.put(n, get(n).asString().orElse(null));
 		return m.asJson();
+	}
+
+	private boolean eq(String s1, String s2) {
+		if (caseSensitive)
+			return Utils.eq(s1, s2);
+		return Utils.eqic(s1, s2);
 	}
 }

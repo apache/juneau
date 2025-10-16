@@ -26,13 +26,6 @@ package org.apache.juneau.msgpack;
 enum DataType {
 	NULL, BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING, BIN, EXT, ARRAY, MAP, INVALID;
 
-	boolean isOneOf(DataType...dataTypes) {
-		for (DataType dt : dataTypes)
-			if (this == dt)
-				return true;
-		return false;
-	}
-
 	static final int
 		POSFIXINT_L  = 0x00,  //   pos fixint     0xxxxxxx     0x00 - 0x7f
 		POSFIXINT_U  = 0x7F,
@@ -76,4 +69,11 @@ enum DataType {
 		MAP32        = 0xDF,  //   map 32         11011111     0xdf
 		NEGFIXINT_L  = 0xE0,  //   neg fixint     111xxxxx     0xe0 - 0xff
 		NEGFIXINT_U  = 0xFF;
+
+	boolean isOneOf(DataType...dataTypes) {
+		for (DataType dt : dataTypes)
+			if (this == dt)
+				return true;
+		return false;
+	}
 }

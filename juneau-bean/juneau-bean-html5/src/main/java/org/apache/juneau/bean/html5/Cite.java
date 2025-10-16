@@ -80,7 +80,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#cite() cite()}
- * 		<li class='jm'>{@link HtmlBuilder#cite(Object, Object...) cite(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#cite(Object...) cite(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -105,10 +105,6 @@ public class Cite extends HtmlElementMixed {
 	public Cite(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Cite _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -118,6 +114,30 @@ public class Cite extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Cite accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Cite attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Cite attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Cite child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Cite children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -478,30 +498,6 @@ public class Cite extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Cite translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Cite child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Cite children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Cite attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Cite attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -80,11 +80,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Authorization")
 public class Authorization extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Authorization";
 
@@ -114,11 +109,6 @@ public class Authorization extends BasicStringHeader {
 	public static Authorization of(Supplier<String> value) {
 		return value == null ? null : new Authorization(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

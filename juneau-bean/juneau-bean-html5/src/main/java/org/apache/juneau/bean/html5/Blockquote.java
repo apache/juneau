@@ -52,7 +52,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#blockquote() blockquote()}
- * 		<li class='jm'>{@link HtmlBuilder#blockquote(Object, Object...) blockquote(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#blockquote(Object...) blockquote(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -78,6 +78,41 @@ public class Blockquote extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Blockquote _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Blockquote accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Blockquote attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Blockquote attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Blockquote child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Blockquote children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#attr-blockquote-cite">cite</a>
 	 * attribute.
@@ -89,26 +124,11 @@ public class Blockquote extends HtmlElementMixed {
 	 * <p>
 	 * The URL should point to the original source of the quoted material.
 	 *
-	 * @param cite The URL of the source document for the quotation.
+	 * @param value The URL of the source document for the quotation.
 	 * @return This object.
 	 */
 	public Blockquote cite(String value) {
 		attr("cite", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Blockquote _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Blockquote accesskey(String value) {
-		super.accesskey(value);
 		return this;
 	}
 
@@ -469,30 +489,6 @@ public class Blockquote extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Blockquote translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Blockquote child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Blockquote children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Blockquote attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Blockquote attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

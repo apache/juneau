@@ -67,11 +67,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Referer")
 public class Referer extends BasicUriHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Referer";
 
@@ -85,18 +80,6 @@ public class Referer extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Referer of(String value) {
-		return value == null ? null : new Referer(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static Referer of(URI value) {
 		return value == null ? null : new Referer(value);
 	}
 
@@ -115,10 +98,17 @@ public class Referer extends BasicUriHeader {
 		return value == null ? null : new Referer(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static Referer of(URI value) {
+		return value == null ? null : new Referer(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -128,17 +118,6 @@ public class Referer extends BasicUriHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Referer(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Referer(URI value) {
 		super(NAME, value);
 	}
 
@@ -153,6 +132,17 @@ public class Referer extends BasicUriHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Referer(Supplier<URI> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Referer(URI value) {
 		super(NAME, value);
 	}
 }

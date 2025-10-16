@@ -34,11 +34,6 @@ import org.apache.juneau.serializer.*;
  * @serial exclude
  */
 public class SerializedHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -52,23 +47,6 @@ public class SerializedHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value) {
-		return new SerializedHeader(name, value, null, null, false);
-	}
-
-	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link #getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the POJO to serialize as the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static SerializedHeader of(String name, Supplier<?> value) {
 		return new SerializedHeader(name, value, null, null, false);
 	}
 
@@ -100,6 +78,23 @@ public class SerializedHeader extends BasicHeader {
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link #getValue()}.
 	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the POJO to serialize as the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static SerializedHeader of(String name, Supplier<?> value) {
+		return new SerializedHeader(name, value, null, null, false);
+	}
+
+	/**
+	 * Static creator with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
 	 * @param name The HTTP header name name.
 	 * @param value
 	 * 	The supplier of the POJO to serialize as the header value.
@@ -118,11 +113,6 @@ public class SerializedHeader extends BasicHeader {
 	public static SerializedHeader of(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Object value;
 	private final Supplier<Object> supplier;
 	private HttpPartSerializerSession serializer;
@@ -207,40 +197,6 @@ public class SerializedHeader extends BasicHeader {
 	}
 
 	/**
-	 * Sets the serializer to use for serializing the value to a string value.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public SerializedHeader serializer(HttpPartSerializer value) {
-		if (value != null)
-			return serializer(value.getPartSession());
-		return this;
-	}
-
-	/**
-	 * Sets the serializer to use for serializing the value to a string value.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public SerializedHeader serializer(HttpPartSerializerSession value) {
-		serializer = value;
-		return this;
-	}
-
-	/**
-	 * Sets the schema object that defines the format of the output.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public SerializedHeader schema(HttpPartSchema value) {
-		this.schema = value;
-		return this;
-	}
-
-	/**
 	 * Copies this bean and sets the serializer and schema on it.
 	 *
 	 * @param serializer The new serializer for the bean.  Can be <jk>null</jk>.
@@ -257,26 +213,6 @@ public class SerializedHeader extends BasicHeader {
 				h.schema(schema);
 			return h;
 		}
-		return this;
-	}
-
-	/**
-	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
-	 *
-	 * @return This object.
-	 */
-	public SerializedHeader skipIfEmpty() {
-		return skipIfEmpty(true);
-	}
-
-	/**
-	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
-	 *
-	 * @param value The new value of this setting.
-	 * @return This object.
-	 */
-	public SerializedHeader skipIfEmpty(boolean value) {
-		this.skipIfEmpty = value;
 		return this;
 	}
 
@@ -300,5 +236,59 @@ public class SerializedHeader extends BasicHeader {
 		} catch (SerializeException e) {
 			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
+	}
+
+	/**
+	 * Sets the schema object that defines the format of the output.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public SerializedHeader schema(HttpPartSchema value) {
+		this.schema = value;
+		return this;
+	}
+
+	/**
+	 * Sets the serializer to use for serializing the value to a string value.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public SerializedHeader serializer(HttpPartSerializer value) {
+		if (value != null)
+			return serializer(value.getPartSession());
+		return this;
+	}
+
+	/**
+	 * Sets the serializer to use for serializing the value to a string value.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public SerializedHeader serializer(HttpPartSerializerSession value) {
+		serializer = value;
+		return this;
+	}
+
+	/**
+	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
+	 *
+	 * @return This object.
+	 */
+	public SerializedHeader skipIfEmpty() {
+		return skipIfEmpty(true);
+	}
+
+	/**
+	 * Don't serialize this header if the value is <jk>null</jk> or an empty string.
+	 *
+	 * @param value The new value of this setting.
+	 * @return This object.
+	 */
+	public SerializedHeader skipIfEmpty(boolean value) {
+		this.skipIfEmpty = value;
+		return this;
 	}
 }

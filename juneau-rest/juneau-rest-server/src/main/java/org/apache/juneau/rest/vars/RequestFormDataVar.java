@@ -60,13 +60,8 @@ public class RequestFormDataVar extends MultipartResolvingVar {
 	}
 
 	@Override /* Overridden from Var */
-	protected boolean allowNested() {
-		return false;
-	}
-
-	@Override /* Overridden from Var */
-	protected boolean allowRecurse() {
-		return false;
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(RestRequest.class).isPresent();
 	}
 
 	@Override /* Overridden from Var */
@@ -75,7 +70,12 @@ public class RequestFormDataVar extends MultipartResolvingVar {
 	}
 
 	@Override /* Overridden from Var */
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(RestRequest.class).isPresent();
+	protected boolean allowNested() {
+		return false;
+	}
+
+	@Override /* Overridden from Var */
+	protected boolean allowRecurse() {
+		return false;
 	}
 }

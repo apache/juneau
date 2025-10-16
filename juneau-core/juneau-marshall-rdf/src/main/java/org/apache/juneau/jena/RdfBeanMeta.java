@@ -45,6 +45,15 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	}
 
 	/**
+	 * Returns the bean property marked as the URI for the bean (annotated with {@link Rdf#beanUri() @Rdf(beanUri)} as <jk>true</jk>).
+	 *
+	 * @return The URI property, or <jk>null</jk> if no URI property exists on this bean.
+	 */
+	public BeanPropertyMeta getBeanUriProperty() {
+		return beanUriProperty;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if one of the properties on this bean is annotated with {@link Rdf#beanUri() @Rdf(beanUri)} as
 	 * <jk>true</jk>
 	 *
@@ -52,14 +61,5 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 */
 	public boolean hasBeanUri() {
 		return beanUriProperty != null;
-	}
-
-	/**
-	 * Returns the bean property marked as the URI for the bean (annotated with {@link Rdf#beanUri() @Rdf(beanUri)} as <jk>true</jk>).
-	 *
-	 * @return The URI property, or <jk>null</jk> if no URI property exists on this bean.
-	 */
-	public BeanPropertyMeta getBeanUriProperty() {
-		return beanUriProperty;
 	}
 }

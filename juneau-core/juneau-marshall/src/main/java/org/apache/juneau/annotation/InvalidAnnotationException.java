@@ -34,16 +34,6 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructor.
-	 *
-	 * @param message Message.
-	 * @param args Arguments.
-	 */
-	public InvalidAnnotationException(String message, Object...args) {
-		super(message, args);
-	}
-
-	/**
 	 * Throws an {@link InvalidAnnotationException} if the specified method contains any of the specified annotations.
 	 *
 	 * @param onMethod The method to check.
@@ -55,6 +45,16 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 		Annotation a = onMethod.getAnyAnnotation(types);
 		if (a != null)
 			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", a.getClass().getSimpleName(), onMethod.getDeclaringClass().getSimpleName(), onMethod);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param message Message.
+	 * @param args Arguments.
+	 */
+	public InvalidAnnotationException(String message, Object...args) {
+		super(message, args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

@@ -75,11 +75,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("From")
 public class From extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "From";
 
@@ -109,11 +104,6 @@ public class From extends BasicStringHeader {
 	public static From of(Supplier<String> value) {
 		return value == null ? null : new From(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

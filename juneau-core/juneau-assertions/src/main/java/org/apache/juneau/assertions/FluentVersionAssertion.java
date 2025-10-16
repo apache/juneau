@@ -115,21 +115,6 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentVersionAssertion(Version value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -150,18 +135,32 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentVersionAssertion(Version value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Extracts the specified version part (zero-indexed position).
+	 * Extracts the maintenance part of the version string (index position 2).
 	 *
-	 * @param index The index of the version part to extract.
 	 * @return This object.
 	 */
-	public FluentIntegerAssertion<R> asPart(int index) {
-		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().getPart(index).orElse(null), returns());
+	public FluentIntegerAssertion<R> asMaintenance() {
+		return asPart(2);
 	}
 
 	/**
@@ -183,12 +182,13 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	}
 
 	/**
-	 * Extracts the maintenance part of the version string (index position 2).
+	 * Extracts the specified version part (zero-indexed position).
 	 *
+	 * @param index The index of the version part to extract.
 	 * @return This object.
 	 */
-	public FluentIntegerAssertion<R> asMaintenance() {
-		return asPart(2);
+	public FluentIntegerAssertion<R> asPart(int index) {
+		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().getPart(index).orElse(null), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

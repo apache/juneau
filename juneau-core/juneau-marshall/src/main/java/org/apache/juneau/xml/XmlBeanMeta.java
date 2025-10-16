@@ -35,47 +35,6 @@ import org.apache.juneau.xml.annotation.*;
  */
 public class XmlBeanMeta extends ExtendedBeanMeta {
 
-	// XML related fields
-	private final Map<String,BeanPropertyMeta> attrs;                        // Map of bean properties that are represented as XML attributes.
-	private final Map<String,BeanPropertyMeta> elements;                     // Map of bean properties that are represented as XML elements.
-	private final BeanPropertyMeta attrsProperty;                            // Bean property that contain XML attribute key/value pairs for this bean.
-	private final Map<String,BeanPropertyMeta> collapsedProperties;          // Properties defined with @Xml.childName annotation.
-	private final BeanPropertyMeta contentProperty;
-	private final XmlFormat contentFormat;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param beanMeta The metadata on the bean that this metadata applies to.
-	 * @param mp XML metadata provider (for finding information about other artifacts).
-	 */
-	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
-		super(beanMeta);
-
-		Class<?> c = beanMeta.getClassMeta().getInnerClass();
-		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, mp);
-
-		attrs = u(b.attrs);
-		elements = u(b.elements);
-		attrsProperty = b.attrsProperty;
-		collapsedProperties = u(b.collapsedProperties);
-		contentProperty = b.contentProperty;
-		contentFormat = b.contentFormat;
-
-		// Do some validation.
-		if (contentProperty != null || contentFormat == XmlFormat.VOID) {
-			if (! elements.isEmpty())
-				throw new BeanRuntimeException(c, "{0} and ELEMENT properties found on the same bean.  These cannot be mixed.", contentFormat);
-			if (! collapsedProperties.isEmpty())
-				throw new BeanRuntimeException(c, "{0} and COLLAPSED properties found on the same bean.  These cannot be mixed.", contentFormat);
-		}
-
-		if (! collapsedProperties.isEmpty()) {
-			if (! Collections.disjoint(elements.keySet(), collapsedProperties.keySet()))
-				throw new BeanRuntimeException(c, "Child element name conflicts found with another property.");
-		}
-	}
-
 	private static class XmlBeanMetaBuilder {
 		Map<String,BeanPropertyMeta>
 			attrs = map(),
@@ -145,6 +104,47 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			});
 		}
 	}
+	// XML related fields
+	private final Map<String,BeanPropertyMeta> attrs;                        // Map of bean properties that are represented as XML attributes.
+	private final Map<String,BeanPropertyMeta> elements;                     // Map of bean properties that are represented as XML elements.
+	private final BeanPropertyMeta attrsProperty;                            // Bean property that contain XML attribute key/value pairs for this bean.
+	private final Map<String,BeanPropertyMeta> collapsedProperties;          // Properties defined with @Xml.childName annotation.
+	private final BeanPropertyMeta contentProperty;
+
+	private final XmlFormat contentFormat;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param beanMeta The metadata on the bean that this metadata applies to.
+	 * @param mp XML metadata provider (for finding information about other artifacts).
+	 */
+	public XmlBeanMeta(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
+		super(beanMeta);
+
+		Class<?> c = beanMeta.getClassMeta().getInnerClass();
+		XmlBeanMetaBuilder b = new XmlBeanMetaBuilder(beanMeta, mp);
+
+		attrs = u(b.attrs);
+		elements = u(b.elements);
+		attrsProperty = b.attrsProperty;
+		collapsedProperties = u(b.collapsedProperties);
+		contentProperty = b.contentProperty;
+		contentFormat = b.contentFormat;
+
+		// Do some validation.
+		if (contentProperty != null || contentFormat == XmlFormat.VOID) {
+			if (! elements.isEmpty())
+				throw new BeanRuntimeException(c, "{0} and ELEMENT properties found on the same bean.  These cannot be mixed.", contentFormat);
+			if (! collapsedProperties.isEmpty())
+				throw new BeanRuntimeException(c, "{0} and COLLAPSED properties found on the same bean.  These cannot be mixed.", contentFormat);
+		}
+
+		if (! collapsedProperties.isEmpty()) {
+			if (! Collections.disjoint(elements.keySet(), collapsedProperties.keySet()))
+				throw new BeanRuntimeException(c, "Child element name conflicts found with another property.");
+		}
+	}
 
 	/**
 	 * The list of properties that should be rendered as XML attributes.
@@ -153,88 +153,6 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 */
 	public Map<String,BeanPropertyMeta> getAttrProperties() {
 		return attrs;
-	}
-
-	/**
-	 * The list of names of properties that should be rendered as XML attributes.
-	 *
-	 * @return Set of property names.
-	 */
-	protected Set<String> getAttrPropertyNames() {
-		return attrs.keySet();
-	}
-
-	/**
-	 * The list of properties that should be rendered as child elements.
-	 *
-	 * @return Map of property names to property metadata.
-	 */
-	protected Map<String,BeanPropertyMeta> getElementProperties() {
-		return elements;
-	}
-
-	/**
-	 * The list of names of properties that should be rendered as child elements.
-	 *
-	 * @return Set of property names.
-	 */
-	protected Set<String> getElementPropertyNames() {
-		return elements.keySet();
-	}
-
-	/**
-	 * The list of properties that should be rendered as collapsed child elements.
-	 * <br>See {@link Xml#childName() @Xml(childName)}
-	 *
-	 * @return Map of property names to property metadata.
-	 */
-	protected Map<String,BeanPropertyMeta> getCollapsedProperties() {
-		return collapsedProperties;
-	}
-
-	/**
-	 * The list of names of properties that should be rendered as collapsed child elements.
-	 *
-	 * @return Set of property names.
-	 */
-	protected Set<String> getCollapsedPropertyNames() {
-		return collapsedProperties.keySet();
-	}
-
-	/**
-	 * The property that returns a map of XML attributes as key/value pairs.
-	 *
-	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
-	 */
-	protected BeanPropertyMeta getAttrsProperty() {
-		return attrsProperty;
-	}
-
-	/**
-	 * The name of the property that returns a map of XML attributes as key/value pairs.
-	 *
-	 * @return The bean property name, or <jk>null</jk> if there is no such method.
-	 */
-	protected String getAttrsPropertyName() {
-		return attrsProperty == null ? null : attrsProperty.getName();
-	}
-
-	/**
-	 * The property that represents the inner XML content of this bean.
-	 *
-	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
-	 */
-	public BeanPropertyMeta getContentProperty() {
-		return contentProperty;
-	}
-
-	/**
-	 * The name of the property that represents the inner XML content of this bean.
-	 *
-	 * @return The bean property name, or <jk>null</jk> if there is no such method.
-	 */
-	protected String getContentPropertyName() {
-		return contentProperty == null ? null : contentProperty.getName();
 	}
 
 	/**
@@ -257,6 +175,88 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 	 */
 	public XmlFormat getContentFormat() {
 		return contentFormat;
+	}
+
+	/**
+	 * The property that represents the inner XML content of this bean.
+	 *
+	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
+	 */
+	public BeanPropertyMeta getContentProperty() {
+		return contentProperty;
+	}
+
+	/**
+	 * The list of names of properties that should be rendered as XML attributes.
+	 *
+	 * @return Set of property names.
+	 */
+	protected Set<String> getAttrPropertyNames() {
+		return attrs.keySet();
+	}
+
+	/**
+	 * The property that returns a map of XML attributes as key/value pairs.
+	 *
+	 * @return The bean property metadata, or <jk>null</jk> if there is no such method.
+	 */
+	protected BeanPropertyMeta getAttrsProperty() {
+		return attrsProperty;
+	}
+
+	/**
+	 * The name of the property that returns a map of XML attributes as key/value pairs.
+	 *
+	 * @return The bean property name, or <jk>null</jk> if there is no such method.
+	 */
+	protected String getAttrsPropertyName() {
+		return attrsProperty == null ? null : attrsProperty.getName();
+	}
+
+	/**
+	 * The list of properties that should be rendered as collapsed child elements.
+	 * <br>See {@link Xml#childName() @Xml(childName)}
+	 *
+	 * @return Map of property names to property metadata.
+	 */
+	protected Map<String,BeanPropertyMeta> getCollapsedProperties() {
+		return collapsedProperties;
+	}
+
+	/**
+	 * The list of names of properties that should be rendered as collapsed child elements.
+	 *
+	 * @return Set of property names.
+	 */
+	protected Set<String> getCollapsedPropertyNames() {
+		return collapsedProperties.keySet();
+	}
+
+	/**
+	 * The name of the property that represents the inner XML content of this bean.
+	 *
+	 * @return The bean property name, or <jk>null</jk> if there is no such method.
+	 */
+	protected String getContentPropertyName() {
+		return contentProperty == null ? null : contentProperty.getName();
+	}
+
+	/**
+	 * The list of properties that should be rendered as child elements.
+	 *
+	 * @return Map of property names to property metadata.
+	 */
+	protected Map<String,BeanPropertyMeta> getElementProperties() {
+		return elements;
+	}
+
+	/**
+	 * The list of names of properties that should be rendered as child elements.
+	 *
+	 * @return Set of property names.
+	 */
+	protected Set<String> getElementPropertyNames() {
+		return elements.keySet();
 	}
 
 	/**

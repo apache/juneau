@@ -33,18 +33,9 @@ import org.apache.juneau.internal.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class StringEntity extends BasicHttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final String EMPTY = "";
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private byte[] byteCache;
 
 	/**
@@ -72,24 +63,6 @@ public class StringEntity extends BasicHttpEntity {
 		super(copyFrom);
 	}
 
-	@Override
-	public StringEntity copy() {
-		return new StringEntity(this);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private String content() {
-		return contentOrElse(EMPTY);
-	}
-
-	@Override /* Overridden from AbstractHttpEntity */
-	public String asString() throws IOException {
-		return content();
-	}
-
 	@Override /* Overridden from AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
 		if (isCached() && byteCache == null)
@@ -98,10 +71,21 @@ public class StringEntity extends BasicHttpEntity {
 			return byteCache;
 		return content().getBytes(getCharset());
 	}
+	@Override /* Overridden from AbstractHttpEntity */
+	public String asString() throws IOException {
+		return content();
+	}
+
+	@Override
+	public StringEntity copy() {
+		return new StringEntity(this);
+	}
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return true;
+	public InputStream getContent() throws IOException {
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return new ReaderInputStream(new StringReader(content()), getCharset());
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -120,28 +104,15 @@ public class StringEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException {
-		if (isCached())
-			return new ByteArrayInputStream(asBytes());
-		return new ReaderInputStream(new StringReader(content()), getCharset());
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
-		if (isCached()) {
-			out.write(asBytes());
-		} else {
-			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
-			osw.write(content());
-			osw.flush();
-		}
+	public boolean isRepeatable() {
+		return true;
 	}
 
 	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return false;
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setCached() throws IOException{
 		super.setCached();
@@ -153,7 +124,6 @@ public class StringEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpEntity */
 	public StringEntity setChunked() {
 		super.setChunked();
@@ -179,13 +149,13 @@ public class StringEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentEncoding(String value) {
+	public StringEntity setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentEncoding(ContentEncoding value) {
+	public StringEntity setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -197,13 +167,13 @@ public class StringEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentType(String value) {
+	public StringEntity setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StringEntity setContentType(ContentType value) {
+	public StringEntity setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
@@ -218,5 +188,21 @@ public class StringEntity extends BasicHttpEntity {
 	public StringEntity setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public void writeTo(OutputStream out) throws IOException {
+		Utils.assertArgNotNull("out", out);
+		if (isCached()) {
+			out.write(asBytes());
+		} else {
+			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
+			osw.write(content());
+			osw.flush();
+		}
+	}
+
+	private String content() {
+		return contentOrElse(EMPTY);
 	}
 }

@@ -36,81 +36,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class QueryAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Query DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link Query} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Applier extends AnnotationApplier<Query,BeanContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Applier(VarResolverSession vr) {
+			super(Query.class, BeanContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Query> ai, BeanContext.Builder b) {
+			Query a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(a);
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link Query @Query annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Query[] value();
 	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(Query a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Finds the name from the specified list of annotations.
-	 *
-	 * @param pi The parameter.
-	 * @return The last matching name, or {@link Value#empty()} if not found.
-	 */
-	public static Value<String> findName(ParamInfo pi) {
-		Value<String> n = Value.empty();
-		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
-		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
-		return n;
-	}
-
-	/**
-	 * Finds the default value from the specified list of annotations.
-	 *
-	 * @param pi The parameter.
-	 * @return The last matching default value, or {@link Value#empty()} if not found.
-	 */
-	public static Value<String> findDef(ParamInfo pi) {
-		Value<String> n = Value.empty();
-		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
-		return n;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -210,10 +174,6 @@ public class QueryAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationTImpl implements Query {
 
 		private final Class<? extends HttpPartParser> parser;
@@ -230,6 +190,11 @@ public class QueryAnnotation {
 			this.value = b.value;
 			this.def = b.def;
 			postConstruct();
+		}
+
+		@Override /* Overridden from Query */
+		public String def() {
+			return def;
 		}
 
 		@Override /* Overridden from Query */
@@ -256,58 +221,68 @@ public class QueryAnnotation {
 		public String value() {
 			return value;
 		}
-
-		@Override /* Overridden from Query */
-		public String def() {
-			return def;
-		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
+	/** Default value */
+	public static final Query DEFAULT = create().build();
 
 	/**
-	 * Applies targeted {@link Query} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class Applier extends AnnotationApplier<Query,BeanContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Applier(VarResolverSession vr) {
-			super(Query.class, BeanContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Query> ai, BeanContext.Builder b) {
-			Query a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(a);
-		}
+	public static Builder create() {
+		return new Builder();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link Query @Query annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Query[] value();
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Query a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	/**
+	 * Finds the default value from the specified list of annotations.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching default value, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findDef(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
+		return n;
+	}
+	/**
+	 * Finds the name from the specified list of annotations.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching name, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findName(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
+		return n;
 	}
 }

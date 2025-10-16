@@ -63,15 +63,6 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public NonAuthoritiveInformation(NonAuthoritiveInformation copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public NonAuthoritiveInformation(NonAuthoritiveInformation copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 		return new NonAuthoritiveInformation(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public NonAuthoritiveInformation setContent(String value) {
+	public NonAuthoritiveInformation setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NonAuthoritiveInformation setContent(HttpEntity value) {
+	public NonAuthoritiveInformation setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NonAuthoritiveInformation setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public NonAuthoritiveInformation setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public NonAuthoritiveInformation setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public NonAuthoritiveInformation setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

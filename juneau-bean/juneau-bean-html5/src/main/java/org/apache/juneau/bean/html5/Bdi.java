@@ -64,7 +64,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#bdi() bdi()}
- * 		<li class='jm'>{@link HtmlBuilder#bdi(Object, Object...) bdi(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#bdi(Object) bdi(Object)}
  * 	</ul>
  * </ul>
  * </p>
@@ -89,10 +89,6 @@ public class Bdi extends HtmlElementText {
 	public Bdi(Object text) {
 		text(text);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Bdi _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -102,6 +98,18 @@ public class Bdi extends HtmlElementText {
 	@Override /* Overridden from HtmlElement */
 	public Bdi accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdi attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdi attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -453,6 +461,12 @@ public class Bdi extends HtmlElementText {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementText */
+	public Bdi text(Object value) {
+		super.text(value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Bdi title(String value) {
 		super.title(value);
@@ -462,24 +476,6 @@ public class Bdi extends HtmlElementText {
 	@Override /* Overridden from HtmlElement */
 	public Bdi translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementText */
-	public Bdi text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Bdi attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Bdi attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

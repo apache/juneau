@@ -37,28 +37,6 @@ import org.apache.juneau.common.utils.*;
  * @param <V> The value type.
  */
 public class Cache<K,V> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param key The key type.
-	 * @param type The value type.
-	 * @return A new builder for this object.
-	 */
-	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
-		return new Builder<>(type);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -75,6 +53,15 @@ public class Cache<K,V> {
 			disabled = env("juneau.cache.disable", false);
 			maxSize = env("juneau.cache.maxSize", 1000);
 			logOnExit = env("juneau.cache.logOnExit", false);
+		}
+
+		/**
+		 * Builds this object.
+		 *
+		 * @return A new cache.
+		 */
+		public Cache<K,V> build() {
+			return new Cache<>(this);
 		}
 
 		/**
@@ -107,21 +94,19 @@ public class Cache<K,V> {
 			maxSize = value;
 			return this;
 		}
-
-		/**
-		 * Builds this object.
-		 *
-		 * @return A new cache.
-		 */
-		public Cache<K,V> build() {
-			return new Cache<>(this);
-		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param key The key type.
+	 * @param type The value type.
+	 * @return A new builder for this object.
+	 */
+	public static <K,V> Builder<K,V> of(Class<K> key, Class<V> type) {
+		return new Builder<>(type);
+	}
 	private final int maxSize;
 	private final ConcurrentHashMap<K,V> cache;
 	private final AtomicInteger cacheHits = new AtomicInteger();

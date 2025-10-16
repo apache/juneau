@@ -44,8 +44,34 @@ import org.apache.juneau.common.utils.*;
  */
 public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
+	class SimpleMapEntry implements Map.Entry<K,V> {
+
+		private int index;
+
+		SimpleMapEntry(int index) {
+			this.index = index;
+		}
+
+		@Override /* Overridden from Map.Entry */
+		public K getKey() {
+			return keys[index];
+		}
+
+		@Override /* Overridden from Map.Entry */
+		public V getValue() {
+			return values[index];
+		}
+
+		@Override /* Overridden from Map.Entry */
+		public V setValue(V val) {
+			V v = values[index];
+			values[index] = val;
+			return v;
+		}
+	}
 	final K[] keys;
 	final V[] values;
+
 	final SimpleMapEntry[] entries;
 
 	/**
@@ -97,31 +123,5 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 			}
 		}
 		throw new IllegalArgumentException("No key '"+key+"' defined in map");
-	}
-
-	class SimpleMapEntry implements Map.Entry<K,V> {
-
-		private int index;
-
-		SimpleMapEntry(int index) {
-			this.index = index;
-		}
-
-		@Override /* Overridden from Map.Entry */
-		public K getKey() {
-			return keys[index];
-		}
-
-		@Override /* Overridden from Map.Entry */
-		public V getValue() {
-			return values[index];
-		}
-
-		@Override /* Overridden from Map.Entry */
-		public V setValue(V val) {
-			V v = values[index];
-			values[index] = val;
-			return v;
-		}
 	}
 }

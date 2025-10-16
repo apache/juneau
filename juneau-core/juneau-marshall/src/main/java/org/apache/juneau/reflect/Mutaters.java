@@ -101,6 +101,27 @@ public class Mutaters {
 	}
 
 	/**
+	 * Constructs a new instance of the specified class from the specified string.
+	 *
+	 * <p>
+	 * Class must be one of the following:
+	 * <ul>
+	 * 	<li>Have a public constructor that takes in a single <c>String</c> argument.
+	 * 	<li>Have a static <c>fromString(String)</c> (or related) method.
+	 * 	<li>Be an <c>enum</c>.
+	 * </ul>
+	 *
+	 * @param <T> The class type.
+	 * @param c The class type.
+	 * @param s The string to create the instance from.
+	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
+	 */
+	public static <T> T fromString(Class<T> c, String s) {
+		Mutater<String,T> t = get(String.class, c);
+		return t == null ? null : t.mutate(s);
+	}
+
+	/**
 	 * Returns the transform for converting the specified input type to the specified output type.
 	 *
 	 * @param <I> The input type.
@@ -143,6 +164,25 @@ public class Mutaters {
 	 */
 	public static <I,O> boolean hasMutate(Class<I> ic, Class<O> oc) {
 		return get(ic, oc) != NULL;
+	}
+
+	/**
+	 * Converts an object to a string.
+	 *
+	 * <p>
+	 * Normally, this is just going to call <c>toString()</c> on the object.
+	 * However, the {@link Locale} and {@link TimeZone} objects are treated special so that the returned value
+	 * works with the {@link #fromString(Class, String)} method.
+	 *
+	 * @param o The object to convert to a string.
+	 * @return The stringified object, or <jk>null</jk> if the object was <jk>null</jk>.
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public static String toString(Object o) {
+		if (o == null)
+			return null;
+		Mutater<Object,String> t = (Mutater<Object,String>)get(o.getClass(), String.class);
+		return t == null ? o.toString() : t.mutate(o);
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes"})
@@ -253,54 +293,6 @@ public class Mutaters {
 		return NULL;
 	}
 
-	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
-		String n = mi.getSimpleName(), cn = ic.getSimpleName();
-		return isOneOf(n, "create","from","fromValue","parse","valueOf","builder")
-			|| (n.startsWith("from") && n.substring(4).equals(cn))
-			|| (n.startsWith("for") && n.substring(3).equals(cn))
-			|| (n.startsWith("parse") && n.substring(5).equals(cn));
-	}
-
-	/**
-	 * Constructs a new instance of the specified class from the specified string.
-	 *
-	 * <p>
-	 * Class must be one of the following:
-	 * <ul>
-	 * 	<li>Have a public constructor that takes in a single <c>String</c> argument.
-	 * 	<li>Have a static <c>fromString(String)</c> (or related) method.
-	 * 	<li>Be an <c>enum</c>.
-	 * </ul>
-	 *
-	 * @param <T> The class type.
-	 * @param c The class type.
-	 * @param s The string to create the instance from.
-	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
-	 */
-	public static <T> T fromString(Class<T> c, String s) {
-		Mutater<String,T> t = get(String.class, c);
-		return t == null ? null : t.mutate(s);
-	}
-
-	/**
-	 * Converts an object to a string.
-	 *
-	 * <p>
-	 * Normally, this is just going to call <c>toString()</c> on the object.
-	 * However, the {@link Locale} and {@link TimeZone} objects are treated special so that the returned value
-	 * works with the {@link #fromString(Class, String)} method.
-	 *
-	 * @param o The object to convert to a string.
-	 * @return The stringified object, or <jk>null</jk> if the object was <jk>null</jk>.
-	 */
-	@SuppressWarnings({ "unchecked" })
-	public static String toString(Object o) {
-		if (o == null)
-			return null;
-		Mutater<Object,String> t = (Mutater<Object,String>)get(o.getClass(), String.class);
-		return t == null ? o.toString() : t.mutate(o);
-	}
-
 	private static MethodInfo findToXMethod(ClassInfo ic, ClassInfo oc) {
 		String tn = oc.getReadableName();
 		return ic.getPublicMethod(
@@ -309,5 +301,13 @@ public class Mutaters {
 			&& x.getSimpleName().startsWith("to")
 			&& x.getSimpleName().substring(2).equalsIgnoreCase(tn)
 		);
+	}
+
+	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
+		String n = mi.getSimpleName(), cn = ic.getSimpleName();
+		return isOneOf(n, "create","from","fromValue","parse","valueOf","builder")
+			|| (n.startsWith("from") && n.substring(4).equals(cn))
+			|| (n.startsWith("for") && n.substring(3).equals(cn))
+			|| (n.startsWith("parse") && n.substring(5).equals(cn));
 	}
 }

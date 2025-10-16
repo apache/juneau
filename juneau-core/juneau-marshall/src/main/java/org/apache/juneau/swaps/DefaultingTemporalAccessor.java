@@ -52,6 +52,40 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 	}
 
 	@Override /* Overridden from TemporalAccessor */
+	public int get(TemporalField field) {
+		if (inner.isSupported(field))
+			return inner.get(field);
+		return (int)getLong(field);
+	}
+
+	@Override /* Overridden from TemporalAccessor */
+	public long getLong(TemporalField field) {
+
+		if (isSupported(field))
+			return inner.getLong(field);
+
+		if (field == INSTANT_SECONDS)
+			return zdt().toEpochSecond();
+
+		if (field == EPOCH_DAY)
+			return zdt().toLocalDate().toEpochDay();
+
+		if (field == YEAR) {
+			if (isSupported(INSTANT_SECONDS))
+	    		return zdt().toLocalDate().getYear();
+			return 1970;
+		}
+
+		if (field == MONTH_OF_YEAR) {
+			if (isSupported(INSTANT_SECONDS))
+	    		return zdt().toLocalDate().getMonthValue();
+			return 1;
+		}
+
+		return 0;
+	}
+
+	@Override /* Overridden from TemporalAccessor */
 	public boolean isSupported(TemporalField field) {
 		return inner.isSupported(field);
 	}
@@ -102,40 +136,6 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 		}
 
 		return null;
-	}
-
-	@Override /* Overridden from TemporalAccessor */
-	public long getLong(TemporalField field) {
-
-		if (isSupported(field))
-			return inner.getLong(field);
-
-		if (field == INSTANT_SECONDS)
-			return zdt().toEpochSecond();
-
-		if (field == EPOCH_DAY)
-			return zdt().toLocalDate().toEpochDay();
-
-		if (field == YEAR) {
-			if (isSupported(INSTANT_SECONDS))
-	    		return zdt().toLocalDate().getYear();
-			return 1970;
-		}
-
-		if (field == MONTH_OF_YEAR) {
-			if (isSupported(INSTANT_SECONDS))
-	    		return zdt().toLocalDate().getMonthValue();
-			return 1;
-		}
-
-		return 0;
-	}
-
-	@Override /* Overridden from TemporalAccessor */
-	public int get(TemporalField field) {
-		if (inner.isSupported(field))
-			return inner.get(field);
-		return (int)getLong(field);
 	}
 
 	private int iget(TemporalField field) {

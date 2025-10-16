@@ -36,6 +36,7 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class XmlWriter extends SerializerWriter {
 
 	private String defaultNsPrefix;
@@ -71,343 +72,97 @@ public class XmlWriter extends SerializerWriter {
 		this.defaultNsPrefix = w.defaultNsPrefix;
 	}
 
-	/**
-	 * Writes an opening tag to the output:  <code><xt>&lt;ns:name</xt></code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter oTag(String ns, String name, boolean needsEncoding) {
-		w('<');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			w(ns).w(':');
-		if (needsEncoding)
-			XmlUtils.encodeElementName(out, name);
-		else
-			append(name);
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(char c) {
+		try {
+			out.write(c);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(char[] value) {
+		super.append(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(int indent, char c) {
+		super.append(indent, c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(int indent, String text) {
+		super.append(indent, text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(Object text) {
+		super.append(text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(String text) {
+		super.append(text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendIf(boolean flag, char value) {
+		super.appendIf(flag, value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendIf(boolean flag, String value) {
+		super.appendIf(flag, value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendln(int indent, String text) {
+		super.appendln(indent, text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendln(String text) {
+		super.appendln(text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendUri(Object value) {
+		super.appendUri(value);
 		return this;
 	}
 
 	/**
-	 * Shortcut for <code>oTag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter oTag(String ns, String name) {
-		return oTag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter oTag(String name) {
-		return oTag(null, name, false);
-	}
-
-	/**
-	 * Shortcut for <c>i(indent).oTag(ns, name, needsEncoding);</c>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) {
-		return i(indent).oTag(ns, name, needsEncoding);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).oTag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter oTag(int indent, String ns, String name) {
-		return i(indent).oTag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter oTag(int indent, String name) {
-		return i(indent).oTag(null, name, false);
-	}
-
-	/**
-	 * Closes a tag.
-	 *
-	 * <p>
-	 * Shortcut for <code>append(<js>'-&gt;'</js>);</code>
-	 *
-	 * @return This object.
-	 */
-	public XmlWriter cTag() {
-		w('>');
-		return this;
-	}
-
-	/**
-	 * Closes an empty tag.
-	 *
-	 * <p>
-	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'-&gt;'</js>);</code>
-	 *
-	 * @return This object.
-	 */
-	public XmlWriter ceTag() {
-		w('/').w('>');
-		return this;
-	}
-
-	/**
-	 * Writes a closed tag to the output:  <code><xt>&lt;ns:name/&gt;</xt></code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter tag(String ns, String name, boolean needsEncoding) {
-		w('<');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			w(ns).w(':');
-		if (needsEncoding)
-			XmlUtils.encodeElementName(out, name);
-		else
-			w(name);
-		w('/').w('>');
-		return this;
-	}
-
-	/**
-	 * Shortcut for <code>tag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter tag(String ns, String name) {
-		return tag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter tag(String name) {
-		return tag(null, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).tag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter tag(int indent, String name) {
-		return i(indent).tag(name);
-	}
-
-	/**
-	 * Shortcut for <c>i(indent).tag(ns, name, needsEncoding);</c>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) {
-		return i(indent).tag(ns, name, needsEncoding);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).tag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter tag(int indent, String ns, String name) {
-		return i(indent).tag(ns, name);
-	}
-
-	/**
-	 * Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter sTag(String ns, String name, boolean needsEncoding) {
-		oTag(ns, name, needsEncoding).w('>');
-		return this;
-	}
-
-	/**
-	 * Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter sTag(String ns, String name) {
-		return sTag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter sTag(String name) {
-		return sTag(null, name);
-	}
-
-	/**
-	 * Shortcut for <c>i(indent).sTag(ns, name, needsEncoding);</c>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) {
-		return i(indent).sTag(ns, name, needsEncoding);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).sTag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter sTag(int indent, String ns, String name) {
-		return i(indent).sTag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter sTag(int indent, String name) {
-		return i(indent).sTag(null, name, false);
-	}
-
-	/**
-	 * Writes an end tag to the output:  <code><xt>&lt;/ns:name&gt;</xt></code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter eTag(String ns, String name, boolean needsEncoding) {
-		w('<').w('/');
-		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			w(ns).w(':');
-		if (needsEncoding)
-			XmlUtils.encodeElementName(out, name);
-		else
-			append(name);
-		w('>');
-		return this;
-	}
-
-	/**
-	 * Shortcut for <code>eTag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter eTag(String ns, String name) {
-		return eTag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter eTag(String name) {
-		return eTag(null, name);
-	}
-
-	/**
-	 * Shortcut for <c>i(indent).eTag(ns, name, needsEncoding);</c>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
-	 * @return This object.
-	 */
-	public XmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) {
-		return i(indent).eTag(ns, name, needsEncoding);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).eTag(ns, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter eTag(int indent, String ns, String name) {
-		return i(indent).eTag(ns, name, false);
-	}
-
-	/**
-	 * Shortcut for <code>i(indent).eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
-	 *
-	 * @param indent The number of prefix tabs to add.
-	 * @param name The element name.
-	 * @return This object.
-	 */
-	public XmlWriter eTag(int indent, String name) {
-		return i(indent).eTag(name);
-	}
-
-	/**
-	 * Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code>
+	 * Same as {@link #attr(String, String, Object)}, except pass in a {@link Namespace} object for the namespace.
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
-	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) {
-		return oAttr(ns, name).q().attrValue(value, valNeedsEncoding).q();
+	public XmlWriter attr(Namespace ns, String name, Object value) {
+		return oAttr(ns == null ? null : ns.name, name).q().attrValue(value, false).q();
+	}
+
+	/**
+	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code>
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value.
+	 * @return This object.
+	 */
+	public XmlWriter attr(String name, Object value) {
+		return attr((String)null, name, value);
 	}
 
 	/**
@@ -435,26 +190,201 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Same as {@link #attr(String, String, Object)}, except pass in a {@link Namespace} object for the namespace.
+	 * Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code>
 	 *
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @param value The attribute value.
+	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter attr(Namespace ns, String name, Object value) {
-		return oAttr(ns == null ? null : ns.name, name).q().attrValue(value, false).q();
+	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) {
+		return oAttr(ns, name).q().attrValue(value, valNeedsEncoding).q();
 	}
 
 	/**
-	 * Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code>
+	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
 	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
-	 * @param value The attribute value.
+	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
 	 */
-	public XmlWriter attr(String name, Object value) {
-		return attr((String)null, name, value);
+	public XmlWriter attrUri(Namespace ns, String name, Object value) {
+		return attr(ns, name, uriResolver.resolve(value));
+	}
+
+	/**
+	 * Append an attribute with a URI value.
+	 *
+	 * @param name The attribute name.
+	 * @param value The attribute value.  Can be any object whose <c>toString()</c> method returns a URI.
+	 * @return This object.
+	 */
+	public XmlWriter attrUri(String name, Object value) {
+		return attrUri((String)null, name, value);
+	}
+
+	/**
+	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The attribute name.
+	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
+	 * @return This object.
+	 */
+	public XmlWriter attrUri(String ns, String name, Object value) {
+		return attr(ns, name, uriResolver.resolve(value), true);
+	}
+
+	/**
+	 * Closes an empty tag.
+	 *
+	 * <p>
+	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'-&gt;'</js>);</code>
+	 *
+	 * @return This object.
+	 */
+	public XmlWriter ceTag() {
+		w('/').w('>');
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter cr(int depth) {
+		super.cr(depth);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter cre(int depth) {
+		super.cre(depth);
+		return this;
+	}
+
+	/**
+	 * Closes a tag.
+	 *
+	 * <p>
+	 * Shortcut for <code>append(<js>'-&gt;'</js>);</code>
+	 *
+	 * @return This object.
+	 */
+	public XmlWriter cTag() {
+		w('>');
+		return this;
+	}
+
+	/**
+	 * Shortcut for <code>i(indent).eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter eTag(int indent, String name) {
+		return i(indent).eTag(name);
+	}
+
+	/**
+	 * Shortcut for <code>i(indent).eTag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter eTag(int indent, String ns, String name) {
+		return i(indent).eTag(ns, name, false);
+	}
+
+	/**
+	 * Shortcut for <c>i(indent).eTag(ns, name, needsEncoding);</c>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) {
+		return i(indent).eTag(ns, name, needsEncoding);
+	}
+
+	/**
+	 * Shortcut for <code>eTag(<jk>null</jk>, name, <jk>false</jk>);</code>
+	 *
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter eTag(String name) {
+		return eTag(null, name);
+	}
+
+	/**
+	 * Shortcut for <code>eTag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter eTag(String ns, String name) {
+		return eTag(ns, name, false);
+	}
+
+	/**
+	 * Writes an end tag to the output:  <code><xt>&lt;/ns:name&gt;</xt></code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter eTag(String ns, String name, boolean needsEncoding) {
+		w('<').w('/');
+		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+			w(ns).w(':');
+		if (needsEncoding)
+			XmlUtils.encodeElementName(out, name);
+		else
+			append(name);
+		w('>');
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter i(int indent) {
+		super.i(indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter ie(int indent) {
+		super.ie(indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter nl(int indent) {
+		super.nl(indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter nlIf(boolean flag, int indent) {
+		super.nlIf(flag, indent);
+		return this;
+	}
+
+	/**
+	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The attribute name.
+	 * @return This object.
+	 */
+	public XmlWriter oAttr(Namespace ns, String name) {
+		return oAttr(ns == null ? null : ns.name, name);
 	}
 
 	/**
@@ -473,49 +403,229 @@ public class XmlWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code>
+	 * Shortcut for <code>i(indent).oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
-	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The attribute name.
+	 * @param indent The number of prefix tabs to add.
+	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter oAttr(Namespace ns, String name) {
-		return oAttr(ns == null ? null : ns.name, name);
+	public XmlWriter oTag(int indent, String name) {
+		return i(indent).oTag(null, name, false);
 	}
 
 	/**
-	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
+	 * Shortcut for <code>i(indent).oTag(ns, name, <jk>false</jk>);</code>
 	 *
+	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The attribute name.
-	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
+	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter attrUri(Namespace ns, String name, Object value) {
-		return attr(ns, name, uriResolver.resolve(value));
+	public XmlWriter oTag(int indent, String ns, String name) {
+		return i(indent).oTag(ns, name, false);
 	}
 
 	/**
-	 * Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code>
+	 * Shortcut for <c>i(indent).oTag(ns, name, needsEncoding);</c>
 	 *
+	 * @param indent The number of prefix tabs to add.
 	 * @param ns The namespace.  Can be <jk>null</jk>.
-	 * @param name The attribute name.
-	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
 	 */
-	public XmlWriter attrUri(String ns, String name, Object value) {
-		return attr(ns, name, uriResolver.resolve(value), true);
+	public XmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) {
+		return i(indent).oTag(ns, name, needsEncoding);
 	}
 
 	/**
-	 * Append an attribute with a URI value.
+	 * Shortcut for <code>oTag(<jk>null</jk>, name, <jk>false</jk>);</code>
 	 *
-	 * @param name The attribute name.
-	 * @param value The attribute value.  Can be any object whose <c>toString()</c> method returns a URI.
+	 * @param name The element name.
 	 * @return This object.
 	 */
-	public XmlWriter attrUri(String name, Object value) {
-		return attrUri((String)null, name, value);
+	public XmlWriter oTag(String name) {
+		return oTag(null, name, false);
+	}
+
+	/**
+	 * Shortcut for <code>oTag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter oTag(String ns, String name) {
+		return oTag(ns, name, false);
+	}
+
+	/**
+	 * Writes an opening tag to the output:  <code><xt>&lt;ns:name</xt></code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter oTag(String ns, String name, boolean needsEncoding) {
+		w('<');
+		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+			w(ns).w(':');
+		if (needsEncoding)
+			XmlUtils.encodeElementName(out, name);
+		else
+			append(name);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter q() {
+		super.q();
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter s() {
+		super.s();
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter sIf(boolean flag) {
+		super.sIf(flag);
+		return this;
+	}
+	/**
+	 * Shortcut for <code>i(indent).sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter sTag(int indent, String name) {
+		return i(indent).sTag(null, name, false);
+	}
+	/**
+	 * Shortcut for <code>i(indent).sTag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter sTag(int indent, String ns, String name) {
+		return i(indent).sTag(ns, name, false);
+	}
+	/**
+	 * Shortcut for <c>i(indent).sTag(ns, name, needsEncoding);</c>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) {
+		return i(indent).sTag(ns, name, needsEncoding);
+	}
+	/**
+	 * Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code>
+	 *
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter sTag(String name) {
+		return sTag(null, name);
+	}
+	/**
+	 * Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter sTag(String ns, String name) {
+		return sTag(ns, name, false);
+	}
+	/**
+	 * Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter sTag(String ns, String name, boolean needsEncoding) {
+		oTag(ns, name, needsEncoding).w('>');
+		return this;
+	}
+	/**
+	 * Shortcut for <code>i(indent).tag(<jk>null</jk>, name, <jk>false</jk>);</code>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter tag(int indent, String name) {
+		return i(indent).tag(name);
+	}
+	/**
+	 * Shortcut for <code>i(indent).tag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter tag(int indent, String ns, String name) {
+		return i(indent).tag(ns, name);
+	}
+	/**
+	 * Shortcut for <c>i(indent).tag(ns, name, needsEncoding);</c>
+	 *
+	 * @param indent The number of prefix tabs to add.
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) {
+		return i(indent).tag(ns, name, needsEncoding);
+	}
+	/**
+	 * Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code>
+	 *
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter tag(String name) {
+		return tag(null, name, false);
+	}
+	/**
+	 * Shortcut for <code>tag(ns, name, <jk>false</jk>);</code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @return This object.
+	 */
+	public XmlWriter tag(String ns, String name) {
+		return tag(ns, name, false);
+	}
+	/**
+	 * Writes a closed tag to the output:  <code><xt>&lt;ns:name/&gt;</xt></code>
+	 *
+	 * @param ns The namespace.  Can be <jk>null</jk>.
+	 * @param name The element name.
+	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
+	 * @return This object.
+	 */
+	public XmlWriter tag(String ns, String name, boolean needsEncoding) {
+		w('<');
+		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
+			w(ns).w(':');
+		if (needsEncoding)
+			XmlUtils.encodeElementName(out, name);
+		else
+			w(name);
+		w('/').w('>');
+		return this;
 	}
 
 	/**
@@ -553,6 +663,23 @@ public class XmlWriter extends SerializerWriter {
 		return this;
 	}
 
+	@Override /* Overridden from Object */
+	public String toString() {
+		return out.toString();
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter w(char c) {
+		super.w(c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter w(String s) {
+		super.w(s);
+		return this;
+	}
+
 	private XmlWriter attrValue(Object value, boolean needsEncoding) {
 		if (needsEncoding)
 			XmlUtils.encodeAttrValue(out, value, this.trimStrings);
@@ -561,131 +688,5 @@ public class XmlWriter extends SerializerWriter {
 		else
 			append(value);
 		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter cr(int depth) {
-		super.cr(depth);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter cre(int depth) {
-		super.cre(depth);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendln(int indent, String text) {
-		super.appendln(indent, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendln(String text) {
-		super.appendln(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(int indent, String text) {
-		super.append(indent, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(int indent, char c) {
-		super.append(indent, c);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter s() {
-		super.s();
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter q() {
-		super.q();
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter i(int indent) {
-		super.i(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter ie(int indent) {
-		super.ie(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter nl(int indent) {
-		super.nl(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(Object text) {
-		super.append(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(String text) {
-		super.append(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(char c) {
-		try {
-			out.write(c);
-		} catch (IOException e) {
-			throw new SerializeException(e);
-		}
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter w(char c) {
-		super.w(c);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter w(String s) {
-		super.w(s);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendUri(Object value) {
-		super.appendUri(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter append(char[] value) {
-		super.append(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter sIf(boolean flag) {
-		super.sIf(flag);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter nlIf(boolean flag, int indent) {
-		super.nlIf(flag, indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendIf(boolean flag, String value) {
-		super.appendIf(flag, value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public XmlWriter appendIf(boolean flag, char value) {
-		super.appendIf(flag, value);
-		return this;
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return out.toString();
 	}
 }

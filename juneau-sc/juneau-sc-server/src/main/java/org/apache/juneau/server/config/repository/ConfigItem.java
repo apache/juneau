@@ -22,11 +22,11 @@ import org.apache.juneau.json.annotation.Json;
 @SuppressWarnings("javadoc")
 public class ConfigItem {
 
+	private String value;
+
 	public ConfigItem(String value) {
 		this.value = value;
 	}
-
-	private String value;
 
 	public String getValue() {
 		return value;

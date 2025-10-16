@@ -59,13 +59,6 @@ public class AnnotationImpl implements Annotation {
 	}
 
 	/**
-	 * This method must be called at the end of initialization to calculate the hashCode one time.
-	 */
-	protected void postConstruct() {
-		this.hashCode = AnnotationUtils.hashCode(this);
-	}
-
-	/**
 	 * Implements the {@link Annotation#annotationType()} method for child classes.
 	 *
 	 * @return This class.
@@ -86,17 +79,17 @@ public class AnnotationImpl implements Annotation {
 	}
 
 	@Override /* Overridden from Object */
-	public int hashCode() {
-		if (hashCode == -1)
-			throw new IllegalArgumentException("Programming error. postConstruct() was never called on annotation.");
-		return hashCode;
-	}
-
-	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		if (!annotationType.isInstance(o))
 			return false;
 		return AnnotationUtils.equals(this, (Annotation)o);
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		if (hashCode == -1)
+			throw new IllegalArgumentException("Programming error. postConstruct() was never called on annotation.");
+		return hashCode;
 	}
 
 	/**
@@ -119,5 +112,12 @@ public class AnnotationImpl implements Annotation {
 	@Override /* Overridden from Object */
 	public String toString() {
 		return toMap().asString();
+	}
+
+	/**
+	 * This method must be called at the end of initialization to calculate the hashCode one time.
+	 */
+	protected void postConstruct() {
+		this.hashCode = AnnotationUtils.hashCode(this);
 	}
 }

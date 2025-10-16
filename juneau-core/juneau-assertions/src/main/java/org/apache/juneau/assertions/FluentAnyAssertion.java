@@ -150,21 +150,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentAnyAssertion(T value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -185,6 +170,21 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentAnyAssertion(T value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -203,83 +203,40 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	/**
-	 * Converts this object assertion into a primitive int array assertion.
+	 * Converts this object assertion into a bean assertion.
 	 *
 	 * @return A new assertion.
-	 * @throws AssertionError If object is not an int array.
+	 * @throws AssertionError If object is not a bean.
 	 */
-	public FluentPrimitiveArrayAssertion<Integer,int[],R> asIntArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(int[].class), returns());
+	public FluentBeanAssertion<T,R> asBean() {
+		return new FluentBeanAssertion<>(this, orElse(null), returns());
 	}
 
 	/**
-	 * Converts this object assertion into a primitive long array assertion.
+	 * Converts this object assertion into a bean assertion.
 	 *
+	 * @param <T2> The bean type.
+	 * @param beanType The bean type.
 	 * @return A new assertion.
-	 * @throws AssertionError If object is not an long array.
+	 * @throws AssertionError If object is not a bean.
 	 */
-	public FluentPrimitiveArrayAssertion<Long,long[],R> asLongArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(long[].class), returns());
+	public <T2> FluentBeanAssertion<T2,R> asBean(Class<T2> beanType) {
+		Utils.assertArgNotNull("beanType", beanType);
+		return new FluentBeanAssertion<>(this, cast(beanType), returns());
 	}
 
 	/**
-	 * Converts this object assertion into a primitive short array assertion.
+	 * Converts this object assertion into a list-of-beans assertion.
 	 *
+	 * @param <T2> The bean type.
+	 * @param beanType The bean type.
 	 * @return A new assertion.
-	 * @throws AssertionError If object is not an short array.
+	 * @throws AssertionError If object is not a bean.
 	 */
-	public FluentPrimitiveArrayAssertion<Short,short[],R> asShortArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(short[].class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a primitive float array assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not an float array.
-	 */
-	public FluentPrimitiveArrayAssertion<Float,float[],R> asFloatArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(float[].class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a primitive double array assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not an double array.
-	 */
-	public FluentPrimitiveArrayAssertion<Double,double[],R> asDoubleArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(double[].class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a primitive char array assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not an char array.
-	 */
-	public FluentPrimitiveArrayAssertion<Character,char[],R> asCharArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(char[].class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a primitive byte array assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not an byte array.
-	 */
-	public FluentPrimitiveArrayAssertion<Byte,byte[],R> asByteArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(byte[].class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a primitive boolean array assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not an boolean array.
-	 */
-	public FluentPrimitiveArrayAssertion<Boolean,boolean[],R> asBooleanArray() throws AssertionError {
-		return new FluentPrimitiveArrayAssertion<>(this, cast(boolean[].class), returns());
+	@SuppressWarnings("unchecked")
+	public <T2> FluentBeanListAssertion<T2,R> asBeanList(Class<T2> beanType) {
+		Utils.assertArgNotNull("beanType", beanType);
+		return new FluentBeanListAssertion<>(this, cast(List.class), returns());
 	}
 
 	/**
@@ -293,6 +250,26 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	/**
+	 * Converts this object assertion into a primitive boolean array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an boolean array.
+	 */
+	public FluentPrimitiveArrayAssertion<Boolean,boolean[],R> asBooleanArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(boolean[].class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a primitive byte array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an byte array.
+	 */
+	public FluentPrimitiveArrayAssertion<Byte,byte[],R> asByteArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(byte[].class), returns());
+	}
+
+	/**
 	 * Converts this object assertion into a byte array assertion.
 	 *
 	 * @return A new assertion.
@@ -300,6 +277,16 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 */
 	public FluentByteArrayAssertion<R> asBytes() {
 		return new FluentByteArrayAssertion<>(this, cast(byte[].class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a primitive char array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an char array.
+	 */
+	public FluentPrimitiveArrayAssertion<Character,char[],R> asCharArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(char[].class), returns());
 	}
 
 	/**
@@ -320,19 +307,10 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a collection.
 	 */
+	@SuppressWarnings("unchecked")
 	public <E> FluentCollectionAssertion<E,R> asCollection(Class<E> elementType) {
 		Utils.assertArgNotNull("elementType", elementType);
 		return new FluentCollectionAssertion<>(this, cast(Collection.class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a collection assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a collection.
-	 */
-	public FluentStringListAssertion<R> asStringList() {
-		return new FluentStringListAssertion<>(this, cast(List.class), returns());
 	}
 
 	/**
@@ -342,6 +320,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an instance of {@link Comparable}.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T2 extends Comparable<T2>> FluentComparableAssertion<T2,R> asComparable() {
 		return new FluentComparableAssertion<>(this, (T2)cast(Comparable.class), returns());
 	}
@@ -357,6 +336,36 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	/**
+	 * Converts this object assertion into a primitive double array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an double array.
+	 */
+	public FluentPrimitiveArrayAssertion<Double,double[],R> asDoubleArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(double[].class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a primitive float array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an float array.
+	 */
+	public FluentPrimitiveArrayAssertion<Float,float[],R> asFloatArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(float[].class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a primitive int array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an int array.
+	 */
+	public FluentPrimitiveArrayAssertion<Integer,int[],R> asIntArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(int[].class), returns());
+	}
+
+	/**
 	 * Converts this object assertion into an integer assertion.
 	 *
 	 * @return A new assertion.
@@ -364,16 +373,6 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 */
 	public FluentIntegerAssertion<R> asInteger() {
 		return new FluentIntegerAssertion<>(this, cast(Integer.class), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a long assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a long.
-	 */
-	public FluentLongAssertion<R> asLong() {
-		return new FluentLongAssertion<>(this, cast(Long.class), returns());
 	}
 
 	/**
@@ -394,9 +393,30 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a list.
 	 */
+	@SuppressWarnings("unchecked")
 	public <E> FluentListAssertion<E,R> asList(Class<E> elementType) {
 		Utils.assertArgNotNull("elementType", elementType);
 		return new FluentListAssertion<>(this, cast(List.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a long assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a long.
+	 */
+	public FluentLongAssertion<R> asLong() {
+		return new FluentLongAssertion<>(this, cast(Long.class), returns());
+	}
+
+	/**
+	 * Converts this object assertion into a primitive long array assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an long array.
+	 */
+	public FluentPrimitiveArrayAssertion<Long,long[],R> asLongArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(long[].class), returns());
 	}
 
 	/**
@@ -419,6 +439,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a map.
 	 */
+	@SuppressWarnings("unchecked")
 	public <K,V> FluentMapAssertion<K,V,R> asMap(Class<K> keyType, Class<V> valueType) {
 		Utils.assertArgNotNull("keyType", keyType);
 		Utils.assertArgNotNull("valueType", valueType);
@@ -426,39 +447,24 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	/**
-	 * Converts this object assertion into a bean assertion.
+	 * Converts this object assertion into a primitive short array assertion.
 	 *
-	 * @param <T2> The bean type.
-	 * @param beanType The bean type.
 	 * @return A new assertion.
-	 * @throws AssertionError If object is not a bean.
+	 * @throws AssertionError If object is not an short array.
 	 */
-	public <T2> FluentBeanAssertion<T2,R> asBean(Class<T2> beanType) {
-		Utils.assertArgNotNull("beanType", beanType);
-		return new FluentBeanAssertion<>(this, cast(beanType), returns());
+	public FluentPrimitiveArrayAssertion<Short,short[],R> asShortArray() throws AssertionError {
+		return new FluentPrimitiveArrayAssertion<>(this, cast(short[].class), returns());
 	}
 
 	/**
-	 * Converts this object assertion into a bean assertion.
+	 * Converts this object assertion into a collection assertion.
 	 *
 	 * @return A new assertion.
-	 * @throws AssertionError If object is not a bean.
+	 * @throws AssertionError If object is not a collection.
 	 */
-	public FluentBeanAssertion<T,R> asBean() {
-		return new FluentBeanAssertion<>(this, orElse(null), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a list-of-beans assertion.
-	 *
-	 * @param <T2> The bean type.
-	 * @param beanType The bean type.
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a bean.
-	 */
-	public <T2> FluentBeanListAssertion<T2,R> asBeanList(Class<T2> beanType) {
-		Utils.assertArgNotNull("beanType", beanType);
-		return new FluentBeanListAssertion<>(this, cast(List.class), returns());
+	@SuppressWarnings("unchecked")
+	public FluentStringListAssertion<R> asStringList() {
+		return new FluentStringListAssertion<>(this, cast(List.class), returns());
 	}
 
 	/**

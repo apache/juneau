@@ -93,7 +93,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#footer() footer()}
- * 		<li class='jm'>{@link HtmlBuilder#footer(Object, Object...) footer(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#footer(Object...) footer(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -118,10 +118,6 @@ public class Footer extends HtmlElementMixed {
 	public Footer(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Footer _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -131,6 +127,30 @@ public class Footer extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Footer accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Footer attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Footer attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Footer child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Footer children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -491,30 +511,6 @@ public class Footer extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Footer translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Footer child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Footer children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Footer attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Footer attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

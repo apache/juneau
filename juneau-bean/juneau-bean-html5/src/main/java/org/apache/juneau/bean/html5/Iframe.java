@@ -68,7 +68,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#iframe() iframe()}
- * 		<li class='jm'>{@link HtmlBuilder#iframe(Object, Object...) iframe(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#iframe(Object...) iframe(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -94,128 +94,6 @@ public class Iframe extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Vertical dimension.
-	 *
-	 * @param height
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Iframe height(Object value) {
-		attr("height", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the iframe. This name can be used as the target for links
-	 * and forms, allowing content to be loaded into the iframe.
-	 *
-	 * <p>
-	 * The name should be unique within the document.
-	 *
-	 * @param name The name of the iframe for targeting.
-	 * @return This object.
-	 */
-	public Iframe name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox">sandbox</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies security restrictions for the iframe content. Multiple restrictions can be
-	 * specified as a space-separated list.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"allow-scripts"</js> - Allow JavaScript execution</li>
-	 * 	<li><js>"allow-same-origin"</js> - Allow same-origin requests</li>
-	 * 	<li><js>"allow-forms"</js> - Allow form submission</li>
-	 * 	<li><js>"allow-popups"</js> - Allow popup windows</li>
-	 * 	<li><js>"allow-top-navigation"</js> - Allow navigation of top-level browsing context</li>
-	 * </ul>
-	 *
-	 * @param sandbox Security restrictions for the iframe content.
-	 * @return This object.
-	 */
-	public Iframe sandbox(String value) {
-		attr("sandbox", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Iframe src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-srcdoc">srcdoc</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies the HTML content to be displayed in the iframe. This content is rendered
-	 * directly within the iframe without requiring a separate HTTP request.
-	 *
-	 * <p>
-	 * The content should be valid HTML that will be displayed in the iframe.
-	 *
-	 * @param srcdoc The HTML content to display in the iframe.
-	 * @return This object.
-	 */
-	public Iframe srcdoc(String value) {
-		attr("srcdoc", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Iframe width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Iframe _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -229,6 +107,29 @@ public class Iframe extends HtmlElementMixed {
 	}
 
 	@Override /* Overridden from HtmlElement */
+	public Iframe attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Iframe attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Iframe child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Iframe children(Object...value) {
+		super.children(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
 	public Iframe contenteditable(Object value) {
 		super.contenteditable(value);
 		return this;
@@ -237,6 +138,23 @@ public class Iframe extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Iframe dir(String value) {
 		super.dir(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Vertical dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Iframe height(Object value) {
+		attr("height", value);
 		return this;
 	}
 
@@ -255,6 +173,24 @@ public class Iframe extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Iframe lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the iframe. This name can be used as the target for links
+	 * and forms, allowing content to be loaded into the iframe.
+	 *
+	 * <p>
+	 * The name should be unique within the document.
+	 *
+	 * @param value The name of the iframe for targeting.
+	 * @return This object.
+	 */
+	public Iframe name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -558,9 +494,77 @@ public class Iframe extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-sandbox">sandbox</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies security restrictions for the iframe content. Multiple restrictions can be
+	 * specified as a space-separated list.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"allow-scripts"</js> - Allow JavaScript execution</li>
+	 * 	<li><js>"allow-same-origin"</js> - Allow same-origin requests</li>
+	 * 	<li><js>"allow-forms"</js> - Allow form submission</li>
+	 * 	<li><js>"allow-popups"</js> - Allow popup windows</li>
+	 * 	<li><js>"allow-top-navigation"</js> - Allow navigation of top-level browsing context</li>
+	 * </ul>
+	 *
+	 * @param value Security restrictions for the iframe content.
+	 * @return This object.
+	 */
+	public Iframe sandbox(String value) {
+		attr("sandbox", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Iframe spellcheck(Object value) {
 		super.spellcheck(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Iframe src(Object value) {
+		attrUri("src", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-iframe-srcdoc">srcdoc</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies the HTML content to be displayed in the iframe. This content is rendered
+	 * directly within the iframe without requiring a separate HTTP request.
+	 *
+	 * <p>
+	 * The content should be valid HTML that will be displayed in the iframe.
+	 *
+	 * @param value The HTML content to display in the iframe.
+	 * @return This object.
+	 */
+	public Iframe srcdoc(String value) {
+		attr("srcdoc", value);
 		return this;
 	}
 
@@ -588,27 +592,19 @@ public class Iframe extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Iframe child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Iframe children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Iframe attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Iframe attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Iframe width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

@@ -53,47 +53,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Reusable instance of {@link UonParser}, all default settings. */
-	public static final UonParser DEFAULT = new UonParser(create());
-
-	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
-	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default parser, decoding. */
-	public static class Decoding extends UonParser {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Decoding(Builder builder) {
-			super(builder.decoding());
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -115,17 +74,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(UonParser copyFrom) {
-			super(copyFrom);
-			decoding = copyFrom.decoding;
-			validateEnd = copyFrom.validateEnd;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -134,101 +82,17 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public UonParser build() {
-			return cache(CACHE).build(UonParser.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				decoding,
-				validateEnd
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Decode <js>"%xx"</js> sequences.
+		 * Copy constructor.
 		 *
-		 * <p>
-		 * When enabled, URI encoded characters will be decoded.  Otherwise it's assumed that they've already been decoded
-		 * before being passed to this parser.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a decoding UON parser.</jc>
-		 * 	ReaderParser <jv>parser</jv> = UonParser.
-		 * 		.<jsm>create</jsm>()
-		 * 		.decoding()
-		 * 		.build();
-		 *
-		 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
-		 * 	String[] <jv>foo</jv> = <jv>parser</jv>.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
-		 * </p>
-		 *
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder decoding() {
-			return decoding(true);
+		protected Builder(UonParser copyFrom) {
+			super(copyFrom);
+			decoding = copyFrom.decoding;
+			validateEnd = copyFrom.validateEnd;
 		}
 
-		/**
-		 * Same as {@link #decoding()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder decoding(boolean value) {
-			decoding = value;
-			return this;
-		}
-
-		/**
-		 * Validate end.
-		 *
-		 * <p>
-		 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
-		 * the stream consists of only comments or whitespace.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser using strict mode.</jc>
-		 * 	ReaderParser <jv>parser</jv> = UonParser.
-		 * 		.<jsm>create</jsm>()
-		 * 		.validateEnd()
-		 * 		.build();
-		 *
-		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
-		 * 	String <jv>in</jv> = <js>"(foo=bar)(baz=qux)"</js>;
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>in</jv>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder validateEnd() {
-			return validateEnd(true);
-		}
-
-		/**
-		 * Same as {@link #validateEnd()} but allows you to explicitly specify the value.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder validateEnd(boolean value) {
-			validateEnd = value;
-			return this;
-		}
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -242,44 +106,25 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
+		public Builder autoCloseStreams() {
+			super.autoCloseStreams();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder autoCloseStreams(boolean value) {
+			super.autoCloseStreams(value);
 			return this;
 		}
 
@@ -288,7 +133,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			super.beanClassVisibility(value);
 			return this;
 		}
-
 		@Override /* Overridden from Builder */
 		public Builder beanConstructorVisibility(Visibility value) {
 			super.beanConstructorVisibility(value);
@@ -338,14 +182,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -356,14 +200,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -374,14 +218,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -392,14 +236,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -424,6 +268,82 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public UonParser build() {
+			return cache(CACHE).build(UonParser.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder consumes(String value) {
+			super.consumes(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debugOutputLines(int value) {
+			super.debugOutputLines(value);
+			return this;
+		}
+
+		/**
+		 * Decode <js>"%xx"</js> sequences.
+		 *
+		 * <p>
+		 * When enabled, URI encoded characters will be decoded.  Otherwise it's assumed that they've already been decoded
+		 * before being passed to this parser.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a decoding UON parser.</jc>
+		 * 	ReaderParser <jv>parser</jv> = UonParser.
+		 * 		.<jsm>create</jsm>()
+		 * 		.decoding()
+		 * 		.build();
+		 *
+		 *  <jc>// Produces: ["foo bar", "baz quz"].</jc>
+		 * 	String[] <jv>foo</jv> = <jv>parser</jv>.parse(<js>"@(foo%20bar,baz%20qux)"</js>, String[].<jk>class</jk>);
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder decoding() {
+			return decoding(true);
+		}
+
+		/**
+		 * Same as {@link #decoding()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder decoding(boolean value) {
+			decoding = value;
 			return this;
 		}
 
@@ -464,14 +384,20 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, T o) {
 			super.example(pojoClass, o);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
@@ -485,6 +411,15 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		public Builder findFluentSetters(Class<?> on) {
 			super.findFluentSetters(on);
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				decoding,
+				validateEnd
+			);
 		}
 
 		@Override /* Overridden from Builder */
@@ -508,6 +443,12 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		@Override /* Overridden from Builder */
 		public Builder ignoreUnknownEnumValues() {
 			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -536,6 +477,12 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
@@ -560,14 +507,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -590,92 +537,8 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams() {
-			super.autoCloseStreams();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder autoCloseStreams(boolean value) {
-			super.autoCloseStreams(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder consumes(String value) {
-			super.consumes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debugOutputLines(int value) {
-			super.debugOutputLines(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.parser.ParserListener> value) {
-			super.listener(value);
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
 			return this;
 		}
 
@@ -692,6 +555,36 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder trimStrings() {
 			super.trimStrings();
 			return this;
@@ -700,6 +593,30 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		@Override /* Overridden from Builder */
 		public Builder trimStrings(boolean value) {
 			super.trimStrings(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -716,22 +633,80 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		/**
+		 * Validate end.
+		 *
+		 * <p>
+		 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
+		 * the stream consists of only comments or whitespace.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a parser using strict mode.</jc>
+		 * 	ReaderParser <jv>parser</jv> = UonParser.
+		 * 		.<jsm>create</jsm>()
+		 * 		.validateEnd()
+		 * 		.build();
+		 *
+		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
+		 * 	String <jv>in</jv> = <js>"(foo=bar)(baz=qux)"</js>;
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>in</jv>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder validateEnd() {
+			return validateEnd(true);
+		}
+
+		/**
+		 * Same as {@link #validateEnd()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder validateEnd(boolean value) {
+			validateEnd = value;
 			return this;
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/** Default parser, decoding. */
+	public static class Decoding extends UonParser {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Decoding(Builder builder) {
+			super(builder.decoding());
+		}
+	}
+
+	/** Reusable instance of {@link UonParser}, all default settings. */
+	public static final UonParser DEFAULT = new UonParser(create());
+	/** Reusable instance of {@link UonParser} with decodeChars set to true. */
+	public static final UonParser DEFAULT_DECODING = new UonParser.Decoding(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final boolean decoding, validateEnd;
 
 	private final Map<ClassMeta<?>,UonClassMeta> uonClassMetas = new ConcurrentHashMap<>();
@@ -758,9 +733,14 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		return UonParserSession.create(this);
 	}
 
-	@Override /* Overridden from Context */
-	public UonParserSession getSession() {
-		return createSession().build();
+	@Override
+	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
+		return getBeanContext().getClassMeta(c);
+	}
+
+	@Override
+	public <T> ClassMeta<T> getClassMeta(Type t, Type... args) {
+		return getBeanContext().getClassMeta(t, args);
 	}
 
 	@Override /* Overridden from HttpPartParser */
@@ -768,6 +748,50 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		return UonParserSession.create(this).build();
 	}
 
+	@Override /* Overridden from Context */
+	public UonParserSession getSession() {
+		return createSession().build();
+	}
+
+	@Override /* Overridden from UonMetaProvider */
+	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
+		if (bpm == null)
+			return UonBeanPropertyMeta.DEFAULT;
+		UonBeanPropertyMeta m = uonBeanPropertyMetas.get(bpm);
+		if (m == null) {
+			m = new UonBeanPropertyMeta(bpm.getDelegateFor(), this);
+			uonBeanPropertyMetas.put(bpm, m);
+		}
+		return m;
+	}
+	@Override /* Overridden from UonMetaProvider */
+	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
+		UonClassMeta m = uonClassMetas.get(cm);
+		if (m == null) {
+			m = new UonClassMeta(cm, this);
+			uonClassMetas.put(cm, m);
+		}
+		return m;
+	}
+
+	/**
+	 * Converts the specified input to the specified class type.
+	 *
+	 * @param <T> The POJO type to transform the input into.
+	 * @param partType The part type being parsed.
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>May be <jk>null</jk>.
+	 * 	<br>Not all part parsers use the schema information.
+	 * @param in The input being parsed.
+	 * @param toType The POJO type to transform the input into.
+	 * @return The parsed value.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
+	 */
+	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
+		return getPartSession().parse(partType, schema, in, getClassMeta(toType));
+	}
 	/**
 	 * Converts the specified input to the specified class type.
 	 *
@@ -798,25 +822,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 * 	<br>Not all part parsers use the schema information.
 	 * @param in The input being parsed.
 	 * @param toType The POJO type to transform the input into.
-	 * @return The parsed value.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws SchemaValidationException If the input or resulting HTTP part object fails schema validation.
-	 */
-	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Class<T> toType) throws ParseException, SchemaValidationException {
-		return getPartSession().parse(partType, schema, in, getClassMeta(toType));
-	}
-
-	/**
-	 * Converts the specified input to the specified class type.
-	 *
-	 * @param <T> The POJO type to transform the input into.
-	 * @param partType The part type being parsed.
-	 * @param schema
-	 * 	Schema information about the part.
-	 * 	<br>May be <jk>null</jk>.
-	 * 	<br>Not all part parsers use the schema information.
-	 * @param in The input being parsed.
-	 * @param toType The POJO type to transform the input into.
 	 * @param toTypeArgs The generic type arguments of the POJO type to transform the input into.
 	 * @return The parsed value.
 	 * @throws ParseException Malformed input encountered.
@@ -825,37 +830,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, Type toType, Type...toTypeArgs) throws ParseException, SchemaValidationException {
 		return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from UonMetaProvider */
-	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
-		UonClassMeta m = uonClassMetas.get(cm);
-		if (m == null) {
-			m = new UonClassMeta(cm, this);
-			uonClassMetas.put(cm, m);
-		}
-		return m;
-	}
-
-	@Override /* Overridden from UonMetaProvider */
-	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
-		if (bpm == null)
-			return UonBeanPropertyMeta.DEFAULT;
-		UonBeanPropertyMeta m = uonBeanPropertyMetas.get(bpm);
-		if (m == null) {
-			m = new UonBeanPropertyMeta(bpm.getDelegateFor(), this);
-			uonBeanPropertyMetas.put(bpm, m);
-		}
-		return m;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Decode <js>"%xx"</js> sequences enabled
 	 *
@@ -878,20 +852,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 */
 	protected final boolean isValidateEnd() {
 		return validateEnd;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
-		return getBeanContext().getClassMeta(c);
-	}
-
-	@Override
-	public <T> ClassMeta<T> getClassMeta(Type t, Type... args) {
-		return getBeanContext().getClassMeta(t, args);
 	}
 
 	@Override /* Overridden from Context */

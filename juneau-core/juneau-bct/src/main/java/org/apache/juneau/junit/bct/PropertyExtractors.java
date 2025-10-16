@@ -55,96 +55,6 @@ import java.util.*;
  */
 public class PropertyExtractors {
 
-	private PropertyExtractors() {}
-
-	/**
-	 * Standard JavaBean property extractor using reflection.
-	 *
-	 * <p>This extractor serves as the universal fallback for property access, implementing
-	 * comprehensive JavaBean property access patterns. It tries multiple approaches to
-	 * access object properties, providing maximum compatibility with different coding styles.</p>
-	 *
-	 * <h5 class='section'>Property Access Order:</h5>
-	 * <ol>
-	 *    <li><b>{@code is{Property}()}</b> - Boolean property getters (e.g., {@code isActive()})</li>
-	 *    <li><b>{@code get{Property}()}</b> - Standard getter methods (e.g., {@code getName()})</li>
-	 *    <li><b>{@code get(String)}</b> - Map-style property access with property name as parameter</li>
-	 *    <li><b>Fields</b> - Public fields with matching names (searches inheritance hierarchy)</li>
-	 *    <li><b>{@code {property}()}</b> - No-argument methods with exact property name</li>
-	 * </ol>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Property "name" can be accessed via:</jc>
-	 *    <jv>obj</jv>.getName()        <jc>// Standard getter</jc>
-	 *    <jv>obj</jv>.name             <jc>// Public field</jc>
-	 *    <jv>obj</jv>.name()           <jc>// Method with property name</jc>
-	 *    <jv>obj</jv>.get(<js>"name"</js>)       <jc>// Map-style getter</jc>
-	 *
-	 *    <jc>// Property "active" (boolean) can be accessed via:</jc>
-	 *    <jv>obj</jv>.isActive()       <jc>// Boolean getter</jc>
-	 *    <jv>obj</jv>.getActive()      <jc>// Standard getter alternative</jc>
-	 *    <jv>obj</jv>.active           <jc>// Public field</jc>
-	 * </p>
-	 *
-	 * <p><b>Compatibility:</b> This extractor can handle any object type, making it the
-	 * universal fallback. It always returns {@code true} from {@link #canExtract(BeanConverter, Object, String)}.</p>
-	 */
-	public static class ObjectPropertyExtractor implements PropertyExtractor {
-
-		@Override
-		public boolean canExtract(BeanConverter converter, Object o, String name) {
-			return true;
-		}
-
-		@Override
-		public Object extract(BeanConverter converter, Object o, String name) {
-			return
-				safe(() -> {
-					if (o == null)
-						return null;
-					var f = (Field)null;
-					var c = o.getClass();
-					var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
-					var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o);
-					}
-					if (o instanceof Map.Entry<?,?> me) {
-						// Reflection to classes inside java.util are restricted in Java 9+.
-						if ("key".equals(name)) return me.getKey();
-						if ("value".equals(name)) return me.getValue();
-					}
-					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o);
-					}
-					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o, name);
-					}
-					var c2 = c;
-					while (f == null && c2 != null) {
-						f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
-						c2 = c2.getSuperclass();
-					}
-					if (f != null) {
-						f.setAccessible(true);
-						return f.get(o);
-					}
-					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
-					if (m != null) {
-						m.setAccessible(true);
-						return m.invoke(o);
-					}
-					throw new PropertyNotFoundException(name, o.getClass());
-				});
-		}
-	}
-
 	/**
 	 * Property extractor for array and collection objects with numeric indexing and size access.
 	 *
@@ -264,4 +174,94 @@ public class PropertyExtractors {
 			return super.extract(converter, o, name);
 		}
 	}
+
+	/**
+	 * Standard JavaBean property extractor using reflection.
+	 *
+	 * <p>This extractor serves as the universal fallback for property access, implementing
+	 * comprehensive JavaBean property access patterns. It tries multiple approaches to
+	 * access object properties, providing maximum compatibility with different coding styles.</p>
+	 *
+	 * <h5 class='section'>Property Access Order:</h5>
+	 * <ol>
+	 *    <li><b>{@code is{Property}()}</b> - Boolean property getters (e.g., {@code isActive()})</li>
+	 *    <li><b>{@code get{Property}()}</b> - Standard getter methods (e.g., {@code getName()})</li>
+	 *    <li><b>{@code get(String)}</b> - Map-style property access with property name as parameter</li>
+	 *    <li><b>Fields</b> - Public fields with matching names (searches inheritance hierarchy)</li>
+	 *    <li><b>{@code {property}()}</b> - No-argument methods with exact property name</li>
+	 * </ol>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Property "name" can be accessed via:</jc>
+	 *    <jv>obj</jv>.getName()        <jc>// Standard getter</jc>
+	 *    <jv>obj</jv>.name             <jc>// Public field</jc>
+	 *    <jv>obj</jv>.name()           <jc>// Method with property name</jc>
+	 *    <jv>obj</jv>.get(<js>"name"</js>)       <jc>// Map-style getter</jc>
+	 *
+	 *    <jc>// Property "active" (boolean) can be accessed via:</jc>
+	 *    <jv>obj</jv>.isActive()       <jc>// Boolean getter</jc>
+	 *    <jv>obj</jv>.getActive()      <jc>// Standard getter alternative</jc>
+	 *    <jv>obj</jv>.active           <jc>// Public field</jc>
+	 * </p>
+	 *
+	 * <p><b>Compatibility:</b> This extractor can handle any object type, making it the
+	 * universal fallback. It always returns {@code true} from {@link #canExtract(BeanConverter, Object, String)}.</p>
+	 */
+	public static class ObjectPropertyExtractor implements PropertyExtractor {
+
+		@Override
+		public boolean canExtract(BeanConverter converter, Object o, String name) {
+			return true;
+		}
+
+		@Override
+		public Object extract(BeanConverter converter, Object o, String name) {
+			return
+				safe(() -> {
+					if (o == null)
+						return null;
+					var f = (Field)null;
+					var c = o.getClass();
+					var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
+					var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
+					if (m != null) {
+						m.setAccessible(true);
+						return m.invoke(o);
+					}
+					if (o instanceof Map.Entry<?,?> me) {
+						// Reflection to classes inside java.util are restricted in Java 9+.
+						if ("key".equals(name)) return me.getKey();
+						if ("value".equals(name)) return me.getValue();
+					}
+					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get"+n) && x.getParameterCount() == 0).findFirst().orElse(null);
+					if (m != null) {
+						m.setAccessible(true);
+						return m.invoke(o);
+					}
+					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("get") && x.getParameterCount() == 1 && x.getParameterTypes()[0] == String.class).findFirst().orElse(null);
+					if (m != null) {
+						m.setAccessible(true);
+						return m.invoke(o, name);
+					}
+					var c2 = c;
+					while (f == null && c2 != null) {
+						f = Arrays.stream(c2.getDeclaredFields()).filter(x -> x.getName().equals(name)).findFirst().orElse(null);
+						c2 = c2.getSuperclass();
+					}
+					if (f != null) {
+						f.setAccessible(true);
+						return f.get(o);
+					}
+					m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals(name) && x.getParameterCount() == 0).findFirst().orElse(null);
+					if (m != null) {
+						m.setAccessible(true);
+						return m.invoke(o);
+					}
+					throw new PropertyNotFoundException(name, o.getClass());
+				});
+		}
+	}
+
+	private PropertyExtractors() {}
 }

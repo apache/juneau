@@ -64,15 +64,6 @@ public class ResetContent extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public ResetContent(ResetContent copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -87,6 +78,15 @@ public class ResetContent extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public ResetContent(ResetContent copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -95,13 +95,13 @@ public class ResetContent extends BasicHttpResponse {
 		return new ResetContent(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setContent(String value) {
+	public ResetContent setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setContent(HttpEntity value) {
+	public ResetContent setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -119,14 +119,14 @@ public class ResetContent extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public ResetContent setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public ResetContent setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public ResetContent setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

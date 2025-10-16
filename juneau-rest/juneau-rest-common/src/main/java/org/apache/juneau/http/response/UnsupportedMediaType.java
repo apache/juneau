@@ -61,21 +61,23 @@ public class UnsupportedMediaType extends BasicHttpException {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
 	 */
-	public UnsupportedMediaType(Throwable cause, String msg, Object...args) {
-		super(STATUS_CODE, cause, msg, args);
-		setStatusLine(STATUS_LINE.copy());
+	public UnsupportedMediaType() {
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
 	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public UnsupportedMediaType() {
-		this((Throwable)null, REASON_PHRASE);
+	public UnsupportedMediaType(HttpResponse response) {
+		super(response);
+		assertStatusCode(response);
 	}
 
 	/**
@@ -100,15 +102,13 @@ public class UnsupportedMediaType extends BasicHttpException {
 	/**
 	 * Constructor.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public UnsupportedMediaType(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+	public UnsupportedMediaType(Throwable cause, String msg, Object...args) {
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
@@ -128,15 +128,15 @@ public class UnsupportedMediaType extends BasicHttpException {
 	public UnsupportedMediaType copy() {
 		return new UnsupportedMediaType(this);
 	}
-	@Override /* Overridden from BasicRuntimeException */
-	public UnsupportedMediaType setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	@Override /* Overridden from BasicHttpException */
+	public UnsupportedMediaType setContent(HttpEntity value) {
+		super.setContent(value);
 		return this;
 	}
 
-	@Override /* Overridden from BasicRuntimeException */
-	public UnsupportedMediaType setUnmodifiable() {
-		super.setUnmodifiable();
+	@Override /* Overridden from BasicHttpException */
+	public UnsupportedMediaType setContent(String value) {
+		super.setContent(value);
 		return this;
 	}
 
@@ -153,6 +153,12 @@ public class UnsupportedMediaType extends BasicHttpException {
 	}
 
 	@Override /* Overridden from BasicHttpException */
+	public UnsupportedMediaType setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
 	public UnsupportedMediaType setHeaders2(Header...values) {
 		super.setHeaders2(values);
 		return this;
@@ -161,6 +167,12 @@ public class UnsupportedMediaType extends BasicHttpException {
 	@Override /* Overridden from BasicHttpException */
 	public UnsupportedMediaType setLocale2(Locale value) {
 		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public UnsupportedMediaType setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 
@@ -181,7 +193,6 @@ public class UnsupportedMediaType extends BasicHttpException {
 		super.setReasonPhraseCatalog(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpException */
 	public UnsupportedMediaType setStatusCode2(int code) throws IllegalStateException{
 		super.setStatusCode2(code);
@@ -193,21 +204,10 @@ public class UnsupportedMediaType extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
-	@Override /* Overridden from BasicHttpException */
-	public UnsupportedMediaType setHeaders(List<Header> values) {
-		super.setHeaders(values);
-		return this;
-	}
 
-	@Override /* Overridden from BasicHttpException */
-	public UnsupportedMediaType setContent(String value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpException */
-	public UnsupportedMediaType setContent(HttpEntity value) {
-		super.setContent(value);
+	@Override /* Overridden from BasicRuntimeException */
+	public UnsupportedMediaType setUnmodifiable() {
+		super.setUnmodifiable();
 		return this;
 	}
 }

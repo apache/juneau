@@ -126,11 +126,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Via")
 public class Via extends BasicCsvHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Via";
 
@@ -172,11 +167,6 @@ public class Via extends BasicCsvHeader {
 	public static Via of(Supplier<String[]> value) {
 		return value == null ? null : new Via(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

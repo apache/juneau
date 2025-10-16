@@ -28,18 +28,18 @@ import org.apache.juneau.*;
 public interface MsgPackMetaProvider extends AnnotationProvider {
 
 	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm);
-
-	/**
 	 * Returns the language-specific metadata on the specified bean property.
 	 *
 	 * @param bpm The bean property to return the metadata on.
 	 * @return The metadata.
 	 */
 	MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm);
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm);
 }

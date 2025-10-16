@@ -73,6 +73,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RestResponse implements HttpResponse, AutoCloseable {
 
 	private final RestClient client;
@@ -104,143 +105,28 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	}
 
 	/**
-	 * Returns the request object that created this response object.
+	 * Adds a header to this message.
 	 *
-	 * @return The request object that created this response object.
+	 * The header will be appended to the end of the list.
+	 *
+	 * @param header The header to append.
 	 */
-	public RestRequest getRequest() {
-		return request;
+	@Override /* Overridden from HttpMessage */
+	public void addHeader(Header header) {
+		headers.append(header);
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Setters
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Consumes the response body.
+	 * Adds a header to this message.
 	 *
-	 * <p>
-	 * This is equivalent to closing the input stream.
+	 * The header will be appended to the end of the list.
 	 *
-	 * <p>
-	 * Any exceptions thrown during close are logged but not propagated.
-	 *
-	 * @return This object.
+	 * @param name The name of the header.
+	 * @param value The value of the header.
 	 */
-	public RestResponse consume() {
-		close();
-		return this;
+	@Override /* Overridden from HttpMessage */
+	public void addHeader(String name, String value) {
+		headers.append(name, value);
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Status line
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the status code of the response.
-	 *
-	 * Shortcut for calling <code>getStatusLine().getStatusCode()</code>.
-	 *
-	 * @return The status code of the response.
-	 */
-	public int getStatusCode() {
-		return getStatusLine().getStatusCode();
-	}
-
-	/**
-	 * Returns the status line reason phrase of the response.
-	 *
-	 * Shortcut for calling <code>getStatusLine().getReasonPhrase()</code>.
-	 *
-	 * @return The status line reason phrase of the response.
-	 */
-	public String getReasonPhrase() {
-		return getStatusLine().getReasonPhrase();
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Status line assertions
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the response {@link StatusLine} object.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertStatus().asCode().is(200)
-	 * 		.getContent().as(MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentResponseStatusLineAssertion<RestResponse> assertStatus() {
-		return new FluentResponseStatusLineAssertion<>(getStatusLine(), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on the response status code.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertStatus(200)
-	 * 		.getContent().as(MyBean.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param value The value to assert.
-	 * @return A new fluent assertion object.
-	 */
-	public RestResponse assertStatus(int value) {
-		assertStatus().asCode().is(value);
-		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Headers
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Shortcut for calling <code>getHeader(name).asString()</code>.
-	 *
-	 * @param name The header name.
-	 * @return The header value, never <jk>null</jk>
-	 */
-	public Optional<String> getStringHeader(String name) {
-		return getHeader(name).asString();
-	}
-
-	/**
-	 * Shortcut for retrieving the response charset from the <l>Content-Type</l> header.
-	 *
-	 * @return The response charset.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public String getCharacterEncoding() throws RestCallException {
-		Optional<ContentType> ct = getContentType();
-		String s = null;
-		if (ct.isPresent())
-			s = getContentType().get().getParameter("charset");
-		return Utils.isEmpty(s) ? "utf-8" : s;
-	}
-
-	/**
-	 * Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
-	 *
-	 * <p>
-	 * This is equivalent to calling <c>getHeader(<js>"Content-Type"</js>).as(ContentType.<jk>class</jk>)</c>.
-	 *
-	 * @return The response charset.
-	 * @throws RestCallException If REST call failed.
-	 */
-	public Optional<ContentType> getContentType() throws RestCallException {
-		return getHeader("Content-Type").as(ContentType.class);
-	}
-
 	/**
 	 * Provides the ability to perform fluent-style assertions on the response character encoding.
 	 *
@@ -258,82 +144,6 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 */
 	public FluentStringAssertion<RestResponse> assertCharset() throws RestCallException {
 		return new FluentStringAssertion<>(getCharacterEncoding(), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a response header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Validates the content type header is provided.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
-	 *
-	 * 	<jc>// Validates the content type is JSON.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
-	 *
-	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).is(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
-	 *
-	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
-	 *
-	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>);
-	 *
-	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
-	 * </p>
-	 *
-	 * <p>
-	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bjava'>
-	 * 	<jc>// Validates the header and converts it to a bean.</jc>
-	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).isNotEmpty()
-	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>)
-	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return A new fluent assertion object.
-	 */
-	public FluentResponseHeaderAssertion<RestResponse> assertHeader(String name) {
-		return new FluentResponseHeaderAssertion<>(getHeader(name), this);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Body
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the body of the response.
-	 *
-	 * This method can be called multiple times returning the same response body each time.
-	 *
-	 * @return The body of the response.
-	 */
-	public ResponseContent getContent() {
-		return responseContent;
 	}
 
 	/**
@@ -405,7 +215,6 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	public FluentResponseBodyAssertion<RestResponse> assertContent() {
 		return new FluentResponseBodyAssertion<>(responseContent, this);
 	}
-
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
@@ -443,6 +252,104 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		assertContent().asString().isMatches(value);
 		return this;
 	}
+	/**
+	 * Provides the ability to perform fluent-style assertions on a response header.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the content type header is provided.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).exists();
+	 *
+	 * 	<jc>// Validates the content type is JSON.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 *
+	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).contains(<js>"json"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using regular expression.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>);
+	 *
+	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * </p>
+	 *
+	 * <p>
+	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the header and converts it to a bean.</jc>
+	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertHeader(<js>"Content-Type"</js>).isNotEmpty()
+	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return A new fluent assertion object.
+	 */
+	public FluentResponseHeaderAssertion<RestResponse> assertHeader(String name) {
+		return new FluentResponseHeaderAssertion<>(getHeader(name), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response {@link StatusLine} object.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertStatus().asCode().is(200)
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @return A new fluent assertion object.
+	 */
+	public FluentResponseStatusLineAssertion<RestResponse> assertStatus() {
+		return new FluentResponseStatusLineAssertion<>(getStatusLine(), this);
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on the response status code.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertStatus(200)
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param value The value to assert.
+	 * @return A new fluent assertion object.
+	 */
+	public RestResponse assertStatus(int value) {
+		assertStatus().asCode().is(value);
+		return this;
+	}
 
 	/**
 	 * Caches the response body so that it can be read as a stream multiple times.
@@ -457,407 +364,6 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	public RestResponse cacheContent() {
 		responseContent.cache();
 		return this;
-	}
-
-	@SuppressWarnings("unchecked")
-	<T> T as(ResponseBeanMeta rbm) {
-		Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
-		final RestClient rc = this.client;
-		return (T)Proxy.newProxyInstance(
-			c.getClassLoader(),
-			new Class[] { c },
-			(InvocationHandler) (proxy, method, args) -> {
-				ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
-				HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
-				HttpPartSchema schema = pm.getSchema();
-				HttpPartType pt = pm.getPartType();
-				String name = pm.getPartName().orElse(null);
-				ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
-				if (pt == RESPONSE_HEADER)
-					return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
-				if (pt == RESPONSE_STATUS)
-					return getStatusCode();
-				return getContent().schema(schema).as(type);
-			});
-	}
-
-	/**
-	 * Logs a message.
-	 *
-	 * @param level The log level.
-	 * @param t The throwable cause.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
-	 * @param args The arguments.
-	 * @return This object.
-	 */
-	public RestResponse log(Level level, Throwable t, String msg, Object...args) {
-		client.log(level, t, msg, args);
-		return this;
-	}
-
-	/**
-	 * Logs a message.
-	 *
-	 * @param level The log level.
-	 * @param msg The message with {@link MessageFormat}-style arguments.
-	 * @param args The arguments.
-	 * @return This object.
-	 */
-	public RestResponse log(Level level, String msg, Object...args) {
-		client.log(level, msg, args);
-		return this;
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------
-	// HttpResponse pass-through methods.
-	// -----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Obtains the status line of this response.
-	 *
-	 * The status line can be set using one of the setStatusLine methods, or it can be initialized in a constructor.
-	 *
-	 * @return The status line, or <jk>null</jk> if not yet set.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public ResponseStatusLine getStatusLine() {
-		return new ResponseStatusLine(this, response.getStatusLine());
-	}
-
-	/**
-	 * Sets the status line of this response.
-	 *
-	 * @param statusline The status line of this response
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setStatusLine(StatusLine statusline) {
-		response.setStatusLine(statusline);
-	}
-
-	/**
-	 * Sets the status line of this response.
-	 *
-	 * <p>
-	 * The reason phrase will be determined based on the current locale.
-	 *
-	 * @param ver The HTTP version.
-	 * @param code The status code.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setStatusLine(ProtocolVersion ver, int code) {
-		response.setStatusLine(ver, code);
-	}
-
-	/**
-	 * Sets the status line of this response with a reason phrase.
-	 *
-	 * @param ver The HTTP version.
-	 * @param code The status code.
-	 * @param reason The reason phrase, or <jk>null</jk> to omit.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		response.setStatusLine(ver, code, reason);
-	}
-
-	/**
-	 * Updates the status line of this response with a new status code.
-	 *
-	 * @param code The HTTP status code.
-	 * @throws IllegalStateException If the status line has not be set.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setStatusCode(int code) {
-		response.setStatusCode(code);
-	}
-
-	/**
-	 * Updates the status line of this response with a new reason phrase.
-	 *
-	 * @param reason The new reason phrase as a single-line string, or <jk>null</jk> to unset the reason phrase.
-	 * @throws IllegalStateException If the status line has not be set.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setReasonPhrase(String reason) {
-		response.setReasonPhrase(reason);
-	}
-
-	/**
-	 * Obtains the message entity of this response.
-	 *
-	 * <p>
-	 * The entity is provided by calling setEntity.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
-	 * 		Instead, <c>getContent().isPresent()</c> can be used to determine whether the response has a body.
-	 * </ul>
-	 *
-	 * @return The response entity.  Never <jk>null</jk>.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public ResponseContent getEntity() {
-		return responseContent;
-	}
-
-	/**
-	 * Associates a response entity with this response.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>If an entity has already been set for this response and it depends on an input stream
-	 * 		({@link HttpEntity#isStreaming()} returns <jk>true</jk>), it must be fully consumed in order to ensure
-	 * 		release of resources.
-	 * </ul>
-	 *
-	 * @param entity The entity to associate with this response, or <jk>null</jk> to unset.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setEntity(HttpEntity entity) {
-		response.setEntity(entity);
-		this.responseContent = new ResponseContent(client, request, this, parser);
-	}
-
-	/**
-	 * Obtains the locale of this response.
-	 *
-	 * The locale is used to determine the reason phrase for the status code.
-	 * It can be changed using {@link #setLocale(Locale)}.
-	 *
-	 * @return The locale of this response, never <jk>null</jk>.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public Locale getLocale() {
-		return response.getLocale();
-	}
-
-	/**
-	 * Changes the locale of this response.
-	 *
-	 * @param loc The new locale.
-	 */
-	@Override /* Overridden from HttpResponse */
-	public void setLocale(Locale loc) {
-		response.setLocale(loc);
-	}
-
-	/**
-	 * Returns the protocol version this message is compatible with.
-	 *
-	 * @return The protocol version this message is compatible with.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() {
-		return response.getProtocolVersion();
-	}
-
-	/**
-	 * Checks if a certain header is present in this message.
-	 *
-	 * <p>
-	 * Header values are ignored.
-	 *
-	 * @param name The header name to check for.
-	 * @return <jk>true</jk> if at least one header with this name is present.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public boolean containsHeader(String name) {
-		return response.containsHeader(name);
-	}
-
-	/**
-	 * Returns all the headers with a specified name of this message.
-	 *
-	 * Header values are ignored.
-	 * <br>Headers are ordered in the sequence they were sent over a connection.
-	 *
-	 * @param name The name of the headers to return.
-	 * @return All the headers with a specified name of this message.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public ResponseHeader[] getHeaders(String name) {
-		return headers.stream(name).map(x -> new ResponseHeader(name, request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
-	}
-
-	/**
-	 * Returns the first header with a specified name of this message.
-	 *
-	 * <p>
-	 * If there is more than one matching header in the message the first element of {@link #getHeaders(String)} is returned.
-	 * <p>
-	 * This method always returns a value so that you can perform assertions on the result.
-	 *
-	 * @param name The name of the header to return.
-	 * @return The header, never <jk>null</jk>.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public ResponseHeader getFirstHeader(String name) {
-		return new ResponseHeader(name, request, this, headers.getFirst(name).orElse(null)).parser(getPartParserSession());
-	}
-
-	/**
-	 * Returns the last header with a specified name of this message.
-	 *
-	 * <p>
-	 * If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.
-	 * <p>
-	 * This method always returns a value so that you can perform assertions on the result.
-	 *
-	 * @param name The name of the header to return.
-	 * @return The header, never <jk>null</jk>.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public ResponseHeader getLastHeader(String name) {
-		return new ResponseHeader(name, request, this, headers.getLast(name).orElse(null)).parser(getPartParserSession());
-	}
-
-	/**
-	 * Returns the response header with the specified name.
-	 *
-	 * <p>
-	 * If more that one header with the given name exists the values will be combined with <js>", "</js> as per <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a>.
-	 *
-	 * @param name The name of the header to return.
-	 * @return The header, never <jk>null</jk>.
-	 */
-	public ResponseHeader getHeader(String name) {
-		return new ResponseHeader(name, request, this, headers.get(name).orElse(null)).parser(getPartParserSession());
-	}
-
-	/**
-	 * Returns all the headers of this message.
-	 *
-	 * Headers are ordered in the sequence they were sent over a connection.
-	 *
-	 * @return All the headers of this message.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public ResponseHeader[] getAllHeaders() {
-		return headers.stream().map(x -> new ResponseHeader(x.getName(), request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
-	}
-
-	/**
-	 * Adds a header to this message.
-	 *
-	 * The header will be appended to the end of the list.
-	 *
-	 * @param header The header to append.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void addHeader(Header header) {
-		headers.append(header);
-	}
-
-	/**
-	 * Adds a header to this message.
-	 *
-	 * The header will be appended to the end of the list.
-	 *
-	 * @param name The name of the header.
-	 * @param value The value of the header.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void addHeader(String name, String value) {
-		headers.append(name, value);
-	}
-
-	/**
-	 * Overwrites the first header with the same name.
-	 *
-	 * The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
-	 * @param header The header to set.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void setHeader(Header header) {
-		headers.set(header);
-	}
-
-	/**
-	 * Overwrites the first header with the same name.
-	 *
-	 * The new header will be appended to the end of the list, if no header with the given name can be found.
-	 *
-	 * @param name The name of the header.
-	 * @param value The value of the header.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void setHeader(String name, String value) {
-		headers.set(name, value);
-	}
-
-	/**
-	 * Overwrites all the headers in the message.
-	 *
-	 * @param headers The array of headers to set.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void setHeaders(Header[] headers) {
-		this.headers = HeaderList.of(headers);
-	}
-
-	/**
-	 * Removes a header from this message.
-	 *
-	 * @param header The header to remove.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void removeHeader(Header header) {
-		headers.remove(header);
-	}
-
-	/**
-	 * Removes all headers with a certain name from this message.
-	 *
-	 * @param name The name of the headers to remove.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public void removeHeaders(String name) {
-		headers.remove(name);
-	}
-
-	/**
-	 * Returns an iterator of all the headers.
-	 *
-	 * @return {@link Iterator} that returns {@link Header} objects in the sequence they are sent over a connection.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator() {
-		return headers.headerIterator();
-	}
-
-	/**
-	 * Returns an iterator of the headers with a given name.
-	 *
-	 * @param name The name of the headers over which to iterate, or <jk>null</jk> for all headers.
-	 * @return {@link Iterator} that returns {@link Header} objects with the argument name in the sequence they are sent over a connection.
-	 */
-	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator(String name) {
-		return headers.headerIterator(name);
-	}
-
-	/**
-	 * Returns the parameters effective for this message as set by {@link #setParams(HttpParams)}.
-	 *
-	 * @return The parameters effective for this message as set by {@link #setParams(HttpParams)}.
-	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
-	 */
-	@Override /* Overridden from HttpMessage */
-	@Deprecated
-	public HttpParams getParams() {
-		return response.getParams();
-	}
-
-	/**
-	 * Provides parameters to be used for the processing of this message.
-	 *
-	 * @param params The parameters.
-	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
-	 */
-	@Override /* Overridden from HttpMessage */
-	@Deprecated
-	public void setParams(HttpParams params) {
-		response.setParams(params);
 	}
 
 	/**
@@ -940,11 +446,465 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			client.log(Level.WARNING, e, "Error during RestResponse close");
 		}
 	}
+	/**
+	 * Consumes the response body.
+	 *
+	 * <p>
+	 * This is equivalent to closing the input stream.
+	 *
+	 * <p>
+	 * Any exceptions thrown during close are logged but not propagated.
+	 *
+	 * @return This object.
+	 */
+	public RestResponse consume() {
+		close();
+		return this;
+	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Checks if a certain header is present in this message.
+	 *
+	 * <p>
+	 * Header values are ignored.
+	 *
+	 * @param name The header name to check for.
+	 * @return <jk>true</jk> if at least one header with this name is present.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public boolean containsHeader(String name) {
+		return response.containsHeader(name);
+	}
 
+	/**
+	 * Returns all the headers of this message.
+	 *
+	 * Headers are ordered in the sequence they were sent over a connection.
+	 *
+	 * @return All the headers of this message.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public ResponseHeader[] getAllHeaders() {
+		return headers.stream().map(x -> new ResponseHeader(x.getName(), request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
+	}
+
+	/**
+	 * Shortcut for retrieving the response charset from the <l>Content-Type</l> header.
+	 *
+	 * @return The response charset.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public String getCharacterEncoding() throws RestCallException {
+		Optional<ContentType> ct = getContentType();
+		String s = null;
+		if (ct.isPresent())
+			s = getContentType().get().getParameter("charset");
+		return Utils.isEmpty(s) ? "utf-8" : s;
+	}
+
+	/**
+	 * Returns the body of the response.
+	 *
+	 * This method can be called multiple times returning the same response body each time.
+	 *
+	 * @return The body of the response.
+	 */
+	public ResponseContent getContent() {
+		return responseContent;
+	}
+
+	/**
+	 * Shortcut for retrieving the response content type from the <l>Content-Type</l> header.
+	 *
+	 * <p>
+	 * This is equivalent to calling <c>getHeader(<js>"Content-Type"</js>).as(ContentType.<jk>class</jk>)</c>.
+	 *
+	 * @return The response charset.
+	 * @throws RestCallException If REST call failed.
+	 */
+	public Optional<ContentType> getContentType() throws RestCallException {
+		return getHeader("Content-Type").as(ContentType.class);
+	}
+
+	/**
+	 * Obtains the message entity of this response.
+	 *
+	 * <p>
+	 * The entity is provided by calling setEntity.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
+	 * 		Instead, <c>getContent().isPresent()</c> can be used to determine whether the response has a body.
+	 * </ul>
+	 *
+	 * @return The response entity.  Never <jk>null</jk>.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public ResponseContent getEntity() {
+		return responseContent;
+	}
+
+	/**
+	 * Returns the first header with a specified name of this message.
+	 *
+	 * <p>
+	 * If there is more than one matching header in the message the first element of {@link #getHeaders(String)} is returned.
+	 * <p>
+	 * This method always returns a value so that you can perform assertions on the result.
+	 *
+	 * @param name The name of the header to return.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public ResponseHeader getFirstHeader(String name) {
+		return new ResponseHeader(name, request, this, headers.getFirst(name).orElse(null)).parser(getPartParserSession());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// HttpResponse pass-through methods.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the response header with the specified name.
+	 *
+	 * <p>
+	 * If more that one header with the given name exists the values will be combined with <js>", "</js> as per <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a>.
+	 *
+	 * @param name The name of the header to return.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	public ResponseHeader getHeader(String name) {
+		return new ResponseHeader(name, request, this, headers.get(name).orElse(null)).parser(getPartParserSession());
+	}
+
+	/**
+	 * Returns all the headers with a specified name of this message.
+	 *
+	 * Header values are ignored.
+	 * <br>Headers are ordered in the sequence they were sent over a connection.
+	 *
+	 * @param name The name of the headers to return.
+	 * @return All the headers with a specified name of this message.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public ResponseHeader[] getHeaders(String name) {
+		return headers.stream(name).map(x -> new ResponseHeader(name, request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
+	}
+
+	/**
+	 * Returns the last header with a specified name of this message.
+	 *
+	 * <p>
+	 * If there is more than one matching header in the message the last element of {@link #getHeaders(String)} is returned.
+	 * <p>
+	 * This method always returns a value so that you can perform assertions on the result.
+	 *
+	 * @param name The name of the header to return.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public ResponseHeader getLastHeader(String name) {
+		return new ResponseHeader(name, request, this, headers.getLast(name).orElse(null)).parser(getPartParserSession());
+	}
+
+	/**
+	 * Obtains the locale of this response.
+	 *
+	 * The locale is used to determine the reason phrase for the status code.
+	 * It can be changed using {@link #setLocale(Locale)}.
+	 *
+	 * @return The locale of this response, never <jk>null</jk>.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public Locale getLocale() {
+		return response.getLocale();
+	}
+
+	/**
+	 * Returns the parameters effective for this message as set by {@link #setParams(HttpParams)}.
+	 *
+	 * @return The parameters effective for this message as set by {@link #setParams(HttpParams)}.
+	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
+	 */
+	@Override /* Overridden from HttpMessage */
+	@Deprecated
+	public HttpParams getParams() {
+		return response.getParams();
+	}
+
+	/**
+	 * Returns the protocol version this message is compatible with.
+	 *
+	 * @return The protocol version this message is compatible with.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public ProtocolVersion getProtocolVersion() {
+		return response.getProtocolVersion();
+	}
+
+	/**
+	 * Returns the status line reason phrase of the response.
+	 *
+	 * Shortcut for calling <code>getStatusLine().getReasonPhrase()</code>.
+	 *
+	 * @return The status line reason phrase of the response.
+	 */
+	public String getReasonPhrase() {
+		return getStatusLine().getReasonPhrase();
+	}
+
+	/**
+	 * Returns the request object that created this response object.
+	 *
+	 * @return The request object that created this response object.
+	 */
+	public RestRequest getRequest() {
+		return request;
+	}
+
+	/**
+	 * Returns the status code of the response.
+	 *
+	 * Shortcut for calling <code>getStatusLine().getStatusCode()</code>.
+	 *
+	 * @return The status code of the response.
+	 */
+	public int getStatusCode() {
+		return getStatusLine().getStatusCode();
+	}
+
+	/**
+	 * Obtains the status line of this response.
+	 *
+	 * The status line can be set using one of the setStatusLine methods, or it can be initialized in a constructor.
+	 *
+	 * @return The status line, or <jk>null</jk> if not yet set.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public ResponseStatusLine getStatusLine() {
+		return new ResponseStatusLine(this, response.getStatusLine());
+	}
+
+	/**
+	 * Shortcut for calling <code>getHeader(name).asString()</code>.
+	 *
+	 * @param name The header name.
+	 * @return The header value, never <jk>null</jk>
+	 */
+	public Optional<String> getStringHeader(String name) {
+		return getHeader(name).asString();
+	}
+
+	/**
+	 * Returns an iterator of all the headers.
+	 *
+	 * @return {@link Iterator} that returns {@link Header} objects in the sequence they are sent over a connection.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public HeaderIterator headerIterator() {
+		return headers.headerIterator();
+	}
+
+	/**
+	 * Returns an iterator of the headers with a given name.
+	 *
+	 * @param name The name of the headers over which to iterate, or <jk>null</jk> for all headers.
+	 * @return {@link Iterator} that returns {@link Header} objects with the argument name in the sequence they are sent over a connection.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public HeaderIterator headerIterator(String name) {
+		return headers.headerIterator(name);
+	}
+
+	/**
+	 * Logs a message.
+	 *
+	 * @param level The log level.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 * @return This object.
+	 */
+	public RestResponse log(Level level, String msg, Object...args) {
+		client.log(level, msg, args);
+		return this;
+	}
+
+	/**
+	 * Logs a message.
+	 *
+	 * @param level The log level.
+	 * @param t The throwable cause.
+	 * @param msg The message with {@link MessageFormat}-style arguments.
+	 * @param args The arguments.
+	 * @return This object.
+	 */
+	public RestResponse log(Level level, Throwable t, String msg, Object...args) {
+		client.log(level, t, msg, args);
+		return this;
+	}
+
+	/**
+	 * Removes a header from this message.
+	 *
+	 * @param header The header to remove.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public void removeHeader(Header header) {
+		headers.remove(header);
+	}
+
+	/**
+	 * Removes all headers with a certain name from this message.
+	 *
+	 * @param name The name of the headers to remove.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public void removeHeaders(String name) {
+		headers.remove(name);
+	}
+
+	/**
+	 * Associates a response entity with this response.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>If an entity has already been set for this response and it depends on an input stream
+	 * 		({@link HttpEntity#isStreaming()} returns <jk>true</jk>), it must be fully consumed in order to ensure
+	 * 		release of resources.
+	 * </ul>
+	 *
+	 * @param entity The entity to associate with this response, or <jk>null</jk> to unset.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setEntity(HttpEntity entity) {
+		response.setEntity(entity);
+		this.responseContent = new ResponseContent(client, request, this, parser);
+	}
+
+	/**
+	 * Overwrites the first header with the same name.
+	 *
+	 * The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
+	 * @param header The header to set.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public void setHeader(Header header) {
+		headers.set(header);
+	}
+
+	/**
+	 * Overwrites the first header with the same name.
+	 *
+	 * The new header will be appended to the end of the list, if no header with the given name can be found.
+	 *
+	 * @param name The name of the header.
+	 * @param value The value of the header.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public void setHeader(String name, String value) {
+		headers.set(name, value);
+	}
+
+	/**
+	 * Overwrites all the headers in the message.
+	 *
+	 * @param headers The array of headers to set.
+	 */
+	@Override /* Overridden from HttpMessage */
+	public void setHeaders(Header[] headers) {
+		this.headers = HeaderList.of(headers);
+	}
+
+	/**
+	 * Changes the locale of this response.
+	 *
+	 * @param loc The new locale.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setLocale(Locale loc) {
+		response.setLocale(loc);
+	}
+
+	/**
+	 * Provides parameters to be used for the processing of this message.
+	 *
+	 * @param params The parameters.
+	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
+	 */
+	@Override /* Overridden from HttpMessage */
+	@Deprecated
+	public void setParams(HttpParams params) {
+		response.setParams(params);
+	}
+
+	/**
+	 * Updates the status line of this response with a new reason phrase.
+	 *
+	 * @param reason The new reason phrase as a single-line string, or <jk>null</jk> to unset the reason phrase.
+	 * @throws IllegalStateException If the status line has not be set.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setReasonPhrase(String reason) {
+		response.setReasonPhrase(reason);
+	}
+
+	/**
+	 * Updates the status line of this response with a new status code.
+	 *
+	 * @param code The HTTP status code.
+	 * @throws IllegalStateException If the status line has not be set.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setStatusCode(int code) {
+		response.setStatusCode(code);
+	}
+
+	/**
+	 * Sets the status line of this response.
+	 *
+	 * <p>
+	 * The reason phrase will be determined based on the current locale.
+	 *
+	 * @param ver The HTTP version.
+	 * @param code The status code.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setStatusLine(ProtocolVersion ver, int code) {
+		response.setStatusLine(ver, code);
+	}
+
+	/**
+	 * Sets the status line of this response with a reason phrase.
+	 *
+	 * @param ver The HTTP version.
+	 * @param code The status code.
+	 * @param reason The reason phrase, or <jk>null</jk> to omit.
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
+		response.setStatusLine(ver, code, reason);
+	}
+
+	/**
+	 * Sets the status line of this response.
+	 *
+	 * @param statusline The status line of this response
+	 */
+	@Override /* Overridden from HttpResponse */
+	public void setStatusLine(StatusLine statusline) {
+		response.setStatusLine(statusline);
+	}
+
+	/**
+	 * Creates a session of the client-default parat parser.
+	 *
+	 * @return A session of the specified parser.
+	 */
+	protected HttpPartParserSession getPartParserSession() {
+		if (partParserSession == null)
+			partParserSession = client.getPartParser().getPartSession();
+		return partParserSession;
+	}
 	/**
 	 * Creates a session of the specified part parser.
 	 *
@@ -960,22 +920,29 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		return s;
 	}
 
-	/**
-	 * Creates a session of the client-default parat parser.
-	 *
-	 * @return A session of the specified parser.
-	 */
-	protected HttpPartParserSession getPartParserSession() {
-		if (partParserSession == null)
-			partParserSession = client.getPartParser().getPartSession();
-		return partParserSession;
+	@SuppressWarnings("unchecked")
+	<T> T as(ResponseBeanMeta rbm) {
+		Class<T> c = (Class<T>)rbm.getClassMeta().getInnerClass();
+		final RestClient rc = this.client;
+		return (T)Proxy.newProxyInstance(
+			c.getClassLoader(),
+			new Class[] { c },
+			(InvocationHandler) (proxy, method, args) -> {
+				ResponseBeanPropertyMeta pm = rbm.getProperty(method.getName());
+				HttpPartParserSession pp = getPartParserSession(pm.getParser().orElse(rc.getPartParser()));
+				HttpPartSchema schema = pm.getSchema();
+				HttpPartType pt = pm.getPartType();
+				String name = pm.getPartName().orElse(null);
+				ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
+				if (pt == RESPONSE_HEADER)
+					return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
+				if (pt == RESPONSE_STATUS)
+					return getStatusCode();
+				return getContent().schema(schema).as(type);
+			});
 	}
 
 	HttpResponse asHttpResponse() {
 		return response;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
 }

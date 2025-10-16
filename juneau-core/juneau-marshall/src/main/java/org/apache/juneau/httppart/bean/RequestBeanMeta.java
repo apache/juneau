@@ -39,51 +39,6 @@ import org.apache.juneau.reflect.*;
  */
 public class RequestBeanMeta {
 
-	/**
-	 * Create metadata from specified parameter.
-	 *
-	 * @param mpi The method parameter.
-	 * @param annotations The annotations to apply to any new part serializers or parsers.
-	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
-	 */
-	public static RequestBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
-		if (mpi.hasNoAnnotation(Request.class))
-			return null;
-		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
-	}
-
-	/**
-	 * Create metadata from specified class.
-	 *
-	 * @param c The class annotated with {@link Request}.
-	 * @param annotations The annotations to apply to any new part serializers or parsers.
-	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
-	 */
-	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
-		ClassInfo ci = ClassInfo.of(c);
-		if (ci.hasNoAnnotation(Request.class))
-			return null;
-		return new RequestBeanMeta.Builder(annotations).apply(c).build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final ClassMeta<?> cm;
-	private final Map<String,RequestBeanPropertyMeta> properties;
-	private final HttpPartSerializer serializer;
-	private final HttpPartParser parser;
-
-	RequestBeanMeta(Builder b) {
-		this.cm = b.cm;
-		this.serializer = b.serializer.orElse(null);
-		this.parser = b.parser.orElse(null);
-		Map<String,RequestBeanPropertyMeta> properties = map();
-		b.properties.forEach((k,v) -> properties.put(k, v.build(serializer, parser)));
-		this.properties = u(properties);
-	}
-
 	static class Builder {
 		ClassMeta<?> cm;
 		AnnotationWorkList annotations;
@@ -93,10 +48,6 @@ public class RequestBeanMeta {
 
 		Builder(AnnotationWorkList annotations) {
 			this.annotations = annotations;
-		}
-
-		Builder apply(ParamInfo mpi) {
-			return apply(mpi.getParameterType().inner()).apply(mpi.getAnnotation(Request.class));
 		}
 
 		Builder apply(Class<?> c) {
@@ -129,6 +80,10 @@ public class RequestBeanMeta {
 			return this;
 		}
 
+		Builder apply(ParamInfo mpi) {
+			return apply(mpi.getParameterType().inner()).apply(mpi.getAnnotation(Request.class));
+		}
+
 		Builder apply(Request a) {
 			if (a != null) {
 				if (isNotVoid(a.serializer()))
@@ -145,12 +100,61 @@ public class RequestBeanMeta {
 	}
 
 	/**
+	 * Create metadata from specified class.
+	 *
+	 * @param c The class annotated with {@link Request}.
+	 * @param annotations The annotations to apply to any new part serializers or parsers.
+	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Request}.
+	 */
+	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
+		ClassInfo ci = ClassInfo.of(c);
+		if (ci.hasNoAnnotation(Request.class))
+			return null;
+		return new RequestBeanMeta.Builder(annotations).apply(c).build();
+	}
+	/**
+	 * Create metadata from specified parameter.
+	 *
+	 * @param mpi The method parameter.
+	 * @param annotations The annotations to apply to any new part serializers or parsers.
+	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
+	 */
+	public static RequestBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
+		if (mpi.hasNoAnnotation(Request.class))
+			return null;
+		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
+	}
+	private final ClassMeta<?> cm;
+	private final Map<String,RequestBeanPropertyMeta> properties;
+	private final HttpPartSerializer serializer;
+
+	private final HttpPartParser parser;
+
+	RequestBeanMeta(Builder b) {
+		this.cm = b.cm;
+		this.serializer = b.serializer.orElse(null);
+		this.parser = b.parser.orElse(null);
+		Map<String,RequestBeanPropertyMeta> properties = map();
+		b.properties.forEach((k,v) -> properties.put(k, v.build(serializer, parser)));
+		this.properties = u(properties);
+	}
+
+	/**
 	 * Returns metadata about the class.
 	 *
 	 * @return Metadata about the class.
 	 */
 	public ClassMeta<?> getClassMeta() {
 		return cm;
+	}
+
+	/**
+	 * Returns all the annotated methods on this bean.
+	 *
+	 * @return All the annotated methods on this bean.
+	 */
+	public Collection<RequestBeanPropertyMeta> getProperties() {
+		return properties.values();
 	}
 
 	/**
@@ -161,14 +165,5 @@ public class RequestBeanMeta {
 	 */
 	public RequestBeanPropertyMeta getProperty(String name) {
 		return properties.get(name);
-	}
-
-	/**
-	 * Returns all the annotated methods on this bean.
-	 *
-	 * @return All the annotated methods on this bean.
-	 */
-	public Collection<RequestBeanPropertyMeta> getProperties() {
-		return properties.values();
 	}
 }

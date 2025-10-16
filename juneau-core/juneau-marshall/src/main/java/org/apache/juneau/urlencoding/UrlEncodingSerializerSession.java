@@ -44,27 +44,8 @@ import org.apache.juneau.uon.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
  * </ul>
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({ "rawtypes", "unchecked", "resource" })
 public class UrlEncodingSerializerSession extends UonSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(UrlEncodingSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -82,14 +63,14 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public UrlEncodingSerializerSession build() {
-			return new UrlEncodingSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public UrlEncodingSerializerSession build() {
+			return new UrlEncodingSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -99,20 +80,20 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder encoding(boolean value) {
+			super.encoding(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -141,20 +122,14 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -177,20 +152,32 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -199,17 +186,35 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			super.useWhitespace(value);
 			return this;
 		}
-
-		@Override /* Overridden from Builder */
-		public Builder encoding(boolean value) {
-			super.encoding(value);
-			return this;
-		}
+	}
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(UrlEncodingSerializer ctx) {
+		return new Builder(ctx);
+	}
+	/*
+	 * Converts a Collection into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
+		Map<Integer,Object> m = new TreeMap<>();
+		IntValue i = IntValue.create();
+		c.forEach(o -> m.put(i.getAndIncrement(), o));
+		return m;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/*
+	 * Converts an array into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Object array) {
+		Map<Integer,Object> m = new TreeMap<>();
+		for (int i = 0; i < Array.getLength(array); i++)
+			m.put(i, Array.get(array, i));
+		return m;
+	}
 
 	private final UrlEncodingSerializer ctx;
 
@@ -221,37 +226,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	protected UrlEncodingSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
-	}
-
-	/*
-	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
-	 */
-	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
-		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
-		if (cm.isCollectionOrArray()) {
-			if (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
-				return true;
-		}
-		return false;
-	}
-
-	/*
-	 * Returns <jk>true</jk> if the specified value should be represented as an expanded parameter list.
-	 */
-	private boolean shouldUseExpandedParams(Object value) {
-		if (value == null || ! isExpandedParams())
-			return false;
-		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta(this);
-		if (cm.isCollectionOrArray()) {
-			if (isExpandedParams())
-				return true;
-		}
-		return false;
-	}
-
-	@Override /* Overridden from SerializerSession */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-		serializeAnything(getUonWriter(out).i(getInitialDepth()), o);
 	}
 
 	/*
@@ -310,75 +284,6 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	/*
-	 * Converts a Collection into an integer-indexed map.
-	 */
-	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
-		Map<Integer,Object> m = new TreeMap<>();
-		IntValue i = IntValue.create();
-		c.forEach(o -> m.put(i.getAndIncrement(), o));
-		return m;
-	}
-
-	/*
-	 * Converts an array into an integer-indexed map.
-	 */
-	private static Map<Integer,Object> getCollectionMap(Object array) {
-		Map<Integer,Object> m = new TreeMap<>();
-		for (int i = 0; i < Array.getLength(array); i++)
-			m.put(i, Array.get(array, i));
-		return m;
-	}
-
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		Flag addAmp = Flag.create();
-
-		forEachEntry(m, e -> {
-			Object key = generalize(e.getKey(), keyType);
-			Object value = e.getValue();
-
-			if (shouldUseExpandedParams(value)) {
-				if (value instanceof Collection) {
-					((Collection<?>)value).forEach(x -> {
-						addAmp.ifSet(()->out.cr(indent).append('&')).set();
-						out.appendObject(key, true).append('=');
-						super.serializeAnything(out, x, null, Utils.s(key), null);
-					});
-				} else /* array */ {
-					for (int i = 0; i < Array.getLength(value); i++) {
-						addAmp.ifSet(()->out.cr(indent).append('&')).set();
-						out.appendObject(key, true).append('=');
-						super.serializeAnything(out, Array.get(value, i), null, Utils.s(key), null);
-					}
-				}
-			} else {
-				addAmp.ifSet(()->out.cr(indent).append('&')).set();
-				out.appendObject(key, true).append('=');
-				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
-			}
-		});
-
-		return out;
-	}
-
-	private SerializerWriter serializeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
-
-		ClassMeta<?> valueType = type.getValueType();
-
-		Flag addAmp = Flag.create();
-
-		m.forEach((k,v) -> {
-			addAmp.ifSet(()->out.cr(indent).append('&')).set();
-			out.append(k).append('=');
-			super.serializeAnything(out, v, valueType, null, null);
-		});
-
-		return out;
-	}
-
 	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		Flag addAmp = Flag.create();
 
@@ -425,10 +330,94 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	private SerializerWriter serializeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
 
+		ClassMeta<?> valueType = type.getValueType();
+
+		Flag addAmp = Flag.create();
+
+		m.forEach((k,v) -> {
+			addAmp.ifSet(()->out.cr(indent).append('&')).set();
+			out.append(k).append('=');
+			super.serializeAnything(out, v, valueType, null, null);
+		});
+
+		return out;
+	}
+
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		Flag addAmp = Flag.create();
+
+		forEachEntry(m, e -> {
+			Object key = generalize(e.getKey(), keyType);
+			Object value = e.getValue();
+
+			if (shouldUseExpandedParams(value)) {
+				if (value instanceof Collection) {
+					((Collection<?>)value).forEach(x -> {
+						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, x, null, Utils.s(key), null);
+					});
+				} else /* array */ {
+					for (int i = 0; i < Array.getLength(value); i++) {
+						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, Array.get(value, i), null, Utils.s(key), null);
+					}
+				}
+			} else {
+				addAmp.ifSet(()->out.cr(indent).append('&')).set();
+				out.appendObject(key, true).append('=');
+				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
+			}
+		});
+
+		return out;
+	}
+
+	/*
+	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
+	 */
+	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
+		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
+		if (cm.isCollectionOrArray()) {
+			if (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
+				return true;
+		}
+		return false;
+	}
+
+	/*
+	 * Returns <jk>true</jk> if the specified value should be represented as an expanded parameter list.
+	 */
+	private boolean shouldUseExpandedParams(Object value) {
+		if (value == null || ! isExpandedParams())
+			return false;
+		ClassMeta<?> cm = getClassMetaForObject(value).getSerializedClassMeta(this);
+		if (cm.isCollectionOrArray()) {
+			if (isExpandedParams())
+				return true;
+		}
+		return false;
+	}
+
+	@Override /* Overridden from SerializerSession */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		serializeAnything(getUonWriter(out).i(getInitialDepth()), o);
+	}
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		return ctx.getUrlEncodingClassMeta(cm);
+	}
 	/**
 	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
@@ -439,19 +428,5 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	protected final boolean isExpandedParams() {
 		return ctx.isExpandedParams();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
-		return ctx.getUrlEncodingClassMeta(cm);
 	}
 }

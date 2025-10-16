@@ -48,11 +48,6 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public abstract class Marshaller {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Serializer s;
 	private final Parser p;
 
@@ -72,15 +67,6 @@ public abstract class Marshaller {
 	}
 
 	/**
-	 * Returns the serializer associated with this marshaller.
-	 *
-	 * @return The serializer associated with this marshaller.
-	 */
-	public Serializer getSerializer() {
-		return s;
-	}
-
-	/**
 	 * Returns the parser associated with this marshaller.
 	 *
 	 * @return The parser associated with this marshaller.
@@ -90,31 +76,70 @@ public abstract class Marshaller {
 	}
 
 	/**
-	 * Serializes a POJO to the specified output stream or writer.
+	 * Returns the serializer associated with this marshaller.
+	 *
+	 * @return The serializer associated with this marshaller.
+	 */
+	public Serializer getSerializer() {
+		return s;
+	}
+
+	/**
+	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
-	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
+	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
-	 * @param object The object to serialize.
-	 * @param output
-	 * 	The output object.
-	 * 	<br>Character-based serializers can handle the following output class types:
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	Marshaller <jv>marshaller</jv>  = Json.<jsf>DEFAULT</jsf>;
+	 *
+	 * 	<jc>// Parse into a string.</jc>
+	 * 	String <jv>string</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, String.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean.</jc>
+	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a bean array.</jc>
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a linked-list of objects.</jc>
+	 * 	List <jv>list</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 *
+	 * 	<jc>// Parse into a map of object keys/values.</jc>
+	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Character-based parsers can handle the following input class types:
 	 * 	<ul>
-	 * 		<li>{@link Writer}
-	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
-	 * 	<br>Stream-based serializers can handle the following output class types:
+	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
-	 * 		<li>{@link OutputStream}
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
 	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
-	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final void write(Object object, Object output) throws SerializeException, IOException {
-		s.serialize(object, output);
+	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
+		return p.parse(input, type);
 	}
 
 	/**
@@ -197,60 +222,30 @@ public abstract class Marshaller {
 	}
 
 	/**
-	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 * Serializes a POJO to the specified output stream or writer.
 	 *
 	 * <p>
-	 * This is the preferred parse method for simple types since you don't need to cast the results.
+	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
 	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	Marshaller <jv>marshaller</jv>  = Json.<jsf>DEFAULT</jsf>;
-	 *
-	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean[].<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	<br>Character-based parsers can handle the following input class types:
+	 * @param object The object to serialize.
+	 * @param output
+	 * 	The output object.
+	 * 	<br>Character-based serializers can handle the following output class types:
 	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
 	 * 	</ul>
-	 * 	<br>Stream-based parsers can handle the following input class types:
+	 * 	<br>Stream-based serializers can handle the following output class types:
 	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link InputStream}
-	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link OutputStream}
 	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
-		return p.parse(input, type);
+	public final void write(Object object, Object output) throws SerializeException, IOException {
+		s.serialize(object, output);
 	}
 }

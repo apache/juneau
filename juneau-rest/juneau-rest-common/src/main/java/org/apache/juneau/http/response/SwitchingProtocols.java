@@ -63,15 +63,6 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public SwitchingProtocols(SwitchingProtocols copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public SwitchingProtocols(SwitchingProtocols copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class SwitchingProtocols extends BasicHttpResponse {
 		return new SwitchingProtocols(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public SwitchingProtocols setContent(String value) {
+	public SwitchingProtocols setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SwitchingProtocols setContent(HttpEntity value) {
+	public SwitchingProtocols setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SwitchingProtocols setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public SwitchingProtocols setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public SwitchingProtocols setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public SwitchingProtocols setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

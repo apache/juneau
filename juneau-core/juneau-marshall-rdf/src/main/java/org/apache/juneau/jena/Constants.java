@@ -25,11 +25,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class Constants {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Built-in Jena languages.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Jena language support: <js>"RDF/XML"</js>.*/
 	public static final String LANG_RDF_XML = "RDF/XML";
 
@@ -44,11 +39,6 @@ public class Constants {
 
 	/** Jena language support: <js>"N3"</js>.*/
 	public static final String LANG_N3 = "N3";
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Built-in Juneau properties.
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * RDF property identifier <js>"items"</js>.
 	 *

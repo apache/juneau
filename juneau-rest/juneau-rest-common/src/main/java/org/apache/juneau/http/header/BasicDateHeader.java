@@ -43,11 +43,6 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicDateHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -62,20 +57,6 @@ public class BasicDateHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicDateHeader of(String name, String value) {
-		return value == null ? null : new BasicDateHeader(name, value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicDateHeader of(String name, ZonedDateTime value) {
 		return value == null ? null : new BasicDateHeader(name, value);
 	}
 
@@ -96,10 +77,19 @@ public class BasicDateHeader extends BasicHeader {
 		return value == null ? null : new BasicDateHeader(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicDateHeader of(String name, ZonedDateTime value) {
+		return value == null ? null : new BasicDateHeader(name, value);
+	}
 	private final ZonedDateTime value;
 	private final Supplier<ZonedDateTime> supplier;
 
@@ -116,21 +106,6 @@ public class BasicDateHeader extends BasicHeader {
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
 		this.value = Utils.isEmpty(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicDateHeader(String name, ZonedDateTime value) {
-		super(name, value);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -152,28 +127,19 @@ public class BasicDateHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		ZonedDateTime x = value();
-		return x == null ? null : RFC_1123_DATE_TIME.format(x);
-	}
-
 	/**
-	 * Returns the header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.
+	 * Constructor.
 	 *
-	 * @return The header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public Optional<ZonedDateTime> asZonedDateTime() {
-		return Utils.opt(value());
-	}
-
-	/**
-	 * Returns the header value as a {@link ZonedDateTime}.
-	 *
-	 * @return The header value as a {@link ZonedDateTime}.  Can be <jk>null</jk>.
-	 */
-	public ZonedDateTime toZonedDateTime() {
-		return value();
+	public BasicDateHeader(String name, ZonedDateTime value) {
+		super(name, value);
+		this.value = value;
+		this.supplier = null;
 	}
 
 	/**
@@ -196,6 +162,21 @@ public class BasicDateHeader extends BasicHeader {
 	}
 
 	/**
+	 * Returns the header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.
+	 *
+	 * @return The header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<ZonedDateTime> asZonedDateTime() {
+		return Utils.opt(value());
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		ZonedDateTime x = value();
+		return x == null ? null : RFC_1123_DATE_TIME.format(x);
+	}
+
+	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
@@ -207,6 +188,15 @@ public class BasicDateHeader extends BasicHeader {
 	public ZonedDateTime orElse(ZonedDateTime other) {
 		ZonedDateTime x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link ZonedDateTime}.
+	 *
+	 * @return The header value as a {@link ZonedDateTime}.  Can be <jk>null</jk>.
+	 */
+	public ZonedDateTime toZonedDateTime() {
+		return value();
 	}
 
 	private ZonedDateTime value() {

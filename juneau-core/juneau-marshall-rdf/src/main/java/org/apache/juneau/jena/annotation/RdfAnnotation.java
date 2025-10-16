@@ -37,65 +37,22 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RdfAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Rdf DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * A collection of {@link Rdf @Rdf annotations}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Rdf[] value();
 	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
-	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static Rdf copy(Rdf a, VarResolverSession r) {
-		return
-			create()
-			.beanUri(r.resolve(a.beanUri()))
-			.collectionFormat(a.collectionFormat())
-			.namespace(r.resolve(a.namespace()))
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.prefix(r.resolve(a.prefix()))
-			.build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -118,15 +75,6 @@ public class RdfAnnotation {
 		}
 
 		/**
-		 * Instantiates a new {@link Rdf @Rdf} object initialized with this builder.
-		 *
-		 * @return A new {@link Rdf @Rdf} object.
-		 */
-		public Rdf build() {
-			return new Impl(this);
-		}
-
-		/**
 		 * Sets the {@link Rdf#beanUri} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -135,6 +83,15 @@ public class RdfAnnotation {
 		public Builder beanUri(boolean value) {
 			this.beanUri = value;
 			return this;
+		}
+
+		/**
+		 * Instantiates a new {@link Rdf @Rdf} object initialized with this builder.
+		 *
+		 * @return A new {@link Rdf @Rdf} object.
+		 */
+		public Rdf build() {
+			return new Impl(this);
 		}
 
 		/**
@@ -159,32 +116,12 @@ public class RdfAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link Rdf#prefix} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder prefix(String value) {
-			this.prefix = value;
-			return this;
-		}
-
-		@Override /* Overridden from TargetedAnnotationBuilder */
-		public Builder on(String...values) {
-			super.on(values);
-			return this;
-		}
 		@Override /* Overridden from TargetedAnnotationTBuilder */
 		public Builder on(Class<?>...value) {
 			super.on(value);
 			return this;
 		}
-		@Override /* Overridden from TargetedAnnotationTBuilder */
-		public Builder onClass(Class<?>...value) {
-			super.onClass(value);
-			return this;
-		}
+
 		@Override /* Overridden from TargetedAnnotationTMFBuilder */
 		public Builder on(Field...value) {
 			super.on(value);
@@ -195,11 +132,73 @@ public class RdfAnnotation {
 			super.on(value);
 			return this;
 		}
+		@Override /* Overridden from TargetedAnnotationBuilder */
+		public Builder on(String...values) {
+			super.on(values);
+			return this;
+		}
+		@Override /* Overridden from TargetedAnnotationTBuilder */
+		public Builder onClass(Class<?>...value) {
+			super.onClass(value);
+			return this;
+		}
+		/**
+		 * Sets the {@link Rdf#prefix} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder prefix(String value) {
+			this.prefix = value;
+			return this;
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Applies targeted {@link Rdf} annotations to a {@link org.apache.juneau.jena.RdfParser.Builder}.
+	 */
+	public static class ParserApplier extends AnnotationApplier<Rdf,RdfParser.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApplier(VarResolverSession vr) {
+			super(Rdf.class, RdfParser.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Rdf> ai, RdfParser.Builder b) {
+			Rdf a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
+	}
+
+	/**
+	 * Applies targeted {@link Rdf} annotations to a {@link org.apache.juneau.jena.RdfSerializer.Builder}.
+	 */
+	public static class SerializerApplier extends AnnotationApplier<Rdf,RdfSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public SerializerApplier(VarResolverSession vr) {
+			super(Rdf.class, RdfSerializer.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Rdf> ai, RdfSerializer.Builder b) {
+			Rdf a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
+	}
 
 	private static class Impl extends TargetedAnnotationTImpl implements Rdf {
 
@@ -236,75 +235,51 @@ public class RdfAnnotation {
 			return prefix;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final Rdf DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link org.apache.juneau.jena.RdfSerializer.Builder}.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
 	 */
-	public static class SerializerApplier extends AnnotationApplier<Rdf,RdfSerializer.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public SerializerApplier(VarResolverSession vr) {
-			super(Rdf.class, RdfSerializer.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rdf> ai, RdfSerializer.Builder b) {
-			Rdf a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static Rdf copy(Rdf a, VarResolverSession r) {
+		return
+			create()
+			.beanUri(r.resolve(a.beanUri()))
+			.collectionFormat(a.collectionFormat())
+			.namespace(r.resolve(a.namespace()))
+			.on(r.resolve(a.on()))
+			.onClass(a.onClass())
+			.prefix(r.resolve(a.prefix()))
+			.build();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
 
 	/**
-	 * Applies targeted {@link Rdf} annotations to a {@link org.apache.juneau.jena.RdfParser.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	public static class ParserApplier extends AnnotationApplier<Rdf,RdfParser.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public ParserApplier(VarResolverSession vr) {
-			super(Rdf.class, RdfParser.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rdf> ai, RdfParser.Builder b) {
-			Rdf a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link Rdf @Rdf annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Rdf[] value();
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

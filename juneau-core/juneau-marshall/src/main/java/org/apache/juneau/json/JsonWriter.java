@@ -36,9 +36,8 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class JsonWriter extends SerializerWriter {
-
-	private final boolean simpleAttrs, escapeSolidus;
 
 	// Characters that trigger special handling of serializing attribute values.
 	private static final AsciiSet
@@ -58,7 +57,9 @@ public class JsonWriter extends SerializerWriter {
 	// can be narrowed in the future if necessary.
 	// For example, we quote attributes that start with $ even though we don't need to.
 	private static final AsciiSet validAttrChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars("_").build();
+
 	private static final AsciiSet validFirstAttrChars = AsciiSet.create().ranges("a-z","A-Z").chars("_").build();
+	private final boolean simpleAttrs, escapeSolidus;
 
 	private final AsciiSet ec;
 
@@ -82,52 +83,65 @@ public class JsonWriter extends SerializerWriter {
 		this.ec = escapeSolidus ? encodedChars2 : encodedChars;
 	}
 
-	/**
-	 * Serializes the specified object as a JSON string value.
-	 *
-	 * @param s The object being serialized.
-	 * @return This object.
-	 */
-	public JsonWriter stringValue(String s) {
-		if (s == null)
-			return this;
-		boolean doConvert = false;
-		for (int i = 0; i < s.length() && ! doConvert; i++) {
-			char c = s.charAt(i);
-			doConvert |= ec.contains(c);
-		}
-		q();
-		if (! doConvert) {
-			w(s);
-		} else {
-			for (int i = 0; i < s.length(); i++) {
-				char c = s.charAt(i);
-				if (ec.contains(c)) {
-					if (c == '\n')
-						w('\\').w('n');
-					else if (c == '\t')
-						w('\\').w('t');
-					else if (c == '\b')
-						w('\\').w('b');
-					else if (c == '\f')
-						w('\\').w('f');
-					else if (c == quoteChar)
-						w('\\').w(quoteChar);
-					else if (c == '\\')
-						w('\\').w('\\');
-					else if (c == '/' && escapeSolidus)
-						w('\\').w('/');
-					else if (c != '\r')
-						w(c);
-				} else {
-					w(c);
-				}
-			}
-		}
-		q();
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(char c) {
+		super.append(c);
 		return this;
 	}
 
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(char[] value) {
+		super.append(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(int indent, char c) {
+		super.append(indent, c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(int indent, String text) {
+		super.append(indent, text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(Object text) {
+		super.append(text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(String text) {
+		super.append(text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter appendIf(boolean b, char c) {
+		super.appendIf(b, c);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter appendIf(boolean b, String text) {
+		super.appendIf(b, text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter appendln(int indent, String text) {
+		super.appendln(indent, text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter appendln(String text) {
+		super.appendln(text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter appendUri(Object value) {
+		super.appendUri(value);
+		return this;
+	}
 	/**
 	 * Serializes the specified object as a JSON attribute name.
 	 *
@@ -178,15 +192,61 @@ public class JsonWriter extends SerializerWriter {
 
 		return this;
 	}
-
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter cr(int depth) {
+		super.cr(depth);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter cre(int depth) {
+		super.cre(depth);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter i(int indent) {
+		super.i(indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter ie(int indent) {
+		super.ie(indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter nl(int indent) {
+		super.nl(indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter nlIf(boolean flag, int indent) {
+		super.nlIf(flag, indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter q() {
+		super.q();
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter s() {
+		super.s();
+		return this;
+	}
 	/**
-	 * Appends a URI to the output.
+	 * Adds a space only if the current indentation level is below maxIndent.
 	 *
-	 * @param uri The URI to append to the output.
+	 * @param indent The number of spaces to indent.
 	 * @return This object.
 	 */
-	public SerializerWriter uriValue(Object uri) {
-		return stringValue(uriResolver.resolve(uri));
+	public JsonWriter s(int indent) {
+		if (indent <= maxIndent)
+			super.s();
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter sIf(boolean flag) {
+		super.sIf(flag);
+		return this;
 	}
 
 	/**
@@ -202,134 +262,70 @@ public class JsonWriter extends SerializerWriter {
 	}
 
 	/**
-	 * Adds a space only if the current indentation level is below maxIndent.
+	 * Serializes the specified object as a JSON string value.
 	 *
-	 * @param indent The number of spaces to indent.
+	 * @param s The object being serialized.
 	 * @return This object.
 	 */
-	public JsonWriter s(int indent) {
-		if (indent <= maxIndent)
-			super.s();
+	public JsonWriter stringValue(String s) {
+		if (s == null)
+			return this;
+		boolean doConvert = false;
+		for (int i = 0; i < s.length() && ! doConvert; i++) {
+			char c = s.charAt(i);
+			doConvert |= ec.contains(c);
+		}
+		q();
+		if (! doConvert) {
+			w(s);
+		} else {
+			for (int i = 0; i < s.length(); i++) {
+				char c = s.charAt(i);
+				if (ec.contains(c)) {
+					if (c == '\n')
+						w('\\').w('n');
+					else if (c == '\t')
+						w('\\').w('t');
+					else if (c == '\b')
+						w('\\').w('b');
+					else if (c == '\f')
+						w('\\').w('f');
+					else if (c == quoteChar)
+						w('\\').w(quoteChar);
+					else if (c == '\\')
+						w('\\').w('\\');
+					else if (c == '/' && escapeSolidus)
+						w('\\').w('/');
+					else if (c != '\r')
+						w(c);
+				} else {
+					w(c);
+				}
+			}
+		}
+		q();
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Appends a URI to the output.
+	 *
+	 * @param uri The URI to append to the output.
+	 * @return This object.
+	 */
+	public SerializerWriter uriValue(Object uri) {
+		return stringValue(uriResolver.resolve(uri));
+	}
 
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter cr(int depth) {
-		super.cr(depth);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter cre(int depth) {
-		super.cre(depth);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendln(int indent, String text) {
-		super.appendln(indent, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendln(String text) {
-		super.appendln(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(int indent, String text) {
-		super.append(indent, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(int indent, char c) {
-		super.append(indent, c);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter s() {
-		super.s();
-		return this;
-	}
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter w(char value) {
 		super.w(value);
 		return this;
 	}
+
 	@Override /* Overridden from SerializerWriter */
 	public JsonWriter w(String value) {
 		super.w(value);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter q() {
-		super.q();
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter i(int indent) {
-		super.i(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter nl(int indent) {
-		super.nl(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(Object text) {
-		super.append(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(String text) {
-		super.append(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendIf(boolean b, String text) {
-		super.appendIf(b, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendIf(boolean b, char c) {
-		super.appendIf(b, c);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(char c) {
-		super.append(c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter appendUri(Object value) {
-		super.appendUri(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter append(char[] value) {
-		super.append(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter ie(int indent) {
-		super.ie(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter sIf(boolean flag) {
-		super.sIf(flag);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public JsonWriter nlIf(boolean flag, int indent) {
-		super.nlIf(flag, indent);
 		return this;
 	}
 }

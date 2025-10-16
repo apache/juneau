@@ -32,25 +32,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class RestMatcherList {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -68,15 +49,6 @@ public class RestMatcherList {
 			entries = list();
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected RestMatcherList buildDefault() {
-			return new RestMatcherList(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Appends the specified rest matcher classes to the list.
 		 *
@@ -89,7 +61,6 @@ public class RestMatcherList {
 				entries.add(beanStore().createBean(RestMatcher.class).type(v));
 			return this;
 		}
-
 		/**
 		 * Appends the specified rest matcher objects to the list.
 		 *
@@ -101,23 +72,32 @@ public class RestMatcherList {
 				entries.add(beanStore().createBean(RestMatcher.class).impl(v));
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected RestMatcherList buildDefault() {
+			return new RestMatcherList(this);
+		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final RestMatcher[] optionalEntries;
 	private final RestMatcher[] requiredEntries;
 

@@ -39,22 +39,6 @@ import org.apache.juneau.serializer.*;
  */
 public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 
-	private Constructor<F> constructor;   // public F(T t);
-	private Method unswapMethod;        // public T build();
-
-	/**
-	 * Constructor.
-	 *
-	 * @param forClass The normal class.
-	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter.
-	 * @param unswapMethod The static method that converts surrogate objects into normal objects.
-	 */
-	protected SurrogateSwap(Class<T> forClass, Constructor<F> constructor, Method unswapMethod) {
-		super(forClass, constructor.getDeclaringClass());
-		this.constructor = constructor;
-		this.unswapMethod = unswapMethod;
-	}
-
 	/**
 	 * Given the specified surrogate class, return the list of object swaps.
 	 *
@@ -83,6 +67,22 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 			}
 		);
 		return l;
+	}
+	private Constructor<F> constructor;   // public F(T t);
+
+	private Method unswapMethod;        // public T build();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param forClass The normal class.
+	 * @param constructor The constructor on the surrogate class that takes the normal class as a parameter.
+	 * @param unswapMethod The static method that converts surrogate objects into normal objects.
+	 */
+	protected SurrogateSwap(Class<T> forClass, Constructor<F> constructor, Method unswapMethod) {
+		super(forClass, constructor.getDeclaringClass());
+		this.constructor = constructor;
+		this.unswapMethod = unswapMethod;
 	}
 
 	@Override /* Overridden from ObjectSwap */

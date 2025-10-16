@@ -132,26 +132,6 @@ import org.apache.juneau.serializer.*;
 public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R> {
 
 	private final RequestFormParam value;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentRequestFormParamAssertion(RequestFormParam value, R returns) {
-		this(null, value, returns);
-	}
-
 	/**
 	 * Chained constructor.
 	 *
@@ -175,50 +155,20 @@ public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R>
 		setThrowable(BadRequest.class);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Converts this object assertion into a boolean assertion.
+	 * Constructor.
 	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a boolean.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
-	public FluentBooleanAssertion<R> asBoolean() {
-		return new FluentBooleanAssertion<>(this, value.asBoolean().orElse(null), returns());
+	public FluentRequestFormParamAssertion(RequestFormParam value, R returns) {
+		this(null, value, returns);
 	}
-
-	/**
-	 * Converts this object assertion into an integer assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not an integer.
-	 */
-	public FluentIntegerAssertion<R> asInteger() {
-		return new FluentIntegerAssertion<>(this, value.asInteger().orElse(null), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a long assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a long.
-	 */
-	public FluentLongAssertion<R> asLong() {
-		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
-	}
-
-	/**
-	 * Converts this object assertion into a zoned-datetime assertion.
-	 *
-	 * @return A new assertion.
-	 * @throws AssertionError If object is not a zoned-datetime.
-	 */
-	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(this, value.asDatePart().asZonedDateTime().orElse(null), returns());
-	}
-
 	/**
 	 * Converts the parameter value to a type using {@link RequestFormParam#as(Class)} and then returns the value as an any-object assertion.
 	 *
@@ -244,9 +194,51 @@ public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R>
 		return new FluentAnyAssertion<>(value.as(type, args).orElse(null), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Converts this object assertion into a boolean assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a boolean.
+	 */
+	public FluentBooleanAssertion<R> asBoolean() {
+		return new FluentBooleanAssertion<>(this, value.asBoolean().orElse(null), returns());
+	}
+
+	/**
+	 * Converts this object assertion into an integer assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not an integer.
+	 */
+	public FluentIntegerAssertion<R> asInteger() {
+		return new FluentIntegerAssertion<>(this, value.asInteger().orElse(null), returns());
+	}
+
+	@Override /* Overridden from FluentStringAssertion */
+	public FluentRequestFormParamAssertion<R> asJavaStrings() {
+		super.asJavaStrings();
+		return this;
+	}
+
+	/**
+	 * Converts this object assertion into a long assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a long.
+	 */
+	public FluentLongAssertion<R> asLong() {
+		return new FluentLongAssertion<>(this, value.asLong().orElse(null), returns());
+	}
+	/**
+	 * Converts this object assertion into a zoned-datetime assertion.
+	 *
+	 * @return A new assertion.
+	 * @throws AssertionError If object is not a zoned-datetime.
+	 */
+	public FluentZonedDateTimeAssertion<R> asZonedDateTime() {
+		return new FluentZonedDateTimeAssertion<>(this, value.asDatePart().asZonedDateTime().orElse(null), returns());
+	}
+
 	@Override /* Overridden from Assertion */
 	public FluentRequestFormParamAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
@@ -274,12 +266,6 @@ public class FluentRequestFormParamAssertion<R> extends FluentStringAssertion<R>
 	@Override /* Overridden from Assertion */
 	public FluentRequestFormParamAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
-		return this;
-	}
-
-	@Override /* Overridden from FluentStringAssertion */
-	public FluentRequestFormParamAssertion<R> asJavaStrings() {
-		super.asJavaStrings();
 		return this;
 	}
 }

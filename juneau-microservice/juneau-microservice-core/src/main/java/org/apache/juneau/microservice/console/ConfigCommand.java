@@ -36,26 +36,6 @@ public class ConfigCommand extends ConsoleCommand {
 	private final Messages mb = Messages.of(ConfigCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "config";
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getSynopsis() {
-		return "config [get|set]";
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
-
-	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		Config conf = Microservice.getInstance().getConfig();
 		if (args.size() > 2) {
@@ -101,5 +81,25 @@ public class ConfigCommand extends ConsoleCommand {
 			out.println(mb.getString("InvalidArguments"));
 		}
 		return false;
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getDescription() {
+		return mb.getString("description");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getInfo() {
+		return mb.getString("info");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getName() {
+		return "config";
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getSynopsis() {
+		return "config [get|set]";
 	}
 }

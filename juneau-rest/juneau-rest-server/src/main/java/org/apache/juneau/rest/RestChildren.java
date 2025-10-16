@@ -38,35 +38,6 @@ import jakarta.servlet.*;
  * </ul>
  */
 public class RestChildren {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Represents a null value for the {@link Rest#restChildrenClass()} annotation.
-	 */
-	@SuppressWarnings("javadoc")
-	public final class Void extends RestChildren {
-		public Void(Builder builder) throws Exception {
-			super(builder);
-		}
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,15 +55,6 @@ public class RestChildren {
 			list = Utils.list();
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected RestChildren buildDefault() {
-			return new RestChildren(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Adds a child resource to this builder.
 		 *
@@ -108,18 +70,36 @@ public class RestChildren {
 			super.impl(value);
 			return this;
 		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected RestChildren buildDefault() {
+			return new RestChildren(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Represents a null value for the {@link Rest#restChildrenClass()} annotation.
+	 */
+	@SuppressWarnings("javadoc")
+	public final class Void extends RestChildren {
+		public Void(Builder builder) throws Exception {
+			super(builder);
+		}
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final Map<String,RestContext> children = synced(map());
 
 	/**
@@ -132,6 +112,28 @@ public class RestChildren {
 			children.put(rc.getPath(), rc);
 	}
 
+	/**
+	 * Returns the children in this object as a map.
+	 *
+	 * <p>
+	 * The keys are the {@link RestContext#getPath() paths} of the child contexts.
+	 *
+	 * @return The children as an unmodifiable map.
+	 */
+	public Map<String,RestContext> asMap() {
+		return u(children);
+	}
+
+	/**
+	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.
+	 */
+	public void destroy() {
+		for (RestContext r : children.values()) {
+			r.destroy();
+			if (r.getResource() instanceof Servlet)
+				((Servlet)r.getResource()).destroy();
+		}
+	}
 	/**
 	 * Looks through the registered children of this object and returns the best match.
 	 *
@@ -153,22 +155,6 @@ public class RestChildren {
 	}
 
 	/**
-	 * Returns the children in this object as a map.
-	 *
-	 * <p>
-	 * The keys are the {@link RestContext#getPath() paths} of the child contexts.
-	 *
-	 * @return The children as an unmodifiable map.
-	 */
-	public Map<String,RestContext> asMap() {
-		return u(children);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Lifecycle methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Called during servlet initialization on all children to invoke all {@link RestPostInit} child-last methods.
 	 *
 	 * @throws ServletException Error occurred.
@@ -186,16 +172,5 @@ public class RestChildren {
 	public void postInitChildFirst() throws ServletException {
 		for (RestContext childContext : children.values())
 			childContext.postInitChildFirst();
-	}
-
-	/**
-	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.
-	 */
-	public void destroy() {
-		for (RestContext r : children.values()) {
-			r.destroy();
-			if (r.getResource() instanceof Servlet)
-				((Servlet)r.getResource()).destroy();
-		}
 	}
 }

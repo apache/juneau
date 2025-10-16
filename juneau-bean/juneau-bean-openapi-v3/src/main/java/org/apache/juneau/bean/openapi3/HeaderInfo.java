@@ -116,302 +116,6 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Make a deep copy of this object.
-	 *
-	 * @return A deep copy of this object.
-	 */
-	public HeaderInfo copy() {
-		return new HeaderInfo(this);
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	protected HeaderInfo strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public HeaderInfo strict(Object value) {
-		super.strict(value);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the header.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the header.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
-	 * Bean property setter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setRequired(Boolean value) {
-		required = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExplode() {
-		return explode;
-	}
-
-	/**
-	 * Bean property setter:  <property>explode</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setExplode(Boolean value) {
-		explode = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
-
-	/**
-	 * Bean property setter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setDeprecated(Boolean value) {
-		deprecated = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
-
-	/**
-	 * Bean property setter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setAllowEmptyValue(Boolean value) {
-		allowEmptyValue = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>allowReserved</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
-	}
-
-	/**
-	 * Bean property setter:  <property>allowReserved</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setAllowReserved(Boolean value) {
-		allowReserved = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>schema</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setSchema(SchemaInfo value) {
-		schema = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>$ref</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Beanp("$ref")
-	public String getRef() {
-		return ref;
-	}
-
-	/**
-	 * Bean property setter:  <property>$ref</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	@Beanp("$ref")
-	public HeaderInfo setRef(String value) {
-		ref = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>x-example</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Beanp("x-example")
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	@Beanp("x-example")
-	public HeaderInfo setExample(Object value) {
-		example = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>examples</property>.
-	 *
-	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,Example> getExamples() {
-		return examples;
-	}
-
-	/**
-	 * Bean property setter:  <property>headers</property>.
-	 *
-	 * <p>
-	 * A list of examples that are sent with the response.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public HeaderInfo setExamples(Map<String,Example> value) {
-		examples = copyOf(value);
-		return this;
-	}
-
-	/**
 	 * Adds a single value to the <property>examples</property> property.
 	 *
 	 * @param name The example name.  Must not be <jk>null</jk>.
@@ -423,6 +127,15 @@ public class HeaderInfo extends OpenApiElement {
 		assertArgNotNull("example", example);
 		examples = mapBuilder(examples).sparse().add(name, example).build();
 		return this;
+	}
+
+	/**
+	 * Make a deep copy of this object.
+	 *
+	 * @return A deep copy of this object.
+	 */
+	public HeaderInfo copy() {
+		return new HeaderInfo(this);
 	}
 
 	@Override /* Overridden from OpenApiElement */
@@ -443,25 +156,117 @@ public class HeaderInfo extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public HeaderInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "$ref" -> setRef(Utils.s(value));
-			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
-			case "allowReserved" -> setAllowReserved(toBoolean(value));
-			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
-			case "explode" -> setExplode(toBoolean(value));
-			case "required" -> setRequired(toBoolean(value));
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "x-example" -> setExample(value);
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
+	/**
+	 * Bean property getter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getAllowEmptyValue() {
+		return allowEmptyValue;
+	}
+
+	/**
+	 * Bean property getter:  <property>allowReserved</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getAllowReserved() {
+		return allowReserved;
+	}
+
+	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getDeprecated() {
+		return deprecated;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the header.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>x-example</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("x-example")
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * The list of possible responses as they are returned from executing this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,Example> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExplode() {
+		return explode;
+	}
+
+	/**
+	 * Bean property getter:  <property>$ref</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("$ref")
+	public String getRef() {
+		return ref;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+
+	/**
+	 * Bean property getter:  <property>schema</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getSchema() {
+		return schema;
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -506,6 +311,201 @@ public class HeaderInfo extends OpenApiElement {
 			refStack.removeLast();
 			return r;
 		}
+		return this;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public HeaderInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "$ref" -> setRef(Utils.s(value));
+			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
+			case "allowReserved" -> setAllowReserved(toBoolean(value));
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "explode" -> setExplode(toBoolean(value));
+			case "required" -> setRequired(toBoolean(value));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "x-example" -> setExample(value);
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setAllowEmptyValue(Boolean value) {
+		allowEmptyValue = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>allowReserved</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setAllowReserved(Boolean value) {
+		allowReserved = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setDeprecated(Boolean value) {
+		deprecated = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A short description of the header.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	@Beanp("x-example")
+	public HeaderInfo setExample(Object value) {
+		example = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>headers</property>.
+	 *
+	 * <p>
+	 * A list of examples that are sent with the response.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setExamples(Map<String,Example> value) {
+		examples = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>explode</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setExplode(Boolean value) {
+		explode = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>$ref</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	@Beanp("$ref")
+	public HeaderInfo setRef(String value) {
+		ref = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setRequired(Boolean value) {
+		required = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schema</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public HeaderInfo setSchema(SchemaInfo value) {
+		schema = value;
+		return this;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public HeaderInfo strict(Object value) {
+		super.strict(value);
+		return this;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	protected HeaderInfo strict() {
+		super.strict();
 		return this;
 	}
 }

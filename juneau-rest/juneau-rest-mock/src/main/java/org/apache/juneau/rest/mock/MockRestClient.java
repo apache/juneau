@@ -246,161 +246,6 @@ import jakarta.servlet.http.*;
  * </ul>
  */
 public class MockRestClient extends RestClient implements HttpClientConnection {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private static Map<Class<?>,RestContext> REST_CONTEXTS = new ConcurrentHashMap<>();
-
-	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static Builder create(Object impl) {
-		return new Builder().restBean(impl);
-	}
-
-	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
-	 *
-	 * <p>
-	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static Builder createLax(Object impl) {
-		return new Builder().restBean(impl).ignoreErrors().noTrace();
-	}
-
-	/**
-	 * Creates a new {@link RestClient} with no registered serializer or parser.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bjava'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestClient build(Object impl) {
-		return create(impl).build();
-	}
-
-	/**
-	 * Creates a new {@link RestClient} with no registered serializer or parser.
-	 *
-	 * <p>
-	 * Same as {@link #build(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bjava'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).ignoreErrors().noTrace().build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestClient buildLax(Object impl) {
-		return create(impl).ignoreErrors().noTrace().build();
-	}
-
-	/**
-	 * Creates a new {@link RestClient} with JSON marshalling support.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bjava'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestClient buildJson(Object impl) {
-		return create(impl).json().build();
-	}
-
-	/**
-	 * Creates a new {@link RestClient} with JSON marshalling support.
-	 *
-	 * <p>
-	 * Same as {@link #buildJson(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bjava'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestClient buildJsonLax(Object impl) {
-		return create(impl).json().ignoreErrors().noTrace().build();
-	}
-
-	/**
-	 * Creates a new {@link RestClient} with Simplified-JSON marshalling support.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bjava'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestClient buildJson5(Object impl) {
-		return create(impl).json5().build();
-	}
-
-	/**
-	 * Creates a new {@link RestClient} with Simplified-JSON marshalling support.
-	 *
-	 * <p>
-	 * Same as {@link #buildJson5(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
-	 *
-	 * <p>
-	 * Equivalent to calling:
-	 * <p class='bjava'>
-	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
-	 * </p>
-	 *
-	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
-	 * 	<br>If a class, it must have a no-arg constructor.
-	 * @return A new builder.
-	 */
-	public static MockRestClient buildJson5Lax(Object impl) {
-		return create(impl).json5().ignoreErrors().noTrace().build();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -421,169 +266,54 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			connectionManager(new MockHttpClientConnectionManager());
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
-		}
-
-		/**
-		 * Specifies the {@link Rest}-annotated bean class or instance to test against.
-		 *
-		 * @param value The {@link Rest}-annotated bean class or instance.
-		 * @return This object.
-		 */
-		public Builder restBean(Object value) {
-			restBean = value;
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
 			return this;
 		}
 
-		/**
-		 * Specifies the {@link RestContext} created for the REST bean.
-		 *
-		 * @param value The {@link RestContext} created for the REST bean.
-		 * @return This object.
-		 */
-		public Builder restContext(RestContext value) {
-			restContext = value;
+		@Override /* Overridden from Builder */
+		public Builder acceptCharset(String value) {
+			super.acceptCharset(value);
 			return this;
 		}
 
-		/**
-		 * Identifies the context path for the REST resource.
-		 *
-		 * <p>
-		 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
-		 * 	object correctly.
-		 *
-		 * <p>
-		 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
-		 *
-		 * <p>
-		 * 	The following fixes are applied to non-conforming strings.
-		 * <ul>
-		 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
-		 * 	<li>Trailing slashes are trimmed.
-		 * 	<li>Leading slash is added if needed.
-		 * </ul>
-		 *
-		 * @param value The context path.
-		 * @return This object.
-		 */
-		public Builder contextPath(String value) {
-			contextPath = toValidContextPath(value);
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
 			return this;
 		}
 
-		/**
-		 * Identifies the servlet path for the REST resource.
-		 *
-		 * <p>
-		 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
-		 * 	object correctly.
-		 *
-		 * <p>
-		 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
-		 *
-		 * <p>
-		 * 	The following fixes are applied to non-conforming strings.
-		 * <ul>
-		 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
-		 * 	<li>Trailing slashes are trimmed.
-		 * 	<li>Leading slash is added if needed.
-		 * </ul>
-		 *
-		 * @param value The context path.
-		 * @return This object.
-		 */
-		public Builder servletPath(String value) {
-			servletPath = toValidContextPath(value);
+		@Override /* Overridden from Builder */
+		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
+			super.addInterceptorFirst(itcp);
 			return this;
 		}
 
-		/**
-		 * Add resolved path variables to this client.
-		 *
-		 * <p>
-		 * Allows you to add resolved parent path variables when performing tests on child resource classes.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A parent class with a path variable.</jc>
-		 * 	<ja>@Rest</ja>(
-		 * 		path=<js>"/parent/{foo}"</js>,
-		 * 		children={
-		 * 			Child.<jk>class</jk>
-		 * 		}
-		 * 	)
-		 * 	<jk>public class</jk> Parent { ... }
-		 *
-		 * 	<jc>// A child class that uses the parent path variable.</jc>
-		 * 	<ja>@Rest</ja>
-		 * 	<jk>public class</jk> Child {
-		 *
-		 * 		<jk>@RestGet</jk>
-		 * 		<jk>public</jk> String get(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>) {
-		 * 			<jk>return</jk> <jv>foo</jv>;
-		 * 		}
-		 * 	}
-		 * </p>
-		 * <p class='bjava'>
-		 * 	<jc>// Test the method that uses the parent path variable.</jc>
-		 * 	MockRestClient
-		 * 		.<jsm>create</jsm>(Child.<jk>class</jk>)
-		 * 		.json5()
-		 * 		.pathVars(<js>"foo"</js>,<js>"bar"</js>)
-		 * 		.build()
-		 * 		.get(<js>"/"</js>)
-		 * 		.run()
-		 * 		.assertStatus().asCode().is(200)
-		 * 		.assertContent().is(<js>"bar"</js>);
-		 * </p>
-		 *
-		 * <review>Needs review</review>
-		 *
-		 * @param value The path variables.
-		 * @return This object.
-		 * @see MockServletRequest#pathVars(Map)
-		 */
-		public Builder pathVars(Map<String,String> value) {
-			pathVars = value;
+		@Override /* Overridden from Builder */
+		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
+			super.addInterceptorFirst(itcp);
 			return this;
 		}
 
-		/**
-		 * Add resolved path variables to this client.
-		 *
-		 * <p>
-		 * Identical to {@link #pathVars(Map)} but allows you to specify as a list of key/value pairs.
-		 *
-		 * @param pairs The key/value pairs.  Must be an even number of parameters.
-		 * @return This object.
-		 */
-		public Builder pathVars(String...pairs) {
-			return pathVars(CollectionUtils.mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
-		}
-
-		/**
-		 * Suppress logging on this client.
-		 *
-		 * @return This object.
-		 */
-		public Builder suppressLogging() {
-			return logRequests(DetailLevel.NONE, null, null);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public Builder debug() {
-			header("Debug", "true");
-			super.debug();
+		@Override /* Overridden from Builder */
+		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
+			super.addInterceptorLast(itcp);
 			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public MockRestClient build() {
-			return build(MockRestClient.class);
+		@Override /* Overridden from Builder */
+		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
+			super.addInterceptorLast(itcp);
+			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -595,6 +325,11 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			super.apply(work);
 			return this;
 		}
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
 
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Object...from) {
@@ -603,26 +338,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
+		public Builder backoffManager(BackoffManager backoffManager) {
+			super.backoffManager(backoffManager);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder basicAuth(String host, int port, String user, String pw) {
+			super.basicAuth(host, port, user, pw);
 			return this;
 		}
 
@@ -681,14 +404,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -699,14 +422,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -717,14 +440,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -735,14 +458,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -770,285 +493,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
+		@Override /* Overridden from Context.Builder */
+		public MockRestClient build() {
+			return build(MockRestClient.class);
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder accept(String value) {
-			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder acceptCharset(String value) {
-			super.acceptCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes() {
-			super.addBeanTypes();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addInterceptorFirst(HttpRequestInterceptor itcp) {
-			super.addInterceptorFirst(itcp);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addInterceptorFirst(HttpResponseInterceptor itcp) {
-			super.addInterceptorFirst(itcp);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addInterceptorLast(HttpRequestInterceptor itcp) {
-			super.addInterceptorLast(itcp);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addInterceptorLast(HttpResponseInterceptor itcp) {
-			super.addInterceptorLast(itcp);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType() {
-			super.addRootType();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder backoffManager(BackoffManager backoffManager) {
-			super.backoffManager(backoffManager);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder basicAuth(String host, int port, String user, String pw) {
-			super.basicAuth(host, port, user, pw);
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
 			return this;
 		}
 
@@ -1109,6 +561,44 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder contentType(String value) {
 			super.contentType(value);
+			return this;
+		}
+
+		/**
+		 * Identifies the context path for the REST resource.
+		 *
+		 * <p>
+		 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+		 * 	object correctly.
+		 *
+		 * <p>
+		 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+		 *
+		 * <p>
+		 * 	The following fixes are applied to non-conforming strings.
+		 * <ul>
+		 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+		 * 	<li>Trailing slashes are trimmed.
+		 * 	<li>Leading slash is added if needed.
+		 * </ul>
+		 *
+		 * @param value The context path.
+		 * @return This object.
+		 */
+		public Builder contextPath(String value) {
+			contextPath = toValidContextPath(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			throw new NoSuchMethodError("Not implemented.");
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder debug() {
+			header("Debug", "true");
+			super.debug();
 			return this;
 		}
 
@@ -1173,6 +663,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder disableAuthCaching() {
 			super.disableAuthCaching();
 			return this;
@@ -1181,6 +677,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder disableAutomaticRetries() {
 			super.disableAutomaticRetries();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
 			return this;
 		}
 
@@ -1199,6 +701,30 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder disableCookieManagement() {
 			super.disableCookieManagement();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
 			return this;
 		}
 
@@ -1227,8 +753,32 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder executorService(ExecutorService executorService, boolean shutdownOnClose) {
 			super.executorService(executorService, shutdownOnClose);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
 			return this;
 		}
 
@@ -1311,8 +861,50 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder ignoreRecursions() {
 			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
 			return this;
 		}
 
@@ -1335,8 +927,26 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder json() {
 			super.json();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder json5() {
+			super.json5();
 			return this;
 		}
 
@@ -1359,6 +969,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder logger(Logger value) {
+			super.logger(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder logRequests(DetailLevel detail, Level level, BiPredicate<RestRequest,RestResponse> test) {
 			super.logRequests(detail, level, test);
 			return this;
@@ -1367,12 +989,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder logToConsole() {
 			super.logToConsole();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder logger(Logger value) {
-			super.logger(value);
 			return this;
 		}
 
@@ -1413,6 +1029,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder mediaType(String value) {
 			super.mediaType(value);
 			return this;
@@ -1421,6 +1043,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder msgPack() {
 			super.msgPack();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanClasses(java.lang.Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
 			return this;
 		}
 
@@ -1527,6 +1161,70 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return this;
 		}
 
+		/**
+		 * Add resolved path variables to this client.
+		 *
+		 * <p>
+		 * Allows you to add resolved parent path variables when performing tests on child resource classes.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A parent class with a path variable.</jc>
+		 * 	<ja>@Rest</ja>(
+		 * 		path=<js>"/parent/{foo}"</js>,
+		 * 		children={
+		 * 			Child.<jk>class</jk>
+		 * 		}
+		 * 	)
+		 * 	<jk>public class</jk> Parent { ... }
+		 *
+		 * 	<jc>// A child class that uses the parent path variable.</jc>
+		 * 	<ja>@Rest</ja>
+		 * 	<jk>public class</jk> Child {
+		 *
+		 * 		<jk>@RestGet</jk>
+		 * 		<jk>public</jk> String get(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>) {
+		 * 			<jk>return</jk> <jv>foo</jv>;
+		 * 		}
+		 * 	}
+		 * </p>
+		 * <p class='bjava'>
+		 * 	<jc>// Test the method that uses the parent path variable.</jc>
+		 * 	MockRestClient
+		 * 		.<jsm>create</jsm>(Child.<jk>class</jk>)
+		 * 		.json5()
+		 * 		.pathVars(<js>"foo"</js>,<js>"bar"</js>)
+		 * 		.build()
+		 * 		.get(<js>"/"</js>)
+		 * 		.run()
+		 * 		.assertStatus().asCode().is(200)
+		 * 		.assertContent().is(<js>"bar"</js>);
+		 * </p>
+		 *
+		 * <review>Needs review</review>
+		 *
+		 * @param value The path variables.
+		 * @return This object.
+		 * @see MockServletRequest#pathVars(Map)
+		 */
+		public Builder pathVars(Map<String,String> value) {
+			pathVars = value;
+			return this;
+		}
+
+		/**
+		 * Add resolved path variables to this client.
+		 *
+		 * <p>
+		 * Identical to {@link #pathVars(Map)} but allows you to specify as a list of key/value pairs.
+		 *
+		 * @param pairs The key/value pairs.  Must be an even number of parameters.
+		 * @return This object.
+		 */
+		public Builder pathVars(String...pairs) {
+			return pathVars(CollectionUtils.mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder plainText() {
 			super.plainText();
@@ -1536,6 +1234,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder pooled() {
 			super.pooled();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
 			return this;
 		}
 
@@ -1590,6 +1300,28 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder requestExecutor(HttpRequestExecutor requestExec) {
 			super.requestExecutor(requestExec);
+			return this;
+		}
+
+		/**
+		 * Specifies the {@link Rest}-annotated bean class or instance to test against.
+		 *
+		 * @param value The {@link Rest}-annotated bean class or instance.
+		 * @return This object.
+		 */
+		public Builder restBean(Object value) {
+			restBean = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the {@link RestContext} created for the REST bean.
+		 *
+		 * @param value The {@link RestContext} created for the REST bean.
+		 * @return This object.
+		 */
+		public Builder restContext(RestContext value) {
+			restContext = value;
 			return this;
 		}
 
@@ -1648,9 +1380,29 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder json5() {
-			super.json5();
+		/**
+		 * Identifies the servlet path for the REST resource.
+		 *
+		 * <p>
+		 * 	This value is used to deconstruct the request URL and set the appropriate URL getters on the {@link HttpServletRequest}
+		 * 	object correctly.
+		 *
+		 * <p>
+		 * 	Should either be a value such as <js>"/foo"</js> or an empty string.
+		 *
+		 * <p>
+		 * 	The following fixes are applied to non-conforming strings.
+		 * <ul>
+		 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+		 * 	<li>Trailing slashes are trimmed.
+		 * 	<li>Leading slash is added if needed.
+		 * </ul>
+		 *
+		 * @param value The context path.
+		 * @return This object.
+		 */
+		public Builder servletPath(String value) {
+			servletPath = toValidContextPath(value);
 			return this;
 		}
 
@@ -1703,6 +1455,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder sq() {
 			super.sq();
 			return this;
@@ -1727,14 +1491,59 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder strict() {
 			super.strict();
+			return this;
+		}
+
+		/**
+		 * Suppress logging on this client.
+		 *
+		 * @return This object.
+		 */
+		public Builder suppressLogging() {
+			return logRequests(DetailLevel.NONE, null, null);
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
 		public Builder targetAuthenticationStrategy(AuthenticationStrategy targetAuthStrategy) {
 			super.targetAuthenticationStrategy(targetAuthStrategy);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
 			return this;
 		}
 
@@ -1759,6 +1568,30 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder trimStringsOnWrite() {
 			super.trimStringsOnWrite();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
 			return this;
 		}
 
@@ -1793,6 +1626,24 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
+			super.userTokenHandler(userTokenHandler);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder useSystemProperties() {
 			super.useSystemProperties();
 			return this;
@@ -1801,12 +1652,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* Overridden from Builder */
 		public Builder useWhitespace() {
 			super.useWhitespace();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder userTokenHandler(UserTokenHandler userTokenHandler) {
-			super.userTokenHandler(userTokenHandler);
 			return this;
 		}
 
@@ -1823,39 +1668,150 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
-	private final RestContext restContext;
-	private final Object restObject;
-	private final String contextPath, servletPath;
-	private final Map<String,String> pathVars;
-
-	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
-	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
-	private final ThreadLocal<MockServletRequest> sreq = new ThreadLocal<>();
-	private final ThreadLocal<MockServletResponse> sres = new ThreadLocal<>();
+	private static Map<Class<?>,RestContext> REST_CONTEXTS = new ConcurrentHashMap<>();
 
 	/**
-	 * Constructor.
+	 * Creates a new {@link RestClient} with no registered serializer or parser.
 	 *
-	 * @param builder
-	 * 	The builder for this object.
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bjava'>
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
 	 */
-	public MockRestClient(Builder builder) {
-		super(preInit(builder));
-		restContext = builder.restContext;
-		contextPath = builder.contextPath != null ? builder.contextPath : "";
-		servletPath = builder.servletPath != null ? builder.servletPath : "";
-		pathVars = builder.pathVars != null ? builder.pathVars : emptyMap();
-		restObject = restContext.getResource();
-
-		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
-		if (ccm instanceof MockHttpClientConnectionManager)
-			((MockHttpClientConnectionManager)ccm).init(this);
+	public static MockRestClient build(Object impl) {
+		return create(impl).build();
 	}
 
+	/**
+	 * Creates a new {@link RestClient} with JSON marshalling support.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bjava'>
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildJson(Object impl) {
+		return create(impl).json().build();
+	}
+
+	/**
+	 * Creates a new {@link RestClient} with Simplified-JSON marshalling support.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bjava'>
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildJson5(Object impl) {
+		return create(impl).json5().build();
+	}
+
+	/**
+	 * Creates a new {@link RestClient} with Simplified-JSON marshalling support.
+	 *
+	 * <p>
+	 * Same as {@link #buildJson5(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bjava'>
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildJson5Lax(Object impl) {
+		return create(impl).json5().ignoreErrors().noTrace().build();
+	}
+
+	/**
+	 * Creates a new {@link RestClient} with JSON marshalling support.
+	 *
+	 * <p>
+	 * Same as {@link #buildJson(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bjava'>
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildJsonLax(Object impl) {
+		return create(impl).json().ignoreErrors().noTrace().build();
+	}
+
+	/**
+	 * Creates a new {@link RestClient} with no registered serializer or parser.
+	 *
+	 * <p>
+	 * Same as {@link #build(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * <p>
+	 * Equivalent to calling:
+	 * <p class='bjava'>
+	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).ignoreErrors().noTrace().build();
+	 * </p>
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static MockRestClient buildLax(Object impl) {
+		return create(impl).ignoreErrors().noTrace().build();
+	}
+
+	/**
+	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static Builder create(Object impl) {
+		return new Builder().restBean(impl);
+	}
+	/**
+	 * Creates a new {@link org.apache.juneau.rest.client.RestClient.Builder} configured with the specified REST implementation bean or bean class.
+	 *
+	 * <p>
+	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.
+	 *
+	 * @param impl
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
+	 * 	<br>If a class, it must have a no-arg constructor.
+	 * @return A new builder.
+	 */
+	public static Builder createLax(Object impl) {
+		return new Builder().restBean(impl).ignoreErrors().noTrace();
+	}
 	private static Builder preInit(Builder builder) {
 		try {
 			Object restBean = builder.restBean;
@@ -1894,54 +1850,47 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			throw new ConfigException(e, "Could not initialize MockRestClient");
 		}
 	}
+	private final RestContext restContext;
+	private final Object restObject;
+	private final String contextPath, servletPath;
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Entry point methods.
-	//------------------------------------------------------------------------------------------------------------------
+	private final Map<String,String> pathVars;
+	private final ThreadLocal<HttpRequest> rreq = new ThreadLocal<>();
+	private final ThreadLocal<MockRestResponse> rres = new ThreadLocal<>();
+	private final ThreadLocal<MockServletRequest> sreq = new ThreadLocal<>();
 
+	private final ThreadLocal<MockServletResponse> sres = new ThreadLocal<>();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder
+	 * 	The builder for this object.
+	 */
+	public MockRestClient(Builder builder) {
+		super(preInit(builder));
+		restContext = builder.restContext;
+		contextPath = builder.contextPath != null ? builder.contextPath : "";
+		servletPath = builder.servletPath != null ? builder.servletPath : "";
+		pathVars = builder.pathVars != null ? builder.pathVars : emptyMap();
+		restObject = restContext.getResource();
+
+		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
+		if (ccm instanceof MockHttpClientConnectionManager)
+			((MockHttpClientConnectionManager)ccm).init(this);
+	}
 	@Override /* Overridden from RestClient */
-	public MockRestRequest request(RestOperation op) throws RestCallException {
-		return (MockRestRequest)super.request(op);
+	public MockRestRequest callback(String callString) throws RestCallException {
+		return (MockRestRequest)super.callback(callString);
 	}
 
-	@Override /* Overridden from RestClient */
-	public MockRestRequest get(Object url) throws RestCallException {
-		return (MockRestRequest)super.get(url);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest get() throws RestCallException {
-		return (MockRestRequest)super.get();
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest put(Object url, Object body) throws RestCallException {
-		return (MockRestRequest)super.put(url, body);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest put(Object url, String body, ContentType contentType) throws RestCallException {
-		return (MockRestRequest)super.put(url, body, contentType);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest put(Object url) throws RestCallException {
-		return (MockRestRequest)super.put(url);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest post(Object url, Object body) throws RestCallException {
-		return (MockRestRequest)super.post(url, body);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest post(Object url, String body, ContentType contentType) throws RestCallException {
-		return (MockRestRequest)super.post(url, body, contentType);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest post(Object url) throws RestCallException {
-		return (MockRestRequest)super.post(url);
+	@Override /* Overridden from HttpClientConnection */
+	public void close() throws IOException {
+		// Don't call super.close() because it will close the client.
+		rreq.remove();
+		rres.remove();
+		sreq.remove();
+		sres.remove();
 	}
 
 	@Override /* Overridden from RestClient */
@@ -1949,14 +1898,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return (MockRestRequest)super.delete(url);
 	}
 
-	@Override /* Overridden from RestClient */
-	public MockRestRequest options(Object url) throws RestCallException {
-		return (MockRestRequest)super.options(url);
-	}
+	@Override /* Overridden from HttpClientConnection */
+	public void flush() throws IOException {}
 
 	@Override /* Overridden from RestClient */
-	public MockRestRequest head(Object url) throws RestCallException {
-		return (MockRestRequest)super.head(url);
+	public MockRestRequest formPost(Object url) throws RestCallException {
+		return (MockRestRequest)super.formPost(url);
 	}
 
 	@Override /* Overridden from RestClient */
@@ -1965,53 +1912,19 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from RestClient */
-	public MockRestRequest formPost(Object url) throws RestCallException {
-		return (MockRestRequest)super.formPost(url);
-	}
-
-	@Override /* Overridden from RestClient */
 	public MockRestRequest formPostPairs(Object url, String...parameters) throws RestCallException {
 		return (MockRestRequest)super.formPostPairs(url, parameters);
 	}
 
 	@Override /* Overridden from RestClient */
-	public MockRestRequest patch(Object url, Object body) throws RestCallException {
-		return (MockRestRequest)super.patch(url, body);
+	public MockRestRequest get() throws RestCallException {
+		return (MockRestRequest)super.get();
 	}
 
 	@Override /* Overridden from RestClient */
-	public MockRestRequest patch(Object url, String body, ContentType contentType) throws RestCallException {
-		return (MockRestRequest)super.patch(url, body, contentType);
+	public MockRestRequest get(Object url) throws RestCallException {
+		return (MockRestRequest)super.get(url);
 	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest patch(Object url) throws RestCallException {
-		return (MockRestRequest)super.patch(url);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest callback(String callString) throws RestCallException {
-		return (MockRestRequest)super.callback(callString);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest request(String method, Object url, Object body) throws RestCallException {
-		return (MockRestRequest)super.request(method, url, body);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest request(String method, Object url) throws RestCallException {
-		return (MockRestRequest)super.request(method, url);
-	}
-
-	@Override /* Overridden from RestClient */
-	public MockRestRequest request(String method, Object url, boolean hasBody) throws RestCallException {
-		return (MockRestRequest)super.request(method, url, hasBody);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Getters and setters.
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Returns the current client-side REST request.
@@ -2065,36 +1978,19 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return sres.get();
 	}
 
-	MockRestClient currentResponse(MockRestResponse value) {
-		rres.set(value);
-		return this;
+	@Override /* Overridden from HttpClientConnection */
+	public HttpConnectionMetrics getMetrics() {
+		return null;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// RestClient methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from RestClient */
-	protected MockRestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
-		return new MockRestRequest(this, uri, method, hasBody);
-	}
-
-	@Override /* Overridden from RestClient */
-	protected MockRestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
-		return new MockRestResponse(this, req, httpResponse, parser);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// HttpClientConnection methods.
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Override /* Overridden from HttpClientConnection */
-	public void close() throws IOException {
-		// Don't call super.close() because it will close the client.
-		rreq.remove();
-		rres.remove();
-		sreq.remove();
-		sres.remove();
+	public int getSocketTimeout() {
+		return Integer.MAX_VALUE;
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest head(Object url) throws RestCallException {
+		return (MockRestRequest)super.head(url);
 	}
 
 	@Override /* Overridden from HttpClientConnection */
@@ -2103,29 +1999,134 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* Overridden from HttpClientConnection */
+	public boolean isResponseAvailable(int timeout) throws IOException {
+		return true;
+	}
+
+	@Override /* Overridden from HttpClientConnection */
 	public boolean isStale() {
 		return false;
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void setSocketTimeout(int timeout) {}
+	@Override /* Overridden from RestClient */
+	public MockRestRequest options(Object url) throws RestCallException {
+		return (MockRestRequest)super.options(url);
+	}
 
+	@Override /* Overridden from RestClient */
+	public MockRestRequest patch(Object url) throws RestCallException {
+		return (MockRestRequest)super.patch(url);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest patch(Object url, Object body) throws RestCallException {
+		return (MockRestRequest)super.patch(url, body);
+	}
+	@Override /* Overridden from RestClient */
+	public MockRestRequest patch(Object url, String body, ContentType contentType) throws RestCallException {
+		return (MockRestRequest)super.patch(url, body, contentType);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest post(Object url) throws RestCallException {
+		return (MockRestRequest)super.post(url);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest post(Object url, Object body) throws RestCallException {
+		return (MockRestRequest)super.post(url, body);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest post(Object url, String body, ContentType contentType) throws RestCallException {
+		return (MockRestRequest)super.post(url, body, contentType);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest put(Object url) throws RestCallException {
+		return (MockRestRequest)super.put(url);
+	}
+	@Override /* Overridden from RestClient */
+	public MockRestRequest put(Object url, Object body) throws RestCallException {
+		return (MockRestRequest)super.put(url, body);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest put(Object url, String body, ContentType contentType) throws RestCallException {
+		return (MockRestRequest)super.put(url, body, contentType);
+	}
 	@Override /* Overridden from HttpClientConnection */
-	public int getSocketTimeout() {
-		return Integer.MAX_VALUE;
+	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
+		InputStream is = new ByteArrayInputStream(sres.get().getContent());
+		Header contentEncoding = response.getLastHeader("Content-Encoding");
+		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"))
+			is = new GZIPInputStream(is);
+		response.setEntity(new InputStreamEntity(is));
 	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public void shutdown() throws IOException {}
+	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
+		try {
+			MockServletResponse res = MockServletResponse.create();
+			restContext.execute(restObject, sreq.get(), res);
 
-	@Override /* Overridden from HttpClientConnection */
-	public HttpConnectionMetrics getMetrics() {
-		return null;
+			// If the status isn't set, something's broken.
+			if (res.getStatus() == 0)
+				throw new IllegalStateException("Response status was 0.");
+
+			// A bug in HttpClient causes an infinite loop if the response is less than 200.
+			// As a workaround, just add 1000 to the status code (which is better than an infinite loop).
+			if (res.getStatus() < 200)
+				res.setStatus(1000 + res.getStatus());
+
+			sres.set(res);
+
+			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
+			res.getHeaders().forEach((k,v) -> {
+				for (String hv : v)
+					response.addHeader(k, hv);
+			});
+
+			return response;
+		} catch (Exception e) {
+			throw new HttpException(emptyIfNull(e.getMessage()), e);
+		}
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest request(RestOperation op) throws RestCallException {
+		return (MockRestRequest)super.request(op);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest request(String method, Object url) throws RestCallException {
+		return (MockRestRequest)super.request(method, url);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest request(String method, Object url, boolean hasBody) throws RestCallException {
+		return (MockRestRequest)super.request(method, url, hasBody);
+	}
+
+	@Override /* Overridden from RestClient */
+	public MockRestRequest request(String method, Object url, Object body) throws RestCallException {
+		return (MockRestRequest)super.request(method, url, body);
 	}
 
 	@Override /* Overridden from HttpClientConnection */
-	public boolean isResponseAvailable(int timeout) throws IOException {
-		return true;
+	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
+		byte[] body = {};
+		HttpEntity entity = request.getEntity();
+		if (entity != null) {
+			long length = entity.getContentLength();
+			if (length < 0)
+				length = 1024;
+			ByteArrayOutputStream baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
+			entity.writeTo(baos);
+			baos.flush();
+			body = baos.toByteArray();
+		}
+		sreq.get().content(body);
 	}
 
 	@Override /* Overridden from HttpClientConnection */
@@ -2164,6 +2165,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 	}
 
+	@Override /* Overridden from HttpClientConnection */
+	public void setSocketTimeout(int timeout) {}
+
+	@Override /* Overridden from HttpClientConnection */
+	public void shutdown() throws IOException {}
+
 	/**
 	 * Attempts to unwrap the request to find the underlying RestRequest object.
 	 * Returns the same object if one of the low-level client methods are used (e.g. execute(HttpUriRequest)).
@@ -2185,60 +2192,18 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return "http://localhost";
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
-		byte[] body = {};
-		HttpEntity entity = request.getEntity();
-		if (entity != null) {
-			long length = entity.getContentLength();
-			if (length < 0)
-				length = 1024;
-			ByteArrayOutputStream baos = new ByteArrayOutputStream((int)Math.min(length, 1024));
-			entity.writeTo(baos);
-			baos.flush();
-			body = baos.toByteArray();
-		}
-		sreq.get().content(body);
+	@Override /* Overridden from RestClient */
+	protected MockRestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
+		return new MockRestRequest(this, uri, method, hasBody);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
-		try {
-			MockServletResponse res = MockServletResponse.create();
-			restContext.execute(restObject, sreq.get(), res);
-
-			// If the status isn't set, something's broken.
-			if (res.getStatus() == 0)
-				throw new IllegalStateException("Response status was 0.");
-
-			// A bug in HttpClient causes an infinite loop if the response is less than 200.
-			// As a workaround, just add 1000 to the status code (which is better than an infinite loop).
-			if (res.getStatus() < 200)
-				res.setStatus(1000 + res.getStatus());
-
-			sres.set(res);
-
-			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
-			res.getHeaders().forEach((k,v) -> {
-				for (String hv : v)
-					response.addHeader(k, hv);
-			});
-
-			return response;
-		} catch (Exception e) {
-			throw new HttpException(emptyIfNull(e.getMessage()), e);
-		}
+	@Override /* Overridden from RestClient */
+	protected MockRestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
+		return new MockRestResponse(this, req, httpResponse, parser);
 	}
 
-	@Override /* Overridden from HttpClientConnection */
-	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
-		InputStream is = new ByteArrayInputStream(sres.get().getContent());
-		Header contentEncoding = response.getLastHeader("Content-Encoding");
-		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"))
-			is = new GZIPInputStream(is);
-		response.setEntity(new InputStreamEntity(is));
+	MockRestClient currentResponse(MockRestResponse value) {
+		rres.set(value);
+		return this;
 	}
-
-	@Override /* Overridden from HttpClientConnection */
-	public void flush() throws IOException {}
 }

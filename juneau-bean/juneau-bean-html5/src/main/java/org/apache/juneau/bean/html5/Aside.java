@@ -93,7 +93,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#aside() aside()}
- * 		<li class='jm'>{@link HtmlBuilder#aside(Object, Object...) aside(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#aside(Object...) aside(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -118,10 +118,6 @@ public class Aside extends HtmlElementMixed {
 	public Aside(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Aside _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -131,6 +127,30 @@ public class Aside extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Aside accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Aside attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Aside attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Aside child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Aside children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -491,30 +511,6 @@ public class Aside extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Aside translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Aside child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Aside children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Aside attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Aside attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

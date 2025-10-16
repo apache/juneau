@@ -40,28 +40,8 @@ import org.apache.juneau.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */
+@SuppressWarnings("resource")
 public class ClasspathStore extends ConfigStore {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default memory store, all default values.*/
-	public static final ClasspathStore DEFAULT = ClasspathStore.create().build();
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -76,6 +56,15 @@ public class ClasspathStore extends ConfigStore {
 		/**
 		 * Copy constructor.
 		 *
+		 * @param copyFrom The builder to copy from.
+		 */
+		protected Builder(Builder copyFrom) {
+			super(copyFrom);
+		}
+
+		/**
+		 * Copy constructor.
+		 *
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(ClasspathStore copyFrom) {
@@ -83,28 +72,6 @@ public class ClasspathStore extends ConfigStore {
 			type(copyFrom.getClass());
 		}
 
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder to copy from.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public ClasspathStore build() {
-			return build(ClasspathStore.class);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -116,13 +83,6 @@ public class ClasspathStore extends ConfigStore {
 			super.apply(work);
 			return this;
 		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
 		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
@@ -130,9 +90,25 @@ public class ClasspathStore extends ConfigStore {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public ClasspathStore build() {
+			return build(ClasspathStore.class);
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -160,15 +136,16 @@ public class ClasspathStore extends ConfigStore {
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Context */
-	public Builder copy() {
-		return new Builder(this);
+	/** Default memory store, all default values.*/
+	public static final ClasspathStore DEFAULT = ClasspathStore.create().build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
-
 	private final ConcurrentHashMap<String,String> cache = new ConcurrentHashMap<>();
 
 	/**
@@ -178,6 +155,28 @@ public class ClasspathStore extends ConfigStore {
 	 */
 	public ClasspathStore(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * No-op.
+	 */
+	@Override /* Overridden from Closeable */
+	public void close() throws IOException {
+		// No-op
+	}
+
+	@Override /* Overridden from Context */
+	public Builder copy() {
+		return new Builder(this);
+	}
+
+	@Override /* Overridden from ConfigStore */
+	public synchronized boolean exists(String name) {
+		try {
+			return ! read(name).isEmpty();
+		} catch (IOException e) {
+			return false;
+		}
 	}
 
 	@Override /* Overridden from ConfigStore */
@@ -195,6 +194,16 @@ public class ClasspathStore extends ConfigStore {
 	}
 
 	@Override /* Overridden from ConfigStore */
+	public synchronized ClasspathStore update(String name, String newContents) {
+		if (newContents == null)
+			cache.remove(name);
+		else
+			cache.put(name, newContents);
+		super.update(name, newContents);
+		return this;
+	}
+
+	@Override /* Overridden from ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 
 		// This is a no-op.
@@ -209,32 +218,5 @@ public class ClasspathStore extends ConfigStore {
 		update(name, newContents);
 
 		return null;
-	}
-
-	@Override /* Overridden from ConfigStore */
-	public synchronized boolean exists(String name) {
-		try {
-			return ! read(name).isEmpty();
-		} catch (IOException e) {
-			return false;
-		}
-	}
-
-	@Override /* Overridden from ConfigStore */
-	public synchronized ClasspathStore update(String name, String newContents) {
-		if (newContents == null)
-			cache.remove(name);
-		else
-			cache.put(name, newContents);
-		super.update(name, newContents);
-		return this;
-	}
-
-	/**
-	 * No-op.
-	 */
-	@Override /* Overridden from Closeable */
-	public void close() throws IOException {
-		// No-op
 	}
 }

@@ -77,7 +77,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#div() div()}
- * 		<li class='jm'>{@link HtmlBuilder#div(Object, Object...) div(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#div(Object...) div(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -102,10 +102,6 @@ public class Div extends HtmlElementMixed {
 	public Div(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Div _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -115,6 +111,30 @@ public class Div extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Div accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Div attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Div attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Div child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Div children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -475,30 +495,6 @@ public class Div extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Div translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Div child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Div children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Div attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Div attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

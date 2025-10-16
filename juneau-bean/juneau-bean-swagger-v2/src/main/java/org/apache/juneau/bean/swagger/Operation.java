@@ -225,6 +225,212 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addConsumes(Collection<MediaType> values) {
+		consumes = setBuilder(consumes).sparse().addAll(values).build();
+		return this;
+	}
+	/**
+	 * Bean property fluent setter:  <property>consumes</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can consume.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation addConsumes(MediaType...value) {
+		consumes = setBuilder(consumes).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * The parameters needed to send a valid API call.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addParameters(Collection<ParameterInfo> values) {
+		parameters = listBuilder(parameters).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation addParameters(ParameterInfo...value) {
+		parameters = listBuilder(parameters).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addProduces(Collection<MediaType> values) {
+		produces = setBuilder(produces).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation addProduces(MediaType...value) {
+		produces = setBuilder(produces).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Adds a single value to the <property>responses</property> property.
+	 *
+	 * @param statusCode The HTTP status code.  Must not be <jk>null</jk>.
+	 * @param response The response description.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addResponse(String statusCode, ResponseInfo response) {
+		assertArgNotNull("statusCode", statusCode);
+		assertArgNotNull("response", response);
+		responses = mapBuilder(responses).add(statusCode, response).build();
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSchemes(Collection<String> values) {
+		schemes = setBuilder(schemes).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>String values can also be JSON arrays.
+	 * @return This object.
+	 */
+	public Operation addSchemes(String...value) {
+		schemes = setBuilder(schemes).sparse().add(value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property adder:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
+		assertArgNotNull("value", value);
+		security = listBuilder(security).addAll(value).build();
+		return this;
+	}
+
+	/**
+	 * Same as {@link #addSecurity(String, String...)}.
+	 *
+	 * @param scheme
+	 * 	The scheme name.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param alternatives
+	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
+	 * 	between the security requirements).
+	 * @return This object.
+	 */
+	public Operation addSecurity(String scheme, String...alternatives) {
+		assertArgNotNull("scheme", scheme);
+		Map<String,List<String>> m = map();
+		m.put(scheme, alist(alternatives));
+		security = listBuilder(security).add(m).build();
+		return this;
+	}
+
+	/**
+	 * Bean property appender:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 *
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public Operation addTags(Collection<String> values) {
+		tags = setBuilder(tags).sparse().addAll(values).build();
+		return this;
+	}
+
+	/**
+	 * Bean property fluent adder:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * @return This object.
+	 */
+	public Operation addTags(String...value) {
+		tags = setBuilder(tags).sparse().add(value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -233,9 +439,25 @@ public class Operation extends SwaggerElement {
 		return new Operation(this);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "consumes" -> toType(getConsumes(), type);
+			case "deprecated" -> toType(getDeprecated(), type);
+			case "description" -> toType(getDescription(), type);
+			case "externalDocs" -> toType(getExternalDocs(), type);
+			case "operationId" -> toType(getOperationId(), type);
+			case "parameters" -> toType(getParameters(), type);
+			case "produces" -> toType(getProduces(), type);
+			case "responses" -> toType(getResponses(), type);
+			case "schemes" -> toType(getSchemes(), type);
+			case "security" -> toType(getSecurity(), type);
+			case "summary" -> toType(getSummary(), type);
+			case "tags" -> toType(getTags(), type);
+			default -> super.get(property, type);
+		};
+	}
 
 	/**
 	 * Bean property getter:  <property>consumes</property>.
@@ -247,6 +469,246 @@ public class Operation extends SwaggerElement {
 	 */
 	public Set<MediaType> getConsumes() {
 		return consumes;
+	}
+
+	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * Declares this operation to be deprecated.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getDeprecated() {
+		return deprecated;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A verbose explanation of the operation behavior.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>externalDocs</property>.
+	 *
+	 * <p>
+	 * Additional external documentation for this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public ExternalDocumentation getExternalDocs() {
+		return externalDocs;
+	}
+
+	/**
+	 * Bean property getter:  <property>operationId</property>.
+	 *
+	 * <p>
+	 * Unique string used to identify the operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getOperationId() {
+		return operationId;
+	}
+
+	/**
+	 * Returns the parameter with the specified type and name.
+	 *
+	 * @param in The parameter in.  Must not be <jk>null</jk>.
+	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
+	 * @return The matching parameter info, or <jk>null</jk> if not found.
+	 */
+	public ParameterInfo getParameter(String in, String name) {
+		assertArgNotNull("in", in);
+		// Note: name can be null for "body" parameters
+		if (parameters != null)
+			for (var pi : parameters)
+				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
+					return pi;
+		return null;
+	}
+	/**
+	 * Bean property getter:  <property>parameters</property>.
+	 *
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
+	 * 		the new definition will override it, but can never remove it.
+	 * 	<li class='note'>
+	 * 		The list MUST NOT include duplicated parameters.
+	 * 	<li class='note'>
+	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
+	 * 	<li class='note'>
+	 * 		The list can use the <a class="doclink" href="https://swagger.io/specification#referenceObject">Swagger Reference Object</a>
+	 * 		to link to parameters that are defined at the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Object's parameters</a>.
+	 * 	<li class='note'>
+	 * 		There can be one <js>"body"</js> parameter at most.
+	 * </ul>
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<ParameterInfo> getParameters() {
+		return parameters;
+	}
+
+	/**
+	 * Bean property getter:  <property>produces</property>.
+	 *
+	 * <p>
+	 * A list of MIME types the operation can produce.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<MediaType> getProduces() {
+		return produces;
+	}
+
+	/**
+	 * Returns the response info with the given status code.
+	 *
+	 * @param status The HTTP status code.
+	 * @return The response info, or <jk>null</jk> if not found.
+	 */
+	public ResponseInfo getResponse(int status) {
+		return getResponse(String.valueOf(status));
+	}
+
+	/**
+	 * Returns the response info with the given status code.
+	 *
+	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
+	 * @return The response info, or <jk>null</jk> if not found.
+	 */
+	public ResponseInfo getResponse(String status) {
+		assertArgNotNull("status", status);
+		return responses == null ? null : responses.get(status);
+	}
+
+	/**
+	 * Bean property getter:  <property>responses</property>.
+	 *
+	 * <p>
+	 * The list of possible responses as they are returned from executing this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,ResponseInfo> getResponses() {
+		return responses;
+	}
+
+	/**
+	 * Bean property getter:  <property>schemes</property>.
+	 *
+	 * <p>
+	 * The transfer protocol for the operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<String> getSchemes() {
+		return schemes;
+	}
+
+	/**
+	 * Bean property getter:  <property>security</property>.
+	 *
+	 * <p>
+	 * A declaration of which security schemes are applied for this operation.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Map<String,List<String>>> getSecurity() {
+		return security;
+	}
+
+	/**
+	 * Bean property getter:  <property>summary</property>.
+	 *
+	 * <p>
+	 * A short summary of what the operation does.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getSummary() {
+		return summary;
+	}
+
+	/**
+	 * Bean property getter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<String> getTags() {
+		return tags;
+	}
+
+	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * <p>
+	 * Declares this operation to be deprecated.
+	 *
+	 * @return The property value, or <jk>false</jk> if it is not set.
+	 */
+	public boolean isDeprecated() {
+		return deprecated != null && deprecated;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(consumes != null, "consumes")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(description != null, "description")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(operationId != null, "operationId")
+			.addIf(parameters != null, "parameters")
+			.addIf(produces != null, "produces")
+			.addIf(responses != null, "responses")
+			.addIf(schemes != null, "schemes")
+			.addIf(security != null, "security")
+			.addIf(summary != null, "summary")
+			.addIf(tags != null, "tags")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override /* Overridden from SwaggerElement */
+	public Operation set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "operationId" -> setOperationId(Utils.s(value));
+			case "parameters" -> setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
+			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
+			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
+			case "summary" -> setSummary(Utils.s(value));
+			case "tags" -> setTags(listBuilder(String.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -283,61 +745,6 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>consumes</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can consume.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation addConsumes(MediaType...value) {
-		consumes = setBuilder(consumes).sparse().add(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>consumes</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can consume.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addConsumes(Collection<MediaType> values) {
-		consumes = setBuilder(consumes).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * Declares this operation to be deprecated.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
-
-	/**
-	 * Bean property getter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * Declares this operation to be deprecated.
-	 *
-	 * @return The property value, or <jk>false</jk> if it is not set.
-	 */
-	public boolean isDeprecated() {
-		return deprecated != null && deprecated;
-	}
-
-	/**
 	 * Bean property setter:  <property>deprecated</property>.
 	 *
 	 * <p>
@@ -350,18 +757,6 @@ public class Operation extends SwaggerElement {
 	public Operation setDeprecated(Boolean value) {
 		deprecated = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A verbose explanation of the operation behavior.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
 	}
 
 	/**
@@ -382,18 +777,6 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this operation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
-
-	/**
 	 * Bean property setter:  <property>externalDocs</property>.
 	 *
 	 * <p>
@@ -407,18 +790,6 @@ public class Operation extends SwaggerElement {
 	public Operation setExternalDocs(ExternalDocumentation value) {
 		externalDocs = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>operationId</property>.
-	 *
-	 * <p>
-	 * Unique string used to identify the operation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getOperationId() {
-		return operationId;
 	}
 
 	/**
@@ -438,50 +809,6 @@ public class Operation extends SwaggerElement {
 	public Operation setOperationId(String value) {
 		operationId = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
-	 * 		the new definition will override it, but can never remove it.
-	 * 	<li class='note'>
-	 * 		The list MUST NOT include duplicated parameters.
-	 * 	<li class='note'>
-	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
-	 * 	<li class='note'>
-	 * 		The list can use the <a class="doclink" href="https://swagger.io/specification#referenceObject">Swagger Reference Object</a>
-	 * 		to link to parameters that are defined at the <a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Object's parameters</a>.
-	 * 	<li class='note'>
-	 * 		There can be one <js>"body"</js> parameter at most.
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<ParameterInfo> getParameters() {
-		return parameters;
-	}
-
-	/**
-	 * Returns the parameter with the specified type and name.
-	 *
-	 * @param in The parameter in.  Must not be <jk>null</jk>.
-	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
-	 * @return The matching parameter info, or <jk>null</jk> if not found.
-	 */
-	public ParameterInfo getParameter(String in, String name) {
-		assertArgNotNull("in", in);
-		// Note: name can be null for "body" parameters
-		if (parameters != null)
-			for (var pi : parameters)
-				if (eq(pi.getIn(), in) && (eq(pi.getName(), name) || "body".equals(pi.getIn())))
-					return pi;
-		return null;
 	}
 
 	/**
@@ -513,53 +840,6 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation setParameters(ParameterInfo...value) {
 		return setParameters(Arrays.asList(value));
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation addParameters(ParameterInfo...value) {
-		parameters = listBuilder(parameters).sparse().add(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * The parameters needed to send a valid API call.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addParameters(Collection<ParameterInfo> values) {
-		parameters = listBuilder(parameters).sparse().addAll(values).build();
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// produces
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Bean property getter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can produce.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Set<MediaType> getProduces() {
-		return produces;
 	}
 
 	/**
@@ -596,70 +876,6 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can produce.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation addProduces(MediaType...value) {
-		produces = setBuilder(produces).sparse().add(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property setter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can produce.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addProduces(Collection<MediaType> values) {
-		produces = setBuilder(produces).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>responses</property>.
-	 *
-	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,ResponseInfo> getResponses() {
-		return responses;
-	}
-
-	/**
-	 * Returns the response info with the given status code.
-	 *
-	 * @param status The HTTP status code.  Must not be <jk>null</jk>.
-	 * @return The response info, or <jk>null</jk> if not found.
-	 */
-	public ResponseInfo getResponse(String status) {
-		assertArgNotNull("status", status);
-		return responses == null ? null : responses.get(status);
-	}
-
-	/**
-	 * Returns the response info with the given status code.
-	 *
-	 * @param status The HTTP status code.
-	 * @return The response info, or <jk>null</jk> if not found.
-	 */
-	public ResponseInfo getResponse(int status) {
-		return getResponse(String.valueOf(status));
-	}
-
-	/**
 	 * Bean property setter:  <property>responses</property>.
 	 *
 	 * <p>
@@ -674,32 +890,6 @@ public class Operation extends SwaggerElement {
 	public Operation setResponses(Map<String,ResponseInfo> value) {
 		responses = copyOf(value);
 		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>responses</property> property.
-	 *
-	 * @param statusCode The HTTP status code.  Must not be <jk>null</jk>.
-	 * @param response The response description.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addResponse(String statusCode, ResponseInfo response) {
-		assertArgNotNull("statusCode", statusCode);
-		assertArgNotNull("response", response);
-		responses = mapBuilder(responses).add(statusCode, response).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>schemes</property>.
-	 *
-	 * <p>
-	 * The transfer protocol for the operation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Set<String> getSchemes() {
-		return schemes;
 	}
 
 	/**
@@ -742,50 +932,6 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property fluent setter:  <property>schemes</property>.
-	 *
-	 * <p>
-	 * The transfer protocol for the operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>String values can also be JSON arrays.
-	 * @return This object.
-	 */
-	public Operation addSchemes(String...value) {
-		schemes = setBuilder(schemes).sparse().add(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property setter:  <property>schemes</property>.
-	 *
-	 * <p>
-	 * The transfer protocol for the operation.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addSchemes(Collection<String> values) {
-		schemes = setBuilder(schemes).sparse().addAll(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for this operation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Map<String,List<String>>> getSecurity() {
-		return security;
-	}
-
-	/**
 	 * Bean property setter:  <property>security</property>.
 	 *
 	 * <p>
@@ -819,55 +965,6 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Same as {@link #addSecurity(String, String...)}.
-	 *
-	 * @param scheme
-	 * 	The scheme name.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param alternatives
-	 * 	The list of values describes alternative security schemes that can be used (that is, there is a logical OR
-	 * 	between the security requirements).
-	 * @return This object.
-	 */
-	public Operation addSecurity(String scheme, String...alternatives) {
-		assertArgNotNull("scheme", scheme);
-		Map<String,List<String>> m = map();
-		m.put(scheme, alist(alternatives));
-		security = listBuilder(security).add(m).build();
-		return this;
-	}
-
-	/**
-	 * Bean property adder:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for this operation.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public Operation addSecurity(Collection<Map<String,List<String>>> value) {
-		assertArgNotNull("value", value);
-		security = listBuilder(security).addAll(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * A short summary of what the operation does.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getSummary() {
-		return summary;
-	}
-
-	/**
 	 * Bean property setter:  <property>summary</property>.
 	 *
 	 * <p>
@@ -881,19 +978,6 @@ public class Operation extends SwaggerElement {
 	public Operation setSummary(String value) {
 		summary = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags for API documentation control.
-	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Set<String> getTags() {
-		return tags;
 	}
 
 	/**
@@ -927,101 +1011,6 @@ public class Operation extends SwaggerElement {
 	public Operation setTags(String...value) {
 		setTags(setBuilder(String.class).sparse().add(value).build());
 		return this;
-	}
-
-	/**
-	 * Bean property fluent adder:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags for API documentation control.
-	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * @return This object.
-	 */
-	public Operation addTags(String...value) {
-		tags = setBuilder(tags).sparse().add(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags for API documentation control.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public Operation addTags(Collection<String> values) {
-		tags = setBuilder(tags).sparse().addAll(values).build();
-		return this;
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "consumes" -> toType(getConsumes(), type);
-			case "deprecated" -> toType(getDeprecated(), type);
-			case "description" -> toType(getDescription(), type);
-			case "externalDocs" -> toType(getExternalDocs(), type);
-			case "operationId" -> toType(getOperationId(), type);
-			case "parameters" -> toType(getParameters(), type);
-			case "produces" -> toType(getProduces(), type);
-			case "responses" -> toType(getResponses(), type);
-			case "schemes" -> toType(getSchemes(), type);
-			case "security" -> toType(getSecurity(), type);
-			case "summary" -> toType(getSummary(), type);
-			case "tags" -> toType(getTags(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override /* Overridden from SwaggerElement */
-	public Operation set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "consumes" -> setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "operationId" -> setOperationId(Utils.s(value));
-			case "parameters" -> setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
-			case "produces" -> setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses" -> setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
-			case "schemes" -> setSchemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security" -> setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
-			case "summary" -> setSummary(Utils.s(value));
-			case "tags" -> setTags(listBuilder(String.class).sparse().addAny(value).build());
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(consumes != null, "consumes")
-			.addIf(deprecated != null, "deprecated")
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
-			.addIf(operationId != null, "operationId")
-			.addIf(parameters != null, "parameters")
-			.addIf(produces != null, "produces")
-			.addIf(responses != null, "responses")
-			.addIf(schemes != null, "schemes")
-			.addIf(security != null, "security")
-			.addIf(summary != null, "summary")
-			.addIf(tags != null, "tags")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	/**

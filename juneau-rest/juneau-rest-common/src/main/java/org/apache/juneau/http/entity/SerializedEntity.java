@@ -40,11 +40,6 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class SerializedEntity extends BasicHttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instances
-	//-----------------------------------------------------------------------------------------------------------------
-
 	Serializer serializer;
 	HttpPartSchema schema;
 
@@ -114,15 +109,103 @@ public class SerializedEntity extends BasicHttpEntity {
 
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Sets the serializer on this entity bean.
-	 *
-	 * @param value The entity serializer, can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public SerializedEntity setSerializer(Serializer value) {
-		assertModifiable();
-		this.serializer = value;
+	@Override /* Overridden from BasicHttpEntity */
+	public InputStream getContent() {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			writeTo(baos);
+			return new ByteArrayInputStream(baos.toByteArray());
+		} catch (IOException e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public long getContentLength() {
+		return -1;
+	}
+
+	@Override
+	public Header getContentType() {
+		Header x = super.getContentType();
+		if (x == null && serializer != null)
+			x = contentType(serializer.getPrimaryMediaType());
+		return x;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public boolean isRepeatable() {
+		return true;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setCached() throws IOException{
+		super.setCached();
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setCharset(Charset value) {
+		super.setCharset(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setChunked() {
+		super.setChunked();
+		return this;
+	}
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setChunked(boolean value) {
+		super.setChunked(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContent(Object value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContent(Supplier<?> value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContentEncoding(ContentEncoding value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContentEncoding(String value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContentLength(long value) {
+		super.setContentLength(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setContentType(String value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setMaxLength(int value) {
+		super.setMaxLength(value);
 		return this;
 	}
 
@@ -141,12 +224,22 @@ public class SerializedEntity extends BasicHttpEntity {
 		return this;
 	}
 
-	@Override
-	public Header getContentType() {
-		Header x = super.getContentType();
-		if (x == null && serializer != null)
-			x = contentType(serializer.getPrimaryMediaType());
-		return x;
+	/**
+	 * Sets the serializer on this entity bean.
+	 *
+	 * @param value The entity serializer, can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public SerializedEntity setSerializer(Serializer value) {
+		assertModifiable();
+		this.serializer = value;
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpEntity */
+	public SerializedEntity setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -167,103 +260,5 @@ public class SerializedEntity extends BasicHttpEntity {
 		} catch (SerializeException e) {
 			throw new BasicRuntimeException(e, "Serialization error on request body.");
 		}
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public long getContentLength() {
-		return -1;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public InputStream getContent() {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			writeTo(baos);
-			return new ByteArrayInputStream(baos.toByteArray());
-		} catch (IOException e) {
-			throw asRuntimeException(e);
-		}
-	}
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setCached() throws IOException{
-		super.setCached();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setCharset(Charset value) {
-		super.setCharset(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setChunked() {
-		super.setChunked();
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setChunked(boolean value) {
-		super.setChunked(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContent(Object value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContent(Supplier<?> value) {
-		super.setContent(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentEncoding(String value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentEncoding(ContentEncoding value) {
-		super.setContentEncoding(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentLength(long value) {
-		super.setContentLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentType(String value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setContentType(ContentType value) {
-		super.setContentType(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setMaxLength(int value) {
-		super.setMaxLength(value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicHttpEntity */
-	public SerializedEntity setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
 	}
 }

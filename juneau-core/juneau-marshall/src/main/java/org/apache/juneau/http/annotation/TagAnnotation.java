@@ -27,27 +27,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class TagAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Tag DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -100,10 +79,6 @@ public class TagAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements Tag {
 
 		private final ExternalDocs externalDocs;
@@ -125,5 +100,15 @@ public class TagAnnotation {
 		public String name() {
 			return name;
 		}
+	}
+	/** Default value */
+	public static final Tag DEFAULT = create().build();
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
 }

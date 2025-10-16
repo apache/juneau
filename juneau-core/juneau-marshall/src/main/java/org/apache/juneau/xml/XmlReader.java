@@ -77,15 +77,6 @@ public class XmlReader implements XMLStreamReader, Positionable {
 		}
 	}
 
-	/**
-	 * Returns the pipe passed into the constructor.
-	 *
-	 * @return The pipe passed into the constructor.
-	 */
-	public ParserPipe getPipe() {
-		return pipe;
-	}
-
 	@Override /* Overridden from XMLStreamReader */
 	public void close() throws XMLStreamException {
 		sr.close();
@@ -187,13 +178,13 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	}
 
 	@Override /* Overridden from XMLStreamReader */
-	public String getNamespaceURI(String prefix) {
-		return sr.getNamespaceURI(prefix);
+	public String getNamespaceURI(int index) {
+		return sr.getNamespaceURI(index);
 	}
 
 	@Override /* Overridden from XMLStreamReader */
-	public String getNamespaceURI(int index) {
-		return sr.getNamespaceURI(index);
+	public String getNamespaceURI(String prefix) {
+		return sr.getNamespaceURI(prefix);
 	}
 
 	@Override /* Overridden from XMLStreamReader */
@@ -201,9 +192,24 @@ public class XmlReader implements XMLStreamReader, Positionable {
 		return sr.getPIData();
 	}
 
+	/**
+	 * Returns the pipe passed into the constructor.
+	 *
+	 * @return The pipe passed into the constructor.
+	 */
+	public ParserPipe getPipe() {
+		return pipe;
+	}
+
 	@Override /* Overridden from XMLStreamReader */
 	public String getPITarget() {
 		return sr.getPITarget();
+	}
+
+	@Override /* Overridden from Positionable */
+	public Position getPosition() {
+		Location l = getLocation();
+		return new Position(l.getLineNumber(), l.getColumnNumber());
 	}
 
 	@Override /* Overridden from XMLStreamReader */
@@ -309,11 +315,5 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	@Override /* Overridden from XMLStreamReader */
 	public boolean standaloneSet() {
 		return sr.standaloneSet();
-	}
-
-	@Override /* Overridden from Positionable */
-	public Position getPosition() {
-		Location l = getLocation();
-		return new Position(l.getLineNumber(), l.getColumnNumber());
 	}
 }

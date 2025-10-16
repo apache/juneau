@@ -77,61 +77,6 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 public abstract class Context implements AnnotationProvider {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
-
-	/**
-	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
-	 */
-	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class);
-
-	/**
-	 * Instantiates a builder of the specified context class.
-	 *
-	 * <p>
-	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
-	 * or protected constructor of the class.
-	 *
-	 * @param type The builder to create.
-	 * @return A new builder.
-	 */
-	public static Builder createBuilder(Class<? extends Context> type) {
-		try {
-			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
-			if (mi == null) {
-				ClassInfo c = ClassInfo.of(type);
-				for (ConstructorInfo ci : c.getPublicConstructors()) {
-					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParam(0).getParameterType().is(type))) {
-						mi = c.getPublicMethod(
-							x -> x.isStatic()
-							&& x.isNotDeprecated()
-							&& x.hasName("create")
-							&& x.hasReturnType(ci.getParam(0).getParameterType())
-						);
-						if (mi != null)
-							break;
-					}
-				}
-				if (mi == null)
-					throw new BasicRuntimeException("Could not find builder create method on class {0}", type);
-				BUILDER_CREATE_METHODS.put(type, mi);
-			}
-			Builder b = (Builder)mi.invoke(null);
-			b.type(type);
-			return b;
-		} catch (ExecutableException e) {
-			throw asRuntimeException(e);
-		}
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -167,18 +112,6 @@ public abstract class Context implements AnnotationProvider {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(Context copyFrom) {
-			debug = copyFrom.debug;
-			type = copyFrom.getClass();
-			annotations = listFrom(copyFrom.annotations, true);
-			registerBuilders(this);
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -188,327 +121,17 @@ public abstract class Context implements AnnotationProvider {
 			registerBuilders(this);
 		}
 
-		private Context innerBuild() {
-			if (type == null)
-				throw new BasicRuntimeException("Type not specified for context builder {0}", getClass().getName());
-			if (impl != null && type.isInstance(impl))
-				return type.cast(impl);
-			if (cache != null)
-				return cache.get(hashKey(), ()->getContextConstructor().invoke(this));
-			return getContextConstructor().invoke(this);
-		}
-
-		private ConstructorInfo getContextConstructor() {
-			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
-			if (cci == null) {
-				cci = ClassInfo.of(type).getPublicConstructor(
-					x -> x.hasNumParams(1)
-					&& x.getParam(0).canAccept(this)
-				);
-				if (cci == null)
-					throw new BasicRuntimeException("Public constructor not found: {0}({1})", className(type), className(this));
-				CONTEXT_CONSTRUCTORS.put(type, cci);
-			}
-			return cci;
-		}
-
 		/**
-		 * Copy creator.
+		 * Copy constructor.
 		 *
-		 * @return A new mutable copy of this builder.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public abstract Builder copy();
-
-		/**
-		 * Build the object.
-		 *
-		 * @return The built object.
-		 */
-		public Context build() {
-			return innerBuild();
+		protected Builder(Context copyFrom) {
+			debug = copyFrom.debug;
+			type = copyFrom.getClass();
+			annotations = listFrom(copyFrom.annotations, true);
+			registerBuilders(this);
 		}
-
-		/**
-		 * Returns the hashkey of this builder.
-		 *
-		 * <p>
-		 * Used to return previously instantiated context beans that have matching hashkeys.
-		 * The {@link HashKey} object is suitable for use as a hashmap key of a map of context beans.
-		 * A context bean is considered equivalent if the {@link HashKey#equals(Object)} method is the same.
-		 *
-		 * @return The hashkey of this builder.
-		 */
-		public HashKey hashKey() {
-			return HashKey.of(debug, type, annotations);
-		}
-
-		/**
-		 * Specifies a cache to use for hashkey-based caching.
-		 *
-		 * @param value The cache.
-		 * @return This object.
-		 */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
-			this.cache = value;
-			return this;
-		}
-
-		/**
-		 * Convenience method for calling {@link #build()} while avoiding a cast.
-		 *
-		 * @param <T> The type to cast the built object to.
-		 * @param c The type to cast the built object to.
-		 * @return The built context bean.
-		 */
-		@SuppressWarnings("unchecked")
-		public final <T extends Context> T build(Class<T> c) {
-			if (type == null || ! c.isAssignableFrom(type))
-				type = c;
-			return (T)innerBuild();
-		}
-
-		/**
-		 * Apply a consumer to this builder.
-		 *
-		 * @param <T> The builder subtype that this consumer can be applied to.
-		 * @param subtype The builder subtype that this consumer can be applied to.
-		 * @param consumer The consumer.
-		 * @return This object.
-		 */
-		public <T extends Builder> Builder apply(Class<T> subtype, Consumer<T> consumer) {
-			if (subtype.isInstance(this))
-				consumer.accept(subtype.cast(this));
-			return this;
-		}
-
-		/**
-		 * Associates a context class with this builder.
-		 *
-		 * <p>
-		 * This is the type of object that this builder creates when the {@link #build()} method is called.
-		 *
-		 * <p>
-		 * By default, it's the outer class of where the builder class is defined.
-		 *
-		 * @param value The context class that this builder should create.
-		 * @return This object.
-		 */
-		public Builder type(Class<? extends Context> value) {
-			this.type = value;
-			return this;
-		}
-
-		/**
-		 * Returns the context class that this builder should create.
-		 *
-		 * @return The context class if it was specified.
-		 */
-		public Optional<Class<?>> getType() {
-			return Utils.opt(type);
-		}
-
-		/**
-		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
-		 *
-		 * @param value The value for this setting.
-		 * @return This object.
-		 */
-		public Builder impl(Context value) {
-			impl = value;
-			return this;
-		}
-
-		/**
-		 * Returns <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
-		 *
-		 * @param work The work to check.
-		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
-		 */
-		public boolean canApply(AnnotationWorkList work) {
-			Flag f = Flag.create();
-			work.forEach(x -> builders.forEach(b -> f.setIf(x.canApply(b))));
-			return f.isSet();
-		}
-
-		/**
-		 * Applies a set of applied to this builder.
-		 *
-		 * <p>
-		 * An {@link AnnotationWork} consists of a single pair of {@link AnnotationInfo} that represents an annotation instance,
-		 * and {@link AnnotationApplier} which represents the code used to apply the values in that annotation to a specific builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
-		 * 	<jk>public class</jk> MyClass {...}
-		 *
-		 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
-		 * 	AnnotationList <jv>annotations</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotationList(<jsf>CONTEXT_APPLY_FILTER</jsf>);
-		 * 	VarResolverSession <jv>vrs</jv> = VarResolver.<jsf>DEFAULT</jsf>.createSession();
-		 * 	AnnotationWorkList <jv>work</jv> = AnnotationWorkList.of(<jv>vrs</jv>, <jv>annotations</jv>);
-		 *
-		 * 	<jc>// Apply any settings found on the annotations.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.apply(<jv>work</jv>)
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param work The list of annotations and appliers to apply to this builder.
-		 * @return This object.
-		 */
-		public Builder apply(AnnotationWorkList work) {
-			applied.addAll(work);
-			work.forEach(x -> builders.forEach(x::apply));
-			return this;
-		}
-
-		/**
-		 * Returns all the annotations that have been applied to this builder.
-		 *
-		 * @return All the annotations that have been applied to this builder.
-		 */
-		public AnnotationWorkList getApplied() {
-			return applied;
-		}
-
-		/**
-		 * Registers the specified secondary builders with this context builder.
-		 *
-		 * <p>
-		 * When {@link #apply(AnnotationWorkList)} is called, it gets called on all registered builders.
-		 *
-		 * @param builders The builders to add to the list of builders.
-		 */
-		protected void registerBuilders(Object...builders) {
-			for (Object b : builders) {
-				if (b == this)
-					this.builders.add(b);
-				else if (b instanceof Builder b2)
-					this.builders.addAll(b2.builders);
-				else
-					this.builders.add(b);
-			}
-		}
-
-		/**
-		 * Applies any of the various <ja>@XConfig</ja> annotations on the specified classes or methods to this context.
-		 *
-		 * <p>
-		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
-		 * applied as properties to this builder.  These annotations include:
-		 * <ul class='javatreec'>
-		 * 	<li class ='ja'>{@link BeanConfig}
-		 * 	<li class ='ja'>{@link CsvConfig}
-		 * 	<li class ='ja'>{@link HtmlConfig}
-		 * 	<li class ='ja'>{@link HtmlDocConfig}
-		 * 	<li class ='ja'>{@link JsonConfig}
-		 * 	<li class ='ja'>{@link JsonSchemaConfig}
-		 * 	<li class ='ja'>{@link MsgPackConfig}
-		 * 	<li class ='ja'>{@link OpenApiConfig}
-		 * 	<li class ='ja'>{@link ParserConfig}
-		 * 	<li class ='ja'>{@link PlainTextConfig}
-		 * 	<li class ='ja'>{@link SerializerConfig}
-		 * 	<li class ='ja'>{@link SoapXmlConfig}
-		 * 	<li class ='ja'>{@link UonConfig}
-		 * 	<li class ='ja'>{@link UrlEncodingConfig}
-		 * 	<li class ='ja'>{@link XmlConfig}
-		 * 	<li class ='ja'><c>RdfConfig</c>
-		 * </ul>
-		 *
-		 * <p>
-		 * Annotations on classes are appended in the following order:
-		 * <ol>
-		 * 	<li>On the package of this class.
-		 * 	<li>On interfaces ordered parent-to-child.
-		 * 	<li>On parent classes ordered parent-to-child.
-		 * 	<li>On this class.
-		 * </ol>
-		 *
-		 * <p>
-		 * Annotations on methods are appended in the following order:
-		 * <ol>
-		 * 	<li>On the package of the method class.
-		 * 	<li>On interfaces ordered parent-to-child.
-		 * 	<li>On parent classes ordered parent-to-child.
-		 * 	<li>On the method class.
-		 * 	<li>On this method and matching methods ordered parent-to-child.
-		 * </ol>
-		 *
-		 * <p>
-		 * The default var resolver {@link VarResolver#DEFAULT} is used to resolve any variables in annotation field values.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A class annotated with a config annotation.</jc>
-		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
-		 * 	<jk>public class</jk> MyClass {...}
-		 *
-		 * 	<jc>// Apply any settings found on the annotations.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.applyAnnotations(MyClass.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// A method annotated with a config annotation.</jc>
-		 * 	<jk>public class</jk> MyClass {
-		 * 		<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
-		 * 		<jk>public void</jk> myMethod() {...}
-		 * 	}
-		 *
-		 * 	<jc>// Apply any settings found on the annotations.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.applyAnnotations(MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param from The classes or methods on which the annotations are defined.
-		 * 	Can be any of the following types:
-		 * 	<ul>
-		 * 		<li>{@link Class}
-		 * 		<li>{@link ClassInfo}
-		 * 		<li>{@link Method}
-		 * 		<li>{@link MethodInfo}
-		 *		<li>A collection/stream/array of anything on this list.
-		 * @return This object.
-		 */
-		public Builder applyAnnotations(Object...from) {
-			var work = AnnotationWorkList.create();
-			Arrays.stream(from).forEach(x -> traverse(work, x));
-			return apply(work);
-		}
-
-		private AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
-			Utils.traverse(x, y -> {
-				if (x instanceof Class<?> x2)
-					work.add(ClassInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
-				else if (x instanceof ClassInfo x2)
-					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
-				else if (x instanceof Method x2)
-					work.add(MethodInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
-				else if (x instanceof MethodInfo x2)
-					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
-				else
-					throw illegalArg("Invalid type passed to applyAnnotations:  {0}", x.getClass().getName());
-			});
-			return work;
-		}
-
-		/**
-		 * Same as {@link #applyAnnotations(Object...)} but explicitly specifies a class varargs to avoid compilation warnings.
-		 *
-		 * @param from The classes or methods on which the annotations are defined.
-		 * @return This object.
-		 */
-		public Builder applyAnnotations(Class<?>...from) {
-			return applyAnnotations((Object[])from);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
 		 * Defines annotations to apply to specific classes and methods.
@@ -699,6 +322,205 @@ public abstract class Context implements AnnotationProvider {
 		}
 
 		/**
+		 * Applies a set of applied to this builder.
+		 *
+		 * <p>
+		 * An {@link AnnotationWork} consists of a single pair of {@link AnnotationInfo} that represents an annotation instance,
+		 * and {@link AnnotationApplier} which represents the code used to apply the values in that annotation to a specific builder.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A class annotated with a config annotation.</jc>
+		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 	<jk>public class</jk> MyClass {...}
+		 *
+		 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
+		 * 	AnnotationList <jv>annotations</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotationList(<jsf>CONTEXT_APPLY_FILTER</jsf>);
+		 * 	VarResolverSession <jv>vrs</jv> = VarResolver.<jsf>DEFAULT</jsf>.createSession();
+		 * 	AnnotationWorkList <jv>work</jv> = AnnotationWorkList.of(<jv>vrs</jv>, <jv>annotations</jv>);
+		 *
+		 * 	<jc>// Apply any settings found on the annotations.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.apply(<jv>work</jv>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param work The list of annotations and appliers to apply to this builder.
+		 * @return This object.
+		 */
+		public Builder apply(AnnotationWorkList work) {
+			applied.addAll(work);
+			work.forEach(x -> builders.forEach(x::apply));
+			return this;
+		}
+
+		/**
+		 * Apply a consumer to this builder.
+		 *
+		 * @param <T> The builder subtype that this consumer can be applied to.
+		 * @param subtype The builder subtype that this consumer can be applied to.
+		 * @param consumer The consumer.
+		 * @return This object.
+		 */
+		public <T extends Builder> Builder apply(Class<T> subtype, Consumer<T> consumer) {
+			if (subtype.isInstance(this))
+				consumer.accept(subtype.cast(this));
+			return this;
+		}
+
+		/**
+		 * Same as {@link #applyAnnotations(Object...)} but explicitly specifies a class varargs to avoid compilation warnings.
+		 *
+		 * @param from The classes or methods on which the annotations are defined.
+		 * @return This object.
+		 */
+		public Builder applyAnnotations(Class<?>...from) {
+			return applyAnnotations((Object[])from);
+		}
+
+		/**
+		 * Applies any of the various <ja>@XConfig</ja> annotations on the specified classes or methods to this context.
+		 *
+		 * <p>
+		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
+		 * applied as properties to this builder.  These annotations include:
+		 * <ul class='javatreec'>
+		 * 	<li class ='ja'>{@link BeanConfig}
+		 * 	<li class ='ja'>{@link CsvConfig}
+		 * 	<li class ='ja'>{@link HtmlConfig}
+		 * 	<li class ='ja'>{@link HtmlDocConfig}
+		 * 	<li class ='ja'>{@link JsonConfig}
+		 * 	<li class ='ja'>{@link JsonSchemaConfig}
+		 * 	<li class ='ja'>{@link MsgPackConfig}
+		 * 	<li class ='ja'>{@link OpenApiConfig}
+		 * 	<li class ='ja'>{@link ParserConfig}
+		 * 	<li class ='ja'>{@link PlainTextConfig}
+		 * 	<li class ='ja'>{@link SerializerConfig}
+		 * 	<li class ='ja'>{@link SoapXmlConfig}
+		 * 	<li class ='ja'>{@link UonConfig}
+		 * 	<li class ='ja'>{@link UrlEncodingConfig}
+		 * 	<li class ='ja'>{@link XmlConfig}
+		 * 	<li class ='ja'><c>RdfConfig</c>
+		 * </ul>
+		 *
+		 * <p>
+		 * Annotations on classes are appended in the following order:
+		 * <ol>
+		 * 	<li>On the package of this class.
+		 * 	<li>On interfaces ordered parent-to-child.
+		 * 	<li>On parent classes ordered parent-to-child.
+		 * 	<li>On this class.
+		 * </ol>
+		 *
+		 * <p>
+		 * Annotations on methods are appended in the following order:
+		 * <ol>
+		 * 	<li>On the package of the method class.
+		 * 	<li>On interfaces ordered parent-to-child.
+		 * 	<li>On parent classes ordered parent-to-child.
+		 * 	<li>On the method class.
+		 * 	<li>On this method and matching methods ordered parent-to-child.
+		 * </ol>
+		 *
+		 * <p>
+		 * The default var resolver {@link VarResolver#DEFAULT} is used to resolve any variables in annotation field values.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A class annotated with a config annotation.</jc>
+		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 	<jk>public class</jk> MyClass {...}
+		 *
+		 * 	<jc>// Apply any settings found on the annotations.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.applyAnnotations(MyClass.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// A method annotated with a config annotation.</jc>
+		 * 	<jk>public class</jk> MyClass {
+		 * 		<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
+		 * 		<jk>public void</jk> myMethod() {...}
+		 * 	}
+		 *
+		 * 	<jc>// Apply any settings found on the annotations.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.applyAnnotations(MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param from The classes or methods on which the annotations are defined.
+		 * 	Can be any of the following types:
+		 * 	<ul>
+		 * 		<li>{@link Class}
+		 * 		<li>{@link ClassInfo}
+		 * 		<li>{@link Method}
+		 * 		<li>{@link MethodInfo}
+		 *		<li>A collection/stream/array of anything on this list.
+		 * @return This object.
+		 */
+		public Builder applyAnnotations(Object...from) {
+			var work = AnnotationWorkList.create();
+			Arrays.stream(from).forEach(x -> traverse(work, x));
+			return apply(work);
+		}
+
+		/**
+		 * Build the object.
+		 *
+		 * @return The built object.
+		 */
+		public Context build() {
+			return innerBuild();
+		}
+
+		/**
+		 * Convenience method for calling {@link #build()} while avoiding a cast.
+		 *
+		 * @param <T> The type to cast the built object to.
+		 * @param c The type to cast the built object to.
+		 * @return The built context bean.
+		 */
+		@SuppressWarnings("unchecked")
+		public final <T extends Context> T build(Class<T> c) {
+			if (type == null || ! c.isAssignableFrom(type))
+				type = c;
+			return (T)innerBuild();
+		}
+
+		/**
+		 * Specifies a cache to use for hashkey-based caching.
+		 *
+		 * @param value The cache.
+		 * @return This object.
+		 */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			this.cache = value;
+			return this;
+		}
+
+		/**
+		 * Returns <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
+		 *
+		 * @param work The work to check.
+		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
+		 */
+		public boolean canApply(AnnotationWorkList work) {
+			Flag f = Flag.create();
+			work.forEach(x -> builders.forEach(b -> f.setIf(x.canApply(b))));
+			return f.isSet();
+		}
+
+		/**
+		 * Copy creator.
+		 *
+		 * @return A new mutable copy of this builder.
+		 */
+		public abstract Builder copy();
+
+		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  Debug mode.
 		 *
 		 * <p>
@@ -761,6 +583,49 @@ public abstract class Context implements AnnotationProvider {
 		}
 
 		/**
+		 * Returns all the annotations that have been applied to this builder.
+		 *
+		 * @return All the annotations that have been applied to this builder.
+		 */
+		public AnnotationWorkList getApplied() {
+			return applied;
+		}
+
+		/**
+		 * Returns the context class that this builder should create.
+		 *
+		 * @return The context class if it was specified.
+		 */
+		public Optional<Class<?>> getType() {
+			return Utils.opt(type);
+		}
+
+		/**
+		 * Returns the hashkey of this builder.
+		 *
+		 * <p>
+		 * Used to return previously instantiated context beans that have matching hashkeys.
+		 * The {@link HashKey} object is suitable for use as a hashmap key of a map of context beans.
+		 * A context bean is considered equivalent if the {@link HashKey#equals(Object)} method is the same.
+		 *
+		 * @return The hashkey of this builder.
+		 */
+		public HashKey hashKey() {
+			return HashKey.of(debug, type, annotations);
+		}
+
+		/**
+		 * Specifies a pre-instantiated bean for the {@link #build()} method to return.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder impl(Context value) {
+			impl = value;
+			return this;
+		}
+
+		/**
 		 * Returns <jk>true</jk> if debug is enabled.
 		 *
 		 * @return <jk>true</jk> if debug is enabled.
@@ -768,12 +633,127 @@ public abstract class Context implements AnnotationProvider {
 		public boolean isDebug() {
 			return debug;
 		}
+		/**
+		 * Associates a context class with this builder.
+		 *
+		 * <p>
+		 * This is the type of object that this builder creates when the {@link #build()} method is called.
+		 *
+		 * <p>
+		 * By default, it's the outer class of where the builder class is defined.
+		 *
+		 * @param value The context class that this builder should create.
+		 * @return This object.
+		 */
+		public Builder type(Class<? extends Context> value) {
+			this.type = value;
+			return this;
+		}
+
+		private ConstructorInfo getContextConstructor() {
+			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+			if (cci == null) {
+				cci = ClassInfo.of(type).getPublicConstructor(
+					x -> x.hasNumParams(1)
+					&& x.getParam(0).canAccept(this)
+				);
+				if (cci == null)
+					throw new BasicRuntimeException("Public constructor not found: {0}({1})", className(type), className(this));
+				CONTEXT_CONSTRUCTORS.put(type, cci);
+			}
+			return cci;
+		}
+
+		private Context innerBuild() {
+			if (type == null)
+				throw new BasicRuntimeException("Type not specified for context builder {0}", getClass().getName());
+			if (impl != null && type.isInstance(impl))
+				return type.cast(impl);
+			if (cache != null)
+				return cache.get(hashKey(), ()->getContextConstructor().invoke(this));
+			return getContextConstructor().invoke(this);
+		}
+
+		private AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
+			Utils.traverse(x, y -> {
+				if (x instanceof Class<?> x2)
+					work.add(ClassInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
+				else if (x instanceof ClassInfo x2)
+					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
+				else if (x instanceof Method x2)
+					work.add(MethodInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));
+				else if (x instanceof MethodInfo x2)
+					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
+				else
+					throw illegalArg("Invalid type passed to applyAnnotations:  {0}", x.getClass().getName());
+			});
+			return work;
+		}
+
+		/**
+		 * Registers the specified secondary builders with this context builder.
+		 *
+		 * <p>
+		 * When {@link #apply(AnnotationWorkList)} is called, it gets called on all registered builders.
+		 *
+		 * @param builders The builders to add to the list of builders.
+		 */
+		protected void registerBuilders(Object...builders) {
+			for (Object b : builders) {
+				if (b == this)
+					this.builders.add(b);
+				else if (b instanceof Builder b2)
+					this.builders.addAll(b2.builders);
+				else
+					this.builders.add(b);
+			}
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
 
+	/**
+	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
+	 */
+	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class);
+	/**
+	 * Instantiates a builder of the specified context class.
+	 *
+	 * <p>
+	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
+	 * or protected constructor of the class.
+	 *
+	 * @param type The builder to create.
+	 * @return A new builder.
+	 */
+	public static Builder createBuilder(Class<? extends Context> type) {
+		try {
+			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
+			if (mi == null) {
+				ClassInfo c = ClassInfo.of(type);
+				for (ConstructorInfo ci : c.getPublicConstructors()) {
+					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParam(0).getParameterType().is(type))) {
+						mi = c.getPublicMethod(
+							x -> x.isStatic()
+							&& x.isNotDeprecated()
+							&& x.hasName("create")
+							&& x.hasReturnType(ci.getParam(0).getParameterType())
+						);
+						if (mi != null)
+							break;
+					}
+				}
+				if (mi == null)
+					throw new BasicRuntimeException("Could not find builder create method on class {0}", type);
+				BUILDER_CREATE_METHODS.put(type, mi);
+			}
+			Builder b = (Builder)mi.invoke(null);
+			b.type(type);
+			return b;
+		} catch (ExecutableException e) {
+			throw asRuntimeException(e);
+		}
+	}
 	final List<Annotation> annotations;
 	final boolean debug;
 
@@ -783,22 +763,6 @@ public abstract class Context implements AnnotationProvider {
 	private final TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
 	private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
 	private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
-
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The context to copy from.
-	 */
-	protected Context(Context copyFrom) {
-		annotationMap = copyFrom.annotationMap;
-		annotations = copyFrom.annotations;
-		debug = copyFrom.debug;
-		classAnnotationCache = copyFrom.classAnnotationCache;
-		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
-		methodAnnotationCache = copyFrom.methodAnnotationCache;
-		fieldAnnotationCache = copyFrom.fieldAnnotationCache;
-		constructorAnnotationCache = copyFrom.constructorAnnotationCache;
-	}
 
 	/**
 	 * Constructor for this class.
@@ -846,14 +810,20 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	/**
-	 * Perform optional initialization on builder before it is used.
+	 * Copy constructor.
 	 *
-	 * <p>
-	 * Default behavior is a no-op.
-	 *
-	 * @param builder The builder to initialize.
+	 * @param copyFrom The context to copy from.
 	 */
-	protected void init(Builder builder) {}
+	protected Context(Context copyFrom) {
+		annotationMap = copyFrom.annotationMap;
+		annotations = copyFrom.annotations;
+		debug = copyFrom.debug;
+		classAnnotationCache = copyFrom.classAnnotationCache;
+		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
+		methodAnnotationCache = copyFrom.methodAnnotationCache;
+		fieldAnnotationCache = copyFrom.fieldAnnotationCache;
+		constructorAnnotationCache = copyFrom.constructorAnnotationCache;
+	}
 
 	/**
 	 * Creates a builder from this context object.
@@ -880,44 +850,6 @@ public abstract class Context implements AnnotationProvider {
 		throw new UnsupportedOperationException("Not implemented.");
 	}
 
-	/**
-	 * Returns a session to use for this context.
-	 *
-	 * <p>
-	 * Note that subclasses may opt to return a reusable non-modifiable session.
-	 *
-	 * @return A new session object.
-	 */
-	public ContextSession getSession() {
-		return createSession().build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Debug mode.
-	 *
-	 * @see Context.Builder#debug()
-	 * @return
-	 * 	<jk>true</jk> if debug mode is enabled.
-	 */
-	public boolean isDebug() {
-		return debug;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// MetaProvider methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onClass != null)
-			for (A a : annotations(type, onClass))
-				consume(filter, action, a);
-	}
-
 	@Override /* Overridden from MetaProvider */
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
@@ -928,20 +860,28 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		A x = null;
-		if (type != null && onClass != null)
-			for (A a : annotations(type, onClass))
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
+		if (type != null && onConstructor != null)
+			for (A a : annotations(type, onConstructor))
 				if (test(filter, a))
-					x = a;
-		return x;
+					return a;
+		return null;
 	}
-
 	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onClass != null)
-			for (A a : declaredAnnotations(type, onClass))
-				consume(filter, action, a);
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
+		if (type != null && onField != null)
+			for (A a : annotations(type, onField))
+				if (test(filter, a))
+					return a;
+		return null;
+	}
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
+		if (type != null && onMethod != null)
+			for (A a : annotations(type, onMethod))
+				if (test(filter, a))
+					return a;
+		return null;
 	}
 
 	@Override /* Overridden from MetaProvider */
@@ -954,65 +894,10 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
-		A x = null;
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onClass != null)
-			for (A a : declaredAnnotations(type, onClass))
-				if (test(filter, a))
-					x = a;
-		return x;
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onMethod != null)
-			for (A a : annotations(type, onMethod))
+			for (A a : annotations(type, onClass))
 				consume(filter, action, a);
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		if (type != null && onMethod != null)
-			for (A a : annotations(type, onMethod))
-				if (test(filter, a))
-					return a;
-		return null;
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
-		A x = null;
-		if (type != null && onMethod != null)
-			for (A a : annotations(type, onMethod))
-				if (test(filter, a))
-					x = a;
-		return x;
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
-		if (type != null && onField != null)
-			for (A a : annotations(type, onField))
-				consume(filter, action, a);
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		if (type != null && onField != null)
-			for (A a : annotations(type, onField))
-				if (test(filter, a))
-					return a;
-		return null;
-	}
-
-	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
-		A x = null;
-		if (type != null && onField != null)
-			for (A a : annotations(type, onField))
-				if (test(filter, a))
-					x = a;
-		return x;
 	}
 
 	@Override /* Overridden from MetaProvider */
@@ -1023,22 +908,36 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		if (type != null && onConstructor != null)
-			for (A a : annotations(type, onConstructor))
-				if (test(filter, a))
-					return a;
-		return null;
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
+		if (type != null && onField != null)
+			for (A a : annotations(type, onField))
+				consume(filter, action, a);
 	}
 
 	@Override /* Overridden from MetaProvider */
-	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
-		A x = null;
-		if (type != null && onConstructor != null)
-			for (A a : annotations(type, onConstructor))
-				if (test(filter, a))
-					x = a;
-		return x;
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
+		if (type != null && onMethod != null)
+			for (A a : annotations(type, onMethod))
+				consume(filter, action, a);
+	}
+
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
+		if (type != null && onClass != null)
+			for (A a : declaredAnnotations(type, onClass))
+				consume(filter, action, a);
+	}
+
+	/**
+	 * Returns a session to use for this context.
+	 *
+	 * <p>
+	 * Note that subclasses may opt to return a reusable non-modifiable session.
+	 *
+	 * @return A new session object.
+	 */
+	public ContextSession getSession() {
+		return createSession().build();
 	}
 
 	/**
@@ -1054,15 +953,15 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
 	 *
 	 * @param <A> The annotation being checked for.
 	 * @param type The annotation being checked for.
-	 * @param onMethod The method being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified method.
+	 * @param onConstructor The constructor being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Method onMethod) {
-		return annotations(type, onMethod).length > 0;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Constructor<?> onConstructor) {
+		return annotations(type, onConstructor).length > 0;
 	}
 
 	/**
@@ -1078,15 +977,81 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
+	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
 	 *
 	 * @param <A> The annotation being checked for.
 	 * @param type The annotation being checked for.
-	 * @param onConstructor The constructor being checked on.
-	 * @return <jk>true</jk> if the annotation exists on the specified field.
+	 * @param onMethod The method being checked on.
+	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Constructor<?> onConstructor) {
-		return annotations(type, onConstructor).length > 0;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Method onMethod) {
+		return annotations(type, onMethod).length > 0;
+	}
+
+	/**
+	 * Debug mode.
+	 *
+	 * @see Context.Builder#debug()
+	 * @return
+	 * 	<jk>true</jk> if debug mode is enabled.
+	 */
+	public boolean isDebug() {
+		return debug;
+	}
+
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onClass != null)
+			for (A a : annotations(type, onClass))
+				if (test(filter, a))
+					x = a;
+		return x;
+	}
+
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onConstructor != null)
+			for (A a : annotations(type, onConstructor))
+				if (test(filter, a))
+					x = a;
+		return x;
+	}
+
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onField != null)
+			for (A a : annotations(type, onField))
+				if (test(filter, a))
+					x = a;
+		return x;
+	}
+
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onMethod != null)
+			for (A a : annotations(type, onMethod))
+				if (test(filter, a))
+					x = a;
+		return x;
+	}
+
+	@Override /* Overridden from MetaProvider */
+	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onClass != null)
+			for (A a : declaredAnnotations(type, onClass))
+				if (test(filter, a))
+					x = a;
+		return x;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return Utils2.toPropertyMap(this).asReadableString();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1095,13 +1060,8 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
-		return (A[])declaredClassAnnotationCache.get(onClass, type);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> type, Method onMethod) {
-		return (A[])methodAnnotationCache.get(onMethod, type);
+	private <A extends Annotation> A[] annotations(Class<A> type, Constructor<?> onConstructor) {
+		return (A[])constructorAnnotationCache.get(onConstructor, type);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1110,13 +1070,23 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> type, Constructor<?> onConstructor) {
-		return (A[])constructorAnnotationCache.get(onConstructor, type);
+	private <A extends Annotation> A[] annotations(Class<A> type, Method onMethod) {
+		return (A[])methodAnnotationCache.get(onMethod, type);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
+		return (A[])declaredClassAnnotationCache.get(onClass, type);
+	}
+	/**
+	 * Perform optional initialization on builder before it is used.
+	 *
+	 * <p>
+	 * Default behavior is a no-op.
+	 *
+	 * @param builder The builder to initialize.
+	 */
+	protected void init(Builder builder) {}
 
 	/**
 	 * Returns the properties on this bean as a map for debugging.
@@ -1125,10 +1095,5 @@ public abstract class Context implements AnnotationProvider {
 	 */
 	protected JsonMap properties() {
 		return filteredMap("annotations", annotations, "debug", debug);
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return Utils2.toPropertyMap(this).asReadableString();
 	}
 }

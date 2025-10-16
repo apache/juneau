@@ -63,15 +63,6 @@ public class MultiStatus extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public MultiStatus(MultiStatus copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class MultiStatus extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public MultiStatus(MultiStatus copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class MultiStatus extends BasicHttpResponse {
 		return new MultiStatus(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public MultiStatus setContent(String value) {
+	public MultiStatus setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MultiStatus setContent(HttpEntity value) {
+	public MultiStatus setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class MultiStatus extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MultiStatus setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public MultiStatus setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public MultiStatus setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public MultiStatus setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

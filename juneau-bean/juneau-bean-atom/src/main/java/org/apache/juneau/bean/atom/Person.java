@@ -73,6 +73,9 @@ public class Person extends Common {
 	private URI uri;
 	private String email;
 
+	/** Bean constructor. */
+	public Person() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -81,13 +84,17 @@ public class Person extends Common {
 	public Person(String name) {
 		setName(name);
 	}
-
-	/** Bean constructor. */
-	public Person() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Bean property getter:  <property>email</property>.
+	 *
+	 * <p>
+	 * Returns the email address associated with the person.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getEmail() {
+		return email;
+	}
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -101,6 +108,54 @@ public class Person extends Common {
 		return name;
 	}
 
+	/**
+	 * Bean property getter:  <property>uri</property>.
+	 *
+	 * <p>
+	 * Returns a URI associated with the person.
+	 *
+	 * <p>
+	 * Typically this is a personal website or profile page.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public URI getUri() {
+		return uri;
+	}
+
+	@Override /* Overridden from Common */
+	public Person setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>email</property>.
+	 *
+	 * <p>
+	 * Sets the email address associated with the person.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Jane Doe"</js>)
+	 * 		.setEmail(<js>"jane@example.org"</js>);
+	 * </p>
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public Person setEmail(String value) {
+		this.email = value;
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Person setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
 	/**
 	 * Bean property setter:  <property>name</property>.
 	 *
@@ -120,21 +175,6 @@ public class Person extends Common {
 	public Person setName(String value) {
 		this.name = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * Returns a URI associated with the person.
-	 *
-	 * <p>
-	 * Typically this is a personal website or profile page.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public URI getUri() {
-		return uri;
 	}
 
 	/**
@@ -160,56 +200,6 @@ public class Person extends Common {
 	 */
 	public Person setUri(Object value) {
 		this.uri = toURI(value);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>email</property>.
-	 *
-	 * <p>
-	 * Returns the email address associated with the person.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * Bean property setter:  <property>email</property>.
-	 *
-	 * <p>
-	 * Sets the email address associated with the person.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Jane Doe"</js>)
-	 * 		.setEmail(<js>"jane@example.org"</js>);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Person setEmail(String value) {
-		this.email = value;
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Person setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Person setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

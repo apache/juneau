@@ -72,6 +72,9 @@ public class Logo extends Common {
 
 	private URI uri;
 
+	/** Bean constructor. */
+	public Logo() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -87,14 +90,6 @@ public class Logo extends Common {
 	public Logo(Object uri) {
 		setUri(uri);
 	}
-
-	/** Bean constructor. */
-	public Logo() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>uri</property>.
 	 *
@@ -106,6 +101,17 @@ public class Logo extends Common {
 	@Xml(format=TEXT)
 	public URI getUri() {
 		return uri;
+	}
+
+	@Override /* Overridden from Common */
+	public Logo setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+	@Override /* Overridden from Common */
+	public Logo setLang(String value) {
+		super.setLang(value);
+		return this;
 	}
 
 	/**
@@ -128,22 +134,6 @@ public class Logo extends Common {
 	 */
 	public Logo setUri(Object value) {
 		this.uri = toURI(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Logo setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Logo setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

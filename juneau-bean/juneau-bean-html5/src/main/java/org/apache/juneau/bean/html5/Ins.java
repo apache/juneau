@@ -78,7 +78,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#ins() ins()}
- * 		<li class='jm'>{@link HtmlBuilder#ins(Object, Object...) ins(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#ins(Object...) ins(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -104,37 +104,6 @@ public class Ins extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
-	 *
-	 * <p>
-	 * Link to the source of the quotation or more information about the edit.
-	 *
-	 * @param cite The new value for this attribute.
-	 * @return This object.
-	 */
-	public Ins cite(String value) {
-		attr("cite", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-datetime">datetime</a> attribute.
-	 *
-	 * <p>
-	 * Date and (optionally) time of the change.
-	 *
-	 * @param datetime The new value for this attribute.
-	 * @return This object.
-	 */
-	public Ins datetime(String value) {
-		attr("datetime", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Ins _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -146,10 +115,61 @@ public class Ins extends HtmlElementMixed {
 		super.accesskey(value);
 		return this;
 	}
+	@Override /* Overridden from HtmlElement */
+	public Ins attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Ins attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Ins child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Ins children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
+	 *
+	 * <p>
+	 * Link to the source of the quotation or more information about the edit.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Ins cite(String value) {
+		attr("cite", value);
+		return this;
+	}
 
 	@Override /* Overridden from HtmlElement */
 	public Ins contenteditable(Object value) {
 		super.contenteditable(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-datetime">datetime</a> attribute.
+	 *
+	 * <p>
+	 * Date and (optionally) time of the change.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Ins datetime(String value) {
+		attr("datetime", value);
 		return this;
 	}
 
@@ -504,30 +524,6 @@ public class Ins extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Ins translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Ins child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Ins children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ins attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Ins attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

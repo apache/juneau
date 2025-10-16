@@ -99,6 +99,16 @@ public class License extends OpenApiElement {
 		return new License(this);
 	}
 
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
+			default -> super.get(property, type);
+		};
+	}
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -109,6 +119,40 @@ public class License extends OpenApiElement {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Bean property getter:  <property>url</property>.
+	 *
+	 * <p>
+	 * A URL to the license used for the API.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public URI getUrl() {
+		return url;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(name != null, "name")
+			.addIf(url != null, "url")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public License set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "name" -> setName(Utils.s(value));
+			case "url" -> setUrl(toURI(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -129,18 +173,6 @@ public class License extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>url</property>.
-	 *
-	 * <p>
-	 * A URL to the license used for the API.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public URI getUrl() {
-		return url;
-	}
-
-	/**
 	 * Bean property setter:  <property>url</property>.
 	 *
 	 * <p>
@@ -155,38 +187,6 @@ public class License extends OpenApiElement {
 	public License setUrl(URI value) {
 		url = value;
 		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "name" -> toType(getName(), type);
-			case "url" -> toType(getUrl(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public License set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "name" -> setName(Utils.s(value));
-			case "url" -> setUrl(toURI(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(name != null, "name")
-			.addIf(url != null, "url")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

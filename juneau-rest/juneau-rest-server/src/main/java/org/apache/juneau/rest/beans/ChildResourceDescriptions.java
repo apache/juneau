@@ -36,11 +36,6 @@ import org.apache.juneau.rest.servlet.*;
  * @serial exclude
  */
 public class ChildResourceDescriptions extends ResourceDescriptions {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -52,18 +47,10 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	public static ChildResourceDescriptions of(RestRequest req) {
 		return new ChildResourceDescriptions(req);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Constructor.
-	 *
-	 * @param req The HTTP servlet request.
+	 * Bean constructor.
 	 */
-	public ChildResourceDescriptions(RestRequest req) {
-		this(req.getContext(), req, false);
+	public ChildResourceDescriptions() {
 	}
 
 	/**
@@ -100,15 +87,13 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	}
 
 	/**
-	 * Bean constructor.
+	 * Constructor.
+	 *
+	 * @param req The HTTP servlet request.
 	 */
-	public ChildResourceDescriptions() {
+	public ChildResourceDescriptions(RestRequest req) {
+		this(req.getContext(), req, false);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from ResourceDescriptions */
 	public ChildResourceDescriptions append(String name, String description) {
 		super.append(name, description);

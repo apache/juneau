@@ -109,10 +109,18 @@ public class Xml extends SwaggerElement {
 	public Xml copy() {
 		return new Xml(this);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from SwaggerElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "attribute" -> toType(getAttribute(), type);
+			case "name" -> toType(getName(), type);
+			case "namespace" -> toType(getNamespace(), type);
+			case "prefix" -> toType(getPrefix(), type);
+			case "wrapped" -> toType(getWrapped(), type);
+			default -> super.get(property, type);
+		};
+	}
 
 	/**
 	 * Bean property getter:  <property>attribute</property>.
@@ -124,6 +132,86 @@ public class Xml extends SwaggerElement {
 	 */
 	public Boolean getAttribute() {
 		return attribute;
+	}
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the element/attribute used for the described schema property.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Bean property getter:  <property>namespace</property>.
+	 *
+	 * <p>
+	 * The URL of the namespace definition.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getNamespace() {
+		return namespace;
+	}
+
+	/**
+	 * Bean property getter:  <property>prefix</property>.
+	 *
+	 * <p>
+	 * The prefix to be used for the name.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPrefix() {
+		return prefix;
+	}
+
+	/**
+	 * Bean property getter:  <property>wrapped</property>.
+	 *
+	 * <p>
+	 * Signifies whether the array is wrapped (for example,
+	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
+	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
+	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
+	 * (outside the <c>items</c>).
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getWrapped() {
+		return wrapped;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(attribute != null, "attribute")
+			.addIf(name != null, "name")
+			.addIf(namespace != null, "namespace")
+			.addIf(prefix != null, "prefix")
+			.addIf(wrapped != null, "wrapped")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Xml set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "attribute" -> setAttribute(toBoolean(value));
+			case "name" -> setName(Utils.s(value));
+			case "namespace" -> setNamespace(Utils.s(value));
+			case "prefix" -> setPrefix(Utils.s(value));
+			case "wrapped" -> setWrapped(toBoolean(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -144,18 +232,6 @@ public class Xml extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the element/attribute used for the described schema property.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
 	 * Bean property setter:  <property>name</property>.
 	 *
 	 * <p>
@@ -169,18 +245,6 @@ public class Xml extends SwaggerElement {
 	public Xml setName(String value) {
 		name = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>namespace</property>.
-	 *
-	 * <p>
-	 * The URL of the namespace definition.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getNamespace() {
-		return namespace;
 	}
 
 	/**
@@ -200,18 +264,6 @@ public class Xml extends SwaggerElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>prefix</property>.
-	 *
-	 * <p>
-	 * The prefix to be used for the name.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPrefix() {
-		return prefix;
-	}
-
-	/**
 	 * Bean property setter:  <property>prefix</property>.
 	 *
 	 * <p>
@@ -225,22 +277,6 @@ public class Xml extends SwaggerElement {
 	public Xml setPrefix(String value) {
 		prefix = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>wrapped</property>.
-	 *
-	 * <p>
-	 * Signifies whether the array is wrapped (for example,
-	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
-	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
-	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
-	 * (outside the <c>items</c>).
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getWrapped() {
-		return wrapped;
 	}
 
 	/**
@@ -262,47 +298,6 @@ public class Xml extends SwaggerElement {
 	public Xml setWrapped(Boolean value) {
 		this.wrapped = value;
 		return this;
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "attribute" -> toType(getAttribute(), type);
-			case "name" -> toType(getName(), type);
-			case "namespace" -> toType(getNamespace(), type);
-			case "prefix" -> toType(getPrefix(), type);
-			case "wrapped" -> toType(getWrapped(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Xml set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "attribute" -> setAttribute(toBoolean(value));
-			case "name" -> setName(Utils.s(value));
-			case "namespace" -> setNamespace(Utils.s(value));
-			case "prefix" -> setPrefix(Utils.s(value));
-			case "wrapped" -> setWrapped(toBoolean(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(attribute != null, "attribute")
-			.addIf(name != null, "name")
-			.addIf(namespace != null, "namespace")
-			.addIf(prefix != null, "prefix")
-			.addIf(wrapped != null, "wrapped")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	/**

@@ -48,6 +48,15 @@ public class MultiSet<E> extends AbstractSet<E> {
 	}
 
 	/**
+	 * Enumerates over all entries in all collections.
+	 *
+	 * @return An enumeration wrapper around this set.
+	 */
+	public Enumeration<E> enumerator() {
+		return Collections.enumeration(this);
+	}
+
+	/**
 	 * Iterates over all entries in all collections.
 	 */
 	@Override /* Overridden from Set */
@@ -87,15 +96,6 @@ public class MultiSet<E> extends AbstractSet<E> {
 				i2.remove();
 			}
 		};
-	}
-
-	/**
-	 * Enumerates over all entries in all collections.
-	 *
-	 * @return An enumeration wrapper around this set.
-	 */
-	public Enumeration<E> enumerator() {
-		return Collections.enumeration(this);
 	}
 
 	@Override /* Overridden from Set */

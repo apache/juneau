@@ -35,59 +35,6 @@ import org.apache.juneau.common.utils.*;
 public class FileUtils {
 
 	/**
-	 * Same as {@link File#mkdirs()} except throws a RuntimeExeption if directory could not be created.
-	 *
-	 * @param f The directory to create.  Must not be <jk>null</jk>.
-	 * @param clean If <jk>true</jk>, deletes the contents of the directory if it already exists.
-	 * @return The same file.
-	 * @throws RuntimeException if directory could not be created.
-	 */
-	public static File mkdirs(File f, boolean clean) {
-		Utils.assertArgNotNull("f", f);
-		if (f.exists()) {
-			if (clean) {
-				if (! delete(f))
-					throw new BasicRuntimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
-			} else {
-				return f;
-			}
-		}
-		if (! f.mkdirs())
-			throw new BasicRuntimeException("Could not create directory ''{0}''", f.getAbsolutePath());
-		return f;
-	}
-
-	/**
-	 * Same as {@link #mkdirs(String, boolean)} but uses String path.
-	 *
-	 * @param path The path of the directory to create.  Must not be <jk>null</jk>
-	 * @param clean If <jk>true</jk>, deletes the contents of the directory if it already exists.
-	 * @return The directory.
-	 */
-	public static File mkdirs(String path, boolean clean) {
-		Utils.assertArgNotNull("path", path);
-		return mkdirs(new File(path), clean);
-	}
-
-	/**
-	 * Recursively deletes a file or directory.
-	 *
-	 * @param f The file or directory to delete.
-	 * @return <jk>true</jk> if file or directory was successfully deleted.
-	 */
-	public static boolean delete(File f) {
-		if (f == null)
-			return true;
-		if (f.isDirectory()) {
-			File[] cf = f.listFiles();
-			if (cf != null)
-				for (File c : cf)
-					delete(c);
-		}
-		return f.delete();
-	}
-
-	/**
 	 * Creates a file if it doesn't already exist using {@link File#createNewFile()}.
 	 *
 	 * <p>
@@ -103,30 +50,6 @@ public class FileUtils {
 				throw new BasicRuntimeException("Could not create file ''{0}''", f.getAbsolutePath());
 		} catch (IOException e) {
 			throw asRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Updates the modified timestamp on the specified file.
-	 *
-	 * <p>
-	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.
-	 *
-	 * @param f The file to modify the modified timestamp on.
-	 */
-	public static void modifyTimestamp(File f) {
-		long lm = f.lastModified();
-		long l = System.currentTimeMillis();
-		if (lm == l)
-			l++;
-		if (! f.setLastModified(l))
-			throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
-
-		// Linux only gives 1s precision, so set the date 1s into the future.
-		if (lm == f.lastModified()) {
-			l += 1000;
-			if (! f.setLastModified(l))
-				throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 		}
 	}
 
@@ -176,6 +99,37 @@ public class FileUtils {
 	}
 
 	/**
+	 * Recursively deletes a file or directory.
+	 *
+	 * @param f The file or directory to delete.
+	 * @return <jk>true</jk> if file or directory was successfully deleted.
+	 */
+	public static boolean delete(File f) {
+		if (f == null)
+			return true;
+		if (f.isDirectory()) {
+			File[] cf = f.listFiles();
+			if (cf != null)
+				for (File c : cf)
+					delete(c);
+		}
+		return f.delete();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified file exists in the specified directory.
+	 *
+	 * @param dir The directory.
+	 * @param fileName The file name.
+	 * @return <jk>true</jk> if the specified file exists in the specified directory.
+	 */
+	public static boolean exists(File dir, String fileName) {
+		if (dir == null || fileName == null)
+			return false;
+		return Files.exists(dir.toPath().resolve(fileName));
+	}
+
+	/**
 	 * Strips the extension from a file name.
 	 *
 	 * @param name The file name.
@@ -206,16 +160,17 @@ public class FileUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified file exists in the specified directory.
+	 * Given an arbitrary path, returns the file name portion of that path.
 	 *
-	 * @param dir The directory.
-	 * @param fileName The file name.
-	 * @return <jk>true</jk> if the specified file exists in the specified directory.
+	 * @param path The path to check.
+	 * @return The file name.
 	 */
-	public static boolean exists(File dir, String fileName) {
-		if (dir == null || fileName == null)
-			return false;
-		return Files.exists(dir.toPath().resolve(fileName));
+	public static String getFileName(String path) {
+		if (Utils.isEmpty(path))
+			return null;
+		path = trimTrailingSlashes(path);
+		int i = path.lastIndexOf('/');
+		return i == -1 ? path : path.substring(i+1);
 	}
 
 	/**
@@ -232,16 +187,61 @@ public class FileUtils {
 	}
 
 	/**
-	 * Given an arbitrary path, returns the file name portion of that path.
+	 * Same as {@link File#mkdirs()} except throws a RuntimeExeption if directory could not be created.
 	 *
-	 * @param path The path to check.
-	 * @return The file name.
+	 * @param f The directory to create.  Must not be <jk>null</jk>.
+	 * @param clean If <jk>true</jk>, deletes the contents of the directory if it already exists.
+	 * @return The same file.
+	 * @throws RuntimeException if directory could not be created.
 	 */
-	public static String getFileName(String path) {
-		if (Utils.isEmpty(path))
-			return null;
-		path = trimTrailingSlashes(path);
-		int i = path.lastIndexOf('/');
-		return i == -1 ? path : path.substring(i+1);
+	public static File mkdirs(File f, boolean clean) {
+		Utils.assertArgNotNull("f", f);
+		if (f.exists()) {
+			if (clean) {
+				if (! delete(f))
+					throw new BasicRuntimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
+			} else {
+				return f;
+			}
+		}
+		if (! f.mkdirs())
+			throw new BasicRuntimeException("Could not create directory ''{0}''", f.getAbsolutePath());
+		return f;
+	}
+
+	/**
+	 * Same as {@link #mkdirs(String, boolean)} but uses String path.
+	 *
+	 * @param path The path of the directory to create.  Must not be <jk>null</jk>
+	 * @param clean If <jk>true</jk>, deletes the contents of the directory if it already exists.
+	 * @return The directory.
+	 */
+	public static File mkdirs(String path, boolean clean) {
+		Utils.assertArgNotNull("path", path);
+		return mkdirs(new File(path), clean);
+	}
+
+	/**
+	 * Updates the modified timestamp on the specified file.
+	 *
+	 * <p>
+	 * Method ensures that the timestamp changes even if it's been modified within the past millisecond.
+	 *
+	 * @param f The file to modify the modified timestamp on.
+	 */
+	public static void modifyTimestamp(File f) {
+		long lm = f.lastModified();
+		long l = System.currentTimeMillis();
+		if (lm == l)
+			l++;
+		if (! f.setLastModified(l))
+			throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+
+		// Linux only gives 1s precision, so set the date 1s into the future.
+		if (lm == f.lastModified()) {
+			l += 1000;
+			if (! f.setLastModified(l))
+				throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+		}
 	}
 }

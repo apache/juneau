@@ -112,38 +112,37 @@ import org.apache.juneau.serializer.*;
  * @serial exclude
  */
 public class JsonList extends LinkedList<Object> {
+	private static class UnmodifiableJsonList extends JsonList {
+		private static final long serialVersionUID = 1L;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
+		@SuppressWarnings("synthetic-access")
+		UnmodifiableJsonList(JsonList contents) {
+			if (contents != null)
+				this.forEach(super::add);
+		}
 
-	private static final long serialVersionUID = 1L;
+		@Override /* Overridden from List */
+		public void add(int location, Object object) {
+			throw new UnsupportedOperationException("Not supported on read-only object.");
+		}
 
-	/**
-	 * Parses a string that can consist of either a JSON array or comma-delimited list.
-	 *
-	 * <p>
-	 * The type of string is auto-detected.
-	 *
-	 * @param s The string to parse.
-	 * @return The parsed string.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonList ofJsonOrCdl(String s) throws ParseException {
-		if (Utils.isEmpty(s))
-			return null;
-		if (! StringUtils.isJsonArray(s, true))
-			return new JsonList((Object[])Utils.splita(s.trim(), ','));
-		return new JsonList(s);
+		@Override
+		public boolean isUnmodifiable() {
+			return true;
+		}
+
+		@Override /* Overridden from List */
+		public Object remove(int location) {
+			throw new UnsupportedOperationException("Not supported on read-only object.");
+		}
+
+		@Override /* Overridden from List */
+		public Object set(int location, Object object) {
+			throw new UnsupportedOperationException("Not supported on read-only object.");
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	transient BeanSession session = null;
-	private transient ObjectRest objectRest;
-
+	private static final long serialVersionUID = 1L;
 	/**
 	 * An empty read-only JsonList.
 	 *
@@ -177,10 +176,140 @@ public class JsonList extends LinkedList<Object> {
 			return Collections.emptyList().subList(start, end);
 		}
 	};
+	/**
+	 * Construct an empty list.
+	 *
+	 * @return An empty list.
+	 */
+	public static JsonList create() {
+		return new JsonList();
+	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Construct a list initialized with the specified list.
+	 *
+	 * @param values
+	 * 	The list to copy.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
+	 */
+	public static JsonList of(Collection<?> values) {
+		return values == null ? null : new JsonList(values);
+	}
+	/**
+	 * Construct a list initialized with the specified values.
+	 *
+	 * @param values The values to add to this list.
+	 * @return A new list, never <jk>null</jk>.
+	 */
+	public static JsonList of(Object... values) {
+		return new JsonList(values);
+	}
+
+	/**
+	 * Convenience method for creating a list of array objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static JsonList ofArrays(Object[]...values) {
+		JsonList l = new JsonList();
+		for (Object[] v : values)
+			l.add(v);
+		return l;
+	}
+
+	/**
+	 * Convenience method for creating a list of collection objects.
+	 *
+	 * @param values The initial values.
+	 * @return A new list.
+	 */
+	public static JsonList ofCollections(Collection<?>...values) {
+		JsonList l = new JsonList();
+		for (Collection<?> v : values)
+			l.add(v);
+		return l;
+	}
+
+	/**
+	 * Construct a list initialized with the specified JSON string.
+	 *
+	 * @param json
+	 * 	The JSON text to parse.
+	 * 	<br>Can be normal or simplified JSON.
+	 * @return A new list or <jk>null</jk> if the string was null.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonList ofJson(CharSequence json) throws ParseException {
+		return json == null ? null : new JsonList(json);
+	}
+
+	/**
+	 * Construct a list initialized with the specified reader containing JSON.
+	 *
+	 * @param json
+	 * 	The reader containing JSON text to parse.
+	 * 	<br>Can contain normal or simplified JSON.
+	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonList ofJson(Reader json) throws ParseException {
+		return json == null ? null : new JsonList(json);
+	}
+
+	/**
+	 * Parses a string that can consist of either a JSON array or comma-delimited list.
+	 *
+	 * <p>
+	 * The type of string is auto-detected.
+	 *
+	 * @param s The string to parse.
+	 * @return The parsed string.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonList ofJsonOrCdl(String s) throws ParseException {
+		if (Utils.isEmpty(s))
+			return null;
+		if (! StringUtils.isJsonArray(s, true))
+			return new JsonList((Object[])Utils.splita(s.trim(), ','));
+		return new JsonList(s);
+	}
+
+	/**
+	 * Construct a list initialized with the specified string.
+	 *
+	 * @param in
+	 * 	The input being parsed.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param p
+	 * 	The parser to use to parse the input.
+	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
+	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonList ofText(CharSequence in, Parser p) throws ParseException {
+		return in == null ? null : new JsonList(in, p);
+	}
+
+	/**
+	 * Construct a list initialized with the specified string.
+	 *
+	 * @param in
+	 * 	The reader containing the input being parsed.
+	 * 	<br>Can contain normal or simplified JSON.
+	 * @param p
+	 * 	The parser to use to parse the input.
+	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
+	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonList ofText(Reader in, Parser p) throws ParseException {
+		return in == null ? null : new JsonList(in);
+	}
+	transient BeanSession session = null;
+
+	private transient ObjectRest objectRest;
 
 	/**
 	 * Construct an empty list.
@@ -194,17 +323,6 @@ public class JsonList extends LinkedList<Object> {
 	 */
 	public JsonList(BeanSession session) {
 		this.session = session;
-	}
-
-	/**
-	 * Construct a list initialized with the specified list.
-	 *
-	 * @param copyFrom
-	 * 	The list to copy.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public JsonList(Collection<?> copyFrom) {
-		super(copyFrom);
 	}
 
 	/**
@@ -239,6 +357,26 @@ public class JsonList extends LinkedList<Object> {
 	}
 
 	/**
+	 * Construct a list initialized with the specified list.
+	 *
+	 * @param copyFrom
+	 * 	The list to copy.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public JsonList(Collection<?> copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
+	 * Construct a list initialized with the contents.
+	 *
+	 * @param entries The entries to add to this list.
+	 */
+	public JsonList(Object... entries) {
+		Collections.addAll(this, entries);
+	}
+
+	/**
 	 * Construct a list initialized with the specified reader containing JSON.
 	 *
 	 * @param json
@@ -249,7 +387,6 @@ public class JsonList extends LinkedList<Object> {
 	public JsonList(Reader json) throws ParseException {
 		parse(json, JsonParser.DEFAULT);
 	}
-
 	/**
 	 * Construct a list initialized with the specified string.
 	 *
@@ -265,159 +402,17 @@ public class JsonList extends LinkedList<Object> {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		parse(in, p);
 	}
-
 	/**
-	 * Construct a list initialized with the contents.
-	 *
-	 * @param entries The entries to add to this list.
-	 */
-	public JsonList(Object... entries) {
-		Collections.addAll(this, entries);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Creators
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Construct an empty list.
-	 *
-	 * @return An empty list.
-	 */
-	public static JsonList create() {
-		return new JsonList();
-	}
-
-	/**
-	 * Construct a list initialized with the specified list.
-	 *
-	 * @param values
-	 * 	The list to copy.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
-	 */
-	public static JsonList of(Collection<?> values) {
-		return values == null ? null : new JsonList(values);
-	}
-
-	/**
-	 * Convenience method for creating a list of collection objects.
-	 *
-	 * @param values The initial values.
-	 * @return A new list.
-	 */
-	public static JsonList ofCollections(Collection<?>...values) {
-		JsonList l = new JsonList();
-		for (Collection<?> v : values)
-			l.add(v);
-		return l;
-	}
-
-	/**
-	 * Convenience method for creating a list of array objects.
-	 *
-	 * @param values The initial values.
-	 * @return A new list.
-	 */
-	public static JsonList ofArrays(Object[]...values) {
-		JsonList l = new JsonList();
-		for (Object[] v : values)
-			l.add(v);
-		return l;
-	}
-
-	/**
-	 * Construct a list initialized with the specified JSON string.
-	 *
-	 * @param json
-	 * 	The JSON text to parse.
-	 * 	<br>Can be normal or simplified JSON.
-	 * @return A new list or <jk>null</jk> if the string was null.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonList ofJson(CharSequence json) throws ParseException {
-		return json == null ? null : new JsonList(json);
-	}
-
-	/**
-	 * Construct a list initialized with the specified string.
-	 *
-	 * @param in
-	 * 	The input being parsed.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use to parse the input.
-	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonList ofText(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new JsonList(in, p);
-	}
-
-	/**
-	 * Construct a list initialized with the specified reader containing JSON.
-	 *
-	 * @param json
-	 * 	The reader containing JSON text to parse.
-	 * 	<br>Can contain normal or simplified JSON.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonList ofJson(Reader json) throws ParseException {
-		return json == null ? null : new JsonList(json);
-	}
-
-	/**
-	 * Construct a list initialized with the specified string.
-	 *
-	 * @param in
-	 * 	The reader containing the input being parsed.
-	 * 	<br>Can contain normal or simplified JSON.
-	 * @param p
-	 * 	The parser to use to parse the input.
-	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
-	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonList ofText(Reader in, Parser p) throws ParseException {
-		return in == null ? null : new JsonList(in);
-	}
-
-	/**
-	 * Construct a list initialized with the specified values.
+	 * Adds all the values in the specified collection to this list.
 	 *
 	 * @param values The values to add to this list.
-	 * @return A new list, never <jk>null</jk>.
-	 */
-	public static JsonList of(Object... values) {
-		return new JsonList(values);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Initializers
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Override the default bean session used for converting POJOs.
-	 *
-	 * <p>
-	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
-	 *
-	 * <p>
-	 * Useful if you're serializing/parsing beans with transforms defined.
-	 *
-	 * @param session The new bean session.
 	 * @return This object.
 	 */
-	public JsonList session(BeanSession session) {
-		this.session = session;
+	public JsonList append(Collection<?> values) {
+		if (values != null)
+			addAll(values);
 		return this;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Appenders
-	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Adds the value to this list.
@@ -442,18 +437,6 @@ public class JsonList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Adds all the values in the specified collection to this list.
-	 *
-	 * @param values The values to add to this list.
-	 * @return This object.
-	 */
-	public JsonList append(Collection<?> values) {
-		if (values != null)
-			addAll(values);
-		return this;
-	}
-
-	/**
 	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
 	 *
 	 * @param flag The boolean flag.
@@ -464,6 +447,18 @@ public class JsonList extends LinkedList<Object> {
 		if (flag)
 			append(value);
 		return this;
+	}
+
+	/**
+	 * Add if predicate matches.
+	 *
+	 * @param <T> The type being tested.
+	 * @param test The predicate to match against.
+	 * @param value The value to add if the predicate matches.
+	 * @return This object.
+	 */
+	public  <T> JsonList appendIf(Predicate<T> test, T value) {
+		return appendIf(test(test, value), value);
 	}
 
 	/**
@@ -492,22 +487,139 @@ public class JsonList extends LinkedList<Object> {
 			add(values[i]);
 		return this;
 	}
-
 	/**
-	 * Add if predicate matches.
+	 * A synonym for {@link #toString()}
 	 *
-	 * @param <T> The type being tested.
-	 * @param test The predicate to match against.
-	 * @param value The value to add if the predicate matches.
-	 * @return This object.
+	 * @return This object as a JSON string.
 	 */
-	public  <T> JsonList appendIf(Predicate<T> test, T value) {
-		return appendIf(test(test, value), value);
+	public String asJson() {
+		return toString();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Retrievers
-	//------------------------------------------------------------------------------------------------------------------
+	/**
+	 * Serialize this array to Simplified JSON.
+	 *
+	 * @return This object as a serialized string.
+	 */
+	public String asString() {
+		return Json5Serializer.DEFAULT.toString(this);
+	}
+
+	/**
+	 * Serialize this array to a string using the specified serializer.
+	 *
+	 * @param serializer The serializer to use to convert this object to a string.
+	 * @return This object as a serialized string.
+	 */
+	public String asString(WriterSerializer serializer) {
+		return serializer.toString(this);
+	}
+
+	/**
+	 * Converts this object into the specified class type.
+	 *
+	 * <p>
+	 * TODO - The current implementation is very inefficient.
+	 *
+	 * @param cm The class type to convert this object to.
+	 * @return A converted object.
+	 */
+	public Object cast(ClassMeta<?> cm) {
+		try {
+			return JsonParser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
+		} catch (ParseException | SerializeException e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Similar to {@link #remove(int) remove(int)},but the key is a slash-delimited path used to traverse entries in
+	 * this POJO.
+	 *
+	 * <p>
+	 * For example, the following code is equivalent:
+	 * </p>
+	 * <p class='bjava'>
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 *
+	 * 	<jc>// Long way</jc>
+	 * 	<jv>list</jv>.getMap(0).getList(<js>"bar"</js>).delete(0);
+	 *
+	 * 	<jc>// Using this method</jc>
+	 * 	<jv>list</jv>.deleteAt(<js>"0/bar/0"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
+	 *
+	 * @param path The path to the entry.
+	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
+	 */
+	public Object deleteAt(String path) {
+		return getObjectRest().delete(path);
+	}
+
+	/**
+	 * Creates an {@link Iterable} with elements of the specified child type.
+	 *
+	 * <p>
+	 * Attempts to convert the child objects to the correct type if they aren't already the correct type.
+	 *
+	 * <p>
+	 * The <c>next()</c> method on the returned iterator may throw a {@link InvalidDataConversionException} if
+	 * the next element cannot be converted to the specified type.
+	 *
+	 * <p>
+	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Iterate over a list of JsonMaps.</jc>
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:123}]"</js>);
+	 * 	<jk>for</jk> (JsonMap <jv>map</jv> : <jv>list</jv>.elements(JsonMap.<jk>class</jk>)) {
+	 * 		<jc>// Do something with map.</jc>
+	 * 	}
+	 *
+	 * 	<jc>// Iterate over a list of ints.</jc>
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+	 * 	<jk>for</jk> (Integer <jv>i</jv> : <jv>list</jv>.elements(Integer.<jk>class</jk>)) {
+	 * 		<jc>// Do something with i.</jc>
+	 * 	}
+	 *
+	 * 	<jc>// Iterate over a list of beans.</jc>
+	 * 	<jc>// Automatically converts to beans.</jc>
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+	 * 	<jk>for</jk> (Person <jv>p</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>)) {
+	 * 		<jc>// Do something with p.</jc>
+	 * 	}
+	 * </p>
+	 *
+	 * @param <E> The child object type.
+	 * @param childType The child object type.
+	 * @return A new <c>Iterable</c> object over this list.
+	 */
+	public <E> Iterable<E> elements(final Class<E> childType) {
+		final Iterator<?> iterator = iterator();
+		return () -> new Iterator<>() {
+
+			@Override /* Overridden from Iterator */
+			public boolean hasNext() {
+				return iterator.hasNext();
+			}
+
+			@Override /* Overridden from Iterator */
+			public E next() {
+				return bs().convertToType(iterator.next(), childType);
+			}
+
+			@Override /* Overridden from Iterator */
+			public void remove() {
+				iterator.remove();
+			}
+
+		};
+	}
 
 	/**
 	 * Get the entry at the specified index, converted to the specified type.
@@ -596,103 +708,6 @@ public class JsonList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Shortcut for calling <code>get(index, String.<jk>class</jk>)</code>.
-	 *
-	 * @param index The index.
-	 * @return The converted value.
-	 */
-	public String getString(int index) {
-		return get(index, String.class);
-	}
-
-	/**
-	 * Shortcut for calling <code>get(index, Integer.<jk>class</jk>)</code>.
-	 *
-	 * @param index The index.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer getInt(int index) {
-		return get(index, Integer.class);
-	}
-
-	/**
-	 * Shortcut for calling <code>get(index, Boolean.<jk>class</jk>)</code>.
-	 *
-	 * @param index The index.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean getBoolean(int index) {
-		return get(index, Boolean.class);
-	}
-
-	/**
-	 * Shortcut for calling <code>get(index, Long.<jk>class</jk>)</code>.
-	 *
-	 * @param index The index.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Long getLong(int index) {
-		return get(index, Long.class);
-	}
-
-	/**
-	 * Shortcut for calling <code>get(index, JsonMap.<jk>class</jk>)</code>.
-	 *
-	 * @param index The index.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap getMap(int index) {
-		return get(index, JsonMap.class);
-	}
-
-	/**
-	 * Same as {@link #getMap(int)} except converts the keys and values to the specified types.
-	 *
-	 * @param <K> The key type class.
-	 * @param <V> The value type class.
-	 * @param index The index.
-	 * @param keyType The key type class.
-	 * @param valType The value type class.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public <K,V> Map<K,V> getMap(int index, Class<K> keyType, Class<V> valType) {
-		return bs().convertToType(get(index), Map.class, keyType, valType);
-	}
-
-	/**
-	 * Shortcut for calling <code>get(index, JsonList.<jk>class</jk>)</code>.
-	 *
-	 * @param index The index.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList getList(int index) {
-		return get(index, JsonList.class);
-	}
-
-	/**
-	 * Same as {@link #getList(int)} except converts the elements to the specified types.
-	 *
-	 * @param <E> The element type.
-	 * @param index The index.
-	 * @param elementType The element type class.
-	 * @return The converted value.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public <E> List<E> getList(int index, Class<E> elementType) {
-		return bs().convertToType(get(index), List.class, elementType);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// POJO REST methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Same as {@link #get(int,Class) get(int,Class)}, but the key is a slash-delimited path used to traverse entries in
 	 * this POJO.
 	 *
@@ -736,34 +751,135 @@ public class JsonList extends LinkedList<Object> {
 	public <T> T getAt(String path, Type type, Type...args) {
 		return getObjectRest().get(path, type, args);
 	}
+	/**
+	 * Returns the {@link BeanSession} currently associated with this list.
+	 *
+	 * @return The {@link BeanSession} currently associated with this list.
+	 */
+	public BeanSession getBeanSession() {
+		return session;
+	}
 
 	/**
-	 * Same as {@link #set(int,Object) set(int,Object)}, but the key is a slash-delimited path used to traverse entries
-	 * in this POJO.
+	 * Shortcut for calling <code>get(index, Boolean.<jk>class</jk>)</code>.
 	 *
-	 * <p>
-	 * For example, the following code is equivalent:
-	 * </p>
-	 * <p class='bjava'>
-	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
-	 *
-	 * 	<jc>// Long way</jc>
-	 * 	<jv>list</jv>.getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
-	 *
-	 * 	<jc>// Using this method</jc>
-	 * 	<jv>list</jv>.putAt(<js>"0/baz"</js>, 123);
-	 * </p>
-	 *
-	 * <p>
-	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
-	 *
-	 * @param path The path to the entry.
-	 * @param o The new value.
-	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
+	 * @param index The index.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public Object putAt(String path, Object o) {
-		return getObjectRest().put(path, o);
+	public Boolean getBoolean(int index) {
+		return get(index, Boolean.class);
+	}
+
+	/**
+	 * Returns the {@link ClassMeta} of the class of the object at the specified index.
+	 *
+	 * @param index An index into this list, zero-based.
+	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
+	 */
+	public ClassMeta<?> getClassMeta(int index) {
+		return bs().getClassMetaForObject(get(index));
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, Integer.<jk>class</jk>)</code>.
+	 *
+	 * @param index The index.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer getInt(int index) {
+		return get(index, Integer.class);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, JsonList.<jk>class</jk>)</code>.
+	 *
+	 * @param index The index.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList getList(int index) {
+		return get(index, JsonList.class);
+	}
+	/**
+	 * Same as {@link #getList(int)} except converts the elements to the specified types.
+	 *
+	 * @param <E> The element type.
+	 * @param index The index.
+	 * @param elementType The element type class.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <E> List<E> getList(int index, Class<E> elementType) {
+		return bs().convertToType(get(index), List.class, elementType);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, Long.<jk>class</jk>)</code>.
+	 *
+	 * @param index The index.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Long getLong(int index) {
+		return get(index, Long.class);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, JsonMap.<jk>class</jk>)</code>.
+	 *
+	 * @param index The index.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap getMap(int index) {
+		return get(index, JsonMap.class);
+	}
+
+	/**
+	 * Same as {@link #getMap(int)} except converts the keys and values to the specified types.
+	 *
+	 * @param <K> The key type class.
+	 * @param <V> The value type class.
+	 * @param index The index.
+	 * @param keyType The key type class.
+	 * @param valType The value type class.
+	 * @return The converted value.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public <K,V> Map<K,V> getMap(int index, Class<K> keyType, Class<V> valType) {
+		return bs().convertToType(get(index), Map.class, keyType, valType);
+	}
+
+	/**
+	 * Shortcut for calling <code>get(index, String.<jk>class</jk>)</code>.
+	 *
+	 * @param index The index.
+	 * @return The converted value.
+	 */
+	public String getString(int index) {
+		return get(index, String.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this list is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this list is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return false;
+	}
+
+	/**
+	 * Returns a modifiable copy of this list if it's unmodifiable.
+	 *
+	 * @return A modifiable copy of this list if it's unmodifiable, or this list if it is already modifiable.
+	 */
+	public JsonList modifiable() {
+		if (isUnmodifiable())
+			return new JsonList(this);
+		return this;
 	}
 
 	/**
@@ -795,8 +911,8 @@ public class JsonList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Similar to {@link #remove(int) remove(int)},but the key is a slash-delimited path used to traverse entries in
-	 * this POJO.
+	 * Same as {@link #set(int,Object) set(int,Object)}, but the key is a slash-delimited path used to traverse entries
+	 * in this POJO.
 	 *
 	 * <p>
 	 * For example, the following code is equivalent:
@@ -805,10 +921,10 @@ public class JsonList extends LinkedList<Object> {
 	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
-	 * 	<jv>list</jv>.getMap(0).getList(<js>"bar"</js>).delete(0);
+	 * 	<jv>list</jv>.getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	<jv>list</jv>.deleteAt(<js>"0/bar/0"</js>);
+	 * 	<jv>list</jv>.putAt(<js>"0/baz"</js>, 123);
 	 * </p>
 	 *
 	 * <p>
@@ -816,23 +932,28 @@ public class JsonList extends LinkedList<Object> {
 	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
+	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
-	public Object deleteAt(String path) {
-		return getObjectRest().delete(path);
+	public Object putAt(String path, Object o) {
+		return getObjectRest().put(path, o);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the {@link BeanSession} currently associated with this list.
+	 * Override the default bean session used for converting POJOs.
 	 *
-	 * @return The {@link BeanSession} currently associated with this list.
+	 * <p>
+	 * Default is {@link BeanContext#DEFAULT}, which is sufficient in most cases.
+	 *
+	 * <p>
+	 * Useful if you're serializing/parsing beans with transforms defined.
+	 *
+	 * @param session The new bean session.
+	 * @return This object.
 	 */
-	public BeanSession getBeanSession() {
-		return session;
+	public JsonList session(BeanSession session) {
+		this.session = session;
+		return this;
 	}
 
 	/**
@@ -845,115 +966,9 @@ public class JsonList extends LinkedList<Object> {
 		this.session = value;
 		return this;
 	}
-
-	/**
-	 * Creates an {@link Iterable} with elements of the specified child type.
-	 *
-	 * <p>
-	 * Attempts to convert the child objects to the correct type if they aren't already the correct type.
-	 *
-	 * <p>
-	 * The <c>next()</c> method on the returned iterator may throw a {@link InvalidDataConversionException} if
-	 * the next element cannot be converted to the specified type.
-	 *
-	 * <p>
-	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Iterate over a list of JsonMaps.</jc>
-	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:123}]"</js>);
-	 * 	<jk>for</jk> (JsonMap <jv>map</jv> : <jv>list</jv>.elements(JsonMap.<jk>class</jk>)) {
-	 * 		<jc>// Do something with map.</jc>
-	 * 	}
-	 *
-	 * 	<jc>// Iterate over a list of ints.</jc>
-	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
-	 * 	<jk>for</jk> (Integer <jv>i</jv> : <jv>list</jv>.elements(Integer.<jk>class</jk>)) {
-	 * 		<jc>// Do something with i.</jc>
-	 * 	}
-	 *
-	 * 	<jc>// Iterate over a list of beans.</jc>
-	 * 	<jc>// Automatically converts to beans.</jc>
-	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
-	 * 	<jk>for</jk> (Person <jv>p</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>)) {
-	 * 		<jc>// Do something with p.</jc>
-	 * 	}
-	 * </p>
-	 *
-	 * @param <E> The child object type.
-	 * @param childType The child object type.
-	 * @return A new <c>Iterable</c> object over this list.
-	 */
-	public <E> Iterable<E> elements(final Class<E> childType) {
-		final Iterator<?> iterator = iterator();
-		return () -> new Iterator<>() {
-
-			@Override /* Overridden from Iterator */
-			public boolean hasNext() {
-				return iterator.hasNext();
-			}
-
-			@Override /* Overridden from Iterator */
-			public E next() {
-				return bs().convertToType(iterator.next(), childType);
-			}
-
-			@Override /* Overridden from Iterator */
-			public void remove() {
-				iterator.remove();
-			}
-
-		};
-	}
-
-	/**
-	 * Returns the {@link ClassMeta} of the class of the object at the specified index.
-	 *
-	 * @param index An index into this list, zero-based.
-	 * @return The data type of the object at the specified index, or <jk>null</jk> if the value is null.
-	 */
-	public ClassMeta<?> getClassMeta(int index) {
-		return bs().getClassMetaForObject(get(index));
-	}
-
-	/**
-	 * Serialize this array to a string using the specified serializer.
-	 *
-	 * @param serializer The serializer to use to convert this object to a string.
-	 * @return This object as a serialized string.
-	 */
-	public String asString(WriterSerializer serializer) {
-		return serializer.toString(this);
-	}
-
-	/**
-	 * Serialize this array to Simplified JSON.
-	 *
-	 * @return This object as a serialized string.
-	 */
-	public String asString() {
-		return Json5Serializer.DEFAULT.toString(this);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this list is unmodifiable.
-	 *
-	 * @return <jk>true</jk> if this list is unmodifiable.
-	 */
-	public boolean isUnmodifiable() {
-		return false;
-	}
-
-	/**
-	 * Returns a modifiable copy of this list if it's unmodifiable.
-	 *
-	 * @return A modifiable copy of this list if it's unmodifiable, or this list if it is already modifiable.
-	 */
-	public JsonList modifiable() {
-		if (isUnmodifiable())
-			return new JsonList(this);
-		return this;
+	@Override /* Overridden from Object */
+	public String toString() {
+		return Json5.of(this);
 	}
 
 	/**
@@ -981,90 +996,20 @@ public class JsonList extends LinkedList<Object> {
 		return this;
 	}
 
-	/**
-	 * Converts this object into the specified class type.
-	 *
-	 * <p>
-	 * TODO - The current implementation is very inefficient.
-	 *
-	 * @param cm The class type to convert this object to.
-	 * @return A converted object.
-	 */
-	public Object cast(ClassMeta<?> cm) {
-		try {
-			return JsonParser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
-		} catch (ParseException | SerializeException e) {
-			throw asRuntimeException(e);
-		}
+	private ObjectRest getObjectRest() {
+		if (objectRest == null)
+			objectRest = new ObjectRest(this);
+		return objectRest;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	private void parse(Reader r, Parser p) throws ParseException {
 		if (p == null)
 			p = JsonParser.DEFAULT;
 		p.parseIntoCollection(r, this, bs().object());
 	}
 
-	private ObjectRest getObjectRest() {
-		if (objectRest == null)
-			objectRest = new ObjectRest(this);
-		return objectRest;
-	}
-
 	BeanSession bs() {
 		if (session == null)
 			session = BeanContext.DEFAULT_SESSION;
 		return session;
-	}
-
-	private static class UnmodifiableJsonList extends JsonList {
-		private static final long serialVersionUID = 1L;
-
-		@SuppressWarnings("synthetic-access")
-		UnmodifiableJsonList(JsonList contents) {
-			if (contents != null)
-				this.forEach(super::add);
-		}
-
-		@Override /* Overridden from List */
-		public void add(int location, Object object) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
-		}
-
-		@Override /* Overridden from List */
-		public Object remove(int location) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
-		}
-
-		@Override /* Overridden from List */
-		public Object set(int location, Object object) {
-			throw new UnsupportedOperationException("Not supported on read-only object.");
-		}
-
-		@Override
-		public boolean isUnmodifiable() {
-			return true;
-		}
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Overridden methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * A synonym for {@link #toString()}
-	 *
-	 * @return This object as a JSON string.
-	 */
-	public String asJson() {
-		return toString();
-	}
-
-	@Override /* Overridden from Object */
-	public String toString() {
-		return Json5.of(this);
 	}
 }

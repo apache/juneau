@@ -40,7 +40,21 @@ import org.apache.juneau.collections.*;
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
+	class BeanMapEntryOverride extends BeanMapEntry {
+		Object value;
+
+		BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {
+			super(bm, bpm, bpm.getName());
+			this.value = value;
+		}
+
+		@Override /* Overridden from Map.Entry */
+		public Object getValue() {
+			return value;
+		}
+	}
 	private Set<String> keys = set();
+
 	private JsonMap overrideValues = new JsonMap();
 
 	/**
@@ -65,22 +79,19 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	}
 
 	@Override /* Overridden from Map */
-	public Object put(String key, Object val) {
-		this.overrideValues.put(key, val);
-		this.keys.add(key);
-		return null;
-	}
-
-	@Override /* Overridden from Map */
-	public Object get(Object key) {
-		if (overrideValues.containsKey(key))
-			return overrideValues.get(key);
-		return super.get(key);
-	}
-
-	@Override /* Overridden from Map */
-	public Set<String> keySet() {
-		return keys;
+	public synchronized Set<Entry<String,Object>> entrySet() {
+		Set<Entry<String,Object>> s = set();
+		keys.forEach(k -> {
+			BeanMapEntry bme;
+			if (overrideValues.containsKey(k))
+				bme = new BeanMapEntryOverride(this, this.getPropertyMeta(k), overrideValues.get(k));
+			else
+				bme = this.getProperty(k);
+			if (bme == null)
+				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", k);
+			s.add(bme);
+		});
+		return s;
 	}
 
 	/**
@@ -98,31 +109,25 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return this;
 	}
 
+	@Override
+	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
+		getProperties().forEach(x -> {
+			if (filter == null || filter.test(x))
+				action.accept(x);
+		});
+		return this;
+	}
+
 	@Override /* Overridden from Map */
-	public Object remove(Object key) {
-		keys.remove(key);
-		return null;
+	public Object get(Object key) {
+		if (overrideValues.containsKey(key))
+			return overrideValues.get(key);
+		return super.get(key);
 	}
 
 	@Override /* Overridden from BeanMap */
 	public BeanMeta<T> getMeta() {
 		return new BeanMetaFiltered<>(super.getMeta(), keys);
-	}
-
-	@Override /* Overridden from Map */
-	public synchronized Set<Entry<String,Object>> entrySet() {
-		Set<Entry<String,Object>> s = set();
-		keys.forEach(k -> {
-			BeanMapEntry bme;
-			if (overrideValues.containsKey(k))
-				bme = new BeanMapEntryOverride(this, this.getPropertyMeta(k), overrideValues.get(k));
-			else
-				bme = this.getProperty(k);
-			if (bme == null)
-				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", k);
-			s.add(bme);
-		});
-		return s;
 	}
 
 	@Override /* Overridden from BeanMap */
@@ -139,26 +144,21 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return l;
 	}
 
-	@Override
-	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		getProperties().forEach(x -> {
-			if (filter == null || filter.test(x))
-				action.accept(x);
-		});
-		return this;
+	@Override /* Overridden from Map */
+	public Set<String> keySet() {
+		return keys;
 	}
 
-	class BeanMapEntryOverride extends BeanMapEntry {
-		Object value;
+	@Override /* Overridden from Map */
+	public Object put(String key, Object val) {
+		this.overrideValues.put(key, val);
+		this.keys.add(key);
+		return null;
+	}
 
-		BeanMapEntryOverride(BeanMap<?> bm, BeanPropertyMeta bpm, Object value) {
-			super(bm, bpm, bpm.getName());
-			this.value = value;
-		}
-
-		@Override /* Overridden from Map.Entry */
-		public Object getValue() {
-			return value;
-		}
+	@Override /* Overridden from Map */
+	public Object remove(Object key) {
+		keys.remove(key);
+		return null;
 	}
 }

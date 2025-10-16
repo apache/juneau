@@ -54,24 +54,6 @@ public class BasicPartIterator implements PartIterator {
 		this.currentIndex = findNext(-1);
 	}
 
-	private int findNext(int pos) {
-
-		int from = pos;
-
-		int to = entries.length - 1;
-		boolean found = false;
-		while (!found && (from < to)) {
-			from++;
-			found = filter(from);
-		}
-
-		return found ? from : -1;
-	}
-
-	private boolean filter(int index) {
-		return (name == null) || eq(name, entries[index].getName());
-	}
-
 	@Override /* Overridden from Iterator */
 	public boolean hasNext() {
 		return (currentIndex >= 0);
@@ -100,5 +82,23 @@ public class BasicPartIterator implements PartIterator {
 
 	private boolean eq(String s1, String s2) {
 		return Utils.eq(caseInsensitive, s1, s2);
+	}
+
+	private boolean filter(int index) {
+		return (name == null) || eq(name, entries[index].getName());
+	}
+
+	private int findNext(int pos) {
+
+		int from = pos;
+
+		int to = entries.length - 1;
+		boolean found = false;
+		while (!found && (from < to)) {
+			from++;
+			found = filter(from);
+		}
+
+		return found ? from : -1;
 	}
 }

@@ -87,24 +87,6 @@ public class HttpHeaders {
 		CONTENTTYPE_TEXT_PLAIN = ContentType.TEXT_PLAIN,
 		CONTENTTYPE_TEXT_XML = ContentType.TEXT_XML,
 		CONTENTTYPE_WILDCARD = ContentType.WILDCARD;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Standard HTTP headers
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new {@link Accept} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static final Accept accept(String value) {
-		return Accept.of(value);
-	}
-
 	/**
 	 * Creates a new {@link Accept} header.
 	 *
@@ -126,6 +108,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final Accept accept(MediaType value) {
+		return Accept.of(value);
+	}
+
+	/**
+	 * Creates a new {@link Accept} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static final Accept accept(String value) {
 		return Accept.of(value);
 	}
 
@@ -296,11 +291,10 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Age age(String value) {
+	public static final Age age(Integer value) {
 		return Age.of(value);
 	}
 
@@ -309,10 +303,11 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Age age(Integer value) {
+	public static final Age age(String value) {
 		return Age.of(value);
 	}
 
@@ -398,6 +393,78 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link BasicHeader} header.
+	 *
+	 * @param name The parameter name.
+	 * @param value
+	 * 	The parameter value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicHeader basicHeader(String name, Object value) {
+		return BasicHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * */
+	public static final BasicHeader basicHeader(String name, Supplier<?> value) {
+		return new BasicHeader(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicBooleanHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicBooleanHeader booleanHeader(String name, Boolean value) {
+		return BasicBooleanHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicBooleanHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicBooleanHeader booleanHeader(String name, String value) {
+		return BasicBooleanHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicBooleanHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicBooleanHeader booleanHeader(String name, Supplier<Boolean> value) {
+		return BasicBooleanHeader.of(name, value);
+	}
+
+	/**
 	 * Creates a new {@link CacheControl} header.
 	 *
 	 * @param value
@@ -425,6 +492,41 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 *
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 */
+	public static boolean canCast(Object o) {
+		ClassInfo ci = ClassInfo.of(o);
+		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+	}
+
+	/**
+	 * Utility method for converting an arbitrary object to a {@link Header}.
+	 *
+	 * @param o
+	 * 	The object to cast or convert to a {@link Header}.
+	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static Header cast(Object o) {
+		if (o instanceof Header)
+			return (Header)o;
+		if (o instanceof Headerable)
+			return ((Headerable)o).asHeader();
+		if (o instanceof NameValuePair)
+			return BasicHeader.of((NameValuePair)o);
+		if (o instanceof NameValuePairable)
+			return BasicHeader.of(((NameValuePairable)o).asNameValuePair());
+		if (o instanceof Map.Entry) {
+			Map.Entry e = (Map.Entry)o;
+			return BasicHeader.of(Utils.s(e.getKey()), Utils.s(e.getValue()));
+		}
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", className(o));
+	}
+
+	/**
 	 * Creates a new {@link ClientVersion} header.
 	 *
 	 * @param value
@@ -434,18 +536,6 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final ClientVersion clientVersion(String value) {
-		return ClientVersion.of(value);
-	}
-
-	/**
-	 * Creates a new {@link ClientVersion} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static final ClientVersion clientVersion(Version value) {
 		return ClientVersion.of(value);
 	}
 
@@ -461,6 +551,18 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final ClientVersion clientVersion(Supplier<Version> value) {
+		return ClientVersion.of(value);
+	}
+
+	/**
+	 * Creates a new {@link ClientVersion} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static final ClientVersion clientVersion(Version value) {
 		return ClientVersion.of(value);
 	}
 
@@ -602,11 +704,10 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final ContentLength contentLength(String value) {
+	public static final ContentLength contentLength(Long value) {
 		return ContentLength.of(value);
 	}
 
@@ -615,10 +716,11 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be parsable using {@link Long#parseLong(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final ContentLength contentLength(Long value) {
+	public static final ContentLength contentLength(String value) {
 		return ContentLength.of(value);
 	}
 
@@ -651,18 +753,6 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link ContentLocation} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static final ContentLocation contentLocation(URI value) {
-		return ContentLocation.of(value);
-	}
-
-	/**
 	 * Creates a new {@link ContentLocation} header with a delayed value.
 	 *
 	 * <p>
@@ -674,6 +764,18 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final ContentLocation contentLocation(Supplier<URI> value) {
+		return ContentLocation.of(value);
+	}
+
+	/**
+	 * Creates a new {@link ContentLocation} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static final ContentLocation contentLocation(URI value) {
 		return ContentLocation.of(value);
 	}
 
@@ -709,11 +811,10 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final ContentType contentType(String value) {
+	public static final ContentType contentType(MediaType value) {
 		return ContentType.of(value);
 	}
 
@@ -722,10 +823,11 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final ContentType contentType(MediaType value) {
+	public static final ContentType contentType(String value) {
 		return ContentType.of(value);
 	}
 
@@ -745,6 +847,49 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link BasicCsvHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be a comma-delimited list.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicCsvHeader csvHeader(String name, String value) {
+		return BasicCsvHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicCsvHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicCsvHeader csvHeader(String name, String...value) {
+		return BasicCsvHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicCsvHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicCsvHeader csvHeader(String name, Supplier<String[]> value) {
+		return BasicCsvHeader.of(name, value);
+	}
+
+	/**
 	 * Creates a new {@link Date} header.
 	 *
 	 * @param value
@@ -754,18 +899,6 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final Date date(String value) {
-		return Date.of(value);
-	}
-
-	/**
-	 * Creates a new {@link Date} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final Date date(ZonedDateTime value) {
 		return Date.of(value);
 	}
 
@@ -785,16 +918,58 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link Debug} header.
+	 * Creates a new {@link Date} header.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final Debug debug(String value) {
-		return Debug.of(value);
+	public static final Date date(ZonedDateTime value) {
+		return Date.of(value);
+	}
+
+	/**
+	 * Creates a new {@link BasicDateHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicDateHeader dateHeader(String name, String value) {
+		return BasicDateHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicDateHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicDateHeader dateHeader(String name, Supplier<ZonedDateTime> value) {
+		return BasicDateHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicDateHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicDateHeader dateHeader(String name, ZonedDateTime value) {
+		return BasicDateHeader.of(name, value);
 	}
 
 	/**
@@ -807,6 +982,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static final Debug debug(Boolean value) {
+		return Debug.of(value);
+	}
+
+	/**
+	 * Creates a new {@link Debug} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static final Debug debug(String value) {
 		return Debug.of(value);
 	}
 
@@ -826,16 +1014,89 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link ETag} header.
+	 * Creates a new {@link BasicEntityTagHeader} header.
 	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicEntityTagHeader entityTagHeader(String name, EntityTag value) {
+		return BasicEntityTagHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicEntityTagHeader} header.
+	 *
+	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final ETag eTag(String value) {
-		return ETag.of(value);
+	public static final BasicEntityTagHeader entityTagHeader(String name, String value) {
+		return BasicEntityTagHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicEntityTagHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicEntityTagHeader entityTagHeader(String name, Supplier<EntityTag> value) {
+		return BasicEntityTagHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicEntityTagsHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicEntityTagsHeader entityTagsHeader(String name, EntityTags value) {
+		return BasicEntityTagsHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicEntityTagsHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicEntityTagsHeader entityTagsHeader(String name, String value) {
+		return BasicEntityTagsHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicEntityTagsHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicEntityTagsHeader entityTagsHeader(String name, Supplier<EntityTags> value) {
+		return BasicEntityTagsHeader.of(name, value);
 	}
 
 	/**
@@ -847,6 +1108,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final ETag eTag(EntityTag value) {
+		return ETag.of(value);
+	}
+
+	/**
+	 * Creates a new {@link ETag} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static final ETag eTag(String value) {
 		return ETag.of(value);
 	}
 
@@ -906,18 +1180,6 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link Expires} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final Expires expires(ZonedDateTime value) {
-		return Expires.of(value);
-	}
-
-	/**
 	 * Creates a new {@link Expires} header with a delayed value.
 	 *
 	 * <p>
@@ -929,6 +1191,18 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final Expires expires(Supplier<ZonedDateTime> value) {
+		return Expires.of(value);
+	}
+
+	/**
+	 * Creates a new {@link Expires} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final Expires expires(ZonedDateTime value) {
 		return Expires.of(value);
 	}
 
@@ -987,6 +1261,86 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link Header} of the specified type.
+	 *
+	 * <p>
+	 * Same as {@link #header(Class, String, Object)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name() @Header(name)} or
+	 * 	{@link org.apache.juneau.http.annotation.Header#value() @Header(value)} annotations.
+	 *
+	 * @param <T> The header implementation class.
+	 * @param type The header implementation class.
+	 * @param value The header value.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final <T extends Header> T header(Class<T> type, Object value) {
+		return HeaderBeanMeta.of(type).construct(null, value);
+	}
+
+	/**
+	 * Creates a new {@link Header} of the specified type.
+	 *
+	 * <p>
+	 * The implementation class must have a public constructor taking in one of the following argument lists:
+	 * <ul>
+	 * 	<li><c><jk>public</jk> X(String <jv>headerValue</jv>)</c>
+	 * 	<li><c><jk>public</jk> X(Object <jv>headerValue</jv>)</c>
+	 * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, String <jv>headerValue</jv>)</c>
+	 * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, Object <jv>headerValue</jv>)</c>
+	 * </ul>
+	 *
+	 * @param <T> The header implementation class.
+	 * @param type The header implementation class.
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final <T extends Header> T header(Class<T> type, String name, Object value) {
+		return HeaderBeanMeta.of(type).construct(name, value);
+	}
+
+	/**
+	 * Instantiates a new {@link org.apache.juneau.http.header.HeaderList}.
+	 *
+	 * @return A new empty builder.
+	 */
+	public static final HeaderList headerList() {
+		return HeaderList.create();
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified headers.
+	 *
+	 * @param headers The headers to add to the list.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final HeaderList headerList(Header...headers) {
+		return HeaderList.of(headers);
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified headers.
+	 *
+	 * @param headers The headers to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
+	 * @return A new unmodifiable instance, never <jk>null</jk>.
+	 */
+	public static final HeaderList headerList(List<Header> headers) {
+		return HeaderList.of(headers);
+	}
+
+	/**
+	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
+	 *
+	 * @param pairs
+	 * 	Initial list of pairs.
+	 * 	<br>Must be an even number of parameters representing key/value pairs.
+	 * @throws RuntimeException If odd number of parameters were specified.
+	 * @return A new instance.
+	 */
+	public static HeaderList headerList(String...pairs) {
+		return HeaderList.ofPairs(pairs);
+	}
+
+	/**
 	 * Creates a new {@link Host} header.
 	 *
 	 * @param value
@@ -1018,11 +1372,10 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final IfMatch ifMatch(String value) {
+	public static final IfMatch ifMatch(EntityTags value) {
 		return IfMatch.of(value);
 	}
 
@@ -1031,10 +1384,11 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final IfMatch ifMatch(EntityTags value) {
+	public static final IfMatch ifMatch(String value) {
 		return IfMatch.of(value);
 	}
 
@@ -1067,18 +1421,6 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link IfModifiedSince} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final IfModifiedSince ifModifiedSince(ZonedDateTime value) {
-		return IfModifiedSince.of(value);
-	}
-
-	/**
 	 * Creates a new {@link IfModifiedSince} header with a delayed value.
 	 *
 	 * <p>
@@ -1094,16 +1436,15 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link IfNoneMatch} header.
+	 * Creates a new {@link IfModifiedSince} header.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final IfNoneMatch ifNoneMatch(String value) {
-		return IfNoneMatch.of(value);
+	public static final IfModifiedSince ifModifiedSince(ZonedDateTime value) {
+		return IfModifiedSince.of(value);
 	}
 
 	/**
@@ -1115,6 +1456,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final IfNoneMatch ifNoneMatch(EntityTags value) {
+		return IfNoneMatch.of(value);
+	}
+
+	/**
+	 * Creates a new {@link IfNoneMatch} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static final IfNoneMatch ifNoneMatch(String value) {
 		return IfNoneMatch.of(value);
 	}
 
@@ -1138,35 +1492,23 @@ public class HttpHeaders {
 	 *
 	 * @param value
 	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final IfRange ifRange(EntityTag value) {
+		return IfRange.of(value);
+	}
+
+	/**
+	 * Creates a new {@link IfRange} header.
+	 *
+	 * @param value
+	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final IfRange ifRange(String value) {
-		return IfRange.of(value);
-	}
-
-	/**
-	 * Creates a new {@link IfRange} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final IfRange ifRange(ZonedDateTime value) {
-		return IfRange.of(value);
-	}
-
-	/**
-	 * Creates a new {@link IfRange} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final IfRange ifRange(EntityTag value) {
 		return IfRange.of(value);
 	}
 
@@ -1187,6 +1529,18 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link IfRange} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final IfRange ifRange(ZonedDateTime value) {
+		return IfRange.of(value);
+	}
+
+	/**
 	 * Creates a new {@link IfUnmodifiedSince} header.
 	 *
 	 * @param value
@@ -1196,18 +1550,6 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final IfUnmodifiedSince ifUnmodifiedSince(String value) {
-		return IfUnmodifiedSince.of(value);
-	}
-
-	/**
-	 * Creates a new {@link IfUnmodifiedSince} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final IfUnmodifiedSince ifUnmodifiedSince(ZonedDateTime value) {
 		return IfUnmodifiedSince.of(value);
 	}
 
@@ -1227,6 +1569,61 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link IfUnmodifiedSince} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final IfUnmodifiedSince ifUnmodifiedSince(ZonedDateTime value) {
+		return IfUnmodifiedSince.of(value);
+	}
+
+	/**
+	 * Creates a new {@link BasicIntegerHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicIntegerHeader integerHeader(String name, Integer value) {
+		return BasicIntegerHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicIntegerHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicIntegerHeader integerHeader(String name, String value) {
+		return BasicIntegerHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicIntegerHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicIntegerHeader integerHeader(String name, Supplier<Integer> value) {
+		return BasicIntegerHeader.of(name, value);
+	}
+
+	/**
 	 * Creates a new {@link LastModified} header.
 	 *
 	 * @param value
@@ -1236,18 +1633,6 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final LastModified lastModified(String value) {
-		return LastModified.of(value);
-	}
-
-	/**
-	 * Creates a new {@link LastModified} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final LastModified lastModified(ZonedDateTime value) {
 		return LastModified.of(value);
 	}
 
@@ -1267,6 +1652,18 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link LastModified} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final LastModified lastModified(ZonedDateTime value) {
+		return LastModified.of(value);
+	}
+
+	/**
 	 * Creates a new {@link Location} header.
 	 *
 	 * @param value
@@ -1276,18 +1673,6 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final Location location(String value) {
-		return Location.of(value);
-	}
-
-	/**
-	 * Creates a new {@link Location} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static final Location location(URI value) {
 		return Location.of(value);
 	}
 
@@ -1307,16 +1692,59 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link MaxForwards} header.
+	 * Creates a new {@link Location} header.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final MaxForwards maxForwards(String value) {
-		return MaxForwards.of(value);
+	public static final Location location(URI value) {
+		return Location.of(value);
+	}
+
+	/**
+	 * Creates a new {@link BasicLongHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicLongHeader longHeader(String name, Long value) {
+		return BasicLongHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicLongHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicLongHeader longHeader(String name, String value) {
+		return BasicLongHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicLongHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicLongHeader longHeader(String name, Supplier<Long> value) {
+		return BasicLongHeader.of(name, value);
 	}
 
 	/**
@@ -1328,6 +1756,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static final MaxForwards maxForwards(Integer value) {
+		return MaxForwards.of(value);
+	}
+
+	/**
+	 * Creates a new {@link MaxForwards} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static final MaxForwards maxForwards(String value) {
 		return MaxForwards.of(value);
 	}
 
@@ -1347,16 +1788,90 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link NoTrace} header.
+	 * Creates a new {@link BasicMediaRangesHeader} header.
 	 *
+	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final NoTrace noTrace(String value) {
-		return NoTrace.of(value);
+	public static final BasicMediaRangesHeader mediaRangesHeader(String name, MediaRanges value) {
+		return BasicMediaRangesHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicMediaRangesHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicMediaRangesHeader mediaRangesHeader(String name, String value) {
+		return BasicMediaRangesHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicMediaRangesHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicMediaRangesHeader mediaRangesHeader(String name, Supplier<MediaRanges> value) {
+		return value == null ? null : new BasicMediaRangesHeader(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicMediaTypeHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicMediaTypeHeader mediaTypeHeader(String name, MediaType value) {
+		return BasicMediaTypeHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicMediaTypeHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicMediaTypeHeader mediaTypeHeader(String name, String value) {
+		return BasicMediaTypeHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicMediaTypeHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicMediaTypeHeader mediaTypeHeader(String name, Supplier<MediaType> value) {
+		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
 
 	/**
@@ -1368,6 +1883,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
 	 */
 	public static final NoTrace noTrace(Boolean value) {
+		return NoTrace.of(value);
+	}
+
+	/**
+	 * Creates a new {@link NoTrace} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static final NoTrace noTrace(String value) {
 		return NoTrace.of(value);
 	}
 
@@ -1451,7 +1979,6 @@ public class HttpHeaders {
 	public static final ProxyAuthenticate proxyAuthenticate(String value) {
 		return ProxyAuthenticate.of(value);
 	}
-
 	/**
 	 * Creates a new {@link ProxyAuthenticate} header with a delayed value.
 	 *
@@ -1535,19 +2062,6 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link Referer} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static final Referer referer(URI value) {
-		return Referer.of(value);
-	}
-
-	/**
 	 * Creates a new {@link Referer} header with a delayed value.
 	 *
 	 * <p>
@@ -1563,28 +2077,16 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link RetryAfter} header.
+	 * Creates a new {@link Referer} header.
 	 *
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>) or an integer.
+	 * 	<br>Must be parsable by {@link URI#create(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final RetryAfter retryAfter(String value) {
-		return RetryAfter.of(value);
-	}
-
-	/**
-	 * Creates a new {@link RetryAfter} header.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final RetryAfter retryAfter(ZonedDateTime value) {
-		return RetryAfter.of(value);
+	public static final Referer referer(URI value) {
+		return Referer.of(value);
 	}
 
 	/**
@@ -1596,6 +2098,19 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final RetryAfter retryAfter(Integer value) {
+		return RetryAfter.of(value);
+	}
+
+	/**
+	 * Creates a new {@link RetryAfter} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>) or an integer.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final RetryAfter retryAfter(String value) {
 		return RetryAfter.of(value);
 	}
 
@@ -1613,6 +2128,92 @@ public class HttpHeaders {
 	 */
 	public static final RetryAfter retryAfter(Supplier<?> value) {
 		return RetryAfter.of(value);
+	}
+
+	/**
+	 * Creates a new {@link RetryAfter} header.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final RetryAfter retryAfter(ZonedDateTime value) {
+		return RetryAfter.of(value);
+	}
+
+	/**
+	 * Creates a new {@link SerializedHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The POJO to serialize as the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 */
+	public static final SerializedHeader serializedHeader(String name, Object value) {
+		return SerializedHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link SerializedHeader} header.
+	 *
+	 * @param name The HTTP header name name.
+	 * @param value
+	 * 	The POJO to serialize as the header value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
+	 * @param schema
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	<br>Can also be a {@link Supplier}.
+	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 */
+	public static SerializedHeader serializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		return SerializedHeader.of(name, value, serializer, schema, skipIfEmpty);
+	}
+
+	/**
+	 * Creates a new {@link SerializedHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the POJO to serialize as the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 */
+	public static final SerializedHeader serializedHeader(String name, Supplier<?> value) {
+		return SerializedHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link SerializedHeader} header.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The HTTP header name name.
+	 * @param value
+	 * 	The supplier of the POJO to serialize as the header value.
+	 * @param serializer
+	 * 	The serializer to use for serializing the value to a string value.
+	 * @param schema
+	 * 	The schema object that defines the format of the output.
+	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
+	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
+	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
+	 * 	<br>Can also be a {@link Supplier}.
+	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 */
+	public static SerializedHeader serializedHeader(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
+		return SerializedHeader.of(name, value, serializer, schema, skipIfEmpty);
 	}
 
 	/**
@@ -1640,6 +2241,88 @@ public class HttpHeaders {
 	 */
 	public static final Server server(Supplier<String> value) {
 		return Server.of(value);
+	}
+
+	/**
+	 * Creates a {@link BasicHeader} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 *
+	 * @param pair The pair string.
+	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
+	 */
+	public static final BasicStringHeader stringHeader(String pair) {
+		return BasicStringHeader.ofPair(pair);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicStringHeader stringHeader(String name, String value) {
+		return BasicStringHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicStringHeader stringHeader(String name, Supplier<String> value) {
+		return BasicStringHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringRangesHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicStringRangesHeader stringRangesHeader(String name, String value) {
+		return BasicStringRangesHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringRangesHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicStringRangesHeader stringRangesHeader(String name, StringRanges value) {
+		return BasicStringRangesHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicStringRangesHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicStringRangesHeader stringRangesHeader(String name, Supplier<StringRanges> value) {
+		return BasicStringRangesHeader.of(name, value);
 	}
 
 	/**
@@ -1800,6 +2483,49 @@ public class HttpHeaders {
 	}
 
 	/**
+	 * Creates a new {@link BasicUriHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link URI#create(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicUriHeader uriHeader(String name, String value) {
+		return BasicUriHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicUriHeader} header with a delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicUriHeader uriHeader(String name, Supplier<URI> value) {
+		return BasicUriHeader.of(name, value);
+	}
+
+	/**
+	 * Creates a new {@link BasicUriHeader} header.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static final BasicUriHeader uriHeader(String name, URI value) {
+		return BasicUriHeader.of(name, value);
+	}
+
+	/**
 	 * Creates a new {@link UserAgent} header.
 	 *
 	 * @param value
@@ -1918,7 +2644,6 @@ public class HttpHeaders {
 	public static final Warning warning(Supplier<String> value) {
 		return Warning.of(value);
 	}
-
 	/**
 	 * Creates a new {@link WwwAuthenticate} header.
 	 *
@@ -1944,745 +2669,5 @@ public class HttpHeaders {
 	 */
 	public static final WwwAuthenticate wwwAuthenticate(Supplier<String> value) {
 		return WwwAuthenticate.of(value);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Custom headers
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new {@link BasicBooleanHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicBooleanHeader booleanHeader(String name, String value) {
-		return BasicBooleanHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicBooleanHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicBooleanHeader booleanHeader(String name, Boolean value) {
-		return BasicBooleanHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicBooleanHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicBooleanHeader booleanHeader(String name, Supplier<Boolean> value) {
-		return BasicBooleanHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicCsvHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be a comma-delimited list.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicCsvHeader csvHeader(String name, String value) {
-		return BasicCsvHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicCsvHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicCsvHeader csvHeader(String name, String...value) {
-		return BasicCsvHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicCsvHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicCsvHeader csvHeader(String name, Supplier<String[]> value) {
-		return BasicCsvHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicDateHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicDateHeader dateHeader(String name, String value) {
-		return BasicDateHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicDateHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicDateHeader dateHeader(String name, ZonedDateTime value) {
-		return BasicDateHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicDateHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicDateHeader dateHeader(String name, Supplier<ZonedDateTime> value) {
-		return BasicDateHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicEntityTagsHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicEntityTagsHeader entityTagsHeader(String name, String value) {
-		return BasicEntityTagsHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicEntityTagsHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicEntityTagsHeader entityTagsHeader(String name, EntityTags value) {
-		return BasicEntityTagsHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicEntityTagsHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicEntityTagsHeader entityTagsHeader(String name, Supplier<EntityTags> value) {
-		return BasicEntityTagsHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicEntityTagHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicEntityTagHeader entityTagHeader(String name, String value) {
-		return BasicEntityTagHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicEntityTagHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicEntityTagHeader entityTagHeader(String name, EntityTag value) {
-		return BasicEntityTagHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicEntityTagHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicEntityTagHeader entityTagHeader(String name, Supplier<EntityTag> value) {
-		return BasicEntityTagHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicIntegerHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicIntegerHeader integerHeader(String name, String value) {
-		return BasicIntegerHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicIntegerHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicIntegerHeader integerHeader(String name, Integer value) {
-		return BasicIntegerHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicIntegerHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicIntegerHeader integerHeader(String name, Supplier<Integer> value) {
-		return BasicIntegerHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicLongHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicLongHeader longHeader(String name, String value) {
-		return BasicLongHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicLongHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicLongHeader longHeader(String name, Long value) {
-		return BasicLongHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicLongHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicLongHeader longHeader(String name, Supplier<Long> value) {
-		return BasicLongHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicMediaRangesHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicMediaRangesHeader mediaRangesHeader(String name, String value) {
-		return BasicMediaRangesHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicMediaRangesHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicMediaRangesHeader mediaRangesHeader(String name, MediaRanges value) {
-		return BasicMediaRangesHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicMediaRangesHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicMediaRangesHeader mediaRangesHeader(String name, Supplier<MediaRanges> value) {
-		return value == null ? null : new BasicMediaRangesHeader(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicMediaTypeHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicMediaTypeHeader mediaTypeHeader(String name, String value) {
-		return BasicMediaTypeHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicMediaTypeHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicMediaTypeHeader mediaTypeHeader(String name, MediaType value) {
-		return BasicMediaTypeHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicMediaTypeHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicMediaTypeHeader mediaTypeHeader(String name, Supplier<MediaType> value) {
-		return value == null ? null : new BasicMediaTypeHeader(name, value);
-	}
-
-	/**
-	 * Creates a {@link BasicHeader} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
-	 *
-	 * @param pair The pair string.
-	 * @return A new header bean, or <jk>null</jk> if the value was <jk>null</jk>.
-	 */
-	public static final BasicStringHeader stringHeader(String pair) {
-		return BasicStringHeader.ofPair(pair);
-	}
-
-	/**
-	 * Creates a new {@link BasicHeader} header.
-	 *
-	 * @param name The parameter name.
-	 * @param value
-	 * 	The parameter value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicHeader basicHeader(String name, Object value) {
-		return BasicHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 * */
-	public static final BasicHeader basicHeader(String name, Supplier<?> value) {
-		return new BasicHeader(name, value);
-	}
-
-	/**
-	 * Creates a new {@link SerializedHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The POJO to serialize as the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
-	 */
-	public static final SerializedHeader serializedHeader(String name, Object value) {
-		return SerializedHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link SerializedHeader} header.
-	 *
-	 * @param name The HTTP header name name.
-	 * @param value
-	 * 	The POJO to serialize as the header value.
-	 * @param serializer
-	 * 	The serializer to use for serializing the value to a string value.
-	 * @param schema
-	 * 	The schema object that defines the format of the output.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	<br>Can also be a {@link Supplier}.
-	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
-	 */
-	public static SerializedHeader serializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return SerializedHeader.of(name, value, serializer, schema, skipIfEmpty);
-	}
-
-	/**
-	 * Creates a new {@link SerializedHeader} header.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The HTTP header name name.
-	 * @param value
-	 * 	The supplier of the POJO to serialize as the header value.
-	 * @param serializer
-	 * 	The serializer to use for serializing the value to a string value.
-	 * @param schema
-	 * 	The schema object that defines the format of the output.
-	 * 	<br>If <jk>null</jk>, defaults to the schema defined on the serializer.
-	 * 	<br>If that's also <jk>null</jk>, defaults to {@link HttpPartSchema#DEFAULT}.
-	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
-	 * 	<br>Can also be a {@link Supplier}.
-	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
-	 */
-	public static SerializedHeader serializedHeader(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return SerializedHeader.of(name, value, serializer, schema, skipIfEmpty);
-	}
-
-	/**
-	 * Creates a new {@link SerializedHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the POJO to serialize as the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
-	 */
-	public static final SerializedHeader serializedHeader(String name, Supplier<?> value) {
-		return SerializedHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicStringHeader stringHeader(String name, String value) {
-		return BasicStringHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicStringHeader stringHeader(String name, Supplier<String> value) {
-		return BasicStringHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringRangesHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicStringRangesHeader stringRangesHeader(String name, String value) {
-		return BasicStringRangesHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringRangesHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicStringRangesHeader stringRangesHeader(String name, StringRanges value) {
-		return BasicStringRangesHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicStringRangesHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicStringRangesHeader stringRangesHeader(String name, Supplier<StringRanges> value) {
-		return BasicStringRangesHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicUriHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link URI#create(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicUriHeader uriHeader(String name, String value) {
-		return BasicUriHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicUriHeader} header.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicUriHeader uriHeader(String name, URI value) {
-		return BasicUriHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link BasicUriHeader} header with a delayed value.
-	 *
-	 * <p>
-	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The supplier of the header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static final BasicUriHeader uriHeader(String name, Supplier<URI> value) {
-		return BasicUriHeader.of(name, value);
-	}
-
-	/**
-	 * Creates a new {@link Header} of the specified type.
-	 *
-	 * <p>
-	 * The implementation class must have a public constructor taking in one of the following argument lists:
-	 * <ul>
-	 * 	<li><c><jk>public</jk> X(String <jv>headerValue</jv>)</c>
-	 * 	<li><c><jk>public</jk> X(Object <jv>headerValue</jv>)</c>
-	 * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, String <jv>headerValue</jv>)</c>
-	 * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, Object <jv>headerValue</jv>)</c>
-	 * </ul>
-	 *
-	 * @param <T> The header implementation class.
-	 * @param type The header implementation class.
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return A new unmodifiable instance, never <jk>null</jk>.
-	 */
-	public static final <T extends Header> T header(Class<T> type, String name, Object value) {
-		return HeaderBeanMeta.of(type).construct(name, value);
-	}
-
-	/**
-	 * Creates a new {@link Header} of the specified type.
-	 *
-	 * <p>
-	 * Same as {@link #header(Class, String, Object)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name() @Header(name)} or
-	 * 	{@link org.apache.juneau.http.annotation.Header#value() @Header(value)} annotations.
-	 *
-	 * @param <T> The header implementation class.
-	 * @param type The header implementation class.
-	 * @param value The header value.
-	 * @return A new unmodifiable instance, never <jk>null</jk>.
-	 */
-	public static final <T extends Header> T header(Class<T> type, Object value) {
-		return HeaderBeanMeta.of(type).construct(null, value);
-	}
-
-	/**
-	 * Instantiates a new {@link org.apache.juneau.http.header.HeaderList}.
-	 *
-	 * @return A new empty builder.
-	 */
-	public static final HeaderList headerList() {
-		return HeaderList.create();
-	}
-
-	/**
-	 * Creates a new {@link HeaderList} initialized with the specified headers.
-	 *
-	 * @param headers The headers to add to the list.  Can be <jk>null</jk>.  <jk>null</jk> entries are ignored.
-	 * @return A new unmodifiable instance, never <jk>null</jk>.
-	 */
-	public static final HeaderList headerList(List<Header> headers) {
-		return HeaderList.of(headers);
-	}
-
-	/**
-	 * Creates a new {@link HeaderList} initialized with the specified headers.
-	 *
-	 * @param headers The headers to add to the list.  <jk>null</jk> entries are ignored.
-	 * @return A new unmodifiable instance, never <jk>null</jk>.
-	 */
-	public static final HeaderList headerList(Header...headers) {
-		return HeaderList.of(headers);
-	}
-
-	/**
-	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
-	 *
-	 * @param pairs
-	 * 	Initial list of pairs.
-	 * 	<br>Must be an even number of parameters representing key/value pairs.
-	 * @throws RuntimeException If odd number of parameters were specified.
-	 * @return A new instance.
-	 */
-	public static HeaderList headerList(String...pairs) {
-		return HeaderList.ofPairs(pairs);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
-	 */
-	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Header.class, Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
-	}
-
-	/**
-	 * Utility method for converting an arbitrary object to a {@link Header}.
-	 *
-	 * @param o
-	 * 	The object to cast or convert to a {@link Header}.
-	 * @return Either the same object cast as a {@link Header} or converted to a {@link Header}.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Header cast(Object o) {
-		if (o instanceof Header)
-			return (Header)o;
-		if (o instanceof Headerable)
-			return ((Headerable)o).asHeader();
-		if (o instanceof NameValuePair)
-			return BasicHeader.of((NameValuePair)o);
-		if (o instanceof NameValuePairable)
-			return BasicHeader.of(((NameValuePairable)o).asNameValuePair());
-		if (o instanceof Map.Entry) {
-			Map.Entry e = (Map.Entry)o;
-			return BasicHeader.of(Utils.s(e.getKey()), Utils.s(e.getValue()));
-		}
-		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", className(o));
 	}
 }

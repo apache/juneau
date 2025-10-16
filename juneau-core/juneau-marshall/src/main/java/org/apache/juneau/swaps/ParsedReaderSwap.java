@@ -60,27 +60,19 @@ import org.apache.juneau.xml.*;
  */
 public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 
-	/** Reader transform for reading JSON text. */
-	public static class Json extends ParsedReaderSwap {
-		/** Constructor */
-		public Json() {
-			super(JsonParser.DEFAULT);
-		}
-	}
-
-	/** Reader transform for reading XML text. */
-	public static class Xml extends ParsedReaderSwap {
-		/** Constructor */
-		public Xml() {
-			super(XmlParser.DEFAULT);
-		}
-	}
-
 	/** Reader transform for reading HTML text. */
 	public static class Html extends ParsedReaderSwap {
 		/** Constructor */
 		public Html() {
 			super(HtmlParser.DEFAULT);
+		}
+	}
+
+	/** Reader transform for reading JSON text. */
+	public static class Json extends ParsedReaderSwap {
+		/** Constructor */
+		public Json() {
+			super(JsonParser.DEFAULT);
 		}
 	}
 
@@ -105,6 +97,14 @@ public class ParsedReaderSwap extends ObjectSwap<Reader,Object> {
 		/** Constructor */
 		public UrlEncoding() {
 			super(UrlEncodingParser.DEFAULT);
+		}
+	}
+
+	/** Reader transform for reading XML text. */
+	public static class Xml extends ParsedReaderSwap {
+		/** Constructor */
+		public Xml() {
+			super(XmlParser.DEFAULT);
 		}
 	}
 

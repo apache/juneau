@@ -58,7 +58,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#fieldset() fieldset()}
- * 		<li class='jm'>{@link HtmlBuilder#fieldset(Object, Object...) fieldset(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#fieldset(Object...) fieldset(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -84,6 +84,53 @@ public class Fieldset extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Fieldset _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Fieldset accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Fieldset attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Fieldset attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Fieldset child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Fieldset children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Fieldset contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Fieldset dir(String value) {
+		super.dir(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fieldset-disabled">disabled</a> attribute.
 	 *
@@ -98,7 +145,7 @@ public class Fieldset extends HtmlElementMixed {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -118,56 +165,11 @@ public class Fieldset extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this fieldset.
+	 * @param value The ID of the form element to associate with this fieldset.
 	 * @return This object.
 	 */
 	public Fieldset form(String value) {
 		attr("form", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the fieldset. This name can be used to access the fieldset
-	 * via the form.elements API and for form submission.
-	 *
-	 * <p>
-	 * The name should be unique within the form and should not contain spaces or special characters.
-	 *
-	 * @param name The name of the fieldset for API access and submission.
-	 * @return This object.
-	 */
-	public Fieldset name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Fieldset _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Fieldset accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Fieldset contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Fieldset dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -186,6 +188,24 @@ public class Fieldset extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Fieldset lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the fieldset. This name can be used to access the fieldset
+	 * via the form.elements API and for form submission.
+	 *
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param value The name of the fieldset for API access and submission.
+	 * @return This object.
+	 */
+	public Fieldset name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -516,30 +536,6 @@ public class Fieldset extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Fieldset translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Fieldset child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Fieldset children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Fieldset attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Fieldset attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

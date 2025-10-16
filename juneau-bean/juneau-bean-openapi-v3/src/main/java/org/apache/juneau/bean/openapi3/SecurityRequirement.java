@@ -51,35 +51,6 @@ public class SecurityRequirement extends OpenApiElement {
 	}
 
 	/**
-	 * Makes a copy of this object.
-	 *
-	 * @return A new copy of this object.
-	 */
-	public SecurityRequirement copy() {
-		return new SecurityRequirement(this);
-	}
-
-	/**
-	 * Returns the security requirements map.
-	 *
-	 * @return The security requirements map.
-	 */
-	public Map<String,List<String>> getRequirements() {
-		return requirements;
-	}
-
-	/**
-	 * Sets the security requirements map.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public SecurityRequirement setRequirements(Map<String,List<String>> value) {
-		this.requirements = value;
-		return this;
-	}
-
-	/**
 	 * Adds a security requirement.
 	 *
 	 * @param schemeName The security scheme name.  Must not be <jk>null</jk>.
@@ -93,6 +64,54 @@ public class SecurityRequirement extends OpenApiElement {
 			requirements = new LinkedHashMap<>();
 		requirements.put(schemeName, Arrays.asList(scopes));
 		return this;
+	}
+
+	/**
+	 * Makes a copy of this object.
+	 *
+	 * @return A new copy of this object.
+	 */
+	public SecurityRequirement copy() {
+		return new SecurityRequirement(this);
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "requirements" -> toType(getRequirements(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Returns the security requirements map.
+	 *
+	 * @return The security requirements map.
+	 */
+	public Map<String,List<String>> getRequirements() {
+		return requirements;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(requirements != null, "requirements")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override /* Overridden from OpenApiElement */
+	public SecurityRequirement set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "requirements" -> setRequirements((Map<String,List<String>>)value);
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
 	}
 
 	/**
@@ -126,33 +145,15 @@ public class SecurityRequirement extends OpenApiElement {
 		return addRequirement(schemeName);
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "requirements" -> toType(getRequirements(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public SecurityRequirement set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "requirements" -> setRequirements((Map<String,List<String>>)value);
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(requirements != null, "requirements")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	/**
+	 * Sets the security requirements map.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public SecurityRequirement setRequirements(Map<String,List<String>> value) {
+		this.requirements = value;
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */

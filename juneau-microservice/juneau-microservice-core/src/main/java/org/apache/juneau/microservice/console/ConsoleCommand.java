@@ -103,45 +103,18 @@ import org.apache.juneau.collections.*;
 public abstract class ConsoleCommand {
 
 	/**
-	 * Returns the name of the command.
-	 *
-	 * <p>
-	 * Example:  <js>"help"</js> for the help command.
-	 *
-	 * @return
-	 * 	The name of the command.
-	 * 	<br>Must not be <jk>null</jk> or contain spaces.
-	 */
-	abstract public String getName();
-
-	/**
-	 * Returns the usage synopsis of the command.
-	 *
-	 * <p>
-	 * Example:  <js>"help [command ...]"
-	 *
-	 * <p>
-	 * The default implementation just returns the name, which implies the command takes no additional arguments.
-	 *
-	 * @return The synopsis of the command.
-	 */
-	public String getSynopsis() {
-		return getName();
-	}
-
-	/**
-	 * Returns a one-line localized description of the command.
-	 *
-	 * <p>
-	 * The locale should be the system locale.
+	 * Executes a command.
+	 * @param in The console reader.
+	 * @param out The console writer.
+	 * @param args The command arguments.  The first argument is always the command itself.
 	 *
 	 * @return
-	 * 	The localized description of the command.
-	 * 	<br>Can be <jk>null</jk> if there is no information.
+	 * 	<jk>true</jk> if the console read thread should exit.
+	 * 	<br>Normally you want to return <jk>true</jk> if your action is causing the microservice to exit or restart.
+	 * @throws Exception
+	 * 	Any thrown exception will simply be sent to STDERR.
 	 */
-	public String getInfo() {
-		return null;
-	}
+	abstract public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception;
 
 	/**
 	 * Returns localized details of the command.
@@ -172,16 +145,43 @@ public abstract class ConsoleCommand {
 	}
 
 	/**
-	 * Executes a command.
-	 * @param in The console reader.
-	 * @param out The console writer.
-	 * @param args The command arguments.  The first argument is always the command itself.
+	 * Returns a one-line localized description of the command.
+	 *
+	 * <p>
+	 * The locale should be the system locale.
 	 *
 	 * @return
-	 * 	<jk>true</jk> if the console read thread should exit.
-	 * 	<br>Normally you want to return <jk>true</jk> if your action is causing the microservice to exit or restart.
-	 * @throws Exception
-	 * 	Any thrown exception will simply be sent to STDERR.
+	 * 	The localized description of the command.
+	 * 	<br>Can be <jk>null</jk> if there is no information.
 	 */
-	abstract public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception;
+	public String getInfo() {
+		return null;
+	}
+
+	/**
+	 * Returns the name of the command.
+	 *
+	 * <p>
+	 * Example:  <js>"help"</js> for the help command.
+	 *
+	 * @return
+	 * 	The name of the command.
+	 * 	<br>Must not be <jk>null</jk> or contain spaces.
+	 */
+	abstract public String getName();
+
+	/**
+	 * Returns the usage synopsis of the command.
+	 *
+	 * <p>
+	 * Example:  <js>"help [command ...]"
+	 *
+	 * <p>
+	 * The default implementation just returns the name, which implies the command takes no additional arguments.
+	 *
+	 * @return The synopsis of the command.
+	 */
+	public String getSynopsis() {
+		return getName();
+	}
 }

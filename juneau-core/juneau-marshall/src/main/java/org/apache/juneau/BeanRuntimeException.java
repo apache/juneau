@@ -31,16 +31,23 @@ public class BeanRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
+	private static String getMessage(Throwable cause, Class<?> c, String msg) {
+		if (msg != null)
+			return (c == null ? "" : c.getName() + ": ") + msg;
+		if (cause != null)
+			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
+		return null;
+	}
+
 	/**
 	 * Constructor.
 	 *
-	 * @param cause The cause of this exception.
 	 * @param c The class name of the bean that caused the exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The error message.
+	 * @param args Arguments passed in to the {@code String.format()} method.
 	 */
-	public BeanRuntimeException(Throwable cause, Class<?> c, String message, Object... args) {
-		super(cause, getMessage(cause, c, message), args);
+	public BeanRuntimeException(Class<?> c, String message, Object... args) {
+		this(null, c,  message, args);
 	}
 
 	/**
@@ -65,29 +72,22 @@ public class BeanRuntimeException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The class name of the bean that caused the exception.
-	 * @param message The error message.
-	 * @param args Arguments passed in to the {@code String.format()} method.
-	 */
-	public BeanRuntimeException(Class<?> c, String message, Object... args) {
-		this(null, c,  message, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * @param cause The initial cause of the exception.
 	 */
 	public BeanRuntimeException(Throwable cause) {
 		this(cause, null, null);
 	}
 
-	private static String getMessage(Throwable cause, Class<?> c, String msg) {
-		if (msg != null)
-			return (c == null ? "" : c.getName() + ": ") + msg;
-		if (cause != null)
-			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
-		return null;
+	/**
+	 * Constructor.
+	 *
+	 * @param cause The cause of this exception.
+	 * @param c The class name of the bean that caused the exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public BeanRuntimeException(Throwable cause, Class<?> c, String message, Object... args) {
+		super(cause, getMessage(cause, c, message), args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

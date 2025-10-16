@@ -31,11 +31,6 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 public class FileResource extends BasicResource {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -62,10 +57,22 @@ public class FileResource extends BasicResource {
 		super(copyFrom);
 	}
 
+	@Override /* Overridden from BasicResource */
+	public FileResource addHeader(String name, String value) {
+		super.addHeader(name, value);
+		return this;
+	}
+	@Override /* Overridden from BasicResource */
+	public FileResource addHeaders(Header...values) {
+		super.addHeaders(values);
+		return this;
+	}
+
 	@Override
 	public FileResource copy() {
 		return new FileResource(this);
 	}
+
 	@Override /* Overridden from BasicResource */
 	public FileResource setCached() throws IOException{
 		super.setCached();
@@ -97,13 +104,13 @@ public class FileResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public FileResource setContentEncoding(String value) {
+	public FileResource setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public FileResource setContentEncoding(ContentEncoding value) {
+	public FileResource setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -115,14 +122,26 @@ public class FileResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
+	public FileResource setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
 	public FileResource setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public FileResource setContentType(ContentType value) {
-		super.setContentType(value);
+	public FileResource setHeader(String name, String value) {
+		super.setHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public FileResource setHeaders(Header...values) {
+		super.setHeaders(values);
 		return this;
 	}
 
@@ -135,30 +154,6 @@ public class FileResource extends BasicResource {
 	@Override /* Overridden from BasicResource */
 	public FileResource setUnmodifiable() {
 		super.setUnmodifiable();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public FileResource addHeaders(Header...values) {
-		super.addHeaders(values);
 		return this;
 	}
 }

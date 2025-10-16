@@ -93,95 +93,6 @@ public class MediaType extends OpenApiElement{
 	}
 
 	/**
-	 * Make a deep copy of this object.
-	 *
-	 * @return A deep copy of this object.
-	 */
-	public MediaType copy() {
-		return new MediaType(this);
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	protected MediaType strict() {
-		super.strict();
-		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public MediaType strict(Object value) {
-		super.strict(value);
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>schema</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public MediaType setSchema(SchemaInfo value) {
-		schema = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>x-example</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Beanp("x-example")
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	@Beanp("x-example")
-	public MediaType setExample(Object value) {
-		example = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>variables</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String, Encoding> getEncoding() {
-		return encoding;
-	}
-
-	/**
-	 * Bean property setter:  <property>variables</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public MediaType setEncoding(Map<String, Encoding> value) {
-		encoding = copyOf(value);
-		return this;
-	}
-
-	/**
 	 * Adds one or more values to the <property>variables</property> property.
 	 *
 	 * @param key The mapping key.  Must not be <jk>null</jk>.
@@ -198,6 +109,60 @@ public class MediaType extends OpenApiElement{
 	}
 
 	/**
+	 * Adds a single value to the <property>examples</property> property.
+	 *
+	 * @param name The example name.  Must not be <jk>null</jk>.
+	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @return This object
+	 */
+	public MediaType addExample(String name, Example example) {
+		assertArgNotNull("name", name);
+		assertArgNotNull("example", example);
+		examples = mapBuilder(examples).add(name, example).build();
+		return this;
+	}
+
+	/**
+	 * Make a deep copy of this object.
+	 *
+	 * @return A deep copy of this object.
+	 */
+	public MediaType copy() {
+		return new MediaType(this);
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "encoding" -> toType(getEncoding(), type);
+			case "examples" -> toType(getExamples(), type);
+			case "schema" -> toType(getSchema(), type);
+			case "x-example" -> toType(getExample(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>variables</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, Encoding> getEncoding() {
+		return encoding;
+	}
+
+	/**
+	 * Bean property getter:  <property>x-example</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("x-example")
+	public Object getExample() {
+		return example;
+	}
+
+	/**
 	 * Bean property getter:  <property>examples</property>.
 	 *
 	 * <p>
@@ -207,6 +172,68 @@ public class MediaType extends OpenApiElement{
 	 */
 	public Map<String,Example> getExamples() {
 		return examples;
+	}
+
+	/**
+	 * Bean property getter:  <property>schema</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getSchema() {
+		return schema;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(schema != null, "schema")
+			.addIf(example != null, "x-example")
+			.addIf(encoding != null, "encoding")
+			.addIf(examples != null, "examples")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public MediaType set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "encoding" -> setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
+			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "x-example" -> setExample(value);
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>variables</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public MediaType setEncoding(Map<String, Encoding> value) {
+		encoding = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	@Beanp("x-example")
+	public MediaType setExample(Object value) {
+		example = value;
+		return this;
 	}
 
 	/**
@@ -226,54 +253,27 @@ public class MediaType extends OpenApiElement{
 	}
 
 	/**
-	 * Adds a single value to the <property>examples</property> property.
+	 * Bean property setter:  <property>schema</property>.
 	 *
-	 * @param name The example name.  Must not be <jk>null</jk>.
-	 * @param example The example.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public MediaType addExample(String name, Example example) {
-		assertArgNotNull("name", name);
-		assertArgNotNull("example", example);
-		examples = mapBuilder(examples).add(name, example).build();
+	public MediaType setSchema(SchemaInfo value) {
+		schema = value;
 		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "encoding" -> toType(getEncoding(), type);
-			case "examples" -> toType(getExamples(), type);
-			case "schema" -> toType(getSchema(), type);
-			case "x-example" -> toType(getExample(), type);
-			default -> super.get(property, type);
-		};
+	public MediaType strict(Object value) {
+		super.strict(value);
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public MediaType set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "encoding" -> setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
-			case "examples" -> setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "x-example" -> setExample(value);
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(schema != null, "schema")
-			.addIf(example != null, "x-example")
-			.addIf(encoding != null, "encoding")
-			.addIf(examples != null, "examples")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected MediaType strict() {
+		super.strict();
+		return this;
 	}
 }

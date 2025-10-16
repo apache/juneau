@@ -127,36 +127,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Appends a string to a StringBuilder, creating a new one if null.
-	 *
-	 * @param sb The StringBuilder to append to, or <jk>null</jk> to create a new one.
-	 * @param in The string to append.
-	 * @return The StringBuilder with the string appended.
-	 */
-	private static StringBuilder append(StringBuilder sb, String in) {
-		if (sb == null)
-			return new StringBuilder(in);
-		sb.append(in);
-		return sb;
-	}
-
-	/**
-	 * Converts an array to a List, handling both primitive and object arrays.
-	 *
-	 * @param array The array to convert.
-	 * @return A List containing the array elements.
-	 */
-	private static List<Object> arrayAsList(Object array) {
-		if (array.getClass().getComponentType().isPrimitive()) {
-			var l = new ArrayList<>(Array.getLength(array));
-			for (var i = 0; i < Array.getLength(array); i++)
-				l.add(Array.get(array, i));
-			return l;
-		}
-		return Arrays.asList((Object[])array);
-	}
-
-	/**
 	 * BASE64-decodes the specified string.
 	 *
 	 * @param in The BASE-64 encoded string.
@@ -335,24 +305,6 @@ public class StringUtils {
 					return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Converts an object to a readable string representation for formatting.
-	 *
-	 * @param o The object to convert.
-	 * @return A readable string representation of the object.
-	 */
-	private static String convertToReadable(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Class)
-			return ((Class<?>)o).getName();
-		if (o instanceof Method)
-			return Method.class.cast(o).getName();
-		if (isArray(o))
-			return arrayAsList(o).stream().map(StringUtils::convertToReadable).collect(Collectors.joining(", ", "[", "]"));
-		return o.toString();
 	}
 
 	/**
@@ -551,30 +503,6 @@ public class StringUtils {
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
 		return 0;
-	}
-
-	/**
-	 * Finds the first non-whitespace, non-comment character in a string.
-	 *
-	 * @param s The string to analyze.
-	 * @return The first real character, or <c>-1</c> if none found.
-	 */
-	private static int firstRealCharacter(String s) {
-		try (var r = new StringReader(s)) {
-			var c = 0;
-			while ((c = r.read()) != -1) {
-				if (! isWhitespace(c)) {
-					if (c == '/') {
-						skipComments(r);
-					} else {
-						return c;
-					}
-				}
-			}
-			return -1;
-		} catch (Exception e) {
-			throw asRuntimeException(e);
-		}
 	}
 
 	/**
@@ -804,15 +732,6 @@ public class StringUtils {
 		}
 		return l;
 	}
-	/**
-	 * Gets or creates an AsciiSet for escaping the specified character.
-	 *
-	 * @param c The character to create an escape set for.
-	 * @return An AsciiSet containing the character and backslash.
-	 */
-	static AsciiSet getEscapeSet(char c) {
-		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
-	}
 
 	/**
 	 * Takes in a string, splits it by lines, and then prepends each line with line numbers.
@@ -921,7 +840,6 @@ public class StringUtils {
 		}
 		return false;
 	}
-
 	/**
 	 * Returns <jk>true</jk> if the specified string is numeric.
 	 *
@@ -1197,44 +1115,6 @@ public class StringUtils {
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
 		return 0;
-	}
-
-	/**
-	 * Determines the multiplier value based on the suffix character in a string.
-	 *
-	 * @param s The string to analyze for multiplier suffix.
-	 * @return The multiplier value (1 if no valid suffix found).
-	 */
-	private static int multiplier(String s) {
-		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
-		if (c == 'G') return 1024*1024*1024;
-		if (c == 'M') return 1024*1024;
-		if (c == 'K') return 1024;
-		if (c == 'g') return 1000*1000*1000;
-		if (c == 'm') return 1000*1000;
-		if (c == 'k') return 1000;
-		return 1;
-	}
-
-	/**
-	 * Determines the long multiplier value based on the suffix character in a string.
-	 *
-	 * @param s The string to analyze for multiplier suffix.
-	 * @return The multiplier value (1 if no valid suffix found).
-	 */
-	private static long multiplier2(String s) {
-		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
-		if (c == 'P') return 1024*1024*1024*1024*1024l;
-		if (c == 'T') return 1024*1024*1024*1024l;
-		if (c == 'G') return 1024*1024*1024l;
-		if (c == 'M') return 1024*1024l;
-		if (c == 'K') return 1024l;
-		if (c == 'p') return 1000*1000*1000*1000*1000l;
-		if (c == 't') return 1000*1000*1000*1000l;
-		if (c == 'g') return 1000*1000*1000l;
-		if (c == 'm') return 1000*1000l;
-		if (c == 'k') return 1000l;
-		return 1;
 	}
 
 	/**
@@ -1602,30 +1482,6 @@ public class StringUtils {
 	}
 
 	/**
-	 * Skips over comment sequences in a StringReader.
-	 *
-	 * @param r The StringReader positioned at the start of a comment.
-	 * @throws IOException If an I/O error occurs.
-	 */
-	private static void skipComments(StringReader r) throws IOException {
-		var c = r.read();
-		//  "/* */" style comments
-		if (c == '*') {
-			while (c != -1)
-				if ((c = r.read()) == '*')
-					if ((c = r.read()) == '/')  // NOSONAR - Intentional.
-						return;
-		//  "//" style comments
-		} else if (c == '/') {
-			while (c != -1) {
-				c = r.read();
-				if (c == -1 || c == '\n')
-					return;
-			}
-		}
-	}
-
-	/**
 	 * An efficient method for checking if a string starts with a character.
 	 *
 	 * @param s The string to check.  Can be <jk>null</jk>.
@@ -1824,6 +1680,7 @@ public class StringUtils {
 	public static String toIsoDate(Calendar c) {
 		return DatatypeConverter.printDate(c);
 	}
+
 	/**
 	 * Converts the specified object to an ISO8601 date-time string.
 	 *
@@ -1927,7 +1784,6 @@ public class StringUtils {
 				s = s.substring(0, s.length()-1);
 		return s;
 	}
-
 	/**
 	 * Trims <js>'/'</js> characters from the beginning of the specified string.
 	 *
@@ -2206,6 +2062,150 @@ public class StringUtils {
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Appends a string to a StringBuilder, creating a new one if null.
+	 *
+	 * @param sb The StringBuilder to append to, or <jk>null</jk> to create a new one.
+	 * @param in The string to append.
+	 * @return The StringBuilder with the string appended.
+	 */
+	private static StringBuilder append(StringBuilder sb, String in) {
+		if (sb == null)
+			return new StringBuilder(in);
+		sb.append(in);
+		return sb;
+	}
+
+	/**
+	 * Converts an array to a List, handling both primitive and object arrays.
+	 *
+	 * @param array The array to convert.
+	 * @return A List containing the array elements.
+	 */
+	private static List<Object> arrayAsList(Object array) {
+		if (array.getClass().getComponentType().isPrimitive()) {
+			var l = new ArrayList<>(Array.getLength(array));
+			for (var i = 0; i < Array.getLength(array); i++)
+				l.add(Array.get(array, i));
+			return l;
+		}
+		return Arrays.asList((Object[])array);
+	}
+
+	/**
+	 * Converts an object to a readable string representation for formatting.
+	 *
+	 * @param o The object to convert.
+	 * @return A readable string representation of the object.
+	 */
+	private static String convertToReadable(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Class)
+			return ((Class<?>)o).getName();
+		if (o instanceof Method)
+			return Method.class.cast(o).getName();
+		if (isArray(o))
+			return arrayAsList(o).stream().map(StringUtils::convertToReadable).collect(Collectors.joining(", ", "[", "]"));
+		return o.toString();
+	}
+
+	/**
+	 * Finds the first non-whitespace, non-comment character in a string.
+	 *
+	 * @param s The string to analyze.
+	 * @return The first real character, or <c>-1</c> if none found.
+	 */
+	private static int firstRealCharacter(String s) {
+		try (var r = new StringReader(s)) {
+			var c = 0;
+			while ((c = r.read()) != -1) {
+				if (! isWhitespace(c)) {
+					if (c == '/') {
+						skipComments(r);
+					} else {
+						return c;
+					}
+				}
+			}
+			return -1;
+		} catch (Exception e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Determines the multiplier value based on the suffix character in a string.
+	 *
+	 * @param s The string to analyze for multiplier suffix.
+	 * @return The multiplier value (1 if no valid suffix found).
+	 */
+	private static int multiplier(String s) {
+		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		if (c == 'G') return 1024*1024*1024;
+		if (c == 'M') return 1024*1024;
+		if (c == 'K') return 1024;
+		if (c == 'g') return 1000*1000*1000;
+		if (c == 'm') return 1000*1000;
+		if (c == 'k') return 1000;
+		return 1;
+	}
+
+	/**
+	 * Determines the long multiplier value based on the suffix character in a string.
+	 *
+	 * @param s The string to analyze for multiplier suffix.
+	 * @return The multiplier value (1 if no valid suffix found).
+	 */
+	private static long multiplier2(String s) {
+		char c = Utils.isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
+		if (c == 'P') return 1024*1024*1024*1024*1024l;
+		if (c == 'T') return 1024*1024*1024*1024l;
+		if (c == 'G') return 1024*1024*1024l;
+		if (c == 'M') return 1024*1024l;
+		if (c == 'K') return 1024l;
+		if (c == 'p') return 1000*1000*1000*1000*1000l;
+		if (c == 't') return 1000*1000*1000*1000l;
+		if (c == 'g') return 1000*1000*1000l;
+		if (c == 'm') return 1000*1000l;
+		if (c == 'k') return 1000l;
+		return 1;
+	}
+
+	/**
+	 * Skips over comment sequences in a StringReader.
+	 *
+	 * @param r The StringReader positioned at the start of a comment.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	private static void skipComments(StringReader r) throws IOException {
+		var c = r.read();
+		//  "/* */" style comments
+		if (c == '*') {
+			while (c != -1)
+				if ((c = r.read()) == '*')
+					if ((c = r.read()) == '/')  // NOSONAR - Intentional.
+						return;
+		//  "//" style comments
+		} else if (c == '/') {
+			while (c != -1) {
+				c = r.read();
+				if (c == -1 || c == '\n')
+					return;
+			}
+		}
+	}
+
+	/**
+	 * Gets or creates an AsciiSet for escaping the specified character.
+	 *
+	 * @param c The character to create an escape set for.
+	 * @return An AsciiSet containing the character and backslash.
+	 */
+	static AsciiSet getEscapeSet(char c) {
+		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
 	}
 
 	/**

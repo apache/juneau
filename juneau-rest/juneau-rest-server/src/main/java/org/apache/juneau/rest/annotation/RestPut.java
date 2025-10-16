@@ -235,65 +235,6 @@ public @interface RestPut {
 	String defaultContentType() default "";
 
 	/**
-	 * Specifies default values for form-data parameters.
-	 *
-	 * <p>
-	 * Strings are of the format <js>"name=value"</js>.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getFormParam(String)} when the parameter is not present on the
-	 * request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doPut(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li class='note'>
-	 * 		Key and value is trimmed of whitespace.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] defaultRequestFormData() default {};
-
-	/**
-	 * Specifies default values for query parameters.
-	 *
-	 * <p>
-	 * Strings are of the format <js>"name=value"</js>.
-	 *
-	 * <p>
-	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doPut(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li class='note'>
-	 * 		Key and value is trimmed of whitespace.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String[] defaultRequestQueryData() default {};
-
-	/**
 	 * Default request attributes.
 	 *
 	 * <p>
@@ -335,6 +276,36 @@ public @interface RestPut {
 	String[] defaultRequestAttributes() default {};
 
 	/**
+	 * Specifies default values for form-data parameters.
+	 *
+	 * <p>
+	 * Strings are of the format <js>"name=value"</js>.
+	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getFormParam(String)} when the parameter is not present on the
+	 * request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doPut(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li class='note'>
+	 * 		Key and value is trimmed of whitespace.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] defaultRequestFormData() default {};
+
+	/**
 	 * Default request headers.
 	 *
 	 * <p>
@@ -360,6 +331,35 @@ public @interface RestPut {
 	 * @return The annotation value.
 	 */
 	String[] defaultRequestHeaders() default {};
+
+	/**
+	 * Specifies default values for query parameters.
+	 *
+	 * <p>
+	 * Strings are of the format <js>"name=value"</js>.
+	 *
+	 * <p>
+	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@RestPut</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
+	 * 	<jk>public</jk> String doPut(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
+	 * 	<li class='note'>
+	 * 		Key and value is trimmed of whitespace.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String[] defaultRequestQueryData() default {};
 
 	/**
 	 * Default response headers.

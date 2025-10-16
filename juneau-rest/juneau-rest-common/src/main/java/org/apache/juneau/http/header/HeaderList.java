@@ -61,16 +61,11 @@ import org.apache.juneau.svl.*;
  */
 public class HeaderList extends ControlledArrayList<Header> {
 
-	private static final long serialVersionUID = 1L;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Represents no header list in annotations. */
 	public static final class Void extends HeaderList {
 		private static final long serialVersionUID = 1L;
 	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Instantiates a new list.
@@ -86,11 +81,10 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 *
 	 * @param headers
 	 * 	The headers to add to the list.
-	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
-	public static HeaderList of(List<Header> headers) {
+	public static HeaderList of(Header...headers) {
 		return new HeaderList().append(headers);
 	}
 
@@ -99,10 +93,11 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 *
 	 * @param headers
 	 * 	The headers to add to the list.
+	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
-	public static HeaderList of(Header...headers) {
+	public static HeaderList of(List<Header> headers) {
 		return new HeaderList().append(headers);
 	}
 
@@ -130,11 +125,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 			x.add(BasicHeader.of(pairs[i], pairs[i+1]));
 		return x;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private VarResolver varResolver;
 	boolean caseSensitive;
 
@@ -156,132 +146,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	/**
-	 * Makes a copy of this list.
-	 *
-	 * @return A new copy of this list.
-	 */
-	public HeaderList copy() {
-		return new HeaderList(this);
-	}
-
-	/**
-	 * Adds a collection of default headers.
-	 *
-	 * <p>
-	 * Default headers are set if they're not already in the list.
-	 *
-	 * @param headers The list of default headers.
-	 * @return This object.
-	 */
-	public HeaderList setDefault(List<Header> headers) {
-		if (headers != null)
-			headers.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public HeaderList setDefault(String name, Object value) {
-		return setDefault(createPart(name, value));
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public HeaderList setDefault(String name, Supplier<?> value) {
-		return setDefault(createPart(name, value));
-	}
-
-	/**
-	 * Makes a copy of this list of headers and adds a collection of default headers.
-	 *
-	 * <p>
-	 * Default headers are set if they're not already in the list.
-	 *
-	 * @param headers The list of default headers.
-	 * @return A new list, or the same list if the headers were empty.
-	 */
-	public HeaderList setDefault(Header...headers) {
-		if (headers != null)
-			setDefault(Arrays.asList(headers));
-		return this;
-	}
-
-	//-------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Allows header values to contain SVL variables.
-	 *
-	 * <p>
-	 * Resolves variables in header values when using the following methods:
-	 * <ul>
-	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
-	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
-	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
-	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
-	 *
-	 * @return This object.
-	 */
-	public HeaderList resolving() {
-		return resolving(VarResolver.DEFAULT);
-	}
-
-	/**
-	 * Allows header values to contain SVL variables.
-	 *
-	 * <p>
-	 * Resolves variables in header values when using the following methods:
-	 * <ul>
-	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
-	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
-	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
-	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
-	 * </ul>
-	 *
-	 * @param varResolver The variable resolver to use for resolving variables.
-	 * @return This object.
-	 */
-	public HeaderList resolving(VarResolver varResolver) {
-		assertModifiable();
-		this.varResolver = varResolver;
-		return this;
-	}
-
-	/**
-	 * Specifies that the headers in this list should be treated as case-sensitive.
-	 *
-	 * <p>
-	 * The default behavior is case-insensitive.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public HeaderList caseSensitive(boolean value) {
-		assertModifiable();
-		caseSensitive = value;
-		return this;
-	}
-
-	/**
 	 * Adds the specified header to the end of the headers in this list.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
@@ -290,6 +154,32 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public HeaderList append(Header value) {
 		if (value != null)
 			add(value);
+		return this;
+	}
+
+	/**
+	 * Adds the specified headers to the end of the headers in this list.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList append(Header...values) {
+		if (values != null)
+			for (Header value : values)
+				if (value != null)
+					append(value);
+		return this;
+	}
+
+	/**
+	 * Adds the specified headers to the end of the headers in this list.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList append(List<Header> values) {
+		if (values != null)
+			values.forEach(this::append);
 		return this;
 	}
 
@@ -323,307 +213,119 @@ public class HeaderList extends ControlledArrayList<Header> {
 	public HeaderList append(String name, Supplier<?> value) {
 		return append(createPart(name, value));
 	}
-
 	/**
-	 * Adds the specified headers to the end of the headers in this list.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList append(Header...values) {
-		if (values != null)
-			for (Header value : values)
-				if (value != null)
-					append(value);
-		return this;
-	}
-
-	/**
-	 * Adds the specified headers to the end of the headers in this list.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList append(List<Header> values) {
-		if (values != null)
-			values.forEach(this::append);
-		return this;
-	}
-
-	/**
-	 * Adds the specified header to the beginning of the headers in this list.
-	 *
-	 * @param value The header to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList prepend(Header value) {
-		if (value != null)
-			add(0, value);
-		return this;
-	}
-
-	/**
-	 * Appends the specified header to the beginning of this list.
+	 * Specifies that the headers in this list should be treated as case-sensitive.
 	 *
 	 * <p>
-	 * The header is added as a {@link BasicHeader}.
+	 * The default behavior is case-insensitive.
 	 *
-	 * @param name The header name.
-	 * @param value The header value.
+	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public HeaderList prepend(String name, Object value) {
-		return prepend(createPart(name, value));
-	}
-
-	/**
-	 * Appends the specified header to the beginning of this list using a value supplier.
-	 *
-	 * <p>
-	 * The header is added as a {@link BasicHeader}.
-	 *
-	 * <p>
-	 * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.
-	 *
-	 * @param name The header name.
-	 * @param value The header value supplier.
-	 * @return This object.
-	 */
-	public HeaderList prepend(String name, Supplier<?> value) {
-		return prepend(createPart(name, value));
-	}
-
-	/**
-	 * Adds the specified headers to the beginning of the headers in this list.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList prepend(Header...values) {
-		if (values != null)
-			prepend(alist(values));
+	public HeaderList caseSensitive(boolean value) {
+		assertModifiable();
+		caseSensitive = value;
 		return this;
 	}
 
 	/**
-	 * Adds the specified headers to the beginning of the headers in this list.
-	 *
-	 * @param values The headers to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList prepend(List<Header> values) {
-		if (values != null)
-			addAll(0, values);
-		return this;
-	}
-
-	/**
-	 * Removes the specified header from this list.
-	 *
-	 * @param value The header to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList remove(Header value) {
-		if (value != null)
-			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
-		return this;
-	}
-
-	/**
-	 * Removes the specified headers from this list.
-	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList remove(Header...values) {
-		for (Header value : values)
-			remove(value);
-		return this;
-	}
-
-	/**
-	 * Removes the specified headers from this list.
-	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList remove(List<Header> values) {
-		if (values != null)
-			values.forEach(this::remove);
-		return this;
-	}
-
-	/**
-	 * Removes the header with the specified name from this list.
-	 *
-	 * @param name The header name.
-	 * @return This object.
-	 */
-	public HeaderList remove(String name) {
-		removeIf(x -> eq(x.getName(), name));
-		return this;
-	}
-
-	/**
-	 * Removes the header with the specified name from this list.
-	 *
-	 * @param names The header name.
-	 * @return This object.
-	 */
-	public HeaderList remove(String...names) {
-		if (names != null)
-			for (String name : names)
-				remove(name);
-		return this;
-	}
-
-	/**
-	 * Removes all headers from this list.
-	 *
-	 * @return This object.
-	 */
-	public HeaderList removeAll() {
-		clear();
-		return this;
-	}
-
-	/**
-	 * Adds or replaces the header(s) with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList set(Header value) {
-		if (value != null) {
-			boolean replaced = false;
-			for (int i = 0, j = size(); i < j; i++) {
-				Header x = get(i);
-				if (eq(x.getName(), value.getName())) {
-					if (replaced) {
-						remove(i);
-						j--;
-					} else {
-						set(i, value);
-						replaced = true;
-					}
-				}
-			}
-
-			if (! replaced)
-				add(value);
-		}
-
-		return this;
-	}
-
-	/**
-	 * Adds or replaces the header(s) with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList set(Header...values) {
-		if (values != null)
-			set(alist(values));
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public HeaderList set(String name, Object value) {
-		return set(createPart(name, value));
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public HeaderList set(String name, Supplier<?> value) {
-		return set(createPart(name, value));
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HeaderList set(List<Header> values) {
-
-		if (values != null) {
-			for (Header h : values) {
-				if (h != null) {
-					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
-						Header x = get(i2);
-						if (eq(x.getName(), h.getName())) {
-							remove(i2);
-							j2--;
-						}
-					}
-				}
-			}
-
-			for (Header x : values) {
-				if (x != null) {
-					add(x);
-				}
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * Gets the first header with the given name.
+	 * Tests if headers with the given name are contained within this list.
 	 *
 	 * <p>
 	 * Header name comparison is case insensitive.
 	 *
 	 * @param name The header name.
-	 * @return The first matching header, or {@link Optional#empty()} if not found.
+	 * @return <jk>true</jk> if at least one header with the name is present.
 	 */
-	public Optional<Header> getFirst(String name) {
-		for (int i = 0; i < size(); i++) {
-			Header x = get(i);
-			if (eq(x.getName(), name))
-				return Utils.opt(x);
-		}
-		return opte();
+	public boolean contains(String name) {
+		return stream().anyMatch(x -> eq(x.getName(), name));
 	}
 
 	/**
-	 * Gets the last header with the given name.
+	 * Makes a copy of this list.
+	 *
+	 * @return A new copy of this list.
+	 */
+	public HeaderList copy() {
+		return new HeaderList(this);
+	}
+
+	/**
+	 * Performs an action on all matching headers in this list.
 	 *
 	 * <p>
-	 * Header name comparison is case insensitive.
+	 * This is the preferred method for iterating over headers as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public HeaderList forEach(Predicate<Header> filter, Consumer<Header> action) {
+		forEach(x -> consume(filter, action, x));
+		return this;
+	}
+
+	/**
+	 * Performs an action on all headers with the specified name in this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over headers as it does not involve
+	 * creation or copy of lists/arrays.
 	 *
 	 * @param name The header name.
-	 * @return The last matching header, or {@link Optional#empty()} if not found.
+	 * @param action An action to perform on each element.
+	 * @return This object.
 	 */
-	public Optional<Header> getLast(String name) {
-		for (int i = size() - 1; i >= 0; i--) {
-			Header x = get(i);
-			if (eq(x.getName(), name))
-				return Utils.opt(x);
-		}
-		return opte();
+	public HeaderList forEach(String name, Consumer<Header> action) {
+		return forEach(x -> eq(name, x.getName()), action);
+	}
+
+	/**
+	 * Performs an action on the values for all matching headers in this list.
+	 *
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public HeaderList forEachValue(Predicate<Header> filter, Consumer<String> action) {
+		return forEach(filter, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Performs an action on the values of all matching headers in this list.
+	 *
+	 * @param name The header name.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public HeaderList forEachValue(String name, Consumer<String> action) {
+		return forEach(name, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Gets a header representing all of the header values with the given name.
+	 *
+	 * <p>
+	 * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name()} or
+	 * 	{@link org.apache.juneau.http.annotation.Header#value()} annotations.
+	 *
+	 * <h5 class='figure'>Example</h5>
+	 * <p class='bjava'>
+	 * 	Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The return type.
+	 * @param type The header implementation class.
+	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		Utils.assertArgNotNull("type", type);
+
+		String name = HeaderBeanMeta.of(type).getSchema().getName();
+		Utils.assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());
+
+		return get(name, type);
 	}
 
 	/**
@@ -727,31 +429,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	/**
-	 * Gets a header representing all of the header values with the given name.
-	 *
-	 * <p>
-	 * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name()} or
-	 * 	{@link org.apache.juneau.http.annotation.Header#value()} annotations.
-	 *
-	 * <h5 class='figure'>Example</h5>
-	 * <p class='bjava'>
-	 * 	Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The return type.
-	 * @param type The header implementation class.
-	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
-	 */
-	public <T> Optional<T> get(Class<T> type) {
-		Utils.assertArgNotNull("type", type);
-
-		String name = HeaderBeanMeta.of(type).getSchema().getName();
-		Utils.assertArg(name != null, "Header name could not be found on bean type ''{0}''", type.getName());
-
-		return get(name, type);
-	}
-
-	/**
 	 * Gets all of the headers.
 	 *
 	 * <p>
@@ -790,25 +467,39 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	/**
-	 * Performs an action on the values for all matching headers in this list.
+	 * Gets the first header with the given name.
 	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
-	 * @param action An action to perform on each element.
-	 * @return This object.
+	 * <p>
+	 * Header name comparison is case insensitive.
+	 *
+	 * @param name The header name.
+	 * @return The first matching header, or {@link Optional#empty()} if not found.
 	 */
-	public HeaderList forEachValue(Predicate<Header> filter, Consumer<String> action) {
-		return forEach(filter, x -> action.accept(x.getValue()));
+	public Optional<Header> getFirst(String name) {
+		for (int i = 0; i < size(); i++) {
+			Header x = get(i);
+			if (eq(x.getName(), name))
+				return Utils.opt(x);
+		}
+		return opte();
 	}
 
 	/**
-	 * Performs an action on the values of all matching headers in this list.
+	 * Gets the last header with the given name.
+	 *
+	 * <p>
+	 * Header name comparison is case insensitive.
 	 *
 	 * @param name The header name.
-	 * @param action An action to perform on each element.
-	 * @return This object.
+	 * @return The last matching header, or {@link Optional#empty()} if not found.
 	 */
-	public HeaderList forEachValue(String name, Consumer<String> action) {
-		return forEach(name, x -> action.accept(x.getValue()));
+	public Optional<Header> getLast(String name) {
+		for (int i = size() - 1; i >= 0; i--) {
+			Header x = get(i);
+			if (eq(x.getName(), name))
+				return Utils.opt(x);
+		}
+		return opte();
 	}
 
 	/**
@@ -819,19 +510,6 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 */
 	public String[] getValues(String name) {
 		return stream().filter(x -> eq(x.getName(), name)).map(Header::getValue).toArray(String[]::new);
-	}
-
-	/**
-	 * Tests if headers with the given name are contained within this list.
-	 *
-	 * <p>
-	 * Header name comparison is case insensitive.
-	 *
-	 * @param name The header name.
-	 * @return <jk>true</jk> if at least one header with the name is present.
-	 */
-	public boolean contains(String name) {
-		return stream().anyMatch(x -> eq(x.getName(), name));
 	}
 
 	/**
@@ -855,36 +533,348 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	/**
-	 * Performs an action on all headers with the specified name in this list.
+	 * Adds the specified header to the beginning of the headers in this list.
 	 *
-	 * <p>
-	 * This is the preferred method for iterating over headers as it does not involve
-	 * creation or copy of lists/arrays.
-	 *
-	 * @param name The header name.
-	 * @param action An action to perform on each element.
+	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public HeaderList forEach(String name, Consumer<Header> action) {
-		return forEach(x -> eq(name, x.getName()), action);
-	}
-
-	/**
-	 * Performs an action on all matching headers in this list.
-	 *
-	 * <p>
-	 * This is the preferred method for iterating over headers as it does not involve
-	 * creation or copy of lists/arrays.
-	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
-	 * @param action An action to perform on each element.
-	 * @return This object.
-	 */
-	public HeaderList forEach(Predicate<Header> filter, Consumer<Header> action) {
-		forEach(x -> consume(filter, action, x));
+	public HeaderList prepend(Header value) {
+		if (value != null)
+			add(0, value);
 		return this;
 	}
 
+	/**
+	 * Adds the specified headers to the beginning of the headers in this list.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList prepend(Header...values) {
+		if (values != null)
+			prepend(alist(values));
+		return this;
+	}
+
+	/**
+	 * Adds the specified headers to the beginning of the headers in this list.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList prepend(List<Header> values) {
+		if (values != null)
+			addAll(0, values);
+		return this;
+	}
+
+	/**
+	 * Appends the specified header to the beginning of this list.
+	 *
+	 * <p>
+	 * The header is added as a {@link BasicHeader}.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public HeaderList prepend(String name, Object value) {
+		return prepend(createPart(name, value));
+	}
+
+	/**
+	 * Appends the specified header to the beginning of this list using a value supplier.
+	 *
+	 * <p>
+	 * The header is added as a {@link BasicHeader}.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link BasicHeader#getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value The header value supplier.
+	 * @return This object.
+	 */
+	public HeaderList prepend(String name, Supplier<?> value) {
+		return prepend(createPart(name, value));
+	}
+
+	/**
+	 * Removes the specified header from this list.
+	 *
+	 * @param value The header to remove.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList remove(Header value) {
+		if (value != null)
+			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
+		return this;
+	}
+
+	/**
+	 * Removes the specified headers from this list.
+	 *
+	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList remove(Header...values) {
+		for (Header value : values)
+			remove(value);
+		return this;
+	}
+
+	/**
+	 * Removes the specified headers from this list.
+	 *
+	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList remove(List<Header> values) {
+		if (values != null)
+			values.forEach(this::remove);
+		return this;
+	}
+
+	/**
+	 * Removes the header with the specified name from this list.
+	 *
+	 * @param name The header name.
+	 * @return This object.
+	 */
+	public HeaderList remove(String name) {
+		removeIf(x -> eq(x.getName(), name));
+		return this;
+	}
+
+	/**
+	 * Removes the header with the specified name from this list.
+	 *
+	 * @param names The header name.
+	 * @return This object.
+	 */
+	public HeaderList remove(String...names) {
+		if (names != null)
+			for (String name : names)
+				remove(name);
+		return this;
+	}
+
+	/**
+	 * Removes all headers from this list.
+	 *
+	 * @return This object.
+	 */
+	public HeaderList removeAll() {
+		clear();
+		return this;
+	}
+
+	/**
+	 * Allows header values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in header values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
+	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
+	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
+	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
+	 *
+	 * @return This object.
+	 */
+	public HeaderList resolving() {
+		return resolving(VarResolver.DEFAULT);
+	}
+
+	/**
+	 * Allows header values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in header values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
+	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
+	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
+	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
+	 * </ul>
+	 *
+	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @return This object.
+	 */
+	public HeaderList resolving(VarResolver varResolver) {
+		assertModifiable();
+		this.varResolver = varResolver;
+		return this;
+	}
+
+	/**
+	 * Adds or replaces the header(s) with the same name.
+	 *
+	 * <p>
+	 * If no header with the same name is found the given header is added to the end of the list.
+	 *
+	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList set(Header value) {
+		if (value != null) {
+			boolean replaced = false;
+			for (int i = 0, j = size(); i < j; i++) {
+				Header x = get(i);
+				if (eq(x.getName(), value.getName())) {
+					if (replaced) {
+						remove(i);
+						j--;
+					} else {
+						set(i, value);
+						replaced = true;
+					}
+				}
+			}
+
+			if (! replaced)
+				add(value);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Adds or replaces the header(s) with the same name.
+	 *
+	 * <p>
+	 * If no header with the same name is found the given header is added to the end of the list.
+	 *
+	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList set(Header...values) {
+		if (values != null)
+			set(alist(values));
+		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * <p>
+	 * If no header with the same name is found the given header is added to the end of the list.
+	 *
+	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public HeaderList set(List<Header> values) {
+
+		if (values != null) {
+			for (Header h : values) {
+				if (h != null) {
+					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
+						Header x = get(i2);
+						if (eq(x.getName(), h.getName())) {
+							remove(i2);
+							j2--;
+						}
+					}
+				}
+			}
+
+			for (Header x : values) {
+				if (x != null) {
+					add(x);
+				}
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public HeaderList set(String name, Object value) {
+		return set(createPart(name, value));
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public HeaderList set(String name, Supplier<?> value) {
+		return set(createPart(name, value));
+	}
+
+	/**
+	 * Makes a copy of this list of headers and adds a collection of default headers.
+	 *
+	 * <p>
+	 * Default headers are set if they're not already in the list.
+	 *
+	 * @param headers The list of default headers.
+	 * @return A new list, or the same list if the headers were empty.
+	 */
+	public HeaderList setDefault(Header...headers) {
+		if (headers != null)
+			setDefault(Arrays.asList(headers));
+		return this;
+	}
+
+	/**
+	 * Adds a collection of default headers.
+	 *
+	 * <p>
+	 * Default headers are set if they're not already in the list.
+	 *
+	 * @param headers The list of default headers.
+	 * @return This object.
+	 */
+	public HeaderList setDefault(List<Header> headers) {
+		if (headers != null)
+			headers.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
+		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public HeaderList setDefault(String name, Object value) {
+		return setDefault(createPart(name, value));
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public HeaderList setDefault(String name, Supplier<?> value) {
+		return setDefault(createPart(name, value));
+	}
+
+	@Override /* Overridden from ControlledArrayList */
+	public HeaderList setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 	/**
 	 * Returns a stream of the headers in this list with the specified name.
 	 *
@@ -898,9 +888,10 @@ public class HeaderList extends ControlledArrayList<Header> {
 		return stream().filter(x->eq(name, x.getName()));
 	}
 
-	//-------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from Object */
+	public String toString() {
+		return "[" + Utils.join(this, ", ") + "]";
+	}
 
 	/**
 	 * Creates a new header out of the specified name/value pair.
@@ -919,27 +910,16 @@ public class HeaderList extends ControlledArrayList<Header> {
 		return isResolving ? new BasicHeader(name, resolver(value)) : new BasicHeader(name, value);
 	}
 
-	private Supplier<Object> resolver(Object input) {
-		return ()->varResolver.resolve(Utils.s(unwrap(input)));
-	}
-
-	private Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
-		return o;
-	}
-
 	private boolean eq(String s1, String s2) {
 		return caseSensitive ? Utils.eq(s1, s2) : Utils.eqic(s1, s2);
 	}
 
-	@Override /* Overridden from Object */
-	public String toString() {
-		return "[" + Utils.join(this, ", ") + "]";
+	private Supplier<Object> resolver(Object input) {
+		return ()->varResolver.resolve(Utils.s(unwrap(input)));
 	}
-	@Override /* Overridden from ControlledArrayList */
-	public HeaderList setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+	private Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		return o;
 	}
 }

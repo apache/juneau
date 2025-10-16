@@ -43,11 +43,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public abstract class BeanContextable extends Context {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -90,73 +85,29 @@ public abstract class BeanContextable extends Context {
 		}
 
 		@Override /* Overridden from Context.Builder */
-		public abstract Builder copy();
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				bcBuilder.hashKey(),
-				bc == null ? 0 : bc.hashKey
-			);
-		}
-
-		/**
-		 * Returns the inner bean context builder.
-		 *
-		 * @return The inner bean context builder.
-		 */
-		public BeanContext.Builder beanContext() {
-			return bcBuilder;
-		}
-
-		/**
-		 * Applies an operation to the inner bean context builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			operation.accept(beanContext());
+		public Builder annotations(Annotation...value) {
+			bcBuilder.annotations(value);
+			super.annotations(value);
 			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Overrides the bean context builder.
-		 *
-		 * <p>
-		 * Used when sharing bean context builders across multiple context objects.
-		 * For example, {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder} uses this to apply common bean settings with the JSON
-		 * serializer and parser.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder beanContext(BeanContext.Builder value) {
-			this.bcBuilder = value;
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
 			return this;
 		}
 
-		/**
-		 * Specifies an already-instantiated bean context to use.
-		 *
-		 * <p>
-		 * Provides an optimization for cases where serializers and parsers can use an existing
-		 * bean context without having to go through <c><jv>beanContext</jv>.copy().build()</c>.
-		 * An example is {@link BeanContext#getBeanToStringSerializer()}.
-		 *
-		 * @param value The bean context to use.
-		 * @return This object.
-		 */
-		public Builder beanContext(BeanContext value) {
-			this.bc = value;
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
 		/**
 		 * Minimum bean class visibility.
 		 *
@@ -249,6 +200,152 @@ public abstract class BeanContextable extends Context {
 		 */
 		public Builder beanConstructorVisibility(Visibility value) {
 			bcBuilder.beanConstructorVisibility(value);
+			return this;
+		}
+
+		/**
+		 * Returns the inner bean context builder.
+		 *
+		 * @return The inner bean context builder.
+		 */
+		public BeanContext.Builder beanContext() {
+			return bcBuilder;
+		}
+
+		/**
+		 * Specifies an already-instantiated bean context to use.
+		 *
+		 * <p>
+		 * Provides an optimization for cases where serializers and parsers can use an existing
+		 * bean context without having to go through <c><jv>beanContext</jv>.copy().build()</c>.
+		 * An example is {@link BeanContext#getBeanToStringSerializer()}.
+		 *
+		 * @param value The bean context to use.
+		 * @return This object.
+		 */
+		public Builder beanContext(BeanContext value) {
+			this.bc = value;
+			return this;
+		}
+
+		/**
+		 * Overrides the bean context builder.
+		 *
+		 * <p>
+		 * Used when sharing bean context builders across multiple context objects.
+		 * For example, {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder} uses this to apply common bean settings with the JSON
+		 * serializer and parser.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder beanContext(BeanContext.Builder value) {
+			this.bcBuilder = value;
+			return this;
+		}
+
+		/**
+		 * Applies an operation to the inner bean context builder.
+		 *
+		 * @param operation The operation to apply.
+		 * @return This object.
+		 */
+		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
+			operation.accept(beanContext());
+			return this;
+		}
+
+		/**
+		 * Bean dictionary.
+		 *
+		 * <p>
+		 * The list of classes that make up the bean dictionary in this bean context.
+		 *
+		 * <p>
+		 * Values are prepended to the list so that later calls can override classes of earlier calls.
+		 *
+		 * <p>
+		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
+		 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
+		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
+		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
+		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
+		 *
+		 * <p>
+		 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
+		 *
+		 * <p>
+		 * Values can consist of any of the following types:
+		 * <ul>
+		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
+		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
+		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
+		 * 	<li>Any array or collection of the objects above.
+		 * </ul>
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jk>public class</jk> Foo {...}
+		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<jk>public class</jk> Bar {...}
+		 *
+		 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+		 * 		.addBeanTypes()
+		 * 		.build();
+		 *
+		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Parse bean.</jc>
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <p>
+		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
+		 *
+		 * <p class='bjava'>
+		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
+		 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
+		 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
+		 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
+		 * 	}
+		 * </p>
+		 *
+		 * <p>
+		 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
+		 * <p class='bjava'>
+		 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
+		 * 	ReaderParser <jv>parser</jv> = HtmlParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Parse an HTML body into HTML beans.</jc>
+		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#dictionary()}
+		 * 	<li class='ja'>{@link Beanp#dictionary()}
+		 * 	<li class='ja'>{@link BeanConfig#dictionary()}
+		 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+		 * </ul>
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * @return This object.
+		 */
+		public Builder beanDictionary(Class<?>...values) {
+			bcBuilder.beanDictionary(values);
 			return this;
 		}
 
@@ -443,196 +540,6 @@ public abstract class BeanContextable extends Context {
 		 */
 		public Builder beanMethodVisibility(Visibility value) {
 			bcBuilder.beanMethodVisibility(value);
-			return this;
-		}
-
-		/**
-		 * Beans require no-arg constructors.
-		 *
-		 * <p>
-		 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
-		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean without a no-arg constructor.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 *
-		 * 		<jc>// A property method.</jc>
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 *
-		 * 		<jc>// A no-arg constructor</jc>
-		 * 		<jk>public</jk> MyBean(String <jv>foo</jv>) {
-		 * 			<jk>this</jk>.<jf>foo</jf> = <jv>foo</jv>;
-		 * 		}
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> <js>"bar"</js>;
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beansRequireDefaultConstructor()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  "bar"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireDefaultConstructor()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder beansRequireDefaultConstructor() {
-			bcBuilder.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		/**
-		 * Beans require Serializable interface.
-		 *
-		 * <p>
-		 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
-		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean without a Serializable interface.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 *
-		 * 		<jc>// A property method.</jc>
-		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
-		 *
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> <js>"bar"</js>;
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beansRequireSerializable()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  "bar"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSerializable()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder beansRequireSerializable() {
-			bcBuilder.beansRequireSerializable();
-			return this;
-		}
-
-		/**
-		 * Beans require setters for getters.
-		 *
-		 * <p>
-		 * When enabled, ignore read-only properties (properties with getters but not setters).
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean without a Serializable interface.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 *
-		 * 		<jc>// A read/write property.</jc>
-		 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
-		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) { ... }
-		 *
-		 * 		<jc>// A read-only property.</jc>
-		 * 		<jk>public</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.beansRequireSettersForGetters()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#beansRequireSettersForGetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSettersForGetters()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder beansRequireSettersForGetters() {
-			bcBuilder.beansRequireSettersForGetters();
-			return this;
-		}
-
-		/**
-		 * Beans don't require at least one property.
-		 *
-		 * <p>
-		 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
-		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-		 *
-		 * <p>
-		 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with no properties.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.disableBeansRequireSomeProperties()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
-		 * 		even if it has no properties.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableBeansRequireSomeProperties()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableBeansRequireSomeProperties() {
-			bcBuilder.disableBeansRequireSomeProperties();
 			return this;
 		}
 
@@ -1316,96 +1223,165 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * Bean dictionary.
+		 * Beans require no-arg constructors.
 		 *
 		 * <p>
-		 * The list of classes that make up the bean dictionary in this bean context.
-		 *
-		 * <p>
-		 * Values are prepended to the list so that later calls can override classes of earlier calls.
-		 *
-		 * <p>
-		 * A dictionary is a name/class mapping used to find class types during parsing when they cannot be inferred
-		 * through reflection.  The names are defined through the {@link Bean#typeName() @Bean(typeName)} annotation defined
-		 * on the bean class.  For example, if a class <c>Foo</c> has a type-name of <js>"myfoo"</js>, then it would end up
-		 * serialized as <js>"{_type:'myfoo',...}"</js> in JSON
-		 * or <js>"&lt;myfoo&gt;...&lt;/myfoo&gt;"</js> in XML.
-		 *
-		 * <p>
-		 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
-		 *
-		 * <p>
-		 * Values can consist of any of the following types:
-		 * <ul>
-		 * 	<li>Any bean class that specifies a value for {@link Bean#typeName() @Bean(typeName)}.
-		 * 	<li>Any subclass of {@link BeanDictionaryList} containing a collection of bean classes with type name annotations.
-		 * 	<li>Any subclass of {@link BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
-		 * 	<li>Any array or collection of the objects above.
-		 * </ul>
+		 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
+		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-		 * 	<jk>public class</jk> Bar {...}
-		 *
-		 * 	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-		 * 		.addBeanTypes()
-		 * 		.build();
-		 *
-		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+		 * 	<jc>// A bean without a no-arg constructor.</jc>
 		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+		 *
+		 * 		<jc>// A property method.</jc>
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 *
+		 * 		<jc>// A no-arg constructor</jc>
+		 * 		<jk>public</jk> MyBean(String <jv>foo</jv>) {
+		 * 			<jk>this</jk>.<jf>foo</jf> = <jv>foo</jv>;
+		 * 		}
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>public</jk> String toString() {
+		 * 			<jk>return</jk> <js>"bar"</js>;
+		 * 		}
 		 * 	}
 		 *
-		 * 	<jc>// Parse bean.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{mySimpleField:{_type:'foo',...}}"</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <p>
-		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
-		 *
-		 * <p class='bjava'>
-		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
-		 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
-		 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;  <jc>// May contain Foo or Bar object.</jc>
-		 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>myMapField</jf>;  <jc>// May contain Foo or Bar objects.</jc>
-		 * 	}
-		 * </p>
-		 *
-		 * <p>
-		 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
-		 * <p class='bjava'>
-		 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
-		 * 	ReaderParser <jv>parser</jv> = HtmlParser
+		 * 	<jc>// Create a serializer that ignores beans without default constructors.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.dictionary(HtmlBeanDictionary.<jk>class</jk>)
+		 * 		.beansRequireDefaultConstructor()
 		 * 		.build();
 		 *
-		 * 	<jc>// Parse an HTML body into HTML beans.</jc>
-		 * 	Body <jv>body</jv> = <jv>parser</jv>.parse(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
+		 * 	<jc>// Produces:  "bar"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#dictionary()}
-		 * 	<li class='ja'>{@link Beanp#dictionary()}
-		 * 	<li class='ja'>{@link BeanConfig#dictionary()}
-		 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * @param values
-		 * 	The values to add to this setting.
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireDefaultConstructor()}
+		 * </ul>
+		 *
 		 * @return This object.
 		 */
-		public Builder beanDictionary(Class<?>...values) {
-			bcBuilder.beanDictionary(values);
+		public Builder beansRequireDefaultConstructor() {
+			bcBuilder.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		/**
+		 * Beans require Serializable interface.
+		 *
+		 * <p>
+		 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
+		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean without a Serializable interface.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 *
+		 * 		<jc>// A property method.</jc>
+		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
+		 *
+		 * 		<ja>@Override</ja>
+		 * 		<jk>public</jk> String toString() {
+		 * 			<jk>return</jk> <js>"bar"</js>;
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that ignores beans not implementing Serializable.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beansRequireSerializable()
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  "bar"</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSerializable()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder beansRequireSerializable() {
+			bcBuilder.beansRequireSerializable();
+			return this;
+		}
+
+		/**
+		 * Beans require setters for getters.
+		 *
+		 * <p>
+		 * When enabled, ignore read-only properties (properties with getters but not setters).
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean without a Serializable interface.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 *
+		 * 		<jc>// A read/write property.</jc>
+		 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
+		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) { ... }
+		 *
+		 * 		<jc>// A read-only property.</jc>
+		 * 		<jk>public</jk> String getBar() { <jk>return</jk> <js>"bar"</js>; }
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that ignores bean properties without setters.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.beansRequireSettersForGetters()
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#beansRequireSettersForGetters()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#beansRequireSettersForGetters()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder beansRequireSettersForGetters() {
+			bcBuilder.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public abstract Builder copy();
+
+		@Override /* Overridden from Context.Builder */
+		public Builder debug() {
+			bcBuilder.debug();
+			super.debug();
 			return this;
 		}
 
@@ -1458,51 +1434,182 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * POJO example.
+		 * Beans don't require at least one property.
 		 *
 		 * <p>
-		 * Specifies an example of the specified class.
+		 * When enabled, then a Java class doesn't need to contain at least 1 property to be considered a bean.
+		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <p>
-		 * Examples are used in cases such as POJO examples in Swagger documents.
+		 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+		 * 	<jc>// A bean with no properties.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that serializes beans even if they have zero properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().setFoo(<js>"foo"</js>).setBar(123))
+		 * 		.disableBeansRequireSomeProperties()
 		 * 		.build();
-		 * </p>
 		 *
-		 * <p>
-		 * This is a shorthand method for the following code:
-		 * <p class='bjava'>
-		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
+		 * 	<jc>// Produces:  {}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
-		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
+		 * 		even if it has no properties.
 		 * </ul>
 		 *
-		 * <p>
-		 * POJO examples can also be defined on classes via the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
-		 * 	<li>A static field annotated with {@link Example @Example}.
-		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
-		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
-		 * @param <T> The POJO class.
-		 * @param pojoClass The POJO class.
-		 * @param o
-		 * 	An instance of the POJO class used for examples.
 		 * @return This object.
 		 */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			bcBuilder.example(pojoClass, o);
+		public Builder disableBeansRequireSomeProperties() {
+			bcBuilder.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		/**
+		 * Don't silently ignore missing setters.
+		 *
+		 * <p>
+		 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
+		 * Otherwise, it will be silently ignored.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public void</jk> getFoo() {
+		 * 			<jk>return</jk> <js>"foo"</js>;
+		 * 		}
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.disableIgnoreMissingSetters()
+		 * 		.build();
+		 *
+		 * 	<jc>// Throws a ParseException.</jc>
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreMissingSetters()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder disableIgnoreMissingSetters() {
+			bcBuilder.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		/**
+		 * Don't ignore transient fields.
+		 *
+		 * <p>
+		 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a transient field.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public transient</jk> String <jf>foo</jf> = <js>"foo"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that doesn't ignore transient fields.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.disableIgnoreTransientFields()
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
+		 * </ul>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreTransientFields()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder disableIgnoreTransientFields() {
+			bcBuilder.disableIgnoreTransientFields();
+			return this;
+		}
+
+		/**
+		 * Don't ignore unknown properties with null values.
+		 *
+		 * <p>
+		 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
+		 * Otherwise it will be silently ignored.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a single property.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>foo</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.disableIgnoreUnknownNullBeanProperties()
+		 * 		.build();
+		 *
+		 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			bcBuilder.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		/**
+		 * Don't use interface proxies.
+		 *
+		 * <p>
+		 * When enabled, interfaces will be instantiated as proxy classes through the use of an
+		 * {@link InvocationHandler} if there is no other way of instantiating them.
+		 * Otherwise, throws a {@link BeanRuntimeException}.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#disableInterfaceProxies()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		public Builder disableInterfaceProxies() {
+			bcBuilder.disableInterfaceProxies();
 			return this;
 		}
 
@@ -1552,6 +1659,55 @@ public abstract class BeanContextable extends Context {
 		 */
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			bcBuilder.example(pojoClass, json);
+			return this;
+		}
+
+		/**
+		 * POJO example.
+		 *
+		 * <p>
+		 * Specifies an example of the specified class.
+		 *
+		 * <p>
+		 * Examples are used in cases such as POJO examples in Swagger documents.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.example(MyBean.<jk>class</jk>, <jk>new</jk> MyBean().setFoo(<js>"foo"</js>).setBar(123))
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This is a shorthand method for the following code:
+		 * <p class='bjava'>
+		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
+		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
+		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
+		 * </ul>
+		 *
+		 * <p>
+		 * POJO examples can also be defined on classes via the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>The {@link Marshalled#example()} annotation on the class itself.
+		 * 	<li>A static field annotated with {@link Example @Example}.
+		 * 	<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
+		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
+		 * </ul>
+		 *
+		 * @param <T> The POJO class.
+		 * @param pojoClass The POJO class.
+		 * @param o
+		 * 	An instance of the POJO class used for examples.
+		 * @return This object.
+		 */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			bcBuilder.example(pojoClass, o);
 			return this;
 		}
 
@@ -1645,6 +1801,15 @@ public abstract class BeanContextable extends Context {
 			return this;
 		}
 
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				bcBuilder.hashKey(),
+				bc == null ? 0 : bc.hashKey
+			);
+		}
+
 		/**
 		 * Ignore invocation errors on getters.
 		 *
@@ -1722,87 +1887,6 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * Don't silently ignore missing setters.
-		 *
-		 * <p>
-		 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
-		 * Otherwise, it will be silently ignored.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public void</jk> getFoo() {
-		 * 			<jk>return</jk> <js>"foo"</js>;
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Create a parser that throws an exception if a setter is not found but a getter is.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.disableIgnoreMissingSetters()
-		 * 		.build();
-		 *
-		 * 	<jc>// Throws a ParseException.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreMissingSetters()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableIgnoreMissingSetters() {
-			bcBuilder.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		/**
-		 * Don't ignore transient fields.
-		 *
-		 * <p>
-		 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a transient field.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public transient</jk> String <jf>foo</jf> = <js>"foo"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that doesn't ignore transient fields.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.disableIgnoreTransientFields()
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"foo":"foo"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
-		 * </ul>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreTransientFields()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableIgnoreTransientFields() {
-			bcBuilder.disableIgnoreTransientFields();
-			return this;
-		}
-
-		/**
 		 * Ignore unknown properties.
 		 *
 		 * <p>
@@ -1856,39 +1940,9 @@ public abstract class BeanContextable extends Context {
 			return this;
 		}
 
-		/**
-		 * Don't ignore unknown properties with null values.
-		 *
-		 * <p>
-		 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
-		 * Otherwise it will be silently ignored.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a single property.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>foo</jf>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a parser that throws an exception on an unknown property even if the value being set is null.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.disableIgnoreUnknownNullBeanProperties()
-		 * 		.build();
-		 *
-		 * 	<jc>// Throws a BeanRuntimeException wrapped in a ParseException on the unknown 'bar' property.</jc>
-		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			bcBuilder.disableIgnoreUnknownNullBeanProperties();
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
 			return this;
 		}
 
@@ -2255,6 +2309,46 @@ public abstract class BeanContextable extends Context {
 		 * Bean property namer
 		 *
 		 * <p>
+		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// A bean with a single property.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names for the MyBean class only.</jc>
+		 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.propertyNamer(MyBean.<jk>class</jk>, PropertyNamerDLC.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
+		 * </ul>
+		 *
+		 * @param on The class that the namer applies to.
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is {@link BasicPropertyNamer}.
+		 * @return This object.
+		 */
+		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
+			bcBuilder.propertyNamer(on, value);
+			return this;
+		}
+
+		/**
+		 * Bean property namer
+		 *
+		 * <p>
 		 * The class to use for calculating bean property names.
 		 *
 		 * <p>
@@ -2294,46 +2388,6 @@ public abstract class BeanContextable extends Context {
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
 			bcBuilder.propertyNamer(value);
-			return this;
-		}
-
-		/**
-		 * Bean property namer
-		 *
-		 * <p>
-		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// A bean with a single property.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that uses Dashed-Lower-Case property names for the MyBean class only.</jc>
-		 * 	<jc>// (e.g. "foo-bar-baz" instead of "fooBarBaz")</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.propertyNamer(MyBean.<jk>class</jk>, PropertyNamerDLC.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces:  {"foo-bar-baz":"fooBarBaz"}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#propertyNamer() Bean(propertyNamer)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#propertyNamer(Class)}
-		 * </ul>
-		 *
-		 * @param on The class that the namer applies to.
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is {@link BasicPropertyNamer}.
-		 * @return This object.
-		 */
-		public Builder propertyNamer(Class<?> on, Class<? extends PropertyNamer> value) {
-			bcBuilder.propertyNamer(on, value);
 			return this;
 		}
 
@@ -2469,6 +2523,72 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object.
+		 * @return This object.
+		 */
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			bcBuilder.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		/**
+		 * A shortcut for defining a {@link FunctionalSwap}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
+		 * @param normalClass The object type being swapped out.
+		 * @param swappedClass The object type being swapped in.
+		 * @param swapFunction The function to convert the object during serialization.
+		 * @param unswapFunction The function to convert the object during parsing.
+		 * @return This object.
+		 */
+		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			bcBuilder.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		/**
+		 * Same as {@link #swaps(Object...)} except explicitly specifies class varargs to avoid compilation warnings.
+		 *
+		 * @param values
+		 * 	The values to add to this setting.
+		 * 	<br>Values can consist of any of the following types:
+		 * 	<ul>
+		 * 		<li>Any subclass of {@link ObjectSwap}.
+		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
+		 * 	</ul>
+		 * @return This object.
+		 */
+		public Builder swaps(Class<?>...values) {
+			bcBuilder.swaps(values);
+			return this;
+		}
+
+		/**
 		 * Java object swaps.
 		 *
 		 * <p>
@@ -2559,72 +2679,6 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * Same as {@link #swaps(Object...)} except explicitly specifies class varargs to avoid compilation warnings.
-		 *
-		 * @param values
-		 * 	The values to add to this setting.
-		 * 	<br>Values can consist of any of the following types:
-		 * 	<ul>
-		 * 		<li>Any subclass of {@link ObjectSwap}.
-		 * 		<li>Any surrogate class.  A shortcut for defining a {@link SurrogateSwap}.
-		 * 	</ul>
-		 * @return This object.
-		 */
-		public Builder swaps(Class<?>...values) {
-			bcBuilder.swaps(values);
-			return this;
-		}
-
-		/**
-		 * A shortcut for defining a {@link FunctionalSwap}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param <T> The object type being swapped out.
-		 * @param <S> The object type being swapped in.
-		 * @param normalClass The object type being swapped out.
-		 * @param swappedClass The object type being swapped in.
-		 * @param swapFunction The function to convert the object.
-		 * @return This object.
-		 */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			bcBuilder.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		/**
-		 * A shortcut for defining a {@link FunctionalSwap}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param <T> The object type being swapped out.
-		 * @param <S> The object type being swapped in.
-		 * @param normalClass The object type being swapped out.
-		 * @param swappedClass The object type being swapped in.
-		 * @param swapFunction The function to convert the object during serialization.
-		 * @param unswapFunction The function to convert the object during parsing.
-		 * @return This object.
-		 */
-		public <T,S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			bcBuilder.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		/**
 		 * <i><l>Context</l> configuration property:&emsp;</i>  TimeZone.
 		 *
 		 * <p>
@@ -2663,6 +2717,11 @@ public abstract class BeanContextable extends Context {
 		 */
 		public Builder timeZone(TimeZone value) {
 			bcBuilder.timeZone(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
 			return this;
 		}
 
@@ -2709,6 +2768,52 @@ public abstract class BeanContextable extends Context {
 		 */
 		public Builder typeName(Class<?> on, String value) {
 			bcBuilder.typeName(on, value);
+			return this;
+		}
+
+		/**
+		 * Bean type property name.
+		 *
+		 * <p>
+		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
+		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
+		 * 	<jk>public class</jk> Foo {...}
+		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
+		 * 	<jk>public class</jk> Bar {...}
+		 *
+		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
+		 * 	}
+		 *
+		 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.typePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
+		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
+		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
+		 * </ul>
+		 *
+		 * @param on The class the type property name applies to.
+		 * @param value
+		 * 	The new value for this setting.
+		 * 	<br>The default is <js>"_type"</js>.
+		 * @return This object.
+		 */
+		public Builder typePropertyName(Class<?> on, String value) {
+			bcBuilder.typePropertyName(on, value);
 			return this;
 		}
 
@@ -2770,52 +2875,6 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * Bean type property name.
-		 *
-		 * <p>
-		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
-		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
-		 * 	<jk>public class</jk> Foo {...}
-		 * 	<ja>@Bean</ja>(typeName=<js>"bar"</js>)
-		 * 	<jk>public class</jk> Bar {...}
-		 *
-		 * 	<jc>// A bean with a field with an indeterminate type.</jc>
-		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> Object <jf>mySimpleField</jf>;
-		 * 	}
-		 *
-		 * 	<jc>// Create a serializer that uses 't' instead of '_type' for dictionary names.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.typePropertyName(MyBean.<jk>class</jk>, <js>"t"</js>)
-		 * 		.dictionary(Foo.<jk>class</jk>, Bar.<jk>class</jk>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Produces "{mySimpleField:{t:'foo',...}}".</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
-		 * </p>
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link Bean#typePropertyName() Bean(typePropertyName)}
-		 * 	<li class='jm'>{@link BeanContext.Builder#typePropertyName(String)}
-		 * </ul>
-		 *
-		 * @param on The class the type property name applies to.
-		 * @param value
-		 * 	The new value for this setting.
-		 * 	<br>The default is <js>"_type"</js>.
-		 * @return This object.
-		 */
-		public Builder typePropertyName(Class<?> on, String value) {
-			bcBuilder.typePropertyName(on, value);
-			return this;
-		}
-
-		/**
 		 * Use enum names.
 		 *
 		 * <p>
@@ -2861,26 +2920,6 @@ public abstract class BeanContextable extends Context {
 		}
 
 		/**
-		 * Don't use interface proxies.
-		 *
-		 * <p>
-		 * When enabled, interfaces will be instantiated as proxy classes through the use of an
-		 * {@link InvocationHandler} if there is no other way of instantiating them.
-		 * Otherwise, throws a {@link BeanRuntimeException}.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
-		 * 	<li class='jm'>{@link BeanContext.Builder#disableInterfaceProxies()}
-		 * </ul>
-		 *
-		 * @return This object.
-		 */
-		public Builder disableInterfaceProxies() {
-			bcBuilder.disableInterfaceProxies();
-			return this;
-		}
-
-		/**
 		 * Use Java Introspector.
 		 *
 		 * <p>
@@ -2906,61 +2945,7 @@ public abstract class BeanContextable extends Context {
 			bcBuilder.useJavaBeanIntrospector();
 			return this;
 		}
-
-		@Override /* Overridden from Context.Builder */
-		public Builder annotations(Annotation...value) {
-			bcBuilder.annotations(value);
-			super.annotations(value);
-			return this;
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public Builder debug() {
-			bcBuilder.debug();
-			super.debug();
-			return this;
-		}
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	final BeanContext beanContext;
 
 	/**
@@ -2981,11 +2966,6 @@ public abstract class BeanContextable extends Context {
 	public BeanContext getBeanContext() {
 		return beanContext;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("beanContext", beanContext.properties());

@@ -63,6 +63,9 @@ public class CommonEntry extends Common {
 	private Text title;
 	private Calendar updated;
 
+	/** Bean constructor. */
+	public CommonEntry() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -84,14 +87,6 @@ public class CommonEntry extends Common {
 	public CommonEntry(String id, String title, String updated) {
 		setId(id).setTitle(title).setUpdated(updated);
 	}
-
-	/** Bean constructor. */
-	public CommonEntry() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>authors</property>.
 	 *
@@ -103,6 +98,93 @@ public class CommonEntry extends Common {
 	@Xml(format=COLLAPSED, childName="author")
 	public Person[] getAuthors() {
 		return authors;
+	}
+
+	/**
+	 * Bean property getter:  <property>categories</property>.
+	 *
+	 * <p>
+	 * The list of categories of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=COLLAPSED, childName="category")
+	public Category[] getCategories() {
+		return categories;
+	}
+
+	/**
+	 * Bean property getter:  <property>contributors</property>.
+	 *
+	 * <p>
+	 * The list of contributors of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=COLLAPSED, childName="contributor")
+	public Person[] getContributors() {
+		return contributors;
+	}
+
+	/**
+	 * Bean property getter:  <property>id</property>.
+	 *
+	 * <p>
+	 * The ID of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Id getId() {
+		return id;
+	}
+
+	/**
+	 * Bean property getter:  <property>links</property>.
+	 *
+	 * <p>
+	 * The list of links of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=COLLAPSED)
+	public Link[] getLinks() {
+		return links;
+	}
+
+	/**
+	 * Bean property getter:  <property>rights</property>.
+	 *
+	 * <p>
+	 * The rights statement of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Text getRights() {
+		return rights;
+	}
+
+	/**
+	 * Bean property getter:  <property>title</property>.
+	 *
+	 * <p>
+	 * The title of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Text getTitle() {
+		return title;
+	}
+
+	/**
+	 * Bean property getter:  <property>updated</property>.
+	 *
+	 * <p>
+	 * The update timestamp of this object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Calendar getUpdated() {
+		return updated;
 	}
 
 	/**
@@ -121,17 +203,10 @@ public class CommonEntry extends Common {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>categories</property>.
-	 *
-	 * <p>
-	 * The list of categories of this object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=COLLAPSED, childName="category")
-	public Category[] getCategories() {
-		return categories;
+	@Override /* Overridden from Common */
+	public CommonEntry setBase(Object value) {
+		super.setBase(value);
+		return this;
 	}
 
 	/**
@@ -151,19 +226,6 @@ public class CommonEntry extends Common {
 	}
 
 	/**
-	 * Bean property getter:  <property>contributors</property>.
-	 *
-	 * <p>
-	 * The list of contributors of this object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=COLLAPSED, childName="contributor")
-	public Person[] getContributors() {
-		return contributors;
-	}
-
-	/**
 	 * Bean property setter:  <property>contributors</property>.
 	 *
 	 * <p>
@@ -177,18 +239,6 @@ public class CommonEntry extends Common {
 	public CommonEntry setContributors(Person...value) {
 		this.contributors = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>id</property>.
-	 *
-	 * <p>
-	 * The ID of this object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Id getId() {
-		return id;
 	}
 
 	/**
@@ -223,17 +273,10 @@ public class CommonEntry extends Common {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>links</property>.
-	 *
-	 * <p>
-	 * The list of links of this object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=COLLAPSED)
-	public Link[] getLinks() {
-		return links;
+	@Override /* Overridden from Common */
+	public CommonEntry setLang(String value) {
+		super.setLang(value);
+		return this;
 	}
 
 	/**
@@ -249,34 +292,6 @@ public class CommonEntry extends Common {
 	 */
 	public CommonEntry setLinks(Link...value) {
 		this.links = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>rights</property>.
-	 *
-	 * <p>
-	 * The rights statement of this object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Text getRights() {
-		return rights;
-	}
-
-	/**
-	 * Bean property setter:  <property>rights</property>.
-	 *
-	 * <p>
-	 * The rights statement of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public CommonEntry setRights(Text value) {
-		this.rights = value;
 		return this;
 	}
 
@@ -297,30 +312,18 @@ public class CommonEntry extends Common {
 	}
 
 	/**
-	 * Bean property getter:  <property>title</property>.
+	 * Bean property setter:  <property>rights</property>.
 	 *
 	 * <p>
-	 * The title of this object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Text getTitle() {
-		return title;
-	}
-
-	/**
-	 * Bean property setter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of this object.
+	 * The rights statement of this object.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public CommonEntry setTitle(Text value) {
-		this.title = value;
+	public CommonEntry setRights(Text value) {
+		this.rights = value;
 		return this;
 	}
 
@@ -341,15 +344,19 @@ public class CommonEntry extends Common {
 	}
 
 	/**
-	 * Bean property getter:  <property>updated</property>.
+	 * Bean property setter:  <property>title</property>.
 	 *
 	 * <p>
-	 * The update timestamp of this object.
+	 * The title of this object.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
 	 */
-	public Calendar getUpdated() {
-		return updated;
+	public CommonEntry setTitle(Text value) {
+		this.title = value;
+		return this;
 	}
 
 	/**
@@ -381,18 +388,6 @@ public class CommonEntry extends Common {
 	 */
 	public CommonEntry setUpdated(String value) {
 		setUpdated(parseDateTime(value));
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public CommonEntry setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public CommonEntry setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

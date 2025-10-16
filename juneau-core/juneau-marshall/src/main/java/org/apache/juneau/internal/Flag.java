@@ -25,8 +25,6 @@ import org.apache.juneau.common.utils.*;
  */
 public class Flag {
 
-	private boolean value;
-
 	/**
 	 * Creates a boolean value initialized to <jk>false</jk>.
 	 *
@@ -46,56 +44,10 @@ public class Flag {
 		return new Flag(value);
 	}
 
+	private boolean value;
+
 	private Flag(boolean value) {
 		this.value = value;
-	}
-
-	/**
-	 * Runs a snippet of code if the boolean value is <jk>true</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BoolValue <jv>flag</jv> = BoolValue.<jsm>create</jsm>();
-	 * 	...
-	 * 	<jv>flag</jv>.ifSet(()-&gt;<jsm>doSomething</jsm>());
-	 * </p>
-	 *
-	 * @param snippet The snippet of code to run.
-	 * @return This object.
-	 */
-	public Flag ifSet(Snippet snippet) {
-		if (value)
-			runSnippet(snippet);
-		return this;
-	}
-
-	/**
-	 * Runs a snippet of code if the boolean value is <jk>false</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	BoolValue <jv>flag</jv> = BoolValue.<jsm>create</jsm>();
-	 * 	...
-	 * 	<jv>flag</jv>.ifNotSet(()-&gt;<jsm>doSomething</jsm>());
-	 * </p>
-	 *
-	 * @param snippet The snippet of code to run.
-	 * @return This object.
-	 */
-	public Flag ifNotSet(Snippet snippet) {
-		if (! value)
-			runSnippet(snippet);
-		return this;
-	}
-
-	private void runSnippet(Snippet snippet) {
-		try {
-			snippet.run();
-		} catch (Error | RuntimeException e) {
-			throw e;
-		} catch (Throwable e) {
-			throw asRuntimeException(e);
-		}
 	}
 
 	/**
@@ -121,22 +73,40 @@ public class Flag {
 	}
 
 	/**
-	 * Sets the boolean value to <jk>true</jk>.
+	 * Runs a snippet of code if the boolean value is <jk>false</jk>.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	BoolValue <jv>flag</jv> = BoolValue.<jsm>create</jsm>();
+	 * 	...
+	 * 	<jv>flag</jv>.ifNotSet(()-&gt;<jsm>doSomething</jsm>());
+	 * </p>
+	 *
+	 * @param snippet The snippet of code to run.
 	 * @return This object.
 	 */
-	public Flag set() {
-		value = true;
+	public Flag ifNotSet(Snippet snippet) {
+		if (! value)
+			runSnippet(snippet);
 		return this;
 	}
 
 	/**
-	 * Sets the boolean value to <jk>false</jk>.
+	 * Runs a snippet of code if the boolean value is <jk>true</jk>.
 	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode'>
+	 * 	BoolValue <jv>flag</jv> = BoolValue.<jsm>create</jsm>();
+	 * 	...
+	 * 	<jv>flag</jv>.ifSet(()-&gt;<jsm>doSomething</jsm>());
+	 * </p>
+	 *
+	 * @param snippet The snippet of code to run.
 	 * @return This object.
 	 */
-	public Flag unset() {
-		value = false;
+	public Flag ifSet(Snippet snippet) {
+		if (value)
+			runSnippet(snippet);
 		return this;
 	}
 
@@ -159,6 +129,16 @@ public class Flag {
 	}
 
 	/**
+	 * Sets the boolean value to <jk>true</jk>.
+	 *
+	 * @return This object.
+	 */
+	public Flag set() {
+		value = true;
+		return this;
+	}
+
+	/**
 	 * Sets the boolean value to <jk>true</jk> if the value is <jk>true</jk>.
 	 *
 	 * @param value The value to set.
@@ -167,5 +147,25 @@ public class Flag {
 	public Flag setIf(boolean value) {
 		this.value |= value;
 		return this;
+	}
+
+	/**
+	 * Sets the boolean value to <jk>false</jk>.
+	 *
+	 * @return This object.
+	 */
+	public Flag unset() {
+		value = false;
+		return this;
+	}
+
+	private void runSnippet(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (Error | RuntimeException e) {
+			throw e;
+		} catch (Throwable e) {
+			throw asRuntimeException(e);
+		}
 	}
 }

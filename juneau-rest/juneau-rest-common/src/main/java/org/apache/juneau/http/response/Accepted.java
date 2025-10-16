@@ -95,13 +95,13 @@ public class Accepted extends BasicHttpResponse {
 		return new Accepted(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setContent(String value) {
+	public Accepted setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setContent(HttpEntity value) {
+	public Accepted setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -119,14 +119,14 @@ public class Accepted extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public Accepted setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Accepted setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public Accepted setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

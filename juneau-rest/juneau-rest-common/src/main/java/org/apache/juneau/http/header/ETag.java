@@ -58,13 +58,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("ETag")
 public class ETag extends BasicEntityTagHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "ETag";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ETag of(EntityTag value) {
+		return value == null ? null : new ETag(value);
+	}
 
 	/**
 	 * Static creator.
@@ -76,18 +83,6 @@ public class ETag extends BasicEntityTagHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ETag of(String value) {
-		return value == null ? null : new ETag(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ETag of(EntityTag value) {
 		return value == null ? null : new ETag(value);
 	}
 
@@ -105,10 +100,16 @@ public class ETag extends BasicEntityTagHeader {
 	public static ETag of(Supplier<EntityTag> value) {
 		return value == null ? null : new ETag(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ETag(EntityTag value) {
+		super(NAME, value);
+	}
 
 	/**
 	 * Constructor.
@@ -119,17 +120,6 @@ public class ETag extends BasicEntityTagHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ETag(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ETag(EntityTag value) {
 		super(NAME, value);
 	}
 

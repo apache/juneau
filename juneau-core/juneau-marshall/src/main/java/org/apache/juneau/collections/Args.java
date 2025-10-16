@@ -125,6 +125,15 @@ public class Args extends JsonMap {
 	/**
 	 * Constructor.
 	 *
+	 * @param args Arguments passed in as a raw command line.
+	 */
+	public Args(String args) {
+		this(Utils.splitQuoted(args));
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param args Arguments passed in through a <c>main(String[] args)</c> method.
 	 */
 	public Args(String[] args) {
@@ -156,13 +165,53 @@ public class Args extends JsonMap {
 		}
 	}
 
+	@Override /* Overridden from JsonMap */
+	public Args append(Map<String,Object> values) {
+		super.append(values);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args append(String key, Object value) {
+		super.append(key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args appendIf(boolean flag, String key, Object value) {
+		super.appendIf(flag, key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args filtered(Predicate<Object> value) {
+		super.filtered(value);
+		return this;
+	}
+
 	/**
-	 * Constructor.
+	 * Returns the optional argument value converted to the specified object type.
 	 *
-	 * @param args Arguments passed in as a raw command line.
+	 * <p>
+	 * If the optional arg has multiple values, returns only the first converted value.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
+	 * 	<jk>boolean</jk> <jv>bool</jv> = <jv>args</jv>.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
+	 * 	<jk>int</jk> <jv>_int</jv> = <jv>args</jv>.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);
+	 * </p>
+	 *
+	 * @param c The class type to convert the value to.
+	 * @param <T> The class type to convert the value to.
+	 * @param name The optional argument name.
+	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
-	public Args(String args) {
-		this(Utils.splitQuoted(args));
+	public <T> T getArg(Class<T> c, String name) {
+		JsonList l = (JsonList)get(name);
+		if (l == null || l.isEmpty())
+			return null;
+		return l.get(0, c);
 	}
 
 	/**
@@ -196,28 +245,6 @@ public class Args extends JsonMap {
 	public String getArg(int i) {
 		return getString(Integer.toString(i));
 	}
-
-	/**
-	 * Returns <jk>true</jk> if argument exists at specified index.
-	 *
-	 * @param i The zero-indexed position of the argument.
-	 * @return <jk>true</jk> if argument exists at specified index.
-	 */
-	public boolean hasArg(int i) {
-		return containsKey(Integer.toString(i));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the named argument exists.
-	 *
-	 * @param name The argument name.
-	 * @return <jk>true</jk> if the named argument exists.
-	 */
-	public boolean hasArg(String name) {
-		JsonList l = (JsonList)get(name);
-		return l != null;
-	}
-
 	/**
 	 * Returns the optional argument value, or blank if the optional argument was not specified.
 	 *
@@ -234,31 +261,6 @@ public class Args extends JsonMap {
 		if (l.size() == 1)
 			return l.get(0).toString();
 		return Arrays.toString(l.toArray()).replaceAll("[\\[\\]]", "");
-	}
-
-	/**
-	 * Returns the optional argument value converted to the specified object type.
-	 *
-	 * <p>
-	 * If the optional arg has multiple values, returns only the first converted value.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
-	 * 	<jk>boolean</jk> <jv>bool</jv> = <jv>args</jv>.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
-	 * 	<jk>int</jk> <jv>_int</jv> = <jv>args</jv>.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);
-	 * </p>
-	 *
-	 * @param c The class type to convert the value to.
-	 * @param <T> The class type to convert the value to.
-	 * @param name The optional argument name.
-	 * @return The optional argument value, or blank if the optional argument was not specified.
-	 */
-	public <T> T getArg(Class<T> c, String name) {
-		JsonList l = (JsonList)get(name);
-		if (l == null || l.isEmpty())
-			return null;
-		return l.get(0, c);
 	}
 
 	/**
@@ -282,43 +284,30 @@ public class Args extends JsonMap {
 		return l;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns <jk>true</jk> if argument exists at specified index.
+	 *
+	 * @param i The zero-indexed position of the argument.
+	 * @return <jk>true</jk> if argument exists at specified index.
+	 */
+	public boolean hasArg(int i) {
+		return containsKey(Integer.toString(i));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the named argument exists.
+	 *
+	 * @param name The argument name.
+	 * @return <jk>true</jk> if the named argument exists.
+	 */
+	public boolean hasArg(String name) {
+		JsonList l = (JsonList)get(name);
+		return l != null;
+	}
 
 	@Override /* Overridden from JsonMap */
 	public Args inner(Map<String,Object> inner) {
 		super.inner(inner);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public Args session(BeanSession session) {
-		super.session(session);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public Args append(String key, Object value) {
-		super.append(key, value);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public Args append(Map<String,Object> values) {
-		super.append(values);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public Args appendIf(boolean flag, String key, Object value) {
-		super.appendIf(flag, key, value);
-		return this;
-	}
-
-	@Override /* Overridden from JsonMap */
-	public Args filtered(Predicate<Object> value) {
-		super.filtered(value);
 		return this;
 	}
 
@@ -329,13 +318,19 @@ public class Args extends JsonMap {
 	}
 
 	@Override /* Overridden from JsonMap */
-	public Args setBeanSession(BeanSession value) {
-		super.setBeanSession(value);
+	public Args modifiable() {
 		return this;
 	}
 
 	@Override /* Overridden from JsonMap */
-	public Args modifiable() {
+	public Args session(BeanSession session) {
+		super.session(session);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args setBeanSession(BeanSession value) {
+		super.setBeanSession(value);
 		return this;
 	}
 

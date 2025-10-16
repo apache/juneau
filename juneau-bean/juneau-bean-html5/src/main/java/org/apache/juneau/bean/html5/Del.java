@@ -54,7 +54,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#del() del()}
- * 		<li class='jm'>{@link HtmlBuilder#del(Object, Object...) del(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#del(Object...) del(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -80,6 +80,41 @@ public class Del extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Del _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Del accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Del attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Del attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Del child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Del children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/edits.html#attr-mod-cite">cite</a> attribute.
 	 *
@@ -90,11 +125,17 @@ public class Del extends HtmlElementMixed {
 	 * <p>
 	 * The URL should point to a document that explains why the content was deleted.
 	 *
-	 * @param cite The URL explaining the reason for the deletion.
+	 * @param value The URL explaining the reason for the deletion.
 	 * @return This object.
 	 */
 	public Del cite(String value) {
 		attr("cite", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Del contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
@@ -108,32 +149,11 @@ public class Del extends HtmlElementMixed {
 	 * <p>
 	 * The value should be a valid date-time string in ISO 8601 format.
 	 *
-	 * @param datetime The date and time when the content was deleted.
+	 * @param value The date and time when the content was deleted.
 	 * @return This object.
 	 */
 	public Del datetime(String value) {
 		attr("datetime", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Del _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Del accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Del contenteditable(Object value) {
-		super.contenteditable(value);
 		return this;
 	}
 
@@ -488,30 +508,6 @@ public class Del extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Del translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Del child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Del children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Del attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Del attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

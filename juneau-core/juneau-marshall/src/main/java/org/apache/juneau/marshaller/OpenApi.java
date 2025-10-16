@@ -50,174 +50,23 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class OpenApi extends CharMarshaller {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Default reusable instance.
 	 */
 	public static final OpenApi DEFAULT = new OpenApi();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final OpenApiSerializer s;
-	private final OpenApiParser p;
-
 	/**
-	 * Constructor.
-	 *
-	 * @param s
-	 * 	The serializer to use for serializing output.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use for parsing input.
-	 * 	<br>Must not be <jk>null</jk>.
-	 */
-	public OpenApi(OpenApiSerializer s, OpenApiParser p) {
-		super(s, p);
-		this.s = s;
-		this.p = p;
-	}
-
-	/**
-	 * Constructor.
+	 * Serializes a Java object to an OpenApi output.
 	 *
 	 * <p>
-	 * Uses {@link OpenApiSerializer#DEFAULT} and {@link OpenApiParser#DEFAULT}.
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
+	 * @param schema The part schema.  Can be <jk>null</jk>.
+	 * @param object The object to serialize.
+	 * @return The output object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public OpenApi() {
-		this(OpenApiSerializer.DEFAULT, OpenApiParser.DEFAULT);
+	public static String of(HttpPartSchema schema, Object object) throws SerializeException {
+		return DEFAULT.s.serialize(HttpPartType.ANY, schema, object);
 	}
-
-	/**
-	 * Parses an OpenApi input string to the specified type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(String input, Class<T> type) throws ParseException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses an OpenApi input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
-	 * 	</ul>
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses an OpenApi input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param schema The part type schema.  Can be <jk>null</jk>.
-	 * @param input
-	 * 	The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(HttpPartSchema schema, String input, Class<T> type) throws ParseException, IOException {
-		return DEFAULT.p.parse(HttpPartType.ANY, schema, input, type);
-	}
-
-	/**
-	 * Parses an OpenApi input string to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public static <T> T to(String input, Type type, Type...args) throws ParseException {
-		return DEFAULT.read(input, type, args);
-	}
-
-	/**
-	 * Parses an OpenApi input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input
-	 * 	The input.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
-	 * 	</ul>
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
-		return DEFAULT.read(input, type, args);
-	}
-
 	/**
 	 * Serializes a Java object to an OpenApi string.
 	 *
@@ -259,16 +108,157 @@ public class OpenApi extends CharMarshaller {
 	}
 
 	/**
-	 * Serializes a Java object to an OpenApi output.
+	 * Parses an OpenApi input object to the specified Java type.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
-	 * @param schema The part schema.  Can be <jk>null</jk>.
-	 * @param object The object to serialize.
-	 * @return The output object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param schema The part type schema.  Can be <jk>null</jk>.
+	 * @param input
+	 * 	The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static String of(HttpPartSchema schema, Object object) throws SerializeException {
-		return DEFAULT.s.serialize(HttpPartType.ANY, schema, object);
+	public static <T> T to(HttpPartSchema schema, String input, Class<T> type) throws ParseException, IOException {
+		return DEFAULT.p.parse(HttpPartType.ANY, schema, input, type);
+	}
+
+	/**
+	 * Parses an OpenApi input object to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 	</ul>
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses an OpenApi input object to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 	</ul>
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
+		return DEFAULT.read(input, type, args);
+	}
+
+	/**
+	 * Parses an OpenApi input string to the specified type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(String input, Class<T> type) throws ParseException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses an OpenApi input string to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input The input.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public static <T> T to(String input, Type type, Type...args) throws ParseException {
+		return DEFAULT.read(input, type, args);
+	}
+
+	private final OpenApiSerializer s;
+
+	private final OpenApiParser p;
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Uses {@link OpenApiSerializer#DEFAULT} and {@link OpenApiParser#DEFAULT}.
+	 */
+	public OpenApi() {
+		this(OpenApiSerializer.DEFAULT, OpenApiParser.DEFAULT);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param s
+	 * 	The serializer to use for serializing output.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param p
+	 * 	The parser to use for parsing input.
+	 * 	<br>Must not be <jk>null</jk>.
+	 */
+	public OpenApi(OpenApiSerializer s, OpenApiParser p) {
+		super(s, p);
+		this.s = s;
+		this.p = p;
 	}
 }

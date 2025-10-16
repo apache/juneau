@@ -35,25 +35,26 @@ import org.apache.juneau.serializer.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class UonWriter extends SerializerWriter {
-
-	private final UonSerializerSession session;
-	private final boolean encodeChars, plainTextParams;
-	private final char quoteChar;
 
 	// Characters that do not need to be URL-encoded in strings.
 	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~=").build();
-
 	// Characters that do not need to be URL-encoded in attribute names.
 	// Identical to unencodedChars, but excludes '='.
 	private static final AsciiSet unencodedCharsAttrName = AsciiSet.create().ranges("a-z","A-Z","0-9").chars(";/?:@-_.!*'$(),~").build();
-
 	// Characters that need to be preceded with an escape character.
 	private static final AsciiSet escapedChars = AsciiSet.of("~'");
 
 	private static final AsciiSet noChars = AsciiSet.of("");
 
 	private static char[] hexArray = "0123456789ABCDEF".toCharArray();
+
+	private final UonSerializerSession session;
+
+	private final boolean encodeChars, plainTextParams;
+
+	private final char quoteChar;
 
 	/**
 	 * Constructor.
@@ -77,6 +78,60 @@ public class UonWriter extends SerializerWriter {
 		this.quoteChar = quoteChar;
 	}
 
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter append(char c) {
+		super.append(c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter append(char[] value) {
+		super.append(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter append(int indent, char c) {
+		super.append(indent, c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter append(int indent, String text) {
+		super.append(indent, text);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter append(Object text) {
+		super.append(text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter append(String text) {
+		super.append(text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter appendIf(boolean b, char c) {
+		super.appendIf(b, c);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter appendIf(boolean b, String text) {
+		super.appendIf(b, text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter appendln(int indent, String text) {
+		super.appendln(indent, text);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter appendln(String text) {
+		super.appendln(text);
+		return this;
+	}
 	/**
 	 * Serializes the specified simple object as a UON string value.
 	 *
@@ -134,6 +189,85 @@ public class UonWriter extends SerializerWriter {
 
 		return this;
 	}
+	/**
+	 * Appends a URI to the output.
+	 *
+	 * @param uri The URI to append to the output.
+	 * @return This object.
+	 */
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter appendUri(Object uri) {
+		return appendObject(uriResolver.resolve(uri), false);
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter cr(int depth) {
+		super.cr(depth);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter cre(int depth) {
+		super.cre(depth);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter i(int indent) {
+		super.i(indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter ie(int indent) {
+		super.ie(indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter nl(int indent) {
+		super.nl(indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter nlIf(boolean flag, int indent) {
+		super.nlIf(flag, indent);
+		return this;
+	}
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter q() {
+		super.q();
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter s() {
+		super.s();
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter sIf(boolean flag) {
+		super.sIf(flag);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter w(char value) {
+		super.w(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public UonWriter w(String value) {
+		super.w(value);
+		return this;
+	}
+
+	/**
+	 * Prints out a two-byte %xx sequence for the given byte value.
+	 */
+	private UonWriter appendHex(int b) {
+		if (b > 255)
+			throw new BasicRuntimeException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
+		w('%').w(hexArray[b>>>4]).w(hexArray[b&0x0F]);
+		return this;
+	}
 
 	/**
 	 * Appends a boolean value to the output.
@@ -154,144 +288,6 @@ public class UonWriter extends SerializerWriter {
 	 */
 	protected UonWriter appendNumber(Object o) {
 		append(o.toString());
-		return this;
-	}
-
-	/**
-	 * Prints out a two-byte %xx sequence for the given byte value.
-	 */
-	private UonWriter appendHex(int b) {
-		if (b > 255)
-			throw new BasicRuntimeException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
-		w('%').w(hexArray[b>>>4]).w(hexArray[b&0x0F]);
-		return this;
-	}
-
-	/**
-	 * Appends a URI to the output.
-	 *
-	 * @param uri The URI to append to the output.
-	 * @return This object.
-	 */
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter appendUri(Object uri) {
-		return (UonWriter)appendObject(uriResolver.resolve(uri), false);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter cr(int depth) {
-		super.cr(depth);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter cre(int depth) {
-		super.cre(depth);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter appendln(int indent, String text) {
-		super.appendln(indent, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter appendln(String text) {
-		super.appendln(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter append(int indent, String text) {
-		super.append(indent, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter append(int indent, char c) {
-		super.append(indent, c);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter q() {
-		super.q();
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter i(int indent) {
-		super.i(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter nl(int indent) {
-		super.nl(indent);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter append(Object text) {
-		super.append(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter append(String text) {
-		super.append(text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter appendIf(boolean b, String text) {
-		super.appendIf(b, text);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter appendIf(boolean b, char c) {
-		super.appendIf(b, c);
-		return this;
-	}
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter append(char c) {
-		super.append(c);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter append(char[] value) {
-		super.append(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter s() {
-		super.s();
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter ie(int indent) {
-		super.ie(indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter sIf(boolean flag) {
-		super.sIf(flag);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter nlIf(boolean flag, int indent) {
-		super.nlIf(flag, indent);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter w(char value) {
-		super.w(value);
-		return this;
-	}
-
-	@Override /* Overridden from SerializerWriter */
-	public UonWriter w(String value) {
-		super.w(value);
 		return this;
 	}
 }

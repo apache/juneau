@@ -36,27 +36,84 @@ public class HtmlElementContainer extends HtmlElement {
 
 	private List<Object> children;
 
-	/**
-	 * The children of this element.
-	 *
-	 * @return The children of this element.
-	 */
-	@Xml(format=ELEMENTS)
-	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
-	public List<Object> getChildren() {
-		return children;
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
 	}
 
 	/**
-	 * Sets the children for this container.
+	 * Adds a child element to this element.
 	 *
-	 * @param children The new children for this container.
+	 * @param value The child to add as a child element.
 	 * @return This object.
 	 */
-	@Beanp("c")
-	public HtmlElementContainer setChildren(List<Object> children) {
-		this.children = children;
+	public HtmlElement child(Object value) {
+		if (this.children == null)
+			this.children = new LinkedList<>();
+		this.children.add(value);
 		return this;
+	}
+
+	/**
+	 * Adds one or more child elements to this element.
+	 *
+	 * @param value The children to add as child elements.
+	 * @return This object.
+	 */
+	public HtmlElement children(Object...value) {
+		if (value.length > 0) {
+			if (this.children == null)
+				this.children = new LinkedList<>();
+			for (var c : value)
+				this.children.add(c);
+		}
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer dir(String value) {
+		super.dir(value);
+		return this;
+	}
+
+	/**
+	 * Returns the child node at the specified index.
+	 *
+	 * @param <T> The class type of the node.
+	 * @param type The class type of the node.
+	 * @param index The index of the node in the list of children.
+	 * @return The child node, or <jk>null</jk> if it doesn't exist.
+	 * @throws InvalidDataConversionException If node is not the expected type.
+	 */
+	public <T> T getChild(Class<T> type, int index) {
+		return (children == null || children.size() <= index || index < 0
+			? null
+			: ConverterUtils.toType(children.get(index), type)
+		);
 	}
 
 	/**
@@ -99,71 +156,14 @@ public class HtmlElementContainer extends HtmlElement {
 	}
 
 	/**
-	 * Returns the child node at the specified index.
+	 * The children of this element.
 	 *
-	 * @param <T> The class type of the node.
-	 * @param type The class type of the node.
-	 * @param index The index of the node in the list of children.
-	 * @return The child node, or <jk>null</jk> if it doesn't exist.
-	 * @throws InvalidDataConversionException If node is not the expected type.
+	 * @return The children of this element.
 	 */
-	public <T> T getChild(Class<T> type, int index) {
-		return (children == null || children.size() <= index || index < 0
-			? null
-			: ConverterUtils.toType(children.get(index), type)
-		);
-	}
-
-	/**
-	 * Adds one or more child elements to this element.
-	 *
-	 * @param children The children to add as child elements.
-	 * @return This object.
-	 */
-	public HtmlElement children(Object...value) {
-		if (value.length > 0) {
-			if (this.children == null)
-				this.children = new LinkedList<>();
-			for (var c : value)
-				this.children.add(c);
-		}
-		return this;
-	}
-
-	/**
-	 * Adds a child element to this element.
-	 *
-	 * @param child The child to add as a child element.
-	 * @return This object.
-	 */
-	public HtmlElement child(Object value) {
-		if (this.children == null)
-			this.children = new LinkedList<>();
-		this.children.add(value);
-		return this;
-	}
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer dir(String value) {
-		super.dir(value);
-		return this;
+	@Xml(format=ELEMENTS)
+	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
+	public List<Object> getChildren() {
+		return children;
 	}
 
 	@Override /* Overridden from HtmlElement */
@@ -484,6 +484,18 @@ public class HtmlElementContainer extends HtmlElement {
 		return this;
 	}
 
+	/**
+	 * Sets the children for this container.
+	 *
+	 * @param children The new children for this container.
+	 * @return This object.
+	 */
+	@Beanp("c")
+	public HtmlElementContainer setChildren(List<Object> children) {
+		this.children = children;
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementContainer spellcheck(Object value) {
 		super.spellcheck(value);
@@ -511,18 +523,6 @@ public class HtmlElementContainer extends HtmlElement {
 	@Override /* Overridden from HtmlElement */
 	public HtmlElementContainer translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public HtmlElementContainer attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

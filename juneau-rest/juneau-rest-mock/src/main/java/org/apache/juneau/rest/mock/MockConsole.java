@@ -87,13 +87,6 @@ public class MockConsole extends PrintStream {
 	private static final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 	/**
-	 * Constructor.
-	 */
-	public MockConsole() {
-		super(baos);
-	}
-
-	/**
 	 * Creator.
 	 *
 	 * @return A new {@link MockConsole} object.
@@ -103,13 +96,10 @@ public class MockConsole extends PrintStream {
 	}
 
 	/**
-	 * Resets the contents of this buffer.
-	 *
-	 * @return This object.
+	 * Constructor.
 	 */
-	public synchronized MockConsole reset() {
-		baos.reset();
-		return this;
+	public MockConsole() {
+		super(baos);
 	}
 
 	/**
@@ -160,6 +150,16 @@ public class MockConsole extends PrintStream {
 	 */
 	public synchronized FluentIntegerAssertion<MockConsole> assertSize() {
 		return new FluentIntegerAssertion<>(baos.size(), this);
+	}
+
+	/**
+	 * Resets the contents of this buffer.
+	 *
+	 * @return This object.
+	 */
+	public synchronized MockConsole reset() {
+		baos.reset();
+		return this;
 	}
 
 	/**

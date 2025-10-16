@@ -98,13 +98,13 @@ public class Found extends BasicHttpResponse {
 		return new Found(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public Found setContent(String value) {
+	public Found setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Found setContent(HttpEntity value) {
+	public Found setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -122,14 +122,14 @@ public class Found extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Found setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public Found setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Found setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public Found setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

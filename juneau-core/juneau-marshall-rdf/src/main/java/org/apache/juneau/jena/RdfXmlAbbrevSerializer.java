@@ -28,11 +28,6 @@ package org.apache.juneau.jena;
  * </ul>
  */
 public class RdfXmlAbbrevSerializer extends RdfSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default RDF/XML serializer, all default settings.*/
 	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(create());
 
@@ -44,11 +39,6 @@ public class RdfXmlAbbrevSerializer extends RdfSerializer {
 	public static RdfSerializer.Builder create() {
 		return RdfSerializer.create().xmlabbrev();
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

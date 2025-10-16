@@ -31,11 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicLongPart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -64,11 +59,6 @@ public class BasicLongPart extends BasicPart {
 			return null;
 		return new BasicLongPart(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Long value;
 	private final Supplier<Long> supplier;
 
@@ -88,18 +78,6 @@ public class BasicLongPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.  Must not be <jk>null</jk>.
-	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
-	 */
-	public BasicLongPart(String name, Supplier<Long> value) {
-		super(name, value);
-		this.value = null;
-		this.supplier = value;
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * <p>
 	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
 	 * Otherwise parses using {@link Long#valueOf(String)}.
@@ -113,9 +91,16 @@ public class BasicLongPart extends BasicPart {
 		this.supplier = null;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicLongPart(String name, Supplier<Long> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	/**
@@ -128,14 +113,6 @@ public class BasicLongPart extends BasicPart {
 	}
 
 	/**
-	 * Returns The part value as a {@link Long}.
-	 *
-	 * @return The part value as a {@link Long}, or <jk>null</jk> if the value <jk>null</jk>.
-	 */
-	public Long toLong() {
-		return value();
-	}
-	/**
 	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
 	 * @return A new fluent assertion object.
@@ -145,6 +122,10 @@ public class BasicLongPart extends BasicPart {
 		return new FluentLongAssertion<>(value(), this);
 	}
 
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
+	}
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
@@ -157,6 +138,15 @@ public class BasicLongPart extends BasicPart {
 	public Long orElse(Long other) {
 		Long x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns The part value as a {@link Long}.
+	 *
+	 * @return The part value as a {@link Long}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public Long toLong() {
+		return value();
 	}
 
 	private Long value() {

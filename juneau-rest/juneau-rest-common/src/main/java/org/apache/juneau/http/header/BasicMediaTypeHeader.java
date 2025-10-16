@@ -41,27 +41,7 @@ import org.apache.juneau.json.*;
  * @serial exclude
  */
 public class BasicMediaTypeHeader extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicMediaTypeHeader of(String name, String value) {
-		return value == null ? null : new BasicMediaTypeHeader(name, value);
-	}
 
 	/**
 	 * Static creator.
@@ -77,12 +57,37 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicMediaTypeHeader of(String name, String value) {
+		return value == null ? null : new BasicMediaTypeHeader(name, value);
+	}
 	private final MediaType value;
 	private final Supplier<MediaType> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicMediaTypeHeader(String name, MediaType value) {
+		super(name, Utils.s(value));
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -97,21 +102,6 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	public BasicMediaTypeHeader(String name, String value) {
 		super(name, value);
 		this.value = parse(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicMediaTypeHeader(String name, MediaType value) {
-		super(name, Utils.s(value));
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -133,11 +123,6 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
-
 	/**
 	 * Returns the header value as a {@link MediaType} wrapped in an {@link Optional}.
 	 *
@@ -148,12 +133,88 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	}
 
 	/**
-	 * Returns the header value as a {@link MediaType}.
+	 * Returns a parameterized value of the header.
 	 *
-	 * @return The header value as a {@link MediaType}.  Can be <jk>null</jk>.
+	 * <p class='bjava'>
+	 * 	ContentType <jv>contentType</jv> = ContentType.<jsm>of</jsm>(<js>"application/json;charset=foo"</js>);
+	 * 	<jsm>assertEquals</jsm>(<js>"foo"</js>, <jv>contentType</jv>.getParameter(<js>"charset"</js>);
+	 * </p>
+	 *
+	 * @param name The header name.
+	 * @return The header value, or <jk>null</jk> if the parameter is not present.
 	 */
-	public MediaType toMediaType() {
-		return value();
+	public String getParameter(String name) {
+		return orElse(MediaType.EMPTY).getParameter(name);
+	}
+
+	/**
+	 * Returns the additional parameters on this media type.
+	 *
+	 * <p>
+	 * For example, given the media type string <js>"text/html;level=1"</js>, will return a map
+	 * with the single entry <code>{level:[<js>'1'</js>]}</code>.
+	 *
+	 * @return The map of additional parameters, or an empty map if there are no parameters.
+	 */
+	public List<NameValuePair> getParameters() {
+		return orElse(MediaType.EMPTY).getParameters();
+	}
+
+	/**
+	 * Returns the <js>'subType'</js> fragment of the <js>'type/subType'</js> string.
+	 *
+	 * @return The media subtype.
+	 */
+	public final String getSubType() {
+		return orElse(MediaType.EMPTY).getSubType();
+	}
+
+	/**
+	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
+	 *
+	 * <P>
+	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
+	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
+	 *
+	 * @return An unmodifiable list of subtype fragments.  Can be <jk>null</jk>.
+	 */
+	public final List<String> getSubTypes() {
+		return orElse(MediaType.EMPTY).getSubTypes();
+	}
+
+	/**
+	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
+	 *
+	 * @return The media type.
+	 */
+	public final String getType() {
+		return orElse(MediaType.EMPTY).getType();
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.
+	 *
+	 * @param value
+	 * 	The subtype string.
+	 * 	Case is ignored.
+	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
+	 */
+	public final boolean hasSubType(String value) {
+		return orElse(MediaType.EMPTY).hasSubType(value);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
+	 *
+	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
+	 */
+	public final boolean isMetaSubtype() {
+		return orElse(MediaType.EMPTY).isMetaSubtype();
 	}
 
 	/**
@@ -183,58 +244,6 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 			}
 		}
 		return matchIndex;
-	}
-
-	/**
-	 * Returns the <js>'type'</js> fragment of the <js>'type/subType'</js> string.
-	 *
-	 * @return The media type.
-	 */
-	public final String getType() {
-		return orElse(MediaType.EMPTY).getType();
-	}
-
-	/**
-	 * Returns the <js>'subType'</js> fragment of the <js>'type/subType'</js> string.
-	 *
-	 * @return The media subtype.
-	 */
-	public final String getSubType() {
-		return orElse(MediaType.EMPTY).getSubType();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.
-	 *
-	 * @param value
-	 * 	The subtype string.
-	 * 	Case is ignored.
-	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
-	 */
-	public final boolean hasSubType(String value) {
-		return orElse(MediaType.EMPTY).hasSubType(value);
-	}
-
-	/**
-	 * Returns the subtypes broken down by fragments delimited by <js>"'"</js>.
-	 *
-	 * <P>
-	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
-	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
-	 *
-	 * @return An unmodifiable list of subtype fragments.  Can be <jk>null</jk>.
-	 */
-	public final List<String> getSubTypes() {
-		return orElse(MediaType.EMPTY).getSubTypes();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
-	 *
-	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
-	 */
-	public final boolean isMetaSubtype() {
-		return orElse(MediaType.EMPTY).isMetaSubtype();
 	}
 
 	/**
@@ -283,34 +292,6 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	}
 
 	/**
-	 * Returns the additional parameters on this media type.
-	 *
-	 * <p>
-	 * For example, given the media type string <js>"text/html;level=1"</js>, will return a map
-	 * with the single entry <code>{level:[<js>'1'</js>]}</code>.
-	 *
-	 * @return The map of additional parameters, or an empty map if there are no parameters.
-	 */
-	public List<NameValuePair> getParameters() {
-		return orElse(MediaType.EMPTY).getParameters();
-	}
-
-	/**
-	 * Returns a parameterized value of the header.
-	 *
-	 * <p class='bjava'>
-	 * 	ContentType <jv>contentType</jv> = ContentType.<jsm>of</jsm>(<js>"application/json;charset=foo"</js>);
-	 * 	<jsm>assertEquals</jsm>(<js>"foo"</js>, <jv>contentType</jv>.getParameter(<js>"charset"</js>);
-	 * </p>
-	 *
-	 * @param name The header name.
-	 * @return The header value, or <jk>null</jk> if the parameter is not present.
-	 */
-	public String getParameter(String name) {
-		return orElse(MediaType.EMPTY).getParameter(name);
-	}
-
-	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
@@ -322,6 +303,15 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	public MediaType orElse(MediaType other) {
 		MediaType x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link MediaType}.
+	 *
+	 * @return The header value as a {@link MediaType}.  Can be <jk>null</jk>.
+	 */
+	public MediaType toMediaType() {
+		return value();
 	}
 
 	private MediaType parse(String value) {

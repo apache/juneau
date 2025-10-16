@@ -60,20 +60,6 @@ import org.apache.juneau.oapi.*;
 public @interface Attr {
 
 	/**
-	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
-	 *
-	 * <p>
-	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
-
-	//=================================================================================================================
-	// Attributes common to all Swagger Parameter objects
-	//=================================================================================================================
-
-	/**
 	 * Request attribute name.
 	 *
 	 * <p>
@@ -97,6 +83,15 @@ public @interface Attr {
 	 * @return The annotation value.
 	 */
 	String name() default "";
+	/**
+	 * Specifies the {@link HttpPartParser} class used for parsing strings to values.
+	 *
+	 * <p>
+	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 *
+	 * @return The annotation value.
+	 */
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	/**
 	 * A synonym for {@link #name()}.

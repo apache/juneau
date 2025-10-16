@@ -48,11 +48,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BeanTraverseSession extends BeanSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,24 +79,6 @@ public class BeanTraverseSession extends BeanSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
@@ -126,6 +103,18 @@ public class BeanTraverseSession extends BeanSession {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
@@ -136,19 +125,43 @@ public class BeanTraverseSession extends BeanSession {
 			super.timeZoneDefault(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
+	private class StackElement {
+		final int depth;
+		final String name;
+		final Object o;
+		final ClassMeta<?> aType;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+		StackElement(int depth, String name, Object o, ClassMeta<?> aType) {
+			this.depth = depth;
+			this.name = name;
+			this.o = o;
+			this.aType = aType;
+		}
 
+		String toString(boolean simple) {
+			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
+			sb.append(Utils.isEmpty(name) ? "<noname>" : name).append(':');
+			sb.append(aType.toString(simple));
+			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
+				sb.append('/').append(aType.getSerializedClassMeta(BeanTraverseSession.this).toString(simple));
+			return sb.toString();
+		}
+	}
 	private final BeanTraverseContext ctx;
 	private final Map<Object,Object> set;                                           // Contains the current objects in the current branch of the model.
-	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
 
+	private final LinkedList<StackElement> stack = new LinkedList<>();              // Contains the current objects in the current branch of the model.
 	// Writable properties
 	private boolean isBottom;                                                       // If 'true', then we're at a leaf in the model (i.e. a String, Number, Boolean, or null).
 	private BeanPropertyMeta currentProperty;
+
 	private ClassMeta<?> currentClass;
 
 	/** The current indentation depth into the model. */
@@ -173,23 +186,167 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Sets the current bean property being traversed for proper error messages.
+	 * Initial depth.
 	 *
-	 * @param currentProperty The current property being traversed.
+	 * @see BeanTraverseContext.Builder#initialDepth(int)
+	 * @return
+	 * 	The initial indentation level at the root.
 	 */
-	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
-		this.currentProperty = currentProperty;
+	public final int getInitialDepth() {
+		return ctx.getInitialDepth();
 	}
 
 	/**
-	 * Sets the current class being traversed for proper error messages.
+	 * Returns information used to determine at what location in the parse a failure occurred.
 	 *
-	 * @param currentClass The current class being traversed.
+	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
-	protected final void setCurrentClass(ClassMeta<?> currentClass) {
-		this.currentClass = currentClass;
+	public final JsonMap getLastLocation() {
+		Predicate<Object> nn = Utils::isNotNull;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
+		return JsonMap.create()
+			.appendIf(nn, "currentClass", currentClass)
+			.appendIf(nn, "currentProperty", currentProperty)
+			.appendIf(nec, "stack", stack);
 	}
 
+	/**
+	 * Max traversal depth.
+	 *
+	 * @see BeanTraverseContext.Builder#maxDepth(int)
+	 * @return
+	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
+	 *	<br>If this depth is exceeded, an exception is thrown.
+	 */
+	public final int getMaxDepth() {
+		return ctx.getMaxDepth();
+	}
+
+	/**
+	 * Automatically detect POJO recursions.
+	 *
+	 * @see BeanTraverseContext.Builder#detectRecursions()
+	 * @return
+	 * 	<jk>true</jk> if recursions should be checked for during traversal.
+	 */
+	public final boolean isDetectRecursions() {
+		return ctx.isDetectRecursions();
+	}
+
+	/**
+	 * Ignore recursion errors.
+	 *
+	 * @see BeanTraverseContext.Builder#ignoreRecursions()
+	 * @return
+	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
+	 * 	<br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
+	 */
+	public final boolean isIgnoreRecursions() {
+		return ctx.isIgnoreRecursions();
+	}
+
+	/**
+	 * Returns the inner type of an {@link Optional}.
+	 *
+	 * @param cm The meta to check.
+	 * @return The inner type of an {@link Optional}.
+	 */
+	protected final ClassMeta<?> getOptionalType(ClassMeta<?> cm) {
+		if (cm.isOptional())
+			return getOptionalType(cm.getElementType());
+		return cm;
+	}
+
+	/**
+	 * If the specified object is an {@link Optional}, returns the inner object.
+	 *
+	 * @param o The object to check.
+	 * @return The inner object if it's an {@link Optional}, <jk>null</jk> if it's <jk>null</jk>, or else the same object.
+	 */
+	protected final Object getOptionalValue(Object o) {
+		if (o == null)
+			return null;
+		if (o instanceof Optional)
+			return getOptionalValue(((Optional<?>)o).orElse(null));
+		return o;
+	}
+
+	/**
+	 * Returns the current stack trace.
+	 *
+	 * @param full
+	 * 	If <jk>true</jk>, returns a full stack trace.
+	 * @return The current stack trace.
+	 */
+	protected String getStack(boolean full) {
+		StringBuilder sb = new StringBuilder();
+		stack.forEach(x -> {
+			if (full) {
+				sb.append("\n\t");
+				for (int i = 1; i < x.depth; i++)
+					sb.append("  ");
+				if (x.depth > 0)
+					sb.append("->");
+				sb.append(x.toString(false));
+			} else {
+				sb.append(" > ").append(x.toString(true));
+			}
+		});
+		return sb.toString();
+	}
+
+	/**
+	 * Same as {@link ClassMeta#isOptional()} but gracefully handles a null {@link ClassMeta}.
+	 *
+	 * @param cm The meta to check.
+	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
+	 */
+	protected final boolean isOptional(ClassMeta<?> cm) {
+		return (cm != null && cm.isOptional());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if we're processing the root node.
+	 *
+	 * <p>
+	 * Must be called after {@link #push(String, Object, ClassMeta)} and before {@link #pop()}.
+	 *
+	 * @return <jk>true</jk> if we're processing the root node.
+	 */
+	protected final boolean isRoot() {
+		return depth == 1;
+	}
+
+	/**
+	 * Logs a warning message.
+	 *
+	 * @param t The throwable that was thrown (if there was one).
+	 * @param msg The warning message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	protected void onError(Throwable t, String msg, Object... args) {
+		super.addWarning(msg, args);
+	}
+
+	/**
+	 * Pop an object off the stack.
+	 */
+	protected final void pop() {
+		indent--;
+		depth--;
+		if ((isDetectRecursions() || isDebug()) && ! isBottom)  {
+			Object o = stack.removeLast().o;
+			Object o2 = set.remove(o);
+			if (o2 == null)
+				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", className(o), stack);
+		}
+		isBottom = false;
+	}
+
+	@Override /* Overridden from ContextSession */
+	protected JsonMap properties() {
+		return filteredMap("indent", indent, "depth", depth);
+	}
 	/**
 	 * Push the specified object onto the stack.
 	 *
@@ -224,17 +381,31 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if we're processing the root node.
+	 * Sets the current class being traversed for proper error messages.
 	 *
-	 * <p>
-	 * Must be called after {@link #push(String, Object, ClassMeta)} and before {@link #pop()}.
-	 *
-	 * @return <jk>true</jk> if we're processing the root node.
+	 * @param currentClass The current class being traversed.
 	 */
-	protected final boolean isRoot() {
-		return depth == 1;
+	protected final void setCurrentClass(ClassMeta<?> currentClass) {
+		this.currentClass = currentClass;
 	}
 
+	/**
+	 * Sets the current bean property being traversed for proper error messages.
+	 *
+	 * @param currentProperty The current property being traversed.
+	 */
+	protected final void setCurrentProperty(BeanPropertyMeta currentProperty) {
+		this.currentProperty = currentProperty;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if we're about to exceed the max depth for the document.
+	 *
+	 * @return <jk>true</jk> if we're about to exceed the max depth for the document.
+	 */
+	protected final boolean willExceedDepth() {
+		return (depth >= getMaxDepth());
+	}
 	/**
 	 * Returns <jk>true</jk> if {@link BeanTraverseContext.Builder#detectRecursions()} is enabled, and the specified
 	 * object is already higher up in the traversal chain.
@@ -253,196 +424,5 @@ public class BeanTraverseSession extends BeanSession {
 
 		stack.add(new StackElement(stack.size(), attrName, o, cm));
 		throw new BeanRecursionException("Recursion occurred, stack={0}", getStack(true));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if we're about to exceed the max depth for the document.
-	 *
-	 * @return <jk>true</jk> if we're about to exceed the max depth for the document.
-	 */
-	protected final boolean willExceedDepth() {
-		return (depth >= getMaxDepth());
-	}
-
-	/**
-	 * Pop an object off the stack.
-	 */
-	protected final void pop() {
-		indent--;
-		depth--;
-		if ((isDetectRecursions() || isDebug()) && ! isBottom)  {
-			Object o = stack.removeLast().o;
-			Object o2 = set.remove(o);
-			if (o2 == null)
-				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", className(o), stack);
-		}
-		isBottom = false;
-	}
-
-	/**
-	 * Same as {@link ClassMeta#isOptional()} but gracefully handles a null {@link ClassMeta}.
-	 *
-	 * @param cm The meta to check.
-	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
-	 */
-	protected final boolean isOptional(ClassMeta<?> cm) {
-		return (cm != null && cm.isOptional());
-	}
-
-	/**
-	 * Returns the inner type of an {@link Optional}.
-	 *
-	 * @param cm The meta to check.
-	 * @return The inner type of an {@link Optional}.
-	 */
-	protected final ClassMeta<?> getOptionalType(ClassMeta<?> cm) {
-		if (cm.isOptional())
-			return getOptionalType(cm.getElementType());
-		return cm;
-	}
-
-	/**
-	 * If the specified object is an {@link Optional}, returns the inner object.
-	 *
-	 * @param o The object to check.
-	 * @return The inner object if it's an {@link Optional}, <jk>null</jk> if it's <jk>null</jk>, or else the same object.
-	 */
-	protected final Object getOptionalValue(Object o) {
-		if (o == null)
-			return null;
-		if (o instanceof Optional)
-			return getOptionalValue(((Optional<?>)o).orElse(null));
-		return o;
-	}
-
-	/**
-	 * Logs a warning message.
-	 *
-	 * @param t The throwable that was thrown (if there was one).
-	 * @param msg The warning message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	protected void onError(Throwable t, String msg, Object... args) {
-		super.addWarning(msg, args);
-	}
-
-	private class StackElement {
-		final int depth;
-		final String name;
-		final Object o;
-		final ClassMeta<?> aType;
-
-		StackElement(int depth, String name, Object o, ClassMeta<?> aType) {
-			this.depth = depth;
-			this.name = name;
-			this.o = o;
-			this.aType = aType;
-		}
-
-		String toString(boolean simple) {
-			StringBuilder sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
-			sb.append(Utils.isEmpty(name) ? "<noname>" : name).append(':');
-			sb.append(aType.toString(simple));
-			if (aType != aType.getSerializedClassMeta(BeanTraverseSession.this))
-				sb.append('/').append(aType.getSerializedClassMeta(BeanTraverseSession.this).toString(simple));
-			return sb.toString();
-		}
-	}
-
-	/**
-	 * Returns the current stack trace.
-	 *
-	 * @param full
-	 * 	If <jk>true</jk>, returns a full stack trace.
-	 * @return The current stack trace.
-	 */
-	protected String getStack(boolean full) {
-		StringBuilder sb = new StringBuilder();
-		stack.forEach(x -> {
-			if (full) {
-				sb.append("\n\t");
-				for (int i = 1; i < x.depth; i++)
-					sb.append("  ");
-				if (x.depth > 0)
-					sb.append("->");
-				sb.append(x.toString(false));
-			} else {
-				sb.append(" > ").append(x.toString(true));
-			}
-		});
-		return sb.toString();
-	}
-
-	/**
-	 * Returns information used to determine at what location in the parse a failure occurred.
-	 *
-	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
-	 */
-	public final JsonMap getLastLocation() {
-		Predicate<Object> nn = Utils::isNotNull;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		return JsonMap.create()
-			.appendIf(nn, "currentClass", currentClass)
-			.appendIf(nn, "currentProperty", currentProperty)
-			.appendIf(nec, "stack", stack);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Automatically detect POJO recursions.
-	 *
-	 * @see BeanTraverseContext.Builder#detectRecursions()
-	 * @return
-	 * 	<jk>true</jk> if recursions should be checked for during traversal.
-	 */
-	public final boolean isDetectRecursions() {
-		return ctx.isDetectRecursions();
-	}
-
-	/**
-	 * Ignore recursion errors.
-	 *
-	 * @see BeanTraverseContext.Builder#ignoreRecursions()
-	 * @return
-	 * 	<jk>true</jk> if when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
-	 * 	<br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
-	 */
-	public final boolean isIgnoreRecursions() {
-		return ctx.isIgnoreRecursions();
-	}
-
-	/**
-	 * Initial depth.
-	 *
-	 * @see BeanTraverseContext.Builder#initialDepth(int)
-	 * @return
-	 * 	The initial indentation level at the root.
-	 */
-	public final int getInitialDepth() {
-		return ctx.getInitialDepth();
-	}
-
-	/**
-	 * Max traversal depth.
-	 *
-	 * @see BeanTraverseContext.Builder#maxDepth(int)
-	 * @return
-	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
-	 *	<br>If this depth is exceeded, an exception is thrown.
-	 */
-	public final int getMaxDepth() {
-		return ctx.getMaxDepth();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from ContextSession */
-	protected JsonMap properties() {
-		return filteredMap("indent", indent, "depth", depth);
 	}
 }

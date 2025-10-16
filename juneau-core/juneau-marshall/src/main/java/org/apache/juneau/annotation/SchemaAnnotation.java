@@ -39,163 +39,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class SchemaAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Schema DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
+	public static class Apply extends AnnotationApplier<Schema,Context.Builder> {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Apply(VarResolverSession vr) {
+			super(Schema.class, Context.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
+			Schema a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(a);
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link Schema @Schema annotations}.
 	 */
-	public static Builder create(String...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(Schema a) {
-		return a == null || DEFAULT.equals(a);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		Schema[] value();
 	}
-
-	/**
-	 * Converts the specified <ja>@Schema</ja> annotation into a generic map.
-	 *
-	 * @param a The annotation instance.  Can be <jk>null</jk>.
-	 * @return The schema converted to a map, or and empty map if the annotation was null.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	@SuppressWarnings("deprecation")
-	public static JsonMap asMap(Schema a) throws ParseException {
-		if (a == null)
-			return JsonMap.EMPTY_MAP;
-		JsonMap m = new JsonMap();
-		if (SchemaAnnotation.empty(a))
-			return m;
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
-		return m
-			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
-			.appendIf(ne, "allOf", joinnl(a.allOf()))
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendIf(ne, "discriminator", a.discriminator())
-			.appendIf(ne, "description", joinnl(a.description(), a.d()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
-			// Handle exclusiveMaximum with Draft 2020-12 fallback
-			.appendIf(ne, "exclusiveMaximum",
-				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() :
-				(a.exclusiveMaximum() || a.emax()) ? "true" : null)
-			// Handle exclusiveMinimum with Draft 2020-12 fallback
-			.appendIf(ne, "exclusiveMinimum",
-				ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() :
-				(a.exclusiveMinimum() || a.emin()) ? "true" : null)
-			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(ne, "ignore", a.ignore() ? "true" : null)
-			.appendIf(nem, "items", merge(m.getMap("items"), a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(nm1, "minProperties", a.minProperties(), a.minp())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendIf(nem, "properties", parseMap(a.properties()))
-			.appendIf(nf, "readOnly", a.readOnly() || a.ro())
-			.appendIf(nf, "required", a.required() || a.r())
-			.appendIf(ne, "title", a.title())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendIf(ne, "xml", joinnl(a.xml()))
-			.appendIf(ne, "$ref", a.$ref())
-			// JSON Schema Draft 2020-12 properties
-			.appendIf(ne, "const", joinnl(a._const()))
-			.appendIf(nec, "examples", a.examples().length == 0 ? null : Arrays.asList(a.examples()))
-			.appendIf(ne, "$comment", joinnl(a.$comment()))
-			.appendIf(nf, "deprecated", a.deprecatedProperty())
-			.appendIf(ne, "contentMediaType", a.contentMediaType())
-			.appendIf(ne, "contentEncoding", a.contentEncoding())
-			.appendIf(ne, "prefixItems", joinnl(a.prefixItems()))
-			.appendIf(ne, "unevaluatedItems", joinnl(a.unevaluatedItems()))
-			.appendIf(ne, "unevaluatedProperties", joinnl(a.unevaluatedProperties()))
-			.appendIf(ne, "dependentSchemas", joinnl(a.dependentSchemas()))
-			.appendIf(ne, "dependentRequired", joinnl(a.dependentRequired()))
-			.appendIf(ne, "if", joinnl(a._if()))
-			.appendIf(ne, "then", joinnl(a._then()))
-			.appendIf(ne, "else", joinnl(a._else()))
-			.appendIf(ne, "$defs", joinnl(a.$defs()))
-			.appendIf(ne, "$id", a.$id())
-		;
-	}
-
-	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
-		if (ItemsAnnotation.empty(a))
-			return m;
-		Predicate<String> ne = Utils::isNotEmpty;
-		Predicate<Collection<?>> nec = Utils::isNotEmpty;
-		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::isNotMinusOne;
-		return m
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(ne, "$ref", a.$ref())
-		;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -225,12 +107,14 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Instantiates a new {@link Schema @Schema} object initialized with this builder.
+		 * Sets the {@link Schema#_const} property on this annotation.
 		 *
-		 * @return A new {@link Schema @Schema} object.
+		 * @param value The new value for this property.
+		 * @return This object.
 		 */
-		public Schema build() {
-			return new Impl(this);
+		public Builder _const(String...value) {
+			this._const = value;
+			return this;
 		}
 
 		/**
@@ -245,6 +129,17 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Schema#_else} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _else(String...value) {
+			this._else = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -252,6 +147,61 @@ public class SchemaAnnotation {
 		 */
 		public Builder _enum(String...value) {
 			this._enum = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#_if} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _if(String...value) {
+			this._if = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#_then} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder _then(String...value) {
+			this._then = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#$comment} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder $comment(String...value) {
+			this.$comment = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#$defs} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder $defs(String...value) {
+			this.$defs = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#$id} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder $id(String value) {
+			this.$id = value;
 			return this;
 		}
 
@@ -278,17 +228,6 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#allOf} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder allOf(String...value) {
-			this.allOf = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Schema#aev} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -296,6 +235,17 @@ public class SchemaAnnotation {
 		 */
 		public Builder aev(boolean value) {
 			this.aev = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#allOf} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allOf(String...value) {
+			this.allOf = value;
 			return this;
 		}
 
@@ -308,6 +258,15 @@ public class SchemaAnnotation {
 		public Builder allowEmptyValue(boolean value) {
 			this.allowEmptyValue = value;
 			return this;
+		}
+
+		/**
+		 * Instantiates a new {@link Schema @Schema} object initialized with this builder.
+		 *
+		 * @return A new {@link Schema @Schema} object.
+		 */
+		public Schema build() {
+			return new Impl(this);
 		}
 
 		/**
@@ -333,6 +292,28 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Schema#contentEncoding} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder contentEncoding(String value) {
+			this.contentEncoding = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#contentMediaType} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder contentMediaType(String value) {
+			this.contentMediaType = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#d} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -340,6 +321,39 @@ public class SchemaAnnotation {
 		 */
 		public Builder d(String...value) {
 			this.d = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#dependentRequired} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dependentRequired(String...value) {
+			this.dependentRequired = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#dependentSchemas} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder dependentSchemas(String...value) {
+			this.dependentSchemas = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#deprecatedProperty} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder deprecatedProperty(boolean value) {
+			this.deprecatedProperty = value;
 			return this;
 		}
 
@@ -399,6 +413,17 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Schema#examples} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder examples(String...value) {
+			this.examples = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -410,6 +435,17 @@ public class SchemaAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Schema#exclusiveMaximumValue} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder exclusiveMaximumValue(String value) {
+			this.exclusiveMaximumValue = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Schema#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -417,6 +453,17 @@ public class SchemaAnnotation {
 		 */
 		public Builder exclusiveMinimum(boolean value) {
 			this.exclusiveMinimum = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#exclusiveMinimumValue} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder exclusiveMinimumValue(String value) {
+			this.exclusiveMinimumValue = value;
 			return this;
 		}
 
@@ -673,6 +720,10 @@ public class SchemaAnnotation {
 			return this;
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------
+		// JSON Schema Draft 2020-12 property setters
+		// -----------------------------------------------------------------------------------------------------------------
+
 		/**
 		 * Sets the {@link Schema#p} property on this annotation.
 		 *
@@ -692,6 +743,17 @@ public class SchemaAnnotation {
 		 */
 		public Builder pattern(String value) {
 			this.pattern = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Schema#prefixItems} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder prefixItems(String...value) {
+			this.prefixItems = value;
 			return this;
 		}
 
@@ -817,131 +879,6 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#uniqueItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder uniqueItems(boolean value) {
-			this.uniqueItems = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#xml} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder xml(String...value) {
-			this.xml = value;
-			return this;
-		}
-
-		// -----------------------------------------------------------------------------------------------------------------
-		// JSON Schema Draft 2020-12 property setters
-		// -----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Sets the {@link Schema#_const} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder _const(String...value) {
-			this._const = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#examples} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder examples(String...value) {
-			this.examples = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#$comment} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder $comment(String...value) {
-			this.$comment = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#deprecatedProperty} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder deprecatedProperty(boolean value) {
-			this.deprecatedProperty = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#exclusiveMaximumValue} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMaximumValue(String value) {
-			this.exclusiveMaximumValue = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#exclusiveMinimumValue} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder exclusiveMinimumValue(String value) {
-			this.exclusiveMinimumValue = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#contentMediaType} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder contentMediaType(String value) {
-			this.contentMediaType = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#contentEncoding} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder contentEncoding(String value) {
-			this.contentEncoding = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#prefixItems} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder prefixItems(String...value) {
-			this.prefixItems = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Schema#unevaluatedItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -964,87 +901,28 @@ public class SchemaAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Schema#dependentSchemas} property on this annotation.
+		 * Sets the {@link Schema#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder dependentSchemas(String...value) {
-			this.dependentSchemas = value;
+		public Builder uniqueItems(boolean value) {
+			this.uniqueItems = value;
 			return this;
 		}
 
 		/**
-		 * Sets the {@link Schema#dependentRequired} property on this annotation.
+		 * Sets the {@link Schema#xml} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder dependentRequired(String...value) {
-			this.dependentRequired = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#_if} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder _if(String...value) {
-			this._if = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#_then} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder _then(String...value) {
-			this._then = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#_else} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder _else(String...value) {
-			this._else = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#$defs} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder $defs(String...value) {
-			this.$defs = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Schema#$id} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder $id(String value) {
-			this.$id = value;
+		public Builder xml(String...value) {
+			this.xml = value;
 			return this;
 		}
 
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends TargetedAnnotationTImpl implements Schema {
 
@@ -1139,13 +1017,48 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
+		public String[] _const() {
+			return _const;
+		}
+
+		@Override /* Overridden from Schema */
 		public String[] _default() {
 			return _default;
 		}
 
 		@Override /* Overridden from Schema */
+		public String[] _else() {
+			return _else;
+		}
+
+		@Override /* Overridden from Schema */
 		public String[] _enum() {
 			return _enum;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] _if() {
+			return _if;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] _then() {
+			return _then;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] $comment() {
+			return $comment;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] $defs() {
+			return $defs;
+		}
+
+		@Override /* Overridden from Schema */
+		public String $id() {
+			return $id;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1159,13 +1072,13 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] allOf() {
-			return allOf;
+		public boolean aev() {
+			return aev;
 		}
 
 		@Override /* Overridden from Schema */
-		public boolean aev() {
-			return aev;
+		public String[] allOf() {
+			return allOf;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1184,8 +1097,33 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
+		public String contentEncoding() {
+			return contentEncoding;
+		}
+
+		@Override /* Overridden from Schema */
+		public String contentMediaType() {
+			return contentMediaType;
+		}
+
+		@Override /* Overridden from Schema */
 		public String[] d() {
 			return d;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] dependentRequired() {
+			return dependentRequired;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] dependentSchemas() {
+			return dependentSchemas;
+		}
+
+		@Override /* Overridden from Schema */
+		public boolean deprecatedProperty() {
+			return deprecatedProperty;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1214,13 +1152,28 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
+		public String[] examples() {
+			return examples;
+		}
+
+		@Override /* Overridden from Schema */
 		public boolean exclusiveMaximum() {
 			return exclusiveMaximum;
 		}
 
 		@Override /* Overridden from Schema */
+		public String exclusiveMaximumValue() {
+			return exclusiveMaximumValue;
+		}
+
+		@Override /* Overridden from Schema */
 		public boolean exclusiveMinimum() {
 			return exclusiveMinimum;
+		}
+
+		@Override /* Overridden from Schema */
+		public String exclusiveMinimumValue() {
+			return exclusiveMinimumValue;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1338,6 +1291,10 @@ public class SchemaAnnotation {
 			return multipleOf;
 		}
 
+		// -----------------------------------------------------------------------------------------------------------------
+		// JSON Schema Draft 2020-12 property getters
+		// -----------------------------------------------------------------------------------------------------------------
+
 		@Override /* Overridden from Schema */
 		public String p() {
 			return p;
@@ -1346,6 +1303,11 @@ public class SchemaAnnotation {
 		@Override /* Overridden from Schema */
 		public String pattern() {
 			return pattern;
+		}
+
+		@Override /* Overridden from Schema */
+		public String[] prefixItems() {
+			return prefixItems;
 		}
 
 		@Override /* Overridden from Schema */
@@ -1404,65 +1366,6 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
-		public boolean uniqueItems() {
-			return uniqueItems;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] xml() {
-			return xml;
-		}
-
-		// -----------------------------------------------------------------------------------------------------------------
-		// JSON Schema Draft 2020-12 property getters
-		// -----------------------------------------------------------------------------------------------------------------
-
-		@Override /* Overridden from Schema */
-		public String[] _const() {
-			return _const;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] examples() {
-			return examples;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] $comment() {
-			return $comment;
-		}
-
-		@Override /* Overridden from Schema */
-		public boolean deprecatedProperty() {
-			return deprecatedProperty;
-		}
-
-		@Override /* Overridden from Schema */
-		public String exclusiveMaximumValue() {
-			return exclusiveMaximumValue;
-		}
-
-		@Override /* Overridden from Schema */
-		public String exclusiveMinimumValue() {
-			return exclusiveMinimumValue;
-		}
-
-		@Override /* Overridden from Schema */
-		public String contentMediaType() {
-			return contentMediaType;
-		}
-
-		@Override /* Overridden from Schema */
-		public String contentEncoding() {
-			return contentEncoding;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] prefixItems() {
-			return prefixItems;
-		}
-
-		@Override /* Overridden from Schema */
 		public String[] unevaluatedItems() {
 			return unevaluatedItems;
 		}
@@ -1473,86 +1376,158 @@ public class SchemaAnnotation {
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] dependentSchemas() {
-			return dependentSchemas;
+		public boolean uniqueItems() {
+			return uniqueItems;
 		}
 
 		@Override /* Overridden from Schema */
-		public String[] dependentRequired() {
-			return dependentRequired;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] _if() {
-			return _if;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] _then() {
-			return _then;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] _else() {
-			return _else;
-		}
-
-		@Override /* Overridden from Schema */
-		public String[] $defs() {
-			return $defs;
-		}
-
-		@Override /* Overridden from Schema */
-		public String $id() {
-			return $id;
+		public String[] xml() {
+			return xml;
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
+	/** Default value */
+	public static final Schema DEFAULT = create().build();
 
 	/**
-	 * Applies targeted {@link Schema} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Converts the specified <ja>@Schema</ja> annotation into a generic map.
+	 *
+	 * @param a The annotation instance.  Can be <jk>null</jk>.
+	 * @return The schema converted to a map, or and empty map if the annotation was null.
+	 * @throws ParseException Malformed input encountered.
 	 */
-	public static class Apply extends AnnotationApplier<Schema,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(Schema.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
-			Schema a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(a);
-		}
+	@SuppressWarnings("deprecation")
+	public static JsonMap asMap(Schema a) throws ParseException {
+		if (a == null)
+			return JsonMap.EMPTY_MAP;
+		JsonMap m = new JsonMap();
+		if (SchemaAnnotation.empty(a))
+			return m;
+		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		return m
+			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
+			.appendIf(ne, "allOf", joinnl(a.allOf()))
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendIf(ne, "discriminator", a.discriminator())
+			.appendIf(ne, "description", joinnl(a.description(), a.d()))
+			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			// Handle exclusiveMaximum with Draft 2020-12 fallback
+			.appendIf(ne, "exclusiveMaximum",
+				ne.test(a.exclusiveMaximumValue()) ? a.exclusiveMaximumValue() :
+				(a.exclusiveMaximum() || a.emax()) ? "true" : null)
+			// Handle exclusiveMinimum with Draft 2020-12 fallback
+			.appendIf(ne, "exclusiveMinimum",
+				ne.test(a.exclusiveMinimumValue()) ? a.exclusiveMinimumValue() :
+				(a.exclusiveMinimum() || a.emin()) ? "true" : null)
+			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(ne, "ignore", a.ignore() ? "true" : null)
+			.appendIf(nem, "items", merge(m.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(nm1, "minProperties", a.minProperties(), a.minp())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nem, "properties", parseMap(a.properties()))
+			.appendIf(nf, "readOnly", a.readOnly() || a.ro())
+			.appendIf(nf, "required", a.required() || a.r())
+			.appendIf(ne, "title", a.title())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendIf(ne, "xml", joinnl(a.xml()))
+			.appendIf(ne, "$ref", a.$ref())
+			// JSON Schema Draft 2020-12 properties
+			.appendIf(ne, "const", joinnl(a._const()))
+			.appendIf(nec, "examples", a.examples().length == 0 ? null : Arrays.asList(a.examples()))
+			.appendIf(ne, "$comment", joinnl(a.$comment()))
+			.appendIf(nf, "deprecated", a.deprecatedProperty())
+			.appendIf(ne, "contentMediaType", a.contentMediaType())
+			.appendIf(ne, "contentEncoding", a.contentEncoding())
+			.appendIf(ne, "prefixItems", joinnl(a.prefixItems()))
+			.appendIf(ne, "unevaluatedItems", joinnl(a.unevaluatedItems()))
+			.appendIf(ne, "unevaluatedProperties", joinnl(a.unevaluatedProperties()))
+			.appendIf(ne, "dependentSchemas", joinnl(a.dependentSchemas()))
+			.appendIf(ne, "dependentRequired", joinnl(a.dependentRequired()))
+			.appendIf(ne, "if", joinnl(a._if()))
+			.appendIf(ne, "then", joinnl(a._then()))
+			.appendIf(ne, "else", joinnl(a._else()))
+			.appendIf(ne, "$defs", joinnl(a.$defs()))
+			.appendIf(ne, "$id", a.$id())
+		;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link Schema @Schema annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		Schema[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(Schema a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
+		if (ItemsAnnotation.empty(a))
+			return m;
+		Predicate<String> ne = Utils::isNotEmpty;
+		Predicate<Collection<?>> nec = Utils::isNotEmpty;
+		Predicate<Map<?,?>> nem = Utils::isNotEmpty;
+		Predicate<Boolean> nf = Utils::isTrue;
+		Predicate<Long> nm1 = Utils::isNotMinusOne;
+		return m
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(ne, "$ref", a.$ref())
+		;
 	}
 }

@@ -96,11 +96,6 @@ public class Source extends CommonEntry {
 	private Icon icon;
 	private Logo logo;
 	private Text subtitle;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>generator</property>.
 	 *
@@ -111,6 +106,66 @@ public class Source extends CommonEntry {
 	 */
 	public Generator getGenerator() {
 		return generator;
+	}
+
+	/**
+	 * Bean property getter:  <property>icon</property>.
+	 *
+	 * <p>
+	 * The icon of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Icon getIcon() {
+		return icon;
+	}
+
+	/**
+	 * Bean property getter:  <property>logo</property>.
+	 *
+	 * <p>
+	 * The logo of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Logo getLogo() {
+		return logo;
+	}
+
+	/**
+	 * Bean property getter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Text getSubtitle() {
+		return subtitle;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Source setAuthors(Person...value) {
+		super.setAuthors(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Source setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Source setCategories(Category...value) {
+		super.setCategories(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Source setContributors(Person...value) {
+		super.setContributors(value);
+		return this;
 	}
 
 	/**
@@ -128,19 +183,6 @@ public class Source extends CommonEntry {
 		this.generator = value;
 		return this;
 	}
-
-	/**
-	 * Bean property getter:  <property>icon</property>.
-	 *
-	 * <p>
-	 * The icon of this source.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Icon getIcon() {
-		return icon;
-	}
-
 	/**
 	 * Bean property setter:  <property>icon</property>.
 	 *
@@ -157,16 +199,28 @@ public class Source extends CommonEntry {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>logo</property>.
-	 *
-	 * <p>
-	 * The logo of this source.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Logo getLogo() {
-		return logo;
+	@Override /* Overridden from CommonEntry */
+	public Source setId(Id value) {
+		super.setId(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Source setId(String value) {
+		super.setId(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Source setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+
+	@Override /* Overridden from CommonEntry */
+	public Source setLinks(Link...value) {
+		super.setLinks(value);
+		return this;
 	}
 
 	/**
@@ -185,31 +239,15 @@ public class Source extends CommonEntry {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * The subtitle of this source.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Text getSubtitle() {
-		return subtitle;
+	@Override /* Overridden from CommonEntry */
+	public Source setRights(String value) {
+		super.setRights(value);
+		return this;
 	}
 
-	/**
-	 * Bean property setter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * The subtitle of this source.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Source setSubtitle(Text value) {
-		this.subtitle = value;
+	@Override /* Overridden from CommonEntry */
+	public Source setRights(Text value) {
+		super.setRights(value);
 		return this;
 	}
 
@@ -229,67 +267,19 @@ public class Source extends CommonEntry {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Source setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Source setLang(String value) {
-		super.setLang(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setAuthors(Person...value) {
-		super.setAuthors(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setCategories(Category...value) {
-		super.setCategories(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setContributors(Person...value) {
-		super.setContributors(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setId(String value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setId(Id value) {
-		super.setId(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setLinks(Link...value) {
-		super.setLinks(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setRights(String value) {
-		super.setRights(value);
-		return this;
-	}
-
-	@Override /* Overridden from CommonEntry */
-	public Source setRights(Text value) {
-		super.setRights(value);
+	/**
+	 * Bean property setter:  <property>subtitle</property>.
+	 *
+	 * <p>
+	 * The subtitle of this source.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Source setSubtitle(Text value) {
+		this.subtitle = value;
 		return this;
 	}
 
@@ -306,13 +296,13 @@ public class Source extends CommonEntry {
 	}
 
 	@Override /* Overridden from CommonEntry */
-	public Source setUpdated(String value) {
+	public Source setUpdated(Calendar value) {
 		super.setUpdated(value);
 		return this;
 	}
 
 	@Override /* Overridden from CommonEntry */
-	public Source setUpdated(Calendar value) {
+	public Source setUpdated(String value) {
 		super.setUpdated(value);
 		return this;
 	}

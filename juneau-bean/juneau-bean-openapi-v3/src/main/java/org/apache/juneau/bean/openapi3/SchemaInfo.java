@@ -194,617 +194,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Make a deep copy of this object.
-	 *
-	 * @return A deep copy of this object.
-	 */
-	public SchemaInfo copy() {
-		return new SchemaInfo(this);
-	}
-
-	/**
-	 * Bean property getter:  <property>format</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Bean property setter:  <property>format</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * 	<br>Formats defined by the OAS include:
-	 * 	<ul>
-	 * 		<li><js>"int32"</js>
-	 * 		<li><js>"int64"</js>
-	 * 		<li><js>"float"</js>
-	 * 		<li><js>"double"</js>
-	 * 		<li><js>"byte"</js>
-	 * 		<li><js>"binary"</js>
-	 * 		<li><js>"date"</js>
-	 * 		<li><js>"date-time"</js>
-	 * 		<li><js>"password"</js>
-	 * 	</ul>
-	 * @return This object
-	 */
-	public SchemaInfo setFormat(String value) {
-		format = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>title</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getTitle() {
-		return title;
-	}
-
-	/**
-	 * Bean property setter:  <property>title</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setTitle(String value) {
-		title = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getDefault() {
-		return _default;
-	}
-
-	/**
-	 * Bean property setter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setDefault(Object value) {
-		_default = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>multipleOf</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>multipleOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMultipleOf(Number value) {
-		multipleOf = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maximum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMaximum() {
-		return maximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>maximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMaximum(Number value) {
-		maximum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setExclusiveMaximum(Boolean value) {
-		exclusiveMaximum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minimum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMinimum() {
-		return minimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>minimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMinimum(Number value) {
-		minimum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setExclusiveMinimum(Boolean value) {
-		exclusiveMinimum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxLength</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMaxLength(Integer value) {
-		maxLength = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minLength</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>minLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMinLength(Integer value) {
-		minLength = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>pattern</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * Bean property setter:  <property>pattern</property>.
-	 *
-	 * <p>
-	 * This string SHOULD be a valid regular expression.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setPattern(String value) {
-		pattern = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMaxItems(Integer value) {
-		maxItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>minItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMinItems(Integer value) {
-		minItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
-	/**
-	 * Bean property setter:  <property>uniqueItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setUniqueItems(Boolean value) {
-		uniqueItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getNullable() {
-		return nullable;
-	}
-	/**
-	 * Bean property setter:  <property>nullable</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setNullable(Boolean value) {
-		nullable = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxProperties</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxProperties() {
-		return maxProperties;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxProperties</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMaxProperties(Integer value) {
-		maxProperties = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minProperties</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinProperties() {
-		return minProperties;
-	}
-
-	/**
-	 * Bean property setter:  <property>minProperties</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setMinProperties(Integer value) {
-		minProperties = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The list of required properties.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<String> getRequired() {
-		return required;
-	}
-
-	/**
-	 * Bean property setter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The list of required properties.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"http"</js>
-	 * 		<li><js>"https"</js>
-	 * 		<li><js>"ws"</js>
-	 * 		<li><js>"wss"</js>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setRequired(Collection<String> value) {
-		required = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Same as {@link #addRequired(String...)}.
-	 *
-	 * @param values
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Collection&lt;String&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
-	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * @return This object
-	 */
-	public SchemaInfo addRequired(String...values) {
-		required = listBuilder(required).sparse().add(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>enum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getEnum() {
-		return _enum;
-	}
-
-	/**
-	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>enum</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Object</code>
-	 * 		<li><code>Collection&lt;Object&gt;</code>
-	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	_enum(<js>"['foo','bar']"</js>);
-	 * 			</p>
-	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode'>
-	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
-	 */
-	public SchemaInfo addEnum(Object...values) {
-		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * Bean property setter:  <property>type</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * 	<br>Possible values include:
-	 * 	<ul>
-	 * 		<li><js>"object"</js>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
-	 * 	</ul>
-	 * @return This object
-	 */
-	public SchemaInfo setType(String value) {
-		type = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>items</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Items getItems() {
-		return items;
-	}
-
-	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setItems(Items value) {
-		items = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>allOf</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getAllOf() {
-		return allOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>allOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = listFrom(value);
-		return this;
-	}
-
-	/**
 	 * Adds one or more values to the <property>allOf</property> property.
 	 *
 	 * @param values
@@ -829,28 +218,6 @@ public class SchemaInfo extends OpenApiElement {
 	 */
 	public SchemaInfo addAllOf(Object...values) {
 		allOf = listBuilder(allOf).elementType(Object.class).sparse().addAny(values).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>allOf</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getAnyOf() {
-		return anyOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>allOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setAnyOf(Collection<Object> value) {
-		anyOf = listFrom(value);
 		return this;
 	}
 
@@ -883,24 +250,30 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>allOf</property>.
+	 * Adds one or more values to the <property>enum</property> property.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public List<Object> getOneOf() {
-		return oneOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>allOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @param values
+	 * 	The values to add to this property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Object</code>
+	 * 		<li><code>Collection&lt;Object&gt;</code>
+	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	_enum(<js>"['foo','bar']"</js>);
+	 * 			</p>
+	 * 		<li><code>String</code> - Individual values
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
+	 * 			</p>
+	 * 	</ul>
+	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
-	public SchemaInfo setOneOf(Collection<Object> value) {
-		oneOf = listFrom(value);
+	public SchemaInfo addEnum(Object...values) {
+		_enum = listBuilder(_enum).elementType(Object.class).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -933,247 +306,38 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>properties</property>.
+	 * Same as {@link #addRequired(String...)}.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String, SchemaInfo> getProperties() {
-		return properties;
-	}
-
-	/**
-	 * Bean property setter:  <property>properties</property>.
-	 *
-	 * @param value
+	 * @param values
 	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Valid types:
+	 * 	<ul>
+	 * 		<li><code>Collection&lt;String&gt;</code>
+	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
+	 * 			</p>
+	 * 		<li><code>String</code> - Individual values
+	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<p class='bcode'>
+	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
+	 * 			</p>
+	 * 	</ul>
 	 * @return This object
 	 */
-	public SchemaInfo setProperties(Map<String, SchemaInfo> value) {
-		properties = copyOf(value);
+	public SchemaInfo addRequired(String...values) {
+		required = listBuilder(required).sparse().add(values).build();
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>additionalProperties</property>.
+	 * Make a deep copy of this object.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @return A deep copy of this object.
 	 */
-	public SchemaInfo getAdditionalProperties() {
-		return additionalProperties;
-	}
-
-	/**
-	 * Bean property setter:  <property>additionalProperties</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setAdditionalProperties(SchemaInfo value) {
-		additionalProperties = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>not</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public SchemaInfo getNot() {
-		return not;
-	}
-
-	/**
-	 * Bean property setter:  <property>not</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setNot(SchemaInfo value) {
-		not = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>discriminator</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Discriminator getDiscriminator() {
-		return discriminator;
-	}
-
-	/**
-	 * Bean property setter:  <property>discriminator</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setDiscriminator(Discriminator value) {
-		discriminator = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>readOnly</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getReadOnly() {
-		return readOnly;
-	}
-
-	/**
-	 * Bean property setter:  <property>readOnly</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setReadOnly(Boolean value) {
-		readOnly = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>WriteOnly</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getWriteOnly() {
-		return writeOnly;
-	}
-
-	/**
-	 * Bean property setter:  <property>WriteOnly</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setWriteOnly(Boolean value) {
-		writeOnly = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>deprecated</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getDeprecated() {
-		return deprecated;
-	}
-
-	/**
-	 * Bean property setter:  <property>deprecated</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setDeprecated(Boolean value) {
-		deprecated = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>xml</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Xml getXml() {
-		return xml;
-	}
-
-	/**
-	 * Bean property setter:  <property>xml</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setXml(Xml value) {
-		xml = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>externalDocs</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
-	}
-
-	/**
-	 * Bean property setter:  <property>externalDocs</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setExternalDocs(ExternalDocumentation value) {
-		externalDocs = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>example</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Bean property setter:  <property>example</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SchemaInfo setExample(Object value) {
-		example = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>$ref</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Beanp("$ref")
-	public String getRef() {
-		return ref;
-	}
-
-	/**
-	 * Bean property setter:  <property>$ref</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	@Beanp("$ref")
-	public SchemaInfo setRef(Object value) {
-		ref = Utils.s(value);
-		return this;
+	public SchemaInfo copy() {
+		return new SchemaInfo(this);
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -1220,51 +384,333 @@ public class SchemaInfo extends OpenApiElement {
 		};
 	}
 
-	@Override /* Overridden from SwaggerElement */
-	public SchemaInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {  // NOSONAR
-			case "$ref" -> setRef(value);
-			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case "allOf" -> setAllOf(listBuilder(Object.class).sparse().addAny(value).build());
-			case "anyOf" -> setAnyOf(listBuilder(Object.class).sparse().addAny(value).build());
-			case "default" -> setDefault(value);
-			case "deprecated" -> setDeprecated(toBoolean(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
-			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
-			case "example" -> setExample(value);
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
-			case "format" -> setFormat(Utils.s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "maxProperties" -> setMaxProperties(toInteger(value));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "minProperties" -> setMinProperties(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "not" -> setNot(toType(value, SchemaInfo.class));
-			case "nullable" -> setNullable(toBoolean(value));
-			case "oneOf" -> setOneOf(listBuilder(Object.class).sparse().addAny(value).build());
-			case "pattern" -> setPattern(Utils.s(value));
-			case "properties" -> setProperties(mapBuilder(String.class, SchemaInfo.class).sparse().addAny(value).build());
-			case "readOnly" -> setReadOnly(toBoolean(value));
-			case "required" -> setRequired(listBuilder(String.class).sparse().addAny(value).build());
-			case "title" -> setTitle(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
-			case "writeOnly" -> setWriteOnly(toBoolean(value));
-			case "xml" -> setXml(toType(value, Xml.class));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
+	/**
+	 * Bean property getter:  <property>additionalProperties</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getAdditionalProperties() {
+		return additionalProperties;
+	}
+
+	/**
+	 * Bean property getter:  <property>allOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getAllOf() {
+		return allOf;
+	}
+
+	/**
+	 * Bean property getter:  <property>allOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getAnyOf() {
+		return anyOf;
+	}
+
+	/**
+	 * Bean property getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getDefault() {
+		return _default;
+	}
+
+	/**
+	 * Bean property getter:  <property>deprecated</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getDeprecated() {
+		return deprecated;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>discriminator</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Discriminator getDiscriminator() {
+		return discriminator;
+	}
+
+	/**
+	 * Bean property getter:  <property>enum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getEnum() {
+		return _enum;
+	}
+
+	/**
+	 * Bean property getter:  <property>example</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Bean property getter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMaximum() {
+		return exclusiveMaximum;
+	}
+
+	/**
+	 * Bean property getter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMinimum() {
+		return exclusiveMinimum;
+	}
+
+	/**
+	 * Bean property getter:  <property>externalDocs</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public ExternalDocumentation getExternalDocs() {
+		return externalDocs;
+	}
+
+	/**
+	 * Bean property getter:  <property>format</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * Bean property getter:  <property>items</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Items getItems() {
+		return items;
+	}
+
+	/**
+	 * Bean property getter:  <property>maximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxItems() {
+		return maxItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxProperties</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxProperties() {
+		return maxProperties;
+	}
+
+	/**
+	 * Bean property getter:  <property>minimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * Bean property getter:  <property>minItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinItems() {
+		return minItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>minLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinLength() {
+		return minLength;
+	}
+
+	/**
+	 * Bean property getter:  <property>minProperties</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinProperties() {
+		return minProperties;
+	}
+
+	/**
+	 * Bean property getter:  <property>multipleOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMultipleOf() {
+		return multipleOf;
+	}
+	/**
+	 * Bean property getter:  <property>not</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getNot() {
+		return not;
+	}
+
+	/**
+	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getNullable() {
+		return nullable;
+	}
+	/**
+	 * Bean property getter:  <property>allOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<Object> getOneOf() {
+		return oneOf;
+	}
+
+	/**
+	 * Bean property getter:  <property>pattern</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * Bean property getter:  <property>properties</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, SchemaInfo> getProperties() {
+		return properties;
+	}
+
+	/**
+	 * Bean property getter:  <property>readOnly</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getReadOnly() {
+		return readOnly;
+	}
+
+	/**
+	 * Bean property getter:  <property>$ref</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Beanp("$ref")
+	public String getRef() {
+		return ref;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The list of required properties.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public List<String> getRequired() {
+		return required;
+	}
+
+	/**
+	 * Bean property getter:  <property>title</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>WriteOnly</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getWriteOnly() {
+		return writeOnly;
+	}
+
+	/**
+	 * Bean property getter:  <property>xml</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Xml getXml() {
+		return xml;
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -1347,6 +793,560 @@ public class SchemaInfo extends OpenApiElement {
 
 		this.example = null;
 
+		return this;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public SchemaInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {  // NOSONAR
+			case "$ref" -> setRef(value);
+			case "additionalProperties" -> setAdditionalProperties(toType(value, SchemaInfo.class));
+			case "allOf" -> setAllOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "anyOf" -> setAnyOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "default" -> setDefault(value);
+			case "deprecated" -> setDeprecated(toBoolean(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "discriminator" -> setDiscriminator(toType(value, Discriminator.class));
+			case "enum" -> setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "example" -> setExample(value);
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "externalDocs" -> setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "format" -> setFormat(Utils.s(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "maxProperties" -> setMaxProperties(toInteger(value));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "minProperties" -> setMinProperties(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "not" -> setNot(toType(value, SchemaInfo.class));
+			case "nullable" -> setNullable(toBoolean(value));
+			case "oneOf" -> setOneOf(listBuilder(Object.class).sparse().addAny(value).build());
+			case "pattern" -> setPattern(Utils.s(value));
+			case "properties" -> setProperties(mapBuilder(String.class, SchemaInfo.class).sparse().addAny(value).build());
+			case "readOnly" -> setReadOnly(toBoolean(value));
+			case "required" -> setRequired(listBuilder(String.class).sparse().addAny(value).build());
+			case "title" -> setTitle(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			case "writeOnly" -> setWriteOnly(toBoolean(value));
+			case "xml" -> setXml(toType(value, Xml.class));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>additionalProperties</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setAdditionalProperties(SchemaInfo value) {
+		additionalProperties = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>allOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setAllOf(Collection<Object> value) {
+		allOf = listFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>allOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setAnyOf(Collection<Object> value) {
+		anyOf = listFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Unlike JSON Schema, the value MUST conform to the defined type for the Schema Object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setDefault(Object value) {
+		_default = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>deprecated</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setDeprecated(Boolean value) {
+		deprecated = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>discriminator</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setDiscriminator(Discriminator value) {
+		discriminator = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setEnum(Collection<Object> value) {
+		_enum = listFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>example</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setExample(Object value) {
+		example = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setExclusiveMaximum(Boolean value) {
+		exclusiveMaximum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setExclusiveMinimum(Boolean value) {
+		exclusiveMinimum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>externalDocs</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setExternalDocs(ExternalDocumentation value) {
+		externalDocs = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Formats defined by the OAS include:
+	 * 	<ul>
+	 * 		<li><js>"int32"</js>
+	 * 		<li><js>"int64"</js>
+	 * 		<li><js>"float"</js>
+	 * 		<li><js>"double"</js>
+	 * 		<li><js>"byte"</js>
+	 * 		<li><js>"binary"</js>
+	 * 		<li><js>"date"</js>
+	 * 		<li><js>"date-time"</js>
+	 * 		<li><js>"password"</js>
+	 * 	</ul>
+	 * @return This object
+	 */
+	public SchemaInfo setFormat(String value) {
+		format = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setItems(Items value) {
+		items = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maximum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMaximum(Number value) {
+		maximum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMaxItems(Integer value) {
+		maxItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMaxLength(Integer value) {
+		maxLength = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxProperties</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMaxProperties(Integer value) {
+		maxProperties = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minimum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMinimum(Number value) {
+		minimum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMinItems(Integer value) {
+		minItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minLength</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMinLength(Integer value) {
+		minLength = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minProperties</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMinProperties(Integer value) {
+		minProperties = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>multipleOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setMultipleOf(Number value) {
+		multipleOf = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>not</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setNot(SchemaInfo value) {
+		not = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>nullable</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setNullable(Boolean value) {
+		nullable = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>allOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setOneOf(Collection<Object> value) {
+		oneOf = listFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>pattern</property>.
+	 *
+	 * <p>
+	 * This string SHOULD be a valid regular expression.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setPattern(String value) {
+		pattern = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>properties</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setProperties(Map<String, SchemaInfo> value) {
+		properties = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>readOnly</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setReadOnly(Boolean value) {
+		readOnly = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>$ref</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	@Beanp("$ref")
+	public SchemaInfo setRef(Object value) {
+		ref = Utils.s(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The list of required properties.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"http"</js>
+	 * 		<li><js>"https"</js>
+	 * 		<li><js>"ws"</js>
+	 * 		<li><js>"wss"</js>
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setRequired(Collection<String> value) {
+		required = listFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>title</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setTitle(String value) {
+		title = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Possible values include:
+	 * 	<ul>
+	 * 		<li><js>"object"</js>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 		<li><js>"file"</js>
+	 * 	</ul>
+	 * @return This object
+	 */
+	public SchemaInfo setType(String value) {
+		type = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setUniqueItems(Boolean value) {
+		uniqueItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>WriteOnly</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setWriteOnly(Boolean value) {
+		writeOnly = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>xml</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SchemaInfo setXml(Xml value) {
+		xml = value;
 		return this;
 	}
 

@@ -107,10 +107,6 @@ public class Rtc extends HtmlElementMixed {
 	public Rtc(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Rtc _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -120,6 +116,30 @@ public class Rtc extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Rtc accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rtc attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Rtc attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Rtc child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Rtc children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -480,30 +500,6 @@ public class Rtc extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Rtc translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Rtc child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Rtc children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Rtc attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Rtc attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

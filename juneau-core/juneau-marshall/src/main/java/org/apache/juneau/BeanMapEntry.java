@@ -67,9 +67,27 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 		this.pName = pName;
 	}
 
+	/**
+	 * Returns the bean map that contains this property.
+	 *
+	 * @return The bean map that contains this property.
+	 */
+	public BeanMap<?> getBeanMap() {
+		return this.beanMap;
+	}
+
 	@Override /* Overridden from Map.Entry */
 	public String getKey() {
 		return meta.getName();
+	}
+
+	/**
+	 * Returns the metadata about this bean property.
+	 *
+	 * @return Metadata about this bean property.
+	 */
+	public BeanPropertyMeta getMeta() {
+		return this.meta;
 	}
 
 	/**
@@ -111,24 +129,6 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	@Override /* Overridden from Map.Entry */
 	public Object setValue(Object value) {
 		return meta.set(this.beanMap, pName, value);
-	}
-
-	/**
-	 * Returns the bean map that contains this property.
-	 *
-	 * @return The bean map that contains this property.
-	 */
-	public BeanMap<?> getBeanMap() {
-		return this.beanMap;
-	}
-
-	/**
-	 * Returns the metadata about this bean property.
-	 *
-	 * @return Metadata about this bean property.
-	 */
-	public BeanPropertyMeta getMeta() {
-		return this.meta;
 	}
 
 	@Override /* Overridden from Object */

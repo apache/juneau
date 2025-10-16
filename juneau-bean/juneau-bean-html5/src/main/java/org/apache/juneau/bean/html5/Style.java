@@ -67,7 +67,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#style() style()}
- * 		<li class='jm'>{@link HtmlBuilder#style(Object, Object...) style(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#style(Object) style(Object)}
  * 	</ul>
  * </ul>
  * </p>
@@ -104,49 +104,6 @@ public class Style extends HtmlElementRawText {
 		text(Utils.joinnl(text));
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the media types for which the stylesheet applies. This allows you to target
-	 * specific devices or media types.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 * 	<li><js>"all"</js> - All media types (default)</li>
-	 * 	<li><js>"screen"</js> - Computer screens</li>
-	 * 	<li><js>"print"</js> - Printers and print preview</li>
-	 * 	<li><js>"handheld"</js> - Handheld devices</li>
-	 * 	<li><js>"projection"</js> - Projectors</li>
-	 * 	<li><js>"tv"</js> - Television</li>
-	 * </ul>
-	 *
-	 * @param media The media types for which the stylesheet applies.
-	 * @return This object.
-	 */
-	public Style media(String value) {
-		attr("media", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Type of embedded resource.
-	 *
-	 * @param type The new value for this attribute.
-	 * @return This object.
-	 */
-	public Style type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Style _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -156,6 +113,17 @@ public class Style extends HtmlElementRawText {
 	@Override /* Overridden from HtmlElement */
 	public Style accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Style attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Style attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -186,6 +154,32 @@ public class Style extends HtmlElementRawText {
 	@Override /* Overridden from HtmlElement */
 	public Style lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-media">media</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the media types for which the stylesheet applies. This allows you to target
+	 * specific devices or media types.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 * 	<li><js>"all"</js> - All media types (default)</li>
+	 * 	<li><js>"screen"</js> - Computer screens</li>
+	 * 	<li><js>"print"</js> - Printers and print preview</li>
+	 * 	<li><js>"handheld"</js> - Handheld devices</li>
+	 * 	<li><js>"projection"</js> - Projectors</li>
+	 * 	<li><js>"tv"</js> - Television</li>
+	 * </ul>
+	 *
+	 * @param value The media types for which the stylesheet applies.
+	 * @return This object.
+	 */
+	public Style media(String value) {
+		attr("media", value);
 		return this;
 	}
 
@@ -507,6 +501,12 @@ public class Style extends HtmlElementRawText {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementRawText */
+	public Style text(Object value) {
+		super.text(value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Style title(String value) {
 		super.title(value);
@@ -519,21 +519,17 @@ public class Style extends HtmlElementRawText {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementRawText */
-	public Style text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Style attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Style attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#attr-style-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Type of embedded resource.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Style type(String value) {
+		attr("type", value);
 		return this;
 	}
 }

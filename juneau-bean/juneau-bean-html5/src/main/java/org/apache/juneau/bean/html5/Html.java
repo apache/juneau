@@ -62,7 +62,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#html() html()}
- * 		<li class='jm'>{@link HtmlBuilder#html(Object, Object...) html(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#html(Object...) html(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -88,36 +88,38 @@ public class Html extends HtmlElementContainer {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the URL of the application cache manifest file. This enables offline functionality
-	 * by allowing the browser to cache resources for offline use.
-	 *
-	 * <p>
-	 * The manifest file should be a text file that lists resources to be cached.
-	 *
-	 * @param manifest The URL of the application cache manifest file.
-	 * @return This object.
-	 */
-	public Html manifest(String value) {
-		attr("manifest", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Html _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Html accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Html attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Html attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Html child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Html children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -148,6 +150,24 @@ public class Html extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Html lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/semantics.html#attr-html-manifest">manifest</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the URL of the application cache manifest file. This enables offline functionality
+	 * by allowing the browser to cache resources for offline use.
+	 *
+	 * <p>
+	 * The manifest file should be a text file that lists resources to be cached.
+	 *
+	 * @param value The URL of the application cache manifest file.
+	 * @return This object.
+	 */
+	public Html manifest(String value) {
+		attr("manifest", value);
 		return this;
 	}
 
@@ -451,6 +471,12 @@ public class Html extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Html setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Html spellcheck(Object value) {
 		super.spellcheck(value);
@@ -478,36 +504,6 @@ public class Html extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Html translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Html child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Html children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Html setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Html attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Html attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

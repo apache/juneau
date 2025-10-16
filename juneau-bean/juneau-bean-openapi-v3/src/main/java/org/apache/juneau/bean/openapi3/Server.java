@@ -95,6 +95,23 @@ public class Server extends OpenApiElement{
 	}
 
 	/**
+	 * Adds one or more values to the <property>variables</property> property.
+	 *
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object
+	 */
+	public Server addVariable(String key, ServerVariable value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
+		variables = mapBuilder(variables).sparse().add(key, value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -104,15 +121,23 @@ public class Server extends OpenApiElement{
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	protected Server strict() {
-		super.strict();
-		return this;
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "url" -> toType(getUrl(), type);
+			case "description" -> toType(getDescription(), type);
+			case "variables" -> toType(getVariables(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Server strict(Object value) {
-		super.strict(value);
-		return this;
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
 	}
 
 	/**
@@ -125,6 +150,52 @@ public class Server extends OpenApiElement{
 	 */
 	public URI getUrl() {
 		return url;
+	}
+
+	/**
+	 * Bean property getter:  <property>variables</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, ServerVariable> getVariables() {
+		return variables;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(url != null, "url")
+			.addIf(variables != null, "variables")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Server set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "description" -> setDescription(Utils.s(value));
+			case "url" -> setUrl(toURI(value));
+			case "variables" -> setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Server setDescription(String value) {
+		description = value;
+		return this;
 	}
 
 	/**
@@ -148,37 +219,6 @@ public class Server extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Server setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>variables</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String, ServerVariable> getVariables() {
-		return variables;
-	}
-
-	/**
 	 * Bean property setter:  <property>variables</property>.
 	 *
 	 * @param value
@@ -191,55 +231,15 @@ public class Server extends OpenApiElement{
 		return this;
 	}
 
-	/**
-	 * Adds one or more values to the <property>variables</property> property.
-	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
-	 */
-	public Server addVariable(String key, ServerVariable value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
-		variables = mapBuilder(variables).sparse().add(key, value).build();
+	@Override /* Overridden from OpenApiElement */
+	public Server strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "url" -> toType(getUrl(), type);
-			case "description" -> toType(getDescription(), type);
-			case "variables" -> toType(getVariables(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Server set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "description" -> setDescription(Utils.s(value));
-			case "url" -> setUrl(toURI(value));
-			case "variables" -> setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(description != null, "description")
-			.addIf(url != null, "url")
-			.addIf(variables != null, "variables")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected Server strict() {
+		super.strict();
+		return this;
 	}
 }

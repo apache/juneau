@@ -35,11 +35,6 @@ import java.util.function.*;
  * @param <E> The array element type.
  */
 public class ArrayBuilder<E> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -50,11 +45,6 @@ public class ArrayBuilder<E> {
 	public static <E> ArrayBuilder<E> of(Class<E> elementType) {
 		return new ArrayBuilder<>(elementType);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private Predicate<E> filter;
 	private final Class<E> elementType;
 	private int size = -1;
@@ -68,28 +58,6 @@ public class ArrayBuilder<E> {
 	 */
 	public ArrayBuilder(Class<E> elementType) {
 		this.elementType = elementType;
-	}
-
-	/**
-	 * Sets the expected size for this array.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public ArrayBuilder<E> size(int value) {
-		size = value;
-		return this;
-	}
-
-	/**
-	 * The predicate to use to filter values added to this builder.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public ArrayBuilder<E> filter(Predicate<E> value) {
-		filter = value;
-		return this;
 	}
 
 	/**
@@ -110,6 +78,17 @@ public class ArrayBuilder<E> {
 	}
 
 	/**
+	 * The predicate to use to filter values added to this builder.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public ArrayBuilder<E> filter(Predicate<E> value) {
+		filter = value;
+		return this;
+	}
+
+	/**
 	 * Returns the populated array.
 	 *
 	 * @param def The default value if no values were added to this builder.
@@ -123,5 +102,16 @@ public class ArrayBuilder<E> {
 		if (list != null)
 			list.toArray(t);
 		return t;
+	}
+
+	/**
+	 * Sets the expected size for this array.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public ArrayBuilder<E> size(int value) {
+		size = value;
+		return this;
 	}
 }

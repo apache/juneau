@@ -29,22 +29,6 @@ import java.util.*;
  * </ul>
  */
 public class ViewArgs {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param args Comma-delimited list of view arguments.
-	 * @return A new {@link ViewArgs} object.
-	 */
-	public static ViewArgs create(String args) {
-		if (args == null) return null;
-		return new ViewArgs(args);
-	}
-
 	/**
 	 * Static creator.
 	 *
@@ -56,22 +40,17 @@ public class ViewArgs {
 		return new ViewArgs(args);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final List<String> view;
-
 	/**
-	 * Constructor.
+	 * Static creator.
 	 *
-	 * @param viewArgs
-	 * 	View arguments.
-	 * 	<br>Values are column names.
+	 * @param args Comma-delimited list of view arguments.
+	 * @return A new {@link ViewArgs} object.
 	 */
-	public ViewArgs(String viewArgs) {
-		this(alist(splita(viewArgs)));
+	public static ViewArgs create(String args) {
+		if (args == null) return null;
+		return new ViewArgs(args);
 	}
+	private final List<String> view;
 
 	/**
 	 * Constructor.
@@ -82,6 +61,17 @@ public class ViewArgs {
 	 */
 	public ViewArgs(Collection<String> viewArgs) {
 		this.view = u(listFrom(viewArgs));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param viewArgs
+	 * 	View arguments.
+	 * 	<br>Values are column names.
+	 */
+	public ViewArgs(String viewArgs) {
+		this(alist(splita(viewArgs)));
 	}
 
 	/**

@@ -33,6 +33,15 @@ public class BoundedServletInputStream extends ServletInputStream {
 	private long remain;
 
 	/**
+	 * Wraps the specified byte array.
+	 *
+	 * @param b The byte contents of the stream.
+	 */
+	public BoundedServletInputStream(byte[] b) {
+		this(new ByteArrayInputStream(b), Long.MAX_VALUE);
+	}
+
+	/**
 	 * Wraps the specified input stream.
 	 *
 	 * @param is The input stream to wrap.
@@ -56,13 +65,36 @@ public class BoundedServletInputStream extends ServletInputStream {
 		this.remain = max;
 	}
 
-	/**
-	 * Wraps the specified byte array.
-	 *
-	 * @param b The byte contents of the stream.
-	 */
-	public BoundedServletInputStream(byte[] b) {
-		this(new ByteArrayInputStream(b), Long.MAX_VALUE);
+	@Override /* Overridden from InputStream */
+	public int available() throws IOException {
+		if (remain <= 0)
+			return 0;
+		return is.available();
+	}
+
+	@Override /* Overridden from InputStream */
+	public void close() throws IOException {
+		is.close();
+	}
+
+	@Override /* Overridden from ServletInputStream */
+	public boolean isFinished() {
+		return sis == null ? false : sis.isFinished();
+	}
+
+	@Override /* Overridden from ServletInputStream */
+	public boolean isReady() {
+		return sis == null ? true : sis.isReady();
+	}
+
+	@Override /* Overridden from InputStream */
+	public synchronized void mark(int limit) {
+		is.mark(limit);
+	}
+
+	@Override /* Overridden from InputStream */
+	public boolean markSupported() {
+		return is.markSupported();
 	}
 
 	@Override /* Overridden from InputStream */
@@ -87,54 +119,22 @@ public class BoundedServletInputStream extends ServletInputStream {
 	}
 
 	@Override /* Overridden from InputStream */
-	public long skip(final long n) throws IOException {
-		long toSkip = Math.min(n, remain);
-		long r = is.skip(toSkip);
-		decrement(r);
-		return r;
-	}
-
-	@Override /* Overridden from InputStream */
-	public int available() throws IOException {
-		if (remain <= 0)
-			return 0;
-		return is.available();
-	}
-
-	@Override /* Overridden from InputStream */
 	public synchronized void reset() throws IOException {
 		is.reset();
-	}
-
-	@Override /* Overridden from InputStream */
-	public synchronized void mark(int limit) {
-		is.mark(limit);
-	}
-
-	@Override /* Overridden from InputStream */
-	public boolean markSupported() {
-		return is.markSupported();
-	}
-
-	@Override /* Overridden from InputStream */
-	public void close() throws IOException {
-		is.close();
-	}
-
-	@Override /* Overridden from ServletInputStream */
-	public boolean isFinished() {
-		return sis == null ? false : sis.isFinished();
-	}
-
-	@Override /* Overridden from ServletInputStream */
-	public boolean isReady() {
-		return sis == null ? true : sis.isReady();
 	}
 
 	@Override /* Overridden from ServletInputStream */
 	public void setReadListener(ReadListener arg0) {
 		if (sis != null)
 			sis.setReadListener(arg0);
+	}
+
+	@Override /* Overridden from InputStream */
+	public long skip(final long n) throws IOException {
+		long toSkip = Math.min(n, remain);
+		long r = is.skip(toSkip);
+		decrement(r);
+		return r;
 	}
 
 	private void decrement() throws IOException {

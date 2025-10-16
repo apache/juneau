@@ -64,7 +64,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#optgroup() optgroup()}
- * 		<li class='jm'>{@link HtmlBuilder#optgroup(Object, Object...) optgroup(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#optgroup(Object...) optgroup(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -90,51 +90,6 @@ public class Optgroup extends HtmlElementContainer {
 		children(children);
 	}
 
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-disabled">disabled</a> attribute.
-	 *
-	 * <p>
-	 * Whether the form control is disabled.
-	 *
-	 * <p>
-	 * This attribute uses deminimized values:
-	 * <ul>
-	 * 	<li><jk>false</jk> - Attribute is not added</li>
-	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
-	 * 	<li>Other values - Passed through as-is</li>
-	 * </ul>
-	 *
-	 * @param disabled
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Optgroup disabled(Object value) {
-		attr("disabled", deminimize(value, "disabled"));
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-label">label</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the user-visible label for the option group. This label is displayed
-	 * in the select element to group related options together.
-	 *
-	 * <p>
-	 * The label should be descriptive and help users understand the grouping of options.
-	 *
-	 * @param label The user-visible label for the option group.
-	 * @return This object.
-	 */
-	public Optgroup label(String value) {
-		attr("label", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Optgroup _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -144,6 +99,29 @@ public class Optgroup extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Optgroup accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Optgroup attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Optgroup attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Optgroup child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Optgroup children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -159,6 +137,30 @@ public class Optgroup extends HtmlElementContainer {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-disabled">disabled</a> attribute.
+	 *
+	 * <p>
+	 * Whether the form control is disabled.
+	 *
+	 * <p>
+	 * This attribute uses deminimized values:
+	 * <ul>
+	 * 	<li><jk>false</jk> - Attribute is not added</li>
+	 * 	<li><jk>true</jk> - Attribute is added as <js>"disabled"</js></li>
+	 * 	<li>Other values - Passed through as-is</li>
+	 * </ul>
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Optgroup disabled(Object value) {
+		attr("disabled", deminimize(value, "disabled"));
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Optgroup hidden(Object value) {
 		super.hidden(value);
@@ -168,6 +170,24 @@ public class Optgroup extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Optgroup id(String value) {
 		super.id(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-optgroup-label">label</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the user-visible label for the option group. This label is displayed
+	 * in the select element to group related options together.
+	 *
+	 * <p>
+	 * The label should be descriptive and help users understand the grouping of options.
+	 *
+	 * @param value The user-visible label for the option group.
+	 * @return This object.
+	 */
+	public Optgroup label(String value) {
+		attr("label", value);
 		return this;
 	}
 
@@ -477,6 +497,12 @@ public class Optgroup extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Optgroup setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Optgroup spellcheck(Object value) {
 		super.spellcheck(value);
@@ -504,36 +530,6 @@ public class Optgroup extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Optgroup translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Optgroup child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Optgroup children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Optgroup setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Optgroup attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Optgroup attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

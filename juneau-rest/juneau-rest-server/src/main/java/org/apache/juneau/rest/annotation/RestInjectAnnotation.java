@@ -30,40 +30,22 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class RestInjectAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final RestInject DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * A collection of {@link RestInject @RestInject annotations}.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
+	@Documented
+	@Target({FIELD,METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Pulls the name/value attribute from a {@link RestInject} annotation.
-	 *
-	 * @param a The annotation to check.  Can be <jk>null</jk>.
-	 * @return The annotation value, or an empty string if the annotation is <jk>null</jk>.
-	 */
-	public static String name(RestInject a) {
-		if (a == null)
-			return "";
-		if (! a.name().isEmpty())
-			return a.name();
-		return a.value();
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		RestInject[] value();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -94,6 +76,17 @@ public class RestInjectAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestInject#methodScope()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder methodScope(String...value) {
+			this.methodScope = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestInject#name()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -115,22 +108,7 @@ public class RestInjectAnnotation {
 			return this;
 		}
 
-		/**
-		 * Sets the {@link RestInject#methodScope()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder methodScope(String...value) {
-			this.methodScope = value;
-			return this;
-		}
-
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
 
 	private static class Impl extends TargetedAnnotationImpl implements RestInject {
 
@@ -146,6 +124,11 @@ public class RestInjectAnnotation {
 		}
 
 		@Override /* Overridden from RestInject */
+		public String[] methodScope() {
+			return methodScope;
+		}
+
+		@Override /* Overridden from RestInject */
 		public String name() {
 			return name;
 		}
@@ -154,31 +137,28 @@ public class RestInjectAnnotation {
 		public String value() {
 			return value;
 		}
-
-		@Override /* Overridden from RestInject */
-		public String[] methodScope() {
-			return methodScope;
-		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final RestInject DEFAULT = create().build();
 	/**
-	 * A collection of {@link RestInject @RestInject annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({FIELD,METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		RestInject[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Pulls the name/value attribute from a {@link RestInject} annotation.
+	 *
+	 * @param a The annotation to check.  Can be <jk>null</jk>.
+	 * @return The annotation value, or an empty string if the annotation is <jk>null</jk>.
+	 */
+	public static String name(RestInject a) {
+		if (a == null)
+			return "";
+		if (! a.name().isEmpty())
+			return a.name();
+		return a.value();
 	}
 }

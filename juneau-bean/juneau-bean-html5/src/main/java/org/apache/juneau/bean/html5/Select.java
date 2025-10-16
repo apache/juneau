@@ -74,7 +74,7 @@ import org.apache.juneau.common.utils.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#select() select()}
- * 		<li class='jm'>{@link HtmlBuilder#select(Object, Object...) select(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#select(String, Object...) select(String, Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -101,19 +101,82 @@ public class Select extends HtmlElementContainer {
 		name(name).children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Select _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
 	 *
-	 * @param autofocus
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Select autofocus(Object value) {
 		attr("autofocus", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Select child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Select children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	/**
+	 * Convenience method for selecting a child {@link Option} after the options have already been populated.
+	 *
+	 * @param optionValue The option value.
+	 * @return This object.
+	 */
+	public Select choose(Object optionValue) {
+		if (optionValue != null) {
+			getChildren().forEach(x -> {
+				if (x instanceof Option o && Utils.eq(optionValue.toString(), o.getAttr(String.class, "value")))
+					o.selected(true);
+			});
+		}
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Select contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -131,7 +194,7 @@ public class Select extends HtmlElementContainer {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -151,11 +214,29 @@ public class Select extends HtmlElementContainer {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this select.
+	 * @param value The ID of the form element to associate with this select.
 	 * @return This object.
 	 */
 	public Select form(String value) {
 		attr("form", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select id(String value) {
+		super.id(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
@@ -173,7 +254,7 @@ public class Select extends HtmlElementContainer {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param multiple
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -193,103 +274,11 @@ public class Select extends HtmlElementContainer {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param name The name of the select element for submission and API access.
+	 * @param value The name of the select element for submission and API access.
 	 * @return This object.
 	 */
 	public Select name(String value) {
 		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-required">required</a> attribute.
-	 *
-	 * <p>
-	 * Whether the control is required for form submission.
-	 *
-	 * @param required
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Select required(Object value) {
-		attr("required", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-size">size</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the number of visible options in a select element. If greater than 1,
-	 * the select becomes a scrollable list instead of a dropdown.
-	 *
-	 * @param size The number of visible options (1 for dropdown, >1 for list).
-	 * @return This object.
-	 */
-	public Select size(Object value) {
-		attr("size", value);
-		return this;
-	}
-
-	/**
-	 * Convenience method for selecting a child {@link Option} after the options have already been populated.
-	 *
-	 * @param optionValue The option value.
-	 * @return This object.
-	 */
-	public Select choose(Object optionValue) {
-		if (optionValue != null) {
-			getChildren().forEach(x -> {
-				if (x instanceof Option o && Utils.eq(optionValue.toString(), o.getAttr(String.class, "value")))
-					o.selected(true);
-			});
-		}
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Select _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -593,6 +582,43 @@ public class Select extends HtmlElementContainer {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-required">required</a> attribute.
+	 *
+	 * <p>
+	 * Whether the control is required for form submission.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Select required(Object value) {
+		attr("required", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Select setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-select-size">size</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the number of visible options in a select element. If greater than 1,
+	 * the select becomes a scrollable list instead of a dropdown.
+	 *
+	 * @param value The number of visible options (1 for dropdown, >1 for list).
+	 * @return This object.
+	 */
+	public Select size(Object value) {
+		attr("size", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Select spellcheck(Object value) {
 		super.spellcheck(value);
@@ -620,36 +646,6 @@ public class Select extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Select translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Select child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Select children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Select setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Select attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

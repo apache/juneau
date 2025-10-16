@@ -134,15 +134,68 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	protected SecuritySchemeInfo strict() {
-		super.strict();
-		return this;
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "in" -> toType(getIn(), type);
+			case "description" -> toType(getDescription(), type);
+			case "scheme" -> toType(getScheme(), type);
+			case "flows" -> toType(getFlows(), type);
+			case "bearerFormat" -> toType(getBearerFormat(), type);
+			case "openIdConnectUrl" -> toType(getOpenIdConnectUrl(), type);
+			case "type" -> toType(getType(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public SecuritySchemeInfo strict(Object value) {
-		super.strict(value);
-		return this;
+	/**
+	 * Bean property getter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getBearerFormat() {
+		return bearerFormat;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A brief description of the parameter.
+	 * <br>This could contain examples of use.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public OAuthFlow getFlows() {
+		return flows;
+	}
+
+	/**
+	 * Bean property getter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getIn() {
+		return in;
 	}
 
 	/**
@@ -169,43 +222,122 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>name</property>.
+	 * Bean property getter:  <property>collectionFormat</property>.
 	 *
 	 * <p>
-	 * The name of the parameter.
+	 * Determines the format of the array if type array is used.
 	 *
-	 * <h5 class='section'>Notes:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Parameter names are case sensitive.
-	 * 	<li>
-	 * 		If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
-	 * 		from the <code>path</code> field in the paths object.
-	 * 	<li>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
-	 * </ul>
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getOpenIdConnectUrl() {
+		return openIdConnectUrl;
+	}
+
+	/**
+	 * Bean property getter:  <property>schema</property>.
 	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getScheme() {
+		return scheme;
+	}
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(bearerFormat != null, "bearerFormat")
+			.addIf(description != null, "description")
+			.addIf(flows != null, "flows")
+			.addIf(in != null, "in")
+			.addIf(name != null, "name")
+			.addIf(openIdConnectUrl != null, "openIdConnectUrl")
+			.addIf(scheme != null, "scheme")
+			.addIf(type != null, "type")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public SecuritySchemeInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "bearerFormat" -> setBearerFormat(Utils.s(value));
+			case "description" -> setDescription(Utils.s(value));
+			case "flows" -> setFlows(toType(value, OAuthFlow.class));
+			case "in" -> setIn(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
+			case "openIdConnectUrl" -> setOpenIdConnectUrl(Utils.s(value));
+			case "scheme" -> setScheme(Utils.s(value));
+			case "type" -> setType(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @param value The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public SecuritySchemeInfo setName(String value) {
-		name = value;
+	public SecuritySchemeInfo setBearerFormat(String value) {
+		bearerFormat = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>in</property>.
+	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The location of the parameter.
+	 * A brief description of the parameter.
+	 * <br>This could contain examples of use.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
 	 */
-	public String getIn() {
-		return in;
+	public SecuritySchemeInfo setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public SecuritySchemeInfo setFlows(OAuthFlow value) {
+		flows = value;
+		return this;
 	}
 
 	/**
@@ -239,45 +371,46 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property getter:  <property>description</property>.
+	 * Bean property setter:  <property>name</property>.
 	 *
 	 * <p>
-	 * A brief description of the parameter.
-	 * <br>This could contain examples of use.
+	 * The name of the parameter.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 * <br>This could contain examples of use.
+	 * <h5 class='section'>Notes:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Parameter names are case sensitive.
+	 * 	<li>
+	 * 		If <code>in</code> is <js>"path"</js>, the <code>name</code> field MUST correspond to the associated path segment
+	 * 		from the <code>path</code> field in the paths object.
+	 * 	<li>
+	 * 		For all other cases, the name corresponds to the parameter name used based on the <code>in</code> property.
+	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public SecuritySchemeInfo setDescription(String value) {
-		description = value;
+	public SecuritySchemeInfo setName(String value) {
+		name = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>schema</property>.
+	 * Bean property setter:  <property>collectionFormat</property>.
 	 *
 	 * <p>
-	 * The schema defining the type used for the body parameter.
+	 * Determines the format of the array if type array is used.
 	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
 	 */
-	public String getScheme() {
-		return scheme;
+	public SecuritySchemeInfo setOpenIdConnectUrl(String value) {
+		openIdConnectUrl = value;
+		return this;
 	}
 
 	/**
@@ -295,18 +428,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public SecuritySchemeInfo setScheme(String value) {
 		scheme = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
 	}
 
 	/**
@@ -342,136 +463,15 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Bean property getter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getBearerFormat() {
-		return bearerFormat;
-	}
-
-	/**
-	 * Bean property setter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SecuritySchemeInfo setBearerFormat(String value) {
-		bearerFormat = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public OAuthFlow getFlows() {
-		return flows;
-	}
-
-	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SecuritySchemeInfo setFlows(OAuthFlow value) {
-		flows = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getOpenIdConnectUrl() {
-		return openIdConnectUrl;
-	}
-
-	/**
-	 * Bean property setter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public SecuritySchemeInfo setOpenIdConnectUrl(String value) {
-		openIdConnectUrl = value;
+	@Override /* Overridden from OpenApiElement */
+	public SecuritySchemeInfo strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 
 	@Override /* Overridden from SwaggerElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "name" -> toType(getName(), type);
-			case "in" -> toType(getIn(), type);
-			case "description" -> toType(getDescription(), type);
-			case "scheme" -> toType(getScheme(), type);
-			case "flows" -> toType(getFlows(), type);
-			case "bearerFormat" -> toType(getBearerFormat(), type);
-			case "openIdConnectUrl" -> toType(getOpenIdConnectUrl(), type);
-			case "type" -> toType(getType(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public SecuritySchemeInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "bearerFormat" -> setBearerFormat(Utils.s(value));
-			case "description" -> setDescription(Utils.s(value));
-			case "flows" -> setFlows(toType(value, OAuthFlow.class));
-			case "in" -> setIn(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
-			case "openIdConnectUrl" -> setOpenIdConnectUrl(Utils.s(value));
-			case "scheme" -> setScheme(Utils.s(value));
-			case "type" -> setType(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(bearerFormat != null, "bearerFormat")
-			.addIf(description != null, "description")
-			.addIf(flows != null, "flows")
-			.addIf(in != null, "in")
-			.addIf(name != null, "name")
-			.addIf(openIdConnectUrl != null, "openIdConnectUrl")
-			.addIf(scheme != null, "scheme")
-			.addIf(type != null, "type")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected SecuritySchemeInfo strict() {
+		super.strict();
+		return this;
 	}
 }

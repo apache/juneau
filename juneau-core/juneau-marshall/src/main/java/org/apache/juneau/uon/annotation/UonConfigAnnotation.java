@@ -31,6 +31,29 @@ import org.apache.juneau.uon.*;
 public class UonConfigAnnotation {
 
 	/**
+	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonParser.Builder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<UonConfig,UonParser.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(UonConfig.class, UonParser.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<UonConfig> ai, UonParser.Builder b) {
+			UonConfig a = ai.inner();
+
+			bool(a.decoding()).ifPresent(x -> b.decoding(x));
+			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
+		}
+	}
+
+	/**
 	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<UonConfig,UonSerializer.Builder> {
@@ -51,29 +74,6 @@ public class UonConfigAnnotation {
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesUon(x));
 			bool(a.encoding()).ifPresent(x -> b.encoding(x));
 			string(a.paramFormat()).map(ParamFormat::valueOf).ifPresent(x -> b.paramFormat(x));
-		}
-	}
-
-	/**
-	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.uon.UonParser.Builder}.
-	 */
-	public static class ParserApply extends AnnotationApplier<UonConfig,UonParser.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public ParserApply(VarResolverSession vr) {
-			super(UonConfig.class, UonParser.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<UonConfig> ai, UonParser.Builder b) {
-			UonConfig a = ai.inner();
-
-			bool(a.decoding()).ifPresent(x -> b.decoding(x));
-			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
 		}
 	}
 }

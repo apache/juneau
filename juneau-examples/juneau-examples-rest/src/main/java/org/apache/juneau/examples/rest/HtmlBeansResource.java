@@ -62,44 +62,6 @@ public class HtmlBeansResource extends BasicRestObject {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * [HTTP GET /htmlbeans]
-	 * @return Descriptive links to the child endpoints.
-	 */
-	@RestGet("/")
-	public ResourceDescriptions getChildDescriptions() {
-		return ResourceDescriptions
-			.create()
-			.append("table", "Example of a serialized table")
-			.append("div", "Example of a serialized div tag")
-			.append("form", "Example of a serialized form");
-	}
-
-	/**
-	 * [HTTP GET /htmlbeans/table]
-	 * @return An example table.
-	 */
-	@RestGet("/table")
-	@HtmlDocConfig(
-		aside={
-			"<div class='text'>",
-			"	<p>Example of serialized table.</p>",
-			"</div>"
-		}
-	)
-	public Table aTable() {
-		return table(
-			tr(
-				th("c1"),
-				th("c2")
-			),
-			tr(
-				td("v1"),
-				td("v2")
-			)
-		);
-	}
-
-	/**
 	 * [HTTP GET /htmlbeans/div]
 	 * @return An example div tag.
 	 */
@@ -139,5 +101,43 @@ public class HtmlBeansResource extends BasicRestObject {
 				button("submit", "Submit"),
 				button("reset", "Reset")
 			);
+	}
+
+	/**
+	 * [HTTP GET /htmlbeans/table]
+	 * @return An example table.
+	 */
+	@RestGet("/table")
+	@HtmlDocConfig(
+		aside={
+			"<div class='text'>",
+			"	<p>Example of serialized table.</p>",
+			"</div>"
+		}
+	)
+	public Table aTable() {
+		return table(
+			tr(
+				th("c1"),
+				th("c2")
+			),
+			tr(
+				td("v1"),
+				td("v2")
+			)
+		);
+	}
+
+	/**
+	 * [HTTP GET /htmlbeans]
+	 * @return Descriptive links to the child endpoints.
+	 */
+	@RestGet("/")
+	public ResourceDescriptions getChildDescriptions() {
+		return ResourceDescriptions
+			.create()
+			.append("table", "Example of a serialized table")
+			.append("div", "Example of a serialized div tag")
+			.append("form", "Example of a serialized form");
 	}
 }

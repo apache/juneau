@@ -75,30 +75,30 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	}
 
 	/**
+	 * Returns the {@link Html#render() @Html(render)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation.
+	 */
+	public HtmlRender<?> getRender() {
+		return render;
+	}
+
+	/**
+	 * Returns the {@link Html#noTableHeaders() @Html(noTableHeaders)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation.
+	 */
+	public boolean isNoTableHeaders() {
+		return noTableHeaders;
+	}
+
+	/**
 	 * Returns the {@link Html#format() @Html(format)} annotation defined on the class.
 	 *
 	 * @return The value of the annotation.
 	 */
 	protected HtmlFormat getFormat() {
 		return format;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
-	 *
-	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
-	 */
-	protected boolean isXml() {
-		return format == HtmlFormat.XML;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
-	 *
-	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
-	 */
-	protected boolean isPlainText() {
-		return format == HtmlFormat.PLAIN_TEXT;
 	}
 
 	/**
@@ -138,20 +138,20 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	}
 
 	/**
-	 * Returns the {@link Html#noTableHeaders() @Html(noTableHeaders)} annotation defined on the class.
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 *
-	 * @return The value of the annotation.
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
 	 */
-	public boolean isNoTableHeaders() {
-		return noTableHeaders;
+	protected boolean isPlainText() {
+		return format == HtmlFormat.PLAIN_TEXT;
 	}
 
 	/**
-	 * Returns the {@link Html#render() @Html(render)} annotation defined on the class.
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 *
-	 * @return The value of the annotation.
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
 	 */
-	public HtmlRender<?> getRender() {
-		return render;
+	protected boolean isXml() {
+		return format == HtmlFormat.XML;
 	}
 }

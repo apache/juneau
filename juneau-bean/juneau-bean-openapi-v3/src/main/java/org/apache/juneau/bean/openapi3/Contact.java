@@ -103,6 +103,29 @@ public class Contact extends OpenApiElement {
 		return new Contact(this);
 	}
 
+	@Override /* Overridden from OpenApiElement */
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "name" -> toType(getName(), type);
+			case "url" -> toType(getUrl(), type);
+			case "email" -> toType(getEmail(), type);
+			default -> super.get(property, type);
+		};
+	}
+
+	/**
+	 * Bean property getter:  <property>email</property>.
+	 *
+	 * <p>
+	 * The email address of the contact person/organization.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getEmail() {
+		return email;
+	}
+
 	/**
 	 * Bean property getter:  <property>name</property>.
 	 *
@@ -113,6 +136,59 @@ public class Contact extends OpenApiElement {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Bean property getter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL pointing to the contact information.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public URI getUrl() {
+		return url;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(email != null, "email")
+			.addIf(name != null, "name")
+			.addIf(url != null, "url")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Contact set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "email" -> setEmail(Utils.s(value));
+			case "name" -> setName(Utils.s(value));
+			case "url" -> setUrl(toURI(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>email</property>.
+	 *
+	 * <p>
+	 * The email address of the contact person/organization.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>MUST be in the format of an email address.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Contact setEmail(String value) {
+		email = value;
+		return this;
 	}
 
 	/**
@@ -129,18 +205,6 @@ public class Contact extends OpenApiElement {
 	public Contact setName(String value) {
 		name = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public URI getUrl() {
-		return url;
 	}
 
 	/**
@@ -161,70 +225,6 @@ public class Contact extends OpenApiElement {
 	public Contact setUrl(URI value) {
 		url = value;
 		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>email</property>.
-	 *
-	 * <p>
-	 * The email address of the contact person/organization.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * Bean property setter:  <property>email</property>.
-	 *
-	 * <p>
-	 * The email address of the contact person/organization.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>MUST be in the format of an email address.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Contact setEmail(String value) {
-		email = value;
-		return this;
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "name" -> toType(getName(), type);
-			case "url" -> toType(getUrl(), type);
-			case "email" -> toType(getEmail(), type);
-			default -> super.get(property, type);
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Contact set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "email" -> setEmail(Utils.s(value));
-			case "name" -> setName(Utils.s(value));
-			case "url" -> setUrl(toURI(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(email != null, "email")
-			.addIf(name != null, "name")
-			.addIf(url != null, "url")
-			.build();
-		return new MultiSet<>(s, super.keySet());
 	}
 
 	@Override /* Overridden from OpenApiElement */

@@ -49,9 +49,6 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class HasQueryArg implements RestOpArg {
 
-	private final String name;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -63,6 +60,17 @@ public class HasQueryArg implements RestOpArg {
 			return new HasQueryArg(paramInfo);
 		return null;
 	}
+	private static String getName(HasQuery x) {
+		return firstNonEmpty(x.name(), x.value());
+	}
+
+	private static boolean hasName(HasQuery x) {
+		return isNotEmpty(x.name()) || isNotEmpty(x.value());
+	}
+
+	private final String name;
+
+	private final Type type;
 
 	/**
 	 * Constructor.
@@ -74,14 +82,6 @@ public class HasQueryArg implements RestOpArg {
 		pi.forEachAnnotation(HasQuery.class, HasQueryArg::hasName, x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasQuery used without name or value"));
 		this.type = pi.getParameterType().innerType();
-	}
-
-	private static boolean hasName(HasQuery x) {
-		return isNotEmpty(x.name()) || isNotEmpty(x.value());
-	}
-
-	private static String getName(HasQuery x) {
-		return firstNonEmpty(x.name(), x.value());
 	}
 
 	@Override /* Overridden from RestOpArg */

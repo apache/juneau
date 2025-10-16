@@ -59,8 +59,6 @@ import org.opentest4j.*;
  */
 class Utils {
 
-	private Utils() {}
-
 	/**
 	 * Converts an array to a {@link List} of objects.
 	 *
@@ -155,6 +153,28 @@ class Utils {
 	}
 
 	/**
+	 * Tests two objects for equality using {@link Objects#equals(Object, Object)}.
+	 *
+	 * <p>This method provides null-safe equality testing using the standard Java equals contract.
+	 * It's a convenience wrapper around {@code <jsm>Objects.equals</jsm>()}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>boolean</jk> equal = <jsm>eq</jsm>(<js>"hello"</js>, <js>"hello"</js>);  <jc>// true</jc>
+	 *   <jk>boolean</jk> equal = <jsm>eq</jsm>(<jk>null</jk>, <jk>null</jk>);      <jc>// true</jc>
+	 *   <jk>boolean</jk> equal = <jsm>eq</jsm>(<js>"hello"</js>, <jk>null</jk>);   <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param <T> The type of objects to compare.
+	 * @param o1 The first object to compare.
+	 * @param o2 The second object to compare.
+	 * @return true if the objects are equal according to {@link Objects#equals(Object, Object)}.
+	 */
+	public static <T> boolean eq(T o1, T o2) {
+		return Objects.equals(o1, o2);
+	}
+
+	/**
 	 * Tests two objects for equality using the provided test predicate.
 	 *
 	 * <p>This method provides null-safe equality testing with custom comparison logic.
@@ -187,28 +207,6 @@ class Utils {
 		if (o2 == null) { return false; }
 		if (o1 == o2) { return true; }
 		return test.test(o1, o2);
-	}
-
-	/**
-	 * Tests two objects for equality using {@link Objects#equals(Object, Object)}.
-	 *
-	 * <p>This method provides null-safe equality testing using the standard Java equals contract.
-	 * It's a convenience wrapper around {@code <jsm>Objects.equals</jsm>()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *   <jk>boolean</jk> equal = <jsm>eq</jsm>(<js>"hello"</js>, <js>"hello"</js>);  <jc>// true</jc>
-	 *   <jk>boolean</jk> equal = <jsm>eq</jsm>(<jk>null</jk>, <jk>null</jk>);      <jc>// true</jc>
-	 *   <jk>boolean</jk> equal = <jsm>eq</jsm>(<js>"hello"</js>, <jk>null</jk>);   <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param <T> The type of objects to compare.
-	 * @param o1 The first object to compare.
-	 * @param o2 The second object to compare.
-	 * @return true if the objects are equal according to {@link Objects#equals(Object, Object)}.
-	 */
-	public static <T> boolean eq(T o1, T o2) {
-		return Objects.equals(o1, o2);
 	}
 
 	/**
@@ -290,7 +288,7 @@ class Utils {
 	 * Creates a {@link Supplier} that formats a message template with parameters.
 	 *
 	 * <p>This method returns a supplier that, when called, will format the message using
-	 * the {@link #f(String, Object...)} method. This is useful for lazy evaluation of
+	 * the {@link MessageFormat#format(String, Object...)} method. This is useful for lazy evaluation of
 	 * expensive formatting operations.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -375,7 +373,7 @@ class Utils {
 	/**
 	 * Tests two objects for inequality using {@link Objects#equals(Object, Object)}.
 	 *
-	 * <p>This method is the logical negation of {@link #eq(Object, Object)}.
+	 * <p>This method is the logical negation of {@link Objects#equals(Object, Object)}.
 	 * It provides null-safe inequality testing using the standard Java equals contract.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -432,47 +430,6 @@ class Utils {
 	}
 
 	/**
-	 * Returns the simple class name of an object, or null if the object is null.
-	 *
-	 * <p>This method provides a safe way to get type information for debugging and logging.
-	 * It handles <jk>null</jk> values gracefully by returning <jk>null</jk> instead of throwing an exception.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *   <jk>var</jk> <jv>type</jv> = <jsm>t</jsm>(<js>"hello"</js>);        <jc>// "String"</jc>
-	 *   <jv>type</jv> = <jk>var</jk><jsm>t</jsm>(<jk>new</jk> ArrayList()); <jc>// "ArrayList"</jc>
-	 *   <jv>type</jv> = <jsm>t</jsm>(<jk>null</jk>);            <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param o The object to get the type name for.
-	 * @return The simple class name of the object, or <jk>null</jk> if the object is <jk>null</jk>.
-	 */
-	public static String t(Object o) {
-		return o == null ? null : o.getClass().getSimpleName();
-	}
-
-	/**
-	 * Tokenizes a string into a list of {@link NestedTokenizer.Token} objects.
-	 *
-	 * <p>This method delegates to {@link NestedTokenizer#tokenize(String)} to parse
-	 * structured field strings into tokens. It's commonly used for parsing field lists
-	 * and nested property expressions.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 *   <jk>var</jk> <jv>tokens</jv> = <jsm>tokenize</jsm>(<js>"name,address{street,city},age"</js>);
-	 *   <jc>// Parses nested field expressions</jc>
-	 * </p>
-	 *
-	 * @param fields The field string to tokenize.
-	 * @return A list of parsed tokens.
-	 * @see NestedTokenizer#tokenize(String)
-	 */
-	public static List<NestedTokenizer.Token> tokenize(String fields) {
-		return NestedTokenizer.tokenize(fields);
-	}
-
-	/**
 	 * Safely converts an object to its string representation, handling any exceptions that may occur.
 	 *
 	 * <p>This method provides a fail-safe way to call {@code toString()} on any object, ensuring that
@@ -519,4 +476,48 @@ class Utils {
 			return t(t) + ": " + t.getMessage();
 		}
 	}
+
+	/**
+	 * Returns the simple class name of an object, or null if the object is null.
+	 *
+	 * <p>This method provides a safe way to get type information for debugging and logging.
+	 * It handles <jk>null</jk> values gracefully by returning <jk>null</jk> instead of throwing an exception.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>var</jk> <jv>type</jv> = <jsm>t</jsm>(<js>"hello"</js>);        <jc>// "String"</jc>
+	 *   <jv>type</jv> = <jk>var</jk><jsm>t</jsm>(<jk>new</jk> ArrayList()); <jc>// "ArrayList"</jc>
+	 *   <jv>type</jv> = <jsm>t</jsm>(<jk>null</jk>);            <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param o The object to get the type name for.
+	 * @return The simple class name of the object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 */
+	public static String t(Object o) {
+		return o == null ? null : o.getClass().getSimpleName();
+	}
+
+	/**
+	 * Tokenizes a string into a list of {@link NestedTokenizer.Token} objects.
+	 *
+	 * <p>This method delegates to {@link NestedTokenizer#tokenize(String)} to parse
+	 * structured field strings into tokens. It's commonly used for parsing field lists
+	 * and nested property expressions.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <jk>var</jk> <jv>tokens</jv> = <jsm>tokenize</jsm>(<js>"name,address{street,city},age"</js>);
+	 *   <jc>// Parses nested field expressions</jc>
+	 * </p>
+	 *
+	 * @param fields The field string to tokenize.
+	 * @return A list of parsed tokens.
+	 * @see NestedTokenizer#tokenize(String)
+	 */
+	@SuppressWarnings("javadoc")
+	public static List<NestedTokenizer.Token> tokenize(String fields) {
+		return NestedTokenizer.tokenize(fields);
+	}
+
+	private Utils() {}
 }

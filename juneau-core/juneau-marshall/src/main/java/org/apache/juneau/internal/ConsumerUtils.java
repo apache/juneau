@@ -24,28 +24,17 @@ import java.util.function.*;
 public class ConsumerUtils {
 
 	/**
-	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-
-	 * @param <T> The type being tested.
-	 * @param predicate The predicate.
-	 * @param value The value to test.
-	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-	 */
-	public static <T> boolean test(Predicate<T> predicate, T value) {
-		return (predicate == null || predicate.test(value));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is the specified type and the specified predicate is <jk>null</jk> or matches the specified value.
+	 * Consumes the specified value if it's the specified type and the predicate is <jk>null</jk> or matches the specified value.
 	 *
-	 * @param <T> The type being tested.
+	 * @param <T> The type being consumed.
 	 * @param type The expected type.
 	 * @param predicate The predicate.
+	 * @param consumer The consumer.
 	 * @param value The value.
-	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 	 */
-	public static <T> boolean test(Class<T> type, Predicate<T> predicate, Object value) {
-		return type.isInstance(value) && (predicate == null || predicate.test(type.cast(value)));
+	public static <T> void consume(Class<T> type, Predicate<T> predicate, Consumer<T> consumer, Object value) {
+		if (test(type, predicate, value))
+			consumer.accept(type.cast(value));
 	}
 
 	/**
@@ -62,16 +51,27 @@ public class ConsumerUtils {
 	}
 
 	/**
-	 * Consumes the specified value if it's the specified type and the predicate is <jk>null</jk> or matches the specified value.
+	 * Returns <jk>true</jk> if the specified object is the specified type and the specified predicate is <jk>null</jk> or matches the specified value.
 	 *
-	 * @param <T> The type being consumed.
+	 * @param <T> The type being tested.
 	 * @param type The expected type.
 	 * @param predicate The predicate.
-	 * @param consumer The consumer.
 	 * @param value The value.
+	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 	 */
-	public static <T> void consume(Class<T> type, Predicate<T> predicate, Consumer<T> consumer, Object value) {
-		if (test(type, predicate, value))
-			consumer.accept(type.cast(value));
+	public static <T> boolean test(Class<T> type, Predicate<T> predicate, Object value) {
+		return type.isInstance(value) && (predicate == null || predicate.test(type.cast(value)));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
+
+	 * @param <T> The type being tested.
+	 * @param predicate The predicate.
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
+	 */
+	public static <T> boolean test(Predicate<T> predicate, T value) {
+		return (predicate == null || predicate.test(value));
 	}
 }

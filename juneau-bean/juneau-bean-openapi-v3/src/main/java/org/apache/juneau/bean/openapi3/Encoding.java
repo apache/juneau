@@ -103,6 +103,22 @@ public class Encoding extends OpenApiElement{
 	}
 
 	/**
+	 * Adds one or more values to the <property>headers</property> property.
+	 *
+	 * @param key The mapping key.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @return This object
+	 */
+	public Encoding addHeader(String key, HeaderInfo value) {
+		assertArgNotNull("key", key);
+		assertArgNotNull("value", value);
+		headers = mapBuilder(headers).sparse().add(key, value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
@@ -112,15 +128,28 @@ public class Encoding extends OpenApiElement{
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	protected Encoding strict() {
-		super.strict();
-		return this;
+	public <T> T get(String property, Class<T> type) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "contentType" -> toType(getContentType(), type);
+			case "style" -> toType(getStyle(), type);
+			case "headers" -> toType(getHeaders(), type);
+			case "explode" -> toType(getExplode(), type);
+			case "allowReserved" -> toType(getAllowReserved(), type);
+			default -> super.get(property, type);
+		};
 	}
 
-	@Override /* Overridden from OpenApiElement */
-	public Encoding strict(Object value) {
-		super.strict(value);
-		return this;
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getAllowReserved() {
+		return allowReserved;
 	}
 
 	/**
@@ -133,6 +162,81 @@ public class Encoding extends OpenApiElement{
 	 */
 	public String getContentType() {
 		return contentType;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExplode() {
+		return explode;
+	}
+
+	/**
+	 * Bean property getter:  <property>variables</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, HeaderInfo> getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Bean property getter:  <property>style</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getStyle() {
+		return style;
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Set<String> keySet() {
+		var s = setBuilder(String.class)
+			.addIf(allowReserved != null, "allowReserved")
+			.addIf(contentType != null, "contentType")
+			.addIf(explode != null, "explode")
+			.addIf(headers != null, "headers")
+			.addIf(style != null, "style")
+			.build();
+		return new MultiSet<>(s, super.keySet());
+	}
+
+	@Override /* Overridden from OpenApiElement */
+	public Encoding set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "allowReserved" -> setAllowReserved(toBoolean(value));
+			case "contentType" -> setContentType(Utils.s(value));
+			case "explode" -> setExplode(toBoolean(value));
+			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
+			case "style" -> setStyle(Utils.s(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>explode</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Encoding setAllowReserved(Boolean value) {
+		allowReserved = value;
+		return this;
 	}
 
 	/**
@@ -156,78 +260,6 @@ public class Encoding extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property getter:  <property>style</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getStyle() {
-		return style;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Encoding setStyle(String value) {
-		style = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>variables</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String, HeaderInfo> getHeaders() {
-		return headers;
-	}
-
-	/**
-	 * Bean property setter:  <property>variables</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Encoding setHeaders(Map<String, HeaderInfo> value) {
-		headers = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>headers</property> property.
-	 *
-	 * @param key The mapping key.  Must not be <jk>null</jk>.
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @return This object
-	 */
-	public Encoding addHeader(String key, HeaderInfo value) {
-		assertArgNotNull("key", key);
-		assertArgNotNull("value", value);
-		headers = mapBuilder(headers).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExplode() {
-		return explode;
-	}
-
-	/**
 	 * Bean property setter:  <property>explode</property>.
 	 *
 	 * <p>
@@ -245,72 +277,40 @@ public class Encoding extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
-	}
-
-	/**
-	 * Bean property setter:  <property>explode</property>.
-	 *
-	 * <p>
-	 * The type of the object.
+	 * Bean property setter:  <property>variables</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Encoding setAllowReserved(Boolean value) {
-		allowReserved = value;
+	public Encoding setHeaders(Map<String, HeaderInfo> value) {
+		headers = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Encoding setStyle(String value) {
+		style = value;
 		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public <T> T get(String property, Class<T> type) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "contentType" -> toType(getContentType(), type);
-			case "style" -> toType(getStyle(), type);
-			case "headers" -> toType(getHeaders(), type);
-			case "explode" -> toType(getExplode(), type);
-			case "allowReserved" -> toType(getAllowReserved(), type);
-			default -> super.get(property, type);
-		};
+	public Encoding strict(Object value) {
+		super.strict(value);
+		return this;
 	}
 
 	@Override /* Overridden from OpenApiElement */
-	public Encoding set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "allowReserved" -> setAllowReserved(toBoolean(value));
-			case "contentType" -> setContentType(Utils.s(value));
-			case "explode" -> setExplode(toBoolean(value));
-			case "headers" -> setHeaders(mapBuilder(String.class, HeaderInfo.class).sparse().addAny(value).build());
-			case "style" -> setStyle(Utils.s(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
-	}
-
-	@Override /* Overridden from OpenApiElement */
-	public Set<String> keySet() {
-		var s = setBuilder(String.class)
-			.addIf(allowReserved != null, "allowReserved")
-			.addIf(contentType != null, "contentType")
-			.addIf(explode != null, "explode")
-			.addIf(headers != null, "headers")
-			.addIf(style != null, "style")
-			.build();
-		return new MultiSet<>(s, super.keySet());
+	protected Encoding strict() {
+		super.strict();
+		return this;
 	}
 }

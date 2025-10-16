@@ -30,6 +30,17 @@ import org.apache.juneau.reflect.*;
  */
 class MethodInfoUtils {
 
+	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
+		List<Class<?>> ptt = m.getRawParamTypes();
+		if (ptt.size() != 1)
+			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", a.getSimpleName(), m);
+		Class<?> rt = ptt.get(0);
+		for (Class<?> cc : c)
+			if (rt == cc)
+				return;
+		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", a.getSimpleName(), m);
+	}
+
 	static void assertNoArgs(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
 		if (m.hasParams())
 			throw new InvalidAnnotationException("Method with @{0} annotation cannot have arguments.  Method=''{1}''", a.getSimpleName(), m);
@@ -45,17 +56,6 @@ class MethodInfoUtils {
 		ClassInfo rt = m.getReturnType();
 		for (Class<?> cc : c)
 			if (rt.is(cc))
-				return;
-		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", a.getSimpleName(), m);
-	}
-
-	static void assertArgType(MethodInfo m, Class<? extends Annotation> a, Class<?>...c) throws InvalidAnnotationException {
-		List<Class<?>> ptt = m.getRawParamTypes();
-		if (ptt.size() != 1)
-			throw new InvalidAnnotationException("Only one parameter can be passed to method with @{0} annotation.  Method=''{0}''", a.getSimpleName(), m);
-		Class<?> rt = ptt.get(0);
-		for (Class<?> cc : c)
-			if (rt == cc)
 				return;
 		throw new InvalidAnnotationException("Invalid return type for method with annotation @{0}.  Method=''{1}''", a.getSimpleName(), m);
 	}

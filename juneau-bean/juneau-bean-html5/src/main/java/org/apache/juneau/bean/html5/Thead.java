@@ -109,10 +109,6 @@ public class Thead extends HtmlElementContainer {
 	public Thead(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Thead _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -122,6 +118,30 @@ public class Thead extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Thead accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Thead attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Thead attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Thead child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Thead children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -455,6 +475,12 @@ public class Thead extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Thead setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Thead spellcheck(Object value) {
 		super.spellcheck(value);
@@ -482,36 +508,6 @@ public class Thead extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Thead translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Thead child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Thead children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Thead setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Thead attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Thead attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

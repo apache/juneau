@@ -31,6 +31,32 @@ import org.apache.juneau.xml.*;
 public class XmlConfigAnnotation {
 
 	/**
+	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlParser.Builder}.
+	 */
+	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParser.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public ParserApply(VarResolverSession vr) {
+			super(XmlConfig.class, XmlParser.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<XmlConfig> ai, XmlParser.Builder b) {
+			XmlConfig a = ai.inner();
+
+			type(a.eventAllocator()).ifPresent(x -> b.eventAllocator(x));
+			bool(a.preserveRootElement()).ifPresent(x -> b.preserveRootElement(x));
+			type(a.reporter()).ifPresent(x -> b.reporter(x));
+			type(a.resolver()).ifPresent(x -> b.resolver(x));
+			bool(a.validating()).ifPresent(x -> b.validating(x));
+		}
+	}
+
+	/**
 	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<XmlConfig,XmlSerializer.Builder> {
@@ -54,32 +80,6 @@ public class XmlConfigAnnotation {
 			string(a.defaultNamespace()).map(Namespace::create).ifPresent(x -> b.defaultNamespace(x));
 			bool(a.enableNamespaces()).ifPresent(x -> b.enableNamespaces(x));
 			strings(a.namespaces()).map(Namespace::createArray).ifPresent(x -> b.namespaces(x));
-		}
-	}
-
-	/**
-	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.xml.XmlParser.Builder}.
-	 */
-	public static class ParserApply extends AnnotationApplier<XmlConfig,XmlParser.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public ParserApply(VarResolverSession vr) {
-			super(XmlConfig.class, XmlParser.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<XmlConfig> ai, XmlParser.Builder b) {
-			XmlConfig a = ai.inner();
-
-			type(a.eventAllocator()).ifPresent(x -> b.eventAllocator(x));
-			bool(a.preserveRootElement()).ifPresent(x -> b.preserveRootElement(x));
-			type(a.reporter()).ifPresent(x -> b.reporter(x));
-			type(a.resolver()).ifPresent(x -> b.resolver(x));
-			bool(a.validating()).ifPresent(x -> b.validating(x));
 		}
 	}
 }

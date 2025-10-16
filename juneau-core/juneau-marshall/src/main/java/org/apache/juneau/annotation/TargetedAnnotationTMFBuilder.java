@@ -41,18 +41,6 @@ public class TargetedAnnotationTMFBuilder<B extends TargetedAnnotationTMFBuilder
 	}
 
 	/**
-	 * Appends the methods that this annotation applies to.
-	 *
-	 * @param value The values to append.
-	 * @return This object.
-	 */
-	public B on(Method...value) {
-		for (Method v : value)
-			on(MethodInfo.of(v).getFullName());
-		return asThis();
-	}
-
-	/**
 	 * Appends the fields that this annotation applies to.
 	 *
 	 * @param value The values to append.
@@ -61,6 +49,18 @@ public class TargetedAnnotationTMFBuilder<B extends TargetedAnnotationTMFBuilder
 	public B on(Field...value) {
 		for (Field v : value)
 			on(FieldInfo.of(v).getFullName());
+		return asThis();
+	}
+
+	/**
+	 * Appends the methods that this annotation applies to.
+	 *
+	 * @param value The values to append.
+	 * @return This object.
+	 */
+	public B on(Method...value) {
+		for (Method v : value)
+			on(MethodInfo.of(v).getFullName());
 		return asThis();
 	}
 }

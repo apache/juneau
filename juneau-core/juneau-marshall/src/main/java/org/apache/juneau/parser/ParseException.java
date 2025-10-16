@@ -58,69 +58,6 @@ public class ParseException extends BasicRuntimeException {
 		return new ParseException(e);
 	}
 
-	/**
-	 * Constructor.
-	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ParseException(String message, Object...args) {
-		super(message, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param causedBy The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ParseException(Throwable causedBy, String message, Object...args) {
-		super(causedBy, message, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param causedBy The cause of this exception.
-	 */
-	public ParseException(Throwable causedBy) {
-		super(causedBy);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param session The parser session.
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ParseException(ParserSession session, String message, Object...args) {
-		super(getMessage(session, message, args));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param session The parser session.
-	 * @param causedBy The cause of this exception.
-	 * @param message The exception message containing {@link MessageFormat}-style arguments.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ParseException(ParserSession session, Throwable causedBy, String message, Object...args) {
-		super(causedBy, getMessage(session, message, args));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param session The parser session.
-	 * @param causedBy The inner exception.
-	 */
-	public ParseException(ParserSession session, Exception causedBy) {
-		super(causedBy, getMessage(session, causedBy.getMessage()));
-	}
-
 	private static String getMessage(ParserSession session, String msg, Object... args) {
 		if (args.length != 0)
 			msg = format(msg, args);
@@ -149,6 +86,69 @@ public class ParseException extends BasicRuntimeException {
 			msg = sb.toString();
 		}
 		return msg;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param session The parser session.
+	 * @param causedBy The inner exception.
+	 */
+	public ParseException(ParserSession session, Exception causedBy) {
+		super(causedBy, getMessage(session, causedBy.getMessage()));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param session The parser session.
+	 * @param message The exception message containing {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ParseException(ParserSession session, String message, Object...args) {
+		super(getMessage(session, message, args));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param session The parser session.
+	 * @param causedBy The cause of this exception.
+	 * @param message The exception message containing {@link MessageFormat}-style arguments.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ParseException(ParserSession session, Throwable causedBy, String message, Object...args) {
+		super(causedBy, getMessage(session, message, args));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ParseException(String message, Object...args) {
+		super(message, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param causedBy The cause of this exception.
+	 */
+	public ParseException(Throwable causedBy) {
+		super(causedBy);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param causedBy The cause of this exception.
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ParseException(Throwable causedBy, String message, Object...args) {
+		super(causedBy, message, args);
 	}
 
 	/**

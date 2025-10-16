@@ -45,10 +45,6 @@ import org.apache.juneau.rest.annotation.*;
  */
 public class DefaultArg implements RestOpArg {
 
-	private final Class<?> type;
-	private final String name;
-	private final ParamInfo paramInfo;
-
 	/**
 	 * Static creator.
 	 *
@@ -58,6 +54,10 @@ public class DefaultArg implements RestOpArg {
 	public static DefaultArg create(ParamInfo paramInfo) {
 		return new DefaultArg(paramInfo);
 	}
+	private final Class<?> type;
+	private final String name;
+
+	private final ParamInfo paramInfo;
 
 	/**
 	 * Constructor.
@@ -69,19 +69,15 @@ public class DefaultArg implements RestOpArg {
 		this.paramInfo = paramInfo;
 		this.name = findBeanName(paramInfo);
 	}
+	@Override /* Overridden from RestOpArg */
+	public Object resolve(RestOpSession opSession) throws Exception {
+		return opSession.getBeanStore().getBean(type, name).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
 	private String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
 		if (n != null)
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
 		return null;
-	}
-
-	@Override /* Overridden from RestOpArg */
-	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getBeanStore().getBean(type, name).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}
 }

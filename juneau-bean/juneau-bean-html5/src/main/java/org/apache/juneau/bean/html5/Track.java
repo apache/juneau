@@ -105,6 +105,12 @@ public class Track extends HtmlElementVoid {
 		src(src).kind(kind);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Track _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-default">default</a>
 	 * attribute.
@@ -121,105 +127,11 @@ public class Track extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param _default Whether this track should be enabled by default.
+	 * @param value Whether this track should be enabled by default.
 	 * @return This object.
 	 */
 	public Track _default(String value) {  // NOSONAR - Intentional naming.
 		attr("default", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the type of text track. This determines how the track is used by the media element.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"subtitles"</js> - Subtitles for the deaf and hard-of-hearing</li>
-	 * 	<li><js>"captions"</js> - Captions for the deaf and hard-of-hearing</li>
-	 * 	<li><js>"descriptions"</js> - Text descriptions of the video content</li>
-	 * 	<li><js>"chapters"</js> - Chapter titles for navigation</li>
-	 * 	<li><js>"metadata"</js> - Metadata for the media</li>
-	 * </ul>
-	 *
-	 * @param kind The type of text track.
-	 * @return This object.
-	 */
-	public Track kind(String value) {
-		attr("kind", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
-	 *
-	 * <p>
-	 * Specifies a user-visible label for the text track. This label is displayed in the media
-	 * player's track selection menu.
-	 *
-	 * <p>
-	 * The label should be descriptive and help users identify the track (e.g., "English Subtitles",
-	 * "Spanish Captions").
-	 *
-	 * @param label The user-visible label for the text track.
-	 * @return This object.
-	 */
-	public Track label(String value) {
-		attr("label", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Track src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies the language of the text track. This helps browsers and media players
-	 * determine which track to use based on the user's language preferences.
-	 *
-	 * <p>
-	 * The value should be a valid language code (e.g., "en", "es", "fr", "de").
-	 *
-	 * @param srclang The language code of the text track.
-	 * @return This object.
-	 */
-	public Track srclang(String value) {
-		attr("srclang", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Track _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
 		return this;
 	}
 
@@ -229,6 +141,17 @@ public class Track extends HtmlElementVoid {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Track attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Track attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 	@Override /* Overridden from HtmlElement */
 	public Track contenteditable(Object value) {
 		super.contenteditable(value);
@@ -250,6 +173,49 @@ public class Track extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Track id(String value) {
 		super.id(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the type of text track. This determines how the track is used by the media element.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"subtitles"</js> - Subtitles for the deaf and hard-of-hearing</li>
+	 * 	<li><js>"captions"</js> - Captions for the deaf and hard-of-hearing</li>
+	 * 	<li><js>"descriptions"</js> - Text descriptions of the video content</li>
+	 * 	<li><js>"chapters"</js> - Chapter titles for navigation</li>
+	 * 	<li><js>"metadata"</js> - Metadata for the media</li>
+	 * </ul>
+	 *
+	 * @param value The type of text track.
+	 * @return This object.
+	 */
+	public Track kind(String value) {
+		attr("kind", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-label">label</a> attribute.
+	 *
+	 * <p>
+	 * Specifies a user-visible label for the text track. This label is displayed in the media
+	 * player's track selection menu.
+	 *
+	 * <p>
+	 * The label should be descriptive and help users identify the track (e.g., "English Subtitles",
+	 * "Spanish Captions").
+	 *
+	 * @param value The user-visible label for the text track.
+	 * @return This object.
+	 */
+	public Track label(String value) {
+		attr("label", value);
 		return this;
 	}
 
@@ -565,6 +531,48 @@ public class Track extends HtmlElementVoid {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Track src(Object value) {
+		attrUri("src", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-srclang">srclang</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies the language of the text track. This helps browsers and media players
+	 * determine which track to use based on the user's language preferences.
+	 *
+	 * <p>
+	 * The value should be a valid language code (e.g., "en", "es", "fr", "de").
+	 *
+	 * @param value The language code of the text track.
+	 * @return This object.
+	 */
+	public Track srclang(String value) {
+		attr("srclang", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Track style(String value) {
 		super.style(value);
@@ -586,18 +594,6 @@ public class Track extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Track translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Track attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Track attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

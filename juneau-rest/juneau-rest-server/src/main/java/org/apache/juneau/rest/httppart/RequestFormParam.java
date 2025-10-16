@@ -94,6 +94,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
 	private final jakarta.servlet.http.Part part;
@@ -120,32 +121,10 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 		super(FORMDATA, request, name, value);
 		this.part = null;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Retrievers
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from RequestHttpPart */
-	public String getValue() {
-		if (value == null && part != null)
-			try {
-				value = IOUtils.read(part.getInputStream());
-			} catch (IOException e) {
-				throw asRuntimeException(e);
-			}
-		return value;
-	}
-
-	/**
-	 * Returns this part value as an input stream.
-	 *
-	 * @return This part value as an input stream.
-	 * @throws IOException If an error occurs in retrieving the content.
-	 */
-	public InputStream getStream() throws IOException {
-		if (value != null)
-			return new ByteArrayInputStream(value.getBytes(IOUtils.UTF8));
-		return part.getInputStream();
+	public RequestFormParam def(String def) {
+		super.def(def);
+		return this;
 	}
 
 	/**
@@ -202,6 +181,18 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	}
 
 	/**
+	 * Returns this part value as an input stream.
+	 *
+	 * @return This part value as an input stream.
+	 * @throws IOException If an error occurs in retrieving the content.
+	 */
+	public InputStream getStream() throws IOException {
+		if (value != null)
+			return new ByteArrayInputStream(value.getBytes(IOUtils.UTF8));
+		return part.getInputStream();
+	}
+
+	/**
 	 * Returns the file name specified by the client.
 	 *
 	 * @return The file name specified by the client.
@@ -211,20 +202,25 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	}
 
 	@Override /* Overridden from RequestHttpPart */
-	public RequestFormParam def(String def) {
-		super.def(def);
+	public String getValue() {
+		if (value == null && part != null)
+			try {
+				value = IOUtils.read(part.getInputStream());
+			} catch (IOException e) {
+				throw asRuntimeException(e);
+			}
+		return value;
+	}
+
+	@Override /* Overridden from RequestHttpPart */
+	public RequestFormParam parser(HttpPartParserSession value) {
+		super.parser(value);
 		return this;
 	}
 
 	@Override /* Overridden from RequestHttpPart */
 	public RequestFormParam schema(HttpPartSchema value) {
 		super.schema(value);
-		return this;
-	}
-
-	@Override /* Overridden from RequestHttpPart */
-	public RequestFormParam parser(HttpPartParserSession value) {
-		super.parser(value);
 		return this;
 	}
 }

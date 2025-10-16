@@ -62,7 +62,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#bdo() bdo()}
- * 		<li class='jm'>{@link HtmlBuilder#bdo(Object, Object...) bdo(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#bdo(String, Object...) bdo(String, Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -88,10 +88,6 @@ public class Bdo extends HtmlElementMixed {
 	public Bdo(String dir, Object...children) {
 		dir(dir).children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Bdo _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -101,6 +97,30 @@ public class Bdo extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Bdo accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdo attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdo attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Bdo child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Bdo children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -461,30 +481,6 @@ public class Bdo extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Bdo translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Bdo child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Bdo children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Bdo attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Bdo attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -36,35 +36,14 @@ import org.apache.juneau.reflect.*;
  */
 public class RequestBeanPropertyMeta {
 
-	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
-		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
-		m.forEachAnnotation(Schema.class, x -> true, x -> sb.apply(x));
-		m.forEachAnnotation(c, x -> true, x -> sb.apply(x));
-		return new Builder().partType(partType).schema(sb.build()).getter(m.inner());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final Method getter;
-	private final HttpPartType partType;
-	private final Optional<HttpPartSerializer> serializer;
-	private final HttpPartParser parser;
-	private final HttpPartSchema schema;
-
-	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
-		this.partType = b.partType;
-		this.schema = b.schema;
-		this.getter = b.getter;
-		this.serializer = Utils.opt(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
-		this.parser = schema.getParser() == null ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).run();
-	}
-
 	static class Builder {
 		HttpPartType partType;
 		HttpPartSchema schema;
 		Method getter;
+
+		RequestBeanPropertyMeta build(HttpPartSerializer serializer, HttpPartParser parser) {
+			return new RequestBeanPropertyMeta(this, serializer, parser);
+		}
 
 		Builder getter(Method value) {
 			getter = value;
@@ -80,19 +59,26 @@ public class RequestBeanPropertyMeta {
 			schema = value;
 			return this;
 		}
-
-		RequestBeanPropertyMeta build(HttpPartSerializer serializer, HttpPartParser parser) {
-			return new RequestBeanPropertyMeta(this, serializer, parser);
-		}
 	}
+	static RequestBeanPropertyMeta.Builder create(HttpPartType partType, Class<? extends Annotation> c, MethodInfo m) {
+		HttpPartSchema.Builder sb = HttpPartSchema.create().name(m.getPropertyName());
+		m.forEachAnnotation(Schema.class, x -> true, x -> sb.apply(x));
+		m.forEachAnnotation(c, x -> true, x -> sb.apply(x));
+		return new Builder().partType(partType).schema(sb.build()).getter(m.inner());
+	}
+	private final Method getter;
+	private final HttpPartType partType;
+	private final Optional<HttpPartSerializer> serializer;
+	private final HttpPartParser parser;
 
-	/**
-	 * Returns the HTTP part name for this property (query parameter name for example).
-	 *
-	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
-	 */
-	public String getPartName() {
-		return schema == null ? null : schema.getName();
+	private final HttpPartSchema schema;
+
+	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
+		this.partType = b.partType;
+		this.schema = b.schema;
+		this.getter = b.getter;
+		this.serializer = Utils.opt(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
+		this.parser = schema.getParser() == null ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).run();
 	}
 
 	/**
@@ -107,6 +93,25 @@ public class RequestBeanPropertyMeta {
 	}
 
 	/**
+	 * Returns the parser to use for parsing the bean property value.
+	 *
+	 * @param _default The default parsing to use if not defined on the annotation.
+	 * @return The parsing to use for serializing the bean property value.
+	 */
+	public HttpPartParserSession getParser(HttpPartParserSession _default) {
+		return parser == null ? _default : parser.getPartSession();
+	}
+
+	/**
+	 * Returns the HTTP part name for this property (query parameter name for example).
+	 *
+	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
+	 */
+	public String getPartName() {
+		return schema == null ? null : schema.getName();
+	}
+
+	/**
 	 * Returns the HTTP part type for this property (query parameter for example).
 	 *
 	 * @return
@@ -118,25 +123,6 @@ public class RequestBeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the serializer to use for serializing the bean property value.
-	 *
-	 * @return The serializer to use for serializing the bean property value.
-	 */
-	public Optional<HttpPartSerializer> getSerializer() {
-		return serializer;
-	}
-
-	/**
-	 * Returns the parser to use for parsing the bean property value.
-	 *
-	 * @param _default The default parsing to use if not defined on the annotation.
-	 * @return The parsing to use for serializing the bean property value.
-	 */
-	public HttpPartParserSession getParser(HttpPartParserSession _default) {
-		return parser == null ? _default : parser.getPartSession();
-	}
-
-	/**
 	 * Returns the schema information gathered from annotations on the method and return type.
 	 *
 	 * @return
@@ -145,5 +131,14 @@ public class RequestBeanPropertyMeta {
 	 */
 	public HttpPartSchema getSchema() {
 		return schema;
+	}
+
+	/**
+	 * Returns the serializer to use for serializing the bean property value.
+	 *
+	 * @return The serializer to use for serializing the bean property value.
+	 */
+	public Optional<HttpPartSerializer> getSerializer() {
+		return serializer;
 	}
 }

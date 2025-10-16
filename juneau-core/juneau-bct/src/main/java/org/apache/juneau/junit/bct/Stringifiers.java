@@ -39,7 +39,7 @@ import java.util.*;
  *
  * <h5 class='section'>Built-in Stringifiers:</h5>
  * <ul>
- *    <li><b>{@link #mapEntryStringifier()}</b> - Converts {@link Map.Entry} to <js>"key=value"</js> format</li>
+ *    <li><b>{@link #mapEntryStringifier()}</b> - Converts {@link java.util.Map.Entry} to <js>"key=value"</js> format</li>
  *    <li><b>{@link #calendarStringifier()}</b> - Converts {@link GregorianCalendar} to ISO-8601 format</li>
  *    <li><b>{@link #dateStringifier()}</b> - Converts {@link Date} to ISO instant format</li>
  *    <li><b>{@link #inputStreamStringifier()}</b> - Converts {@link InputStream} content to hex strings</li>
@@ -92,148 +92,6 @@ public class Stringifiers {
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
 	/**
-	 * Constructor.
-	 */
-	private Stringifiers() {}
-
-	/**
-	 * Returns a stringifier for {@link Map.Entry} objects that formats them as <js>"key=value"</js>.
-	 *
-	 * <p>This stringifier creates a human-readable representation of map entries by converting
-	 * both the key and value to strings and joining them with the configured entry separator.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Format:</b> Uses the pattern <js>"{key}{separator}{value}"</js></li>
-	 *    <li><b>Separator:</b> Uses the {@code mapEntrySeparator} setting (default: <js>"="</js>)</li>
-	 *    <li><b>Recursive conversion:</b> Both key and value are converted using the same converter</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test map entry stringification</jc>
-	 *    <jk>var</jk> <jv>entry</jv> = Map.<jsm>entry</jsm>(<js>"name"</js>, <js>"John"</js>);
-	 *    <jsm>assertBean</jsm>(<jv>entry</jv>, <js>"&lt;self&gt;"</js>, <js>"name=John"</js>);
-	 *
-	 *    <jc>// Test with custom separator</jc>
-	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *       .defaultSettings()
-	 *       .addSetting(<jsf>SETTING_mapEntrySeparator</jsf>, <js>": "</js>)
-	 *       .build();
-	 *    <jsm>assertBean</jsm>(<jv>entry</jv>, <js>"&lt;self&gt;"</js>, <js>"name: John"</js>);
-	 * </p>
-	 *
-	 * @return A {@link Stringifier} for {@link Map.Entry} objects
-	 * @see Map.Entry
-	 */
-	public static Stringifier<Map.Entry> mapEntryStringifier() {
-		return (bc, entry) -> bc.stringify(entry.getKey()) + bc.getSetting("mapEntrySeparator", "=") + bc.stringify(entry.getValue());
-	}
-
-	/**
-	 * Returns a stringifier for {@link GregorianCalendar} objects that formats them as ISO-8601 strings.
-	 *
-	 * <p>This stringifier converts calendar objects to standardized ISO-8601 timestamp format,
-	 * which provides consistent, sortable, and internationally recognized date representations.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Format:</b> Uses the {@code calendarFormat} setting (default: {@link java.time.format.DateTimeFormatter#ISO_INSTANT})</li>
-	 *    <li><b>Timezone:</b> Respects the calendar's timezone information</li>
-	 *    <li><b>Precision:</b> Includes full precision available in the calendar</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test calendar stringification</jc>
-	 *    <jk>var</jk> <jv>calendar</jv> = <jk>new</jk> GregorianCalendar(<jv>2023</jv>, Calendar.<jsf>JANUARY</jsf>, <jv>15</jv>);
-	 *    <jsm>assertMatchesGlob</jsm>(<js>"2023-01-*"</js>, <jv>calendar</jv>);
-	 *
-	 *    <jc>// Test with custom format</jc>
-	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
-	 *       .defaultSettings()
-	 *       .addSetting(<jsf>SETTING_calendarFormat</jsf>, DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>)
-	 *       .build();
-	 * </p>
-	 *
-	 * @return A {@link Stringifier} for {@link GregorianCalendar} objects
-	 * @see GregorianCalendar
-	 * @see java.time.format.DateTimeFormatter#ISO_INSTANT
-	 */
-	public static Stringifier<GregorianCalendar> calendarStringifier() {
-		return (bc, calendar) -> calendar.toZonedDateTime().format(bc.getSetting("calendarFormat", ISO_INSTANT));
-	}
-
-	/**
-	 * Returns a stringifier for {@link Date} objects that formats them as ISO instant strings.
-	 *
-	 * <p>This stringifier converts Date objects to ISO-8601 instant format, providing
-	 * standardized timestamp representations suitable for logging and comparison.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Format:</b> ISO-8601 instant format (e.g., <js>"2023-01-15T10:30:00Z"</js>)</li>
-	 *    <li><b>Timezone:</b> Always represents time in UTC (Z timezone)</li>
-	 *    <li><b>Precision:</b> Millisecond precision as available in Date objects</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test date stringification</jc>
-	 *    <jk>var</jk> <jv>date</jv> = <jk>new</jk> Date(<jv>1673780400000L</jv>); <jc>// 2023-01-15T10:00:00Z</jc>
-	 *    <jsm>assertBean</jsm>(<jv>date</jv>, <js>"&lt;self&gt;"</js>, <js>"2023-01-15T10:00:00Z"</js>);
-	 *
-	 *    <jc>// Test in object property</jc>
-	 *    <jk>var</jk> <jv>event</jv> = <jk>new</jk> Event().setTimestamp(<jv>date</jv>);
-	 *    <jsm>assertBean</jsm>(<jv>event</jv>, <js>"timestamp"</js>, <js>"2023-01-15T10:00:00Z"</js>);
-	 * </p>
-	 *
-	 * @return A {@link Stringifier} for {@link Date} objects
-	 * @see Date
-	 */
-	public static Stringifier<Date> dateStringifier() {
-		return (bc, date) -> date.toInstant().toString();
-	}
-
-	/**
-	 * Returns a stringifier for {@link InputStream} objects that converts content to hex strings.
-	 *
-	 * <p><b>Warning:</b> This stringifier consumes and closes the input stream during conversion.
-	 * After stringification, the stream cannot be used again.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Content reading:</b> Reads all available bytes from the stream</li>
-	 *    <li><b>Hex conversion:</b> Converts bytes to uppercase hexadecimal representation</li>
-	 *    <li><b>Resource management:</b> Automatically closes the stream after reading</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test with byte content</jc>
-	 *    <jk>var</jk> <jv>stream</jv> = <jk>new</jk> ByteArrayInputStream(<jk>new</jk> <jk>byte</jk>[]{<jv>0x48</jv>, <jv>0x65</jv>, <jv>0x6C</jv>, <jv>0x6C</jv>, <jv>0x6F</jv>});
-	 *    <jsm>assertBean</jsm>(<jv>stream</jv>, <js>"&lt;self&gt;"</js>, <js>"48656C6C6F"</js>); <jc>// "Hello" in hex</jc>
-	 *
-	 *    <jc>// Test empty stream</jc>
-	 *    <jk>var</jk> <jv>empty</jv> = <jk>new</jk> ByteArrayInputStream(<jk>new</jk> <jk>byte</jk>[<jv>0</jv>]);
-	 *    <jsm>assertBean</jsm>(<jv>empty</jv>, <js>"&lt;self&gt;"</js>, <js>""</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Important Notes:</h5>
-	 * <ul>
-	 *    <li><b>One-time use:</b> The stream is consumed and closed during conversion</li>
-	 *    <li><b>Memory usage:</b> All content is loaded into memory for conversion</li>
-	 *    <li><b>Exception handling:</b> IO exceptions are wrapped in RuntimeException</li>
-	 * </ul>
-	 *
-	 * @return A {@link Stringifier} for {@link InputStream} objects
-	 * @see InputStream
-	 */
-	public static Stringifier<InputStream> inputStreamStringifier() {
-		return (bc, stream) -> stringifyInputStream(stream);
-	}
-
-	/**
 	 * Returns a stringifier for byte arrays that converts them to hex strings.
 	 *
 	 * <p>This stringifier provides a consistent way to represent binary data as readable
@@ -271,116 +129,37 @@ public class Stringifiers {
 	}
 
 	/**
-	 * Returns a stringifier for {@link Reader} objects that converts content to strings.
+	 * Returns a stringifier for {@link GregorianCalendar} objects that formats them as ISO-8601 strings.
 	 *
-	 * <p><b>Warning:</b> This stringifier consumes and closes the reader during conversion.
-	 * After stringification, the reader cannot be used again.</p>
+	 * <p>This stringifier converts calendar objects to standardized ISO-8601 timestamp format,
+	 * which provides consistent, sortable, and internationally recognized date representations.</p>
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 *    <li><b>Content reading:</b> Reads all available characters from the reader</li>
-	 *    <li><b>String conversion:</b> Converts characters directly to string format</li>
-	 *    <li><b>Resource management:</b> Automatically closes the reader after reading</li>
+	 *    <li><b>Format:</b> Uses the {@code calendarFormat} setting (default: {@link java.time.format.DateTimeFormatter#ISO_INSTANT})</li>
+	 *    <li><b>Timezone:</b> Respects the calendar's timezone information</li>
+	 *    <li><b>Precision:</b> Includes full precision available in the calendar</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 *    <jc>// Test with string content</jc>
-	 *    <jk>var</jk> <jv>reader</jv> = <jk>new</jk> StringReader(<js>"Hello World"</js>);
-	 *    <jsm>assertBean</jsm>(<jv>reader</jv>, <js>"&lt;self&gt;"</js>, <js>"Hello World"</js>);
+	 *    <jc>// Test calendar stringification</jc>
+	 *    <jk>var</jk> <jv>calendar</jv> = <jk>new</jk> GregorianCalendar(<jv>2023</jv>, Calendar.<jsf>JANUARY</jsf>, <jv>15</jv>);
+	 *    <jsm>assertMatchesGlob</jsm>(<js>"2023-01-*"</js>, <jv>calendar</jv>);
 	 *
-	 *    <jc>// Test with file reader</jc>
-	 *    <jk>var</jk> <jv>fileReader</jv> = Files.<jsm>newBufferedReader</jsm>(path);
-	 *    <jsm>assertMatchesGlob</jsm>(<js>"*expected content*"</js>, <jv>fileReader</jv>);
+	 *    <jc>// Test with custom format</jc>
+	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *       .defaultSettings()
+	 *       .addSetting(<jsf>SETTING_calendarFormat</jsf>, DateTimeFormatter.<jsf>ISO_LOCAL_DATE</jsf>)
+	 *       .build();
 	 * </p>
 	 *
-	 * <h5 class='section'>Important Notes:</h5>
-	 * <ul>
-	 *    <li><b>One-time use:</b> The reader is consumed and closed during conversion</li>
-	 *    <li><b>Memory usage:</b> All content is loaded into memory for conversion</li>
-	 *    <li><b>Exception handling:</b> IO exceptions are wrapped in RuntimeException</li>
-	 * </ul>
-	 *
-	 * @return A {@link Stringifier} for {@link Reader} objects
-	 * @see Reader
+	 * @return A {@link Stringifier} for {@link GregorianCalendar} objects
+	 * @see GregorianCalendar
+	 * @see java.time.format.DateTimeFormatter#ISO_INSTANT
 	 */
-	public static Stringifier<Reader> readerStringifier() {
-		return (bc, reader) -> stringifyReader(reader);
-	}
-
-	/**
-	 * Returns a stringifier for {@link File} objects that converts file content to strings.
-	 *
-	 * <p>This stringifier reads the entire file content and returns it as a string,
-	 * making it useful for testing file-based operations and content verification.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Content reading:</b> Reads the entire file content into memory</li>
-	 *    <li><b>Encoding:</b> Uses the default platform encoding for text files</li>
-	 *    <li><b>Resource management:</b> Properly closes file resources after reading</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test file content</jc>
-	 *    <jk>var</jk> <jv>configFile</jv> = <jk>new</jk> File(<js>"config.properties"</js>);
-	 *    <jsm>assertMatchesGlob</jsm>(<js>"*database.url=*"</js>, <jv>configFile</jv>);
-	 *
-	 *    <jc>// Test empty file</jc>
-	 *    <jk>var</jk> <jv>emptyFile</jv> = <jk>new</jk> File(<js>"empty.txt"</js>);
-	 *    <jsm>assertBean</jsm>(<jv>emptyFile</jv>, <js>"&lt;self&gt;"</js>, <js>""</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Important Notes:</h5>
-	 * <ul>
-	 *    <li><b>Memory usage:</b> Large files will consume significant memory</li>
-	 *    <li><b>File existence:</b> Non-existent files will cause exceptions</li>
-	 *    <li><b>Binary files:</b> May produce unexpected results with binary content</li>
-	 *    <li><b>Exception handling:</b> IO exceptions are wrapped in RuntimeException</li>
-	 * </ul>
-	 *
-	 * @return A {@link Stringifier} for {@link File} objects
-	 * @see File
-	 */
-	public static Stringifier<File> fileStringifier() {
-		return (bc, file) -> safe(() -> stringifyReader(Files.newBufferedReader(file.toPath())));
-	}
-
-	/**
-	 * Returns a stringifier for {@link Enum} objects that converts them to name format.
-	 *
-	 * <p>This stringifier provides a consistent way to represent enum values as their
-	 * declared constant names, which is typically the most useful format for testing.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Name format:</b> Uses {@link Enum#name()} method for string representation</li>
-	 *    <li><b>Case preservation:</b> Maintains the exact case as declared in enum</li>
-	 *    <li><b>All enum types:</b> Works with any enum implementation</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test enum stringification</jc>
-	 *    <jsm>assertBean</jsm>(Color.<jsf>RED</jsf>, <js>"&lt;self&gt;"</js>, <js>"RED"</js>);
-	 *    <jsm>assertBean</jsm>(Status.<jsf>IN_PROGRESS</jsf>, <js>"&lt;self&gt;"</js>, <js>"IN_PROGRESS"</js>);
-	 *
-	 *    <jc>// Test in object property</jc>
-	 *    <jk>var</jk> <jv>task</jv> = <jk>new</jk> Task().setStatus(Status.<jsf>COMPLETED</jsf>);
-	 *    <jsm>assertBean</jsm>(<jv>task</jv>, <js>"status"</js>, <js>"COMPLETED"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Alternative Formats:</h5>
-	 * <p>If you need different enum string representations (like {@link Enum#toString()}
-	 * or custom formatting), register a custom stringifier for specific enum types.</p>
-	 *
-	 * @return A {@link Stringifier} for {@link Enum} objects
-	 * @see Enum
-	 * @see Enum#name()
-	 */
-	public static Stringifier<Enum> enumStringifier() {
-		return (bc, enumValue) -> enumValue.name();
+	public static Stringifier<GregorianCalendar> calendarStringifier() {
+		return (bc, calendar) -> calendar.toZonedDateTime().format(bc.getSetting("calendarFormat", ISO_INSTANT));
 	}
 
 	/**
@@ -461,44 +240,147 @@ public class Stringifiers {
 	}
 
 	/**
-	 * Returns a stringifier for {@link Method} objects that formats them as readable signatures.
+	 * Returns a stringifier for {@link Date} objects that formats them as ISO instant strings.
 	 *
-	 * <p>This stringifier creates human-readable method signatures including the method
-	 * name and parameter types, useful for reflection-based testing and debugging.</p>
+	 * <p>This stringifier converts Date objects to ISO-8601 instant format, providing
+	 * standardized timestamp representations suitable for logging and comparison.</p>
 	 *
 	 * <h5 class='section'>Behavior:</h5>
 	 * <ul>
-	 *    <li><b>Format:</b> <js>"{methodName}({paramType1},{paramType2},...)"</js></li>
-	 *    <li><b>Method name:</b> Uses the declared method name</li>
-	 *    <li><b>Parameter types:</b> Includes all parameter types in declaration order</li>
+	 *    <li><b>Format:</b> ISO-8601 instant format (e.g., <js>"2023-01-15T10:30:00Z"</js>)</li>
+	 *    <li><b>Timezone:</b> Always represents time in UTC (Z timezone)</li>
+	 *    <li><b>Precision:</b> Millisecond precision as available in Date objects</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Usage Examples:</h5>
 	 * <p class='bjava'>
-	 *    <jc>// Test method stringification</jc>
-	 *    <jk>var</jk> <jv>method</jv> = String.<jk>class</jk>.getMethod(<js>"substring"</js>, <jk>int</jk>.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
-	 *    <jsm>assertBean</jsm>(<jv>method</jv>, <js>"&lt;self&gt;"</js>, <js>"substring(int,int)"</js>);
+	 *    <jc>// Test date stringification</jc>
+	 *    <jk>var</jk> <jv>date</jv> = <jk>new</jk> Date(<jv>1673780400000L</jv>); <jc>// 2023-01-15T10:00:00Z</jc>
+	 *    <jsm>assertBean</jsm>(<jv>date</jv>, <js>"&lt;self&gt;"</js>, <js>"2023-01-15T10:00:00Z"</js>);
 	 *
-	 *    <jc>// Test no-arg method</jc>
-	 *    <jk>var</jk> <jv>toString</jv> = Object.<jk>class</jk>.getMethod(<js>"toString"</js>);
-	 *    <jsm>assertBean</jsm>(<jv>toString</jv>, <js>"&lt;self&gt;"</js>, <js>"toString()"</js>);
+	 *    <jc>// Test in object property</jc>
+	 *    <jk>var</jk> <jv>event</jv> = <jk>new</jk> Event().setTimestamp(<jv>date</jv>);
+	 *    <jsm>assertBean</jsm>(<jv>event</jv>, <js>"timestamp"</js>, <js>"2023-01-15T10:00:00Z"</js>);
 	 * </p>
 	 *
-	 * @return A {@link Stringifier} for {@link Method} objects
-	 * @see Method
+	 * @return A {@link Stringifier} for {@link Date} objects
+	 * @see Date
 	 */
-	public static Stringifier<Method> methodStringifier() {
-		return (bc, method) ->
-			new StringBuilder()
-				.append(method.getName())
-				.append('(')
-				.append(
-					Arrays.stream(method.getParameterTypes())
-						.map(x -> stringifyClass(bc, x))
-						.collect(joining(","))
-				)
-				.append(')')
-				.toString();
+	public static Stringifier<Date> dateStringifier() {
+		return (bc, date) -> date.toInstant().toString();
+	}
+
+	/**
+	 * Returns a stringifier for {@link Enum} objects that converts them to name format.
+	 *
+	 * <p>This stringifier provides a consistent way to represent enum values as their
+	 * declared constant names, which is typically the most useful format for testing.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Name format:</b> Uses {@link Enum#name()} method for string representation</li>
+	 *    <li><b>Case preservation:</b> Maintains the exact case as declared in enum</li>
+	 *    <li><b>All enum types:</b> Works with any enum implementation</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test enum stringification</jc>
+	 *    <jsm>assertBean</jsm>(Color.<jsf>RED</jsf>, <js>"&lt;self&gt;"</js>, <js>"RED"</js>);
+	 *    <jsm>assertBean</jsm>(Status.<jsf>IN_PROGRESS</jsf>, <js>"&lt;self&gt;"</js>, <js>"IN_PROGRESS"</js>);
+	 *
+	 *    <jc>// Test in object property</jc>
+	 *    <jk>var</jk> <jv>task</jv> = <jk>new</jk> Task().setStatus(Status.<jsf>COMPLETED</jsf>);
+	 *    <jsm>assertBean</jsm>(<jv>task</jv>, <js>"status"</js>, <js>"COMPLETED"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Alternative Formats:</h5>
+	 * <p>If you need different enum string representations (like {@link Enum#toString()}
+	 * or custom formatting), register a custom stringifier for specific enum types.</p>
+	 *
+	 * @return A {@link Stringifier} for {@link Enum} objects
+	 * @see Enum
+	 * @see Enum#name()
+	 */
+	public static Stringifier<Enum> enumStringifier() {
+		return (bc, enumValue) -> enumValue.name();
+	}
+
+	/**
+	 * Returns a stringifier for {@link File} objects that converts file content to strings.
+	 *
+	 * <p>This stringifier reads the entire file content and returns it as a string,
+	 * making it useful for testing file-based operations and content verification.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Content reading:</b> Reads the entire file content into memory</li>
+	 *    <li><b>Encoding:</b> Uses the default platform encoding for text files</li>
+	 *    <li><b>Resource management:</b> Properly closes file resources after reading</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test file content</jc>
+	 *    <jk>var</jk> <jv>configFile</jv> = <jk>new</jk> File(<js>"config.properties"</js>);
+	 *    <jsm>assertMatchesGlob</jsm>(<js>"*database.url=*"</js>, <jv>configFile</jv>);
+	 *
+	 *    <jc>// Test empty file</jc>
+	 *    <jk>var</jk> <jv>emptyFile</jv> = <jk>new</jk> File(<js>"empty.txt"</js>);
+	 *    <jsm>assertBean</jsm>(<jv>emptyFile</jv>, <js>"&lt;self&gt;"</js>, <js>""</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Important Notes:</h5>
+	 * <ul>
+	 *    <li><b>Memory usage:</b> Large files will consume significant memory</li>
+	 *    <li><b>File existence:</b> Non-existent files will cause exceptions</li>
+	 *    <li><b>Binary files:</b> May produce unexpected results with binary content</li>
+	 *    <li><b>Exception handling:</b> IO exceptions are wrapped in RuntimeException</li>
+	 * </ul>
+	 *
+	 * @return A {@link Stringifier} for {@link File} objects
+	 * @see File
+	 */
+	public static Stringifier<File> fileStringifier() {
+		return (bc, file) -> safe(() -> stringifyReader(Files.newBufferedReader(file.toPath())));
+	}
+
+	/**
+	 * Returns a stringifier for {@link InputStream} objects that converts content to hex strings.
+	 *
+	 * <p><b>Warning:</b> This stringifier consumes and closes the input stream during conversion.
+	 * After stringification, the stream cannot be used again.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Content reading:</b> Reads all available bytes from the stream</li>
+	 *    <li><b>Hex conversion:</b> Converts bytes to uppercase hexadecimal representation</li>
+	 *    <li><b>Resource management:</b> Automatically closes the stream after reading</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test with byte content</jc>
+	 *    <jk>var</jk> <jv>stream</jv> = <jk>new</jk> ByteArrayInputStream(<jk>new</jk> <jk>byte</jk>[]{<jv>0x48</jv>, <jv>0x65</jv>, <jv>0x6C</jv>, <jv>0x6C</jv>, <jv>0x6F</jv>});
+	 *    <jsm>assertBean</jsm>(<jv>stream</jv>, <js>"&lt;self&gt;"</js>, <js>"48656C6C6F"</js>); <jc>// "Hello" in hex</jc>
+	 *
+	 *    <jc>// Test empty stream</jc>
+	 *    <jk>var</jk> <jv>empty</jv> = <jk>new</jk> ByteArrayInputStream(<jk>new</jk> <jk>byte</jk>[<jv>0</jv>]);
+	 *    <jsm>assertBean</jsm>(<jv>empty</jv>, <js>"&lt;self&gt;"</js>, <js>""</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Important Notes:</h5>
+	 * <ul>
+	 *    <li><b>One-time use:</b> The stream is consumed and closed during conversion</li>
+	 *    <li><b>Memory usage:</b> All content is loaded into memory for conversion</li>
+	 *    <li><b>Exception handling:</b> IO exceptions are wrapped in RuntimeException</li>
+	 * </ul>
+	 *
+	 * @return A {@link Stringifier} for {@link InputStream} objects
+	 * @see InputStream
+	 */
+	public static Stringifier<InputStream> inputStreamStringifier() {
+		return (bc, stream) -> stringifyInputStream(stream);
 	}
 
 	/**
@@ -546,6 +428,40 @@ public class Stringifiers {
 	}
 
 	/**
+	 * Returns a stringifier for {@link java.util.Map.Entry} objects that formats them as <js>"key=value"</js>.
+	 *
+	 * <p>This stringifier creates a human-readable representation of map entries by converting
+	 * both the key and value to strings and joining them with the configured entry separator.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Format:</b> Uses the pattern <js>"{key}{separator}{value}"</js></li>
+	 *    <li><b>Separator:</b> Uses the {@code mapEntrySeparator} setting (default: <js>"="</js>)</li>
+	 *    <li><b>Recursive conversion:</b> Both key and value are converted using the same converter</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test map entry stringification</jc>
+	 *    <jk>var</jk> <jv>entry</jv> = Map.<jsm>entry</jsm>(<js>"name"</js>, <js>"John"</js>);
+	 *    <jsm>assertBean</jsm>(<jv>entry</jv>, <js>"&lt;self&gt;"</js>, <js>"name=John"</js>);
+	 *
+	 *    <jc>// Test with custom separator</jc>
+	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
+	 *       .defaultSettings()
+	 *       .addSetting(<jsf>SETTING_mapEntrySeparator</jsf>, <js>": "</js>)
+	 *       .build();
+	 *    <jsm>assertBean</jsm>(<jv>entry</jv>, <js>"&lt;self&gt;"</js>, <js>"name: John"</js>);
+	 * </p>
+	 *
+	 * @return A {@link Stringifier} for {@link java.util.Map.Entry} objects
+	 * @see java.util.Map.Entry
+	 */
+	public static Stringifier<Map.Entry> mapEntryStringifier() {
+		return (bc, entry) -> bc.stringify(entry.getKey()) + bc.getSetting("mapEntrySeparator", "=") + bc.stringify(entry.getValue());
+	}
+
+	/**
 	 * Returns a stringifier for {@link Map} objects that formats them with configurable delimiters.
 	 *
 	 * <p>This stringifier converts maps to brace-delimited strings by first converting the
@@ -579,7 +495,7 @@ public class Stringifiers {
 	 *
 	 * @return A {@link Stringifier} for {@link Map} objects
 	 * @see Map
-	 * @see Map.Entry
+	 * @see java.util.Map.Entry
 	 */
 	public static Stringifier<Map> mapStringifier() {
 		return (bc, map) -> ((Map<?,?>)map).entrySet().stream()
@@ -591,10 +507,99 @@ public class Stringifiers {
 			));
 	}
 
-	//---------------------------------------------------------------------------------------------
-	// Helper methods for internal stringification
-	//---------------------------------------------------------------------------------------------
+	/**
+	 * Returns a stringifier for {@link Method} objects that formats them as readable signatures.
+	 *
+	 * <p>This stringifier creates human-readable method signatures including the method
+	 * name and parameter types, useful for reflection-based testing and debugging.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Format:</b> <js>"{methodName}({paramType1},{paramType2},...)"</js></li>
+	 *    <li><b>Method name:</b> Uses the declared method name</li>
+	 *    <li><b>Parameter types:</b> Includes all parameter types in declaration order</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test method stringification</jc>
+	 *    <jk>var</jk> <jv>method</jv> = String.<jk>class</jk>.getMethod(<js>"substring"</js>, <jk>int</jk>.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
+	 *    <jsm>assertBean</jsm>(<jv>method</jv>, <js>"&lt;self&gt;"</js>, <js>"substring(int,int)"</js>);
+	 *
+	 *    <jc>// Test no-arg method</jc>
+	 *    <jk>var</jk> <jv>toString</jv> = Object.<jk>class</jk>.getMethod(<js>"toString"</js>);
+	 *    <jsm>assertBean</jsm>(<jv>toString</jv>, <js>"&lt;self&gt;"</js>, <js>"toString()"</js>);
+	 * </p>
+	 *
+	 * @return A {@link Stringifier} for {@link Method} objects
+	 * @see Method
+	 */
+	public static Stringifier<Method> methodStringifier() {
+		return (bc, method) ->
+			new StringBuilder()
+				.append(method.getName())
+				.append('(')
+				.append(
+					Arrays.stream(method.getParameterTypes())
+						.map(x -> stringifyClass(bc, x))
+						.collect(joining(","))
+				)
+				.append(')')
+				.toString();
+	}
 
+	/**
+	 * Returns a stringifier for {@link Reader} objects that converts content to strings.
+	 *
+	 * <p><b>Warning:</b> This stringifier consumes and closes the reader during conversion.
+	 * After stringification, the reader cannot be used again.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Content reading:</b> Reads all available characters from the reader</li>
+	 *    <li><b>String conversion:</b> Converts characters directly to string format</li>
+	 *    <li><b>Resource management:</b> Automatically closes the reader after reading</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test with string content</jc>
+	 *    <jk>var</jk> <jv>reader</jv> = <jk>new</jk> StringReader(<js>"Hello World"</js>);
+	 *    <jsm>assertBean</jsm>(<jv>reader</jv>, <js>"&lt;self&gt;"</js>, <js>"Hello World"</js>);
+	 *
+	 *    <jc>// Test with file reader</jc>
+	 *    <jk>var</jk> <jv>fileReader</jv> = Files.<jsm>newBufferedReader</jsm>(path);
+	 *    <jsm>assertMatchesGlob</jsm>(<js>"*expected content*"</js>, <jv>fileReader</jv>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Important Notes:</h5>
+	 * <ul>
+	 *    <li><b>One-time use:</b> The reader is consumed and closed during conversion</li>
+	 *    <li><b>Memory usage:</b> All content is loaded into memory for conversion</li>
+	 *    <li><b>Exception handling:</b> IO exceptions are wrapped in RuntimeException</li>
+	 * </ul>
+	 *
+	 * @return A {@link Stringifier} for {@link Reader} objects
+	 * @see Reader
+	 */
+	public static Stringifier<Reader> readerStringifier() {
+		return (bc, reader) -> stringifyReader(reader);
+	}
+
+	/**
+	 * Converts a Class to a string representation based on converter settings.
+	 *
+	 * @param bc The bean converter for accessing settings
+	 * @param clazz The Class to convert
+	 * @return String representation of the class
+	 */
+	private static String stringifyClass(BeanConverter bc, Class<?> clazz) {
+		return switch(bc.getSetting("classNameFormat", "default")) {
+			case "simple" -> clazz.getSimpleName();
+			case "canonical" -> clazz.getCanonicalName();
+			default -> clazz.getName();
+		};
+	}
 	/**
 	 * Converts an InputStream to a hexadecimal string representation.
 	 *
@@ -641,17 +646,7 @@ public class Stringifiers {
 	}
 
 	/**
-	 * Converts a Class to a string representation based on converter settings.
-	 *
-	 * @param bc The bean converter for accessing settings
-	 * @param clazz The Class to convert
-	 * @return String representation of the class
+	 * Constructor.
 	 */
-	private static String stringifyClass(BeanConverter bc, Class<?> clazz) {
-		return switch(bc.getSetting("classNameFormat", "default")) {
-			case "simple" -> clazz.getSimpleName();
-			case "canonical" -> clazz.getCanonicalName();
-			default -> clazz.getName();
-		};
-	}
+	private Stringifiers() {}
 }

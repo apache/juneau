@@ -69,10 +69,6 @@ public class Strong extends HtmlElementMixed {
 	public Strong(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Strong _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -82,6 +78,30 @@ public class Strong extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Strong accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Strong attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Strong attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Strong child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Strong children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -442,30 +462,6 @@ public class Strong extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Strong translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Strong child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Strong children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Strong attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Strong attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

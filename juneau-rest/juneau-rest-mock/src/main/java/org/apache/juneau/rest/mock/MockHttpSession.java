@@ -36,14 +36,6 @@ import jakarta.servlet.http.*;
  */
 public class MockHttpSession implements HttpSession {
 
-	private Map<String,Object> attributes = map();
-
-	private long creationTime, lastAccessedTime;
-	private int maxInactiveInterval;
-	private String id;
-	private ServletContext servletContext;
-	private boolean isNew;
-
 	/**
 	 * Creates a new HTTP session.
 	 *
@@ -53,10 +45,13 @@ public class MockHttpSession implements HttpSession {
 		return new MockHttpSession();
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
-	// Setter methods
-	//------------------------------------------------------------------------------------------------------------------
+	private Map<String,Object> attributes = map();
+	private long creationTime, lastAccessedTime;
+	private int maxInactiveInterval;
+	private String id;
+	private ServletContext servletContext;
 
+	private boolean isNew;
 	/**
 	 * Sets the creation time on this session.
 	 *
@@ -68,6 +63,77 @@ public class MockHttpSession implements HttpSession {
 	 */
 	public MockHttpSession creationTime(long value) {
 		this.creationTime = value;
+		return this;
+	}
+
+	@Override /* Overridden from HttpSession */
+	public Object getAttribute(String name) {
+		return attributes.get(name);
+	}
+
+	@Override /* Overridden from HttpSession */
+	public Enumeration<String> getAttributeNames() {
+		return Collections.enumeration(attributes.keySet());
+	}
+
+	@Override /* Overridden from HttpSession */
+	public long getCreationTime() {
+		return creationTime;
+	}
+
+	@Override /* Overridden from HttpSession */
+	public String getId() {
+		return id;
+	}
+
+	@Override /* Overridden from HttpSession */
+	public long getLastAccessedTime() {
+		return lastAccessedTime;
+	}
+	@Override /* Overridden from HttpSession */
+	public int getMaxInactiveInterval() {
+		return maxInactiveInterval;
+	}
+
+	@Override /* Overridden from HttpSession */
+	public ServletContext getServletContext() {
+		return servletContext;
+	}
+
+	/**
+	 * Sets the id on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#getId()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockHttpSession id(String value) {
+		this.id = value;
+		return this;
+	}
+
+	@Override /* Overridden from HttpSession */
+	public void invalidate() {
+	}
+
+	@Override /* Overridden from HttpSession */
+	public boolean isNew() {
+		return isNew;
+	}
+
+	/**
+	 * Sets the is-new value on this session.
+	 *
+	 * <p>
+	 * Affects the results of calling {@link HttpSession#isNew()}.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public MockHttpSession isNew(boolean value) {
+		this.isNew = value;
 		return this;
 	}
 
@@ -99,20 +165,10 @@ public class MockHttpSession implements HttpSession {
 		return this;
 	}
 
-	/**
-	 * Sets the id on this session.
-	 *
-	 * <p>
-	 * Affects the results of calling {@link HttpSession#getId()}.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public MockHttpSession id(String value) {
-		this.id = value;
-		return this;
+	@Override /* Overridden from HttpSession */
+	public void removeAttribute(String name) {
+		attributes.remove(name);
 	}
-
 	/**
 	 * Sets the servlet context on this session.
 	 *
@@ -127,79 +183,13 @@ public class MockHttpSession implements HttpSession {
 		return this;
 	}
 
-	/**
-	 * Sets the is-new value on this session.
-	 *
-	 * <p>
-	 * Affects the results of calling {@link HttpSession#isNew()}.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public MockHttpSession isNew(boolean value) {
-		this.isNew = value;
-		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// HttpSession methods
-	//------------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from HttpSession */
-	public long getCreationTime() {
-		return creationTime;
-	}
-
-	@Override /* Overridden from HttpSession */
-	public String getId() {
-		return id;
-	}
-
-	@Override /* Overridden from HttpSession */
-	public long getLastAccessedTime() {
-		return lastAccessedTime;
-	}
-
-	@Override /* Overridden from HttpSession */
-	public ServletContext getServletContext() {
-		return servletContext;
+	public void setAttribute(String name, Object value) {
+		attributes.put(name, value);
 	}
 
 	@Override /* Overridden from HttpSession */
 	public void setMaxInactiveInterval(int value) {
 		this.maxInactiveInterval = value;
-	}
-
-	@Override /* Overridden from HttpSession */
-	public int getMaxInactiveInterval() {
-		return maxInactiveInterval;
-	}
-
-	@Override /* Overridden from HttpSession */
-	public Object getAttribute(String name) {
-		return attributes.get(name);
-	}
-
-	@Override /* Overridden from HttpSession */
-	public Enumeration<String> getAttributeNames() {
-		return Collections.enumeration(attributes.keySet());
-	}
-
-	@Override /* Overridden from HttpSession */
-	public void setAttribute(String name, Object value) {
-		attributes.put(name, value);
-	}
-	@Override /* Overridden from HttpSession */
-	public void removeAttribute(String name) {
-		attributes.remove(name);
-	}
-
-	@Override /* Overridden from HttpSession */
-	public void invalidate() {
-	}
-
-	@Override /* Overridden from HttpSession */
-	public boolean isNew() {
-		return isNew;
 	}
 }

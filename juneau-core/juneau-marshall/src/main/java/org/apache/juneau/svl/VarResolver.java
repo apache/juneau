@@ -66,48 +66,8 @@ import org.apache.juneau.svl.vars.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class VarResolver {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Default string variable resolver with support for system properties and environment variables:
-	 *
-	 * <ul>
-	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
-	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
-	 * 	<li><c>$A{key[,default]}</c> - {@link ArgsVar}
-	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
-	 * 	<li><c>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</c> - {@link SwitchVar}
-	 * 	<li><c>$IF{arg,then[,else]}</c> - {@link IfVar}
-	 * 	<li><c>$CO{arg[,arg2...]}</c> - {@link CoalesceVar}
-	 * 	<li><c>$PM{arg,pattern}</c> - {@link PatternMatchVar}
-	 * 	<li><c>$PR{stringArg,pattern,replace}</c>- {@link PatternReplaceVar}
-	 * 	<li><c>$PE{arg,pattern,groupIndex}</c> - {@link PatternExtractVar}
-	 * 	<li><c>$UC{arg}</c> - {@link UpperCaseVar}
-	 * 	<li><c>$LC{arg}</c> - {@link LowerCaseVar}
-	 * 	<li><c>$NE{arg}</c> - {@link NotEmptyVar}
-	 * 	<li><c>$LN{arg[,delimiter]}</c> - {@link LenVar}
-	 * 	<li><c>$ST{arg,start[,end]}</c> - {@link SubstringVar}
-	 * </ul>
-	 */
-	public static final VarResolver DEFAULT = create().defaultVars().build();
-
-	/**
-	 * Instantiates a new clean-slate {@link Builder} object.
-	 *
-	 * @return A new {@link Builder} object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -133,55 +93,18 @@ public class VarResolver {
 			vars = VarList.of(copyFrom.vars);
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected VarResolver buildDefault() {
-			return new VarResolver(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Register new variables with this resolver.
+		 * Adds a bean to the bean store in this session.
 		 *
-		 * @param values
-		 * 	The variable resolver classes.
-		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+		 * @param <T> The bean type.
+		 * @param c The bean type.
+		 * @param value The bean.
 		 * @return This object .
 		 */
-		@SafeVarargs
-		public final Builder vars(Class<? extends Var>...values) {
-			vars.append(values);
+		public <T> Builder bean(Class<T> c, T value) {
+			beanStore().addBean(c, value);
 			return this;
 		}
-
-		/**
-		 * Register new variables with this resolver.
-		 *
-		 * @param values
-		 * 	The variable resolver classes.
-		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
-		 * @return This object .
-		 */
-		public Builder vars(Var...values) {
-			vars.append(values);
-			return this;
-		}
-
-		/**
-		 * Register new variables with this resolver.
-		 *
-		 * @param values
-		 * 	The variable resolver classes.
-		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
-		 * @return This object .
-		 */
-		public Builder vars(VarList values) {
-			vars.append(values);
-			return this;
-		}
-
 		/**
 		 * Adds the default variables to this builder.
 		 *
@@ -212,18 +135,6 @@ public class VarResolver {
 			return this;
 		}
 
-		/**
-		 * Adds a bean to the bean store in this session.
-		 *
-		 * @param <T> The bean type.
-		 * @param c The bean type.
-		 * @param value The bean.
-		 * @return This object .
-		 */
-		public <T> Builder bean(Class<T> c, T value) {
-			beanStore().addBean(c, value);
-			return this;
-		}
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
@@ -235,14 +146,90 @@ public class VarResolver {
 			super.type(value);
 			return this;
 		}
+
+		/**
+		 * Register new variables with this resolver.
+		 *
+		 * @param values
+		 * 	The variable resolver classes.
+		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+		 * @return This object .
+		 */
+		@SafeVarargs
+		public final Builder vars(Class<? extends Var>...values) {
+			vars.append(values);
+			return this;
+		}
+
+		/**
+		 * Register new variables with this resolver.
+		 *
+		 * @param values
+		 * 	The variable resolver classes.
+		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+		 * @return This object .
+		 */
+		public Builder vars(Var...values) {
+			vars.append(values);
+			return this;
+		}
+		/**
+		 * Register new variables with this resolver.
+		 *
+		 * @param values
+		 * 	The variable resolver classes.
+		 * 	These classes must subclass from {@link Var} and have no-arg constructors.
+		 * @return This object .
+		 */
+		public Builder vars(VarList values) {
+			vars.append(values);
+			return this;
+		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected VarResolver buildDefault() {
+			return new VarResolver(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Default string variable resolver with support for system properties and environment variables:
+	 *
+	 * <ul>
+	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
+	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
+	 * 	<li><c>$A{key[,default]}</c> - {@link ArgsVar}
+	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
+	 * 	<li><c>$SW{stringArg,pattern:thenValue[,pattern:thenValue...]}</c> - {@link SwitchVar}
+	 * 	<li><c>$IF{arg,then[,else]}</c> - {@link IfVar}
+	 * 	<li><c>$CO{arg[,arg2...]}</c> - {@link CoalesceVar}
+	 * 	<li><c>$PM{arg,pattern}</c> - {@link PatternMatchVar}
+	 * 	<li><c>$PR{stringArg,pattern,replace}</c>- {@link PatternReplaceVar}
+	 * 	<li><c>$PE{arg,pattern,groupIndex}</c> - {@link PatternExtractVar}
+	 * 	<li><c>$UC{arg}</c> - {@link UpperCaseVar}
+	 * 	<li><c>$LC{arg}</c> - {@link LowerCaseVar}
+	 * 	<li><c>$NE{arg}</c> - {@link NotEmptyVar}
+	 * 	<li><c>$LN{arg[,delimiter]}</c> - {@link LenVar}
+	 * 	<li><c>$ST{arg,start[,end]}</c> - {@link SubstringVar}
+	 * </ul>
+	 */
+	public static final VarResolver DEFAULT = create().defaultVars().build();
+	/**
+	 * Instantiates a new clean-slate {@link Builder} object.
+	 *
+	 * @return A new {@link Builder} object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	private static Var toVar(BeanStore bs, Object o) {
+		if (o instanceof Class)
+			return bs.createBean(Var.class).type((Class<?>)o).run();
+		return (Var)o;
+	}
 	final Var[] vars;
 	private final Map<String,Var> varMap;
+
 	final BeanStore beanStore;
 
 	/**
@@ -261,39 +248,6 @@ public class VarResolver {
 		this.beanStore = BeanStore.of(builder.beanStore());
 	}
 
-	private static Var toVar(BeanStore bs, Object o) {
-		if (o instanceof Class)
-			return bs.createBean(Var.class).type((Class<?>)o).run();
-		return (Var)o;
-	}
-
-	/**
-	 * Returns a new builder object using the settings in this resolver as a base.
-	 *
-	 * @return A new var resolver builder.
-	 */
-	public Builder copy() {
-		return new Builder(this);
-	}
-
-	/**
-	 * Returns an unmodifiable map of {@link Var Vars} associated with this context.
-	 *
-	 * @return A map whose keys are var names (e.g. <js>"S"</js>) and values are {@link Var} instances.
-	 */
-	protected Map<String,Var> getVarMap() {
-		return varMap;
-	}
-
-	/**
-	 * Returns an array of variables define in this variable resolver context.
-	 *
-	 * @return A new array containing the variables in this context.
-	 */
-	protected Var[] getVars() {
-		return Arrays.copyOf(vars, vars.length);
-	}
-
 	/**
 	 * Adds a bean to this session.
 	 *
@@ -305,6 +259,15 @@ public class VarResolver {
 	public <T> VarResolver addBean(Class<T> c, T value) {
 		beanStore.addBean(c, value);
 		return this;
+	}
+
+	/**
+	 * Returns a new builder object using the settings in this resolver as a base.
+	 *
+	 * @return A new var resolver builder.
+	 */
+	public Builder copy() {
+		return new Builder(this);
 	}
 
 	/**
@@ -355,5 +318,23 @@ public class VarResolver {
 	 */
 	public void resolveTo(String s, Writer w) throws IOException {
 		createSession(null).resolveTo(s, w);
+	}
+
+	/**
+	 * Returns an unmodifiable map of {@link Var Vars} associated with this context.
+	 *
+	 * @return A map whose keys are var names (e.g. <js>"S"</js>) and values are {@link Var} instances.
+	 */
+	protected Map<String,Var> getVarMap() {
+		return varMap;
+	}
+
+	/**
+	 * Returns an array of variables define in this variable resolver context.
+	 *
+	 * @return A new array containing the variables in this context.
+	 */
+	protected Var[] getVars() {
+		return Arrays.copyOf(vars, vars.length);
 	}
 }

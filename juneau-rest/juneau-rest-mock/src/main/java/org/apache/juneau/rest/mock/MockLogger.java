@@ -75,9 +75,18 @@ public class MockLogger extends Logger {
 
 	private static final String FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";
 
+	/**
+	 * Creator.
+	 *
+	 * @return A new {@link MockLogger} object.
+	 */
+	public static MockLogger create() {
+		return new MockLogger();
+	}
 	private final List<LogRecord> logRecords = list();
 	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	private volatile Formatter formatter;
+
 	private volatile String format = "%4$s: %5$s%6$s%n";
 
 	/**
@@ -88,48 +97,55 @@ public class MockLogger extends Logger {
 	}
 
 	/**
-	 * Creator.
+	 * Allows you to perform fluent-style assertions on the contents of the log file.
 	 *
-	 * @return A new {@link MockLogger} object.
+	 * @return A new fluent-style assertion object.
 	 */
-	public static MockLogger create() {
-		return new MockLogger();
-	}
-
-	@Override /* Overridden from Logger */
-	public synchronized void log(LogRecord record) {
-		logRecords.add(record);
-		try {
-			baos.write(getFormatter().format(record).getBytes("UTF-8"));
-		} catch (Exception e) {
-			throw asRuntimeException(e);
-		}
-	}
-
-	private Formatter getFormatter() {
-		if (formatter == null) {
-			synchronized(this) {
-				String oldFormat = System.getProperty(FORMAT_PROPERTY);
-				System.setProperty(FORMAT_PROPERTY, format);
-				formatter = new SimpleFormatter();
-				if (oldFormat == null)
-					System.clearProperty(FORMAT_PROPERTY);
-				else
-					System.setProperty(FORMAT_PROPERTY, oldFormat);
-			}
-		}
-		return formatter;
+	public synchronized FluentStringAssertion<MockLogger> assertContents() {
+		return new FluentStringAssertion<>(baos.toString(), this);
 	}
 
 	/**
-	 * Sets the level for this logger.
+	 * Asserts that the last message was logged at the specified level.
 	 *
-	 * @param level The new level for this logger.
+	 * @param level The level to match against.
 	 * @return This object.
 	 */
-	public synchronized MockLogger level(Level level) {
-		super.setLevel(level);
+	public synchronized MockLogger assertLastLevel(Level level) {
+		assertLogged();
+		if (last().getLevel() != level)
+			throw new AssertionError("Message logged at [" + last().getLevel() + "] instead of [" + level + "]");
 		return this;
+	}
+
+	/**
+	 * Asserts that the last message matched the specified message.
+	 *
+	 * @return This object.
+	 */
+	public synchronized FluentStringAssertion<MockLogger> assertLastMessage() {
+		assertLogged();
+		return new FluentStringAssertion<>(last().getMessage(), this);
+	}
+
+	/**
+	 * Asserts that this logger was called.
+	 *
+	 * @return This object.
+	 */
+	public synchronized MockLogger assertLogged() {
+		if (logRecords.isEmpty())
+			throw new AssertionError("Message not logged");
+		return this;
+	}
+
+	/**
+	 * Asserts that the specified number of messages have been logged.
+	 *
+	 * @return This object.
+	 */
+	public synchronized FluentIntegerAssertion<MockLogger> assertRecordCount() {
+		return new FluentIntegerAssertion<>(logRecords.size(), this);
 	}
 
 	/**
@@ -161,6 +177,27 @@ public class MockLogger extends Logger {
 	}
 
 	/**
+	 * Sets the level for this logger.
+	 *
+	 * @param level The new level for this logger.
+	 * @return This object.
+	 */
+	public synchronized MockLogger level(Level level) {
+		super.setLevel(level);
+		return this;
+	}
+
+	@Override /* Overridden from Logger */
+	public synchronized void log(LogRecord record) {
+		logRecords.add(record);
+		try {
+			baos.write(getFormatter().format(record).getBytes("UTF-8"));
+		} catch (Exception e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	/**
 	 * Resets this logger.
 	 *
 	 * @return This object.
@@ -172,68 +209,31 @@ public class MockLogger extends Logger {
 	}
 
 	/**
-	 * Asserts that this logger was called.
-	 *
-	 * @return This object.
+	 * Returns the contents of this log file as a string.
 	 */
-	public synchronized MockLogger assertLogged() {
-		if (logRecords.isEmpty())
-			throw new AssertionError("Message not logged");
-		return this;
+	@Override
+	public String toString() {
+		return baos.toString();
 	}
 
-	/**
-	 * Asserts that the last message was logged at the specified level.
-	 *
-	 * @param level The level to match against.
-	 * @return This object.
-	 */
-	public synchronized MockLogger assertLastLevel(Level level) {
-		assertLogged();
-		if (last().getLevel() != level)
-			throw new AssertionError("Message logged at [" + last().getLevel() + "] instead of [" + level + "]");
-		return this;
-	}
-
-	/**
-	 * Asserts that the last message matched the specified message.
-	 *
-	 * @return This object.
-	 */
-	public synchronized FluentStringAssertion<MockLogger> assertLastMessage() {
-		assertLogged();
-		return new FluentStringAssertion<>(last().getMessage(), this);
-	}
-
-	/**
-	 * Asserts that the specified number of messages have been logged.
-	 *
-	 * @return This object.
-	 */
-	public synchronized FluentIntegerAssertion<MockLogger> assertRecordCount() {
-		return new FluentIntegerAssertion<>(logRecords.size(), this);
-	}
-
-	/**
-	 * Allows you to perform fluent-style assertions on the contents of the log file.
-	 *
-	 * @return A new fluent-style assertion object.
-	 */
-	public synchronized FluentStringAssertion<MockLogger> assertContents() {
-		return new FluentStringAssertion<>(baos.toString(), this);
+	private Formatter getFormatter() {
+		if (formatter == null) {
+			synchronized(this) {
+				String oldFormat = System.getProperty(FORMAT_PROPERTY);
+				System.setProperty(FORMAT_PROPERTY, format);
+				formatter = new SimpleFormatter();
+				if (oldFormat == null)
+					System.clearProperty(FORMAT_PROPERTY);
+				else
+					System.setProperty(FORMAT_PROPERTY, oldFormat);
+			}
+		}
+		return formatter;
 	}
 
 	private LogRecord last() {
 		if (logRecords.isEmpty())
 			throw new AssertionError("Message not logged");
 		return logRecords.get(logRecords.size()-1);
-	}
-
-	/**
-	 * Returns the contents of this log file as a string.
-	 */
-	@Override
-	public String toString() {
-		return baos.toString();
 	}
 }

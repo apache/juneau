@@ -31,11 +31,6 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 public class StreamResource extends BasicResource {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -62,10 +57,22 @@ public class StreamResource extends BasicResource {
 		super(copyFrom);
 	}
 
+	@Override /* Overridden from BasicResource */
+	public StreamResource addHeader(String name, String value) {
+		super.addHeader(name, value);
+		return this;
+	}
+	@Override /* Overridden from BasicResource */
+	public StreamResource addHeaders(Header...values) {
+		super.addHeaders(values);
+		return this;
+	}
+
 	@Override
 	public StreamResource copy() {
 		return new StreamResource(this);
 	}
+
 	@Override /* Overridden from BasicResource */
 	public StreamResource setCached() throws IOException{
 		super.setCached();
@@ -97,13 +104,13 @@ public class StreamResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StreamResource setContentEncoding(String value) {
+	public StreamResource setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StreamResource setContentEncoding(ContentEncoding value) {
+	public StreamResource setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -115,14 +122,26 @@ public class StreamResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
+	public StreamResource setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
 	public StreamResource setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public StreamResource setContentType(ContentType value) {
-		super.setContentType(value);
+	public StreamResource setHeader(String name, String value) {
+		super.setHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public StreamResource setHeaders(Header...values) {
+		super.setHeaders(values);
 		return this;
 	}
 
@@ -135,30 +154,6 @@ public class StreamResource extends BasicResource {
 	@Override /* Overridden from BasicResource */
 	public StreamResource setUnmodifiable() {
 		super.setUnmodifiable();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public StreamResource addHeaders(Header...values) {
-		super.addHeaders(values);
 		return this;
 	}
 }

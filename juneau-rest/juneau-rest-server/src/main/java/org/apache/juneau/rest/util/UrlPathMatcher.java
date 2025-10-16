@@ -37,25 +37,6 @@ import org.apache.juneau.rest.annotation.*;
 public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 	/**
-	 * Constructs a matcher from the specified pattern string.
-	 *
-	 * @param pattern The pattern string.
-	 * @return A new matcher.
-	 */
-	public static UrlPathMatcher of(String pattern) {
-		pattern = emptyIfNull(pattern);
-		boolean isFilePattern = pattern.matches("[^\\/]+\\.[^\\/]+");
-		return isFilePattern ? new FileNameMatcher(pattern) : new PathMatcher(pattern);
-
-	}
-
-	private final String pattern;
-
-	UrlPathMatcher(String pattern) {
-		this.pattern = pattern;
-	}
-
-	/**
 	 * A file name pattern such as "favicon.ico" or "*.jsp".
 	 */
 	private static class FileNameMatcher extends UrlPathMatcher {
@@ -71,6 +52,11 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		}
 
 		@Override /* Overridden from UrlPathMatcher */
+		public String getComparator() {
+			return comparator;
+		}
+
+		@Override /* Overridden from UrlPathMatcher */
 		public UrlPathMatch match(UrlPath pathInfo) {
 			Optional<String> fileName = pathInfo.getFileName();
 			if (fileName.isPresent()) {
@@ -79,11 +65,6 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 					return new UrlPathMatch(pathInfo.getPath(), pathInfo.getParts().length, new String[0], new String[0]);
 			}
 			return null;
-		}
-
-		@Override /* Overridden from UrlPathMatcher */
-		public String getComparator() {
-			return comparator;
 		}
 	}
 
@@ -129,6 +110,21 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 			this.varKeys = vars.isEmpty() ? null : vars.toArray(new String[vars.size()]);
 		}
 
+		@Override
+		public String getComparator() {
+			return comparator;
+		}
+
+		@Override
+		public String[] getVars() {
+			return varKeys == null ? new String[0] : Arrays.copyOf(varKeys, varKeys.length);
+		}
+
+		@Override
+		public boolean hasVars() {
+			return varKeys != null;
+		}
+
 		/**
 		 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
 		 *
@@ -167,58 +163,25 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 			return new UrlPathMatch(urlPath.getPath(), parts.length, varKeys, vals);
 		}
-
-		@Override
-		public String[] getVars() {
-			return varKeys == null ? new String[0] : Arrays.copyOf(varKeys, varKeys.length);
-		}
-
-		@Override
-		public boolean hasVars() {
-			return varKeys != null;
-		}
-
-		@Override
-		public String getComparator() {
-			return comparator;
-		}
 	}
 
 	/**
-	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
+	 * Constructs a matcher from the specified pattern string.
 	 *
-	 * @param pathInfo The path to match against.
-	 * @return
-	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
+	 * @param pattern The pattern string.
+	 * @return A new matcher.
 	 */
-	public abstract UrlPathMatch match(UrlPath pathInfo);
+	public static UrlPathMatcher of(String pattern) {
+		pattern = emptyIfNull(pattern);
+		boolean isFilePattern = pattern.matches("[^\\/]+\\.[^\\/]+");
+		return isFilePattern ? new FileNameMatcher(pattern) : new PathMatcher(pattern);
 
-	/**
-	 * Returns a string that can be used to compare this matcher with other matchers to provide the ability to
-	 * order URL patterns from most-specific to least-specific.
-	 *
-	 * @return A comparison string.
-	 */
-	protected abstract String getComparator();
-
-	/**
-	 * Returns the variable names found in the pattern.
-	 *
-	 * @return
-	 * 	The variable names or an empty array if no variables found.
-	 *	<br>Modifying the returned array does not modify this object.
-	 */
-	public String[] getVars() {
-		return new String[0];
 	}
 
-	/**
-	 * Returns <jk>true</jk> if this path pattern contains variables.
-	 *
-	 * @return <jk>true</jk> if this path pattern contains variables.
-	 */
-	public boolean hasVars() {
-		return false;
+	private final String pattern;
+
+	UrlPathMatcher(String pattern) {
+		this.pattern = pattern;
 	}
 
 	/**
@@ -245,8 +208,45 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 		return o.getComparator().compareTo(getComparator());
 	}
 
+	/**
+	 * Returns the variable names found in the pattern.
+	 *
+	 * @return
+	 * 	The variable names or an empty array if no variables found.
+	 *	<br>Modifying the returned array does not modify this object.
+	 */
+	public String[] getVars() {
+		return new String[0];
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this path pattern contains variables.
+	 *
+	 * @return <jk>true</jk> if this path pattern contains variables.
+	 */
+	public boolean hasVars() {
+		return false;
+	}
+
+	/**
+	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
+	 *
+	 * @param pathInfo The path to match against.
+	 * @return
+	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
+	 */
+	public abstract UrlPathMatch match(UrlPath pathInfo);
+
 	@Override /* Overridden from Object */
 	public String toString() {
 		return pattern;
 	}
+
+	/**
+	 * Returns a string that can be used to compare this matcher with other matchers to provide the ability to
+	 * order URL patterns from most-specific to least-specific.
+	 *
+	 * @return A comparison string.
+	 */
+	protected abstract String getComparator();
 }

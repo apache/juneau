@@ -57,30 +57,6 @@ public enum Visibility {
 	PRIVATE;
 
 	/**
-	 * Identifies if the specified mod matches this visibility.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
-	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
-	 * 	<jsf>PRIVATE</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
-	 * 	<jsf>NONE</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
-	 * </p>
-	 *
-	 * @param mod The modifier from the object being tested (e.g. results from {@link Class#getModifiers()}.
-	 * @return <jk>true</jk> if this visibility matches the specified modifier attribute.
-	 */
-	public boolean isVisible(int mod) {
-		switch(this) {
-			case NONE: return false;
-			case PRIVATE: return true;
-			case DEFAULT: return ! Modifier.isPrivate(mod);
-			case PROTECTED: return Modifier.isProtected(mod) || Modifier.isPublic(mod);
-			default: return Modifier.isPublic(mod);
-		}
-	}
-
-	/**
 	 * Shortcut for <c>isVisible(x.getModifiers());</c>
 	 *
 	 * @param x The class to check.
@@ -111,6 +87,30 @@ public enum Visibility {
 	}
 
 	/**
+	 * Identifies if the specified mod matches this visibility.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
+	 * 	<jsf>PUBLIC</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
+	 * 	<jsf>PRIVATE</jsf>.isVisible(MyPrivateClass.<jk>class</jk>.getModifiers()); <jc>//true</jc>
+	 * 	<jsf>NONE</jsf>.isVisible(MyPublicClass.<jk>class</jk>.getModifiers()); <jc>//false</jc>
+	 * </p>
+	 *
+	 * @param mod The modifier from the object being tested (e.g. results from {@link Class#getModifiers()}.
+	 * @return <jk>true</jk> if this visibility matches the specified modifier attribute.
+	 */
+	public boolean isVisible(int mod) {
+		switch(this) {
+			case NONE: return false;
+			case PRIVATE: return true;
+			case DEFAULT: return ! Modifier.isPrivate(mod);
+			case PROTECTED: return Modifier.isProtected(mod) || Modifier.isPublic(mod);
+			default: return Modifier.isPublic(mod);
+		}
+	}
+
+	/**
 	 * Makes constructor accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
 	 *
 	 * <p>
@@ -132,26 +132,6 @@ public enum Visibility {
 	}
 
 	/**
-	 * Makes method accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
-	 *
-	 * <p>
-	 * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.
-	 *
-	 * @param x The method.
-	 * @return
-	 * 	The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
-	 * 	met or call to {@link Method#setAccessible(boolean)} throws a security exception.
-	 */
-	public Method transform(Method x) {
-		if (x == null)
-			return null;
-		if (isVisible(x))
-			if (! setAccessible(x))
-				return null;
-		return x;
-	}
-
-	/**
 	 * Makes field accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
 	 *
 	 * <p>
@@ -163,6 +143,26 @@ public enum Visibility {
 	 * 	met or call to {@link Field#setAccessible(boolean)} throws a security exception.
 	 */
 	public Field transform(Field x) {
+		if (x == null)
+			return null;
+		if (isVisible(x))
+			if (! setAccessible(x))
+				return null;
+		return x;
+	}
+
+	/**
+	 * Makes method accessible if it matches the visibility requirements, or returns <jk>null</jk> if it doesn't.
+	 *
+	 * <p>
+	 * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.
+	 *
+	 * @param x The method.
+	 * @return
+	 * 	The same method if visibility requirements met, or <jk>null</jk> if visibility requirement not
+	 * 	met or call to {@link Method#setAccessible(boolean)} throws a security exception.
+	 */
+	public Method transform(Method x) {
 		if (x == null)
 			return null;
 		if (isVisible(x))

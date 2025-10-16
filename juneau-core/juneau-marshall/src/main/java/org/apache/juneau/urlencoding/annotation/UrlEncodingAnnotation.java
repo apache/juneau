@@ -35,62 +35,45 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class UrlEncodingAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final UrlEncoding DEFAULT = create().build();
-
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
+	 * Applies targeted {@link UrlEncoding} annotations to a {@link org.apache.juneau.Context.Builder}.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static class Apply extends AnnotationApplier<UrlEncoding,Context.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public Apply(VarResolverSession vr) {
+			super(UrlEncoding.class, Context.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<UrlEncoding> ai, Context.Builder b) {
+			UrlEncoding a = ai.inner();
+			if (isEmptyArray(a.on(), a.onClass()))
+				return;
+			b.annotations(copy(a, vr()));
+		}
 	}
 
 	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
+	 * A collection of {@link UrlEncoding @UrlEncoding annotations}.
 	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
+	@Documented
+	@Target({METHOD,TYPE})
+	@Retention(RUNTIME)
+	@Inherited
+	public static @interface Array {
 
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
+		/**
+		 * The child annotations.
+		 *
+		 * @return The annotation value.
+		 */
+		UrlEncoding[] value();
 	}
-
-	/**
-	 * Creates a copy of the specified annotation.
-	 *
-	 * @param a The annotation to copy.s
-	 * @param r The var resolver for resolving any variables.
-	 * @return A copy of the specified annotation.
-	 */
-	public static UrlEncoding copy(UrlEncoding a, VarResolverSession r) {
-		return
-			create()
-			.expandedParams(a.expandedParams())
-			.on(r.resolve(a.on()))
-			.onClass(a.onClass())
-			.build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -132,10 +115,6 @@ public class UrlEncodingAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends TargetedAnnotationTImpl implements UrlEncoding {
 
 		private final boolean expandedParams;
@@ -152,51 +131,47 @@ public class UrlEncodingAnnotation {
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final UrlEncoding DEFAULT = create().build();
 	/**
-	 * Applies targeted {@link UrlEncoding} annotations to a {@link org.apache.juneau.Context.Builder}.
+	 * Creates a copy of the specified annotation.
+	 *
+	 * @param a The annotation to copy.s
+	 * @param r The var resolver for resolving any variables.
+	 * @return A copy of the specified annotation.
 	 */
-	public static class Apply extends AnnotationApplier<UrlEncoding,Context.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public Apply(VarResolverSession vr) {
-			super(UrlEncoding.class, Context.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<UrlEncoding> ai, Context.Builder b) {
-			UrlEncoding a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
-				return;
-			b.annotations(copy(a, vr()));
-		}
+	public static UrlEncoding copy(UrlEncoding a, VarResolverSession r) {
+		return
+			create()
+			.expandedParams(a.expandedParams())
+			.on(r.resolve(a.on()))
+			.onClass(a.onClass())
+			.build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * A collection of {@link UrlEncoding @UrlEncoding annotations}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	@Documented
-	@Target({METHOD,TYPE})
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface Array {
-
-		/**
-		 * The child annotations.
-		 *
-		 * @return The annotation value.
-		 */
-		UrlEncoding[] value();
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

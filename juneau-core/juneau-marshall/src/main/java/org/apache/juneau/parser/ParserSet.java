@@ -86,58 +86,6 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 public class ParserSet {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * An identifier that the previous entries in this group should be inherited.
-	 * <p>
-	 * Used by {@link ParserSet.Builder#set(Class...)}
-	 */
-	@SuppressWarnings("javadoc")
-	public static abstract class Inherit extends Parser {
-		protected Inherit(Parser.Builder builder) {
-			super(builder);
-		}
-	}
-
-	/**
-	 * An identifier that the previous entries in this group should not be inherited.
-	 * <p>
-	 * Used by {@link ParserSet.Builder#add(Class...)}
-	 */
-	@SuppressWarnings("javadoc")
-	public static abstract class NoInherit extends Parser {
-		protected NoInherit(Parser.Builder builder) {
-			super(builder);
-		}
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -157,16 +105,6 @@ public class ParserSet {
 		}
 
 		/**
-		 * Clone an existing parser group.
-		 *
-		 * @param copyFrom The parser group that we're copying settings and parsers from.
-		 */
-		protected Builder(ParserSet copyFrom) {
-			super(copyFrom.getClass(), BeanStore.INSTANCE);
-			this.entries = list((Object[])copyFrom.entries);
-		}
-
-		/**
 		 * Clone an existing parser group builder.
 		 *
 		 * <p>
@@ -181,60 +119,14 @@ public class ParserSet {
 			copyFrom.entries.stream().map(this::copyBuilder).forEach(x -> entries.add(x));
 		}
 
-		private Object copyBuilder(Object o) {
-			if (o instanceof Parser.Builder) {
-				Parser.Builder x = (Parser.Builder)o;
-				Parser.Builder x2 = x.copy();
-				if (Utils.ne(x.getClass(), x2.getClass()))
-					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
-				x = x2;
-				if (bcBuilder != null)
-					x.beanContext(bcBuilder);
-				return x;
-			}
-			return o;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected ParserSet buildDefault() {
-			return new ParserSet(this);
-		}
-
 		/**
-		 * Makes a copy of this builder.
+		 * Clone an existing parser group.
 		 *
-		 * @return A new copy of this builder.
+		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Associates an existing bean context builder with all parser builders in this group.
-		 *
-		 * @param value The bean contest builder to associate.
-		 * @return This object.
-		 */
-		public Builder beanContext(BeanContext.Builder value) {
-			bcBuilder = value;
-			forEach(x -> x.beanContext(value));
-			return this;
-		}
-
-		/**
-		 * Applies an operation to the bean context builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			if (bcBuilder != null)
-				operation.accept(bcBuilder);
-			return this;
+		protected Builder(ParserSet copyFrom) {
+			super(copyFrom.getClass(), BeanStore.INSTANCE);
+			this.entries = list((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -278,6 +170,153 @@ public class ParserSet {
 		}
 
 		/**
+		 * Registers the specified parsers with this group.
+		 *
+		 * <p>
+		 * When passing in pre-instantiated parsers to this group, applying properties and transforms to the group
+		 * do not affect them.
+		 *
+		 * @param s The parsers to append to this group.
+		 * @return This object.
+		 */
+		public Builder add(Parser...s) {
+			prependAll(entries, (Object[])s);
+			return this;
+		}
+
+		/**
+		 * Applies the specified annotations to all applicable parser builders in this group.
+		 *
+		 * @param work The annotations to apply.
+		 * @return This object.
+		 */
+		public Builder apply(AnnotationWorkList work) {
+			return forEach(x -> x.apply(work));
+		}
+		/**
+		 * Associates an existing bean context builder with all parser builders in this group.
+		 *
+		 * @param value The bean contest builder to associate.
+		 * @return This object.
+		 */
+		public Builder beanContext(BeanContext.Builder value) {
+			bcBuilder = value;
+			forEach(x -> x.beanContext(value));
+			return this;
+		}
+
+		/**
+		 * Applies an operation to the bean context builder.
+		 *
+		 * @param operation The operation to apply.
+		 * @return This object.
+		 */
+		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
+			if (bcBuilder != null)
+				operation.accept(bcBuilder);
+			return this;
+		}
+
+		/**
+		 * Returns <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
+		 *
+		 * @param work The work to check.
+		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
+		 */
+		public boolean canApply(AnnotationWorkList work) {
+			for (Object o : entries)
+				if (o instanceof Parser.Builder)
+					if (((Parser.Builder)o).canApply(work))
+						return true;
+			return false;
+		}
+
+		/**
+		 * Clears out any existing parsers in this group.
+		 *
+		 * @return This object.
+		 */
+		public Builder clear() {
+			entries.clear();
+			return this;
+		}
+
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		/**
+		 * Performs an action on all parser builders of the specified type in this group.
+		 *
+		 * @param <B> The parser builder type.
+		 * @param type The parser builder type.
+		 * @param action The action to perform.
+		 * @return This object.
+		 */
+		public <B extends Parser.Builder> Builder forEach(Class<B> type, Consumer<B> action) {
+			builders(type).forEach(action);
+			return this;
+		}
+
+		/**
+		 * Performs an action on all parser builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object.
+		 */
+		public Builder forEach(Consumer<Parser.Builder> action) {
+			builders(Parser.Builder.class).forEach(action);
+			return this;
+		}
+
+		/**
+		 * Performs an action on all output stream parser builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object.
+		 */
+		public Builder forEachISP(Consumer<InputStreamParser.Builder> action) {
+			return forEach(InputStreamParser.Builder.class, action);
+		}
+
+		/**
+		 * Performs an action on all writer parser builders in this group.
+		 *
+		 * @param action The action to perform.
+		 * @return This object.
+		 */
+		public Builder forEachRP(Consumer<ReaderParser.Builder> action) {
+			return forEach(ReaderParser.Builder.class, action);
+		}
+
+		@Override /* Overridden from BeanBuilder */
+		public Builder impl(Object value) {
+			super.impl(value);
+			return this;
+		}
+
+		/**
+		 * Returns direct access to the {@link Parser} and {@link Parser.Builder} objects in this builder.
+		 *
+		 * <p>
+		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
+		 * as re-ordering/adding/removing entries.
+		 *
+		 * <p>
+		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder} objects.
+		 *
+		 * @return The inner list of entries in this builder.
+		 */
+		public List<Object> inner() {
+			return entries;
+		}
+
+		/**
 		 * Sets the specified parsers for this group.
 		 *
 		 * <p>
@@ -316,6 +355,34 @@ public class ParserSet {
 			return this;
 		}
 
+		@Override /* Overridden from Object */
+		public String toString() {
+			return entries.stream().map(this::toString).collect(joining(",","[","]"));
+		}
+
+		@Override /* Overridden from BeanBuilder */
+		public Builder type(Class<?> value) {
+			super.type(value);
+			return this;
+		}
+
+		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
+			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
+		}
+		private Object copyBuilder(Object o) {
+			if (o instanceof Parser.Builder) {
+				Parser.Builder x = (Parser.Builder)o;
+				Parser.Builder x2 = x.copy();
+				if (Utils.ne(x.getClass(), x2.getClass()))
+					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
+				x = x2;
+				if (bcBuilder != null)
+					x.beanContext(bcBuilder);
+				return x;
+			}
+			return o;
+		}
+
 		private Object createBuilder(Object o) {
 			if (o instanceof Class) {
 
@@ -333,135 +400,6 @@ public class ParserSet {
 			}
 			return o;
 		}
-
-		/**
-		 * Registers the specified parsers with this group.
-		 *
-		 * <p>
-		 * When passing in pre-instantiated parsers to this group, applying properties and transforms to the group
-		 * do not affect them.
-		 *
-		 * @param s The parsers to append to this group.
-		 * @return This object.
-		 */
-		public Builder add(Parser...s) {
-			prependAll(entries, (Object[])s);
-			return this;
-		}
-
-		/**
-		 * Clears out any existing parsers in this group.
-		 *
-		 * @return This object.
-		 */
-		public Builder clear() {
-			entries.clear();
-			return this;
-		}
-
-		/**
-		 * Returns <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
-		 *
-		 * @param work The work to check.
-		 * @return <jk>true</jk> if at least one of the specified annotations can be applied to at least one parser builder in this group.
-		 */
-		public boolean canApply(AnnotationWorkList work) {
-			for (Object o : entries)
-				if (o instanceof Parser.Builder)
-					if (((Parser.Builder)o).canApply(work))
-						return true;
-			return false;
-		}
-
-		/**
-		 * Applies the specified annotations to all applicable parser builders in this group.
-		 *
-		 * @param work The annotations to apply.
-		 * @return This object.
-		 */
-		public Builder apply(AnnotationWorkList work) {
-			return forEach(x -> x.apply(work));
-		}
-
-		/**
-		 * Performs an action on all parser builders in this group.
-		 *
-		 * @param action The action to perform.
-		 * @return This object.
-		 */
-		public Builder forEach(Consumer<Parser.Builder> action) {
-			builders(Parser.Builder.class).forEach(action);
-			return this;
-		}
-
-		/**
-		 * Performs an action on all writer parser builders in this group.
-		 *
-		 * @param action The action to perform.
-		 * @return This object.
-		 */
-		public Builder forEachRP(Consumer<ReaderParser.Builder> action) {
-			return forEach(ReaderParser.Builder.class, action);
-		}
-
-		/**
-		 * Performs an action on all output stream parser builders in this group.
-		 *
-		 * @param action The action to perform.
-		 * @return This object.
-		 */
-		public Builder forEachISP(Consumer<InputStreamParser.Builder> action) {
-			return forEach(InputStreamParser.Builder.class, action);
-		}
-
-		/**
-		 * Performs an action on all parser builders of the specified type in this group.
-		 *
-		 * @param <B> The parser builder type.
-		 * @param type The parser builder type.
-		 * @param action The action to perform.
-		 * @return This object.
-		 */
-		public <B extends Parser.Builder> Builder forEach(Class<B> type, Consumer<B> action) {
-			builders(type).forEach(action);
-			return this;
-		}
-
-		/**
-		 * Returns direct access to the {@link Parser} and {@link Parser.Builder} objects in this builder.
-		 *
-		 * <p>
-		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
-		 * as re-ordering/adding/removing entries.
-		 *
-		 * <p>
-		 * Note that it is up to the user to ensure that the list only contains {@link Parser} and {@link Parser.Builder} objects.
-		 *
-		 * @return The inner list of entries in this builder.
-		 */
-		public List<Object> inner() {
-			return entries;
-		}
-
-		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
-			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
-		}
-		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		public Builder type(Class<?> value) {
-			super.type(value);
-			return this;
-		}
-		@Override /* Overridden from Object */
-		public String toString() {
-			return entries.stream().map(this::toString).collect(joining(",","[","]"));
-		}
-
 		private String toString(Object o) {
 			if (o == null)
 				return "null";
@@ -469,12 +407,54 @@ public class ParserSet {
 				return "builder:" + o.getClass().getName();
 			return "parser:" + o.getClass().getName();
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected ParserSet buildDefault() {
+			return new ParserSet(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * An identifier that the previous entries in this group should be inherited.
+	 * <p>
+	 * Used by {@link ParserSet.Builder#set(Class...)}
+	 */
+	@SuppressWarnings("javadoc")
+	public static abstract class Inherit extends Parser {
+		protected Inherit(Parser.Builder builder) {
+			super(builder);
+		}
+	}
 
+	/**
+	 * An identifier that the previous entries in this group should not be inherited.
+	 * <p>
+	 * Used by {@link ParserSet.Builder#add(Class...)}
+	 */
+	@SuppressWarnings("javadoc")
+	public static abstract class NoInherit extends Parser {
+		protected NoInherit(Parser.Builder builder) {
+			super(builder);
+		}
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder(BeanStore.INSTANCE);
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
 
@@ -505,12 +485,6 @@ public class ParserSet {
 		this.mediaTypeParsers = Utils.array(l, Parser.class);
 	}
 
-	private Parser build(Object o) {
-		if (o instanceof Parser)
-			return (Parser)o;
-		return ((Parser.Builder)o).build();
-	}
-
 	/**
 	 * Creates a copy of this parser group.
 	 *
@@ -518,6 +492,38 @@ public class ParserSet {
 	 */
 	public Builder copy() {
 		return new Builder(this);
+	}
+
+	/**
+	 * Same as {@link #getParserMatch(MediaType)} but returns just the matched parser.
+	 *
+	 * @param mediaType The HTTP media type.
+	 * @return The parser that matched the media type, or <jk>null</jk> if no match was made.
+	 */
+	public Parser getParser(MediaType mediaType) {
+		ParserMatch pm = getParserMatch(mediaType);
+		return pm == null ? null : pm.getParser();
+	}
+
+	/**
+	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
+	 *
+	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.
+	 * @return The parser that matched the content type header, or <jk>null</jk> if no match was made.
+	 */
+	public Parser getParser(String contentTypeHeader) {
+		ParserMatch pm = getParserMatch(contentTypeHeader);
+		return pm == null ? null : pm.getParser();
+	}
+
+	/**
+	 * Same as {@link #getParserMatch(String)} but matches using a {@link MediaType} instance.
+	 *
+	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.
+	 * @return The parser and media type that matched the media type, or <jk>null</jk> if no match was made.
+	 */
+	public ParserMatch getParserMatch(MediaType mediaType) {
+		return getParserMatch(mediaType.toString());
 	}
 
 	/**
@@ -546,35 +552,12 @@ public class ParserSet {
 	}
 
 	/**
-	 * Same as {@link #getParserMatch(String)} but matches using a {@link MediaType} instance.
+	 * Returns the parsers in this group.
 	 *
-	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.
-	 * @return The parser and media type that matched the media type, or <jk>null</jk> if no match was made.
+	 * @return An unmodifiable list of parsers in this group.
 	 */
-	public ParserMatch getParserMatch(MediaType mediaType) {
-		return getParserMatch(mediaType.toString());
-	}
-
-	/**
-	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
-	 *
-	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.
-	 * @return The parser that matched the content type header, or <jk>null</jk> if no match was made.
-	 */
-	public Parser getParser(String contentTypeHeader) {
-		ParserMatch pm = getParserMatch(contentTypeHeader);
-		return pm == null ? null : pm.getParser();
-	}
-
-	/**
-	 * Same as {@link #getParserMatch(MediaType)} but returns just the matched parser.
-	 *
-	 * @param mediaType The HTTP media type.
-	 * @return The parser that matched the media type, or <jk>null</jk> if no match was made.
-	 */
-	public Parser getParser(MediaType mediaType) {
-		ParserMatch pm = getParserMatch(mediaType);
-		return pm == null ? null : pm.getParser();
+	public List<Parser> getParsers() {
+		return u(alist(entries));
 	}
 
 	/**
@@ -590,20 +573,17 @@ public class ParserSet {
 	}
 
 	/**
-	 * Returns the parsers in this group.
-	 *
-	 * @return An unmodifiable list of parsers in this group.
-	 */
-	public List<Parser> getParsers() {
-		return u(alist(entries));
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this group contains no parsers.
 	 *
 	 * @return <jk>true</jk> if this group contains no parsers.
 	 */
 	public boolean isEmpty() {
 		return entries.length == 0;
+	}
+
+	private Parser build(Object o) {
+		if (o instanceof Parser)
+			return (Parser)o;
+		return ((Parser.Builder)o).build();
 	}
 }

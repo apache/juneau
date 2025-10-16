@@ -29,15 +29,6 @@ import org.apache.juneau.*;
 public interface Setter {
 
 	/**
-	 * Call the setter on the specified object.
-	 *
-	 * @param object The object to call the setter on
-	 * @param value The value to set.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 */
-	void set(Object object, Object value) throws ExecutableException;
-
-	/**
 	 * Field setter
 	 */
 	static class FieldSetter implements Setter {
@@ -78,4 +69,13 @@ public interface Setter {
 			}
 		}
 	}
+
+	/**
+	 * Call the setter on the specified object.
+	 *
+	 * @param object The object to call the setter on
+	 * @param value The value to set.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	void set(Object object, Object value) throws ExecutableException;
 }

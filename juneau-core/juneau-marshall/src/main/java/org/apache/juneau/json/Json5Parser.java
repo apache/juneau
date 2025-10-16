@@ -36,11 +36,6 @@ package org.apache.juneau.json;
  * </ul>
  */
 public class Json5Parser extends JsonParser {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/** Default parser, Accept=application/json5. */
 	public static final Json5Parser DEFAULT = new Json5Parser(create());
 
@@ -52,11 +47,6 @@ public class Json5Parser extends JsonParser {
 	public static JsonParser.Builder create() {
 		return JsonParser.create().consumes("application/json5,text/json5,application/json,text/json");
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

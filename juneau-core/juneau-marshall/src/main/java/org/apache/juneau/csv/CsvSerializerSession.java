@@ -42,26 +42,8 @@ import org.apache.juneau.svl.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class CsvSerializerSession extends WriterSerializerSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(CsvSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -79,14 +61,14 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public CsvSerializerSession build() {
-			return new CsvSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public CsvSerializerSession build() {
+			return new CsvSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -96,20 +78,14 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -138,20 +114,14 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -174,20 +144,32 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -197,11 +179,15 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(CsvSerializer ctx) {
+		return new Builder(ctx);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -209,6 +195,33 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	 */
 	protected CsvSerializerSession(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * Applies any registered object swap to the specified value.
+	 *
+	 * <p>
+	 * If a swap is registered for the value's type, the value is transformed using the swap's
+	 * {@code swap()} method before being serialized.
+	 *
+	 * @param value The value to potentially swap.
+	 * @param type The class metadata of the value's type.
+	 * @return The swapped value, or the original value if no swap is registered.
+	 */
+	@SuppressWarnings({"rawtypes"})
+	private Object applySwap(Object value, ClassMeta<?> type) {
+		try {
+			if (value == null || type == null)
+				return value;
+
+			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(this);
+			if (swap != null) {
+				return swap(swap, value);
+			}
+			return value;
+		} catch (SerializeException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -276,33 +289,6 @@ public class CsvSerializerSession extends WriterSerializerSession {
 					});
 				}
 			}
-		}
-	}
-
-	/**
-	 * Applies any registered object swap to the specified value.
-	 *
-	 * <p>
-	 * If a swap is registered for the value's type, the value is transformed using the swap's
-	 * {@code swap()} method before being serialized.
-	 *
-	 * @param value The value to potentially swap.
-	 * @param type The class metadata of the value's type.
-	 * @return The swapped value, or the original value if no swap is registered.
-	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private Object applySwap(Object value, ClassMeta<?> type) {
-		try {
-			if (value == null || type == null)
-				return value;
-
-			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(this);
-			if (swap != null) {
-				return swap(swap, value);
-			}
-			return value;
-		} catch (SerializeException e) {
-			throw new RuntimeException(e);
 		}
 	}
 

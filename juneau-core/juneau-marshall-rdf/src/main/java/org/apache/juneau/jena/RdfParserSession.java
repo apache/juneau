@@ -52,25 +52,6 @@ import com.hp.hpl.jena.util.iterator.*;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class RdfParserSession extends ReaderParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(RdfParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -88,14 +69,14 @@ public class RdfParserSession extends ReaderParserSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public RdfParserSession build() {
-			return new RdfParserSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public RdfParserSession build() {
+			return new RdfParserSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -105,20 +86,14 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -147,26 +122,20 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -183,22 +152,38 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
 			return this;
 		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(RdfParser ctx) {
+		return new Builder(ctx);
+	}
 	private final RdfParser ctx;
 	private final Property pRoot, pValue, pType, pRdfType;
 	private final Model model;
@@ -225,45 +210,6 @@ public class RdfParserSession extends ReaderParserSession {
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
 		if (! ctx.getLanguage().equals(LANG_NTRIPLE))
 			ctx.getJenaSettings().forEach((k,v) -> rdfReader.setProperty(k, v));
-	}
-
-	@Override /* Overridden from ReaderParserSession */
-	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-
-		RDFReader r = rdfReader;
-		r.read(model, pipe.getBufferedReader(), null);
-
-		List<Resource> roots = getRoots(model);
-
-		// Special case where we're parsing a loose collection of resources.
-		if (isLooseCollections() && type.isCollectionOrArray()) {
-			Collection c = null;
-			if (type.isArray() || type.isArgs())
-				c = list();
-			else
-				c = (
-					type.canCreateNewInstance(getOuter())
-					? (Collection<?>)type.newInstance(getOuter())
-					: new JsonList(this)
-				);
-
-			AtomicInteger argIndex = new AtomicInteger(0);
-			Collection c2 = c;
-			roots.forEach(x -> c2.add(parseAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
-
-			if (type.isArray() || type.isArgs())
-				return (T)toArray(type, c);
-			return (T)c;
-		}
-
-		if (roots.isEmpty())
-			return type.isOptional() ? (T)Utils.opte() : null;
-
-		if (roots.size() > 1)
-			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());
-		Resource resource = roots.get(0);
-
-		return parseAnything(type, resource, getOuter(), null);
 	}
 
 	private final void addModelPrefix(Namespace ns) {
@@ -323,48 +269,28 @@ public class RdfParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	private <T> BeanMap<T> parseIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException {
-		BeanMeta<T> bm = m.getMeta();
-		RdfBeanMeta rbm = getRdfBeanMeta(bm);
-		if (rbm.hasBeanUri() && r2.getURI() != null)
-			rbm.getBeanUriProperty().set(m, null, r2.getURI());
-		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
-			Statement st = i.next();
-			Property p = st.getPredicate();
-			String key = decodeString(p.getLocalName());
-			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
-			setCurrentProperty(pMeta);
-			if (pMeta != null) {
-				RDFNode o = st.getObject();
-				ClassMeta<?> cm = pMeta.getClassMeta();
-				if (cm.isCollectionOrArray() && isMultiValuedCollections(pMeta)) {
-					ClassMeta<?> et = cm.getElementType();
-					Object value = parseAnything(et, o, m.getBean(false), pMeta);
-					setName(et, value, key);
-					try {
-						pMeta.add(m, key, value);
-					} catch (BeanRuntimeException e) {
-						onBeanSetterException(pMeta, e);
-						throw e;
-					}
-				} else {
-					Object value = parseAnything(cm, o, m.getBean(false), pMeta);
-					setName(cm, value, key);
-					try {
-						pMeta.set(m, key, value);
-					} catch (BeanRuntimeException e) {
-						onBeanSetterException(pMeta, e);
-						throw e;
-					}
-				}
-			} else if (! (p.equals(pRoot) || p.equals(pType))) {
-				RDFNode o = st.getObject();
-				Object value = parseAnything(object(), o, m.getBean(false), null);
-				onUnknownProperty(key, m, value);
+	private Object getValue(RDFNode n, Object outer) throws ParseException {
+		if (n.isLiteral())
+			return n.asLiteral().getValue();
+		if (n.isResource()) {
+			Statement st = n.asResource().getProperty(pValue);
+			if (st != null) {
+				n = st.getObject();
+				if (n.isLiteral())
+					return n.asLiteral().getValue();
+				return parseAnything(object(), st.getObject(), outer, null);
 			}
-			setCurrentProperty(null);
 		}
-		return m;
+		throw new ParseException(this, "Unknown value type for node ''{0}''", n);
+	}
+
+	private boolean isBag(RDFNode n) {
+		if (n.isResource()) {
+			Statement st = n.asResource().getProperty(pRdfType);
+			if (st != null)
+				return RDF_BAG.equals(st.getResource().getURI());
+		}
+		return false;
 	}
 
 	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
@@ -374,6 +300,15 @@ public class RdfParserSession extends ReaderParserSession {
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 
 		return getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
+	}
+
+	private boolean isSeq(RDFNode n) {
+		if (n.isResource()) {
+			Statement st = n.asResource().getProperty(pRdfType);
+			if (st != null)
+				return RDF_SEQ.equals(st.getResource().getURI());
+		}
+		return false;
 	}
 
 	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws ParseException {
@@ -519,37 +454,66 @@ public class RdfParserSession extends ReaderParserSession {
 		return (T)o;
 	}
 
-	private boolean isSeq(RDFNode n) {
-		if (n.isResource()) {
-			Statement st = n.asResource().getProperty(pRdfType);
-			if (st != null)
-				return RDF_SEQ.equals(st.getResource().getURI());
-		}
-		return false;
-	}
-
-	private boolean isBag(RDFNode n) {
-		if (n.isResource()) {
-			Statement st = n.asResource().getProperty(pRdfType);
-			if (st != null)
-				return RDF_BAG.equals(st.getResource().getURI());
-		}
-		return false;
-	}
-
-	private Object getValue(RDFNode n, Object outer) throws ParseException {
-		if (n.isLiteral())
-			return n.asLiteral().getValue();
-		if (n.isResource()) {
-			Statement st = n.asResource().getProperty(pValue);
-			if (st != null) {
-				n = st.getObject();
-				if (n.isLiteral())
-					return n.asLiteral().getValue();
-				return parseAnything(object(), st.getObject(), outer, null);
+	private <T> BeanMap<T> parseIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException {
+		BeanMeta<T> bm = m.getMeta();
+		RdfBeanMeta rbm = getRdfBeanMeta(bm);
+		if (rbm.hasBeanUri() && r2.getURI() != null)
+			rbm.getBeanUriProperty().set(m, null, r2.getURI());
+		for (StmtIterator i = r2.listProperties(); i.hasNext();) {
+			Statement st = i.next();
+			Property p = st.getPredicate();
+			String key = decodeString(p.getLocalName());
+			BeanPropertyMeta pMeta = m.getPropertyMeta(key);
+			setCurrentProperty(pMeta);
+			if (pMeta != null) {
+				RDFNode o = st.getObject();
+				ClassMeta<?> cm = pMeta.getClassMeta();
+				if (cm.isCollectionOrArray() && isMultiValuedCollections(pMeta)) {
+					ClassMeta<?> et = cm.getElementType();
+					Object value = parseAnything(et, o, m.getBean(false), pMeta);
+					setName(et, value, key);
+					try {
+						pMeta.add(m, key, value);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(pMeta, e);
+						throw e;
+					}
+				} else {
+					Object value = parseAnything(cm, o, m.getBean(false), pMeta);
+					setName(cm, value, key);
+					try {
+						pMeta.set(m, key, value);
+					} catch (BeanRuntimeException e) {
+						onBeanSetterException(pMeta, e);
+						throw e;
+					}
+				}
+			} else if (! (p.equals(pRoot) || p.equals(pType))) {
+				RDFNode o = st.getObject();
+				Object value = parseAnything(object(), o, m.getBean(false), null);
+				onUnknownProperty(key, m, value);
 			}
+			setCurrentProperty(null);
 		}
-		throw new ParseException(this, "Unknown value type for node ''{0}''", n);
+		return m;
+	}
+
+	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
+		int argIndex = 0;
+		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
+			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
+			l.add(e);
+		}
+		return l;
+	}
+
+	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
+		int argIndex = 0;
+		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
+			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
+			l.add(e);
+		}
+		return l;
 	}
 
 	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException {
@@ -576,28 +540,45 @@ public class RdfParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
-		int argIndex = 0;
-		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
-			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
-			l.add(e);
+	@SuppressWarnings("resource")
+	@Override /* Overridden from ReaderParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+
+		RDFReader r = rdfReader;
+		r.read(model, pipe.getBufferedReader(), null);
+
+		List<Resource> roots = getRoots(model);
+
+		// Special case where we're parsing a loose collection of resources.
+		if (isLooseCollections() && type.isCollectionOrArray()) {
+			Collection c = null;
+			if (type.isArray() || type.isArgs())
+				c = list();
+			else
+				c = (
+					type.canCreateNewInstance(getOuter())
+					? (Collection<?>)type.newInstance(getOuter())
+					: new JsonList(this)
+				);
+
+			AtomicInteger argIndex = new AtomicInteger(0);
+			Collection c2 = c;
+			roots.forEach(x -> c2.add(parseAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
+
+			if (type.isArray() || type.isArgs())
+				return (T)toArray(type, c);
+			return (T)c;
 		}
-		return l;
+
+		if (roots.isEmpty())
+			return type.isOptional() ? (T)Utils.opte() : null;
+
+		if (roots.size() > 1)
+			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());
+		Resource resource = roots.get(0);
+
+		return parseAnything(type, resource, getOuter(), null);
 	}
-
-	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
-		int argIndex = 0;
-		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
-			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
-			l.add(e);
-		}
-		return l;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Common properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
@@ -607,6 +588,16 @@ public class RdfParserSession extends ReaderParserSession {
 	 */
 	protected final RdfCollectionFormat getCollectionFormat() {
 		return ctx.getCollectionFormat();
+	}
+
+	/**
+	 * All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaSettings() {
+		return ctx.getJenaSettings();
 	}
 
 	/**
@@ -641,6 +632,43 @@ public class RdfParserSession extends ReaderParserSession {
 	protected final String getLanguage() {
 		return ctx.getLanguage();
 	}
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
+		return ctx.getRdfBeanMeta(bm);
+	}
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getRdfBeanPropertyMeta(bpm);
+	}
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		return ctx.getRdfClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getXmlBeanPropertyMeta(bpm);
+	}
 
 	/**
 	 * Collections should be serialized and parsed as loose collections.
@@ -654,24 +682,6 @@ public class RdfParserSession extends ReaderParserSession {
 		return ctx.isLooseCollections();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Jena properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * All Jena-related configuration properties.
-	 *
-	 * @return
-	 * 	A map of all Jena-related configuration properties.
-	 */
-	protected final Map<String,Object> getJenaSettings() {
-		return ctx.getJenaSettings();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Trim whitespace from text elements.
 	 *
@@ -681,49 +691,5 @@ public class RdfParserSession extends ReaderParserSession {
 	 */
 	protected final boolean isTrimWhitespace() {
 		return ctx.isTrimWhitespace();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
-		return ctx.getRdfClassMeta(cm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean.
-	 *
-	 * @param bm The bean to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
-		return ctx.getRdfBeanMeta(bm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
-		return ctx.getRdfBeanPropertyMeta(bpm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		return ctx.getXmlBeanPropertyMeta(bpm);
 	}
 }

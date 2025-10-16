@@ -31,6 +31,28 @@ import org.apache.juneau.svl.*;
 public class SerializerConfigAnnotation {
 
 	/**
+	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder}.
+	 */
+	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public OutputStreamSerializerApply(VarResolverSession vr) {
+			super(SerializerConfig.class, OutputStreamSerializer.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializer.Builder b) {
+			SerializerConfig a = ai.inner();
+
+			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
+		}
+	}
+
+	/**
 	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.Serializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<SerializerConfig,Serializer.Builder> {
@@ -64,28 +86,6 @@ public class SerializerConfigAnnotation {
 			bool(a.ignoreRecursions()).ifPresent(x -> b.ignoreRecursions(x));
 			integer(a.initialDepth(), "initialDepth").ifPresent(x -> b.initialDepth(x));
 			integer(a.maxDepth(), "maxDepth").ifPresent(x -> b.maxDepth(x));
-		}
-	}
-
-	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder}.
-	 */
-	public static class OutputStreamSerializerApply extends AnnotationApplier<SerializerConfig,OutputStreamSerializer.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public OutputStreamSerializerApply(VarResolverSession vr) {
-			super(SerializerConfig.class, OutputStreamSerializer.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializer.Builder b) {
-			SerializerConfig a = ai.inner();
-
-			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
 		}
 	}
 

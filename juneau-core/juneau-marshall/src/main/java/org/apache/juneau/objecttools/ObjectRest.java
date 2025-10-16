@@ -137,10 +137,25 @@ import org.apache.juneau.parser.*;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ObjectRest {
+	class JsonNode {
+		Object o;
+		ClassMeta cm;
+		JsonNode parent;
+		String keyName;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
+		JsonNode(JsonNode parent, String keyName, Object o, ClassMeta cm) {
+			this.o = o;
+			this.keyName = keyName;
+			this.parent = parent;
+			if (cm == null || cm.isObject()) {
+				if (o == null)
+					cm = session.object();
+				else
+					cm = session.getClassMetaForObject(o);
+			}
+			this.cm = cm;
+		}
+	}
 
 	/** The list of possible request types. */
 	private static final int GET=1, PUT=2, POST=3, DELETE=4;
@@ -153,7 +168,6 @@ public class ObjectRest {
 	public static ObjectRest create(Object o) {
 		return new ObjectRest(o);
 	}
-
 	/**
 	 * Static creator.
 	 * @param o The object being wrapped.
@@ -163,12 +177,41 @@ public class ObjectRest {
 	public static ObjectRest create(Object o, ReaderParser parser) {
 		return new ObjectRest(o, parser);
 	}
+	/** Handle nulls and strip off leading '/' char. */
+	private static String normalizeUrl(String url) {
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+		// Interpret nulls and blanks the same (i.e. as addressing the root itself)
+		if (url == null)
+			url = "";
+
+		// Strip off leading slash if present.
+		if (isNotEmpty(url) && url.charAt(0) == '/')
+			url = url.substring(1);
+
+		return url;
+	}
+
+	private static int parseInt(String key) {
+		try {
+			return Integer.parseInt(key);
+		} catch (NumberFormatException e) {
+			throw new ObjectRestException(HTTP_BAD_REQUEST,
+				"Cannot address an item in an array with a non-integer key ''{0}''", key
+			);
+		}
+	}
+
+	private static Object[] removeArrayEntry(Object o, int index) {
+		Object[] a = (Object[])o;
+		// Shrink the array.
+		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length-1);
+		System.arraycopy(a, 0, a2, 0, index);
+		System.arraycopy(a, index+1, a2, index, a.length-index-1);
+		return a2;
+	}
 
 	private ReaderParser parser = JsonParser.DEFAULT;
+
 	final BeanSession session;
 
 	/** If true, the root cannot be overwritten */
@@ -207,22 +250,18 @@ public class ObjectRest {
 	}
 
 	/**
-	 * Call this method to prevent the root object from being overwritten on <c>put("", xxx);</c> calls.
+	 * Remove an element from a POJO model.
 	 *
-	 * @return This object.
-	 */
-	public ObjectRest setRootLocked() {
-		this.rootLocked = true;
-		return this;
-	}
-
-	/**
-	 * The root object that was passed into the constructor of this method.
+	 * <p>
+	 * If the element does not exist, no action is taken.
 	 *
-	 * @return The root object.
+	 * @param url
+	 * 	The URL of the element being deleted.
+	 * 	If <jk>null</jk> or blank, the root itself is deleted.
+	 * @return The removed element, or null if that element does not exist.
 	 */
-	public Object getRootObject() {
-		return root.o;
+	public Object delete(String url) {
+		return service(DELETE, url, null);
 	}
 
 	/**
@@ -235,20 +274,6 @@ public class ObjectRest {
 	 */
 	public Object get(String url) {
 		return getWithDefault(url, null);
-	}
-
-	/**
-	 * Retrieves the element addressed by the URL.
-	 *
-	 * @param url
-	 * 	The URL of the element to retrieve.
-	 * 	<br>If <jk>null</jk> or blank, returns the root.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The addressed element, or null if that element does not exist in the tree.
-	 */
-	public Object getWithDefault(String url, Object defVal) {
-		Object o = service(GET, url, null);
-		return o == null ? defVal : o;
 	}
 
 	/**
@@ -346,6 +371,286 @@ public class ObjectRest {
 	}
 
 	/**
+	 * Returns the specified entry value converted to a {@link Boolean}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean getBoolean(String url) {
+		return get(url, Boolean.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Boolean}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Boolean getBoolean(String url, Boolean defVal) {
+		return getWithDefault(url, defVal, Boolean.class);
+	}
+
+	/**
+	 * Returns the class type of the object at the specified URL.
+	 *
+	 * @param url The URL.
+	 * @return The class type.
+	 */
+	public ClassMeta getClassMeta(String url) {
+		JsonNode n = getNode(normalizeUrl(url), root);
+		if (n == null)
+			return null;
+		return n.cm;
+	}
+
+	/**
+	 * Returns the specified entry value converted to an {@link Integer}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer getInt(String url) {
+		return get(url, Integer.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to an {@link Integer}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Integer getInt(String url, Integer defVal) {
+		return getWithDefault(url, defVal, Integer.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link JsonList}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(JsonList.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList getJsonList(String url) {
+		return get(url, JsonList.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link JsonList}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(JsonList.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonList getJsonList(String url, JsonList defVal) {
+		return getWithDefault(url, defVal, JsonList.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Map}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(JsonMap.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap getJsonMap(String url) {
+		return get(url, JsonMap.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link JsonMap}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(JsonMap.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public JsonMap getJsonMap(String url, JsonMap defVal) {
+		return getWithDefault(url, defVal, JsonMap.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link List}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(List.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public List<?> getList(String url) {
+		return get(url, List.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link List}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public List<?> getList(String url, List<?> defVal) {
+		return getWithDefault(url, defVal, List.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Long}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Long getLong(String url) {
+		return get(url, Long.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Long}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Long getLong(String url, Long defVal) {
+		return getWithDefault(url, defVal, Long.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Map}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Map<?,?> getMap(String url) {
+		return get(url, Map.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link Map}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 * @throws InvalidDataConversionException If value cannot be converted.
+	 */
+	public Map<?,?> getMap(String url, Map<?,?> defVal) {
+		return getWithDefault(url, defVal, Map.class);
+	}
+
+	/**
+	 * Returns the list of available methods that can be passed to the {@link #invokeMethod(String, String, String)}
+	 * for the object addressed by the specified URL.
+	 *
+	 * @param url The URL.
+	 * @return The list of methods.
+	 */
+	public Collection<String> getPublicMethods(String url) {
+		Object o = get(url);
+		if (o == null)
+			return null;
+		return session.getClassMeta(o.getClass()).getPublicMethods().keySet();
+	}
+
+	/**
+	 * The root object that was passed into the constructor of this method.
+	 *
+	 * @return The root object.
+	 */
+	public Object getRootObject() {
+		return root.o;
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link String}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(String.<jk>class</jk>, key)</code>.
+	 *
+	 * @param url The key.
+	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
+	 */
+	public String getString(String url) {
+		return get(url, String.class);
+	}
+
+	/**
+	 * Returns the specified entry value converted to a {@link String}.
+	 *
+	 * <p>
+	 * Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.
+	 *
+	 * @param url The key.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The converted value, or the default value if the map contains no mapping for this key.
+	 */
+	public String getString(String url, String defVal) {
+		return getWithDefault(url, defVal, String.class);
+	}
+
+	/**
+	 * Retrieves the element addressed by the URL.
+	 *
+	 * @param url
+	 * 	The URL of the element to retrieve.
+	 * 	<br>If <jk>null</jk> or blank, returns the root.
+	 * @param defVal The default value if the map doesn't contain the specified mapping.
+	 * @return The addressed element, or null if that element does not exist in the tree.
+	 */
+	public Object getWithDefault(String url, Object defVal) {
+		Object o = service(GET, url, null);
+		return o == null ? defVal : o;
+	}
+
+	/**
 	 * Same as {@link #get(String, Class)} but returns a default value if the addressed element is null or non-existent.
 	 *
 	 * @param url
@@ -385,236 +690,6 @@ public class ObjectRest {
 	}
 
 	/**
-	 * Returns the specified entry value converted to a {@link String}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(String.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 */
-	public String getString(String url) {
-		return get(url, String.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link String}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(String.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 */
-	public String getString(String url, String defVal) {
-		return getWithDefault(url, defVal, String.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to an {@link Integer}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Integer.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer getInt(String url) {
-		return get(url, Integer.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to an {@link Integer}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Integer.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Integer getInt(String url, Integer defVal) {
-		return getWithDefault(url, defVal, Integer.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Long}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Long.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Long getLong(String url) {
-		return get(url, Long.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Long}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Long.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Long getLong(String url, Long defVal) {
-		return getWithDefault(url, defVal, Long.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Boolean}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean getBoolean(String url) {
-		return get(url, Boolean.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Boolean}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Boolean.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Boolean getBoolean(String url, Boolean defVal) {
-		return getWithDefault(url, defVal, Boolean.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Map}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Map.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Map<?,?> getMap(String url) {
-		return get(url, Map.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Map}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(Map.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public Map<?,?> getMap(String url, Map<?,?> defVal) {
-		return getWithDefault(url, defVal, Map.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link List}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(List.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public List<?> getList(String url) {
-		return get(url, List.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link List}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(List.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public List<?> getList(String url, List<?> defVal) {
-		return getWithDefault(url, defVal, List.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link Map}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(JsonMap.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap getJsonMap(String url) {
-		return get(url, JsonMap.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link JsonMap}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(JsonMap.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonMap getJsonMap(String url, JsonMap defVal) {
-		return getWithDefault(url, defVal, JsonMap.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link JsonList}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(JsonList.<jk>class</jk>, key)</code>.
-	 *
-	 * @param url The key.
-	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList getJsonList(String url) {
-		return get(url, JsonList.class);
-	}
-
-	/**
-	 * Returns the specified entry value converted to a {@link JsonList}.
-	 *
-	 * <p>
-	 * Shortcut for <code>get(JsonList.<jk>class</jk>, key, defVal)</code>.
-	 *
-	 * @param url The key.
-	 * @param defVal The default value if the map doesn't contain the specified mapping.
-	 * @return The converted value, or the default value if the map contains no mapping for this key.
-	 * @throws InvalidDataConversionException If value cannot be converted.
-	 */
-	public JsonList getJsonList(String url, JsonList defVal) {
-		return getWithDefault(url, defVal, JsonList.class);
-	}
-
-	/**
 	 * Executes the specified method with the specified parameters on the specified object.
 	 *
 	 * @param url The URL of the element to retrieve.
@@ -650,49 +725,6 @@ public class ObjectRest {
 	}
 
 	/**
-	 * Returns the list of available methods that can be passed to the {@link #invokeMethod(String, String, String)}
-	 * for the object addressed by the specified URL.
-	 *
-	 * @param url The URL.
-	 * @return The list of methods.
-	 */
-	public Collection<String> getPublicMethods(String url) {
-		Object o = get(url);
-		if (o == null)
-			return null;
-		return session.getClassMeta(o.getClass()).getPublicMethods().keySet();
-	}
-
-	/**
-	 * Returns the class type of the object at the specified URL.
-	 *
-	 * @param url The URL.
-	 * @return The class type.
-	 */
-	public ClassMeta getClassMeta(String url) {
-		JsonNode n = getNode(normalizeUrl(url), root);
-		if (n == null)
-			return null;
-		return n.cm;
-	}
-
-	/**
-	 * Sets/replaces the element addressed by the URL.
-	 *
-	 * <p>
-	 * This method expands the POJO model as necessary to create the new element.
-	 *
-	 * @param url
-	 * 	The URL of the element to create.
-	 * 	If <jk>null</jk> or blank, the root itself is replaced with the specified value.
-	 * @param val The value being set.  Value can be of any type.
-	 * @return The previously addressed element, or <jk>null</jk> the element did not previously exist.
-	 */
-	public Object put(String url, Object val) {
-		return service(PUT, url, val);
-	}
-
-	/**
 	 * Adds a value to a list element in a POJO model.
 	 *
 	 * <p>
@@ -725,18 +757,29 @@ public class ObjectRest {
 	}
 
 	/**
-	 * Remove an element from a POJO model.
+	 * Sets/replaces the element addressed by the URL.
 	 *
 	 * <p>
-	 * If the element does not exist, no action is taken.
+	 * This method expands the POJO model as necessary to create the new element.
 	 *
 	 * @param url
-	 * 	The URL of the element being deleted.
-	 * 	If <jk>null</jk> or blank, the root itself is deleted.
-	 * @return The removed element, or null if that element does not exist.
+	 * 	The URL of the element to create.
+	 * 	If <jk>null</jk> or blank, the root itself is replaced with the specified value.
+	 * @param val The value being set.  Value can be of any type.
+	 * @return The previously addressed element, or <jk>null</jk> the element did not previously exist.
 	 */
-	public Object delete(String url) {
-		return service(DELETE, url, null);
+	public Object put(String url, Object val) {
+		return service(PUT, url, val);
+	}
+
+	/**
+	 * Call this method to prevent the root object from being overwritten on <c>put("", xxx);</c> calls.
+	 *
+	 * @return This object.
+	 */
+	public ObjectRest setRootLocked() {
+		this.rootLocked = true;
+		return this;
 	}
 
 	@Override /* Overridden from Object */
@@ -744,18 +787,21 @@ public class ObjectRest {
 		return String.valueOf(root.o);
 	}
 
-	/** Handle nulls and strip off leading '/' char. */
-	private static String normalizeUrl(String url) {
+	private Object[] addArrayEntry(Object o, Object val, ClassMeta componentType) {
+		Object[] a = (Object[])o;
+		// Expand out the array.
+		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length+1);
+		System.arraycopy(a, 0, a2, 0, a.length);
+		a2[a.length] = convert(val, componentType);
+		return a2;
+	}
 
-		// Interpret nulls and blanks the same (i.e. as addressing the root itself)
-		if (url == null)
-			url = "";
-
-		// Strip off leading slash if present.
-		if (isNotEmpty(url) && url.charAt(0) == '/')
-			url = url.substring(1);
-
-		return url;
+	private Object convert(Object in, ClassMeta cm) {
+		if (cm == null)
+			return in;
+		if (cm.isBean() && in instanceof Map)
+			return session.convertToType(in, cm);
+		return in;
 	}
 
 	/*
@@ -909,44 +955,6 @@ public class ObjectRest {
 		return a;
 	}
 
-	private Object[] addArrayEntry(Object o, Object val, ClassMeta componentType) {
-		Object[] a = (Object[])o;
-		// Expand out the array.
-		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length+1);
-		System.arraycopy(a, 0, a2, 0, a.length);
-		a2[a.length] = convert(val, componentType);
-		return a2;
-	}
-
-	private static Object[] removeArrayEntry(Object o, int index) {
-		Object[] a = (Object[])o;
-		// Shrink the array.
-		Object[] a2 = (Object[])Array.newInstance(a.getClass().getComponentType(), a.length-1);
-		System.arraycopy(a, 0, a2, 0, index);
-		System.arraycopy(a, index+1, a2, index, a.length-index-1);
-		return a2;
-	}
-
-	class JsonNode {
-		Object o;
-		ClassMeta cm;
-		JsonNode parent;
-		String keyName;
-
-		JsonNode(JsonNode parent, String keyName, Object o, ClassMeta cm) {
-			this.o = o;
-			this.keyName = keyName;
-			this.parent = parent;
-			if (cm == null || cm.isObject()) {
-				if (o == null)
-					cm = session.object();
-				else
-					cm = session.getClassMetaForObject(o);
-			}
-			this.cm = cm;
-		}
-	}
-
 	JsonNode getNode(String url, JsonNode n) {
 		if (url == null || url.isEmpty())
 			return n;
@@ -998,23 +1006,5 @@ public class ObjectRest {
 			return new JsonNode(n, parentKey, o2, ct2);
 
 		return getNode(childUrl, new JsonNode(n, parentKey, o2, ct2));
-	}
-
-	private Object convert(Object in, ClassMeta cm) {
-		if (cm == null)
-			return in;
-		if (cm.isBean() && in instanceof Map)
-			return session.convertToType(in, cm);
-		return in;
-	}
-
-	private static int parseInt(String key) {
-		try {
-			return Integer.parseInt(key);
-		} catch (NumberFormatException e) {
-			throw new ObjectRestException(HTTP_BAD_REQUEST,
-				"Cannot address an item in an array with a non-integer key ''{0}''", key
-			);
-		}
 	}
 }

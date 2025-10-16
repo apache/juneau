@@ -40,25 +40,6 @@ import org.apache.juneau.httppart.*;
  * </ul>
  */
 public class ReaderParserSession extends ParserSession {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(ReaderParser ctx) {
-		return new Builder(ctx);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -79,11 +60,22 @@ public class ReaderParserSession extends ParserSession {
 			streamCharset = ctx.streamCharset;
 		}
 
+		@Override /* Overridden from Builder */
+		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
+			super.apply(type, apply);
+			return this;
+		}
+
 		@Override
 		public ReaderParserSession build() {
 			return new ReaderParserSession(this);
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder debug(Boolean value) {
+			super.debug(value);
+			return this;
+		}
 		/**
 		 * File charset.
 		 *
@@ -106,54 +98,9 @@ public class ReaderParserSession extends ParserSession {
 			return this;
 		}
 
-		/**
-		 * Input stream charset.
-		 *
-		 * <p>
-		 * The character set to use for converting InputStreams and byte arrays to readers.
-		 *
-		 * <p>
-		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-		 *
-		 * <p>
-		 * If not specified, defaults to UTF-8.
-		 *
-		 * @param value
-		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder streamCharset(Charset value) {
-			streamCharset = value;
-			return this;
-		}
 		@Override /* Overridden from Builder */
-		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
-			super.apply(type, apply);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(Boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -182,26 +129,20 @@ public class ReaderParserSession extends ParserSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder outer(Object value) {
 			super.outer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -216,12 +157,56 @@ public class ReaderParserSession extends ParserSession {
 			super.schemaDefault(value);
 			return this;
 		}
+
+		/**
+		 * Input stream charset.
+		 *
+		 * <p>
+		 * The character set to use for converting InputStreams and byte arrays to readers.
+		 *
+		 * <p>
+		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+		 *
+		 * <p>
+		 * If not specified, defaults to UTF-8.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder streamCharset(Charset value) {
+			streamCharset = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(ReaderParser ctx) {
+		return new Builder(ctx);
+	}
 	private final ReaderParser ctx;
 	private final Charset fileCharset, streamCharset;
 
@@ -235,11 +220,6 @@ public class ReaderParserSession extends ParserSession {
 		ctx = builder.ctx;
 		fileCharset = builder.fileCharset;
 		streamCharset = builder.streamCharset;
-	}
-
-	@Override /* Overridden from ParserSession */
-	public final boolean isReaderParser() {
-		return true;
 	}
 
 	/**
@@ -269,10 +249,6 @@ public class ReaderParserSession extends ParserSession {
 		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Returns the file charset defined on this session.
 	 *
@@ -281,7 +257,6 @@ public class ReaderParserSession extends ParserSession {
 	public Charset getFileCharset() {
 		return fileCharset;
 	}
-
 	/**
 	 * Returns the stream charset defined on this session.
 	 *
@@ -291,10 +266,10 @@ public class ReaderParserSession extends ParserSession {
 		return streamCharset;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
+	@Override /* Overridden from ParserSession */
+	public final boolean isReaderParser() {
+		return true;
+	}
 	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);

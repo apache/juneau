@@ -77,13 +77,37 @@ public class Keygen extends HtmlElementVoid {
 	 */
 	public Keygen() { /* Empty constructor. */ }
 
+	@Override /* Overridden from HtmlElement */
+	public Keygen _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
 	 *
-	 * @param autofocus
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -103,11 +127,22 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * The challenge string is typically provided by the server and used to verify the key generation.
 	 *
-	 * @param challenge The challenge string to package with the generated key.
+	 * @param value The challenge string to package with the generated key.
 	 * @return This object.
 	 */
 	public Keygen challenge(String value) {
 		attr("challenge", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Keygen contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -125,7 +160,7 @@ public class Keygen extends HtmlElementVoid {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -145,11 +180,23 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this keygen.
+	 * @param value The ID of the form element to associate with this keygen.
 	 * @return This object.
 	 */
 	public Keygen form(String value) {
 		attr("form", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen hidden(Object value) {
+		super.hidden(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen id(String value) {
+		super.id(value);
 		return this;
 	}
 
@@ -167,11 +214,17 @@ public class Keygen extends HtmlElementVoid {
 	 *  	<li><js>"EC"</js> - Elliptic curve key pair</li>
 	 * </ul>
 	 *
-	 * @param keytype The type of cryptographic key to generate.
+	 * @param value The type of cryptographic key to generate.
 	 * @return This object.
 	 */
 	public Keygen keytype(String value) {
 		attr("keytype", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen lang(String value) {
+		super.lang(value);
 		return this;
 	}
 
@@ -185,56 +238,11 @@ public class Keygen extends HtmlElementVoid {
 	 * <p>
 	 * The name should be unique within the form and should not contain spaces or special characters.
 	 *
-	 * @param name The name of the keygen element for submission and API access.
+	 * @param value The name of the keygen element for submission and API access.
 	 * @return This object.
 	 */
 	public Keygen name(String value) {
 		attr("name", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Keygen _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen dir(String value) {
-		super.dir(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen hidden(Object value) {
-		super.hidden(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen id(String value) {
-		super.id(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen lang(String value) {
-		super.lang(value);
 		return this;
 	}
 
@@ -565,18 +573,6 @@ public class Keygen extends HtmlElementVoid {
 	@Override /* Overridden from HtmlElement */
 	public Keygen translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Keygen attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

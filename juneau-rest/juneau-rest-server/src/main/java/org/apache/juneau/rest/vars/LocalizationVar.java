@@ -57,6 +57,11 @@ public class LocalizationVar extends MultipartVar {
 	}
 
 	@Override /* Overridden from Var */
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(Messages.class).isPresent() || session.getBean(RestRequest.class).isPresent();
+	}
+
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String[] args) {
 		if (args.length > 0) {
 			String key = args[0];
@@ -69,10 +74,5 @@ public class LocalizationVar extends MultipartVar {
 			return messages.getString(key, (Object[])a);
 		}
 		return "";
-	}
-
-	@Override /* Overridden from Var */
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(Messages.class).isPresent() || session.getBean(RestRequest.class).isPresent();
 	}
 }

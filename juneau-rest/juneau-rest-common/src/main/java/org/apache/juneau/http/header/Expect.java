@@ -77,11 +77,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Expect")
 public class Expect extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Expect";
 
@@ -111,11 +106,6 @@ public class Expect extends BasicStringHeader {
 	public static Expect of(Supplier<String> value) {
 		return value == null ? null : new Expect(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

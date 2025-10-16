@@ -89,11 +89,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Expires")
 public class Expires extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Expires";
 
@@ -107,18 +102,6 @@ public class Expires extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static Expires of(String value) {
-		return value == null ? null : new Expires(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static Expires of(ZonedDateTime value) {
 		return value == null ? null : new Expires(value);
 	}
 
@@ -137,10 +120,17 @@ public class Expires extends BasicDateHeader {
 		return value == null ? null : new Expires(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static Expires of(ZonedDateTime value) {
+		return value == null ? null : new Expires(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -150,17 +140,6 @@ public class Expires extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Expires(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public Expires(ZonedDateTime value) {
 		super(NAME, value);
 	}
 
@@ -175,6 +154,17 @@ public class Expires extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public Expires(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public Expires(ZonedDateTime value) {
 		super(NAME, value);
 	}
 }

@@ -33,12 +33,8 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class StreamEntity extends BasicHttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private byte[] byteCache;
 	private String stringCache;
 
@@ -67,20 +63,14 @@ public class StreamEntity extends BasicHttpEntity {
 		super(copyFrom);
 	}
 
-	@Override
-	public StreamEntity copy() {
-		return new StreamEntity(this);
+	@Override /* Overridden from AbstractHttpEntity */
+	public byte[] asBytes() throws IOException {
+		if (isCached() && byteCache == null)
+			byteCache = readBytes(content(), getMaxLength());
+		if (byteCache != null)
+			return byteCache;
+		return readBytes(content(), getMaxLength());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@SuppressWarnings("resource") // Caller closes
-	private InputStream content() {
-		return Objects.requireNonNull(contentOrElse((InputStream) null), "Input stream is null.");
-	}
-
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
@@ -90,18 +80,16 @@ public class StreamEntity extends BasicHttpEntity {
 		return read(content());
 	}
 
-	@Override /* Overridden from AbstractHttpEntity */
-	public byte[] asBytes() throws IOException {
-		if (isCached() && byteCache == null)
-			byteCache = readBytes(content(), getMaxLength());
-		if (byteCache != null)
-			return byteCache;
-		return readBytes(content(), getMaxLength());
+	@Override
+	public StreamEntity copy() {
+		return new StreamEntity(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return isCached();
+	public InputStream getContent() throws IOException {
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return content();
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -112,35 +100,15 @@ public class StreamEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException {
-		if (isCached())
-			return new ByteArrayInputStream(asBytes());
-		return content();
-	}
-
-	/**
-	 * Writes bytes from the {@code InputStream} this entity was constructed
-	 * with to an {@code OutputStream}.  The content length
-	 * determines how many bytes are written.  If the length is unknown ({@code -1}), the
-	 * stream will be completely consumed (to the end of the stream).
-	 */
-	@Override
-	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
-
-		if (isCached()) {
-			out.write(asBytes());
-		} else {
-			try (InputStream is = getContent()) {
-				pipe(is, out, getMaxLength());
-			}
-		}
+	public boolean isRepeatable() {
+		return isCached();
 	}
 
 	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return ! isCached();
 	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public StreamEntity setCached() throws IOException{
 		super.setCached();
@@ -152,7 +120,6 @@ public class StreamEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpEntity */
 	public StreamEntity setChunked() {
 		super.setChunked();
@@ -178,13 +145,13 @@ public class StreamEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentEncoding(String value) {
+	public StreamEntity setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentEncoding(ContentEncoding value) {
+	public StreamEntity setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -196,13 +163,13 @@ public class StreamEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentType(String value) {
+	public StreamEntity setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public StreamEntity setContentType(ContentType value) {
+	public StreamEntity setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
@@ -217,5 +184,29 @@ public class StreamEntity extends BasicHttpEntity {
 	public StreamEntity setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
+	}
+
+	/**
+	 * Writes bytes from the {@code InputStream} this entity was constructed
+	 * with to an {@code OutputStream}.  The content length
+	 * determines how many bytes are written.  If the length is unknown ({@code -1}), the
+	 * stream will be completely consumed (to the end of the stream).
+	 */
+	@Override
+	public void writeTo(OutputStream out) throws IOException {
+		Utils.assertArgNotNull("out", out);
+
+		if (isCached()) {
+			out.write(asBytes());
+		} else {
+			try (InputStream is = getContent()) {
+				pipe(is, out, getMaxLength());
+			}
+		}
+	}
+
+	@SuppressWarnings("resource") // Caller closes
+	private InputStream content() {
+		return Objects.requireNonNull(contentOrElse((InputStream) null), "Input stream is null.");
 	}
 }

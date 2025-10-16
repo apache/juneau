@@ -79,17 +79,24 @@ public abstract class Var {
 	}
 
 	/**
-	 * Return the name of this variable.
+	 * The interface that needs to be implemented for subclasses of {@link SimpleVar}.
 	 *
-	 * <p>
-	 * For example, the system property variable returns <js>"S"</js> since the format of the variable is
-	 * <js>"$S{system.property}"</js>.
-	 *
-	 * @return The name of this variable.
+	 * @param session The session object used for a single instance of a var resolution.
+	 * @param arg The inside argument of the variable.
+	 * @return The resolved value.
+	 * @throws Exception Any exception can be thrown.
 	 */
-	protected String getName() {
-		return name;
-	}
+	public abstract String resolve(VarResolverSession session, String arg) throws Exception;
+
+	/**
+	 * The interface that needs to be implemented for subclasses of {@link StreamedVar}.
+	 *
+	 * @param session The session object used for a single instance of a var resolution.
+	 * @param w The writer to send the resolved value to.
+	 * @param arg The inside argument of the variable.
+	 * @throws Exception Any exception can be thrown.
+	 */
+	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
 
 	/**
 	 * Returns whether nested variables are supported by this variable.
@@ -160,22 +167,15 @@ public abstract class Var {
 	}
 
 	/**
-	 * The interface that needs to be implemented for subclasses of {@link SimpleVar}.
+	 * Return the name of this variable.
 	 *
-	 * @param session The session object used for a single instance of a var resolution.
-	 * @param arg The inside argument of the variable.
-	 * @return The resolved value.
-	 * @throws Exception Any exception can be thrown.
-	 */
-	public abstract String resolve(VarResolverSession session, String arg) throws Exception;
-
-	/**
-	 * The interface that needs to be implemented for subclasses of {@link StreamedVar}.
+	 * <p>
+	 * For example, the system property variable returns <js>"S"</js> since the format of the variable is
+	 * <js>"$S{system.property}"</js>.
 	 *
-	 * @param session The session object used for a single instance of a var resolution.
-	 * @param w The writer to send the resolved value to.
-	 * @param arg The inside argument of the variable.
-	 * @throws Exception Any exception can be thrown.
+	 * @return The name of this variable.
 	 */
-	public abstract void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception;
+	protected String getName() {
+		return name;
+	}
 }

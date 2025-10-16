@@ -47,12 +47,8 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore  /* Use toString() to serialize */
+@SuppressWarnings("resource")
 public class BasicResource implements HttpResource {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	BasicHttpEntity entity;
 	HeaderList headers = HeaderList.create();
 	boolean unmodifiable;
@@ -91,6 +87,102 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
+	 * Appends the specified header to the end of the headers in this builder.
+	 *
+	 * <p>
+	 * This is a no-op if either the name or value is <jk>null</jk>.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public BasicResource addHeader(String name, String value) {
+		if (name != null && value != null)
+			headers.append(name, value);
+		return this;
+	}
+
+	/**
+	 * Appends the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to set.  <jk>null</jk> headers and headers with <jk>null</jk> names or values are ignored.
+	 * @return This object.
+	 */
+	public BasicResource addHeaders(Header...values) {
+		for (Header h : values) {
+			if (h != null) {
+				String n = h.getName();
+				String v = h.getValue();
+				if (isNotEmpty(n)) {
+					if (n.equalsIgnoreCase("content-type"))
+						setContentType(v);
+					else if (n.equalsIgnoreCase("content-encoding"))
+						setContentEncoding(v);
+					else if (n.equalsIgnoreCase("content-length"))
+						setContentLength(Long.parseLong(v));
+					else
+						headers.append(h);
+				}
+			}
+		}
+		return this;
+	}
+	/**
+	 * Converts the contents of the entity of this resource as a byte array.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return The contents of this entity as a byte array.
+	 * @throws IOException If a problem occurred while trying to read the content.
+	 */
+	public byte[] asBytes() throws IOException {
+		return entity.asBytes();
+	}
+
+	/**
+	 * Returns an assertion on the contents of the entity of this resource.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public FluentByteArrayAssertion<BasicResource> assertBytes() throws IOException {
+		return new FluentByteArrayAssertion<>(asBytes(), this);
+	}
+
+	/**
+	 * Returns an assertion on the contents of the entity of this resource.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return A new fluent assertion.
+	 * @throws IOException If a problem occurred while trying to read the byte array.
+	 */
+	public FluentStringAssertion<BasicResource> assertString() throws IOException {
+		return new FluentStringAssertion<>(asString(), this);
+	}
+
+	/**
+	 * Converts the contents of the entity of this resource as a string.
+	 *
+	 * <p>
+	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 *
+	 * @return The contents of this entity as a string.
+	 * @throws IOException If a problem occurred while trying to read the content.
+	 */
+	public String asString() throws IOException {
+		return entity.asString();
+	}
+
+	@Override
+	public void consumeContent() throws IOException {}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * <p>
@@ -115,22 +207,52 @@ public class BasicResource implements HttpResource {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@Override /* Overridden from HttpEntity */
+	public InputStream getContent() throws IOException, UnsupportedOperationException {
+		return entity.getContent();
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public Header getContentEncoding() {
+		return entity.getContentEncoding();
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public long getContentLength() {
+		return entity.getContentLength();
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public Header getContentType() {
+		return entity.getContentType();
+	}
 
 	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 * Returns access to the underlying builder for the HTTP entity.
 	 *
-	 * @return This object.
+	 * @return The underlying builder for the HTTP entity.
 	 */
-	public BasicResource setUnmodifiable() {
-		unmodifiable = true;
-		entity.setUnmodifiable();
-		headers.setUnmodifiable();
-		return this;
+	public HttpEntity getEntity() {
+		return entity;
+	}
+
+	@Override /* Overridden from HttpResource */
+	public HeaderList getHeaders() {
+		return headers;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isChunked() {
+		return entity.isChunked();
+	}
+	@Override /* Overridden from HttpEntity */
+	public boolean isRepeatable() {
+		return entity.isRepeatable();
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isStreaming() {
+		return entity.isStreaming();
 	}
 
 	/**
@@ -143,20 +265,45 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
+	 * be read multiple times.
+	 *
+	 * @return This object.
+	 * @throws IOException If entity could not be read into memory.
 	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
+	public BasicResource setCached() throws IOException {
+		entity.setCached();
+		return this;
 	}
 
 	/**
-	 * Returns access to the underlying builder for the HTTP entity.
+	 * Sets the 'chunked' flag value to <jk>true</jk>.
 	 *
-	 * @return The underlying builder for the HTTP entity.
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 		use chunked encoding.
+	 * </ul>
+	 *
+	 * @return This object.
 	 */
-	public HttpEntity getEntity() {
-		return entity;
+	public BasicResource setChunked() {
+		entity.setChunked();
+		return this;
+	}
+	/**
+	 * Sets the 'chunked' flag value.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 		use chunked encoding.
+	 * </ul>
+	 *
+	 * @param value The new value for this flag.
+	 * @return This object.
+	 */
+	public BasicResource setChunked(boolean value) {
+		entity.setChunked(value);
+		return this;
 	}
 
 	/**
@@ -186,24 +333,23 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
-	 * Sets the content type on this entity bean.
+	 * Sets the content encoding header on this entity bean.
 	 *
-	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentType(String value) {
-		entity.setContentType(value);
+	public BasicResource setContentEncoding(ContentEncoding value) {
+		entity.setContentEncoding(value);
 		return this;
 	}
-
 	/**
-	 * Sets the content type on this entity bean.
+	 * Sets the content encoding header on this entity bean.
 	 *
-	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentType(ContentType value) {
-		entity.setContentType(value);
+	public BasicResource setContentEncoding(String value) {
+		entity.setContentEncoding(value);
 		return this;
 	}
 
@@ -219,73 +365,26 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
-	 * Sets the content encoding header on this entity bean.
+	 * Sets the content type on this entity bean.
 	 *
-	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentEncoding(String value) {
-		entity.setContentEncoding(value);
+	public BasicResource setContentType(ContentType value) {
+		entity.setContentType(value);
 		return this;
 	}
 
 	/**
-	 * Sets the content encoding header on this entity bean.
+	 * Sets the content type on this entity bean.
 	 *
-	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
-	public BasicResource setContentEncoding(ContentEncoding value) {
-		entity.setContentEncoding(value);
+	public BasicResource setContentType(String value) {
+		entity.setContentType(value);
 		return this;
 	}
-
-	/**
-	 * Sets the 'chunked' flag value to <jk>true</jk>.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
-	 * 		use chunked encoding.
-	 * </ul>
-	 *
-	 * @return This object.
-	 */
-	public BasicResource setChunked() {
-		entity.setChunked();
-		return this;
-	}
-
-	/**
-	 * Sets the 'chunked' flag value.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
-	 * 		use chunked encoding.
-	 * </ul>
-	 *
-	 * @param value The new value for this flag.
-	 * @return This object.
-	 */
-	public BasicResource setChunked(boolean value) {
-		entity.setChunked(value);
-		return this;
-	}
-
-	/**
-	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
-	 * be read multiple times.
-	 *
-	 * @return This object.
-	 * @throws IOException If entity could not be read into memory.
-	 */
-	public BasicResource setCached() throws IOException {
-		entity.setCached();
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BasicHeaderGroup setters.
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Sets the specified header in this builder.
@@ -300,33 +399,6 @@ public class BasicResource implements HttpResource {
 	public BasicResource setHeader(String name, String value) {
 		if (name != null && value != null)
 			headers.set(name, value);
-		return this;
-	}
-
-	/**
-	 * Appends the specified header to the end of the headers in this builder.
-	 *
-	 * <p>
-	 * This is a no-op if either the name or value is <jk>null</jk>.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public BasicResource addHeader(String name, String value) {
-		if (name != null && value != null)
-			headers.append(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets the specified headers in this builder.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicResource setHeaders(HeaderList value) {
-		headers = value.copy();
 		return this;
 	}
 
@@ -357,127 +429,28 @@ public class BasicResource implements HttpResource {
 	}
 
 	/**
-	 * Appends the specified headers to the end of the headers in this builder.
+	 * Sets the specified headers in this builder.
 	 *
-	 * @param values The headers to set.  <jk>null</jk> headers and headers with <jk>null</jk> names or values are ignored.
+	 * @param value The new value.
 	 * @return This object.
 	 */
-	public BasicResource addHeaders(Header...values) {
-		for (Header h : values) {
-			if (h != null) {
-				String n = h.getName();
-				String v = h.getValue();
-				if (isNotEmpty(n)) {
-					if (n.equalsIgnoreCase("content-type"))
-						setContentType(v);
-					else if (n.equalsIgnoreCase("content-encoding"))
-						setContentEncoding(v);
-					else if (n.equalsIgnoreCase("content-length"))
-						setContentLength(Long.parseLong(v));
-					else
-						headers.append(h);
-				}
-			}
-		}
+	public BasicResource setHeaders(HeaderList value) {
+		headers = value.copy();
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Converts the contents of the entity of this resource as a string.
-	 *
+	 * Specifies whether this bean should be unmodifiable.
 	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
 	 *
-	 * @return The contents of this entity as a string.
-	 * @throws IOException If a problem occurred while trying to read the content.
+	 * @return This object.
 	 */
-	public String asString() throws IOException {
-		return entity.asString();
-	}
-
-	/**
-	 * Converts the contents of the entity of this resource as a byte array.
-	 *
-	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
-	 *
-	 * @return The contents of this entity as a byte array.
-	 * @throws IOException If a problem occurred while trying to read the content.
-	 */
-	public byte[] asBytes() throws IOException {
-		return entity.asBytes();
-	}
-
-	/**
-	 * Returns an assertion on the contents of the entity of this resource.
-	 *
-	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
-	 *
-	 * @return A new fluent assertion.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
-	 */
-	public FluentStringAssertion<BasicResource> assertString() throws IOException {
-		return new FluentStringAssertion<>(asString(), this);
-	}
-
-	/**
-	 * Returns an assertion on the contents of the entity of this resource.
-	 *
-	 * <p>
-	 * Note that this may exhaust the content on non-repeatable, non-cached entities.
-	 *
-	 * @return A new fluent assertion.
-	 * @throws IOException If a problem occurred while trying to read the byte array.
-	 */
-	public FluentByteArrayAssertion<BasicResource> assertBytes() throws IOException {
-		return new FluentByteArrayAssertion<>(asBytes(), this);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Path-through methods.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return entity.getContentLength();
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return entity.isRepeatable();
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isChunked() {
-		return entity.isChunked();
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public Header getContentType() {
-		return entity.getContentType();
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public Header getContentEncoding() {
-		return entity.getContentEncoding();
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isStreaming() {
-		return entity.isStreaming();
-	}
-
-	@Override
-	public void consumeContent() throws IOException {}
-
-	@Override /* Overridden from HttpEntity */
-	public InputStream getContent() throws IOException, UnsupportedOperationException {
-		return entity.getContent();
+	public BasicResource setUnmodifiable() {
+		unmodifiable = true;
+		entity.setUnmodifiable();
+		headers.setUnmodifiable();
+		return this;
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -485,8 +458,11 @@ public class BasicResource implements HttpResource {
 		entity.writeTo(outStream);
 	}
 
-	@Override /* Overridden from HttpResource */
-	public HeaderList getHeaders() {
-		return headers;
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
 	}
 }

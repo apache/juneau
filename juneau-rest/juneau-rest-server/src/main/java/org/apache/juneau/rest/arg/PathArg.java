@@ -54,11 +54,6 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  */
 public class PathArg implements RestOpArg {
-	private final HttpPartParser partParser;
-	private final HttpPartSchema schema;
-	private final String name, def;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -72,29 +67,6 @@ public class PathArg implements RestOpArg {
 			return new PathArg(paramInfo, annotations, pathMatcher);
 		return null;
 	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param paramInfo The Java method parameter being resolved.
-	 * @param annotations The annotations to apply to any new part parsers.
-	 * @param pathMatcher Path matcher for the specified method.
-	 */
-	protected PathArg(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
-		// Get the path parameter name
-		this.name = getName(paramInfo, pathMatcher);
-
-		// Check for class-level defaults and merge if found
-		Path mergedPath = getMergedPath(paramInfo, name);
-
-		// Use merged path annotation for all lookups
-		this.def = mergedPath != null && !mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
-		this.type = paramInfo.getParameterType().innerType();
-		this.schema = mergedPath != null ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
-		Class<? extends HttpPartParser> pp = schema.getParser();
-		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
-	}
-
 	/**
 	 * Gets the merged @Path annotation combining class-level and parameter-level values.
 	 *
@@ -139,7 +111,6 @@ public class PathArg implements RestOpArg {
 		// Merge the two annotations: parameter-level takes precedence
 		return mergeAnnotations(classLevelPath, paramPath);
 	}
-
 	/**
 	 * Merges two @Path annotations, with param-level taking precedence over class-level.
 	 *
@@ -158,7 +129,6 @@ public class PathArg implements RestOpArg {
 			.schema(mergeSchemas(classLevel.schema(), paramLevel.schema()))
 			.build();
 	}
-
 	/**
 	 * Merges two @Schema annotations, with param-level taking precedence.
 	 *
@@ -171,6 +141,48 @@ public class PathArg implements RestOpArg {
 		if (!SchemaAnnotation.empty(paramLevel))
 			return paramLevel;
 		return classLevel;
+	}
+
+	private final HttpPartParser partParser;
+
+	private final HttpPartSchema schema;
+
+	private final String name, def;
+
+	private final Type type;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param paramInfo The Java method parameter being resolved.
+	 * @param annotations The annotations to apply to any new part parsers.
+	 * @param pathMatcher Path matcher for the specified method.
+	 */
+	protected PathArg(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
+		// Get the path parameter name
+		this.name = getName(paramInfo, pathMatcher);
+
+		// Check for class-level defaults and merge if found
+		Path mergedPath = getMergedPath(paramInfo, name);
+
+		// Use merged path annotation for all lookups
+		this.def = mergedPath != null && !mergedPath.def().isEmpty() ? mergedPath.def() : findDef(paramInfo).orElse(null);
+		this.type = paramInfo.getParameterType().innerType();
+		this.schema = mergedPath != null ? HttpPartSchema.create(mergedPath) : HttpPartSchema.create(Path.class, paramInfo);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
+	}
+
+	@Override /* Overridden from RestOpArg */
+	public Object resolve(RestOpSession opSession) throws Exception {
+		RestRequest req = opSession.getRequest();
+		if (name.equals("*")) {
+			JsonMap m = new JsonMap();
+			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
+			return req.getBeanSession().convertToType(m, type);
+		}
+		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
+		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 
 	private String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
@@ -199,17 +211,5 @@ public class PathArg implements RestOpArg {
 			return pathMatcher.getVars()[idx];
 		}
 		throw new ArgException(pi, "@Path used without name or value");
-	}
-
-	@Override /* Overridden from RestOpArg */
-	public Object resolve(RestOpSession opSession) throws Exception {
-		RestRequest req = opSession.getRequest();
-		if (name.equals("*")) {
-			JsonMap m = new JsonMap();
-			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
-			return req.getBeanSession().convertToType(m, type);
-		}
-		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 }

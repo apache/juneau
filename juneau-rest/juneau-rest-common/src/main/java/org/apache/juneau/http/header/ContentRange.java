@@ -137,11 +137,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Content-Range")
 public class ContentRange extends BasicStringHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Range";
 
@@ -171,11 +166,6 @@ public class ContentRange extends BasicStringHeader {
 	public static ContentRange of(Supplier<String> value) {
 		return value == null ? null : new ContentRange(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

@@ -49,9 +49,6 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class HasFormDataArg implements RestOpArg {
 
-	private final String name;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -63,6 +60,17 @@ public class HasFormDataArg implements RestOpArg {
 			return new HasFormDataArg(paramInfo);
 		return null;
 	}
+	private static String getName(HasFormData x) {
+		return firstNonEmpty(x.name(), x.value());
+	}
+
+	private static boolean hasName(HasFormData x) {
+		return isNotEmpty(x.name()) || isNotEmpty(x.value());
+	}
+
+	private final String name;
+
+	private final Type type;
 
 	/**
 	 * Constructor.
@@ -74,14 +82,6 @@ public class HasFormDataArg implements RestOpArg {
 		pi.forEachAnnotation(HasFormData.class, HasFormDataArg::hasName, x -> _name.set(getName(x)));
 		this.name = _name.orElseThrow(() -> new ArgException(pi, "@HasFormData used without name or value"));
 		this.type = pi.getParameterType().innerType();
-	}
-
-	private static boolean hasName(HasFormData x) {
-		return isNotEmpty(x.name()) || isNotEmpty(x.value());
-	}
-
-	private static String getName(HasFormData x) {
-		return firstNonEmpty(x.name(), x.value());
 	}
 
 	@Override /* Overridden from RestOpArg */

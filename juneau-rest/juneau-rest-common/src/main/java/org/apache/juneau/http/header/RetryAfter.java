@@ -73,13 +73,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Retry-After")
 public class RetryAfter extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Retry-After";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static RetryAfter of(Integer value) {
+		return value == null ? null : new RetryAfter(value);
+	}
 
 	/**
 	 * Static creator.
@@ -91,30 +98,6 @@ public class RetryAfter extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static RetryAfter of(String value) {
-		return value == null ? null : new RetryAfter(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static RetryAfter of(ZonedDateTime value) {
-		return value == null ? null : new RetryAfter(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static RetryAfter of(Integer value) {
 		return value == null ? null : new RetryAfter(value);
 	}
 
@@ -134,12 +117,32 @@ public class RetryAfter extends BasicDateHeader {
 		return value == null ? null : new RetryAfter(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static RetryAfter of(ZonedDateTime value) {
+		return value == null ? null : new RetryAfter(value);
+	}
 	private final Integer value;
 	private final Supplier<?> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public RetryAfter(Integer value) {
+		super(NAME, (String)null);
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -152,32 +155,6 @@ public class RetryAfter extends BasicDateHeader {
 	public RetryAfter(String value) {
 		super(NAME, isNumeric(value) ? null : value);
 		this.value = isNumeric(value) ? Integer.parseInt(value) : null;
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public RetryAfter(ZonedDateTime value) {
-		super(NAME, value);
-		this.value = null;
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public RetryAfter(Integer value) {
-		super(NAME, (String)null);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -198,6 +175,32 @@ public class RetryAfter extends BasicDateHeader {
 		this.supplier = value;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public RetryAfter(ZonedDateTime value) {
+		super(NAME, value);
+		this.value = null;
+		this.supplier = null;
+	}
+
+	/**
+	 * Returns this header value as an integer.
+	 *
+	 * @return This header value as a integer, or an empty optional if value was <jk>null</jk> or not an integer.
+	 */
+	public Optional<Integer> asInteger() {
+		if (supplier != null) {
+			Object o = supplier.get();
+			return Utils.opt(o instanceof Integer ? (Integer)o : null);
+		}
+		return Utils.opt(value);
+	}
+
 	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null) {
@@ -214,18 +217,5 @@ public class RetryAfter extends BasicDateHeader {
 		if (value != null)
 			return Utils.s(value);
 		return super.getValue();
-	}
-
-	/**
-	 * Returns this header value as an integer.
-	 *
-	 * @return This header value as a integer, or an empty optional if value was <jk>null</jk> or not an integer.
-	 */
-	public Optional<Integer> asInteger() {
-		if (supplier != null) {
-			Object o = supplier.get();
-			return Utils.opt(o instanceof Integer ? (Integer)o : null);
-		}
-		return Utils.opt(value);
 	}
 }

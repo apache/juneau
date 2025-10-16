@@ -34,11 +34,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class DefaultClassList {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -57,19 +52,7 @@ public class DefaultClassList {
 	public static DefaultClassList of(Class<?>...values) {
 		return new DefaultClassList().add(values);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final List<Class<?>> entries;
-
-	/**
-	 * Constructor.
-	 */
-	protected DefaultClassList() {
-		entries = list();
-	}
 
 	/**
 	 * Copy constructor
@@ -81,6 +64,13 @@ public class DefaultClassList {
 	}
 
 	/**
+	 * Constructor.
+	 */
+	protected DefaultClassList() {
+		entries = list();
+	}
+
+	/**
 	 * Prepends the specified values to the beginning of this list.
 	 *
 	 * @param values The values to prepend to this list.
@@ -89,6 +79,15 @@ public class DefaultClassList {
 	public DefaultClassList add(Class<?>...values) {
 		prependAll(entries, values);
 		return this;
+	}
+
+	/**
+	 * Creates a copy of this list.
+	 *
+	 * @return A copy of this list.
+	 */
+	public DefaultClassList copy() {
+		return new DefaultClassList(this);
 	}
 
 	/**
@@ -105,14 +104,5 @@ public class DefaultClassList {
 			if (e != null && type.isAssignableFrom(e))
 				return Utils.opt((Class<? extends T>)e);
 		return Utils.opte();
-	}
-
-	/**
-	 * Creates a copy of this list.
-	 *
-	 * @return A copy of this list.
-	 */
-	public DefaultClassList copy() {
-		return new DefaultClassList(this);
 	}
 }

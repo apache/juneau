@@ -30,6 +30,16 @@ public class ConfigException extends BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Constructor
+	 *
+	 * @param message The error message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ConfigException(String message, Object...args) {
+		this(null, message, args);
+	}
+
+	/**
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.
@@ -38,16 +48,6 @@ public class ConfigException extends BasicRuntimeException {
 	 */
 	public ConfigException(Throwable cause, String message, Object... args) {
 		super(cause, message, args);
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @param message The error message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ConfigException(String message, Object...args) {
-		this(null, message, args);
 	}
 
 	@Override

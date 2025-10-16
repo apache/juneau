@@ -56,6 +56,17 @@ public class ObjectRestException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
+	 * @param status The HTTP-equivalent status code.
+	 * @param message The detailed message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public ObjectRestException(int status, String message, Object...args) {
+		this(null, status, message, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param cause The cause of this exception.
 	 * @param status HTTP status code.
 	 * @param message The {@link MessageFormat}-style message.
@@ -64,17 +75,6 @@ public class ObjectRestException extends BasicRuntimeException {
 	public ObjectRestException(Throwable cause, int status, String message, Object... args) {
 		super(cause, message, args);
 		this.status = status;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param status The HTTP-equivalent status code.
-	 * @param message The detailed message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public ObjectRestException(int status, String message, Object...args) {
-		this(null, status, message, args);
 	}
 
 	/**

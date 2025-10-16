@@ -72,10 +72,6 @@ public class Title extends HtmlElementRawText {
 	public Title(String text) {
 		text(text);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Title _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -85,6 +81,18 @@ public class Title extends HtmlElementRawText {
 	@Override /* Overridden from HtmlElement */
 	public Title accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Title attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Title attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 
@@ -436,6 +444,12 @@ public class Title extends HtmlElementRawText {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementRawText */
+	public Title text(Object value) {
+		super.text(value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Title title(String value) {
 		super.title(value);
@@ -445,24 +459,6 @@ public class Title extends HtmlElementRawText {
 	@Override /* Overridden from HtmlElement */
 	public Title translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementRawText */
-	public Title text(Object value) {
-		super.text(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Title attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Title attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

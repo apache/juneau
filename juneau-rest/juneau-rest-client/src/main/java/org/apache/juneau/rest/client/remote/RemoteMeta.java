@@ -45,7 +45,11 @@ import org.apache.juneau.svl.*;
  */
 public class RemoteMeta {
 
+	private static String resolve(String s) {
+		return VarResolver.DEFAULT.resolve(s);
+	}
 	private final Map<Method,RemoteOperationMeta> operations;
+
 	private final HeaderList headers;
 
 	/**
@@ -95,16 +99,6 @@ public class RemoteMeta {
 	}
 
 	/**
-	 * Returns the metadata about the specified operation on this resource proxy.
-	 *
-	 * @param m The method to look up.
-	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
-	 */
-	public RemoteOperationMeta getOperationMeta(Method m) {
-		return operations.get(m);
-	}
-
-	/**
 	 * Returns the headers to set on all requests.
 	 *
 	 * @return The headers to set on all requests.
@@ -112,12 +106,13 @@ public class RemoteMeta {
 	public HeaderList getHeaders() {
 		return headers;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Helper methods.
-	//------------------------------------------------------------------------------------------------------------------
-
-	private static String resolve(String s) {
-		return VarResolver.DEFAULT.resolve(s);
+	/**
+	 * Returns the metadata about the specified operation on this resource proxy.
+	 *
+	 * @param m The method to look up.
+	 * @return Metadata about the method or <jk>null</jk> if no metadata was found.
+	 */
+	public RemoteOperationMeta getOperationMeta(Method m) {
+		return operations.get(m);
 	}
 }

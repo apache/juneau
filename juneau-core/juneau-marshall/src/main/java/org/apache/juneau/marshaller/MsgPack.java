@@ -48,142 +48,10 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public class MsgPack extends StreamMarshaller {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Default reusable instance.
 	 */
 	public static final MsgPack DEFAULT = new MsgPack();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param s
-	 * 	The serializer to use for serializing output.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use for parsing input.
-	 * 	<br>Must not be <jk>null</jk>.
-	 */
-	public MsgPack(MsgPackSerializer s, MsgPackParser p) {
-		super(s, p);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * <p>
-	 * Uses {@link MsgPackSerializer#DEFAULT} and {@link MsgPackParser#DEFAULT}.
-	 */
-	public MsgPack() {
-		this(MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT);
-	}
-
-	/**
-	 * Parses a JSON input string to the specified type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(byte[] input, Class<T> type) throws ParseException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses a JSON input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link InputStream}
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
-	 * 	</ul>
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses a JSON input string to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public static <T> T to(byte[] input, Type type, Type...args) throws ParseException {
-		return DEFAULT.read(input, type, args);
-	}
-
-	/**
-	 * Parses a JSON input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input
-	 * 	The input.
-	 * 	<br>Can be any of the following types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link InputStream}
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
-	 * 	</ul>
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
-		return DEFAULT.read(input, type, args);
-	}
-
 	/**
 	 * Serializes a Java object to a JSON string.
 	 *
@@ -220,5 +88,127 @@ public class MsgPack extends StreamMarshaller {
 	public static Object of(Object object, Object output) throws SerializeException, IOException {
 		DEFAULT.write(object, output);
 		return output;
+	}
+
+	/**
+	 * Parses a JSON input string to the specified type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(byte[] input, Class<T> type) throws ParseException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses a JSON input string to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input The input.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public static <T> T to(byte[] input, Type type, Type...args) throws ParseException {
+		return DEFAULT.read(input, type, args);
+	}
+
+	/**
+	 * Parses a JSON input object to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
+	 * 	</ul>
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses a JSON input object to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input
+	 * 	The input.
+	 * 	<br>Can be any of the following types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
+	 * 	</ul>
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
+	 */
+	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
+		return DEFAULT.read(input, type, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * Uses {@link MsgPackSerializer#DEFAULT} and {@link MsgPackParser#DEFAULT}.
+	 */
+	public MsgPack() {
+		this(MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param s
+	 * 	The serializer to use for serializing output.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param p
+	 * 	The parser to use for parsing input.
+	 * 	<br>Must not be <jk>null</jk>.
+	 */
+	public MsgPack(MsgPackSerializer s, MsgPackParser p) {
+		super(s, p);
 	}
 }

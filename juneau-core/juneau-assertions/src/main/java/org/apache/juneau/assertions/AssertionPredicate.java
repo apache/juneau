@@ -65,100 +65,6 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Argument placeholder for tested value.
-	 */
-	public static final Function<Object,String> VALUE = StringUtils::stringifyDeep;
-
-	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
-	private static final String
-		MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest"),
-		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final Predicate<T> inner;
-	private final String message;
-	private final Object[] args;
-	final ThreadLocal<String> failedMessage = new ThreadLocal<>();
-
-	/**
-	 * Constructor.
-	 *
-	 * @param inner The predicate test.
-	 * @param message
-	 * 	The error message if predicate fails.
-	 * 	<br>Supports {@link MessageFormat}-style arguments.
-	 * @param args
-	 * 	Optional message arguments.
-	 * 	<br>Can contain {@link #VALUE} to specify the value itself as an argument.
-	 * 	<br>Can contain {@link Function functions} to apply to the tested value.
-	 */
-	public AssertionPredicate(Predicate<T> inner, String message, Object...args) {
-		this.inner = inner;
-		if (message != null) {
-			this.message = message;
-			this.args = args;
-		} else if (inner instanceof AssertionPredicate) {
-			this.message = MSG_valueDidNotPassTest;
-			this.args = new Object[]{};
-		} else {
-			this.message = MSG_valueDidNotPassTestWithValue;
-			this.args = new Object[]{VALUE};
-		}
-	}
-
-	AssertionPredicate() {
-		this.inner = null;
-		this.message = null;
-		this.args = null;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Test methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Predicate */
-	public boolean test(T t) {
-		failedMessage.remove();
-		var b = inner.test(t);
-		if (! b) {
-			var m = message;
-			var oargs = new Object[this.args.length];
-			for (var i = 0; i < oargs.length; i++) {
-				var a = this.args[i];
-				if (a instanceof Function af)  // NOSONAR - Intentional.
-					oargs[i] = af.apply(t);
-				else
-					oargs[i] = a;
-			}
-			m = format(m, oargs);
-			if (inner instanceof AssertionPredicate inner2)  // NOSONAR - Intentional.
-				m += "\n\t" + inner2.getFailureMessage();
-			failedMessage.set(m);
-		}
-		return inner.test(t);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the error message from the last call to this assertion.
-	 *
-	 * @return The error message, or <jk>null</jk> if there was no failure.
-	 */
-	protected String getFailureMessage() {
-		return failedMessage.get();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Subclasses
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Encapsulates multiple predicates into a single AND operation.
 	 *
 	 * <p>
@@ -169,11 +75,11 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 */
 	public static class And<T> extends AssertionPredicate<T> {
 
-		private final Predicate<T>[] inner;
-
 		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+
 		private static final String
 			MSG_predicateTestFailed = MESSAGES.getString("predicateTestFailed");
+		private final Predicate<T>[] inner;
 
 		/**
 		 * Constructor.
@@ -202,45 +108,6 @@ public class AssertionPredicate<T> implements Predicate<T> {
 				}
 			}
 			return true;
-		}
-	}
-
-	/**
-	 * Encapsulates multiple predicates into a single OR operation.
-	 *
-	 * <p>
-	 * Similar to <c><jsm>stream</jsm>(<jv>predicates</jv>).reduce(<jv>x</jv>-&gt;<jk>true</jk>, Predicate::or)</c> but
-	 * provides for {@link #getFailureMessage()} to return a useful message.
-	 *
-	 * @param <T> the type of input being tested.
-	 */
-	public static class Or<T> extends AssertionPredicate<T> {
-
-		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
-		private static final String
-			MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed");
-
-		private final Predicate<T>[] inner;
-
-		/**
-		 * Constructor.
-		 *
-		 * @param inner The inner predicates to run.
-		 */
-		@SafeVarargs
-		public Or(Predicate<T>...inner) {
-			this.inner = inner;
-		}
-
-		@Override /* Overridden from Predicate */
-		public boolean test(T t) {
-			failedMessage.remove();
-			for (var p : inner)
-				if (p != null && p.test(t))
-					return true;
-			var m = format(MSG_noPredicateTestsPassed);
-			failedMessage.set(m);
-			return false;
 		}
 	}
 
@@ -282,5 +149,139 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			}
 			return true;
 		}
+	}
+	/**
+	 * Encapsulates multiple predicates into a single OR operation.
+	 *
+	 * <p>
+	 * Similar to <c><jsm>stream</jsm>(<jv>predicates</jv>).reduce(<jv>x</jv>-&gt;<jk>true</jk>, Predicate::or)</c> but
+	 * provides for {@link #getFailureMessage()} to return a useful message.
+	 *
+	 * @param <T> the type of input being tested.
+	 */
+	public static class Or<T> extends AssertionPredicate<T> {
+
+		private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+		private static final String
+			MSG_noPredicateTestsPassed = MESSAGES.getString("noPredicateTestsPassed");
+
+		private final Predicate<T>[] inner;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param inner The inner predicates to run.
+		 */
+		@SafeVarargs
+		public Or(Predicate<T>...inner) {
+			this.inner = inner;
+		}
+
+		@Override /* Overridden from Predicate */
+		public boolean test(T t) {
+			failedMessage.remove();
+			for (var p : inner)
+				if (p != null && p.test(t))
+					return true;
+			var m = format(MSG_noPredicateTestsPassed);
+			failedMessage.set(m);
+			return false;
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Argument placeholder for tested value.
+	 */
+	public static final Function<Object,String> VALUE = StringUtils::stringifyDeep;
+	private static final Messages MESSAGES = Messages.of(AssertionPredicate.class, "Messages");
+	private static final String
+		MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest"),
+		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
+	private final Predicate<T> inner;
+
+	private final String message;
+
+	private final Object[] args;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Test methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	final ThreadLocal<String> failedMessage = new ThreadLocal<>();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Constructor.
+	 *
+	 * @param inner The predicate test.
+	 * @param message
+	 * 	The error message if predicate fails.
+	 * 	<br>Supports {@link MessageFormat}-style arguments.
+	 * @param args
+	 * 	Optional message arguments.
+	 * 	<br>Can contain {@link #VALUE} to specify the value itself as an argument.
+	 * 	<br>Can contain {@link Function functions} to apply to the tested value.
+	 */
+	public AssertionPredicate(Predicate<T> inner, String message, Object...args) {
+		this.inner = inner;
+		if (message != null) {
+			this.message = message;
+			this.args = args;
+		} else if (inner instanceof AssertionPredicate) {
+			this.message = MSG_valueDidNotPassTest;
+			this.args = new Object[]{};
+		} else {
+			this.message = MSG_valueDidNotPassTestWithValue;
+			this.args = new Object[]{VALUE};
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Subclasses
+	//-----------------------------------------------------------------------------------------------------------------
+
+	AssertionPredicate() {
+		this.inner = null;
+		this.message = null;
+		this.args = null;
+	}
+
+	@Override /* Overridden from Predicate */
+	@SuppressWarnings("unchecked")
+	public boolean test(T t) {
+		failedMessage.remove();
+		var b = inner.test(t);
+		if (! b) {
+			var m = message;
+			var oargs = new Object[this.args.length];
+			for (var i = 0; i < oargs.length; i++) {
+				var a = this.args[i];
+				if (a instanceof Function af)  // NOSONAR - Intentional.
+					oargs[i] = af.apply(t);
+				else
+					oargs[i] = a;
+			}
+			m = format(m, oargs);
+			if (inner instanceof AssertionPredicate inner2)  // NOSONAR - Intentional.
+				m += "\n\t" + inner2.getFailureMessage();
+			failedMessage.set(m);
+		}
+		return inner.test(t);
+	}
+
+	/**
+	 * Returns the error message from the last call to this assertion.
+	 *
+	 * @return The error message, or <jk>null</jk> if there was no failure.
+	 */
+	protected String getFailureMessage() {
+		return failedMessage.get();
 	}
 }

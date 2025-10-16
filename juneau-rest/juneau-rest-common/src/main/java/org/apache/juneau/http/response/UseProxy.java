@@ -63,15 +63,6 @@ public class UseProxy extends BasicHttpResponse {
 	}
 
 	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The bean to copy from.
-	 */
-	public UseProxy(UseProxy copyFrom) {
-		super(copyFrom);
-	}
-
-	/**
 	 * Constructor.
 	 *
 	 * <p>
@@ -86,6 +77,15 @@ public class UseProxy extends BasicHttpResponse {
 	}
 
 	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public UseProxy(UseProxy copyFrom) {
+		super(copyFrom);
+	}
+
+	/**
 	 * Creates a builder for this class initialized with the contents of this bean.
 	 *
 	 * @return A new builder bean.
@@ -94,13 +94,13 @@ public class UseProxy extends BasicHttpResponse {
 		return new UseProxy(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setContent(String value) {
+	public UseProxy setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setContent(HttpEntity value) {
+	public UseProxy setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class UseProxy extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public UseProxy setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public UseProxy setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public UseProxy setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

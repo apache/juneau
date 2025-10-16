@@ -92,26 +92,6 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<RequestLine,R> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentRequestLineAssertion(RequestLine value, R returns) {
-		this(null, value, returns);
-	}
-
 	/**
 	 * Chained constructor.
 	 *
@@ -134,10 +114,20 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 		setThrowable(BadRequest.class);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentRequestLineAssertion(RequestLine value, R returns) {
+		this(null, value, returns);
+	}
 	/**
 	 * Returns the request line method string as a new assertion.
 	 *
@@ -145,15 +135,6 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 	 */
 	public FluentStringAssertion<R> asMethod() {
 		return new FluentStringAssertion<>(value().getMethod(), returns());
-	}
-
-	/**
-	 * Returns the request line uri string as a new assertion.
-	 *
-	 * @return A new assertion.
-	 */
-	public FluentStringAssertion<R> asUri() {
-		return new FluentStringAssertion<>(value().getUri(), returns());
 	}
 
 	/**
@@ -165,9 +146,14 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<Request
 		return new FluentProtocolVersionAssertion<>(value().getProtocolVersion(), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the request line uri string as a new assertion.
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentStringAssertion<R> asUri() {
+		return new FluentStringAssertion<>(value().getUri(), returns());
+	}
 	@Override /* Overridden from Assertion */
 	public FluentRequestLineAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

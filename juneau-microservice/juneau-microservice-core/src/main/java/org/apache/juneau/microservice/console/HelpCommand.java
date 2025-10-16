@@ -35,31 +35,6 @@ public class HelpCommand extends ConsoleCommand {
 	private final Messages mb = Messages.of(HelpCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "help";
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getSynopsis() {
-		return "help [command]";
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getDescription() {
-		return mb.getString("description");
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getExamples() {
-		return mb.getString("examples");
-	}
-
-	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
 		Map<String,ConsoleCommand> commands = Microservice.getInstance().getConsoleCommands();
 		if (args.size() == 1) {
@@ -90,6 +65,31 @@ public class HelpCommand extends ConsoleCommand {
 			}
 		}
 		return false;
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getDescription() {
+		return mb.getString("description");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getExamples() {
+		return mb.getString("examples");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getInfo() {
+		return mb.getString("info");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getName() {
+		return "help";
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getSynopsis() {
+		return "help [command]";
 	}
 
 	private String indent(String in) {

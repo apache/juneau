@@ -37,6 +37,16 @@ public class ClassUtils {
 	public static final Predicate<Class<?>> NOT_VOID = ClassUtils::isNotVoid;
 
 	/**
+	 * Returns the fully-qualified class name for the specified object.
+	 *
+	 * @param value The object to get the class name for.
+	 * @return The name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String className(Object value) {
+		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
+	}
+
+	/**
 	 * Returns the class types for the specified arguments.
 	 *
 	 * @param args The objects we're getting the classes of.
@@ -85,28 +95,34 @@ public class ClassUtils {
 	}
 
 	/**
+	 * Returns <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean isNotVoid(Class c) {
+		return ! isVoid(c);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean isVoid(Class c) {
+		return (c == null || c == void.class || c == Void.class || c.getSimpleName().equalsIgnoreCase("void"));
+	}
+
+	/**
 	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
 	 * @param x The constructor.
 	 * @return <jk>true</jk> if call was successful.
 	 */
 	public static boolean setAccessible(Constructor<?> x) {
-		try {
-			if (x != null)
-				x.setAccessible(true);
-			return true;
-		} catch (SecurityException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
-	 *
-	 * @param x The method.
-	 * @return <jk>true</jk> if call was successful.
-	 */
-	public static boolean setAccessible(Method x) {
 		try {
 			if (x != null)
 				x.setAccessible(true);
@@ -133,34 +149,19 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Returns the specified type as a <c>Class</c>.
+	 * Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.
 	 *
-	 * <p>
-	 * If it's already a <c>Class</c>, it just does a cast.
-	 * <br>If it's a <c>ParameterizedType</c>, it returns the raw type.
-	 *
-	 * @param t The type to convert.
-	 * @return The type converted to a <c>Class</c>, or <jk>null</jk> if it could not be converted.
+	 * @param x The method.
+	 * @return <jk>true</jk> if call was successful.
 	 */
-	public static Class<?> toClass(Type t) {
-		if (t instanceof Class)
-			return (Class<?>)t;
-		if (t instanceof ParameterizedType) {
-			ParameterizedType pt = (ParameterizedType)t;
-			// The raw type should always be a class (right?)
-			return (Class<?>)pt.getRawType();
+	public static boolean setAccessible(Method x) {
+		try {
+			if (x != null)
+				x.setAccessible(true);
+			return true;
+		} catch (SecurityException e) {
+			return false;
 		}
-		return null;
-	}
-
-	/**
-	 * Returns the fully-qualified class name for the specified object.
-	 *
-	 * @param value The object to get the class name for.
-	 * @return The name of the class or <jk>null</jk> if the value was null.
-	 */
-	public static String className(Object value) {
-		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
 	}
 
 	/**
@@ -182,24 +183,23 @@ public class ClassUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 * Returns the specified type as a <c>Class</c>.
 	 *
-	 * @param c The class to check.
-	 * @return <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
-	 */
-	@SuppressWarnings("rawtypes")
-	public static boolean isVoid(Class c) {
-		return (c == null || c == void.class || c == Void.class || c.getSimpleName().equalsIgnoreCase("void"));
-	}
-
-	/**
-	 * Returns <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 * <p>
+	 * If it's already a <c>Class</c>, it just does a cast.
+	 * <br>If it's a <c>ParameterizedType</c>, it returns the raw type.
 	 *
-	 * @param c The class to check.
-	 * @return <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 * @param t The type to convert.
+	 * @return The type converted to a <c>Class</c>, or <jk>null</jk> if it could not be converted.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static boolean isNotVoid(Class c) {
-		return ! isVoid(c);
+	public static Class<?> toClass(Type t) {
+		if (t instanceof Class)
+			return (Class<?>)t;
+		if (t instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType)t;
+			// The raw type should always be a class (right?)
+			return (Class<?>)pt.getRawType();
+		}
+		return null;
 	}
 }

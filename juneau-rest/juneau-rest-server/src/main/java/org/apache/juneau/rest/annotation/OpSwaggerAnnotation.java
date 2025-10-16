@@ -30,47 +30,6 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 public class OpSwaggerAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final OpSwagger DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>true</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean empty(OpSwagger a) {
-		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Returns <jk>false</jk> if the specified annotation contains all default values.
-	 *
-	 * @param a The annotation to check.
-	 * @return <jk>false</jk> if the specified annotation contains all default values.
-	 */
-	public static boolean notEmpty(OpSwagger a) {
-		return ! empty(a);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -223,10 +182,6 @@ public class OpSwaggerAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static class Impl extends AnnotationImpl implements OpSwagger {
 
 		private final ExternalDocs externalDocs;
@@ -303,5 +258,35 @@ public class OpSwaggerAnnotation {
 		public String[] value() {
 			return value;
 		}
+	}
+
+	/** Default value */
+	public static final OpSwagger DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(OpSwagger a) {
+		return a == null || DEFAULT.equals(a);
+	}
+	/**
+	 * Returns <jk>false</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>false</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean notEmpty(OpSwagger a) {
+		return ! empty(a);
 	}
 }

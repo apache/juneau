@@ -119,23 +119,18 @@ public class Content extends Text {
 
 	/**
 	 * Normal content.
+	 */
+	public Content() {
+	}
+
+	/**
+	 * Normal content.
 	 *
 	 * @param type The content type of this content.
 	 */
 	public Content(String type) {
 		super(type);
 	}
-
-	/**
-	 * Normal content.
-	 */
-	public Content() {
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>src</property>.
 	 *
@@ -151,6 +146,17 @@ public class Content extends Text {
 	@Xml(format=ATTR)
 	public URI getSrc() {
 		return src;
+	}
+
+	@Override /* Overridden from Common */
+	public Content setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+	@Override /* Overridden from Common */
+	public Content setLang(String value) {
+		super.setLang(value);
+		return this;
 	}
 
 	/**
@@ -181,31 +187,15 @@ public class Content extends Text {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Text */
-	public Content setType(String value) {
-		super.setType(value);
-		return this;
-	}
-
 	@Override /* Overridden from Text */
 	public Content setText(String value) {
 		super.setText(value);
 		return this;
 	}
 
-	@Override /* Overridden from Common */
-	public Content setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Content setLang(String value) {
-		super.setLang(value);
+	@Override /* Overridden from Text */
+	public Content setType(String value) {
+		super.setType(value);
 		return this;
 	}
 }

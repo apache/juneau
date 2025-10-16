@@ -48,46 +48,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class MsgPackSerializer extends OutputStreamSerializer implements MsgPackMetaProvider {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, all default settings.*/
-	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(create());
-
-	/** Default serializer, all default settings, spaced-hex string output.*/
-	public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());
-
-	/** Default serializer, all default settings, spaced-hex string output.*/
-	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, spaced-hex string output. */
-	public static class SpacedHex extends MsgPackSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public SpacedHex(Builder builder) {
-			super(builder.binaryFormat(BinaryFormat.SPACED_HEX));
-		}
-	}
-
 	/** Default serializer, BASE64 string output. */
 	public static class Base64 extends MsgPackSerializer {
 
@@ -100,10 +60,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			super(builder.binaryFormat(BinaryFormat.BASE64));
 		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Builder class.
@@ -125,43 +81,38 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(MsgPackSerializer copyFrom) {
-			super(copyFrom);
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(MsgPackSerializer copyFrom) {
+			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public MsgPackSerializer build() {
-			return cache(CACHE).build(MsgPackSerializer.class);
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
+			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				addBeanTypesMsgPack
-			);
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
 		/**
 		 * Add <js>"_type"</js> properties when needed.
 		 *
@@ -190,6 +141,18 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			return this;
 		}
 		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType(boolean value) {
+			super.addRootType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
@@ -202,44 +165,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -298,14 +231,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -316,14 +249,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -334,14 +267,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -352,14 +285,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -384,6 +317,52 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		@Override /* Overridden from Builder */
 		public Builder beansRequireSettersForGetters() {
 			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder binaryFormat(BinaryFormat value) {
+			super.binaryFormat(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public MsgPackSerializer build() {
+			return cache(CACHE).build(MsgPackSerializer.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
 			return this;
 		}
 
@@ -424,14 +403,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
 			return this;
 		}
 
@@ -447,6 +426,14 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			return this;
 		}
 
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				addBeanTypesMsgPack
+			);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
@@ -456,6 +443,18 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions(boolean value) {
+			super.ignoreRecursions(value);
 			return this;
 		}
 
@@ -472,6 +471,12 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
 			super.implClass(interfaceClass, implClass);
 			return this;
@@ -480,6 +485,12 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		@Override /* Overridden from Builder */
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
 			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
 			return this;
 		}
 
@@ -496,8 +507,32 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder keepNullProperties() {
+			super.keepNullProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder keepNullProperties(boolean value) {
+			super.keepNullProperties(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
+			super.listener(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder locale(Locale value) {
 			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
 			return this;
 		}
 
@@ -520,14 +555,44 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
+		public Builder produces(String value) {
+			super.produces(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
 		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
 			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortCollections() {
+			super.sortCollections();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortCollections(boolean value) {
+			super.sortCollections(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortMaps() {
+			super.sortMaps();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortMaps(boolean value) {
+			super.sortMaps(value);
 			return this;
 		}
 
@@ -562,13 +627,13 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
+		public Builder swaps(Class<?>...values) {
 			super.swaps(values);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
+		public Builder swaps(Object...values) {
 			super.swaps(values);
 			return this;
 		}
@@ -576,150 +641,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		@Override /* Overridden from Builder */
 		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions() {
-			super.ignoreRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions(boolean value) {
-			super.ignoreRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder initialDepth(int value) {
-			super.initialDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder accept(String value) {
-			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes() {
-			super.addBeanTypes();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes(boolean value) {
-			super.addBeanTypes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType() {
-			super.addRootType();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType(boolean value) {
-			super.addRootType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder keepNullProperties() {
-			super.keepNullProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder keepNullProperties(boolean value) {
-			super.keepNullProperties(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
-			super.listener(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder produces(String value) {
-			super.produces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortCollections() {
-			super.sortCollections();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortCollections(boolean value) {
-			super.sortCollections(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortMaps() {
-			super.sortMaps();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortMaps(boolean value) {
-			super.sortMaps(value);
 			return this;
 		}
 
@@ -760,6 +681,30 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
@@ -778,16 +723,46 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder binaryFormat(BinaryFormat value) {
-			super.binaryFormat(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
 			return this;
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/** Default serializer, spaced-hex string output. */
+	public static class SpacedHex extends MsgPackSerializer {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public SpacedHex(Builder builder) {
+			super(builder.binaryFormat(BinaryFormat.SPACED_HEX));
+		}
+	}
+
+	/** Default serializer, all default settings.*/
+	public static final MsgPackSerializer DEFAULT = new MsgPackSerializer(create());
+	/** Default serializer, all default settings, spaced-hex string output.*/
+	public static final MsgPackSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());
+
+	/** Default serializer, all default settings, spaced-hex string output.*/
+	public static final MsgPackSerializer DEFAULT_BASE64 = new Base64(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final boolean
 		addBeanTypesMsgPack;
 
@@ -814,25 +789,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		return MsgPackSerializerSession.create(this);
 	}
 
-	@Override /* Overridden from Context */
-	public MsgPackSerializerSession getSession() {
-		return createSession().build();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from MsgPackMetaProvider */
-	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
-		MsgPackClassMeta m = msgPackClassMetas.get(cm);
-		if (m == null) {
-			m = new MsgPackClassMeta(cm, this);
-			msgPackClassMetas.put(cm, m);
-		}
-		return m;
-	}
-
 	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
@@ -844,20 +800,24 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 		return m;
 	}
+	@Override /* Overridden from MsgPackMetaProvider */
+	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
+		MsgPackClassMeta m = msgPackClassMetas.get(cm);
+		if (m == null) {
+			m = new MsgPackClassMeta(cm, this);
+			msgPackClassMetas.put(cm, m);
+		}
+		return m;
+	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
+	@Override /* Overridden from Context */
+	public MsgPackSerializerSession getSession() {
+		return createSession().build();
+	}
 	@Override
 	protected final boolean isAddBeanTypes() {
 		return addBeanTypesMsgPack || super.isAddBeanTypes();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);

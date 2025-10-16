@@ -85,6 +85,12 @@ public class Th extends HtmlElementMixed {
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Th _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-abbr">abbr</a> attribute.
 	 *
@@ -95,11 +101,40 @@ public class Th extends HtmlElementMixed {
 	 * <p>
 	 * The abbreviation should be shorter than the full header text but still meaningful.
 	 *
-	 * @param abbr The abbreviated label for the header cell.
+	 * @param value The abbreviated label for the header cell.
 	 * @return This object.
 	 */
 	public Th abbr(String value) {
 		attr("abbr", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Th accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Th attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Th attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Th child(Object value) {
+		super.child(value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElementMixed */
+	public Th children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -109,13 +144,25 @@ public class Th extends HtmlElementMixed {
 	 * <p>
 	 * Number of columns that the cell is to span.
 	 *
-	 * @param colspan
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
 	public Th colspan(Object value) {
 		attr("colspan", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Th contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Th dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -129,102 +176,11 @@ public class Th extends HtmlElementMixed {
 	 * <p>
 	 * Multiple IDs can be specified as a space-separated list.
 	 *
-	 * @param headers The IDs of header cells that apply to this cell.
+	 * @param value The IDs of header cells that apply to this cell.
 	 * @return This object.
 	 */
 	public Th headers(String value) {
 		attr("headers", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
-	 *
-	 * <p>
-	 * Number of rows that the cell is to span.
-	 *
-	 * @param rowspan
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Th rowspan(Object value) {
-		attr("rowspan", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-scope">scope</a> attribute.
-	 *
-	 * <p>
-	 * Specifies which cells the header cell applies to. This helps define the relationship
-	 * between header and data cells for accessibility.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 *  	<li><js>"row"</js> - Header applies to all cells in the same row</li>
-	 *  	<li><js>"col"</js> - Header applies to all cells in the same column</li>
-	 *  	<li><js>"rowgroup"</js> - Header applies to all cells in the same row group</li>
-	 *  	<li><js>"colgroup"</js> - Header applies to all cells in the same column group</li>
-	 * </ul>
-	 *
-	 * @param scope Which cells the header cell applies to.
-	 * @return This object.
-	 */
-	public Th scope(String value) {
-		attr("scope", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-sorted">sorted</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the sort direction and ordinality of the column. This indicates how the table
-	 * is currently sorted and which column is the primary sort key.
-	 *
-	 * <p>
-	 * Common values:
-	 * <ul>
-	 *  	<li><js>"asc"</js> - Column is sorted in ascending order</li>
-	 *  	<li><js>"desc"</js> - Column is sorted in descending order</li>
-	 *  	<li><js>"asc 1"</js> - Column is the primary sort key in ascending order</li>
-	 *  	<li><js>"desc 1"</js> - Column is the primary sort key in descending order</li>
-	 * </ul>
-	 *
-	 * @param sorted The sort direction and ordinality of the column.
-	 * @return This object.
-	 */
-	public Th sorted(String value) {
-		attr("sorted", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Th _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Th accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Th contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Th dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -546,6 +502,70 @@ public class Th extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-tdth-rowspan">rowspan</a> attribute.
+	 *
+	 * <p>
+	 * Number of rows that the cell is to span.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Th rowspan(Object value) {
+		attr("rowspan", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-scope">scope</a> attribute.
+	 *
+	 * <p>
+	 * Specifies which cells the header cell applies to. This helps define the relationship
+	 * between header and data cells for accessibility.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 *  	<li><js>"row"</js> - Header applies to all cells in the same row</li>
+	 *  	<li><js>"col"</js> - Header applies to all cells in the same column</li>
+	 *  	<li><js>"rowgroup"</js> - Header applies to all cells in the same row group</li>
+	 *  	<li><js>"colgroup"</js> - Header applies to all cells in the same column group</li>
+	 * </ul>
+	 *
+	 * @param value Which cells the header cell applies to.
+	 * @return This object.
+	 */
+	public Th scope(String value) {
+		attr("scope", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/tabular-data.html#attr-th-sorted">sorted</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the sort direction and ordinality of the column. This indicates how the table
+	 * is currently sorted and which column is the primary sort key.
+	 *
+	 * <p>
+	 * Common values:
+	 * <ul>
+	 *  	<li><js>"asc"</js> - Column is sorted in ascending order</li>
+	 *  	<li><js>"desc"</js> - Column is sorted in descending order</li>
+	 *  	<li><js>"asc 1"</js> - Column is the primary sort key in ascending order</li>
+	 *  	<li><js>"desc 1"</js> - Column is the primary sort key in descending order</li>
+	 * </ul>
+	 *
+	 * @param value The sort direction and ordinality of the column.
+	 * @return This object.
+	 */
+	public Th sorted(String value) {
+		attr("sorted", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Th spellcheck(Object value) {
 		super.spellcheck(value);
@@ -573,30 +593,6 @@ public class Th extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Th translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Th child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Th children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Th attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Th attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

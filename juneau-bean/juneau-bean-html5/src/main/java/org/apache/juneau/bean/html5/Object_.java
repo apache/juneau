@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.bean.html5;
 
+import java.net.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
@@ -85,7 +88,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#object() object()}
- * 		<li class='jm'>{@link HtmlBuilder#object(Object, Object...) object(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#object(Object...) object(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -111,6 +114,48 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 		children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Object_ _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Object_ accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Object_ attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Object_ attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Object_ child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Object_ children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Object_ contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-data">data</a> attribute.
 	 *
@@ -125,11 +170,16 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param data The URL of the resource to be embedded.
+	 * @param value The URL of the resource to be embedded.
 	 * @return This object.
 	 */
 	public Object_ data(String value) {
 		attr("data", value);
+		return this;
+	}
+	@Override /* Overridden from HtmlElement */
+	public Object_ dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -139,7 +189,7 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 	 * <p>
 	 * Associates the control with a form element.
 	 *
-	 * @param form The new value for this attribute.
+	 * @param value The new value for this attribute.
 	 * @return This object.
 	 */
 	public Object_ form(String value) {
@@ -154,116 +204,13 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 	 * <p>
 	 * Vertical dimension.
 	 *
-	 * @param height
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
 	public Object_ height(Object value) {
 		attr("height", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Name of nested browsing context.
-	 *
-	 * @param name The new value for this attribute.
-	 * @return This object.
-	 */
-	public Object_ name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Type of embedded resource.
-	 *
-	 * @param type The new value for this attribute.
-	 * @return This object.
-	 */
-	public Object_ type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
-	 *
-	 * @param typemustmatch
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Boolean} or {@link String}.
-	 * @return This object.
-	 */
-	public Object_ typemustmatch(Object value) {
-		attr("typemustmatch", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Name of image map to use.
-	 *
-	 * @param usemap The new value for this attribute.
-	 * @return This object.
-	 */
-	public Object_ usemap(String value) {
-		attr("usemap", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Object_ width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Object_ _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Object_ accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Object_ contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Object_ dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -282,6 +229,20 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 	@Override /* Overridden from HtmlElement */
 	public Object_ lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Name of nested browsing context.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Object_ name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -615,27 +576,65 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Object_ child(Object value) {
-		super.child(value);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Type of embedded resource.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Object_ type(String value) {
+		attr("type", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Object_ children(Object...value) {
-		super.children(value);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-object-typemustmatch">typemustmatch</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Whether the type attribute and the Content-Type value need to match for the resource to be used.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Boolean} or {@link String}.
+	 * @return This object.
+	 */
+	public Object_ typemustmatch(Object value) {
+		attr("typemustmatch", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Object_ attr(String key, Object val) {
-		super.attr(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-hyperlink-usemap">usemap</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Name of image map to use.
+	 *
+	 * @param value The new value for this attribute.
+	 * @return This object.
+	 */
+	public Object_ usemap(String value) {
+		attr("usemap", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElement */
-	public Object_ attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Object_ width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

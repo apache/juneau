@@ -38,28 +38,8 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RrpcRestOpSession extends RestOpSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param ctx The context of the RRPC Java Method.
-	 * @param session The REST session creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(RrpcRestOpContext ctx, RestSession session) {
-		return new Builder(ctx, session);
-
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,11 +64,17 @@ public class RrpcRestOpSession extends RestOpSession {
 		}
 
 	}
+	/**
+	 * Static creator.
+	 *
+	 * @param ctx The context of the RRPC Java Method.
+	 * @param session The REST session creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(RrpcRestOpContext ctx, RestSession session) {
+		return new Builder(ctx, session);
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	}
 	private final RrpcRestOpContext ctx;
 
 	/**
@@ -99,6 +85,12 @@ public class RrpcRestOpSession extends RestOpSession {
 	protected RrpcRestOpSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+	}
+
+	@Override /* Overridden from RestOpSession */
+	public RrpcRestOpSession finish() {
+		super.finish();
+		return this;
 	}
 
 	@Override
@@ -150,12 +142,6 @@ public class RrpcRestOpSession extends RestOpSession {
 	@Override /* Overridden from RestOpSession */
 	public RrpcRestOpSession status(StatusLine value) {
 		super.status(value);
-		return this;
-	}
-
-	@Override /* Overridden from RestOpSession */
-	public RrpcRestOpSession finish() {
-		super.finish();
 		return this;
 	}
 }

@@ -76,13 +76,20 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("If-Range")
 public class IfRange extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Range";
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfRange of(EntityTag value) {
+		return value == null ? null : new IfRange(value);
+	}
 
 	/**
 	 * Static creator.
@@ -94,30 +101,6 @@ public class IfRange extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfRange of(String value) {
-		return value == null ? null : new IfRange(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static IfRange of(ZonedDateTime value) {
-		return value == null ? null : new IfRange(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static IfRange of(EntityTag value) {
 		return value == null ? null : new IfRange(value);
 	}
 
@@ -137,12 +120,36 @@ public class IfRange extends BasicDateHeader {
 		return value == null ? null : new IfRange(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfRange of(ZonedDateTime value) {
+		return value == null ? null : new IfRange(value);
+	}
+	private static boolean isEtag(String s) {
+		return s.startsWith("\"") || s.startsWith("W/");
+	}
 	private final EntityTag value;
+
 	private final Supplier<?> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfRange(EntityTag value) {
+		super(NAME, (String)null);
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -155,32 +162,6 @@ public class IfRange extends BasicDateHeader {
 	public IfRange(String value) {
 		super(NAME, isEtag(value) ? null : value);
 		this.value = isEtag(value) ? EntityTag.of(value) : null;
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public IfRange(ZonedDateTime value) {
-		super(NAME, value);
-		this.value = null;
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public IfRange(EntityTag value) {
-		super(NAME, (String)null);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -201,6 +182,32 @@ public class IfRange extends BasicDateHeader {
 		this.supplier = value;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfRange(ZonedDateTime value) {
+		super(NAME, value);
+		this.value = null;
+		this.supplier = null;
+	}
+
+	/**
+	 * Returns this header as an {@link EntityTag}.
+	 *
+	 * @return This header as an {@link EntityTag}.
+	 */
+	public Optional<EntityTag> asEntityTag() {
+		if (supplier != null) {
+			Object o = supplier.get();
+			return Utils.opt(o instanceof EntityTag ? (EntityTag)o : null);
+		}
+		return Utils.opt(value);
+	}
+
 	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null) {
@@ -217,22 +224,5 @@ public class IfRange extends BasicDateHeader {
 		if (value != null)
 			return Utils.s(value);
 		return super.getValue();
-	}
-
-	/**
-	 * Returns this header as an {@link EntityTag}.
-	 *
-	 * @return This header as an {@link EntityTag}.
-	 */
-	public Optional<EntityTag> asEntityTag() {
-		if (supplier != null) {
-			Object o = supplier.get();
-			return Utils.opt(o instanceof EntityTag ? (EntityTag)o : null);
-		}
-		return Utils.opt(value);
-	}
-
-	private static boolean isEtag(String s) {
-		return s.startsWith("\"") || s.startsWith("W/");
 	}
 }

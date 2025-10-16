@@ -72,6 +72,9 @@ public class Icon extends Common {
 
 	private URI uri;
 
+	/** Bean constructor. */
+	public Icon() {}
+
 	/**
 	 * Normal constructor.
 	 *
@@ -87,14 +90,6 @@ public class Icon extends Common {
 	public Icon(Object uri) {
 		setUri(uri);
 	}
-
-	/** Bean constructor. */
-	public Icon() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Bean property getter:  <property>uri</property>.
 	 *
@@ -106,6 +101,17 @@ public class Icon extends Common {
 	@Xml(format=TEXT)
 	public URI getUri() {
 		return uri;
+	}
+
+	@Override /* Overridden from Common */
+	public Icon setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+	@Override /* Overridden from Common */
+	public Icon setLang(String value) {
+		super.setLang(value);
+		return this;
 	}
 
 	/**
@@ -125,22 +131,6 @@ public class Icon extends Common {
 	 */
 	public Icon setUri(Object value) {
 		this.uri = toURI(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Icon setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Icon setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

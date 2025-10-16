@@ -39,37 +39,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class ThrownStore {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Identifies a single global store for the entire JVM. */
-	public static final ThrownStore GLOBAL = new ThrownStore();
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @return A new builder for this object.
-	 */
-	public static Builder create() {
-		return new Builder(BeanStore.INSTANCE);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -86,41 +55,6 @@ public class ThrownStore {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(ThrownStore.class, beanStore);
-		}
-
-		@Override /* Overridden from BeanBuilder */
-		protected ThrownStore buildDefault() {
-			return new ThrownStore(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Specifies a subclass of {@link ThrownStats} to use for individual method statistics.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		public Builder statsImplClass(Class<? extends ThrownStats> value) {
-			this.statsImplClass = value;
-			return this;
-		}
-
-		/**
-		 * Specifies the parent store of this store.
-		 *
-		 * <p>
-		 * Parent stores are used for aggregating statistics across multiple child stores.
-		 * <br>The {@link ThrownStore#GLOBAL} store can be used for aggregating all thrown exceptions in a single JVM.
-		 *
-		 * @param value The parent store.  Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder parent(ThrownStore value) {
-			this.parent = value;
-			return this;
 		}
 
 		/**
@@ -142,17 +76,63 @@ public class ThrownStore {
 			return this;
 		}
 
+		/**
+		 * Specifies the parent store of this store.
+		 *
+		 * <p>
+		 * Parent stores are used for aggregating statistics across multiple child stores.
+		 * <br>The {@link ThrownStore#GLOBAL} store can be used for aggregating all thrown exceptions in a single JVM.
+		 *
+		 * @param value The parent store.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder parent(ThrownStore value) {
+			this.parent = value;
+			return this;
+		}
+
+		/**
+		 * Specifies a subclass of {@link ThrownStats} to use for individual method statistics.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder statsImplClass(Class<? extends ThrownStats> value) {
+			this.statsImplClass = value;
+			return this;
+		}
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected ThrownStore buildDefault() {
+			return new ThrownStore(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+	/** Identifies a single global store for the entire JVM. */
+	public static final ThrownStore GLOBAL = new ThrownStore();
 
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder(BeanStore.INSTANCE);
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final ConcurrentHashMap<Long,ThrownStats> db = new ConcurrentHashMap<>();
 	private final Optional<ThrownStore> parent;
 	private final BeanStore beanStore;
@@ -201,13 +181,12 @@ public class ThrownStore {
 	}
 
 	/**
-	 * Retrieves the stats for the specified thrown exception.
+	 * Returns the list of all stack traces in this database.
 	 *
-	 * @param e The exception.
-	 * @return A clone of the stats, never <jk>null</jk>.
+	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
 	 */
-	public Optional<ThrownStats> getStats(Throwable e) {
-		return getStats(hash(e));
+	public List<ThrownStats> getStats() {
+		return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());
 	}
 
 	/**
@@ -222,12 +201,13 @@ public class ThrownStore {
 	}
 
 	/**
-	 * Returns the list of all stack traces in this database.
+	 * Retrieves the stats for the specified thrown exception.
 	 *
-	 * @return The list of all stack traces in this database, cloned and sorted by count descending.
+	 * @param e The exception.
+	 * @return A clone of the stats, never <jk>null</jk>.
 	 */
-	public List<ThrownStats> getStats() {
-		return db.values().stream().map(ThrownStats::clone).sorted(comparingInt(ThrownStats::getCount).reversed()).collect(toList());
+	public Optional<ThrownStats> getStats(Throwable e) {
+		return getStats(hash(e));
 	}
 
 	/**
@@ -235,6 +215,46 @@ public class ThrownStore {
 	 */
 	public void reset() {
 		db.clear();
+	}
+
+	private ThrownStats find(final Throwable t) {
+
+		if (t == null)
+			return null;
+
+		long hash = hash(t);
+
+		ThrownStats stc = db.get(hash);
+		if (stc == null) {
+			stc = ThrownStats
+				.create(beanStore)
+				.type(statsImplClass)
+				.throwable(t)
+				.hash(hash)
+				.stackTrace(createStackTrace(t))
+				.causedBy(find(t.getCause()))
+				.build();
+
+			db.putIfAbsent(hash, stc);
+			stc = db.get(hash);
+		}
+
+		return stc;
+	}
+
+	/**
+	 * Converts the stack trace for the specified throwable into a simple list of strings.
+	 *
+	 * <p>
+	 * The stack trace elements for the throwable are sent through {@link #normalize(StackTraceElement)} to convert
+	 * them to simple strings.
+	 *
+	 *
+	 * @param t The throwable to create the stack trace for.
+	 * @return A modifiable list of strings.
+	 */
+	protected List<String> createStackTrace(Throwable t) {
+		return alist(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());
 	}
 
 	/**
@@ -254,21 +274,6 @@ public class ThrownStore {
 				h = 31*h + s.charAt(i);
 		}
 		return h;
-	}
-
-	/**
-	 * Converts the stack trace for the specified throwable into a simple list of strings.
-	 *
-	 * <p>
-	 * The stack trace elements for the throwable are sent through {@link #normalize(StackTraceElement)} to convert
-	 * them to simple strings.
-	 *
-	 *
-	 * @param t The throwable to create the stack trace for.
-	 * @return A modifiable list of strings.
-	 */
-	protected List<String> createStackTrace(Throwable t) {
-		return alist(t.getStackTrace()).stream().filter(this::include).map(this::normalize).collect(toList());
 	}
 
 	/**
@@ -305,30 +310,5 @@ public class ThrownStore {
 		if (ignoreClasses.contains(s2))
 			return "<ignored>";
 		return s2 + "..." + s3;
-	}
-
-	private ThrownStats find(final Throwable t) {
-
-		if (t == null)
-			return null;
-
-		long hash = hash(t);
-
-		ThrownStats stc = db.get(hash);
-		if (stc == null) {
-			stc = ThrownStats
-				.create(beanStore)
-				.type(statsImplClass)
-				.throwable(t)
-				.hash(hash)
-				.stackTrace(createStackTrace(t))
-				.causedBy(find(t.getCause()))
-				.build();
-
-			db.putIfAbsent(hash, stc);
-			stc = db.get(hash);
-		}
-
-		return stc;
 	}
 }

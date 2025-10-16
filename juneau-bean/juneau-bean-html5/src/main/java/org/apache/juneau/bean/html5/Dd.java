@@ -79,7 +79,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#dd() dd()}
- * 		<li class='jm'>{@link HtmlBuilder#dd(Object, Object...) dd(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#dd(Object...) dd(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -104,10 +104,6 @@ public class Dd extends HtmlElementMixed {
 	public Dd(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Dd _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -117,6 +113,30 @@ public class Dd extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Dd accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dd attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dd attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Dd child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Dd children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -477,30 +497,6 @@ public class Dd extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Dd translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Dd child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Dd children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Dd attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Dd attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -116,18 +116,6 @@ public class OperationMap extends TreeMap<String,Operation> {
 	}
 
 	/**
-	 * Override put to normalize keys to lowercase.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return The previous value associated with key, or null if there was no mapping for key.
-	 */
-	@Override
-	public Operation put(String key, Operation value) {
-		return super.put(emptyIfNull(key).toLowerCase(), value);
-	}
-
-	/**
 	 * Fluent-style put method.
 	 *
 	 * @param httpMethodName The HTTP method name.
@@ -137,5 +125,17 @@ public class OperationMap extends TreeMap<String,Operation> {
 	public OperationMap append(String httpMethodName, Operation operation) {
 		put(httpMethodName, operation);
 		return this;
+	}
+
+	/**
+	 * Override put to normalize keys to lowercase.
+	 *
+	 * @param key The key.
+	 * @param value The value.
+	 * @return The previous value associated with key, or null if there was no mapping for key.
+	 */
+	@Override
+	public Operation put(String key, Operation value) {
+		return super.put(emptyIfNull(key).toLowerCase(), value);
 	}
 }

@@ -47,9 +47,6 @@ import org.apache.juneau.rest.httppart.*;
  */
 public class ContentArg implements RestOpArg {
 
-	private final HttpPartSchema schema;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -61,6 +58,9 @@ public class ContentArg implements RestOpArg {
 			return new ContentArg(paramInfo);
 		return null;
 	}
+	private final HttpPartSchema schema;
+
+	private final Type type;
 
 	/**
 	 * Constructor.

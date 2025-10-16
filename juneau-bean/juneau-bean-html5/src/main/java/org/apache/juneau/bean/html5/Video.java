@@ -85,7 +85,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#video() video()}
- * 		<li class='jm'>{@link HtmlBuilder#video(Object, Object...) video(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#video(Object) video(Object)}
  * 	</ul>
  * </ul>
  * </p>
@@ -111,6 +111,30 @@ public class Video extends HtmlElementMixed {
 		src(src);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Video _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Video accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Video attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Video attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-autoplay">autoplay</a>
 	 * attribute.
@@ -126,13 +150,31 @@ public class Video extends HtmlElementMixed {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param autoplay
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Video autoplay(Object value) {
 		attr("autoplay", deminimize(value, "autoplay"));
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Video child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Video children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Video contenteditable(Object value) {
+		super.contenteditable(value);
 		return this;
 	}
 
@@ -151,7 +193,7 @@ public class Video extends HtmlElementMixed {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param controls
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -175,7 +217,7 @@ public class Video extends HtmlElementMixed {
 	 * 	<li><js>"use-credentials"</js> - Cross-origin requests include credentials</li>
 	 * </ul>
 	 *
-	 * @param crossorigin How to handle cross-origin requests.
+	 * @param value How to handle cross-origin requests.
 	 * @return This object.
 	 */
 	public Video crossorigin(String value) {
@@ -183,6 +225,11 @@ public class Video extends HtmlElementMixed {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Video dir(String value) {
+		super.dir(value);
+		return this;
+	}
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-height">height</a>
 	 * attribute.
@@ -190,169 +237,13 @@ public class Video extends HtmlElementMixed {
 	 * <p>
 	 * Vertical dimension.
 	 *
-	 * @param height
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
 	public Video height(Object value) {
 		attr("height", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
-	 *
-	 * <p>
-	 * Causes the media to automatically restart from the beginning when it reaches the end.
-	 *
-	 * @param loop If <jk>true</jk>, the media will loop continuously.
-	 * @return This object.
-	 */
-	public Video loop(Object value) {
-		attr("loop", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Groups multiple media elements together so they can be controlled as a single unit. All media elements
-	 * with the same mediagroup value will share the same MediaController, allowing synchronized playback.
-	 *
-	 * <p>
-	 * This is useful for creating synchronized audio/video presentations or multiple camera angles.
-	 *
-	 * @param mediagroup The name of the media group to join.
-	 * @return This object.
-	 */
-	public Video mediagroup(String value) {
-		attr("mediagroup", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
-	 *
-	 * @param muted If <jk>true</jk>, the media will be muted by default.
-	 * @return This object.
-	 */
-	public Video muted(Object value) {
-		attr("muted", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-video-poster">poster</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies an image to display as a placeholder before the video starts playing. This image is shown
-	 * while the video is loading or before the user clicks play.
-	 *
-	 * <p>
-	 * The poster image should be representative of the video content and help users understand what the video contains.
-	 *
-	 * @param poster The URL of the poster image to display before video playback.
-	 * @return This object.
-	 */
-	public Video poster(String value) {
-		attr("poster", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
-	 * attribute.
-	 *
-	 * <p>
-	 * Specifies how the browser should load the media resource.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"none"</js> - Do not preload the media</li>
-	 * 	<li><js>"metadata"</js> - Preload only metadata (duration, dimensions, etc.)</li>
-	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
-	 * </ul>
-	 *
-	 * @param preload How much of the media to preload.
-	 * @return This object.
-	 */
-	public Video preload(String value) {
-		attr("preload", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
-	 *
-	 * <p>
-	 * Address of the resource.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
-	 * @param src
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link URL} or {@link String}.
-	 * @return This object.
-	 */
-	public Video src(Object value) {
-		attrUri("src", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
-	 *
-	 * <p>
-	 * Horizontal dimension.
-	 *
-	 * @param width
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Video width(Object value) {
-		attr("width", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Video _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -371,6 +262,54 @@ public class Video extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Video lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-loop">loop</a> attribute.
+	 *
+	 * <p>
+	 * Causes the media to automatically restart from the beginning when it reaches the end.
+	 *
+	 * @param value If <jk>true</jk>, the media will loop continuously.
+	 * @return This object.
+	 */
+	public Video loop(Object value) {
+		attr("loop", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-mediagroup">mediagroup</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Groups multiple media elements together so they can be controlled as a single unit. All media elements
+	 * with the same mediagroup value will share the same MediaController, allowing synchronized playback.
+	 *
+	 * <p>
+	 * This is useful for creating synchronized audio/video presentations or multiple camera angles.
+	 *
+	 * @param value The name of the media group to join.
+	 * @return This object.
+	 */
+	public Video mediagroup(String value) {
+		attr("mediagroup", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-muted">muted</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Mutes the audio output by default. Useful for autoplay videos where audio should be disabled initially.
+	 *
+	 * @param value If <jk>true</jk>, the media will be muted by default.
+	 * @return This object.
+	 */
+	public Video muted(Object value) {
+		attr("muted", value);
 		return this;
 	}
 
@@ -674,9 +613,74 @@ public class Video extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-video-poster">poster</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies an image to display as a placeholder before the video starts playing. This image is shown
+	 * while the video is loading or before the user clicks play.
+	 *
+	 * <p>
+	 * The poster image should be representative of the video content and help users understand what the video contains.
+	 *
+	 * @param value The URL of the poster image to display before video playback.
+	 * @return This object.
+	 */
+	public Video poster(String value) {
+		attr("poster", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-preload">preload</a>
+	 * attribute.
+	 *
+	 * <p>
+	 * Specifies how the browser should load the media resource.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"none"</js> - Do not preload the media</li>
+	 * 	<li><js>"metadata"</js> - Preload only metadata (duration, dimensions, etc.)</li>
+	 * 	<li><js>"auto"</js> - Preload the entire media file (default)</li>
+	 * </ul>
+	 *
+	 * @param value How much of the media to preload.
+	 * @return This object.
+	 */
+	public Video preload(String value) {
+		attr("preload", value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Video spellcheck(Object value) {
 		super.spellcheck(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-media-src">src</a> attribute.
+	 *
+	 * <p>
+	 * Address of the resource.
+	 *
+	 * <p>
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link URL} or {@link String}.
+	 * @return This object.
+	 */
+	public Video src(Object value) {
+		attrUri("src", value);
 		return this;
 	}
 
@@ -704,27 +708,19 @@ public class Video extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementContainer */
-	public Video child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Video children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Video attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-dim-width">width</a> attribute.
+	 *
+	 * <p>
+	 * Horizontal dimension.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Video width(Object value) {
+		attr("width", value);
 		return this;
 	}
 }

@@ -94,13 +94,13 @@ public class Created extends BasicHttpResponse {
 		return new Created(this);
 	}
 	@Override /* Overridden from BasicHttpResponse */
-	public Created setContent(String value) {
+	public Created setContent(HttpEntity value) {
 		super.setContent(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Created setContent(HttpEntity value) {
+	public Created setContent(String value) {
 		super.setContent(value);
 		return this;
 	}
@@ -118,14 +118,14 @@ public class Created extends BasicHttpResponse {
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Created setHeaders(List<Header> values) {
-		super.setHeaders(values);
+	public Created setHeaders(HeaderList value) {
+		super.setHeaders(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpResponse */
-	public Created setHeaders(HeaderList value) {
-		super.setHeaders(value);
+	public Created setHeaders(List<Header> values) {
+		super.setHeaders(values);
 		return this;
 	}
 

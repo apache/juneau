@@ -28,27 +28,6 @@ import org.apache.juneau.marshaller.*;
 public class Console {
 
 	/**
-	 * Prints a message with arguments to {@link System#out}.
-	 *
-	 * <p>
-	 * Arguments are automatically converted to strings using the {@link Json5} marshaller.
-	 *
-	 * <p>
-	 * Useful for debug messages.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Console.<jsm>out</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
-	 * </p>
-	 *
-	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link Json5} marshaller.
-	 */
-	public static final void out(String msg, Object...args) {
-		System.out.println(format(msg, args));
-	}
-
-	/**
 	 * Prints a message with arguments to {@link System#err}.
 	 *
 	 * <p>
@@ -91,5 +70,26 @@ public class Console {
 		for (int i = 0; i < args.length; i++)
 			args[i] = Json5.of(args[i]);
 		return MessageFormat.format(msg, args);
+	}
+
+	/**
+	 * Prints a message with arguments to {@link System#out}.
+	 *
+	 * <p>
+	 * Arguments are automatically converted to strings using the {@link Json5} marshaller.
+	 *
+	 * <p>
+	 * Useful for debug messages.
+	 *
+	 * <h5 class='figure'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	Console.<jsm>out</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
+	 * </p>
+	 *
+	 * @param msg The {@link MessageFormat}-styled message.
+	 * @param args The arguments sent to the the formatter after running them through the {@link Json5} marshaller.
+	 */
+	public static final void out(String msg, Object...args) {
+		System.out.println(format(msg, args));
 	}
 }

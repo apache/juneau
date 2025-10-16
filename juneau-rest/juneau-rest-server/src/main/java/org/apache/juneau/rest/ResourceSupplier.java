@@ -41,6 +41,11 @@ public class ResourceSupplier implements Supplier<Object> {
 		this.supplier = supplier;
 	}
 
+	@Override
+	public Object get() {
+		return supplier.get();
+	}
+
 	/**
 	 * Returns the resource class.
 	 *
@@ -51,10 +56,5 @@ public class ResourceSupplier implements Supplier<Object> {
 	 */
 	public Class<?> getResourceClass() {
 		return resourceClass;
-	}
-
-	@Override
-	public Object get() {
-		return supplier.get();
 	}
 }

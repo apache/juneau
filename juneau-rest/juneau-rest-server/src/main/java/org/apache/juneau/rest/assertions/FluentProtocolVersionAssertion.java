@@ -91,26 +91,6 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<ProtocolVersion,R> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
-		this(null, value, returns);
-	}
-
 	/**
 	 * Chained constructor.
 	 *
@@ -133,19 +113,20 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 		setThrowable(BadRequest.class);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Transform methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * Returns the protocol string as a new assertion.
+	 * Constructor.
 	 *
-	 * @return A new assertion.
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
 	 */
-	public FluentStringAssertion<R> asProtocol() {
-		return new FluentStringAssertion<>(value().getProtocol(), returns());
+	public FluentProtocolVersionAssertion(ProtocolVersion value, R returns) {
+		this(null, value, returns);
 	}
-
 	/**
 	 * Returns the protocol major version as a new assertion.
 	 *
@@ -164,9 +145,14 @@ public class FluentProtocolVersionAssertion<R> extends FluentObjectAssertion<Pro
 		return new FluentIntegerAssertion<>(value().getMinor(), returns());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the protocol string as a new assertion.
+	 *
+	 * @return A new assertion.
+	 */
+	public FluentStringAssertion<R> asProtocol() {
+		return new FluentStringAssertion<>(value().getProtocol(), returns());
+	}
 	@Override /* Overridden from Assertion */
 	public FluentProtocolVersionAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);

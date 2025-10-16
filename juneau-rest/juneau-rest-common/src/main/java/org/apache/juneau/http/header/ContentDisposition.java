@@ -57,11 +57,6 @@ import org.apache.juneau.internal.*;
  */
 @Header("Content-Disposition")
 public class ContentDisposition extends BasicStringRangesHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Disposition";
 
@@ -106,11 +101,6 @@ public class ContentDisposition extends BasicStringRangesHeader {
 	public static ContentDisposition of(Supplier<StringRanges> value) {
 		return value == null ? null : new ContentDisposition(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

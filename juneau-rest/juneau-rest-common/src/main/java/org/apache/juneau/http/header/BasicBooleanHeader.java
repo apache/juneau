@@ -43,12 +43,21 @@ import org.apache.juneau.http.annotation.*;
 @Header
 @Schema(type="boolean")
 public class BasicBooleanHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Static creator.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicBooleanHeader of(String name, Boolean value) {
+		return value == null ? null : new BasicBooleanHeader(name, value);
+	}
 
 	/**
 	 * Static creator.
@@ -62,20 +71,6 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicBooleanHeader of(String name, String value) {
-		return value == null ? null : new BasicBooleanHeader(name, value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public static BasicBooleanHeader of(String name, Boolean value) {
 		return value == null ? null : new BasicBooleanHeader(name, value);
 	}
 
@@ -95,13 +90,23 @@ public class BasicBooleanHeader extends BasicHeader {
 	public static BasicBooleanHeader of(String name, Supplier<Boolean> value) {
 		return value == null ? null : new BasicBooleanHeader(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Boolean value;
 	private final Supplier<Boolean> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicBooleanHeader(String name, Boolean value) {
+		super(name, value);
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -116,21 +121,6 @@ public class BasicBooleanHeader extends BasicHeader {
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
 		this.value = Utils.isEmpty(value) ? null : Boolean.valueOf(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicBooleanHeader(String name, Boolean value) {
-		super(name, value);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -152,11 +142,6 @@ public class BasicBooleanHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
-
 	/**
 	 * Returns the header value as a {@link Boolean} wrapped in an {@link Optional}.
 	 *
@@ -164,25 +149,6 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public Optional<Boolean> asBoolean() {
 		return Utils.opt(value());
-	}
-
-	/**
-	 * Returns the header value as a {@link Boolean}.
-	 *
-	 * @return The header value as a {@link Boolean}.  Can be <jk>null</jk>.
-	 */
-	public Boolean toBoolean() {
-		return value();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the header value is <jk>true</jk>.
-	 *
-	 * @return <jk>true</jk> if the header value is <jk>true</jk>.
-	 */
-	public boolean isTrue() {
-		Boolean x = value();
-		return x == null ? value : x;
 	}
 
 	/**
@@ -204,6 +170,21 @@ public class BasicBooleanHeader extends BasicHeader {
 		return new FluentBooleanAssertion<>(value(), this);
 	}
 
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the header value is <jk>true</jk>.
+	 *
+	 * @return <jk>true</jk> if the header value is <jk>true</jk>.
+	 */
+	public boolean isTrue() {
+		Boolean x = value();
+		return x == null ? value : x;
+	}
+
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
@@ -216,6 +197,15 @@ public class BasicBooleanHeader extends BasicHeader {
 	public Boolean orElse(Boolean other) {
 		Boolean x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link Boolean}.
+	 *
+	 * @return The header value as a {@link Boolean}.  Can be <jk>null</jk>.
+	 */
+	public Boolean toBoolean() {
+		return value();
 	}
 
 	private Boolean value() {

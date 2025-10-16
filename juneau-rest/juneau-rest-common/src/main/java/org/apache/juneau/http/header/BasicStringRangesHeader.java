@@ -39,11 +39,6 @@ import org.apache.juneau.common.utils.*;
  * @serial exclude
  */
 public class BasicStringRangesHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -91,11 +86,6 @@ public class BasicStringRangesHeader extends BasicHeader {
 	public static BasicStringRangesHeader of(String name, Supplier<StringRanges> value) {
 		return value == null ? null : new BasicStringRangesHeader(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String stringValue;
 	private final StringRanges value;
 	private final Supplier<StringRanges> supplier;
@@ -152,11 +142,6 @@ public class BasicStringRangesHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return stringValue != null ? stringValue : Utils.s(value());
-	}
-
 	/**
 	 * Returns the header value as a {@link StringRanges} wrapped in an {@link Optional}.
 	 *
@@ -167,12 +152,19 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	/**
-	 * Returns the header value as a {@link StringRanges}.
+	 * Returns the {@link MediaRange} at the specified index.
 	 *
-	 * @return The header value as a {@link StringRanges}.  Can be <jk>null</jk>.
+	 * @param index The index position of the media range.
+	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
-	public StringRanges toStringRanges() {
-		return value();
+	public StringRange getRange(int index) {
+		StringRanges x = value();
+		return x == null ? null : x.getRange(index);
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return stringValue != null ? stringValue : Utils.s(value());
 	}
 
 	/**
@@ -199,17 +191,6 @@ public class BasicStringRangesHeader extends BasicHeader {
 	}
 
 	/**
-	 * Returns the {@link MediaRange} at the specified index.
-	 *
-	 * @param index The index position of the media range.
-	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
-	 */
-	public StringRange getRange(int index) {
-		StringRanges x = value();
-		return x == null ? null : x.getRange(index);
-	}
-
-	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
@@ -221,6 +202,15 @@ public class BasicStringRangesHeader extends BasicHeader {
 	public StringRanges orElse(StringRanges other) {
 		StringRanges x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link StringRanges}.
+	 *
+	 * @return The header value as a {@link StringRanges}.  Can be <jk>null</jk>.
+	 */
+	public StringRanges toStringRanges() {
+		return value();
 	}
 
 	private StringRanges value() {

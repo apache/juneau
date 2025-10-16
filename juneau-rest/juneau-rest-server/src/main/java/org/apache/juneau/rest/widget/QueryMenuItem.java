@@ -31,6 +31,16 @@ import org.apache.juneau.rest.*;
  */
 public class QueryMenuItem extends MenuItemWidget {
 
+	@Override /* Overridden from MenuItemWidget */
+	public String getContent(RestRequest req, RestResponse res) {
+		return loadHtml(req, "QueryMenuItem.html");
+	}
+
+	@Override /* Overridden from MenuItemWidget */
+	public String getLabel(RestRequest req, RestResponse res) {
+		return "query";
+	}
+
 	/**
 	 * Returns CSS for the tooltips.
 	 */
@@ -39,15 +49,5 @@ public class QueryMenuItem extends MenuItemWidget {
 		return super.getStyle(req, res)
 			+ "\n"
 			+ loadStyle(req, "styles/QueryMenuItem.css");
-	}
-
-	@Override /* Overridden from MenuItemWidget */
-	public String getLabel(RestRequest req, RestResponse res) {
-		return "query";
-	}
-
-	@Override /* Overridden from MenuItemWidget */
-	public String getContent(RestRequest req, RestResponse res) {
-		return loadHtml(req, "QueryMenuItem.html");
 	}
 }

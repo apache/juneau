@@ -40,26 +40,6 @@ import org.apache.juneau.rest.logger.*;
  * </ul>
  */
 public class RestOpSession extends ContextSession {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param ctx The context object of the Java method being invoked.
-	 * @param session The REST session object creating this object.
-	 * @return A new builder.
-	 */
-	public static Builder create(RestOpContext ctx, RestSession session) {
-		return new Builder(ctx, session);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -80,15 +60,9 @@ public class RestOpSession extends ContextSession {
 			this.session = session;
 		}
 
-		/**
-		 * Sets the logger to use when logging this call.
-		 *
-		 * @param value The new value for this setting.  Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public Builder logger(CallLogger value) {
-			session.logger(value);
-			return this;
+		@Override /* Overridden from Session.Builder */
+		public RestOpSession build() {
+			return new RestOpSession(this);
 		}
 
 		/**
@@ -103,16 +77,27 @@ public class RestOpSession extends ContextSession {
 			return this;
 		}
 
-		@Override /* Overridden from Session.Builder */
-		public RestOpSession build() {
-			return new RestOpSession(this);
+		/**
+		 * Sets the logger to use when logging this call.
+		 *
+		 * @param value The new value for this setting.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder logger(CallLogger value) {
+			session.logger(value);
+			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param ctx The context object of the Java method being invoked.
+	 * @param session The REST session object creating this object.
+	 * @return A new builder.
+	 */
+	public static Builder create(RestOpContext ctx, RestSession session) {
+		return new Builder(ctx, session);
+	}
 	private final RestOpContext ctx;
 	private final RestSession session;
 	private final RestRequest req;
@@ -137,9 +122,69 @@ public class RestOpSession extends ContextSession {
 		}
 	}
 
+	/**
+	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
+	 *
+	 * @return This object.
+	 */
+	public RestOpSession finish() {
+		try {
+			res.flushBuffer();
+			req.close();
+		} catch (Exception e) {
+			session.exception(e);
+		}
+		return this;
+	}
+
+	/**
+	 * Returns the bean store for this session.
+	 *
+	 * @return The bean store for this session.
+	 */
+	public BeanStore getBeanStore() {
+		return session.getBeanStore();
+	}
+
 	@Override /* Overridden from ContextSession */
 	public RestOpContext getContext() {
 		return ctx;
+	}
+
+	/**
+	 * Returns the REST request object for this session.
+	 *
+	 * @return The REST request object for this session.
+	 */
+	public RestRequest getRequest() {
+		return req;
+	}
+
+	/**
+	 * Returns the REST response object for this session.
+	 *
+	 * @return The REST response object for this session.
+	 */
+	public RestResponse getResponse() {
+		return res;
+	}
+
+	/**
+	 * Returns the context of the parent class of this Java method.
+	 *
+	 * @return The context of the parent class of this Java method.
+	 */
+	public RestContext getRestContext() {
+		return session.getContext();
+	}
+
+	/**
+	 * Returns the session of the parent class of this Java method.
+	 *
+	 * @return The session of the parent class of this Java method.
+	 */
+	public RestSession getRestSession() {
+		return session;
 	}
 
 	/**
@@ -171,51 +216,6 @@ public class RestOpSession extends ContextSession {
 	}
 
 	/**
-	 * Returns the REST request object for this session.
-	 *
-	 * @return The REST request object for this session.
-	 */
-	public RestRequest getRequest() {
-		return req;
-	}
-
-	/**
-	 * Returns the REST response object for this session.
-	 *
-	 * @return The REST response object for this session.
-	 */
-	public RestResponse getResponse() {
-		return res;
-	}
-
-	/**
-	 * Returns the bean store for this session.
-	 *
-	 * @return The bean store for this session.
-	 */
-	public BeanStore getBeanStore() {
-		return session.getBeanStore();
-	}
-
-	/**
-	 * Returns the context of the parent class of this Java method.
-	 *
-	 * @return The context of the parent class of this Java method.
-	 */
-	public RestContext getRestContext() {
-		return session.getContext();
-	}
-
-	/**
-	 * Returns the session of the parent class of this Java method.
-	 *
-	 * @return The session of the parent class of this Java method.
-	 */
-	public RestSession getRestSession() {
-		return session;
-	}
-
-	/**
 	 * Sets the status of the response.
 	 *
 	 * @param value The new status.
@@ -223,21 +223,6 @@ public class RestOpSession extends ContextSession {
 	 */
 	public RestOpSession status(StatusLine value) {
 		session.status(value);
-		return this;
-	}
-
-	/**
-	 * Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
-	 *
-	 * @return This object.
-	 */
-	public RestOpSession finish() {
-		try {
-			res.flushBuffer();
-			req.close();
-		} catch (Exception e) {
-			session.exception(e);
-		}
 		return this;
 	}
 }

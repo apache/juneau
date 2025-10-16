@@ -46,25 +46,140 @@ import org.apache.juneau.rest.servlet.*;
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
 public class LogsResource extends BasicRestServlet {
+	@Response(schema=@Schema(description="File action"))
+	public static class Action extends LinkString {
+		public Action(String name, String uri, Object...uriArgs) {
+			super(name, uri, uriArgs);
+		}
+		@Override /* Overridden from LinkString */
+		public Action setName(String value) {
+			super.setName(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(java.net.URI value) {
+			super.setUri(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(String value) {
+			super.setUri(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(String value, Object...args) {
+			super.setUri(value, args);
+			return this;
+		}
+	}
+	@Response(schema=@Schema(description="File or directory details"))
+	@Bean(properties="type,name,size,lastModified,actions,files")
+	public static class FileResource {
+		static final FileFilter FILE_FILTER = f -> f.isDirectory() || f.getName().endsWith(".log");
+		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
+			int c = o1.getType().compareTo(o2.getType());
+			return c != 0 ? c : o1.getName().compareTo(o2.getName());
+		};
+		private final File f;
+		private final String path;
+
+		private final String uri;
+
+		private final boolean includeChildren, allowDeletes;
+
+		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
+			this.f = f;
+			this.path = path;
+			this.uri = "servlet:/"+(path == null ? "" : path);
+			this.includeChildren = includeChildren;
+			this.allowDeletes = allowDeletes;
+		}
+
+		@Html(format=HtmlFormat.HTML_CDC)
+		public List<Action> getActions() throws Exception {
+			List<Action> l = new ArrayList<>();
+			if (f.canRead() && ! f.isDirectory()) {
+				l.add(new Action("view", uri + "?method=VIEW"));
+				l.add(new Action("highlighted", uri + "?method=VIEW&highlight=true"));
+				l.add(new Action("parsed", uri + "?method=PARSE"));
+				l.add(new Action("download", uri + "?method=DOWNLOAD"));
+				if (allowDeletes)
+					l.add(new Action("delete", uri + "?method=DELETE"));
+			}
+			return l;
+		}
+
+		public Set<FileResource> getFiles() {
+			if (f.isFile() || ! includeChildren)
+				return null;
+			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
+			for (File fc : f.listFiles(FILE_FILTER))
+				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
+			return s;
+		}
+
+		public Date getLastModified() {
+			return new Date(f.lastModified());
+		}
+
+		public LinkString getName() {
+			return new LinkString(f.getName(), uri);
+		}
+
+		public long getSize() {
+			return f.isDirectory() ? f.listFiles().length : f.length();
+		}
+
+		public String getType() {
+			return (f.isDirectory() ? "dir" : "file");
+		}
+	}
+	@Response(schema=@Schema(type="string",format="binary",description="Contents of file"))
+	static class FileContents extends FileInputStream {
+		public FileContents(File file) throws FileNotFoundException {
+			super(file);
+		}
+	}
+	@Response(schema=@Schema(description="Redirect to root page on success"))
+	static class RedirectToRoot extends SeeOtherRoot {}
+
 	private static final long serialVersionUID = 1L;
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	private static BufferedReader getReader(File f) throws IOException {
+		return new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
+	}
 
 	private File logDir;
+
 	private LogEntryFormatter leFormatter;
+
 	boolean allowDeletes;
 
-	@RestInit
-	public void init(Config config) throws Exception {
-		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
-		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(true);
-		leFormatter = new LogEntryFormatter(
-			config.get("Logging/format").asString().orElse("[{date} {level}] {msg}%n"),
-			config.get("Logging/dateFormat").asString().orElse("yyyy.MM.dd hh:mm:ss"),
-			config.get("Logging/useStackTraceHashes").asBoolean().orElse(true)
-		);
+	@RestDelete(
+		path="/*",
+		summary="Delete log file",
+		description="Delete a log file on the file system."
+	)
+	public RedirectToRoot deleteFile(@Path("/*") String path) throws MethodNotAllowed {
+		deleteFile(getFile(path));
+		return new RedirectToRoot();
+	}
+	@RestOp(
+		method="DOWNLOAD",
+		path="/*",
+		summary="Download file",
+		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
+	)
+	public FileContents downloadFile(RestResponse res, @Path("/*") String path) throws NotFound, MethodNotAllowed {
+		res.setContentType("application/octet-stream");
+		try {
+			return new FileContents(getFile(path));
+		} catch (FileNotFoundException e) {
+			throw new NotFound("File not found");
+		}
 	}
 
 	@RestGet(
@@ -81,6 +196,17 @@ public class LogsResource extends BasicRestServlet {
 		req.setAttribute("fullPath", dir.getAbsolutePath());
 
 		return new FileResource(dir, path, allowDeletes, true);
+	}
+
+	@RestInit
+	public void init(Config config) throws Exception {
+		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
+		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(true);
+		leFormatter = new LogEntryFormatter(
+			config.get("Logging/format").asString().orElse("[{date} {level}] {msg}%n"),
+			config.get("Logging/dateFormat").asString().orElse("yyyy.MM.dd hh:mm:ss"),
+			config.get("Logging/useStackTraceHashes").asBoolean().orElse(true)
+		);
 	}
 
 	@SuppressWarnings("resource")
@@ -143,7 +269,6 @@ public class LogsResource extends BasicRestServlet {
 			}
 		}
 	}
-
 	@RestOp(
 		method="PARSE",
 		path="/*",
@@ -177,156 +302,6 @@ public class LogsResource extends BasicRestServlet {
 		return getLogParser(f, startDate, endDate, thread, loggers, severity);
 	}
 
-	@RestOp(
-		method="DOWNLOAD",
-		path="/*",
-		summary="Download file",
-		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
-	)
-	public FileContents downloadFile(RestResponse res, @Path("/*") String path) throws NotFound, MethodNotAllowed {
-		res.setContentType("application/octet-stream");
-		try {
-			return new FileContents(getFile(path));
-		} catch (FileNotFoundException e) {
-			throw new NotFound("File not found");
-		}
-	}
-
-	@RestDelete(
-		path="/*",
-		summary="Delete log file",
-		description="Delete a log file on the file system."
-	)
-	public RedirectToRoot deleteFile(@Path("/*") String path) throws MethodNotAllowed {
-		deleteFile(getFile(path));
-		return new RedirectToRoot();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper beans
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Response(schema=@Schema(type="string",format="binary",description="Contents of file"))
-	static class FileContents extends FileInputStream {
-		public FileContents(File file) throws FileNotFoundException {
-			super(file);
-		}
-	}
-
-	@Response(schema=@Schema(description="Redirect to root page on success"))
-	static class RedirectToRoot extends SeeOtherRoot {}
-
-	@Response(schema=@Schema(description="File action"))
-	public static class Action extends LinkString {
-		public Action(String name, String uri, Object...uriArgs) {
-			super(name, uri, uriArgs);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Overridden methods
-		//-----------------------------------------------------------------------------------------------------------------
-
-		@Override /* Overridden from LinkString */
-		public Action setName(String value) {
-			super.setName(value);
-			return this;
-		}
-
-		@Override /* Overridden from LinkString */
-		public Action setUri(java.net.URI value) {
-			super.setUri(value);
-			return this;
-		}
-
-		@Override /* Overridden from LinkString */
-		public Action setUri(String value) {
-			super.setUri(value);
-			return this;
-		}
-
-		@Override /* Overridden from LinkString */
-		public Action setUri(String value, Object...args) {
-			super.setUri(value, args);
-			return this;
-		}
-	}
-
-	@Response(schema=@Schema(description="File or directory details"))
-	@Bean(properties="type,name,size,lastModified,actions,files")
-	public static class FileResource {
-		private final File f;
-		private final String path;
-		private final String uri;
-		private final boolean includeChildren, allowDeletes;
-
-		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
-			this.f = f;
-			this.path = path;
-			this.uri = "servlet:/"+(path == null ? "" : path);
-			this.includeChildren = includeChildren;
-			this.allowDeletes = allowDeletes;
-		}
-
-		public String getType() {
-			return (f.isDirectory() ? "dir" : "file");
-		}
-
-		public LinkString getName() {
-			return new LinkString(f.getName(), uri);
-		}
-
-		public long getSize() {
-			return f.isDirectory() ? f.listFiles().length : f.length();
-		}
-
-		public Date getLastModified() {
-			return new Date(f.lastModified());
-		}
-
-		@Html(format=HtmlFormat.HTML_CDC)
-		public List<Action> getActions() throws Exception {
-			List<Action> l = new ArrayList<>();
-			if (f.canRead() && ! f.isDirectory()) {
-				l.add(new Action("view", uri + "?method=VIEW"));
-				l.add(new Action("highlighted", uri + "?method=VIEW&highlight=true"));
-				l.add(new Action("parsed", uri + "?method=PARSE"));
-				l.add(new Action("download", uri + "?method=DOWNLOAD"));
-				if (allowDeletes)
-					l.add(new Action("delete", uri + "?method=DELETE"));
-			}
-			return l;
-		}
-
-		public Set<FileResource> getFiles() {
-			if (f.isFile() || ! includeChildren)
-				return null;
-			Set<FileResource> s = new TreeSet<>(FILE_COMPARATOR);
-			for (File fc : f.listFiles(FILE_FILTER))
-				s.add(new FileResource(fc, (path != null ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false));
-			return s;
-		}
-
-		static final FileFilter FILE_FILTER = f -> f.isDirectory() || f.getName().endsWith(".log");
-
-		static final Comparator<FileResource> FILE_COMPARATOR = (o1, o2) -> {
-			int c = o1.getType().compareTo(o2.getType());
-			return c != 0 ? c : o1.getName().compareTo(o2.getName());
-		};
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private File getFile(String path) throws NotFound {
-		if (path == null)
-			return logDir;
-		File f = new File(logDir.getAbsolutePath() + '/' + path);
-		if (f.exists())
-			return f;
-		throw new NotFound("File not found.");
-	}
-
 	private void deleteFile(File f) {
 		if (! allowDeletes)
 			throw new MethodNotAllowed("DELETE not enabled");
@@ -341,17 +316,22 @@ public class LogsResource extends BasicRestServlet {
 			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath()) ;
 	}
 
-	private static BufferedReader getReader(File f) throws IOException {
-		return new BufferedReader(new InputStreamReader(new FileInputStream(f), Charset.defaultCharset()));
+	private File getFile(String path) throws NotFound {
+		if (path == null)
+			return logDir;
+		File f = new File(logDir.getAbsolutePath() + '/' + path);
+		if (f.exists())
+			return f;
+		throw new NotFound("File not found.");
+	}
+
+	private LogParser getLogParser(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {
+		return new LogParser(leFormatter, f, start, end, thread, loggers, severity);
 	}
 
 	private Object getReader(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {
 		if (start == null && end == null && thread == null && loggers == null)
 			return getReader(f);
 		return getLogParser(f, start, end, thread, loggers, severity);
-	}
-
-	private LogParser getLogParser(File f, final Date start, final Date end, final String thread, final String[] loggers, final String[] severity) throws IOException {
-		return new LogParser(leFormatter, f, start, end, thread, loggers, severity);
 	}
 }

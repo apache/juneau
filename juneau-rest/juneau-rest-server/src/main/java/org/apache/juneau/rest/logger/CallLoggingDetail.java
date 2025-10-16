@@ -42,13 +42,6 @@ public enum CallLoggingDetail {
 	 */
 	ENTITY;
 
-	boolean isOneOf(CallLoggingDetail...values) {
-		for (CallLoggingDetail v : values)
-			if (v == this)
-				return true;
-		return false;
-	}
-
 	/**
 	 * Retrieves this enum using case-insensitive matching.
 	 *
@@ -62,5 +55,12 @@ public enum CallLoggingDetail {
 			} catch (IllegalArgumentException  e) {}
 		}
 		return null;
+	}
+
+	boolean isOneOf(CallLoggingDetail...values) {
+		for (CallLoggingDetail v : values)
+			if (v == this)
+				return true;
+		return false;
 	}
 }

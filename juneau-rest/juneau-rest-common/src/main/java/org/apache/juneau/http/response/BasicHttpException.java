@@ -65,16 +65,27 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	/**
 	 * Constructor.
-	 *
-	 * @param statusCode The HTTP status code.
-	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
-	 * @param msg The message.  Can be <jk>null</jk>.
-	 * @param args The message arguments.
 	 */
-	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
-		super(cause, msg, args);
-		setStatusCode(statusCode);
-		setContent(f(msg, args));
+	public BasicHttpException() {
+		super((Throwable)null);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response being parsed.
+	 */
+	public BasicHttpException(HttpResponse response) {
+		super((Throwable)null);
+		Header h = response.getLastHeader("Thrown");
+		if (h != null)
+			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
+		setHeaders(response.getAllHeaders());
+		setContent(response.getEntity());
+		setStatusCode(response.getStatusLine().getStatusCode());
 	}
 
 	/**
@@ -112,27 +123,16 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	/**
 	 * Constructor.
-	 */
-	public BasicHttpException() {
-		super((Throwable)null);
-	}
-
-	/**
-	 * Constructor.
 	 *
-	 * <p>
-	 * This is the constructor used when parsing an HTTP response.
-	 *
-	 * @param response The HTTP response being parsed.
+	 * @param statusCode The HTTP status code.
+	 * @param cause The caused-by exception.  Can be <jk>null</jk>.
+	 * @param msg The message.  Can be <jk>null</jk>.
+	 * @param args The message arguments.
 	 */
-	public BasicHttpException(HttpResponse response) {
-		super((Throwable)null);
-		Header h = response.getLastHeader("Thrown");
-		if (h != null)
-			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
-		setHeaders(response.getAllHeaders());
-		setContent(response.getEntity());
-		setStatusCode(response.getStatusLine().getStatusCode());
+	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
+		super(cause, msg, args);
+		setStatusCode(statusCode);
+		setContent(f(msg, args));
 	}
 
 	/**
@@ -144,233 +144,36 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		this(0, copyFrom.getCause(), copyFrom.getMessage());
 		setStatusLine(copyFrom.statusLine.copy());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Specifies whether this bean should be unmodifiable.
-	 * <p>
-	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
-	 *
-	 * @return This object.
-	 */
-	@Override
-	public BasicHttpException setUnmodifiable() {
-		super.setUnmodifiable();
-		statusLine.setUnmodifiable();
-		return this;
+	@Override /* Overridden from HttpMessage */
+	public void addHeader(Header value) {
+		headers.append(value);
+	}
+	@Override /* Overridden from HttpMessage */
+	public void addHeader(String name, String value) {
+		headers.append(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// BasicStatusLine setters.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Sets the protocol version on the status line.
-	 *
-	 * <p>
-	 * If not specified, <js>"HTTP/1.1"</js> will be used.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicHttpException setStatusLine(BasicStatusLine value) {
-		assertModifiable();
-		statusLine = value.copy();
-		return this;
+	@Override /* Overridden from HttpMessage */
+	public boolean containsHeader(String name) {
+		return headers.contains(name);
 	}
 
-	/**
-	 * Same as {@link #setStatusCode(int)} but returns this object.
-	 *
-	 * @param code The new status code.
-	 * @return This object.
-	 * @throws IllegalStateException If status code could not be set.
-	 */
-	public BasicHttpException setStatusCode2(int code) throws IllegalStateException {
-		setStatusCode(code);
-		return this;
+	@Override /* Overridden from HttpMessage */
+	public Header[] getAllHeaders() {
+		return headers.getAll();
 	}
 
-	/**
-	 * Sets the protocol version on the status line.
-	 *
-	 * <p>
-	 * If not specified, <js>"HTTP/1.1"</js> will be used.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
-		statusLine.setProtocolVersion(value);
-		return this;
+	@Override /* Overridden from HttpMessage */
+	public HttpEntity getEntity() {
+		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
+		if (content == null)
+			content = stringEntity(getMessage());
+		return content;
 	}
 
-	/**
-	 * Sets the reason phrase on the status line.
-	 *
-	 * <p>
-	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
-	 * using the locale on this builder.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicHttpException setReasonPhrase2(String value) {
-		statusLine.setReasonPhrase(value);
-		return this;
-	}
-
-	/**
-	 * Sets the reason phrase catalog used to retrieve reason phrases.
-	 *
-	 * <p>
-	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
-		statusLine.setReasonPhraseCatalog(value);
-		return this;
-	}
-
-	/**
-	 * Sets the locale used to retrieve reason phrases.
-	 *
-	 * <p>
-	 * If not specified, uses {@link Locale#getDefault()}.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicHttpException setLocale2(Locale value) {
-		statusLine.setLocale(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BasicHeaderGroup setters.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns access to the underlying builder for the headers.
-	 *
-	 * @return The underlying builder for the headers.
-	 */
-	public HeaderList getHeaders() {
-		assertModifiable();
-		return headers;
-	}
-
-	/**
-	 * Sets the specified headers on this response.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	public BasicHttpException setHeaders(HeaderList value) {
-		assertModifiable();
-		headers = value.copy();
-		return this;
-	}
-
-	/**
-	 * Sets a header on this response.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public BasicHttpException setHeader2(String name, Object value) {
-		headers.set(name, value);
-		return this;
-	}
-
-	/**
-	 * Sets multiple headers on this response.
-	 *
-	 * @param values The headers to add.
-	 * @return This object.
-	 */
-	public BasicHttpException setHeaders2(Header...values) {
-		headers.set(values);
-		return this;
-	}
-
-	/**
-	 * Sets the specified headers on this response.
-	 *
-	 * @param values The headers to set.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public BasicHttpException setHeaders(List<Header> values) {
-		headers.set(values);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Body setters.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Sets the body on this response.
-	 *
-	 * @param value The body on this response.
-	 * @return This object.
-	 */
-	public BasicHttpException setContent(String value) {
-		setContent(stringEntity(value));
-		return this;
-	}
-
-	/**
-	 * Sets the body on this response.
-	 *
-	 * @param value The body on this response.
-	 * @return This object.
-	 */
-	public BasicHttpException setContent(HttpEntity value) {
-		assertModifiable();
-		this.content = value;
-		return this;
-	}
-
-	/**
-	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
-	 *
-	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If status code is not what was expected.
-	 */
-	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		Utils.assertArgNotNull("response", response);
-		int expected = getStatusLine().getStatusCode();
-		int actual = response.getStatusLine().getStatusCode();
-		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
-	}
-
-	/**
-	 * Returns the root cause of this exception.
-	 *
-	 * <p>
-	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:
-	 * <ul>
-	 * 	<li>{@link BasicHttpException}
-	 * 	<li>{@link InvocationTargetException}
-	 * </ul>
-	 *
-	 * @return The root cause of this exception, or <jk>null</jk> if no root cause was found.
-	 */
-	public Throwable getRootCause() {
-		Throwable t = this;
-		while(t != null) {
-			if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))
-				return t;
-			t = t.getCause();
-		}
-		return null;
+	@Override /* Overridden from HttpMessage */
+	public Header getFirstHeader(String name) {
+		return headers.getFirst(name).orElse(null);
 	}
 
 	/**
@@ -406,6 +209,30 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		}
 		return sb.toString();
 	}
+	/**
+	 * Returns access to the underlying builder for the headers.
+	 *
+	 * @return The underlying builder for the headers.
+	 */
+	public HeaderList getHeaders() {
+		assertModifiable();
+		return headers;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public Header[] getHeaders(String name) {
+		return headers.getAll(name);
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public Header getLastHeader(String name) {
+		return headers.getLast(name).orElse(null);
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public Locale getLocale() {
+		return statusLine.getLocale();
+	}
 
 	@Override /* Overridden from Throwable */
 	public String getMessage() {
@@ -415,6 +242,43 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		if (m == null)
 			m = statusLine.getReasonPhrase();
 		return m;
+	}
+	@SuppressWarnings("deprecation")
+	@Override /* Overridden from HttpMessage */
+	public HttpParams getParams() {
+		return null;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public ProtocolVersion getProtocolVersion() {
+		return statusLine.getProtocolVersion();
+	}
+
+	/**
+	 * Returns the root cause of this exception.
+	 *
+	 * <p>
+	 * The root cause is the first exception in the init-cause parent chain that's not one of the following:
+	 * <ul>
+	 * 	<li>{@link BasicHttpException}
+	 * 	<li>{@link InvocationTargetException}
+	 * </ul>
+	 *
+	 * @return The root cause of this exception, or <jk>null</jk> if no root cause was found.
+	 */
+	public Throwable getRootCause() {
+		Throwable t = this;
+		while(t != null) {
+			if (! (t instanceof BasicHttpException || t instanceof InvocationTargetException))
+				return t;
+			t = t.getCause();
+		}
+		return null;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public StatusLine getStatusLine() {
+		return statusLine;
 	}
 
 	@Override /* Overridden from Object */
@@ -429,64 +293,14 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return i;
 	}
 
-	@Override /* Overridden from Object */
-	public String toString() {
-		return emptyIfNull(getLocalizedMessage());
+	@Override /* Overridden from HttpMessage */
+	public HeaderIterator headerIterator() {
+		return headers.headerIterator();
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public ProtocolVersion getProtocolVersion() {
-		return statusLine.getProtocolVersion();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public boolean containsHeader(String name) {
-		return headers.contains(name);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header[] getHeaders(String name) {
-		return headers.getAll(name);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header getFirstHeader(String name) {
-		return headers.getFirst(name).orElse(null);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header getLastHeader(String name) {
-		return headers.getLast(name).orElse(null);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Header[] getAllHeaders() {
-		return headers.getAll();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void addHeader(Header value) {
-		headers.append(value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void addHeader(String name, String value) {
-		headers.append(name, value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setHeader(Header value) {
-		headers.set(value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setHeader(String name, String value) {
-		headers.set(name, value);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setHeaders(Header[] values) {
-		headers.removeAll().append(values);
+	public HeaderIterator headerIterator(String name) {
+		return headers.headerIterator(name);
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -499,20 +313,119 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		headers.remove(name);
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator() {
-		return headers.headerIterator();
+	/**
+	 * Sets the body on this response.
+	 *
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	public BasicHttpException setContent(HttpEntity value) {
+		assertModifiable();
+		this.content = value;
+		return this;
+	}
+
+	/**
+	 * Sets the body on this response.
+	 *
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	public BasicHttpException setContent(String value) {
+		setContent(stringEntity(value));
+		return this;
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public HeaderIterator headerIterator(String name) {
-		return headers.headerIterator(name);
+	public void setEntity(HttpEntity entity) {
+		assertModifiable();
+		this.content = entity;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override /* Overridden from HttpMessage */
-	public HttpParams getParams() {
-		return null;
+	public void setHeader(Header value) {
+		headers.set(value);
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setHeader(String name, String value) {
+		headers.set(name, value);
+	}
+
+	/**
+	 * Sets a header on this response.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public BasicHttpException setHeader2(String name, Object value) {
+		headers.set(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setHeaders(Header[] values) {
+		headers.removeAll().append(values);
+	}
+
+	/**
+	 * Sets the specified headers on this response.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpException setHeaders(HeaderList value) {
+		assertModifiable();
+		headers = value.copy();
+		return this;
+	}
+
+	/**
+	 * Sets the specified headers on this response.
+	 *
+	 * @param values The headers to set.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public BasicHttpException setHeaders(List<Header> values) {
+		headers.set(values);
+		return this;
+	}
+
+	/**
+	 * Sets multiple headers on this response.
+	 *
+	 * @param values The headers to add.
+	 * @return This object.
+	 */
+	public BasicHttpException setHeaders2(Header...values) {
+		headers.set(values);
+		return this;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setLocale(Locale loc) {
+		statusLine.setLocale(loc);
+	}
+
+	/**
+	 * Sets the locale used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link Locale#getDefault()}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpException setLocale2(Locale value) {
+		statusLine.setLocale(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public BasicHttpException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -520,14 +433,84 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public void setParams(HttpParams params) {
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public StatusLine getStatusLine() {
-		return statusLine;
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
+		statusLine.setProtocolVersion(value);
+		return this;
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void setStatusLine(StatusLine value) {
-		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
+	public void setReasonPhrase(String reason) throws IllegalStateException {
+		statusLine.setReasonPhrase(reason);
+	}
+
+	/**
+	 * Sets the reason phrase on the status line.
+	 *
+	 * <p>
+	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
+	 * using the locale on this builder.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpException setReasonPhrase2(String value) {
+		statusLine.setReasonPhrase(value);
+		return this;
+	}
+
+	/**
+	 * Sets the reason phrase catalog used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		statusLine.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* Overridden from HttpMessage */
+	public void setStatusCode(int code) throws IllegalStateException {
+		statusLine.setStatusCode(code);
+	}
+
+	/**
+	 * Same as {@link #setStatusCode(int)} but returns this object.
+	 *
+	 * @param code The new status code.
+	 * @return This object.
+	 * @throws IllegalStateException If status code could not be set.
+	 */
+	public BasicHttpException setStatusCode2(int code) throws IllegalStateException {
+		setStatusCode(code);
+		return this;
+	}
+
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	public BasicHttpException setStatusLine(BasicStatusLine value) {
+		assertModifiable();
+		statusLine = value.copy();
+		return this;
 	}
 
 	@Override /* Overridden from HttpMessage */
@@ -541,41 +524,38 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	@Override /* Overridden from HttpMessage */
-	public void setStatusCode(int code) throws IllegalStateException {
-		statusLine.setStatusCode(code);
+	public void setStatusLine(StatusLine value) {
+		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
 	}
 
-	@Override /* Overridden from HttpMessage */
-	public void setReasonPhrase(String reason) throws IllegalStateException {
-		statusLine.setReasonPhrase(reason);
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public HttpEntity getEntity() {
-		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
-		if (content == null)
-			content = stringEntity(getMessage());
-		return content;
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setEntity(HttpEntity entity) {
-		assertModifiable();
-		this.content = entity;
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public Locale getLocale() {
-		return statusLine.getLocale();
-	}
-
-	@Override /* Overridden from HttpMessage */
-	public void setLocale(Locale loc) {
-		statusLine.setLocale(loc);
-	}
-	@Override /* Overridden from BasicRuntimeException */
-	public BasicHttpException setMessage(String message, Object...args) {
-		super.setMessage(message, args);
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	public BasicHttpException setUnmodifiable() {
+		super.setUnmodifiable();
+		statusLine.setUnmodifiable();
 		return this;
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return emptyIfNull(getLocalizedMessage());
+	}
+	/**
+	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
+	 *
+	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If status code is not what was expected.
+	 */
+	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+		Utils.assertArgNotNull("response", response);
+		int expected = getStatusLine().getStatusCode();
+		int actual = response.getStatusLine().getStatusCode();
+		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 }

@@ -43,12 +43,8 @@ import org.apache.juneau.utils.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
 */
+@SuppressWarnings("resource")
 public abstract class ConfigStore extends Context implements Closeable {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -63,42 +59,29 @@ public abstract class ConfigStore extends Context implements Closeable {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(ConfigStore copyFrom) {
-			super(copyFrom);
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public abstract Builder copy();
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(ConfigStore copyFrom) {
+			super(copyFrom);
+		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
 			return this;
 		}
-
 		@Override /* Overridden from Builder */
 		public Builder apply(AnnotationWorkList work) {
 			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -109,10 +92,19 @@ public abstract class ConfigStore extends Context implements Closeable {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
+
+		@Override /* Overridden from Context.Builder */
+		public abstract Builder copy();
 
 		@Override /* Overridden from Builder */
 		public Builder debug() {
@@ -138,11 +130,6 @@ public abstract class ConfigStore extends Context implements Closeable {
 			return this;
 		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
 
@@ -156,6 +143,36 @@ public abstract class ConfigStore extends Context implements Closeable {
 	}
 
 	/**
+	 * Checks whether the configuration with the specified name exists in this store.
+	 *
+	 * @param name The config name.
+	 * @return <jk>true</jk> if the configuration with the specified name exists in this store.
+	 */
+	public abstract boolean exists(String name);
+
+	/**
+	 * Returns a map file containing the parsed contents of a configuration.
+	 *
+	 * @param name The configuration name.
+	 * @return
+	 * 	The parsed configuration.
+	 * 	<br>Never <jk>null</jk>.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public synchronized ConfigMap getMap(String name) throws IOException {
+		name = resolveName(name);
+		var cm = configMaps.get(name);
+		if (cm != null)
+			return cm;
+		cm = new ConfigMap(this, name);
+		var cm2 = configMaps.putIfAbsent(name, cm);
+		if (cm2 != null)
+			return cm2;
+		register(name, cm);
+		return cm;
+	}
+
+	/**
 	 * Returns the contents of the configuration file.
 	 *
 	 * @param name The config file name.
@@ -166,27 +183,6 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public abstract String read(String name) throws IOException;
-
-	/**
-	 * Saves the contents of the configuration file if the underlying storage hasn't been modified.
-	 *
-	 * @param name The config file name.
-	 * @param expectedContents The expected contents of the file.
-	 * @param newContents The new contents.
-	 * @return
-	 * 	If <jk>null</jk>, then we successfully stored the contents of the file.
-	 * 	<br>Otherwise the contents of the file have changed and we return the new contents of the file.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public abstract String write(String name, String expectedContents, String newContents) throws IOException;
-
-	/**
-	 * Checks whether the configuration with the specified name exists in this store.
-	 *
-	 * @param name The config name.
-	 * @return <jk>true</jk> if the configuration with the specified name exists in this store.
-	 */
-	public abstract boolean exists(String name);
 
 	/**
 	 * Registers a new listener on this store.
@@ -221,28 +217,6 @@ public abstract class ConfigStore extends Context implements Closeable {
 	}
 
 	/**
-	 * Returns a map file containing the parsed contents of a configuration.
-	 *
-	 * @param name The configuration name.
-	 * @return
-	 * 	The parsed configuration.
-	 * 	<br>Never <jk>null</jk>.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public synchronized ConfigMap getMap(String name) throws IOException {
-		name = resolveName(name);
-		var cm = configMaps.get(name);
-		if (cm != null)
-			return cm;
-		cm = new ConfigMap(this, name);
-		var cm2 = configMaps.putIfAbsent(name, cm);
-		if (cm2 != null)
-			return cm2;
-		register(name, cm);
-		return cm;
-	}
-
-	/**
 	 * Called when the physical contents of a config file have changed.
 	 *
 	 * <p>
@@ -274,6 +248,19 @@ public abstract class ConfigStore extends Context implements Closeable {
 			sb.append(l).append('\n');
 		return update(name, sb.toString());
 	}
+
+	/**
+	 * Saves the contents of the configuration file if the underlying storage hasn't been modified.
+	 *
+	 * @param name The config file name.
+	 * @param expectedContents The expected contents of the file.
+	 * @param newContents The new contents.
+	 * @return
+	 * 	If <jk>null</jk>, then we successfully stored the contents of the file.
+	 * 	<br>Otherwise the contents of the file have changed and we return the new contents of the file.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public abstract String write(String name, String expectedContents, String newContents) throws IOException;
 
 	/**
 	 * Subclasses can override this method to convert config names to internal forms.

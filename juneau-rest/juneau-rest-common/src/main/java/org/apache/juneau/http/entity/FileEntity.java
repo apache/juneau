@@ -33,12 +33,8 @@ import org.apache.juneau.http.header.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class FileEntity extends BasicHttpEntity {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private byte[] byteCache;
 	private String stringCache;
 
@@ -67,25 +63,14 @@ public class FileEntity extends BasicHttpEntity {
 		super(copyFrom);
 	}
 
-	@Override
-	public FileEntity copy() {
-		return new FileEntity(this);
+	@Override /* Overridden from AbstractHttpEntity */
+	public byte[] asBytes() throws IOException {
+		if (isCached() && byteCache == null)
+			byteCache = readBytes(content(), getMaxLength());
+		if (byteCache != null)
+			return byteCache;
+		return readBytes(content());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private File content() {
-		File f = contentOrElse((File)null);
-		Objects.requireNonNull(f, "File");
-		if (! f.exists())
-			throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");
-		if (! f.canRead())
-			throw new IllegalStateException("File " + f.getAbsolutePath() + " is not readable.");
-		return f;
-	}
-
 	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
@@ -95,23 +80,9 @@ public class FileEntity extends BasicHttpEntity {
 		return read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());
 	}
 
-	@Override /* Overridden from AbstractHttpEntity */
-	public byte[] asBytes() throws IOException {
-		if (isCached() && byteCache == null)
-			byteCache = readBytes(content(), getMaxLength());
-		if (byteCache != null)
-			return byteCache;
-		return readBytes(content());
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public boolean isRepeatable() {
-		return true;
-	}
-
-	@Override /* Overridden from HttpEntity */
-	public long getContentLength() {
-		return content().length();
+	@Override
+	public FileEntity copy() {
+		return new FileEntity(this);
 	}
 
 	@Override /* Overridden from HttpEntity */
@@ -122,17 +93,15 @@ public class FileEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from HttpEntity */
-	public void writeTo(OutputStream out) throws IOException {
-		Utils.assertArgNotNull("out", out);
-
-		if (isCached()) {
-			out.write(asBytes());
-		} else {
-			try (InputStream is = getContent()) {
-				IOUtils.pipe(is, out, getMaxLength());
-			}
-		}
+	public long getContentLength() {
+		return content().length();
 	}
+
+	@Override /* Overridden from HttpEntity */
+	public boolean isRepeatable() {
+		return true;
+	}
+
 	@Override /* Overridden from BasicHttpEntity */
 	public FileEntity setCached() throws IOException{
 		super.setCached();
@@ -144,7 +113,6 @@ public class FileEntity extends BasicHttpEntity {
 		super.setCharset(value);
 		return this;
 	}
-
 	@Override /* Overridden from BasicHttpEntity */
 	public FileEntity setChunked() {
 		super.setChunked();
@@ -170,13 +138,13 @@ public class FileEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentEncoding(String value) {
+	public FileEntity setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentEncoding(ContentEncoding value) {
+	public FileEntity setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -188,13 +156,13 @@ public class FileEntity extends BasicHttpEntity {
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentType(String value) {
+	public FileEntity setContentType(ContentType value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicHttpEntity */
-	public FileEntity setContentType(ContentType value) {
+	public FileEntity setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
@@ -209,5 +177,28 @@ public class FileEntity extends BasicHttpEntity {
 	public FileEntity setUnmodifiable() {
 		super.setUnmodifiable();
 		return this;
+	}
+
+	@Override /* Overridden from HttpEntity */
+	public void writeTo(OutputStream out) throws IOException {
+		Utils.assertArgNotNull("out", out);
+
+		if (isCached()) {
+			out.write(asBytes());
+		} else {
+			try (InputStream is = getContent()) {
+				IOUtils.pipe(is, out, getMaxLength());
+			}
+		}
+	}
+
+	private File content() {
+		File f = contentOrElse((File)null);
+		Objects.requireNonNull(f, "File");
+		if (! f.exists())
+			throw new IllegalStateException("File " + f.getAbsolutePath() + " does not exist.");
+		if (! f.canRead())
+			throw new IllegalStateException("File " + f.getAbsolutePath() + " is not readable.");
+		return f;
 	}
 }

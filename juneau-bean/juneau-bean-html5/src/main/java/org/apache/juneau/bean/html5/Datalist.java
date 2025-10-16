@@ -87,7 +87,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#datalist() datalist()}
- * 		<li class='jm'>{@link HtmlBuilder#datalist(Object, Object...) datalist(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#datalist(String, Option...) datalist(String, Option...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -113,10 +113,6 @@ public class Datalist extends HtmlElementContainer {
 	public Datalist(String id, Option...children) {
 		id(id).children((Object[])children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Datalist _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -126,6 +122,30 @@ public class Datalist extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Datalist accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Datalist attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Datalist attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Datalist child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Datalist children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -459,6 +479,12 @@ public class Datalist extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Datalist setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Datalist spellcheck(Object value) {
 		super.spellcheck(value);
@@ -486,36 +512,6 @@ public class Datalist extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Datalist translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Datalist child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Datalist children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Datalist setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Datalist attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Datalist attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

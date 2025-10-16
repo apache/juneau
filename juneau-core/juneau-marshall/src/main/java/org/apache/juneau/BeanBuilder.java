@@ -36,14 +36,14 @@ public class BeanBuilder<T> {
 	private final BeanStore beanStore;
 
 	/**
-	 * Constructor.
+	 * Copy constructor.
 	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @param defaultType The default bean type that this builder creates.
+	 * @param copyFrom The bean store to copy from.
 	 */
-	protected BeanBuilder(Class<? extends T> defaultType, BeanStore beanStore) {
-		this.defaultType = type = defaultType;
-		this.beanStore = beanStore;
+	protected BeanBuilder(BeanBuilder<T> copyFrom) {
+		type = copyFrom.type;
+		impl = copyFrom.impl;
+		beanStore = copyFrom.beanStore;
 	}
 
 	/**
@@ -56,14 +56,23 @@ public class BeanBuilder<T> {
 	}
 
 	/**
-	 * Copy constructor.
+	 * Constructor.
 	 *
-	 * @param copyFrom The bean store to copy from.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @param defaultType The default bean type that this builder creates.
 	 */
-	protected BeanBuilder(BeanBuilder<T> copyFrom) {
-		type = copyFrom.type;
-		impl = copyFrom.impl;
-		beanStore = copyFrom.beanStore;
+	protected BeanBuilder(Class<? extends T> defaultType, BeanStore beanStore) {
+		this.defaultType = type = defaultType;
+		this.beanStore = beanStore;
+	}
+
+	/**
+	 * Returns the bean store passed in through the constructor.
+	 *
+	 * @return The bean store passed in through the constructor.
+	 */
+	public BeanStore beanStore() {
+		return beanStore;
 	}
 
 	/**
@@ -77,56 +86,6 @@ public class BeanBuilder<T> {
 		if (type == null || type == defaultType)
 			return buildDefault();
 		return creator().run();
-	}
-
-	/**
-	 * Instantiates the creator for this bean.
-	 *
-	 * <p>
-	 * Subclasses can override this to provide specialized handling.
-	 *
-	 * @return The creator for this bean.
-	 */
-	protected BeanCreator<? extends T> creator() {
-		return beanStore
-			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
-			.builder(BeanBuilder.class, this);
-	}
-
-	/**
-	 * Creates the bean when the bean type is <jk>null</jk> or is the default value.
-	 *
-	 * @return A new bean.
-	 */
-	protected T buildDefault() {
-		return beanStore
-			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
-			.builder(BeanBuilder.class, this)
-			.run();
-	}
-
-	/**
-	 * Overrides the bean type produced by the {@link #build()} method.
-	 *
-	 * <p>
-	 * Use this method if you want to instantiated a bean subclass.
-	 *
-	 * @param value The setting value.
-	 * @return  This object.
-	 */
-	@SuppressWarnings("unchecked")
-	public BeanBuilder<T> type(Class<?> value) {
-		type = (Class<T>)value;
-		return this;
-	}
-
-	/**
-	 * Returns the implementation type specified via {@link #type(Class)}.
-	 *
-	 * @return The implementation type specified via {@link #type(Class)}.
-	 */
-	protected Optional<Class<? extends T>> type() {
-		return Utils.opt(type);
 	}
 
 	/**
@@ -145,6 +104,47 @@ public class BeanBuilder<T> {
 	}
 
 	/**
+	 * Overrides the bean type produced by the {@link #build()} method.
+	 *
+	 * <p>
+	 * Use this method if you want to instantiated a bean subclass.
+	 *
+	 * @param value The setting value.
+	 * @return  This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public BeanBuilder<T> type(Class<?> value) {
+		type = (Class<T>)value;
+		return this;
+	}
+
+	/**
+	 * Creates the bean when the bean type is <jk>null</jk> or is the default value.
+	 *
+	 * @return A new bean.
+	 */
+	protected T buildDefault() {
+		return beanStore
+			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
+			.builder(BeanBuilder.class, this)
+			.run();
+	}
+
+	/**
+	 * Instantiates the creator for this bean.
+	 *
+	 * <p>
+	 * Subclasses can override this to provide specialized handling.
+	 *
+	 * @return The creator for this bean.
+	 */
+	protected BeanCreator<? extends T> creator() {
+		return beanStore
+			.createBean(type().orElseThrow(() -> new IllegalStateException("Type not specified.")))
+			.builder(BeanBuilder.class, this);
+	}
+
+	/**
 	 * Returns the override bean specified via {@link #impl(Object)}.
 	 *
 	 * @return The override bean specified via {@link #impl(Object)}.
@@ -154,11 +154,11 @@ public class BeanBuilder<T> {
 	}
 
 	/**
-	 * Returns the bean store passed in through the constructor.
+	 * Returns the implementation type specified via {@link #type(Class)}.
 	 *
-	 * @return The bean store passed in through the constructor.
+	 * @return The implementation type specified via {@link #type(Class)}.
 	 */
-	public BeanStore beanStore() {
-		return beanStore;
+	protected Optional<Class<? extends T>> type() {
+		return Utils.opt(type);
 	}
 }

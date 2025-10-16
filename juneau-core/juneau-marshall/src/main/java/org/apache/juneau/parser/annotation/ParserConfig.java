@@ -48,19 +48,29 @@ import org.apache.juneau.xml.*;
 public @interface ParserConfig {
 
 	/**
-	 * Optional rank for this config.
+	 * Auto-close streams.
 	 *
 	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
+	 * If <js>"true"</js>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
+	 * after parsing is complete.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#autoCloseStreams()}
+	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// InputStreamParser
-	//-------------------------------------------------------------------------------------------------------------------
-
+	String autoCloseStreams() default "";
 	/**
 	 * Binary input format.
 	 *
@@ -86,36 +96,6 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	String binaryFormat() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Parser
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Auto-close streams.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
-	 * after parsing is complete.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#autoCloseStreams()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String autoCloseStreams() default "";
-
 	/**
 	 * Debug output lines.
 	 *
@@ -141,6 +121,30 @@ public @interface ParserConfig {
 	String debugOutputLines() default "";
 
 	/**
+	 * File charset.
+	 *
+	 * <p>
+	 * The character set to use for reading <c>Files</c> from the file system.
+	 *
+	 * <p>
+	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String fileCharset() default "";
+
+	/**
 	 * Parser listener.
 	 *
 	 * <p>
@@ -153,6 +157,40 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	Class<? extends ParserListener> listener() default ParserListener.Void.class;
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
+
+	/**
+	 * Input stream charset.
+	 *
+	 * <p>
+	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
+	 *
+	 * <p>
+	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String streamCharset() default "";
 
 	/**
 	 * Strict mode.
@@ -205,7 +243,6 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	String strict() default "";
-
 	/**
 	 * Trim parsed strings.
 	 *
@@ -271,56 +308,4 @@ public @interface ParserConfig {
 	 * @return The annotation value.
 	 */
 	String unbuffered() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// ReaderParser
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * File charset.
-	 *
-	 * <p>
-	 * The character set to use for reading <c>Files</c> from the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String fileCharset() default "";
-
-	/**
-	 * Input stream charset.
-	 *
-	 * <p>
-	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
-	 *
-	 * <p>
-	 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String streamCharset() default "";
 }

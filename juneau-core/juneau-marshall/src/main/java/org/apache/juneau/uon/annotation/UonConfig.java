@@ -43,78 +43,6 @@ import org.apache.juneau.urlencoding.*;
 public @interface UonConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// UonCommon
-	//-------------------------------------------------------------------------------------------------------------------
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// UonParser
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Decode <js>"%xx"</js> sequences.
-	 *
-	 * <p>
-	 * Specify <js>"true"</js> if URI encoded characters should be decoded, <js>"false"</js> if they've already been decoded
-	 * before being passed to this parser.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js> (default for {@link UrlEncodingParser})
-	 * 	<li><js>"false"</js> (default for {@link UonParser})
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#decoding()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String decoding() default "";
-
-	/**
-	 * Validate end.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
-	 * the stream consists of only comments or whitespace.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String validateEnd() default "";
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// UonSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
@@ -144,6 +72,31 @@ public @interface UonConfig {
 	String addBeanTypes() default "";
 
 	/**
+	 * Decode <js>"%xx"</js> sequences.
+	 *
+	 * <p>
+	 * Specify <js>"true"</js> if URI encoded characters should be decoded, <js>"false"</js> if they've already been decoded
+	 * before being passed to this parser.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> (default for {@link UrlEncodingParser})
+	 * 	<li><js>"false"</js> (default for {@link UonParser})
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#decoding()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String decoding() default "";
+
+	/**
 	 * Encode non-valid URI characters.
 	 *
 	 * <p>
@@ -171,7 +124,6 @@ public @interface UonConfig {
 	 * @return The annotation value.
 	 */
 	String encoding() default "";
-
 	/**
 	 * Format to use for query/form-data/header values.
 	 *
@@ -195,4 +147,42 @@ public @interface UonConfig {
 	 * @return The annotation value.
 	 */
 	String paramFormat() default "";
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
+	//-------------------------------------------------------------------------------------------------------------------
+	// UonParser
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Validate end.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
+	 * the stream consists of only comments or whitespace.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String validateEnd() default "";
 }

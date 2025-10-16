@@ -200,33 +200,25 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	/**
+	 * Bean property appender:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object.
+	 */
+	public ParameterInfo addEnum(Object...value) {
+		_enum = setBuilder(_enum).sparse().add(value).build();
+		return this;
+	}
+
+	/**
 	 * Make a deep copy of this object.
 	 *
 	 * @return A deep copy of this object.
 	 */
 	public ParameterInfo copy() {
 		return new ParameterInfo(this);
-	}
-
-	@Override /* Overridden from SwaggerElement */
-	public ParameterInfo strict() {
-		super.strict();
-		return this;
-	}
-
-	/**
-	 * Sets strict mode on this bean.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
-	 * @return This object.
-	 */
-	@Override
-	public ParameterInfo strict(Object value) {
-		super.strict(value);
-		return this;
 	}
 
 	/**
@@ -293,731 +285,6 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Bean property getter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 *
-	 * <p>
-	 * This is valid only for either <c>query</c> or <c>formData</c> parameters and allows you to send a
-	 * parameter with a name only or an empty value.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getAllowEmptyValue() {
-		return allowEmptyValue;
-	}
-
-	/**
-	 * Bean property setter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * 	<br>Default is <jk>false</jk>.
-	 * @return This object.
-	 */
-	public ParameterInfo setAllowEmptyValue(Boolean value) {
-		allowEmptyValue = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getCollectionFormat() {
-		return collectionFormat;
-	}
-
-	/**
-	 * Bean property setter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
-	 * 		<li><js>"ssv"</js> - space separated values <c>foo bar</c>.
-	 * 		<li><js>"tsv"</js> - tab separated values <c>foo\tbar</c>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
-	 * 		<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
-	 * 			instance <c>foo=bar&amp;foo=baz</c>.
-	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setCollectionFormat(String value) {
-		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_COLLECTION_FORMATS)
-			);
-		collectionFormat = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 *
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getDefault() {
-		return _default;
-	}
-
-	/**
-	 * Bean property setter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setDefault(Object value) {
-		_default = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setDescription(String value) {
-		description = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>enum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Set<Object> getEnum() {
-		return _enum;
-	}
-
-	/**
-	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum = setFrom(value);
-		return this;
-	}
-
-	/**
-	 * Bean property appender:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object.
-	 */
-	public ParameterInfo addEnum(Object...value) {
-		_enum = setBuilder(_enum).sparse().add(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Strings can be JSON arrays.
-	 * @return This object.
-	 */
-	public ParameterInfo setEnum(Object...value) {
-		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMaximum() {
-		return exclusiveMaximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setExclusiveMaximum(Boolean value) {
-		exclusiveMaximum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getExclusiveMinimum() {
-		return exclusiveMinimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setExclusiveMinimum(Boolean value) {
-		exclusiveMinimum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getFormat() {
-		return format;
-	}
-
-	/**
-	 * Bean property setter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setFormat(String value) {
-		format = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getIn() {
-		return in;
-	}
-
-	/**
-	 * Bean property setter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"query"</js>
-	 * 		<li><js>"header"</js>
-	 * 		<li><js>"path"</js>
-	 * 		<li><js>"formData"</js>
-	 * 		<li><js>"body"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setIn(String value) {
-		if (isStrict() && ! contains(value, VALID_IN))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_IN)
-			);
-		in = value;
-		if ("path".equals(value))
-			required = true;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Items getItems() {
-		return items;
-	}
-
-	/**
-	 * Bean property setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setItems(Items value) {
-		items = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maximum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMaximum() {
-		return maximum;
-	}
-
-	/**
-	 * Bean property setter:  <property>maximum</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMaximum(Number value) {
-		maximum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxItems() {
-		return maxItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxItems</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMaxItems(Integer value) {
-		maxItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>maxLength</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMaxLength() {
-		return maxLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>maxLength</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMaxLength(Integer value) {
-		maxLength = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minimum</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMinimum() {
-		return minimum;
-	}
-
-	/**
-	 * Bean property setter:  <property>minimum</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMinimum(Number value) {
-		minimum = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minItems</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinItems() {
-		return minItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>minItems</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMinItems(Integer value) {
-		minItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>minLength</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Integer getMinLength() {
-		return minLength;
-	}
-
-	/**
-	 * Bean property setter:  <property>minLength</property>.
-	 *
-	 * @param value The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMinLength(Integer value) {
-		minLength = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>multipleOf</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Number getMultipleOf() {
-		return multipleOf;
-	}
-
-	/**
-	 * Bean property setter:  <property>multipleOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setMultipleOf(Number value) {
-		multipleOf = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the parameter.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Parameter names are case sensitive.
-	 * 	<li class='note'>
-	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
-	 * 		from the <c>path</c> field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
-	 * 	<li class='note'>
-	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
-	 * </ul>
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Bean property setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setName(String value) {
-		if (! "body".equals(in))
-			name = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>pattern</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getPattern() {
-		return pattern;
-	}
-
-	/**
-	 * Bean property setter:  <property>pattern</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>This string SHOULD be a valid regular expression.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setPattern(String value) {
-		pattern = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
-	 * Bean property setter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setRequired(Boolean value) {
-		required = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public SchemaInfo getSchema() {
-		return schema;
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setSchema(SchemaInfo value) {
-		schema = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * Bean property setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
-	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
-	 * 	<br>Property value is required.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setType(String value) {
-		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new BasicRuntimeException(
-				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, Json5.of(VALID_TYPES)
-			);
-		type = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>uniqueItems</property>.
-	 *
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getUniqueItems() {
-		return uniqueItems;
-	}
-
-	/**
-	 * Bean property setter:  <property>uniqueItems</property>.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object.
-	 */
-	public ParameterInfo setUniqueItems(Boolean value) {
-		uniqueItems = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>example</property>.
-	 *
-	 * <p>
-	 * An example of the parameter. This is useful for documentation purposes.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Object getExample() {
-		return example;
-	}
-
-	/**
-	 * Bean property setter:  <property>example</property>.
-	 *
-	 * <p>
-	 * An example of the parameter. This is useful for documentation purposes.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setExample(Object value) {
-		this.example = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>examples</property>.
-	 *
-	 * <p>
-	 * Examples of the parameter. This is useful for documentation purposes.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,String> getExamples() {
-		return examples;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * <p>
-	 * Examples of the parameter. This is useful for documentation purposes.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo setExamples(Map<String,String> value) {
-		this.examples = value;
-		return this;
-	}
-
 	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
@@ -1050,41 +317,287 @@ public class ParameterInfo extends SwaggerElement {
 			default -> super.get(property, type);
 		};
 	}
+	/**
+	 * Bean property getter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued parameters.
+	 *
+	 * <p>
+	 * This is valid only for either <c>query</c> or <c>formData</c> parameters and allows you to send a
+	 * parameter with a name only or an empty value.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getAllowEmptyValue() {
+		return allowEmptyValue;
+	}
 
-	@Override /* Overridden from SwaggerElement */
-	public ParameterInfo set(String property, Object value) {
-		assertArgNotNull("property", property);
-		return switch (property) {
-			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
-			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
-			case "default" -> setDefault(value);
-			case "description" -> setDescription(Utils.s(value));
-			case "enum" -> setEnum(value);
-			case "example" -> setExample(value);
-			case "examples" -> setExamples(toType(value, Map.class));
-			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
-			case "format" -> setFormat(Utils.s(value));
-			case "in" -> setIn(Utils.s(value));
-			case "items" -> setItems(toType(value, Items.class));
-			case "maximum" -> setMaximum(toNumber(value));
-			case "maxItems" -> setMaxItems(toInteger(value));
-			case "maxLength" -> setMaxLength(toInteger(value));
-			case "minimum" -> setMinimum(toNumber(value));
-			case "minItems" -> setMinItems(toInteger(value));
-			case "minLength" -> setMinLength(toInteger(value));
-			case "multipleOf" -> setMultipleOf(toNumber(value));
-			case "name" -> setName(Utils.s(value));
-			case "pattern" -> setPattern(Utils.s(value));
-			case "required" -> setRequired(toBoolean(value));
-			case "schema" -> setSchema(toType(value, SchemaInfo.class));
-			case "type" -> setType(Utils.s(value));
-			case "uniqueItems" -> setUniqueItems(toBoolean(value));
-			default -> {
-				super.set(property, value);
-				yield this;
-			}
-		};
+	/**
+	 * Bean property getter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getCollectionFormat() {
+		return collectionFormat;
+	}
+
+	/**
+	 * Bean property getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 *
+	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getDefault() {
+		return _default;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A brief description of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property getter:  <property>enum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Set<Object> getEnum() {
+		return _enum;
+	}
+
+	/**
+	 * Bean property getter:  <property>example</property>.
+	 *
+	 * <p>
+	 * An example of the parameter. This is useful for documentation purposes.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getExample() {
+		return example;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Examples of the parameter. This is useful for documentation purposes.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,String> getExamples() {
+		return examples;
+	}
+
+	/**
+	 * Bean property getter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMaximum() {
+		return exclusiveMaximum;
+	}
+
+	/**
+	 * Bean property getter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExclusiveMinimum() {
+		return exclusiveMinimum;
+	}
+
+	/**
+	 * Bean property getter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * Bean property getter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getIn() {
+		return in;
+	}
+
+	/**
+	 * Bean property getter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Items getItems() {
+		return items;
+	}
+
+	/**
+	 * Bean property getter:  <property>maximum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMaximum() {
+		return maximum;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxItems() {
+		return maxItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>maxLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMaxLength() {
+		return maxLength;
+	}
+
+	/**
+	 * Bean property getter:  <property>minimum</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMinimum() {
+		return minimum;
+	}
+
+	/**
+	 * Bean property getter:  <property>minItems</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinItems() {
+		return minItems;
+	}
+
+	/**
+	 * Bean property getter:  <property>minLength</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Integer getMinLength() {
+		return minLength;
+	}
+
+	/**
+	 * Bean property getter:  <property>multipleOf</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Number getMultipleOf() {
+		return multipleOf;
+	}
+
+	/**
+	 * Bean property getter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the parameter.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Parameter names are case sensitive.
+	 * 	<li class='note'>
+	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
+	 * 		from the <c>path</c> field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
+	 * 	<li class='note'>
+	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
+	 * </ul>
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Bean property getter:  <property>pattern</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getPattern() {
+		return pattern;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getRequired() {
+		return required;
+	}
+
+	/**
+	 * Bean property getter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public SchemaInfo getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Bean property getter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * Bean property getter:  <property>uniqueItems</property>.
+	 *
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getUniqueItems() {
+		return uniqueItems;
 	}
 
 	@Override /* Overridden from SwaggerElement */
@@ -1140,6 +653,488 @@ public class ParameterInfo extends SwaggerElement {
 		if (items != null)
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
+		return this;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public ParameterInfo set(String property, Object value) {
+		assertArgNotNull("property", property);
+		return switch (property) {
+			case "allowEmptyValue" -> setAllowEmptyValue(toBoolean(value));
+			case "collectionFormat" -> setCollectionFormat(Utils.s(value));
+			case "default" -> setDefault(value);
+			case "description" -> setDescription(Utils.s(value));
+			case "enum" -> setEnum(value);
+			case "example" -> setExample(value);
+			case "examples" -> setExamples(toType(value, Map.class));
+			case "exclusiveMaximum" -> setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum" -> setExclusiveMinimum(toBoolean(value));
+			case "format" -> setFormat(Utils.s(value));
+			case "in" -> setIn(Utils.s(value));
+			case "items" -> setItems(toType(value, Items.class));
+			case "maximum" -> setMaximum(toNumber(value));
+			case "maxItems" -> setMaxItems(toInteger(value));
+			case "maxLength" -> setMaxLength(toInteger(value));
+			case "minimum" -> setMinimum(toNumber(value));
+			case "minItems" -> setMinItems(toInteger(value));
+			case "minLength" -> setMinLength(toInteger(value));
+			case "multipleOf" -> setMultipleOf(toNumber(value));
+			case "name" -> setName(Utils.s(value));
+			case "pattern" -> setPattern(Utils.s(value));
+			case "required" -> setRequired(toBoolean(value));
+			case "schema" -> setSchema(toType(value, SchemaInfo.class));
+			case "type" -> setType(Utils.s(value));
+			case "uniqueItems" -> setUniqueItems(toBoolean(value));
+			default -> {
+				super.set(property, value);
+				yield this;
+			}
+		};
+	}
+
+	/**
+	 * Bean property setter:  <property>allowEmptyValue</property>.
+	 *
+	 * <p>
+	 * Sets the ability to pass empty-valued parameters.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * 	<br>Default is <jk>false</jk>.
+	 * @return This object.
+	 */
+	public ParameterInfo setAllowEmptyValue(Boolean value) {
+		allowEmptyValue = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>collectionFormat</property>.
+	 *
+	 * <p>
+	 * Determines the format of the array if type array is used.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
+	 * 		<li><js>"ssv"</js> - space separated values <c>foo bar</c>.
+	 * 		<li><js>"tsv"</js> - tab separated values <c>foo\tbar</c>.
+	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
+	 * 		<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
+	 * 			instance <c>foo=bar&amp;foo=baz</c>.
+	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
+	 * 	</ul>
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setCollectionFormat(String value) {
+		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
+				value, Json5.of(VALID_COLLECTION_FORMATS)
+			);
+		collectionFormat = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setDefault(Object value) {
+		_default = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * <p>
+	 * A brief description of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br><a class="doclink" href="https://help.github.com/articles/github-flavored-markdown">GFM syntax</a> can be used for rich text representation.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setEnum(Collection<Object> value) {
+		_enum = setFrom(value);
+		return this;
+	}
+
+	/**
+	 * Bean property fluent setter:  <property>enum</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Strings can be JSON arrays.
+	 * @return This object.
+	 */
+	public ParameterInfo setEnum(Object...value) {
+		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>example</property>.
+	 *
+	 * <p>
+	 * An example of the parameter. This is useful for documentation purposes.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setExample(Object value) {
+		this.example = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * Examples of the parameter. This is useful for documentation purposes.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setExamples(Map<String,String> value) {
+		this.examples = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMaximum</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setExclusiveMaximum(Boolean value) {
+		exclusiveMaximum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>exclusiveMinimum</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setExclusiveMinimum(Boolean value) {
+		exclusiveMinimum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>format</property>.
+	 *
+	 * <p>
+	 * The extending format for the previously mentioned type.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setFormat(String value) {
+		format = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>in</property>.
+	 *
+	 * <p>
+	 * The location of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"query"</js>
+	 * 		<li><js>"header"</js>
+	 * 		<li><js>"path"</js>
+	 * 		<li><js>"formData"</js>
+	 * 		<li><js>"body"</js>
+	 * 	</ul>
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setIn(String value) {
+		if (isStrict() && ! contains(value, VALID_IN))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
+				value, Json5.of(VALID_IN)
+			);
+		in = value;
+		if ("path".equals(value))
+			required = true;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>items</property>.
+	 *
+	 * <p>
+	 * Describes the type of items in the array.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setItems(Items value) {
+		items = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maximum</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMaximum(Number value) {
+		maximum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxItems</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMaxItems(Integer value) {
+		maxItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>maxLength</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMaxLength(Integer value) {
+		maxLength = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minimum</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMinimum(Number value) {
+		minimum = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minItems</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMinItems(Integer value) {
+		minItems = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>minLength</property>.
+	 *
+	 * @param value The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMinLength(Integer value) {
+		minLength = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>multipleOf</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setMultipleOf(Number value) {
+		multipleOf = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>name</property>.
+	 *
+	 * <p>
+	 * The name of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setName(String value) {
+		if (! "body".equals(in))
+			name = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>pattern</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>This string SHOULD be a valid regular expression.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setPattern(String value) {
+		pattern = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>required</property>.
+	 *
+	 * <p>
+	 * Determines whether this parameter is mandatory.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
+	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setRequired(Boolean value) {
+		required = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>schema</property>.
+	 *
+	 * <p>
+	 * The schema defining the type used for the body parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setSchema(SchemaInfo value) {
+		schema = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>type</property>.
+	 *
+	 * <p>
+	 * The type of the parameter.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Valid values:
+	 * 	<ul>
+	 * 		<li><js>"string"</js>
+	 * 		<li><js>"number"</js>
+	 * 		<li><js>"integer"</js>
+	 * 		<li><js>"boolean"</js>
+	 * 		<li><js>"array"</js>
+	 * 		<li><js>"file"</js>
+	 * 	</ul>
+	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
+	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
+	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
+	 */
+	public ParameterInfo setType(String value) {
+		if (isStrict() && ! contains(value, VALID_TYPES))
+			throw new BasicRuntimeException(
+				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
+				value, Json5.of(VALID_TYPES)
+			);
+		type = value;
+		return this;
+	}
+
+	/**
+	 * Bean property setter:  <property>uniqueItems</property>.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	public ParameterInfo setUniqueItems(Boolean value) {
+		uniqueItems = value;
+		return this;
+	}
+
+	@Override /* Overridden from SwaggerElement */
+	public ParameterInfo strict() {
+		super.strict();
+		return this;
+	}
+
+	/**
+	 * Sets strict mode on this bean.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
+	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
+	 * @return This object.
+	 */
+	@Override
+	public ParameterInfo strict(Object value) {
+		super.strict(value);
 		return this;
 	}
 }

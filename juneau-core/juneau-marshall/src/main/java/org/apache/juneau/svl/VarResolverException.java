@@ -35,22 +35,22 @@ public class VarResolverException extends BasicRuntimeException {
 	/**
 	 * Constructor.
 	 *
+	 * @param message The {@link MessageFormat}-style message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	public VarResolverException(String message, Object...args) {
+		this(null, message, args);
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param cause The cause of this exception.
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public VarResolverException(Throwable cause, String message, Object... args) {
 		super(cause, message, args);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
-	 */
-	public VarResolverException(String message, Object...args) {
-		this(null, message, args);
 	}
 
 	@Override /* Overridden from BasicRuntimeException */

@@ -34,11 +34,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicCsvArrayPart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final String[] EMPTY = {};
 
 	/**
@@ -69,11 +64,6 @@ public class BasicCsvArrayPart extends BasicPart {
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String[] value;
 	private final Supplier<String[]> supplier;
 	private String stringValue;
@@ -94,19 +84,6 @@ public class BasicCsvArrayPart extends BasicPart {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.  Must not be <jk>null</jk>.
-	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
-	 */
-	public BasicCsvArrayPart(String name, Supplier<String[]> value) {
-		super(name, value);
-		this.value = null;
-		this.supplier = value;
-		this.stringValue = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
 	 * <p>
 	 * <jk>null</jk> values are treated as <jk>null</jk>.
 	 * Otherwise parses as a comma-delimited list with whitespace trimmed.
@@ -121,13 +98,51 @@ public class BasicCsvArrayPart extends BasicPart {
 		this.stringValue = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		if (supplier != null)
-			return Utils.join(supplier.get(), ',');
-		if (stringValue != null)
-			stringValue = Utils.join(value, ',');
-		return stringValue;
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicCsvArrayPart(String name, Supplier<String[]> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+		this.stringValue = null;
+	}
+
+	/**
+	 * Returns The part value as an array wrapped in an {@link Optional}.
+	 *
+	 * <p>
+	 * Array is a copy of the value of this part.
+	 *
+	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String[]> asArray() {
+		return Utils.opt(copyOf(value()));
+	}
+
+	/**
+	 * Returns The part value as a {@link List} wrapped in an {@link Optional}.
+	 *
+	 * <p>
+	 * The list is unmodifiable.
+	 *
+	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<List<String>> asList() {
+		return Utils.opt(toList());
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this part.
+	 *
+	 * @return A new fluent assertion object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public FluentListAssertion<String,BasicCsvArrayPart> assertList() {
+		return new FluentListAssertion<>(u(alist(value())), this);
 	}
 
 	/**
@@ -158,38 +173,27 @@ public class BasicCsvArrayPart extends BasicPart {
 		return false;
 	}
 
-	/**
-	 * Provides the ability to perform fluent-style assertions on this part.
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public FluentListAssertion<String,BasicCsvArrayPart> assertList() {
-		return new FluentListAssertion<>(u(alist(value())), this);
+	@Override /* Overridden from Header */
+	public String getValue() {
+		if (supplier != null)
+			return Utils.join(supplier.get(), ',');
+		if (stringValue != null)
+			stringValue = Utils.join(value, ',');
+		return stringValue;
 	}
 
 	/**
-	 * Returns The part value as a {@link List}.
+	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
-	 * The list is unmodifiable.
+	 * This is a shortened form for calling <c>asArray().orElse(<jv>other</jv>)</c>.
 	 *
-	 * @return The part value as a {@link List}, or <jk>null</jk> if the value <jk>null</jk>.
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
 	 */
-	public List<String> toList() {
-		return u(alist(value()));
-	}
-
-	/**
-	 * Returns The part value as a {@link List} wrapped in an {@link Optional}.
-	 *
-	 * <p>
-	 * The list is unmodifiable.
-	 *
-	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<List<String>> asList() {
-		return Utils.opt(toList());
+	public String[] orElse(String[] other) {
+		String[] x = value();
+		return x != null ? x : other;
 	}
 
 	/**
@@ -205,29 +209,15 @@ public class BasicCsvArrayPart extends BasicPart {
 	}
 
 	/**
-	 * Returns The part value as an array wrapped in an {@link Optional}.
+	 * Returns The part value as a {@link List}.
 	 *
 	 * <p>
-	 * Array is a copy of the value of this part.
+	 * The list is unmodifiable.
 	 *
-	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 * @return The part value as a {@link List}, or <jk>null</jk> if the value <jk>null</jk>.
 	 */
-	public Optional<String[]> asArray() {
-		return Utils.opt(copyOf(value()));
-	}
-
-	/**
-	 * Return the value if present, otherwise return <c>other</c>.
-	 *
-	 * <p>
-	 * This is a shortened form for calling <c>asArray().orElse(<jv>other</jv>)</c>.
-	 *
-	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
-	 * @return The value, if present, otherwise <c>other</c>.
-	 */
-	public String[] orElse(String[] other) {
-		String[] x = value();
-		return x != null ? x : other;
+	public List<String> toList() {
+		return u(alist(value()));
 	}
 
 	private String[] value() {

@@ -35,80 +35,6 @@ import org.apache.juneau.reflect.*;
  */
 public class RemoteOperationArg {
 
-	private final int index;
-	private final HttpPartType partType;
-	private final Optional<HttpPartSerializer> serializer;
-	private final HttpPartSchema schema;
-
-	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
-		this.index = index;
-		this.partType = partType;
-		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
-		this.schema = schema;
-	}
-
-	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema, String overrideName) {
-		this.index = index;
-		this.partType = partType;
-		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
-		// Create a new schema with the overridden name
-		this.schema = HttpPartSchema.create().name(overrideName).build();
-	}
-
-	/**
-	 * Returns the name of the HTTP part.
-	 *
-	 * @return The name of the HTTP part.
-	 */
-	public String getName() {
-		return schema.getName();
-	}
-
-	/**
-	 * Returns whether the <c>skipIfEmpty</c> flag was found in the schema.
-	 *
-	 * @return <jk>true</jk> if the <c>skipIfEmpty</c> flag was found in the schema.
-	 */
-	public boolean isSkipIfEmpty() {
-		return schema.isSkipIfEmpty();
-	}
-
-	/**
-	 * Returns the method argument index.
-	 *
-	 * @return The method argument index.
-	 */
-	public int getIndex() {
-		return index;
-	}
-
-	/**
-	 * Returns the HTTP part type.
-	 *
-	 * @return The HTTP part type.  Never <jk>null</jk>.
-	 */
-	public HttpPartType getPartType() {
-		return partType;
-	}
-
-	/**
-	 * Returns the HTTP part serializer to use for serializing this part.
-	 *
-	 * @return The HTTP part serializer, or the default if not specified.
-	 */
-	public Optional<HttpPartSerializer> getSerializer() {
-		return serializer;
-	}
-
-	/**
-	 * Returns the HTTP part schema information about this part.
-	 *
-	 * @return The HTTP part schema information, or <jk>null</jk> if not found.
-	 */
-	public HttpPartSchema getSchema() {
-		return schema;
-	}
-
 	static RemoteOperationArg create(ParamInfo mpi) {
 		int i = mpi.getIndex();
 		if (mpi.hasAnnotation(Header.class)) {
@@ -128,5 +54,79 @@ public class RemoteOperationArg {
 			return new RemoteOperationArg(i, BODY, HttpPartSchema.create(Content.class, mpi));
 		}
 		return null;
+	}
+	private final int index;
+	private final HttpPartType partType;
+	private final Optional<HttpPartSerializer> serializer;
+
+	private final HttpPartSchema schema;
+
+	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
+		this.index = index;
+		this.partType = partType;
+		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
+		this.schema = schema;
+	}
+
+	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema, String overrideName) {
+		this.index = index;
+		this.partType = partType;
+		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
+		// Create a new schema with the overridden name
+		this.schema = HttpPartSchema.create().name(overrideName).build();
+	}
+
+	/**
+	 * Returns the method argument index.
+	 *
+	 * @return The method argument index.
+	 */
+	public int getIndex() {
+		return index;
+	}
+
+	/**
+	 * Returns the name of the HTTP part.
+	 *
+	 * @return The name of the HTTP part.
+	 */
+	public String getName() {
+		return schema.getName();
+	}
+
+	/**
+	 * Returns the HTTP part type.
+	 *
+	 * @return The HTTP part type.  Never <jk>null</jk>.
+	 */
+	public HttpPartType getPartType() {
+		return partType;
+	}
+
+	/**
+	 * Returns the HTTP part schema information about this part.
+	 *
+	 * @return The HTTP part schema information, or <jk>null</jk> if not found.
+	 */
+	public HttpPartSchema getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Returns the HTTP part serializer to use for serializing this part.
+	 *
+	 * @return The HTTP part serializer, or the default if not specified.
+	 */
+	public Optional<HttpPartSerializer> getSerializer() {
+		return serializer;
+	}
+
+	/**
+	 * Returns whether the <c>skipIfEmpty</c> flag was found in the schema.
+	 *
+	 * @return <jk>true</jk> if the <c>skipIfEmpty</c> flag was found in the schema.
+	 */
+	public boolean isSkipIfEmpty() {
+		return schema.isSkipIfEmpty();
 	}
 }

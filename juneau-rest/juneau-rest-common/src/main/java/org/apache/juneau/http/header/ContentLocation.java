@@ -76,11 +76,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Content-Location")
 public class ContentLocation extends BasicUriHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Content-Location";
 
@@ -94,18 +89,6 @@ public class ContentLocation extends BasicUriHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static ContentLocation of(String value) {
-		return value == null ? null : new ContentLocation(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
-	 */
-	public static ContentLocation of(URI value) {
 		return value == null ? null : new ContentLocation(value);
 	}
 
@@ -124,10 +107,17 @@ public class ContentLocation extends BasicUriHeader {
 		return value == null ? null : new ContentLocation(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 */
+	public static ContentLocation of(URI value) {
+		return value == null ? null : new ContentLocation(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -137,17 +127,6 @@ public class ContentLocation extends BasicUriHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ContentLocation(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public ContentLocation(URI value) {
 		super(NAME, value);
 	}
 
@@ -162,6 +141,17 @@ public class ContentLocation extends BasicUriHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public ContentLocation(Supplier<URI> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public ContentLocation(URI value) {
 		super(NAME, value);
 	}
 }

@@ -135,21 +135,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentArrayAssertion(E[] value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -170,38 +155,42 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentArrayAssertion(E[] value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Overridden from FluentObjectAssertion */
-	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {  // NOSONAR - Intentional.
-		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
-	@Override /* Overridden from FluentBaseAssertion */
-	public FluentStringAssertion<R> asString() {
-		return new FluentStringAssertion<>(this, toString(), returns());
-	}
-
 	/**
-	 * Converts this assertion into a {@link FluentListAssertion} of strings.
+	 * Converts this assertion into a {@link FluentBeanListAssertion}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Extracts the 'foo' property from an array of beans and validates their values.</jc>.
+	 * 	<jsm>assertObject</jsm>(<jv>myArrayOfBeans</jv>)
+	 * 		.asBeanList()
+	 * 		.asProperty(<js>"foo"</js>)
+	 * 		.asSorted()
+	 * 		.equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
+	 * </p>
 	 *
 	 * @return A new fluent string assertion.
 	 */
-	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map((o) -> s(o)).toList(), returns());
-	}
-
-	/**
-	 * Runs the stringify function against all values in this list and returns it as a fluent string list assertion.
-	 *
-	 * @param function The function to apply to all values in this list.
-	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
-	 */
-	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
-		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
-		return new FluentStringListAssertion<>(this, l, returns());
+	public FluentBeanListAssertion<E,R> asBeanList() {
+		return new FluentBeanListAssertion<>(this, toList(), returns());
 	}
 
 	/**
@@ -222,25 +211,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
 		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
 		return new FluentStringAssertion<>(this, Utils.join(l, ','), returns());
-	}
-
-	/**
-	 * Converts this assertion into a {@link FluentBeanListAssertion}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Extracts the 'foo' property from an array of beans and validates their values.</jc>.
-	 * 	<jsm>assertObject</jsm>(<jv>myArrayOfBeans</jv>)
-	 * 		.asBeanList()
-	 * 		.asProperty(<js>"foo"</js>)
-	 * 		.asSorted()
-	 * 		.equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent string assertion.
-	 */
-	public FluentBeanListAssertion<E,R> asBeanList() {
-		return new FluentBeanListAssertion<>(this, toList(), returns());
 	}
 
 	/**
@@ -276,22 +246,39 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		return new FluentListAssertion<>(this, toSortedList(comparator), returns());
 	}
 
+	@Override /* Overridden from FluentBaseAssertion */
+	public FluentStringAssertion<R> asString() {
+		return new FluentStringAssertion<>(this, toString(), returns());
+	}
+
+	/**
+	 * Converts this assertion into a {@link FluentListAssertion} of strings.
+	 *
+	 * @return A new fluent string assertion.
+	 */
+	public FluentStringListAssertion<R> asStrings() {
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map((o) -> s(o)).toList(), returns());
+	}
+
+	/**
+	 * Runs the stringify function against all values in this list and returns it as a fluent string list assertion.
+	 *
+	 * @param function The function to apply to all values in this list.
+	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
+		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
+		return new FluentStringListAssertion<>(this, l, returns());
+	}
+
+	@Override /* Overridden from FluentObjectAssertion */
+	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {  // NOSONAR - Intentional.
+		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Asserts that the contents of this list contain the specified values.
-	 *
-	 * @param entries The expected entries in this list.
-	 * @return This object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isHas(E...entries) throws AssertionError {
-		Utils.assertArgNotNull("entries", entries);
-		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
- 		return is(p);
-	}
 
 	/**
 	 * Asserts that the contents of this list pass the specified tests.
@@ -312,21 +299,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	/**
-	 * Asserts that at least one value in the array passes the specified test.
-	 *
-	 * @param test The predicate test.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
-	 */
-	public R isAny(Predicate<E> test) throws AssertionError {
-		Utils.assertArgNotNull("test", test);
-		for (var v : value())
-			if (test.test(v))
-				return returns();
-		throw error(MSG_arrayDidntContainAnyMatchingValue, (Object)value());
-	}
-
-	/**
 	 * Asserts that all values in the array passes the specified test.
 	 *
 	 * @param test The predicate test.
@@ -342,6 +314,35 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	/**
+	 * Asserts that at least one value in the array passes the specified test.
+	 *
+	 * @param test The predicate test.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
+	 */
+	public R isAny(Predicate<E> test) throws AssertionError {
+		Utils.assertArgNotNull("test", test);
+		for (var v : value())
+			if (test.test(v))
+				return returns();
+		throw error(MSG_arrayDidntContainAnyMatchingValue, (Object)value());
+	}
+
+	/**
+	 * Asserts that the array contains the expected value.
+	 *
+	 * @param entry The value to check for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isContains(E entry) throws AssertionError {
+		for (int i = 0, j = length(); i < j; i++)
+			if (Utils.eq(at(i), entry))
+				return returns();
+		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
+	}
+
+	/**
 	 * Asserts that the collection exists and is empty.
 	 *
 	 * @return The fluent return object.
@@ -350,6 +351,34 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public R isEmpty() throws AssertionError {
 		if (length() != 0)
 			throw error(MSG_arrayWasNotEmpty);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the contents of this list contain the specified values.
+	 *
+	 * @param entries The expected entries in this list.
+	 * @return This object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	@SuppressWarnings("unchecked")
+	public R isHas(E...entries) throws AssertionError {
+		Utils.assertArgNotNull("entries", entries);
+		Predicate<E>[] p = stream(entries).map(AssertionPredicates::eq).toArray(Predicate[]::new);
+ 		return is(p);
+	}
+
+	/**
+	 * Asserts that the array does not contain the expected value.
+	 *
+	 * @param entry The value to check for.
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isNotContains(E entry) throws AssertionError {
+		for (int i = 0, j = length(); i < j; i++)
+			if (Utils.eq(at(i), entry))
+				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
 		return returns();
 	}
 
@@ -375,34 +404,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	public R isSize(int size) throws AssertionError {
 		if (length() != size)
 			throw error(MSG_arrayUnexpectedSize, size, length());
-		return returns();
-	}
-
-	/**
-	 * Asserts that the array contains the expected value.
-	 *
-	 * @param entry The value to check for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isContains(E entry) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
-			if (Utils.eq(at(i), entry))
-				return returns();
-		throw error(MSG_arrayDidNotContainExpectedValue, entry, toString());
-	}
-
-	/**
-	 * Asserts that the array does not contain the expected value.
-	 *
-	 * @param entry The value to check for.
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isNotContains(E entry) throws AssertionError {
-		for (int i = 0, j = length(); i < j; i++)
-			if (Utils.eq(at(i), entry))
-				throw error(MSG_arrayContainedUnexpectedValue, entry, toString());
 		return returns();
 	}
 
@@ -442,6 +443,15 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@Override
+	public String toString() {
+		return valueIsNull() ? null : Arrays.toString(value());
+	}
+
+	private E at(int index) {
+		return valueIsNull() || index >= length() || index < 0 ? null : value()[index];
+	}
+
 	private int length() {
 		return value().length;
 	}
@@ -452,14 +462,5 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 
 	private List<E> toSortedList(Comparator<E> comparator) {
 		return valueIsNull() ? null : sortedList(comparator, value());
-	}
-
-	private E at(int index) {
-		return valueIsNull() || index >= length() || index < 0 ? null : value()[index];
-	}
-
-	@Override
-	public String toString() {
-		return valueIsNull() ? null : Arrays.toString(value());
 	}
 }

@@ -50,11 +50,6 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 public class ObjectIntrospector {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 * @param o The object on which Java methods will be invoked.
@@ -73,13 +68,17 @@ public class ObjectIntrospector {
 	public static ObjectIntrospector create(Object o, ReaderParser parser) {
 		return new ObjectIntrospector(o, parser);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Object object;
 	private final ReaderParser parser;
+
+	/**
+	 * Shortcut for calling <code><jk>new</jk> ObjectIntrospector(o, <jk>null</jk>);</code>
+	 *
+	 * @param o The object on which Java methods will be invoked.
+	 */
+	public ObjectIntrospector(Object o) {
+		this(o, null);
+	}
 
 	/**
 	 * Constructor.
@@ -93,54 +92,6 @@ public class ObjectIntrospector {
 			parser = JsonParser.DEFAULT;
 		this.object = object;
 		this.parser = parser;
-	}
-
-	/**
-	 * Shortcut for calling <code><jk>new</jk> ObjectIntrospector(o, <jk>null</jk>);</code>
-	 *
-	 * @param o The object on which Java methods will be invoked.
-	 */
-	public ObjectIntrospector(Object o) {
-		this(o, null);
-	}
-
-	/**
-	 * Primary method.
-	 *
-	 * <p>
-	 * Invokes the specified method on this bean.
-	 *
-	 * @param method The method being invoked.
-	 * @param args
-	 * 	The arguments to pass as parameters to the method.
-	 * 	These will automatically be converted to the appropriate object type if possible.
-	 * 	Can be <jk>null</jk> if method has no arguments.
-	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
-	 * 	inaccessible.
-	 * @throws IllegalArgumentException
-	 * 	If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			The number of actual and formal parameters differ.
-	 * 		<li>
-	 * 			An unwrapping conversion for primitive arguments fails.
-	 * 		<li>
-	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
-	 * 			conversion.
-	 * 		<li>
-	 * 			The constructor pertains to an enum type.
-	 * 	</ul>
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
-		if (object == null)
-			return null;
-		Object[] params = args == null ? null : parser.parseArgs(args, method.getGenericParameterTypes());
-		return method.invoke(object, params);
 	}
 
 	/**
@@ -184,6 +135,81 @@ public class ObjectIntrospector {
 	/**
 	 * Convenience method for invoking argument from method signature (@see {@link MethodInfo#getSignature()}.
 	 *
+	 * @param <T> The return type of the method call.
+	 * @param returnType The return type of the method call.
+	 * @param method The method being invoked.
+	 * @param args
+	 * 	The arguments to pass as parameters to the method.
+	 * 	These will automatically be converted to the appropriate object type if possible.
+	 * 	Can be <jk>null</jk> if method has no arguments.
+	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
+	 * @throws NoSuchMethodException If method does not exist.
+	 * @throws IllegalAccessException
+	 * 	If the <c>Constructor</c> object enforces Java language access control and
+	 * 	the underlying constructor is inaccessible.
+	 * @throws IllegalArgumentException
+	 * 	If one of the following occurs:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			The number of actual and formal parameters differ.
+	 * 		<li>
+	 * 			An unwrapping conversion for primitive arguments fails.
+	 * 		<li>
+	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 			conversion.
+	 * 		<li>
+	 * 			The constructor pertains to an enum type.
+	 * 	</ul>
+	 * @throws InvocationTargetException If the underlying constructor throws an exception.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public <T> T invokeMethod(Class<T> returnType, String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
+		return returnType.cast(invokeMethod(method, args));
+	}
+
+	/**
+	 * Primary method.
+	 *
+	 * <p>
+	 * Invokes the specified method on this bean.
+	 *
+	 * @param method The method being invoked.
+	 * @param args
+	 * 	The arguments to pass as parameters to the method.
+	 * 	These will automatically be converted to the appropriate object type if possible.
+	 * 	Can be <jk>null</jk> if method has no arguments.
+	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
+	 * @throws IllegalAccessException
+	 * 	If the <c>Constructor</c> object enforces Java language access control and the underlying constructor is
+	 * 	inaccessible.
+	 * @throws IllegalArgumentException
+	 * 	If one of the following occurs:
+	 * 	<ul class='spaced-list'>
+	 * 		<li>
+	 * 			The number of actual and formal parameters differ.
+	 * 		<li>
+	 * 			An unwrapping conversion for primitive arguments fails.
+	 * 		<li>
+	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
+	 * 			conversion.
+	 * 		<li>
+	 * 			The constructor pertains to an enum type.
+	 * 	</ul>
+	 * @throws InvocationTargetException If the underlying constructor throws an exception.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public Object invokeMethod(Method method, Reader args) throws InvocationTargetException, IllegalArgumentException, IllegalAccessException, ParseException, IOException {
+		if (object == null)
+			return null;
+		Object[] params = args == null ? null : parser.parseArgs(args, method.getGenericParameterTypes());
+		return method.invoke(object, params);
+	}
+
+	/**
+	 * Convenience method for invoking argument from method signature (@see {@link MethodInfo#getSignature()}.
+	 *
 	 * @param method The method being invoked.
 	 * @param args
 	 * 	The arguments to pass as parameters to the method.
@@ -218,41 +244,5 @@ public class ObjectIntrospector {
 		if (m == null)
 			throw new NoSuchMethodException(method);
 		return invokeMethod(m, args == null ? null : new StringReader(args));
-	}
-
-	/**
-	 * Convenience method for invoking argument from method signature (@see {@link MethodInfo#getSignature()}.
-	 *
-	 * @param <T> The return type of the method call.
-	 * @param returnType The return type of the method call.
-	 * @param method The method being invoked.
-	 * @param args
-	 * 	The arguments to pass as parameters to the method.
-	 * 	These will automatically be converted to the appropriate object type if possible.
-	 * 	Can be <jk>null</jk> if method has no arguments.
-	 * @return The object returned by the call to the method, or <jk>null</jk> if target object is <jk>null</jk>.
-	 * @throws NoSuchMethodException If method does not exist.
-	 * @throws IllegalAccessException
-	 * 	If the <c>Constructor</c> object enforces Java language access control and
-	 * 	the underlying constructor is inaccessible.
-	 * @throws IllegalArgumentException
-	 * 	If one of the following occurs:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			The number of actual and formal parameters differ.
-	 * 		<li>
-	 * 			An unwrapping conversion for primitive arguments fails.
-	 * 		<li>
-	 * 			A parameter value cannot be converted to the corresponding formal parameter type by a method invocation
-	 * 			conversion.
-	 * 		<li>
-	 * 			The constructor pertains to an enum type.
-	 * 	</ul>
-	 * @throws InvocationTargetException If the underlying constructor throws an exception.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public <T> T invokeMethod(Class<T> returnType, String method, String args) throws NoSuchMethodException, IllegalArgumentException, InvocationTargetException, IllegalAccessException, ParseException, IOException {
-		return returnType.cast(invokeMethod(method, args));
 	}
 }

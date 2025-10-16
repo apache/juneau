@@ -56,16 +56,6 @@ public class PropertyNotFoundException extends RuntimeException {
 	}
 
 	/**
-	 * Constructs a new PropertyNotFoundException with the specified detail message and cause.
-	 *
-	 * @param message The detail message describing the missing property
-	 * @param cause The underlying cause of the exception
-	 */
-	public PropertyNotFoundException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	/**
 	 * Constructs a new PropertyNotFoundException for a specific property name and object type.
 	 *
 	 * @param propertyName The name of the property that could not be found
@@ -84,5 +74,15 @@ public class PropertyNotFoundException extends RuntimeException {
 	 */
 	public PropertyNotFoundException(String propertyName, Class<?> objectType, Throwable cause) {
 		super(f("Property ''{0}'' not found on object of type {1}", propertyName, objectType.getSimpleName()) ,cause);
+	}
+
+	/**
+	 * Constructs a new PropertyNotFoundException with the specified detail message and cause.
+	 *
+	 * @param message The detail message describing the missing property
+	 * @param cause The underlying cause of the exception
+	 */
+	public PropertyNotFoundException(String message, Throwable cause) {
+		super(message, cause);
 	}
 }

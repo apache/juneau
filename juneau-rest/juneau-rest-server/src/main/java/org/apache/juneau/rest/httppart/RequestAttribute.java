@@ -76,20 +76,6 @@ public class RequestAttribute extends BasicNamedAttribute {
 		super(name, value);
 		this.req = request;
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Retrievers
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the value of this part as a string.
-	 *
-	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
-	 */
-	public Optional<String> asString() {
-		return Utils.opt(Utils.s(getValue()));
-	}
-
 	/**
 	 * Converts this part to the specified POJO.
 	 *
@@ -100,5 +86,14 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 */
 	public <T> Optional<T> as(Class<T> type) {
 		return Utils.opt(req.getBeanSession().convertToType(getValue(), type));
+	}
+
+	/**
+	 * Returns the value of this part as a string.
+	 *
+	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
+	 */
+	public Optional<String> asString() {
+		return Utils.opt(Utils.s(getValue()));
 	}
 }

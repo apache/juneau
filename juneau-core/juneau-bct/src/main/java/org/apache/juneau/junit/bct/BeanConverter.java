@@ -59,23 +59,6 @@ import java.util.*;
 public interface BeanConverter {
 
 	/**
-	 * Converts an object to its string representation for testing purposes.
-	 *
-	 * @param o The object to stringify
-	 * @return The string representation of the object
-	 */
-	String stringify(Object o);
-
-	/**
-	 * Converts a collection-like object to a standardized List&lt;Object&gt; format.
-	 *
-	 * @param o The object to convert to a list. Must not be null.
-	 * @return A List containing the elements
-	 * @throws IllegalArgumentException if the object is null or cannot be converted to a list
-	 */
-	List<Object> listify(Object o);
-
-	/**
 	 * Determines if an object can be converted to a list.
 	 *
 	 * @param o The object to test. May be null.
@@ -84,12 +67,14 @@ public interface BeanConverter {
 	boolean canListify(Object o);
 
 	/**
-	 * Pre-processes objects before conversion operations.
+	 * Extracts a nested property value using structured field access syntax.
 	 *
-	 * @param o The object to swap
-	 * @return The swapped object, or the original object if no swapping is needed
+	 * @param o The object to extract nested properties from. May be null.
+	 * @param token The parsed token containing the property access structure. Must not be null.
+	 * @return A formatted string representation of the extracted nested values
+	 * @throws IllegalArgumentException if the token is null
 	 */
-	Object swap(Object o);
+	String getNested(Object o, NestedTokenizer.Token token);
 
 	/**
 	 * Accesses a named property or field from an object.
@@ -112,12 +97,27 @@ public interface BeanConverter {
 	<T> T getSetting(String key, T defaultValue);
 
 	/**
-	 * Extracts a nested property value using structured field access syntax.
+	 * Converts a collection-like object to a standardized List&lt;Object&gt; format.
 	 *
-	 * @param o The object to extract nested properties from. May be null.
-	 * @param token The parsed token containing the property access structure. Must not be null.
-	 * @return A formatted string representation of the extracted nested values
-	 * @throws IllegalArgumentException if the token is null
+	 * @param o The object to convert to a list. Must not be null.
+	 * @return A List containing the elements
+	 * @throws IllegalArgumentException if the object is null or cannot be converted to a list
 	 */
-	String getNested(Object o, NestedTokenizer.Token token);
+	List<Object> listify(Object o);
+
+	/**
+	 * Converts an object to its string representation for testing purposes.
+	 *
+	 * @param o The object to stringify
+	 * @return The string representation of the object
+	 */
+	String stringify(Object o);
+
+	/**
+	 * Pre-processes objects before conversion operations.
+	 *
+	 * @param o The object to swap
+	 * @return The swapped object, or the original object if no swapping is needed
+	 */
+	Object swap(Object o);
 }

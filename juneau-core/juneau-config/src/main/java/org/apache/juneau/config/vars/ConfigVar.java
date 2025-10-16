@@ -67,12 +67,12 @@ public class ConfigVar extends DefaultingVar {
 	}
 
 	@Override /* Overridden from Var */
-	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(Config.class).map(x -> x.get(key).orElse(null)).orElse(null);
+	public boolean canResolve(VarResolverSession session) {
+		return session.getBean(Config.class).isPresent();
 	}
 
 	@Override /* Overridden from Var */
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(Config.class).isPresent();
+	public String resolve(VarResolverSession session, String key) {
+		return session.getBean(Config.class).map(x -> x.get(key).orElse(null)).orElse(null);
 	}
 }

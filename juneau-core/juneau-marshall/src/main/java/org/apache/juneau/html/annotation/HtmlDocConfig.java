@@ -43,20 +43,6 @@ import org.apache.juneau.svl.*;
 public @interface HtmlDocConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// HtmlDocSerializer
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Aside section contents.
 	 *
 	 * <p>
@@ -102,7 +88,6 @@ public @interface HtmlDocConfig {
 	 * @return The annotation value.
 	 */
 	String[] aside() default {};
-
 	/**
 	 * Float aside section contents.
 	 *
@@ -433,6 +418,16 @@ public @interface HtmlDocConfig {
 	 * @return The annotation value.
 	 */
 	String nowrap() default "";
+
+	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
 
 	/**
 	 * Resolve $ variables in serialized pojo.

@@ -29,9 +29,6 @@ import jakarta.servlet.http.*;
  */
 public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 
-	final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	final ServletOutputStream os;
-
 	/**
 	 * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.
 	 *
@@ -44,6 +41,9 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 			return (CachingHttpServletResponse)res;
 		return new CachingHttpServletResponse(res);
 	}
+	final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+	final ServletOutputStream os;
 
 	/**
 	 * Constructor.
@@ -56,9 +56,28 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 		os = res.getOutputStream();
 	}
 
+	/**
+	 * Returns the content of the servlet response without consuming the stream.
+	 *
+	 * @return The content of the response.
+	 */
+	public byte[] getContent() {
+		return baos.toByteArray();
+	}
+
 	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
 		return new ServletOutputStream() {
+
+			@Override
+			public void close() throws IOException {
+				os.close();
+			}
+
+			@Override
+			public void flush() throws IOException {
+				os.flush();
+			}
 
 			@Override
 			public boolean isReady() {
@@ -75,25 +94,6 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 				baos.write(b);
 				os.write(b);
 			}
-
-			@Override
-			public void flush() throws IOException {
-				os.flush();
-			}
-
-			@Override
-			public void close() throws IOException {
-				os.close();
-			}
 		};
-	}
-
-	/**
-	 * Returns the content of the servlet response without consuming the stream.
-	 *
-	 * @return The content of the response.
-	 */
-	public byte[] getContent() {
-		return baos.toByteArray();
 	}
 }

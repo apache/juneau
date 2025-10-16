@@ -25,6 +25,8 @@ public class ThrowableUtils {
 
 	/**
 	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.
+	 *
+	 * @param <T> The supplier type.
 	 */
 	@FunctionalInterface
 	public interface SupplierWithThrowable<T> {

@@ -111,7 +111,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#article() article()}
- * 		<li class='jm'>{@link HtmlBuilder#article(Object, Object...) article(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#article(Object...) article(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -137,14 +137,50 @@ public class Article extends HtmlElementMixed {
 		children(children);
 	}
 
-	/**
-	 * Adds a header node to this element.
-	 *
-	 * @param children The children inside the header node.
-	 * @return This object.
-	 */
-	public Article header(Object...children) {
-		super.child(HtmlBuilder.header(children));
+	@Override /* Overridden from HtmlElement */
+	public Article _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Article accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Article attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Article attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+	@Override /* Overridden from HtmlElementMixed */
+	public Article child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Article children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Article contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Article dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -160,51 +196,13 @@ public class Article extends HtmlElementMixed {
 	}
 
 	/**
-	 * Adds a link node to this element.
+	 * Adds a header node to this element.
 	 *
-	 * @param link The link node to add to this article.
+	 * @param children The children inside the header node.
 	 * @return This object.
 	 */
-	public Article link(Link value) {
-		super.child(value);
-		return this;
-	}
-
-	/**
-	 * Adds a section node to this element.
-	 *
-	 * @param section The section node to add to this article.
-	 * @return This object.
-	 */
-	public Article section(Section value) {
-		super.child(value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Article _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Article accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Article contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Article dir(String value) {
-		super.dir(value);
+	public Article header(Object...children) {
+		super.child(HtmlBuilder.header(children));
 		return this;
 	}
 
@@ -223,6 +221,17 @@ public class Article extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Article lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * Adds a link node to this element.
+	 *
+	 * @param value The link node to add to this article.
+	 * @return This object.
+	 */
+	public Article link(Link value) {
+		super.child(value);
 		return this;
 	}
 
@@ -526,6 +535,17 @@ public class Article extends HtmlElementMixed {
 		return this;
 	}
 
+	/**
+	 * Adds a section node to this element.
+	 *
+	 * @param value The section node to add to this article.
+	 * @return This object.
+	 */
+	public Article section(Section value) {
+		super.child(value);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Article spellcheck(Object value) {
 		super.spellcheck(value);
@@ -553,30 +573,6 @@ public class Article extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Article translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Article child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Article children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Article attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Article attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

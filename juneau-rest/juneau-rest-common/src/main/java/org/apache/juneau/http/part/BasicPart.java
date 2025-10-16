@@ -50,37 +50,16 @@ import org.apache.juneau.reflect.*;
  */
 @BeanIgnore
 public class BasicPart implements NameValuePair, Headerable {
-	private final String name;
-	private final Object value;
-
 	/**
-	 * Static creator.
+	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * @return A new {@link BasicPart} object.
+	 * @param o The object to check.
+	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
 	 */
-	public static BasicPart of(String name, Object value) {
-		return new BasicPart(name, value);
+	public static boolean canCast(Object o) {
+		ClassInfo ci = ClassInfo.of(o);
+		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
 	}
-
-	/**
-	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
-	 *
-	 * @param pair The pair string.
-	 * @return A new {@link NameValuePair} object.
-	 */
-	public static BasicPart ofPair(String pair) {
-		if (pair == null)
-			return null;
-		int i = pair.indexOf(':');
-		if (i == -1)
-			i = pair.indexOf('=');
-		if (i == -1)
-			return of(pair, "");
-		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
-	}
-
 	/**
 	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
 	 *
@@ -110,15 +89,36 @@ public class BasicPart implements NameValuePair, Headerable {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 * Static creator.
 	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the {@link #cast(Object)} method can be used on the specified object.
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return A new {@link BasicPart} object.
 	 */
-	public static boolean canCast(Object o) {
-		ClassInfo ci = ClassInfo.of(o);
-		return ci != null && ci.isChildOfAny(Headerable.class, NameValuePair.class, NameValuePairable.class, Map.Entry.class);
+	public static BasicPart of(String name, Object value) {
+		return new BasicPart(name, value);
 	}
+
+	/**
+	 * Creates a {@link NameValuePair} from a name/value pair string (e.g. <js>"Foo: bar"</js>)
+	 *
+	 * @param pair The pair string.
+	 * @return A new {@link NameValuePair} object.
+	 */
+	public static BasicPart ofPair(String pair) {
+		if (pair == null)
+			return null;
+		int i = pair.indexOf(':');
+		if (i == -1)
+			i = pair.indexOf('=');
+		if (i == -1)
+			return of(pair, "");
+		return of(pair.substring(0,i).trim(), pair.substring(i+1).trim());
+	}
+
+	private final String name;
+
+	private final Object value;
 
 	/**
 	 * Constructor.
@@ -142,6 +142,11 @@ public class BasicPart implements NameValuePair, Headerable {
 		this.value = copyFrom.value;
 	}
 
+	@Override /* Overridden from Headerable */
+	public BasicHeader asHeader() {
+		return BasicHeader.of(name, Utils.s(value));
+	}
+
 	/**
 	 * Provides an object for performing assertions against the name of this pair.
 	 *
@@ -160,19 +165,9 @@ public class BasicPart implements NameValuePair, Headerable {
 		return new FluentStringAssertion<>(getValue(), this);
 	}
 
-	@Override /* Overridden from Headerable */
-	public BasicHeader asHeader() {
-		return BasicHeader.of(name, Utils.s(value));
-	}
-
 	@Override /* Overridden from NameValuePair */
 	public String getName() {
 		return name;
-	}
-
-	@Override /* Overridden from NameValuePair */
-	public String getValue() {
-		return Utils.s(unwrap(value));
 	}
 
 	/**
@@ -182,6 +177,11 @@ public class BasicPart implements NameValuePair, Headerable {
 	 */
 	public Object getRawValue() {
 		return unwrap(value);
+	}
+
+	@Override /* Overridden from NameValuePair */
+	public String getValue() {
+		return Utils.s(unwrap(value));
 	}
 
 	@Override /* Overridden from Object */

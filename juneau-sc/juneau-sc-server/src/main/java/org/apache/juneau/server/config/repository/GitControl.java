@@ -62,13 +62,19 @@ public class GitControl {
 		git = new Git(localRepo);
 	}
 
-	public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {
-		Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
-	}
-
 	public void addToRepo() throws IOException, NoFilepatternException, GitAPIException {
 		AddCommand add = git.add();
 		add.addFilepattern(".").call();
+	}
+
+	public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException,
+			CheckoutConflictException, GitAPIException {
+		git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();
+	}
+
+	@SuppressWarnings("resource")
+	public void cloneRepo() throws IOException, NoFilepatternException, GitAPIException {
+		Git.cloneRepository().setURI(remotePath).setDirectory(new File(localPath)).call();
 	}
 
 	public void commitToRepo(String message) throws IOException, NoHeadException, NoMessageException,
@@ -76,9 +82,10 @@ public class GitControl {
 		git.commit().setMessage(message).call();
 	}
 
-	public void branch(String name) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException,
-			CheckoutConflictException, GitAPIException {
-		git.checkout().setName(name).setStartPoint("origin/".concat(name)).call();
+	public void pullFromRepo()
+			throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException,
+			InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {
+		git.pull().call();
 	}
 
 	public void pushToRepo() throws IOException, JGitInternalException, InvalidRemoteException, GitAPIException {
@@ -92,11 +99,5 @@ public class GitControl {
 		} catch (InvalidRemoteException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void pullFromRepo()
-			throws IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException,
-			InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {
-		git.pull().call();
 	}
 }

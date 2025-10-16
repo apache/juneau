@@ -44,32 +44,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestOpAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final RestOp DEFAULT = create().build();
-
-	/**
-	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
-	 */
-	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -185,28 +159,6 @@ public class RestOpAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestOp#defaultRequestFormData()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder defaultRequestFormData(String...value) {
-			this.defaultRequestFormData = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestOp#defaultRequestQueryData()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder defaultRequestQueryData(String...value) {
-			this.defaultRequestQueryData = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link RestOp#defaultRequestAttributes()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -218,6 +170,17 @@ public class RestOpAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOp#defaultRequestFormData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestFormData(String...value) {
+			this.defaultRequestFormData = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOp#defaultRequestHeaders()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -225,6 +188,17 @@ public class RestOpAnnotation {
 		 */
 		public Builder defaultRequestHeaders(String...value) {
 			this.defaultRequestHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultRequestQueryData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestQueryData(String...value) {
+			this.defaultRequestQueryData = value;
 			return this;
 		}
 
@@ -399,9 +373,61 @@ public class RestOpAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Applies {@link RestOp} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 */
+	public static class RestOpContextApply extends AnnotationApplier<RestOp,RestOpContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public RestOpContextApply(VarResolverSession vr) {
+			super(RestOp.class, RestOpContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<RestOp> ai, RestOpContext.Builder b) {
+			RestOp a = ai.inner();
+
+			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
+			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
+			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
+			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
+			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
+			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
+			stream(a.defaultRequestFormData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestFormData().setDefault(x));
+			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
+			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
+			b.converters().append(a.converters());
+			b.guards().append(a.guards());
+			b.matchers().append(a.matchers());
+			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
+			stream(a.path()).forEach(x -> b.path(x));
+			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+
+			string(a.method()).ifPresent(x -> b.httpMethod(x));
+			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
+
+			String v = StringUtils.trim(string(a.value()).orElse(null));
+			if (v != null) {
+				int i = v.indexOf(' ');
+				if (i == -1) {
+					b.httpMethod(v);
+				} else {
+					b.httpMethod(v.substring(0, i).trim());
+					b.path(v.substring(i).trim());
+				}
+			}
+		}
+	}
 
 	private static class Impl extends TargetedAnnotationImpl implements RestOp {
 
@@ -482,23 +508,23 @@ public class RestOpAnnotation {
 		}
 
 		@Override /* Overridden from RestOp */
-		public String[] defaultRequestFormData() {
-			return defaultRequestFormData;
-		}
-
-		@Override /* Overridden from RestOp */
-		public String[] defaultRequestQueryData() {
-			return defaultRequestQueryData;
-		}
-
-		@Override /* Overridden from RestOp */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
 		@Override /* Overridden from RestOp */
+		public String[] defaultRequestFormData() {
+			return defaultRequestFormData;
+		}
+
+		@Override /* Overridden from RestOp */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] defaultRequestQueryData() {
+			return defaultRequestQueryData;
 		}
 
 		@Override /* Overridden from RestOp */
@@ -576,64 +602,18 @@ public class RestOpAnnotation {
 			return value;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final RestOp DEFAULT = create().build();
 	/**
-	 * Applies {@link RestOp} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<RestOp,RestOpContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestOpContextApply(VarResolverSession vr) {
-			super(RestOp.class, RestOpContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<RestOp> ai, RestOpContext.Builder b) {
-			RestOp a = ai.inner();
-
-			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
-			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));
-			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders().setDefault(x));
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders().setDefault(x));
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes().add(x));
-			stream(a.defaultRequestQueryData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestQueryData().setDefault(x));
-			stream(a.defaultRequestFormData()).map(HttpParts::basicPart).forEach(x -> b.defaultRequestFormData().setDefault(x));
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
-			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders().setDefault(x));
-			b.converters().append(a.converters());
-			b.guards().append(a.guards());
-			b.matchers().append(a.matchers());
-			string(a.clientVersion()).ifPresent(x -> b.clientVersion(x));
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			stream(a.path()).forEach(x -> b.path(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
-
-			string(a.method()).ifPresent(x -> b.httpMethod(x));
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
-
-			String v = StringUtils.trim(string(a.value()).orElse(null));
-			if (v != null) {
-				int i = v.indexOf(' ');
-				if (i == -1) {
-					b.httpMethod(v);
-				} else {
-					b.httpMethod(v.substring(0, i).trim());
-					b.path(v.substring(i).trim());
-				}
-			}
-		}
+	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
 	}
 }

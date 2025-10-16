@@ -38,28 +38,6 @@ import jakarta.activation.*;
  * </ul>
  */
 public interface StaticFiles extends FileFinder {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Represents no static files */
-	public abstract class Void implements StaticFiles {}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -81,29 +59,6 @@ public interface StaticFiles extends FileFinder {
 			mimeTypes = new ExtendedMimetypesFileTypeMap();
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected StaticFiles buildDefault() {
-			return new BasicStaticFiles(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Appends headers to add to HTTP responses.
-		 *
-		 * <p>
-		 * Can be called multiple times to add multiple headers.
-		 *
-		 * @param headers The headers to add.
-		 * @return This object.
-		 */
-		public Builder headers(Header...headers) {
-			addAll(this.headers, headers);
-			return this;
-		}
-
 		/**
 		 * Prepend the MIME type values to the MIME types registry.
 		 *
@@ -114,18 +69,6 @@ public interface StaticFiles extends FileFinder {
 			this.mimeTypes.addMimeTypes(mimeTypes);
 			return this;
 		}
-
-		/**
-		 * Replaces the MIME types registry used for determining content types.
-		 *
-		 * @param mimeTypes The new MIME types registry.
-		 * @return This object.
-		 */
-		public Builder mimeTypes(MimetypesFileTypeMap mimeTypes) {
-			this.mimeTypes = mimeTypes;
-			return this;
-		}
-
 		/**
 		 * Enables in-memory caching of files for quicker retrieval.
 		 *
@@ -175,6 +118,26 @@ public interface StaticFiles extends FileFinder {
 		}
 
 		/**
+		 * Appends headers to add to HTTP responses.
+		 *
+		 * <p>
+		 * Can be called multiple times to add multiple headers.
+		 *
+		 * @param headers The headers to add.
+		 * @return This object.
+		 */
+		public Builder headers(Header...headers) {
+			addAll(this.headers, headers);
+			return this;
+		}
+
+		@Override /* Overridden from BeanBuilder */
+		public Builder impl(Object value) {
+			super.impl(value);
+			return this;
+		}
+
+		/**
 		 * Specifies the regular expression file name patterns to use to include files being retrieved from the file source.
 		 *
 		 * @param patterns
@@ -184,6 +147,17 @@ public interface StaticFiles extends FileFinder {
 		 */
 		public Builder include(String...patterns) {
 			fileFinder.include(patterns);
+			return this;
+		}
+
+		/**
+		 * Replaces the MIME types registry used for determining content types.
+		 *
+		 * @param mimeTypes The new MIME types registry.
+		 * @return This object.
+		 */
+		public Builder mimeTypes(MimetypesFileTypeMap mimeTypes) {
+			this.mimeTypes = mimeTypes;
 			return this;
 		}
 
@@ -198,22 +172,28 @@ public interface StaticFiles extends FileFinder {
 			return this;
 		}
 		@Override /* Overridden from BeanBuilder */
-		public Builder impl(Object value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected StaticFiles buildDefault() {
+			return new BasicStaticFiles(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Represents no static files */
+	public abstract class Void implements StaticFiles {}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	/**
 	 * Resolve the specified path.
 	 *

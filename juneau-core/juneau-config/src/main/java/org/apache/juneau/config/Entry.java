@@ -53,69 +53,6 @@ public class Entry {
 		this.config = config;
 		this.value = configEntry == null ? null : config.removeMods(configEntry.getModifiers(), configEntry.getValue());
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Value retrievers
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns <jk>true</jk> if this entry exists in the config.
-	 *
-	 * @return <jk>true</jk> if this entry exists in the config.
-	 */
-	public boolean isPresent() {
-		return ! isNull();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this entry exists in the config and is not empty.
-	 *
-	 * @return <jk>true</jk> if this entry exists in the config and is not empty.
-	 */
-	public boolean isNotEmpty() {
-		return ! isEmpty();
-	}
-
-	/**
-	 * Returns this entry as a string.
-	 *
-	 * @return <jk>true</jk> if this entry exists in the config and is not empty.
-	 * @throws NullPointerException if value was <jk>null</jk>.
-	 */
-	public String get() {
-		if (isNull())
-			throw new NullPointerException("Value was null");
-		return toString();
-	}
-
-	/**
-	 * Returns this entry converted to the specified type or returns the default value.
-	 *
-	 * <p>
-	 * This is equivalent to calling <c>as(<jv>def</jv>.getClass()).orElse(<jv>def</jv>)</c> but is simpler and
-	 * avoids the creation of an {@link Optional} object.
-	 *
-	 * @param def The default value to return if value does not exist.
-	 * @return This entry converted to the specified type or returns the default value.
-	 */
-	public String orElse(String def) {
-		return isNull() ? def : get();
-	}
-
-	/**
-	 * Returns this entry converted to the specified type or returns the default value.
-	 *
-	 * <p>
-	 * This is equivalent to calling <c>as(<jv>def</jv>.getClass()).orElse(<jv>def</jv>)</c> but is simpler and
-	 * avoids the creation of an {@link Optional} object.
-	 *
-	 * @param def The default value to return if value does not exist.
-	 * @return This entry converted to the specified type or returns the default value.
-	 */
-	public String orElseGet(Supplier<String> def) {
-		return isNull() ? def.get() : get();
-	}
-
 	/**
 	 * Returns this entry converted to the specified type.
 	 *
@@ -125,6 +62,65 @@ public class Entry {
 	 */
 	public <T> Optional<T> as(Class<T> type) {
 		return as((Type)type);
+	}
+
+	/**
+	 * Returns this entry converted to the specified type.
+	 *
+	 * @param <T> The type to convert the value to.
+	 * @param parser The parser to use to parse the entry value.
+	 * @param type The type to convert the value to.
+	 * @return This entry converted to the specified type, or {@link Optional#empty()} if the entry does not exist.
+	 */
+	public <T> Optional<T> as(Parser parser, Class<T> type) {
+		return as(parser, (Type)type);
+	}
+
+	/**
+	 * Same as {@link #as(Type, Type...)} but specifies the parser to use to parse the entry.
+	 *
+	 * @param <T> The object type to create.
+	 * @param parser
+	 * 	The parser to use to parse the entry.
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
+		if (isNull())
+			return Utils.opte();
+
+		try {
+			var v = toString();
+			if (type == String.class) return (Optional<T>)asString();
+			if (type == String[].class) return (Optional<T>)asStringArray();
+			if (type == byte[].class) return (Optional<T>)asBytes();
+			if (type == int.class || type == Integer.class) return (Optional<T>)asInteger();
+			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
+			if (type == JsonMap.class) return (Optional<T>)asMap();
+			if (type == JsonList.class) return (Optional<T>)asList();
+			if (isEmpty())
+				return Utils.opte();
+			if (isSimpleType(type))
+				return Utils.opt((T)config.beanSession.convertToType(v, (Class<?>)type));
+
+			if (parser instanceof JsonParser) {
+				var s1 = firstNonWhitespaceChar(v);
+				if (isArray(type) && s1 != '[')
+					v = '[' + v + ']';
+				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
+					v = '\'' + v + '\'';
+			}
+			return Utils.opt(parser.parse(v, type, args));
+		} catch (ParseException e) {
+			throw new BeanRuntimeException(e, null, "Value could not be parsed.");
+		}
 	}
 
 	/**
@@ -186,142 +182,6 @@ public class Entry {
 	}
 
 	/**
-	 * Same as {@link #as(Type, Type...)} but specifies the parser to use to parse the entry.
-	 *
-	 * @param <T> The object type to create.
-	 * @param parser
-	 * 	The parser to use to parse the entry.
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
-		if (isNull())
-			return Utils.opte();
-
-		try {
-			var v = toString();
-			if (type == String.class) return (Optional<T>)asString();
-			if (type == String[].class) return (Optional<T>)asStringArray();
-			if (type == byte[].class) return (Optional<T>)asBytes();
-			if (type == int.class || type == Integer.class) return (Optional<T>)asInteger();
-			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
-			if (type == JsonMap.class) return (Optional<T>)asMap();
-			if (type == JsonList.class) return (Optional<T>)asList();
-			if (isEmpty())
-				return Utils.opte();
-			if (isSimpleType(type))
-				return Utils.opt((T)config.beanSession.convertToType(v, (Class<?>)type));
-
-			if (parser instanceof JsonParser) {
-				var s1 = firstNonWhitespaceChar(v);
-				if (isArray(type) && s1 != '[')
-					v = '[' + v + ']';
-				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
-					v = '\'' + v + '\'';
-			}
-			return Utils.opt(parser.parse(v, type, args));
-		} catch (ParseException e) {
-			throw new BeanRuntimeException(e, null, "Value could not be parsed.");
-		}
-	}
-
-	/**
-	 * Returns this entry converted to the specified type.
-	 *
-	 * @param <T> The type to convert the value to.
-	 * @param parser The parser to use to parse the entry value.
-	 * @param type The type to convert the value to.
-	 * @return This entry converted to the specified type, or {@link Optional#empty()} if the entry does not exist.
-	 */
-	public <T> Optional<T> as(Parser parser, Class<T> type) {
-		return as(parser, (Type)type);
-	}
-
-	/**
-	 * Returns this entry as a string.
-	 *
-	 * @return This entry as a string, or <jk>null</jk> if the entry does not exist.
-	 */
- 	@Override
-	public String toString() {
- 		return isPresent() ? config.varSession.resolve(value) : null;
-	}
-
-	/**
-	 * Returns this entry as a string.
-	 *
-	 * @return This entry as a string, or {@link Optional#empty()} if the entry does not exist.
-	 */
-	public Optional<String> asString() {
- 		return Utils.opt(isPresent() ? config.varSession.resolve(value) : null);
-	}
-
-	/**
-	 * Returns this entry as a string array.
-	 *
-	 * <p>
-	 * If the value exists, splits the value on commas and returns the values as trimmed strings.
-	 *
-	 * @return This entry as a string array, or {@link Optional#empty()} if the entry does not exist.
-	 */
-	public Optional<String[]> asStringArray() {
-		if (! isPresent())
-			return Utils.opte();
-		var v = toString();
-		var s1 = firstNonWhitespaceChar(v);
-		var s2 = lastNonWhitespaceChar(v);
-		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
-			try {
-				return Utils.opt(config.parser.parse(v, String[].class));
-			} catch (ParseException e) {
-				throw new BeanRuntimeException(e);
-			}
-		}
-		return Utils.opt(splita(v));
-	}
-
-	/**
-	 * Returns this entry as an integer.
-	 *
-	 * <p>
-	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga in base 2.
-	 * <br><js>"k"</js>, <js>"m"</js>, and <js>"g"</js> can be used to identify kilo, mega, and giga in base 10.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
-	 * 	<li>
-	 * 		<code><js>"100M"</js> -&gt; 104857600</code>
-	 * 	<li>
-	 * 		<code><js>"100k"</js> -&gt; 1000000</code>
-	 * 	<li>
-	 * 		<code><js>"100m"</js> -&gt; 100000000</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link Integer#decode(String)} underneath, so any of the following integer formats are supported:
-	 * <ul>
-	 * 	<li><js>"0x..."</js>
-	 * 	<li><js>"0X..."</js>
-	 * 	<li><js>"#..."</js>
-	 * 	<li><js>"0..."</js>
-	 * </ul>
-	 *
-	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
-	 */
-	public Optional<Integer> asInteger() {
-		return Utils.opt(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
-	}
-
-	/**
 	 * Returns this entry as a parsed boolean.
 	 *
 	 * <p>
@@ -334,37 +194,28 @@ public class Entry {
 	}
 
 	/**
-	 * Returns this entry as a long.
+	 * Returns this entry as a byte array.
 	 *
 	 * <p>
-	 * <js>"K"</js>, <js>"M"</js>, <js>"G"</js>, <js>"T"</js>, and <js>"P"</js> can be used to identify kilo, mega, giga, tera, and penta in base 2.
-	 * <br><js>"k"</js>, <js>"m"</js>, <js>"g"</js>, <js>"t"</js>, and <js>"p"</js> can be used to identify kilo, mega, giga, tera, and p in base 10.
+	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link Config.Builder#binaryFormat(BinaryFormat)} setting.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
-	 * 	<li>
-	 * 		<code><js>"100M"</js> -&gt; 104857600</code>
-	 * 	<li>
-	 * 		<code><js>"100k"</js> -&gt; 1000000</code>
-	 * 	<li>
-	 * 		<code><js>"100m"</js> -&gt; 100000000</code>
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link Long#decode(String)} underneath, so any of the following integer formats are supported:
-	 * <ul>
-	 * 	<li><js>"0x..."</js>
-	 * 	<li><js>"0X..."</js>
-	 * 	<li><js>"#..."</js>
-	 * 	<li><js>"0..."</js>
-	 * </ul>
-	 *
-	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
+	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 */
-	public Optional<Long> asLong() {
-		return Utils.opt(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
+	public Optional<byte[]> asBytes() {
+		if (isNull())
+			return Utils.opte();
+		var s = toString();
+		if (s.indexOf('\n') != -1)
+			s = s.replace("\n", "");
+		try {
+			if (config.binaryFormat == HEX)
+				return Utils.opt(fromHex(s));
+			if (config.binaryFormat == SPACED_HEX)
+				return Utils.opt(fromSpacedHex(s));
+			return Utils.opt(base64Decode(s));
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e, null, "Value could not be converted to a byte array.");
+		}
 	}
 
 	/**
@@ -404,28 +255,111 @@ public class Entry {
 	}
 
 	/**
-	 * Returns this entry as a byte array.
+	 * Returns this entry as an integer.
 	 *
 	 * <p>
-	 * Byte arrays are stored as encoded strings, typically BASE64, but dependent on the {@link Config.Builder#binaryFormat(BinaryFormat)} setting.
+	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga in base 2.
+	 * <br><js>"k"</js>, <js>"m"</js>, and <js>"g"</js> can be used to identify kilo, mega, and giga in base 10.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
+	 * 	<li>
+	 * 		<code><js>"100M"</js> -&gt; 104857600</code>
+	 * 	<li>
+	 * 		<code><js>"100k"</js> -&gt; 1000000</code>
+	 * 	<li>
+	 * 		<code><js>"100m"</js> -&gt; 100000000</code>
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link Integer#decode(String)} underneath, so any of the following integer formats are supported:
+	 * <ul>
+	 * 	<li><js>"0x..."</js>
+	 * 	<li><js>"0X..."</js>
+	 * 	<li><js>"#..."</js>
+	 * 	<li><js>"0..."</js>
+	 * </ul>
+	 *
+	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
+	 */
+	public Optional<Integer> asInteger() {
+		return Utils.opt(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
+	}
+
+	/**
+	 * Returns this entry as a parsed list.
+	 *
+	 * <p>
+	 * Uses the parser registered on the {@link Config} to parse the entry.
+	 *
+	 * <p>
+	 * If the parser is a JSON parser, the starting/trailing <js>"["</js>/<js>"]"</js> in the value are optional.
 	 *
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
+	 * @throws ParseException If value could not be parsed.
 	 */
-	public Optional<byte[]> asBytes() {
+	public Optional<JsonList> asList() throws ParseException {
+		return asList(config.parser);
+	}
+
+	/**
+	 * Returns this entry as a parsed list.
+	 *
+	 * <p>
+	 * If the parser is a JSON parser, the starting/trailing <js>"["</js>/<js>"]"</js> in the value are optional.
+	 *
+	 * @param parser The parser to use to parse the value, or {@link Optional#empty()} to use the parser defined on the config.
+	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
+	 * @throws ParseException If value could not be parsed.
+	 */
+	public Optional<JsonList> asList(Parser parser) throws ParseException {
 		if (isNull())
 			return Utils.opte();
+		if (parser == null)
+			parser = config.parser;
 		var s = toString();
-		if (s.indexOf('\n') != -1)
-			s = s.replace("\n", "");
-		try {
-			if (config.binaryFormat == HEX)
-				return Utils.opt(fromHex(s));
-			if (config.binaryFormat == SPACED_HEX)
-				return Utils.opt(fromSpacedHex(s));
-			return Utils.opt(base64Decode(s));
-		} catch (Exception e) {
-			throw new BeanRuntimeException(e, null, "Value could not be converted to a byte array.");
+		if (parser instanceof JsonParser) {
+			var s1 = firstNonWhitespaceChar(s);
+			if (s1 != '[' && ! "null".equals(s))
+				s = '[' + s + ']';
 		}
+		return Utils.opt(JsonList.ofText(s, parser));
+	}
+
+	/**
+	 * Returns this entry as a long.
+	 *
+	 * <p>
+	 * <js>"K"</js>, <js>"M"</js>, <js>"G"</js>, <js>"T"</js>, and <js>"P"</js> can be used to identify kilo, mega, giga, tera, and penta in base 2.
+	 * <br><js>"k"</js>, <js>"m"</js>, <js>"g"</js>, <js>"t"</js>, and <js>"p"</js> can be used to identify kilo, mega, giga, tera, and p in base 10.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
+	 * 	<li>
+	 * 		<code><js>"100M"</js> -&gt; 104857600</code>
+	 * 	<li>
+	 * 		<code><js>"100k"</js> -&gt; 1000000</code>
+	 * 	<li>
+	 * 		<code><js>"100m"</js> -&gt; 100000000</code>
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link Long#decode(String)} underneath, so any of the following integer formats are supported:
+	 * <ul>
+	 * 	<li><js>"0x..."</js>
+	 * 	<li><js>"0X..."</js>
+	 * 	<li><js>"#..."</js>
+	 * 	<li><js>"0..."</js>
+	 * </ul>
+	 *
+	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
+	 */
+	public Optional<Long> asLong() {
+		return Utils.opt(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
 	}
 
 	/**
@@ -469,65 +403,48 @@ public class Entry {
 	}
 
 	/**
-	 * Returns this entry as a parsed list.
+	 * Returns this entry as a string.
 	 *
-	 * <p>
-	 * Uses the parser registered on the {@link Config} to parse the entry.
-	 *
-	 * <p>
-	 * If the parser is a JSON parser, the starting/trailing <js>"["</js>/<js>"]"</js> in the value are optional.
-	 *
-	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
-	 * @throws ParseException If value could not be parsed.
+	 * @return This entry as a string, or {@link Optional#empty()} if the entry does not exist.
 	 */
-	public Optional<JsonList> asList() throws ParseException {
-		return asList(config.parser);
+	public Optional<String> asString() {
+ 		return Utils.opt(isPresent() ? config.varSession.resolve(value) : null);
 	}
 
 	/**
-	 * Returns this entry as a parsed list.
+	 * Returns this entry as a string array.
 	 *
 	 * <p>
-	 * If the parser is a JSON parser, the starting/trailing <js>"["</js>/<js>"]"</js> in the value are optional.
+	 * If the value exists, splits the value on commas and returns the values as trimmed strings.
 	 *
-	 * @param parser The parser to use to parse the value, or {@link Optional#empty()} to use the parser defined on the config.
-	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
-	 * @throws ParseException If value could not be parsed.
+	 * @return This entry as a string array, or {@link Optional#empty()} if the entry does not exist.
 	 */
-	public Optional<JsonList> asList(Parser parser) throws ParseException {
-		if (isNull())
+	public Optional<String[]> asStringArray() {
+		if (! isPresent())
 			return Utils.opte();
-		if (parser == null)
-			parser = config.parser;
-		var s = toString();
-		if (parser instanceof JsonParser) {
-			var s1 = firstNonWhitespaceChar(s);
-			if (s1 != '[' && ! "null".equals(s))
-				s = '[' + s + ']';
+		var v = toString();
+		var s1 = firstNonWhitespaceChar(v);
+		var s2 = lastNonWhitespaceChar(v);
+		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
+			try {
+				return Utils.opt(config.parser.parse(v, String[].class));
+			} catch (ParseException e) {
+				throw new BeanRuntimeException(e);
+			}
 		}
-		return Utils.opt(JsonList.ofText(s, parser));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Metadata retrievers
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the name of this entry.
-	 *
-	 * @return The name of this entry.
-	 */
-	public String getKey() {
-		return configEntry.getKey();
+		return Utils.opt(splita(v));
 	}
 
 	/**
-	 * Returns the raw value of this entry.
+	 * Returns this entry as a string.
 	 *
-	 * @return The raw value of this entry.
+	 * @return <jk>true</jk> if this entry exists in the config and is not empty.
+	 * @throws NullPointerException if value was <jk>null</jk>.
 	 */
-	public String getValue() {
-		return configEntry.getValue();
+	public String get() {
+		if (isNull())
+			throw new NullPointerException("Value was null");
+		return toString();
 	}
 
 	/**
@@ -540,12 +457,12 @@ public class Entry {
 	}
 
 	/**
-	 * Returns the pre-lines of this entry.
+	 * Returns the name of this entry.
 	 *
-	 * @return The pre-lines of this entry as an unmodifiable list.
+	 * @return The name of this entry.
 	 */
-	public List<String> getPreLines() {
-		return configEntry.getPreLines();
+	public String getKey() {
+		return configEntry.getKey();
 	}
 
 	/**
@@ -557,9 +474,84 @@ public class Entry {
 		return configEntry.getModifiers();
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the pre-lines of this entry.
+	 *
+	 * @return The pre-lines of this entry as an unmodifiable list.
+	 */
+	public List<String> getPreLines() {
+		return configEntry.getPreLines();
+	}
+
+	/**
+	 * Returns the raw value of this entry.
+	 *
+	 * @return The raw value of this entry.
+	 */
+	public String getValue() {
+		return configEntry.getValue();
+	}
+	/**
+	 * Returns <jk>true</jk> if this entry exists in the config and is not empty.
+	 *
+	 * @return <jk>true</jk> if this entry exists in the config and is not empty.
+	 */
+	public boolean isNotEmpty() {
+		return ! isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this entry exists in the config.
+	 *
+	 * @return <jk>true</jk> if this entry exists in the config.
+	 */
+	public boolean isPresent() {
+		return ! isNull();
+	}
+
+	/**
+	 * Returns this entry converted to the specified type or returns the default value.
+	 *
+	 * <p>
+	 * This is equivalent to calling <c>as(<jv>def</jv>.getClass()).orElse(<jv>def</jv>)</c> but is simpler and
+	 * avoids the creation of an {@link Optional} object.
+	 *
+	 * @param def The default value to return if value does not exist.
+	 * @return This entry converted to the specified type or returns the default value.
+	 */
+	public String orElse(String def) {
+		return isNull() ? def : get();
+	}
+
+	/**
+	 * Returns this entry converted to the specified type or returns the default value.
+	 *
+	 * <p>
+	 * This is equivalent to calling <c>as(<jv>def</jv>.getClass()).orElse(<jv>def</jv>)</c> but is simpler and
+	 * avoids the creation of an {@link Optional} object.
+	 *
+	 * @param def The default value to return if value does not exist.
+	 * @return This entry converted to the specified type or returns the default value.
+	 */
+	public String orElseGet(Supplier<String> def) {
+		return isNull() ? def.get() : get();
+	}
+
+	/**
+	 * Returns this entry as a string.
+	 *
+	 * @return This entry as a string, or <jk>null</jk> if the entry does not exist.
+	 */
+ 	@Override
+	public String toString() {
+ 		return isPresent() ? config.varSession.resolve(value) : null;
+	}
+	private boolean isArray(Type t) {
+		if (! (t instanceof Class))
+			return false;
+		var c = (Class<?>)t;
+		return (c.isArray());
+	}
 
 	private boolean isEmpty() {
 		return Utils.isEmpty(value);
@@ -567,13 +559,6 @@ public class Entry {
 
 	private boolean isNull() {
 		return value == null;
-	}
-
-	private boolean isArray(Type t) {
-		if (! (t instanceof Class))
-			return false;
-		var c = (Class<?>)t;
-		return (c.isArray());
 	}
 
 	private boolean isSimpleType(Type t) {

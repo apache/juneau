@@ -79,6 +79,15 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	private AtomicReference<LogRecord> lastRecord = new AtomicReference<>();
 
 	/**
+	 * Constructor using default settings.
+	 * <p>
+	 * Uses the same settings as {@link CallLogger}.
+	 */
+	public BasicTestCaptureCallLogger() {
+		super(BeanStore.INSTANCE);
+	}
+
+	/**
 	 * Constructor using specific settings.
 	 *
 	 * @param beanStore The bean store containing injectable beans for this logger.
@@ -88,12 +97,81 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	}
 
 	/**
-	 * Constructor using default settings.
-	 * <p>
-	 * Uses the same settings as {@link CallLogger}.
+	 * Returns an assertion of the last logged message.
+	 *
+	 * @return The last logged message as an assertion object.  Never <jk>null</jk>.
 	 */
-	public BasicTestCaptureCallLogger() {
-		super(BeanStore.INSTANCE);
+	public StringAssertion assertMessage() {
+		return new StringAssertion(getMessage());
+	}
+
+	/**
+	 * Returns an assertion of the last logged message and then deletes it internally.
+	 *
+	 * @return The last logged message as an assertion object.  Never <jk>null</jk>.
+	 */
+	public StringAssertion assertMessageAndReset() {
+		return new StringAssertion(getMessageAndReset());
+	}
+
+	/**
+	 * Returns the last logged message level.
+	 *
+	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
+	 */
+	public ThrowableAssertion<Throwable> assertThrown() {
+		return new ThrowableAssertion<>(getThrown());
+	}
+
+	/**
+	 * Returns the last logged message level.
+	 *
+	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
+	 */
+	public Level getLevel() {
+		LogRecord r = lastRecord.get();
+		return r == null ? null : r.getLevel();
+	}
+
+	/**
+	 * Returns the last logged message.
+	 *
+	 * @return The last logged message, or <jk>null</jk> if nothing was logged.
+	 */
+	public String getMessage() {
+		LogRecord r = lastRecord.get();
+		return r == null ? null : r.getMessage();
+	}
+
+	/**
+	 * Returns the last logged message and then deletes it internally.
+	 *
+	 * @return The last logged message.
+	 */
+	public String getMessageAndReset() {
+		String msg = getMessage();
+		reset();
+		return msg;
+	}
+
+	/**
+	 * Returns the last logged message level.
+	 *
+	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
+	 */
+	public Throwable getThrown() {
+		LogRecord r = lastRecord.get();
+		return r == null ? null : r.getThrown();
+	}
+
+	/**
+	 * Resets the internal message buffer.
+	 *
+	 * @return This object.
+	 */
+	public BasicTestCaptureCallLogger reset() {
+		this.lastRecord.set(null);
+		return this;
 	}
 
 	@Override
@@ -128,83 +206,5 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 		LogRecord r = new LogRecord(level, msg);
 		r.setThrown(e);
 		this.lastRecord.set(r);
-	}
-
-	/**
-	 * Returns the last logged message.
-	 *
-	 * @return The last logged message, or <jk>null</jk> if nothing was logged.
-	 */
-	public String getMessage() {
-		LogRecord r = lastRecord.get();
-		return r == null ? null : r.getMessage();
-	}
-
-	/**
-	 * Returns the last logged message and then deletes it internally.
-	 *
-	 * @return The last logged message.
-	 */
-	public String getMessageAndReset() {
-		String msg = getMessage();
-		reset();
-		return msg;
-	}
-
-	/**
-	 * Returns an assertion of the last logged message.
-	 *
-	 * @return The last logged message as an assertion object.  Never <jk>null</jk>.
-	 */
-	public StringAssertion assertMessage() {
-		return new StringAssertion(getMessage());
-	}
-
-	/**
-	 * Returns an assertion of the last logged message and then deletes it internally.
-	 *
-	 * @return The last logged message as an assertion object.  Never <jk>null</jk>.
-	 */
-	public StringAssertion assertMessageAndReset() {
-		return new StringAssertion(getMessageAndReset());
-	}
-
-	/**
-	 * Returns the last logged message level.
-	 *
-	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
-	 */
-	public Level getLevel() {
-		LogRecord r = lastRecord.get();
-		return r == null ? null : r.getLevel();
-	}
-
-	/**
-	 * Returns the last logged message level.
-	 *
-	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
-	 */
-	public Throwable getThrown() {
-		LogRecord r = lastRecord.get();
-		return r == null ? null : r.getThrown();
-	}
-
-	/**
-	 * Returns the last logged message level.
-	 *
-	 * @return The last logged message level, or <jk>null</jk> if nothing was logged.
-	 */
-	public ThrowableAssertion<Throwable> assertThrown() {
-		return new ThrowableAssertion<>(getThrown());
-	}
-
-	/**
-	 * Resets the internal message buffer.
-	 *
-	 * @return This object.
-	 */
-	public BasicTestCaptureCallLogger reset() {
-		this.lastRecord.set(null);
-		return this;
 	}
 }

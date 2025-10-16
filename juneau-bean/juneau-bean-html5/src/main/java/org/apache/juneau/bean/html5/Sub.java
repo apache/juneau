@@ -76,10 +76,6 @@ public class Sub extends HtmlElementMixed {
 	public Sub(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Sub _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -89,6 +85,30 @@ public class Sub extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Sub accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Sub attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Sub attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Sub child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Sub children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -449,30 +469,6 @@ public class Sub extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Sub translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Sub child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Sub children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Sub attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Sub attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

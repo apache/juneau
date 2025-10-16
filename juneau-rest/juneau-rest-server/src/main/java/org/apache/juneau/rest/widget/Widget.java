@@ -47,6 +47,25 @@ import org.apache.juneau.svl.*;
 public abstract class Widget implements HtmlWidget {
 
 	/**
+	 * Resolves the HTML content for this widget.
+	 *
+	 * <p>
+	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
+	 *
+	 * @param req The HTTP request object.
+	 * @param res The current HTTP response.
+	 * @return The HTML content of this widget.
+	 */
+	public String getHtml(RestRequest req, RestResponse res) {
+		return null;
+	}
+
+	@Override /* Overridden from HtmlWidget */
+	public String getHtml(VarResolverSession session) {
+		return getHtml(req(session), res(session));
+	}
+
+	/**
 	 * The widget key.
 	 *
 	 * <p>
@@ -65,43 +84,6 @@ public abstract class Widget implements HtmlWidget {
 		return getClass().getSimpleName();
 	}
 
-	private RestRequest req(VarResolverSession session) {
-		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-	}
-
-	private RestResponse res(VarResolverSession session) {
-		return session.getBean(RestResponse.class).orElseThrow(InternalServerError::new);
-	}
-
-	@Override /* Overridden from HtmlWidget */
-	public String getHtml(VarResolverSession session) {
-		return getHtml(req(session), res(session));
-	}
-
-	@Override /* Overridden from HtmlWidget */
-	public String getScript(VarResolverSession session) {
-		return getScript(req(session), res(session));
-	}
-
-	@Override /* Overridden from HtmlWidget */
-	public String getStyle(VarResolverSession session) {
-		return getStyle(req(session), res(session));
-	}
-
-	/**
-	 * Resolves the HTML content for this widget.
-	 *
-	 * <p>
-	 * A returned value of <jk>null</jk> will cause nothing to be added to the page.
-	 *
-	 * @param req The HTTP request object.
-	 * @param res The current HTTP response.
-	 * @return The HTML content of this widget.
-	 */
-	public String getHtml(RestRequest req, RestResponse res) {
-		return null;
-	}
-
 	/**
 	 * Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.
 	 *
@@ -114,6 +96,11 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	public String getScript(RestRequest req, RestResponse res) {
 		return null;
+	}
+
+	@Override /* Overridden from HtmlWidget */
+	public String getScript(VarResolverSession session) {
+		return getScript(req(session), res(session));
 	}
 
 	/**
@@ -130,6 +117,19 @@ public abstract class Widget implements HtmlWidget {
 		return null;
 	}
 
+	@Override /* Overridden from HtmlWidget */
+	public String getStyle(VarResolverSession session) {
+		return getStyle(req(session), res(session));
+	}
+
+	private RestRequest req(VarResolverSession session) {
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
+	}
+
+	private RestResponse res(VarResolverSession session) {
+		return session.getBean(RestResponse.class).orElseThrow(InternalServerError::new);
+	}
+
 	/**
 	 * Returns the file finder to use for finding files on the file system.
 	 *
@@ -138,6 +138,45 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected FileFinder getFileFinder(RestRequest req) {
 		return req.getStaticFiles();
+	}
+
+	/**
+	 * Loads the specified HTML file and strips HTML comments from the file.
+	 *
+	 * <p>
+	 * Comment are assumed to be <js>"&lt;!-- --&gt;"</js> code blocks.
+	 *
+	 * @param req The HTTP request object.
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 */
+	protected String loadHtml(RestRequest req, String name) {
+		try {
+			String s = getFileFinder(req).getString(name, null).orElse(null);
+			if (s != null)
+				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
+			return s;
+		} catch (IOException e) {
+			throw asRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Same as {@link #loadHtml(RestRequest,String)} but replaces request-time SVL variables.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
+	 * </ul>
+	 *
+	 * @param req The current HTTP request.
+	 * @param res The current HTTP response.
+	 * @param name Name of the desired resource.
+	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	protected String loadHtmlWithVars(RestRequest req, RestResponse res, String name) throws IOException {
+		return req.getVarResolverSession().resolve(loadHtml(req, name));
 	}
 
 	/**
@@ -216,44 +255,5 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadStyleWithVars(RestRequest req, RestResponse res, String name) throws IOException {
 		return req.getVarResolverSession().resolve(loadStyle(req, name));
-	}
-
-	/**
-	 * Loads the specified HTML file and strips HTML comments from the file.
-	 *
-	 * <p>
-	 * Comment are assumed to be <js>"&lt;!-- --&gt;"</js> code blocks.
-	 *
-	 * @param req The HTTP request object.
-	 * @param name Name of the desired resource.
-	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 */
-	protected String loadHtml(RestRequest req, String name) {
-		try {
-			String s = getFileFinder(req).getString(name, null).orElse(null);
-			if (s != null)
-				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
-			return s;
-		} catch (IOException e) {
-			throw asRuntimeException(e);
-		}
-	}
-
-	/**
-	 * Same as {@link #loadHtml(RestRequest,String)} but replaces request-time SVL variables.
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-	 * </ul>
-	 *
-	 * @param req The current HTTP request.
-	 * @param res The current HTTP response.
-	 * @param name Name of the desired resource.
-	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	protected String loadHtmlWithVars(RestRequest req, RestResponse res, String name) throws IOException {
-		return req.getVarResolverSession().resolve(loadHtml(req, name));
 	}
 }

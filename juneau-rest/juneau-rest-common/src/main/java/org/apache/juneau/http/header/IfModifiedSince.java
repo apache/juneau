@@ -100,11 +100,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("If-Modified-Since")
 public class IfModifiedSince extends BasicDateHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "If-Modified-Since";
 
@@ -118,18 +113,6 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static IfModifiedSince of(String value) {
-		return value == null ? null : new IfModifiedSince(value);
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
-	 */
-	public static IfModifiedSince of(ZonedDateTime value) {
 		return value == null ? null : new IfModifiedSince(value);
 	}
 
@@ -148,10 +131,17 @@ public class IfModifiedSince extends BasicDateHeader {
 		return value == null ? null : new IfModifiedSince(value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 */
+	public static IfModifiedSince of(ZonedDateTime value) {
+		return value == null ? null : new IfModifiedSince(value);
+	}
 	/**
 	 * Constructor.
 	 *
@@ -161,17 +151,6 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public IfModifiedSince(String value) {
-		super(NAME, value);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 */
-	public IfModifiedSince(ZonedDateTime value) {
 		super(NAME, value);
 	}
 
@@ -186,6 +165,17 @@ public class IfModifiedSince extends BasicDateHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 */
 	public IfModifiedSince(Supplier<ZonedDateTime> value) {
+		super(NAME, value);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 */
+	public IfModifiedSince(ZonedDateTime value) {
 		super(NAME, value);
 	}
 }

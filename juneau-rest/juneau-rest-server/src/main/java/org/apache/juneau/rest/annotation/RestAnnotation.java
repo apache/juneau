@@ -50,47 +50,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 public class RestAnnotation {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/** Default value */
-	public static final Rest DEFAULT = create().build();
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @return A new builder object.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(Class<?>...on) {
-		return create().on(on);
-	}
-
-	/**
-	 * Instantiates a new builder for this class.
-	 *
-	 * @param on The targets this annotation applies to.
-	 * @return A new builder object.
-	 */
-	public static Builder create(String...on) {
-		return create().on(on);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 *
@@ -130,26 +89,6 @@ public class RestAnnotation {
 		 */
 		protected Builder() {
 			super(Rest.class);
-		}
-
-		/**
-		 * Instantiates a new {@link Rest @Rest} object initialized with this builder.
-		 *
-		 * @return A new {@link Rest @Rest} object.
-		 */
-		public Rest build() {
-			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link Rest#disableContentParam()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder disableContentParam(String value) {
-			this.disableContentParam = value;
-			return this;
 		}
 
 		/**
@@ -194,6 +133,15 @@ public class RestAnnotation {
 		public Builder beanStore(Class<? extends BeanStore> value) {
 			this.beanStore = value;
 			return this;
+		}
+
+		/**
+		 * Instantiates a new {@link Rest @Rest} object initialized with this builder.
+		 *
+		 * @return A new {@link Rest @Rest} object.
+		 */
+		public Rest build() {
+			return new Impl(this);
 		}
 
 		/**
@@ -359,6 +307,17 @@ public class RestAnnotation {
 		 */
 		public Builder defaultResponseHeaders(String...value) {
 			this.defaultResponseHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#disableContentParam()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder disableContentParam(String value) {
+			this.disableContentParam = value;
 			return this;
 		}
 
@@ -655,9 +614,88 @@ public class RestAnnotation {
 
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Implementation
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestContext.Builder}.
+	 */
+	public static class RestContextApply extends AnnotationApplier<Rest,RestContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public RestContextApply(VarResolverSession vr) {
+			super(Rest.class, RestContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Rest> ai, RestContext.Builder b) {
+			Rest a = ai.inner();
+
+			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
+			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
+			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
+			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes(x));
+			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders(x));
+			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders(x));
+			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders(x));
+			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders(x));
+			b.responseProcessors().add(a.responseProcessors());
+			b.children((Object[])a.children());
+			b.restOpArgs(a.restOpArgs());
+			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
+			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
+			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
+			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
+			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
+			b.messages().location(string(a.messages()).orElse(null));
+			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
+			string(a.path()).ifPresent(x -> b.path(x));
+			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
+			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
+			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
+			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
+			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
+			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
+			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableContentParam(x));
+			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
+			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
+			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
+			bool(a.renderResponseStackTraces()).ifPresent(x -> b.renderResponseStackTraces(x));
+		}
+	}
+
+	/**
+	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 */
+	public static class RestOpContextApply extends AnnotationApplier<Rest,RestOpContext.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public RestOpContextApply(VarResolverSession vr) {
+			super(Rest.class, RestOpContext.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
+			Rest a = ai.inner();
+
+			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
+			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
+			b.converters().append(a.converters());
+			b.guards().append(a.guards());
+			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
+			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
+			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
+			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
+		}
+	}
 
 	private static class Impl extends TargetedAnnotationTImpl implements Rest {
 
@@ -738,11 +776,6 @@ public class RestAnnotation {
 			this.pathParams = copyOf(b.pathParams);
 			this.formDataParams = copyOf(b.formDataParams);
 			postConstruct();
-		}
-
-		@Override /* Overridden from Rest */
-		public String disableContentParam() {
-			return disableContentParam;
 		}
 
 		@Override /* Overridden from Rest */
@@ -841,13 +874,28 @@ public class RestAnnotation {
 		}
 
 		@Override /* Overridden from Rest */
+		public String disableContentParam() {
+			return disableContentParam;
+		}
+
+		@Override /* Overridden from Rest */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
 		@Override /* Overridden from Rest */
+		public FormData[] formDataParams() {
+			return formDataParams;
+		}
+
+		@Override /* Overridden from Rest */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
+		}
+
+		@Override /* Overridden from Rest */
+		public Header[] headerParams() {
+			return headerParams;
 		}
 
 		@Override /* Overridden from Rest */
@@ -881,8 +929,18 @@ public class RestAnnotation {
 		}
 
 		@Override /* Overridden from Rest */
+		public Path[] pathParams() {
+			return pathParams;
+		}
+
+		@Override /* Overridden from Rest */
 		public String[] produces() {
 			return produces;
+		}
+
+		@Override /* Overridden from Rest */
+		public Query[] queryParams() {
+			return queryParams;
 		}
 
 		@Override /* Overridden from Rest */
@@ -969,112 +1027,34 @@ public class RestAnnotation {
 		public String uriResolution() {
 			return uriResolution;
 		}
-
-		@Override /* Overridden from Rest */
-		public Query[] queryParams() {
-			return queryParams;
-		}
-
-		@Override /* Overridden from Rest */
-		public Header[] headerParams() {
-			return headerParams;
-		}
-
-		@Override /* Overridden from Rest */
-		public Path[] pathParams() {
-			return pathParams;
-		}
-
-		@Override /* Overridden from Rest */
-		public FormData[] formDataParams() {
-			return formDataParams;
-		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Appliers
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/** Default value */
+	public static final Rest DEFAULT = create().build();
 	/**
-	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
 	 */
-	public static class RestContextApply extends AnnotationApplier<Rest,RestContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestContextApply(VarResolverSession vr) {
-			super(Rest.class, RestContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestContext.Builder b) {
-			Rest a = ai.inner();
-
-			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
-			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
-			type(a.partSerializer()).ifPresent(x -> b.partSerializer().type(x));
-			type(a.partParser()).ifPresent(x -> b.partParser().type(x));
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			stream(a.defaultRequestAttributes()).map(BasicNamedAttribute::ofPair).forEach(x -> b.defaultRequestAttributes(x));
-			stream(a.defaultRequestHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultRequestHeaders(x));
-			stream(a.defaultResponseHeaders()).map(HttpHeaders::stringHeader).forEach(x -> b.defaultResponseHeaders(x));
-			string(a.defaultAccept()).map(HttpHeaders::accept).ifPresent(x -> b.defaultRequestHeaders(x));
-			string(a.defaultContentType()).map(HttpHeaders::contentType).ifPresent(x -> b.defaultRequestHeaders(x));
-			b.responseProcessors().add(a.responseProcessors());
-			b.children((Object[])a.children());
-			b.restOpArgs(a.restOpArgs());
-			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
-			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
-			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
-			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
-			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
-			b.messages().location(string(a.messages()).orElse(null));
-			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
-			string(a.path()).ifPresent(x -> b.path(x));
-			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
-			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
-			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
-			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
-			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
-			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
-			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableContentParam(x));
-			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
-			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
-			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
-			bool(a.renderResponseStackTraces()).ifPresent(x -> b.renderResponseStackTraces(x));
-		}
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
+	 */
+	public static Builder create(Class<?>...on) {
+		return create().on(on);
 	}
 
 	/**
-	 * Applies {@link Rest} annotations to a {@link org.apache.juneau.rest.RestOpContext.Builder}.
+	 * Instantiates a new builder for this class.
+	 *
+	 * @param on The targets this annotation applies to.
+	 * @return A new builder object.
 	 */
-	public static class RestOpContextApply extends AnnotationApplier<Rest,RestOpContext.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public RestOpContextApply(VarResolverSession vr) {
-			super(Rest.class, RestOpContext.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
-			Rest a = ai.inner();
-
-			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
-			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));
-			b.converters().append(a.converters());
-			b.guards().append(a.guards());
-			string(a.defaultCharset()).map(Charset::forName).ifPresent(x -> b.defaultCharset(x));
-			string(a.maxInput()).ifPresent(x -> b.maxInput(x));
-			cdl(a.rolesDeclared()).forEach(x -> b.rolesDeclared(x));
-			string(a.roleGuard()).ifPresent(x -> b.roleGuard(x));
-		}
+	public static Builder create(String...on) {
+		return create().on(on);
 	}
 }

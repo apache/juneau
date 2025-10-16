@@ -36,21 +36,17 @@ import org.apache.juneau.parser.*;
 public class SchemaUtils {
 
 	/**
-	 * Concatenates and parses a string array as a JSON object.
+	 * Joins an array of strings with newlines.
 	 *
-	 * @param ss The array to concatenate and parse.
-	 * @return The parsed contents.
-	 * @throws ParseException Invalid JSON encountered.
+	 * @param s The array to join.
+	 * @return A new joined string.
 	 */
-	public static JsonMap parseMap(String[] ss) throws ParseException {
-		if (ss.length == 0)
-			return null;
-		String s = joinnl(ss);
-		if (s.isEmpty())
-			return null;
-		if (! isJsonObject(s, true))
-			s = "{" + s + "}";
-		return JsonMap.ofJson(s);
+	public static String joinnl(String[]...s) {
+		for (String[] ss : s) {
+			if (ss.length != 0)
+				return Utils.joinnl(ss).trim();
+		}
+		return "";
 	}
 
 	/**
@@ -81,6 +77,24 @@ public class SchemaUtils {
 	}
 
 	/**
+	 * Concatenates and parses a string array as a JSON object.
+	 *
+	 * @param ss The array to concatenate and parse.
+	 * @return The parsed contents.
+	 * @throws ParseException Invalid JSON encountered.
+	 */
+	public static JsonMap parseMap(String[] ss) throws ParseException {
+		if (ss.length == 0)
+			return null;
+		String s = joinnl(ss);
+		if (s.isEmpty())
+			return null;
+		if (! isJsonObject(s, true))
+			s = "{" + s + "}";
+		return JsonMap.ofJson(s);
+	}
+
+	/**
 	 * Concatenates and parses a string array as JSON array or comma-delimited list.
 	 *
 	 * @param ss The array to concatenate and parse.
@@ -96,19 +110,5 @@ public class SchemaUtils {
 		Set<String> set = set();
 		JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		return set;
-	}
-
-	/**
-	 * Joins an array of strings with newlines.
-	 *
-	 * @param s The array to join.
-	 * @return A new joined string.
-	 */
-	public static String joinnl(String[]...s) {
-		for (String[] ss : s) {
-			if (ss.length != 0)
-				return Utils.joinnl(ss).trim();
-		}
-		return "";
 	}
 }

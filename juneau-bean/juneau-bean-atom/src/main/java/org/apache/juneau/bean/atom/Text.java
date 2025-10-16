@@ -93,6 +93,9 @@ public class Text extends Common {
 	private String type;
 	private String text;  // NOSONAR - Intentional naming.
 
+	/** Bean constructor. */
+	public Text() {}
+
 	/**
 	 * Normal content.
 	 *
@@ -101,13 +104,18 @@ public class Text extends Common {
 	public Text(String type) {
 		setType(type);
 	}
-
-	/** Bean constructor. */
-	public Text() {}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Bean property getter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this content.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	@Xml(format=XMLTEXT)
+	public String getText() {
+		return text;
+	}
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -120,6 +128,33 @@ public class Text extends Common {
 	@Xml(format=ATTR)
 	public String getType() {
 		return type;
+	}
+
+	@Override /* Overridden from Common */
+	public Text setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	@Override /* Overridden from Common */
+	public Text setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+	/**
+	 * Bean property setter:  <property>text</property>.
+	 *
+	 * <p>
+	 * The content of this content.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public Text setText(String value) {
+		this.text = value;
+		return this;
 	}
 
 	/**
@@ -144,51 +179,6 @@ public class Text extends Common {
 	 */
 	public Text setType(String value) {
 		this.type = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this content.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	@Xml(format=XMLTEXT)
-	public String getText() {
-		return text;
-	}
-
-	/**
-	 * Bean property setter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this content.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Text setText(String value) {
-		this.text = value;
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden setters (to simplify method chaining)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Common */
-	public Text setBase(Object value) {
-		super.setBase(value);
-		return this;
-	}
-
-	@Override /* Overridden from Common */
-	public Text setLang(String value) {
-		super.setLang(value);
 		return this;
 	}
 }

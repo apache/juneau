@@ -38,6 +38,7 @@ import org.apache.juneau.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings("resource")
 public class SerializerWriter extends Writer {
 
 	/** The underlying writer. */
@@ -59,6 +60,20 @@ public class SerializerWriter extends Writer {
 	protected final UriResolver uriResolver;
 
 	/**
+	 * Copy Constructor
+	 *
+	 * @param w Writer being copied.
+	 */
+	public SerializerWriter(SerializerWriter w) {
+		this.out = w.out;
+		this.useWhitespace = w.useWhitespace;
+		this.maxIndent = w.maxIndent;
+		this.trimStrings = w.trimStrings;
+		this.quoteChar = w.quoteChar;
+		this.uriResolver = w.uriResolver;
+	}
+
+	/**
 	 * @param out The writer being wrapped.
 	 * @param useWhitespace
 	 * 	If <jk>true</jk>, calling {@link #cr(int)} will create an indentation and calling {@link #s()} will write a
@@ -77,18 +92,144 @@ public class SerializerWriter extends Writer {
 		this.uriResolver = uriResolver;
 	}
 
+	@Override /* Overridden from Writer */
+	public SerializerWriter append(char c) {
+		try {
+			out.write(c);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
+		return this;
+	}
+
 	/**
-	 * Copy Constructor
+	 * Appends the specified characters to this writer.
 	 *
-	 * @param w Writer being copied.
+	 * @param value The characters to append to this writer.
+	 * @return This object.
 	 */
-	public SerializerWriter(SerializerWriter w) {
-		this.out = w.out;
-		this.useWhitespace = w.useWhitespace;
-		this.maxIndent = w.maxIndent;
-		this.trimStrings = w.trimStrings;
-		this.quoteChar = w.quoteChar;
-		this.uriResolver = w.uriResolver;
+	public SerializerWriter append(char[] value) {
+		for (char c : value)
+			w(c);
+		return this;
+	}
+
+	/**
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
+	 *
+	 * @param indent The number of tabs to indent.
+	 * @param value The character to write.
+	 * @return This object.
+	 */
+	public SerializerWriter append(int indent, char value) {
+		return i(indent).w(value);
+	}
+
+	/**
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
+	 *
+	 * @param indent The number of tabs to indent.
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter append(int indent, String value) {
+		return append(indent, false, value);
+	}
+
+	/**
+	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
+	 *
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter append(Object value) {
+		w(value == null ? null : value.toString());
+		return this;
+	}
+
+	/**
+	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
+	 *
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter append(String value) {
+		if (value != null)
+			w(value);
+		return this;
+	}
+
+	/**
+	 * Writes the specified text to the writer if b is true.
+	 *
+	 * @param flag Boolean flag.
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter appendIf(boolean flag, char value) {
+		if (flag)
+			w(value);
+		return this;
+	}
+
+	/**
+	 * Writes the specified text to the writer if b is true.
+	 *
+	 * @param flag Boolean flag.
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter appendIf(boolean flag, String value) {
+		if (flag)
+			w(value);
+		return this;
+	}
+
+	/**
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, followed by a newline
+	 * (if the {@code useWhitespace} setting is enabled).
+	 *
+	 * @param indent The number of tabs to indent.
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter appendln(int indent, String value) {
+		return append(indent, true, value);
+	}
+
+	/**
+	 * Writes the specified text followed by a newline (if the {@code useWhitespace} setting is enabled).
+	 *
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	public SerializerWriter appendln(String value) {
+		return append(0, true, value);
+	}
+
+	/**
+	 * Appends the specified object as a URI.
+	 *
+	 * <p>
+	 * Object is converted to a <c>String</c> using <c>toString()</c>, so this will work on {@link URL} or
+	 * {@link URI} objects, or any other type that returns a URI via it's <c>toString()</c> method.
+	 *
+	 * <p>
+	 * The URI is resolved based on the {@link Serializer.Builder#uriRelativity(UriRelativity)} and
+	 * {@link Serializer.Builder#uriResolution(UriResolution)} settings and the {@link UriContext} that's part of the
+	 * session.
+	 *
+	 * @param value The URI to serialize.
+	 * @return This object.
+	 */
+	public SerializerWriter appendUri(Object value) {
+		uriResolver.append(this, value);
+		return this;
+	}
+
+	@Override /* Overridden from Writer */
+	public void close() throws IOException {
+		out.close();
 	}
 
 	/**
@@ -121,130 +262,9 @@ public class SerializerWriter extends Writer {
 		return this;
 	}
 
-	/**
-	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, followed by a newline
-	 * (if the {@code useWhitespace} setting is enabled).
-	 *
-	 * @param indent The number of tabs to indent.
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter appendln(int indent, String value) {
-		return append(indent, true, value);
-	}
-
-	/**
-	 * Writes the specified text followed by a newline (if the {@code useWhitespace} setting is enabled).
-	 *
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter appendln(String value) {
-		return append(0, true, value);
-	}
-
-	/**
-	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
-	 *
-	 * @param indent The number of tabs to indent.
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter append(int indent, String value) {
-		return append(indent, false, value);
-	}
-
-	/**
-	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
-	 *
-	 * @param indent The number of tabs to indent.
-	 * @param value The character to write.
-	 * @return This object.
-	 */
-	public SerializerWriter append(int indent, char value) {
-		return i(indent).w(value);
-	}
-
-	/**
-	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, optionally followed by a
-	 * newline (if the {@code useWhitespace} setting is enabled).
-	 *
-	 * @param indent The number of tabs to indent.
-	 * @param newline If <jk>true</jk>, then a newline is written.
-	 * @param value The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object.
-	 */
-	private SerializerWriter append(int indent, boolean newline, String value) {
-
-		if (value == null)
-			return this;
-
-		// If text contains newlines, we break it up into lines and indent them separately.
-		if (value.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
-			for (StringTokenizer st = new StringTokenizer(value, "\n"); st.hasMoreTokens();)
-				i(indent).w(st.nextToken()).w("\n");
-		} else {
-			i(indent).w(value);
-		}
-
-		if (newline)
-			nl(indent);
-
-		return this;
-	}
-
-	/**
-	 * Appends the specified object as a URI.
-	 *
-	 * <p>
-	 * Object is converted to a <c>String</c> using <c>toString()</c>, so this will work on {@link URL} or
-	 * {@link URI} objects, or any other type that returns a URI via it's <c>toString()</c> method.
-	 *
-	 * <p>
-	 * The URI is resolved based on the {@link Serializer.Builder#uriRelativity(UriRelativity)} and
-	 * {@link Serializer.Builder#uriResolution(UriResolution)} settings and the {@link UriContext} that's part of the
-	 * session.
-	 *
-	 * @param value The URI to serialize.
-	 * @return This object.
-	 */
-	public SerializerWriter appendUri(Object value) {
-		uriResolver.append(this, value);
-		return this;
-	}
-
-	/**
-	 * Appends the specified characters to this writer.
-	 *
-	 * @param value The characters to append to this writer.
-	 * @return This object.
-	 */
-	public SerializerWriter append(char[] value) {
-		for (char c : value)
-			w(c);
-		return this;
-	}
-
-	/**
-	 * Adds a whitespace character to the output if the {@code useWhitespace} setting is enabled.
-	 *
-	 * @return This object.
-	 */
-	public SerializerWriter s() {
-		if (useWhitespace)
-			w(' ');
-		return this;
-	}
-
-	/**
-	 * Adds the quote character specified by the {@code quoteChar} setting to the output.
-	 *
-	 * @return This object.
-	 */
-	public SerializerWriter q() {
-		w(quoteChar);
-		return this;
+	@Override /* Overridden from Writer */
+	public void flush() throws IOException {
+		out.flush();
 	}
 
 	/**
@@ -286,6 +306,40 @@ public class SerializerWriter extends Writer {
 	}
 
 	/**
+	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
+	 *
+	 * @param flag The boolean flag.
+	 * @param indent The current indentation level.
+	 * @return This object.
+	 */
+	public SerializerWriter nlIf(boolean flag, int indent) {
+		if (flag && useWhitespace && indent <= maxIndent)
+			w('\n');
+		return this;
+	}
+
+	/**
+	 * Adds the quote character specified by the {@code quoteChar} setting to the output.
+	 *
+	 * @return This object.
+	 */
+	public SerializerWriter q() {
+		w(quoteChar);
+		return this;
+	}
+
+	/**
+	 * Adds a whitespace character to the output if the {@code useWhitespace} setting is enabled.
+	 *
+	 * @return This object.
+	 */
+	public SerializerWriter s() {
+		if (useWhitespace)
+			w(' ');
+		return this;
+	}
+
+	/**
 	 * Writes a space if the boolean expression is <jk>true</jk> and {@code useWhitespace} is false.
 	 *
 	 * <p>
@@ -300,69 +354,6 @@ public class SerializerWriter extends Writer {
 			w(' ');
 		return this;
 	}
-
-	/**
-	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
-	 *
-	 * @param flag The boolean flag.
-	 * @param indent The current indentation level.
-	 * @return This object.
-	 */
-	public SerializerWriter nlIf(boolean flag, int indent) {
-		if (flag && useWhitespace && indent <= maxIndent)
-			w('\n');
-		return this;
-	}
-
-	/**
-	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
-	 *
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter append(Object value) {
-		w(value == null ? null : value.toString());
-		return this;
-	}
-
-	/**
-	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
-	 *
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter append(String value) {
-		if (value != null)
-			w(value);
-		return this;
-	}
-
-	/**
-	 * Writes the specified text to the writer if b is true.
-	 *
-	 * @param flag Boolean flag.
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter appendIf(boolean flag, String value) {
-		if (flag)
-			w(value);
-		return this;
-	}
-
-	/**
-	 * Writes the specified text to the writer if b is true.
-	 *
-	 * @param flag Boolean flag.
-	 * @param value The text to write.
-	 * @return This object.
-	 */
-	public SerializerWriter appendIf(boolean flag, char value) {
-		if (flag)
-			w(value);
-		return this;
-	}
-
 	/**
 	 * Writes the specified character to the writer.
 	 *
@@ -393,20 +384,6 @@ public class SerializerWriter extends Writer {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* Overridden from Writer */
-	public SerializerWriter append(char c) {
-		try {
-			out.write(c);
-		} catch (IOException e) {
-			throw new SerializeException(e);
-		}
-		return this;
-	}
-
 	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int off, int len) {
 		try {
@@ -416,13 +393,32 @@ public class SerializerWriter extends Writer {
 		}
 	}
 
-	@Override /* Overridden from Writer */
-	public void flush() throws IOException {
-		out.flush();
-	}
+	/**
+	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text, optionally followed by a
+	 * newline (if the {@code useWhitespace} setting is enabled).
+	 *
+	 * @param indent The number of tabs to indent.
+	 * @param newline If <jk>true</jk>, then a newline is written.
+	 * @param value The text to write.
+	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @return This object.
+	 */
+	private SerializerWriter append(int indent, boolean newline, String value) {
 
-	@Override /* Overridden from Writer */
-	public void close() throws IOException {
-		out.close();
+		if (value == null)
+			return this;
+
+		// If text contains newlines, we break it up into lines and indent them separately.
+		if (value.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
+			for (StringTokenizer st = new StringTokenizer(value, "\n"); st.hasMoreTokens();)
+				i(indent).w(st.nextToken()).w("\n");
+		} else {
+			i(indent).w(value);
+		}
+
+		if (newline)
+			nl(indent);
+
+		return this;
 	}
 }

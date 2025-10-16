@@ -62,6 +62,93 @@ import java.util.*;
 class NestedTokenizer {
 
 	/**
+	 * Represents a parsed token with optional nested sub-tokens.
+	 *
+	 * <p>A Token contains a string value and may have nested tokens representing
+	 * the content inside braces. Tokens support deep nesting for complex hierarchical structures.</p>
+	 *
+	 * <h5 class='section'>Structure:</h5>
+	 * <ul>
+	 *    <li><b>value:</b> The main token value (part before any braces)</li>
+	 *    <li><b>nested:</b> Optional list of nested tokens (content within braces)</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <ul>
+	 *    <li><js>"foo"</js> → <js>Token{value="foo", nested=null}</js></li>
+	 *    <li><js>"foo{a,b}"</js> → <js>Token{value="foo", nested=[Token{value="a"}, Token{value="b"}]}</js></li>
+	 * </ul>
+	 */
+	public static class Token {
+
+		/** The main value of this token */
+		private final String value;
+
+		/** Nested tokens if this token has braced content, null otherwise */
+		private List<Token> nested;
+
+		/**
+		 * Creates a new token with the specified value.
+		 *
+		 * @param value The token value
+		 */
+		public Token(String value) {
+			this.value = value != null ? value : "";
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return (o instanceof Token o2) && eq(this, o2, (x,y)->eq(x.value, y.value) && eq(x.nested, y.nested));
+		}
+
+		/**
+		 * Returns an unmodifiable view of the nested tokens.
+		 *
+		 * @return unmodifiable list of nested tokens, or empty list if none
+		 */
+		public List<Token> getNested() {
+			return nested != null ? unmodifiableList(nested) : emptyList();
+		}
+
+		/**
+		 * Returns the main value of this token.
+		 *
+		 * @return The token value
+		 */
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(value, nested);
+		}
+
+		/**
+		 * Returns true if this token has nested content.
+		 *
+		 * @return true if nested tokens exist
+		 */
+		public boolean hasNested() {
+			return nested != null && !nested.isEmpty();
+		}
+
+		@Override
+		public String toString() {
+			return hasNested() ? nested.stream().map(Object::toString).collect(joining(",",value + "{","}")) : value;
+		}
+
+		/**
+		 * Sets the nested tokens for this token (package-private for tokenizer use).
+		 *
+		 * @param nested The list of nested tokens
+		 */
+		void setNested(List<Token> nested) {
+			this.nested = nested;
+		}
+	}
+
+	/**
 	 * Parser states for the finite state machine.
 	 */
 	enum ParseState {
@@ -162,92 +249,5 @@ class NestedTokenizer {
 			position++;
 		}
 		return position;
-	}
-
-	/**
-	 * Represents a parsed token with optional nested sub-tokens.
-	 *
-	 * <p>A Token contains a string value and may have nested tokens representing
-	 * the content inside braces. Tokens support deep nesting for complex hierarchical structures.</p>
-	 *
-	 * <h5 class='section'>Structure:</h5>
-	 * <ul>
-	 *    <li><b>value:</b> The main token value (part before any braces)</li>
-	 *    <li><b>nested:</b> Optional list of nested tokens (content within braces)</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <ul>
-	 *    <li><js>"foo"</js> → <js>Token{value="foo", nested=null}</js></li>
-	 *    <li><js>"foo{a,b}"</js> → <js>Token{value="foo", nested=[Token{value="a"}, Token{value="b"}]}</js></li>
-	 * </ul>
-	 */
-	public static class Token {
-
-		/** The main value of this token */
-		private final String value;
-
-		/** Nested tokens if this token has braced content, null otherwise */
-		private List<Token> nested;
-
-		/**
-		 * Creates a new token with the specified value.
-		 *
-		 * @param value The token value
-		 */
-		public Token(String value) {
-			this.value = value != null ? value : "";
-		}
-
-		/**
-		 * Returns the main value of this token.
-		 *
-		 * @return The token value
-		 */
-		public String getValue() {
-			return value;
-		}
-
-		/**
-		 * Returns true if this token has nested content.
-		 *
-		 * @return true if nested tokens exist
-		 */
-		public boolean hasNested() {
-			return nested != null && !nested.isEmpty();
-		}
-
-		/**
-		 * Returns an unmodifiable view of the nested tokens.
-		 *
-		 * @return unmodifiable list of nested tokens, or empty list if none
-		 */
-		public List<Token> getNested() {
-			return nested != null ? unmodifiableList(nested) : emptyList();
-		}
-
-		/**
-		 * Sets the nested tokens for this token (package-private for tokenizer use).
-		 *
-		 * @param nested The list of nested tokens
-		 */
-		void setNested(List<Token> nested) {
-			this.nested = nested;
-		}
-
-		@Override
-		public String toString() {
-			return hasNested() ? nested.stream().map(Object::toString).collect(joining(",",value + "{","}")) : value;
-		}
-
-		@Override
-		public boolean equals(Object o) {
-			return (o instanceof Token o2) && eq(this, o2, (x,y)->eq(x.value, y.value) && eq(x.nested, y.nested));
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(value, nested);
-		}
 	}
 }

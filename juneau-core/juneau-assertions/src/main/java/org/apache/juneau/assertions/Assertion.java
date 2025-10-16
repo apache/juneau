@@ -73,9 +73,35 @@ public class Assertion {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Convenience method for getting the array class of the specified element type.
+	 *
+	 * @param <E> The element type.
+	 * @param c The object to get the class name for.
+	 * @return The class name for an object.
+	 */
+	@SuppressWarnings("unchecked")
+	protected static <E> Class<E[]> arrayClass(Class<E> c) {
+		return (Class<E[]>)Array.newInstance(c,0).getClass();
+	}
+	/**
+	 * Convenience method for getting the class name for an object.
+	 *
+	 * @param o The object to get the class name for.
+	 * @return The class name for an object.
+	 */
+	protected static String className(Object o) {
+		return ClassUtils.className(o);
+	}
 	private String msg;
 	private Object[] msgArgs;
+
 	private PrintStream out = System.err;  // NOSONAR - Intentional.
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Config
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private Class<? extends RuntimeException> throwable;
 
 	/**
@@ -91,10 +117,6 @@ public class Assertion {
 			this.throwable = creator.throwable;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Config
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Allows you to override the assertion failure message.
@@ -123,15 +145,6 @@ public class Assertion {
 	}
 
 	/**
-	 * If an error occurs, send the error message to STDOUT instead of STDERR.
-	 *
-	 * @return This object.
-	 */
-	public Assertion setStdOut() {
-		return setOut(System.out);  // NOSONAR - Intentional.
-	}
-
-	/**
 	 * If an error occurs, send the error message to the specified stream instead of STDERR.
 	 *
 	 * @param value
@@ -154,6 +167,22 @@ public class Assertion {
 	 */
 	public Assertion setSilent() {
 		return setOut(null);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * If an error occurs, send the error message to STDOUT instead of STDERR.
+	 *
+	 * @return This object.
+	 */
+	public Assertion setStdOut() {
+		return setOut(System.out);  // NOSONAR - Intentional.
 	}
 
 	/**
@@ -186,13 +215,6 @@ public class Assertion {
 		this.throwable = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Fluent setters
-	//-----------------------------------------------------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------------------------------------
-	// Utility methods
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Creates a new {@link BasicAssertionError}.
@@ -235,26 +257,5 @@ public class Assertion {
 			}
 		}
 		return new BasicAssertionError(cause, msg);
-	}
-
-	/**
-	 * Convenience method for getting the class name for an object.
-	 *
-	 * @param o The object to get the class name for.
-	 * @return The class name for an object.
-	 */
-	protected static String className(Object o) {
-		return ClassUtils.className(o);
-	}
-
-	/**
-	 * Convenience method for getting the array class of the specified element type.
-	 *
-	 * @param <E> The element type.
-	 * @param c The object to get the class name for.
-	 * @return The class name for an object.
-	 */
-	protected static <E> Class<E[]> arrayClass(Class<E> c) {
-		return (Class<E[]>)Array.newInstance(c,0).getClass();
 	}
 }

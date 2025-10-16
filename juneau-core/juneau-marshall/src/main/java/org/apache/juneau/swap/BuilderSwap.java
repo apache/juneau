@@ -38,105 +38,6 @@ import org.apache.juneau.reflect.*;
 @SuppressWarnings("unchecked")
 public class BuilderSwap<T,B> {
 
-	private final Class<T> objectClass;
-	private final Class<B> builderClass;
-	private final Constructor<T> objectConstructor;          // public Pojo(Builder);
-	private final Constructor<B> builderConstructor;       // protected Builder();
-	private final MethodInfo createBuilderMethod;          // Builder create();
-	private final MethodInfo createObjectMethod;             // Pojo build();
-	private ClassMeta<?> builderClassMeta;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param objectClass The object class created by the builder class.
-	 * @param builderClass The builder class.
-	 * @param objectConstructor The object constructor that takes in a builder as a parameter.
-	 * @param builderConstructor The builder no-arg constructor.
-	 * @param createBuilderMethod The static create() method on the object class.
-	 * @param createObjectMethod The build() method on the builder class.
-	 */
-	protected BuilderSwap(Class<T> objectClass, Class<B> builderClass, Constructor<T> objectConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod, MethodInfo createObjectMethod) {
-		this.objectClass = objectClass;
-		this.builderClass = builderClass;
-		this.objectConstructor = objectConstructor;
-		this.builderConstructor = builderConstructor;
-		this.createBuilderMethod = createBuilderMethod;
-		this.createObjectMethod = createObjectMethod;
-	}
-
-	/**
-	 * The object class.
-	 *
-	 * @return The object class.
-	 */
-	public Class<T> getObjectClass() {
-		return objectClass;
-	}
-
-	/**
-	 * The builder class.
-	 *
-	 * @return The builder class.
-	 */
-	public Class<B> getBuilderClass() {
-		return builderClass;
-	}
-
-	/**
-	 * Returns the {@link ClassMeta} of the transformed class type.
-	 *
-	 * <p>
-	 * This value is cached for quick lookup.
-	 *
-	 * @param session
-	 * 	The bean context to use to get the class meta.
-	 * 	This is always going to be the same bean context that created this swap.
-	 * @return The {@link ClassMeta} of the transformed class type.
-	 */
-	public ClassMeta<?> getBuilderClassMeta(BeanSession session) {
-		if (builderClassMeta == null)
-			builderClassMeta = session.getClassMeta(getBuilderClass());
-		return builderClassMeta;
-	}
-
-	/**
-	 * Creates a new builder object.
-	 *
-	 * @param session The current bean session.
-	 * @param hint A hint about the class type.
-	 * @return A new object.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 */
-	public B create(BeanSession session, ClassMeta<?> hint) throws ExecutableException {
-		if (createBuilderMethod != null)
-			return (B)createBuilderMethod.invoke(null);
-		try {
-			return builderConstructor.newInstance();
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			throw new ExecutableException(e);
-		}
-	}
-
-	/**
-	 * Creates a new object from the specified builder.
-	 *
-	 * @param session The current bean session.
-	 * @param builder The object builder.
-	 * @param hint A hint about the class type.
-	 * @return A new object.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 */
-	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
-		if (createObjectMethod != null)
-			return (T)createObjectMethod.invoke(builder);
-		try {
-			return objectConstructor.newInstance(builder);
-		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
-			throw new ExecutableException(e);
-		}
-	}
-
 	/**
 	 * Creates a BuilderSwap from the specified builder class if it qualifies as one.
 	 *
@@ -177,7 +78,6 @@ public class BuilderSwap<T,B> {
 
 		return new BuilderSwap(objectClass, builderClass, objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), createBuilderMethod, createObjectMethod);
 	}
-
 	/**
 	 * Creates a BuilderSwap from the specified object class if it has one.
 	 *
@@ -233,7 +133,14 @@ public class BuilderSwap<T,B> {
 
 		return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);
 	}
-
+	private static MethodInfo getBuilderBuildMethod(ClassInfo c) {
+		return c.getDeclaredMethod(
+			x -> x.isNotStatic()
+			&& x.hasNoParams()
+			&& (!x.hasReturnType(void.class))
+			&& x.hasName("build")
+		);
+	}
 	private static MethodInfo getBuilderCreateMethod(ClassInfo c) {
 		return c.getPublicMethod(
 			x -> x.isStatic()
@@ -242,20 +149,113 @@ public class BuilderSwap<T,B> {
 			&& hasConstructorThatTakesType(c, x.getReturnType())
 		);
 	}
-
 	private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {
 		return c.getPublicConstructor(
 			x -> x.hasNumParams(1)
 			&& x.hasParamTypes(argType)
 		) != null;
 	}
+	private final Class<T> objectClass;
+	private final Class<B> builderClass;
 
-	private static MethodInfo getBuilderBuildMethod(ClassInfo c) {
-		return c.getDeclaredMethod(
-			x -> x.isNotStatic()
-			&& x.hasNoParams()
-			&& (!x.hasReturnType(void.class))
-			&& x.hasName("build")
-		);
+	private final Constructor<T> objectConstructor;          // public Pojo(Builder);
+
+	private final Constructor<B> builderConstructor;       // protected Builder();
+
+	private final MethodInfo createBuilderMethod;          // Builder create();
+
+	private final MethodInfo createObjectMethod;             // Pojo build();
+
+	private ClassMeta<?> builderClassMeta;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param objectClass The object class created by the builder class.
+	 * @param builderClass The builder class.
+	 * @param objectConstructor The object constructor that takes in a builder as a parameter.
+	 * @param builderConstructor The builder no-arg constructor.
+	 * @param createBuilderMethod The static create() method on the object class.
+	 * @param createObjectMethod The build() method on the builder class.
+	 */
+	protected BuilderSwap(Class<T> objectClass, Class<B> builderClass, Constructor<T> objectConstructor, Constructor<B> builderConstructor, MethodInfo createBuilderMethod, MethodInfo createObjectMethod) {
+		this.objectClass = objectClass;
+		this.builderClass = builderClass;
+		this.objectConstructor = objectConstructor;
+		this.builderConstructor = builderConstructor;
+		this.createBuilderMethod = createBuilderMethod;
+		this.createObjectMethod = createObjectMethod;
+	}
+
+	/**
+	 * Creates a new object from the specified builder.
+	 *
+	 * @param session The current bean session.
+	 * @param builder The object builder.
+	 * @param hint A hint about the class type.
+	 * @return A new object.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public T build(BeanSession session, B builder, ClassMeta<?> hint) throws ExecutableException {
+		if (createObjectMethod != null)
+			return (T)createObjectMethod.invoke(builder);
+		try {
+			return objectConstructor.newInstance(builder);
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
+	}
+
+	/**
+	 * Creates a new builder object.
+	 *
+	 * @param session The current bean session.
+	 * @param hint A hint about the class type.
+	 * @return A new object.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public B create(BeanSession session, ClassMeta<?> hint) throws ExecutableException {
+		if (createBuilderMethod != null)
+			return (B)createBuilderMethod.invoke(null);
+		try {
+			return builderConstructor.newInstance();
+		} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+			throw new ExecutableException(e);
+		}
+	}
+
+	/**
+	 * The builder class.
+	 *
+	 * @return The builder class.
+	 */
+	public Class<B> getBuilderClass() {
+		return builderClass;
+	}
+
+	/**
+	 * Returns the {@link ClassMeta} of the transformed class type.
+	 *
+	 * <p>
+	 * This value is cached for quick lookup.
+	 *
+	 * @param session
+	 * 	The bean context to use to get the class meta.
+	 * 	This is always going to be the same bean context that created this swap.
+	 * @return The {@link ClassMeta} of the transformed class type.
+	 */
+	public ClassMeta<?> getBuilderClassMeta(BeanSession session) {
+		if (builderClassMeta == null)
+			builderClassMeta = session.getClassMeta(getBuilderClass());
+		return builderClassMeta;
+	}
+
+	/**
+	 * The object class.
+	 *
+	 * @return The object class.
+	 */
+	public Class<T> getObjectClass() {
+		return objectClass;
 	}
 }

@@ -30,29 +30,6 @@ import java.util.*;
  * </ul>
  */
 public class SortArgs {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param args
-	 * 	Comma-delimited list of sort arguments.
-	 * 	<br>Values are of the following forms:
-	 * 	<ul>
-	 * 		<li><js>"column"</js> - Sort column ascending.
-	 * 		<li><js>"column+"</js> - Sort column ascending.
-	 * 		<li><js>"column-"</js> - Sort column descending.
-	 * 	</ul>
-	 * @return A new {@link SortArgs} object.
-	 */
-	public static SortArgs create(String args) {
-		if (args == null) return null;
-		return new SortArgs(args);
-	}
-
 	/**
 	 * Static creator.
 	 *
@@ -71,16 +48,10 @@ public class SortArgs {
 		return new SortArgs(args);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final Map<String,Boolean> sort;
-
 	/**
-	 * Constructor.
+	 * Static creator.
 	 *
-	 * @param sortArgs
+	 * @param args
 	 * 	Comma-delimited list of sort arguments.
 	 * 	<br>Values are of the following forms:
 	 * 	<ul>
@@ -88,10 +59,13 @@ public class SortArgs {
 	 * 		<li><js>"column+"</js> - Sort column ascending.
 	 * 		<li><js>"column-"</js> - Sort column descending.
 	 * 	</ul>
+	 * @return A new {@link SortArgs} object.
 	 */
-	public SortArgs(String sortArgs) {
-		this(alist(splita(sortArgs)));
+	public static SortArgs create(String args) {
+		if (args == null) return null;
+		return new SortArgs(args);
 	}
+	private final Map<String,Boolean> sort;
 
 	/**
 	 * Constructor.
@@ -116,6 +90,22 @@ public class SortArgs {
 			sort.put(s, isDesc);
 		});
 		this.sort = u(sort);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param sortArgs
+	 * 	Comma-delimited list of sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
+	 */
+	public SortArgs(String sortArgs) {
+		this(alist(splita(sortArgs)));
 	}
 
 	/**

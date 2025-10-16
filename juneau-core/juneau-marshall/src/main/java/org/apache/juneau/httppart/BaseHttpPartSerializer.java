@@ -31,11 +31,6 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 public abstract class BaseHttpPartSerializer extends BeanContextable implements HttpPartSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -55,11 +50,6 @@ public abstract class BaseHttpPartSerializer extends BeanContextable implements 
 			super(builder);
 		}
 	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

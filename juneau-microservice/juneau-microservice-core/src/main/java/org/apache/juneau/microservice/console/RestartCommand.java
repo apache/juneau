@@ -35,13 +35,10 @@ public class RestartCommand extends ConsoleCommand {
 	private final Messages mb = Messages.of(RestartCommand.class, "Messages");
 
 	@Override /* Overridden from ConsoleCommand */
-	public String getName() {
-		return "restart";
-	}
-
-	@Override /* Overridden from ConsoleCommand */
-	public String getInfo() {
-		return mb.getString("info");
+	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
+		Microservice.getInstance().stop();
+		Microservice.getInstance().start();
+		return true;
 	}
 
 	@Override /* Overridden from ConsoleCommand */
@@ -50,9 +47,12 @@ public class RestartCommand extends ConsoleCommand {
 	}
 
 	@Override /* Overridden from ConsoleCommand */
-	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
-		Microservice.getInstance().stop();
-		Microservice.getInstance().start();
-		return true;
+	public String getInfo() {
+		return mb.getString("info");
+	}
+
+	@Override /* Overridden from ConsoleCommand */
+	public String getName() {
+		return "restart";
 	}
 }

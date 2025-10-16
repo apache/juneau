@@ -32,9 +32,33 @@ import java.util.function.*;
  * @serial exclude
  */
 public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConcurrentCache.Key<K1,K2>,V> {
-	private static final long serialVersionUID = 1L;
+	static class Key<K1,K2> {
+		final K1 k1;
+		final K2 k2;
+		final int hashCode;
 
+		Key(K1 k1, K2 k2) {
+			this.k1 = k1;
+			this.k2 = k2;
+			this.hashCode = 31*(k1 == null ? 0 : k1.hashCode()) + (k2 == null ? 0 : k2.hashCode());
+		}
+
+		@Override /* Overridden from Object */
+		@SuppressWarnings("unchecked")
+		public boolean equals(Object o) {
+			Key<K1,K2> ko = (Key<K1,K2>)o;
+			return Objects.equals(k1, ko.k1) && Objects.equals(k2, ko.k2);
+		}
+
+		@Override /* Overridden from Object */
+		public int hashCode() {
+			return hashCode;
+		}
+	}
+
+	private static final long serialVersionUID = 1L;
 	private final boolean disabled;
+
 	private final BiFunction<K1,K2,V> supplier;
 
 	/**
@@ -52,21 +76,6 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 	public TwoKeyConcurrentCache(boolean disabled, BiFunction<K1,K2,V> supplier) {
 		this.disabled = disabled;
 		this.supplier = supplier;
-	}
-
-	/**
-	 * Adds an entry to this map.
-	 *
-	 * @param key1 Key part 1.  Can be <jk>null</jk>.
-	 * @param key2 Key part 2.  Can be <jk>null</jk>.
-	 * @param value Value.
-	 * @return The previous value if there was one.
-	 */
-	public V put(K1 key1, K2 key2, V value) {
-		if (disabled)
-			return null;
-		Key<K1,K2> key = new Key<>(key1, key2);
-		return super.put(key, value);
 	}
 
 	/**
@@ -88,27 +97,18 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 		return v;
 	}
 
-	static class Key<K1,K2> {
-		final K1 k1;
-		final K2 k2;
-		final int hashCode;
-
-		Key(K1 k1, K2 k2) {
-			this.k1 = k1;
-			this.k2 = k2;
-			this.hashCode = 31*(k1 == null ? 0 : k1.hashCode()) + (k2 == null ? 0 : k2.hashCode());
-		}
-
-		@Override /* Overridden from Object */
-		public int hashCode() {
-			return hashCode;
-		}
-
-		@Override /* Overridden from Object */
-		@SuppressWarnings("unchecked")
-		public boolean equals(Object o) {
-			Key<K1,K2> ko = (Key<K1,K2>)o;
-			return Objects.equals(k1, ko.k1) && Objects.equals(k2, ko.k2);
-		}
+	/**
+	 * Adds an entry to this map.
+	 *
+	 * @param key1 Key part 1.  Can be <jk>null</jk>.
+	 * @param key2 Key part 2.  Can be <jk>null</jk>.
+	 * @param value Value.
+	 * @return The previous value if there was one.
+	 */
+	public V put(K1 key1, K2 key2, V value) {
+		if (disabled)
+			return null;
+		Key<K1,K2> key = new Key<>(key1, key2);
+		return super.put(key, value);
 	}
 }

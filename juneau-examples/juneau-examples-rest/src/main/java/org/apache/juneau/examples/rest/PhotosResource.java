@@ -64,11 +64,6 @@ import java.net.*;
 )
 public class PhotosResource extends BasicRestServlet {
 
-	private static final long serialVersionUID = 1L;
-
-	// Our cache of photos
-	private Map<Integer,Photo> photos = new TreeMap<>();
-
 	/** Bean class for storing photos */
 	public static class Photo {
 		private int id;
@@ -77,6 +72,15 @@ public class PhotosResource extends BasicRestServlet {
 		Photo(int id, BufferedImage image) {
 			this.id = id;
 			this.image = image;
+		}
+
+		/**
+		 * The photo ID
+		 *
+		 * @return The photo ID.
+		 */
+		public int getID() {
+			return id;
 		}
 
 		/**
@@ -91,15 +95,41 @@ public class PhotosResource extends BasicRestServlet {
 				throw new IllegalStateException(e); // Shouldn't happen.
 			}
 		}
+	}
 
-		/**
-		 * The photo ID
-		 *
-		 * @return The photo ID.
-		 */
-		public int getID() {
-			return id;
-		}
+	private static final long serialVersionUID = 1L;
+
+	// Our cache of photos
+	private Map<Integer,Photo> photos = new TreeMap<>();
+
+	/**
+	 * [HTTP PUT /photos/{id}]
+	 * PUT request handler.
+	 *
+	 * @param id The photo ID.
+	 * @param image The photo image.
+	 * @return OK.
+	 */
+	@RestPut(path="/{id}", parsers=ImageParser.class)
+	public Ok addPhoto(@Path("id") int id, @Content BufferedImage image) {
+		photos.put(id, new Photo(id, image));
+		return Ok.OK;
+	}
+
+	/**
+	 * [HTTP DELETE /photos/{id}]
+	 * DELETE request handler
+	 *
+	 * @param id The photo ID.
+	 * @return OK.
+	 * @throws NotFound If photo not found.
+	 */
+	@RestDelete("/{id}")
+	public Ok deletePhoto(@Path("id") int id) throws NotFound {
+		Photo p = photos.remove(id);
+		if (p == null)
+			throw new NotFound("Photo not found");
+		return Ok.OK;
 	}
 
 	/**
@@ -130,20 +160,6 @@ public class PhotosResource extends BasicRestServlet {
 	}
 
 	/**
-	 * [HTTP PUT /photos/{id}]
-	 * PUT request handler.
-	 *
-	 * @param id The photo ID.
-	 * @param image The photo image.
-	 * @return OK.
-	 */
-	@RestPut(path="/{id}", parsers=ImageParser.class)
-	public Ok addPhoto(@Path("id") int id, @Content BufferedImage image) {
-		photos.put(id, new Photo(id, image));
-		return Ok.OK;
-	}
-
-	/**
 	 * [HTTP POST /photos]
 	 * POST request handler.
 	 *
@@ -156,21 +172,5 @@ public class PhotosResource extends BasicRestServlet {
 		Photo p = new Photo(id, image);
 		photos.put(id, p);
 		return p;
-	}
-
-	/**
-	 * [HTTP DELETE /photos/{id}]
-	 * DELETE request handler
-	 *
-	 * @param id The photo ID.
-	 * @return OK.
-	 * @throws NotFound If photo not found.
-	 */
-	@RestDelete("/{id}")
-	public Ok deletePhoto(@Path("id") int id) throws NotFound {
-		Photo p = photos.remove(id);
-		if (p == null)
-			throw new NotFound("Photo not found");
-		return Ok.OK;
 	}
 }

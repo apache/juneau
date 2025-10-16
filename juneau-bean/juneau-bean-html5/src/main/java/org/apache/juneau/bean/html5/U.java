@@ -81,7 +81,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#u() u()}
- * 		<li class='jm'>{@link HtmlBuilder#u(Object, Object...) u(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#u(Object...) u(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -106,10 +106,6 @@ public class U extends HtmlElementMixed {
 	public U(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public U _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -119,6 +115,30 @@ public class U extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public U accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public U attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public U attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public U child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public U children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -479,30 +499,6 @@ public class U extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public U translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public U child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public U children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public U attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public U attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

@@ -27,18 +27,18 @@ import org.apache.juneau.*;
 public interface SoapXmlMetaProvider extends AnnotationProvider {
 
 	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	SoapXmlClassMeta getSoapXmlClassMeta(ClassMeta<?> cm);
-
-	/**
 	 * Returns the language-specific metadata on the specified bean property.
 	 *
 	 * @param bpm The bean property to return the metadata on.
 	 * @return The metadata.
 	 */
 	SoapXmlBeanPropertyMeta getSoapXmlBeanPropertyMeta(BeanPropertyMeta bpm);
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	SoapXmlClassMeta getSoapXmlClassMeta(ClassMeta<?> cm);
 }

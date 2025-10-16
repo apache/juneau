@@ -42,7 +42,7 @@ import java.util.stream.*;
  *    <li><b>{@link #iteratorListifier()}</b> - Converts {@link Iterator} objects to lists (consumes iterator)</li>
  *    <li><b>{@link #enumerationListifier()}</b> - Converts {@link Enumeration} objects to lists</li>
  *    <li><b>{@link #streamListifier()}</b> - Converts {@link Stream} objects to lists (terminates stream)</li>
- *    <li><b>{@link #mapListifier()}</b> - Converts {@link Map} to list of {@link Map.Entry} objects</li>
+ *    <li><b>{@link #mapListifier()}</b> - Converts {@link Map} to list of {@link java.util.Map.Entry} objects</li>
  * </ul>
  *
  * <h5 class='section'>Usage Example:</h5>
@@ -78,11 +78,6 @@ import java.util.stream.*;
  */
 @SuppressWarnings("rawtypes")
 public class Listifiers {
-
-	/**
-	 * Constructor.
-	 */
-	private Listifiers() {}
 
 	/**
 	 * Returns a listifier for {@link Collection} objects that converts them to {@link ArrayList}.
@@ -135,6 +130,7 @@ public class Listifiers {
 	 * @see TreeSet
 	 * @see LinkedHashSet
 	 */
+	@SuppressWarnings("unchecked")
 	public static Listifier<Collection> collectionListifier() {
 		return (bc, collection) -> {
 			if (collection instanceof Set && !(collection instanceof SortedSet) && !(collection instanceof LinkedHashSet)) {
@@ -142,6 +138,40 @@ public class Listifiers {
 			}
 			return new ArrayList<>(collection);
 		};
+	}
+
+	/**
+	 * Returns a listifier for {@link Enumeration} objects that converts them to lists.
+	 *
+	 * <p><b>Warning:</b> This listifier consumes the enumeration during conversion. After listification,
+	 * the enumeration will be exhausted and cannot be used again.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Element extraction:</b> Consumes all remaining elements from the enumeration</li>
+	 *    <li><b>Order preservation:</b> Maintains the enumeration's order in the resulting list</li>
+	 *    <li><b>Enumeration exhaustion:</b> The enumeration becomes unusable after conversion</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test with Vector enumeration</jc>
+	 *    <jk>var</jk> <jv>vector</jv> = <jk>new</jk> Vector&lt;&gt;(List.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));
+	 *    <jk>var</jk> <jv>enumeration</jv> = <jv>vector</jv>.elements();
+	 *    <jsm>assertList</jsm>(<jv>enumeration</jv>, <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
+	 *
+	 *    <jc>// Test with Hashtable enumeration</jc>
+	 *    <jk>var</jk> <jv>table</jv> = <jk>new</jk> Hashtable&lt;&gt;(Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>));
+	 *    <jk>var</jk> <jv>keys</jv> = <jv>table</jv>.keys();
+	 *    <jsm>assertList</jsm>(<jv>keys</jv>, <js>"key1"</js>);
+	 * </p>
+	 *
+	 * @return A {@link Listifier} for {@link Enumeration} objects
+	 * @see Enumeration
+	 */
+	@SuppressWarnings("unchecked")
+	public static Listifier<Enumeration> enumerationListifier() {
+		return (bc, enumeration) -> list(enumeration);
 	}
 
 	/**
@@ -172,6 +202,7 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Iterable} objects
 	 * @see Iterable
 	 */
+	@SuppressWarnings("unchecked")
 	public static Listifier<Iterable> iterableListifier() {
 		return (bc, iterable) -> stream(iterable.spliterator(), false).toList();
 	}
@@ -212,86 +243,13 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Iterator} objects
 	 * @see Iterator
 	 */
+	@SuppressWarnings("unchecked")
 	public static Listifier<Iterator> iteratorListifier() {
 		return (bc, iterator) -> stream(spliteratorUnknownSize(iterator, 0), false).toList();
 	}
 
 	/**
-	 * Returns a listifier for {@link Enumeration} objects that converts them to lists.
-	 *
-	 * <p><b>Warning:</b> This listifier consumes the enumeration during conversion. After listification,
-	 * the enumeration will be exhausted and cannot be used again.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Element extraction:</b> Consumes all remaining elements from the enumeration</li>
-	 *    <li><b>Order preservation:</b> Maintains the enumeration's order in the resulting list</li>
-	 *    <li><b>Enumeration exhaustion:</b> The enumeration becomes unusable after conversion</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test with Vector enumeration</jc>
-	 *    <jk>var</jk> <jv>vector</jv> = <jk>new</jk> Vector&lt;&gt;(List.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));
-	 *    <jk>var</jk> <jv>enumeration</jv> = <jv>vector</jv>.elements();
-	 *    <jsm>assertList</jsm>(<jv>enumeration</jv>, <js>"x"</js>, <js>"y"</js>, <js>"z"</js>);
-	 *
-	 *    <jc>// Test with Hashtable enumeration</jc>
-	 *    <jk>var</jk> <jv>table</jv> = <jk>new</jk> Hashtable&lt;&gt;(Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>));
-	 *    <jk>var</jk> <jv>keys</jv> = <jv>table</jv>.keys();
-	 *    <jsm>assertList</jsm>(<jv>keys</jv>, <js>"key1"</js>);
-	 * </p>
-	 *
-	 * @return A {@link Listifier} for {@link Enumeration} objects
-	 * @see Enumeration
-	 */
-	public static Listifier<Enumeration> enumerationListifier() {
-		return (bc, enumeration) -> list(enumeration);
-	}
-
-	/**
-	 * Returns a listifier for {@link Stream} objects that converts them to lists.
-	 *
-	 * <p><b>Warning:</b> This listifier terminates the stream during conversion. After listification,
-	 * the stream is closed and cannot be used again.</p>
-	 *
-	 * <h5 class='section'>Behavior:</h5>
-	 * <ul>
-	 *    <li><b>Stream termination:</b> Calls toList() to collect all stream elements</li>
-	 *    <li><b>Order preservation:</b> Maintains stream order in the resulting list</li>
-	 *    <li><b>Stream closure:</b> The stream becomes unusable after conversion</li>
-	 * </ul>
-	 *
-	 * <h5 class='section'>Usage Examples:</h5>
-	 * <p class='bjava'>
-	 *    <jc>// Test with filtered stream</jc>
-	 *    <jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>10</jv>)
-	 *       .filter(<jv>n</jv> -&gt; <jv>n</jv> % <jv>2</jv> == <jv>0</jv>)
-	 *       .boxed();
-	 *    <jsm>assertList</jsm>(<jv>numbers</jv>, <jv>2</jv>, <jv>4</jv>, <jv>6</jv>, <jv>8</jv>);
-	 *
-	 *    <jc>// Test with mapped stream</jc>
-	 *    <jk>var</jk> <jv>words</jv> = Stream.<jsm>of</jsm>(<js>"hello"</js>, <js>"world"</js>)
-	 *       .map(String::toUpperCase);
-	 *    <jsm>assertList</jsm>(<jv>words</jv>, <js>"HELLO"</js>, <js>"WORLD"</js>);
-	 * </p>
-	 *
-	 * <h5 class='section'>Important Notes:</h5>
-	 * <ul>
-	 *    <li><b>One-time use:</b> The stream is terminated and cannot be reused</li>
-	 *    <li><b>Lazy evaluation:</b> Stream operations are executed during listification</li>
-	 *    <li><b>Exception handling:</b> Stream operation exceptions are propagated</li>
-	 * </ul>
-	 *
-	 * @return A {@link Listifier} for {@link Stream} objects
-	 * @see Stream
-	 */
-	public static Listifier<Stream> streamListifier() {
-		return (bc, stream) -> stream.toList();
-	}
-
-	/**
-	 * Returns a listifier for {@link Map} objects that converts them to lists of {@link Map.Entry} objects.
+	 * Returns a listifier for {@link Map} objects that converts them to lists of {@link java.util.Map.Entry} objects.
 	 *
 	 * <p>This listifier enables maps to be processed as lists in BCT assertions, making it easy
 	 * to test map contents using list-based assertion methods.</p>
@@ -345,10 +303,11 @@ public class Listifiers {
 	 *
 	 * @return A {@link Listifier} for {@link Map} objects
 	 * @see Map
-	 * @see Map.Entry
+	 * @see java.util.Map.Entry
 	 * @see TreeMap
 	 * @see LinkedHashMap
 	 */
+	@SuppressWarnings("unchecked")
 	public static Listifier<Map> mapListifier() {
 		return (bc, map) -> {
 			if (!(map instanceof SortedMap) && !(map instanceof LinkedHashMap)) {
@@ -357,4 +316,50 @@ public class Listifiers {
 			return new ArrayList<>(map.entrySet());
 		};
 	}
+
+	/**
+	 * Returns a listifier for {@link Stream} objects that converts them to lists.
+	 *
+	 * <p><b>Warning:</b> This listifier terminates the stream during conversion. After listification,
+	 * the stream is closed and cannot be used again.</p>
+	 *
+	 * <h5 class='section'>Behavior:</h5>
+	 * <ul>
+	 *    <li><b>Stream termination:</b> Calls toList() to collect all stream elements</li>
+	 *    <li><b>Order preservation:</b> Maintains stream order in the resulting list</li>
+	 *    <li><b>Stream closure:</b> The stream becomes unusable after conversion</li>
+	 * </ul>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test with filtered stream</jc>
+	 *    <jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>10</jv>)
+	 *       .filter(<jv>n</jv> -&gt; <jv>n</jv> % <jv>2</jv> == <jv>0</jv>)
+	 *       .boxed();
+	 *    <jsm>assertList</jsm>(<jv>numbers</jv>, <jv>2</jv>, <jv>4</jv>, <jv>6</jv>, <jv>8</jv>);
+	 *
+	 *    <jc>// Test with mapped stream</jc>
+	 *    <jk>var</jk> <jv>words</jv> = Stream.<jsm>of</jsm>(<js>"hello"</js>, <js>"world"</js>)
+	 *       .map(String::toUpperCase);
+	 *    <jsm>assertList</jsm>(<jv>words</jv>, <js>"HELLO"</js>, <js>"WORLD"</js>);
+	 * </p>
+	 *
+	 * <h5 class='section'>Important Notes:</h5>
+	 * <ul>
+	 *    <li><b>One-time use:</b> The stream is terminated and cannot be reused</li>
+	 *    <li><b>Lazy evaluation:</b> Stream operations are executed during listification</li>
+	 *    <li><b>Exception handling:</b> Stream operation exceptions are propagated</li>
+	 * </ul>
+	 *
+	 * @return A {@link Listifier} for {@link Stream} objects
+	 * @see Stream
+	 */
+	public static Listifier<Stream> streamListifier() {
+		return (bc, stream) -> stream.toList();
+	}
+
+	/**
+	 * Constructor.
+	 */
+	private Listifiers() {}
 }

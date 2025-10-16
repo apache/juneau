@@ -30,25 +30,6 @@ import org.apache.juneau.svl.*;
 public class PlainTextConfigAnnotation {
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.plaintext.PlainTextSerializer.Builder}.
-	 */
-	public static class SerializerApply extends AnnotationApplier<PlainTextConfig,PlainTextSerializer.Builder> {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param vr The resolver for resolving values in annotations.
-		 */
-		public SerializerApply(VarResolverSession vr) {
-			super(PlainTextConfig.class, PlainTextSerializer.Builder.class, vr);
-		}
-
-		@Override
-		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {
-		}
-	}
-
-	/**
 	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.plaintext.PlainTextParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<PlainTextConfig,PlainTextParser.Builder> {
@@ -64,6 +45,25 @@ public class PlainTextConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextParser.Builder b) {
+		}
+	}
+
+	/**
+	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.plaintext.PlainTextSerializer.Builder}.
+	 */
+	public static class SerializerApply extends AnnotationApplier<PlainTextConfig,PlainTextSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public SerializerApply(VarResolverSession vr) {
+			super(PlainTextConfig.class, PlainTextSerializer.Builder.class, vr);
+		}
+
+		@Override
+		public void apply(AnnotationInfo<PlainTextConfig> ai, PlainTextSerializer.Builder b) {
 		}
 	}
 }

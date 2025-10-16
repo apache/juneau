@@ -31,11 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicStringPart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -64,11 +59,6 @@ public class BasicStringPart extends BasicPart {
 			return null;
 		return new BasicStringPart(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final String value;
 	private final Supplier<String> supplier;
 
@@ -106,11 +96,6 @@ public class BasicStringPart extends BasicPart {
 		return new FluentStringAssertion<>(value(), this);
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return value();
-	}
-
 	/**
 	 * Returns The part value as a {@link String} wrapped in an {@link Optional}.
 	 *
@@ -118,6 +103,11 @@ public class BasicStringPart extends BasicPart {
 	 */
 	public Optional<String> asString() {
 		return Utils.opt(value());
+	}
+
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return value();
 	}
 
 	/**

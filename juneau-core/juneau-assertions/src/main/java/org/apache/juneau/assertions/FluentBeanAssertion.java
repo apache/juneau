@@ -100,21 +100,6 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentBeanAssertion(T value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -135,24 +120,34 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentBeanAssertion(T value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Overridden from FluentObjectAssertion */
-	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
-		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
-	}
-
 	/**
-	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
-	 * a new {@link MapAssertion}.
+	 * Extracts the specified property as an {@link FluentListAssertion}.
 	 *
-	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
-	 * @return This object.
+	 * @param names The names of the properties to extract.  Can also pass in comma-delimited lists.
+	 * @return An assertion of the property values.
 	 */
-	public FluentMapAssertion<String,Object,R> asPropertyMap(String...names) {
-		return new FluentMapAssertion<>(this, toBeanMap().getProperties(Utils.splita(names, ',')), returns());
+	public FluentListAssertion<Object,R> asProperties(String...names) {
+		BeanMap<T> bm = toBeanMap();
+		return new FluentListAssertion<>(this, stream(names).map(bm::get).toList(), returns());
 	}
 
 	/**
@@ -166,14 +161,19 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	/**
-	 * Extracts the specified property as an {@link FluentListAssertion}.
+	 * Extracts the specified fields of this bean into a simple map of key/value pairs and returns it as
+	 * a new {@link MapAssertion}.
 	 *
-	 * @param names The names of the properties to extract.  Can also pass in comma-delimited lists.
-	 * @return An assertion of the property values.
+	 * @param names The fields to extract.  Can also pass in comma-delimited lists.
+	 * @return This object.
 	 */
-	public FluentListAssertion<Object,R> asProperties(String...names) {
-		BeanMap<T> bm = toBeanMap();
-		return new FluentListAssertion<>(this, stream(names).map(bm::get).toList(), returns());
+	public FluentMapAssertion<String,Object,R> asPropertyMap(String...names) {
+		return new FluentMapAssertion<>(this, toBeanMap().getProperties(Utils.splita(names, ',')), returns());
+	}
+
+	@Override /* Overridden from FluentObjectAssertion */
+	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
+		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

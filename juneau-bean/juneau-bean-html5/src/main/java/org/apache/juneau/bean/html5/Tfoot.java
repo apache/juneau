@@ -98,10 +98,6 @@ public class Tfoot extends HtmlElementContainer {
 	public Tfoot(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
 	@Override /* Overridden from HtmlElement */
 	public Tfoot _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
@@ -111,6 +107,30 @@ public class Tfoot extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Tfoot accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Tfoot attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Tfoot attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Tfoot child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Tfoot children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -444,6 +464,12 @@ public class Tfoot extends HtmlElementContainer {
 		return this;
 	}
 
+	@Override /* Overridden from HtmlElementContainer */
+	public Tfoot setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
 	@Override /* Overridden from HtmlElement */
 	public Tfoot spellcheck(Object value) {
 		super.spellcheck(value);
@@ -471,36 +497,6 @@ public class Tfoot extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElement */
 	public Tfoot translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Tfoot child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Tfoot children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementContainer */
-	public Tfoot setChildren(List<Object> children) {
-		super.setChildren(children);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Tfoot attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Tfoot attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

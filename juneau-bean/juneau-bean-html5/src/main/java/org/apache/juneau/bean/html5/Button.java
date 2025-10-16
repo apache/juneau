@@ -65,7 +65,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#button() button()}
- * 		<li class='jm'>{@link HtmlBuilder#button(Object, Object...) button(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#button(String, Object...) button(String, Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -102,19 +102,67 @@ public class Button extends HtmlElementMixed {
 		type(type).children(children);
 	}
 
+	@Override /* Overridden from HtmlElement */
+	public Button _class(String value) {  // NOSONAR - Intentional naming.
+		super._class(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Button accesskey(String value) {
+		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Button attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Button attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-autofocus">autofocus</a> attribute.
 	 *
 	 * <p>
 	 * Automatically focus the form control when the page is loaded.
 	 *
-	 * @param autofocus
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
 	public Button autofocus(Object value) {
 		attr("autofocus", value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Button child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Button children(Object...value) {
+		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Button contenteditable(Object value) {
+		super.contenteditable(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Button dir(String value) {
+		super.dir(value);
 		return this;
 	}
 
@@ -132,7 +180,7 @@ public class Button extends HtmlElementMixed {
 	 * 	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param disabled
+	 * @param value
 	 * 	The new value for this attribute.
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
@@ -152,7 +200,7 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * The value should match the ID of a form element in the same document.
 	 *
-	 * @param form The ID of the form element to associate with this button.
+	 * @param value The ID of the form element to associate with this button.
 	 * @return This object.
 	 */
 	public Button form(String value) {
@@ -174,14 +222,13 @@ public class Button extends HtmlElementMixed {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param formaction The URL where the form data will be submitted.
+	 * @param value The URL where the form data will be submitted.
 	 * @return This object.
 	 */
 	public Button formaction(String value) {
 		attrUri("formaction", value);
 		return this;
 	}
-
 	/**
 	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-formenctype">formenctype</a> attribute.
 	 *
@@ -196,7 +243,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li><js>"text/plain"</js> - Plain text encoding</li>
 	 * </ul>
 	 *
-	 * @param formenctype The encoding type for form submission.
+	 * @param value The encoding type for form submission.
 	 * @return This object.
 	 */
 	public Button formenctype(String value) {
@@ -218,7 +265,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li><js>"dialog"</js> - Used for forms within dialog elements</li>
 	 * </ul>
 	 *
-	 * @param formmethod The HTTP method for form submission.
+	 * @param value The HTTP method for form submission.
 	 * @return This object.
 	 */
 	public Button formmethod(String value) {
@@ -242,7 +289,7 @@ public class Button extends HtmlElementMixed {
 	 *  	<li>Other values - Passed through as-is</li>
 	 * </ul>
 	 *
-	 * @param formnovalidate Whether to bypass form validation.
+	 * @param value Whether to bypass form validation.
 	 * @return This object.
 	 */
 	public Button formnovalidate(String value) {
@@ -266,112 +313,11 @@ public class Button extends HtmlElementMixed {
 	 *  	<li><js>"framename"</js> - Open in a named frame</li>
 	 * </ul>
 	 *
-	 * @param formtarget Where to display the form response.
+	 * @param value Where to display the form response.
 	 * @return This object.
 	 */
 	public Button formtarget(String value) {
 		attr("formtarget", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-menu">menu</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the ID of a menu element that should be displayed as a pop-up menu
-	 * when the button is activated.
-	 *
-	 * <p>
-	 * The value should match the ID of a menu element in the same document.
-	 *
-	 * @param menu The ID of the menu element to display as a pop-up.
-	 * @return This object.
-	 */
-	public Button menu(String value) {
-		attr("menu", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the name of the button. This name is used when the form is submitted and
-	 * can be used to access the element via the form.elements API.
-	 *
-	 * <p>
-	 * The name should be unique within the form and should not contain spaces or special characters.
-	 *
-	 * @param name The name of the button for submission and API access.
-	 * @return This object.
-	 */
-	public Button name(String value) {
-		attr("name", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-type">type</a> attribute.
-	 *
-	 * <p>
-	 * Specifies the type of button and its behavior when clicked.
-	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"submit"</js> - Submits the form (default)</li>
-	 * 	<li><js>"reset"</js> - Resets the form to its initial state</li>
-	 * 	<li><js>"button"</js> - Generic button with no default behavior</li>
-	 * </ul>
-	 *
-	 * @param type The type of button and its behavior.
-	 * @return This object.
-	 */
-	public Button type(String value) {
-		attr("type", value);
-		return this;
-	}
-
-	/**
-	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-value">value</a> attribute.
-	 *
-	 * <p>
-	 * Value to be used for form submission.
-	 *
-	 * @param value
-	 * 	The new value for this attribute.
-	 * 	Typically a {@link Number} or {@link String}.
-	 * @return This object.
-	 */
-	public Button value(Object value) {
-		attr("value", value);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-	@Override /* Overridden from HtmlElement */
-	public Button _class(String value) {  // NOSONAR - Intentional naming.
-		super._class(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Button accesskey(String value) {
-		super.accesskey(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Button contenteditable(Object value) {
-		super.contenteditable(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Button dir(String value) {
-		super.dir(value);
 		return this;
 	}
 
@@ -390,6 +336,42 @@ public class Button extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Button lang(String value) {
 		super.lang(value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-menu">menu</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the ID of a menu element that should be displayed as a pop-up menu
+	 * when the button is activated.
+	 *
+	 * <p>
+	 * The value should match the ID of a menu element in the same document.
+	 *
+	 * @param value The ID of the menu element to display as a pop-up.
+	 * @return This object.
+	 */
+	public Button menu(String value) {
+		attr("menu", value);
+		return this;
+	}
+
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the name of the button. This name is used when the form is submitted and
+	 * can be used to access the element via the form.elements API.
+	 *
+	 * <p>
+	 * The name should be unique within the form and should not contain spaces or special characters.
+	 *
+	 * @param value The name of the button for submission and API access.
+	 * @return This object.
+	 */
+	public Button name(String value) {
+		attr("name", value);
 		return this;
 	}
 
@@ -723,27 +705,41 @@ public class Button extends HtmlElementMixed {
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Button child(Object value) {
-		super.child(value);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-type">type</a> attribute.
+	 *
+	 * <p>
+	 * Specifies the type of button and its behavior when clicked.
+	 *
+	 * <p>
+	 * Possible values:
+	 * <ul>
+	 * 	<li><js>"submit"</js> - Submits the form (default)</li>
+	 * 	<li><js>"reset"</js> - Resets the form to its initial state</li>
+	 * 	<li><js>"button"</js> - Generic button with no default behavior</li>
+	 * </ul>
+	 *
+	 * @param value The type of button and its behavior.
+	 * @return This object.
+	 */
+	public Button type(String value) {
+		attr("type", value);
 		return this;
 	}
 
-	@Override /* Overridden from HtmlElementMixed */
-	public Button children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Button attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Button attrUri(String key, Object val) {
-		super.attrUri(key, val);
+	/**
+	 * <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-button-value">value</a> attribute.
+	 *
+	 * <p>
+	 * Value to be used for form submission.
+	 *
+	 * @param value
+	 * 	The new value for this attribute.
+	 * 	Typically a {@link Number} or {@link String}.
+	 * @return This object.
+	 */
+	public Button value(Object value) {
+		attr("value", value);
 		return this;
 	}
 }

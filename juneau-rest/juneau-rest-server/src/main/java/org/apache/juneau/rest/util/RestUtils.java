@@ -43,17 +43,8 @@ import jakarta.servlet.http.*;
 
  * </ul>
  */
+@SuppressWarnings("resource")
 public class RestUtils {
-
-	/**
-	 * Returns readable text for an HTTP response code.
-	 *
-	 * @param rc The HTTP response code.
-	 * @return Readable text for an HTTP response code, or <jk>null</jk> if it's an invalid code.
-	 */
-	public static String getHttpResponseText(int rc) {
-		return httpMsgs.get(rc);
-	}
 
 	private static Map<Integer,String> httpMsgs = mapBuilder(Integer.class, String.class)
 		.add(100, "Continue")
@@ -99,6 +90,32 @@ public class RestUtils {
 		.build()
 	;
 
+	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
+
+	/**
+	 * Normalizes the {@link RestOp#path()} value.
+	 *
+	 * @param path The path to normalize.
+	 * @return The normalized path.
+	 */
+	public static String fixMethodPath(String path) {
+		if (path == null)
+			return null;
+		if (path.equals("/"))
+			return path;
+		return trimTrailingSlashes(path);
+	}
+
+	/**
+	 * Returns readable text for an HTTP response code.
+	 *
+	 * @param rc The HTTP response code.
+	 * @return Readable text for an HTTP response code, or <jk>null</jk> if it's an invalid code.
+	 */
+	public static String getHttpResponseText(int rc) {
+		return httpMsgs.get(rc);
+	}
+
 	/**
 	 * Identical to {@link HttpServletRequest#getPathInfo()} but doesn't decode encoded characters.
 	 *
@@ -116,71 +133,72 @@ public class RestUtils {
 	}
 
 	/**
-	 * Efficiently trims the path info part from a request URI.
+	 * Returns <jk>true</jk> if the specified value is a valid context path.
 	 *
-	 * <p>
-	 * The result is the URI of the servlet itself.
+	 * The path must start with a "/" character but not end with a "/" character.
+	 * For servlets in the default (root) context, the value should be "".
 	 *
-	 * @param requestURI The value returned by {@link HttpServletRequest#getRequestURL()}
-	 * @param contextPath The value returned by {@link HttpServletRequest#getContextPath()}
-	 * @param servletPath The value returned by {@link HttpServletRequest#getServletPath()}
-	 * @return The same StringBuilder with remainder trimmed.
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified value is a valid context path.
 	 */
-	public static StringBuffer trimPathInfo(StringBuffer requestURI, String contextPath, String servletPath) {
-		if (servletPath.equals("/"))
-			servletPath = "";
-		if (contextPath.equals("/"))
-			contextPath = "";
+	public static boolean isValidContextPath(String value) {
+		if (value == null)
+			return false;
+		if (value.isEmpty())
+			return true;
+		if (value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
+			return false;
+		return true;
+	}
 
-		try {
-			// Given URL:  http://hostname:port/servletPath/extra
-			// We want:    http://hostname:port/servletPath
-			int sc = 0;
-			for (int i = 0; i < requestURI.length(); i++) {
-				char c = requestURI.charAt(i);
-				if (c == '/') {
-					sc++;
-					if (sc == 3) {
-						if (servletPath.isEmpty()) {
-							requestURI.setLength(i);
-							return requestURI;
-						}
+	/**
+	 * Returns <jk>true</jk> if the specified value is a valid path-info path.
+	 *
+	 * The extra path information follows the servlet path but precedes the query string and will start with a "/" character.
+	 * The value should be null if there was no extra path information.
+	 *
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified value is a valid path-info path.
+	 */
+	public static boolean isValidPathInfo(String value) {
+		if (value == null)
+			return true;
+		if (value.isEmpty() || value.charAt(0) != '/')
+			return false;
+		return true;
+	}
 
-						// Make sure context path follows the authority.
-						for (int j = 0; j < contextPath.length(); i++, j++)
-							if (requestURI.charAt(i) != contextPath.charAt(j))
-								throw new Exception("case=1");
+	/**
+	 * Returns <jk>true</jk> if the specified value is a valid servlet path.
+	 *
+	 * This path must with a "/" character and includes either the servlet name or a path to the servlet,
+	 * but does not include any extra path information or a query string.
+	 * Should be an empty string ("") if the servlet used to process this request was matched using the "/*" pattern.
+	 *
+	 * @param value The value to test.
+	 * @return <jk>true</jk> if the specified value is a valid servlet path.
+	 */
+	public static boolean isValidServletPath(String value) {
+		if (value == null)
+			return false;
+		if (value.isEmpty())
+			return true;
+		if (value.equals("/") || value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
+			return false;
+		return true;
+	}
 
-						// Make sure servlet path follows the authority.
-						for (int j = 0; j < servletPath.length(); i++, j++)
-							if (requestURI.charAt(i) != servletPath.charAt(j))
-								throw new Exception("case=2");
-
-						// Make sure servlet path isn't a false match (e.g. /foo2 should not match /foo)
-						c = (requestURI.length() == i ? '/' : requestURI.charAt(i));
-						if (c == '/' || c == '?') {
-							requestURI.setLength(i);
-							return requestURI;
-						}
-
-						throw new Exception("case=3");
-					}
-				} else if (c == '?') {
-					if (sc != 2)
-						throw new Exception("case=4");
-					if (servletPath.isEmpty()) {
-						requestURI.setLength(i);
-						return requestURI;
-					}
-					throw new Exception("case=5");
-				}
-			}
-			if (servletPath.isEmpty())
-				return requestURI;
-			throw new Exception("case=6");
-		} catch (Exception e) {
-			throw new BasicRuntimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
-		}
+	/**
+	 * Parses a string that can consist of a simple string or JSON object/array.
+	 *
+	 * @param s The string to parse.
+	 * @return The parsed value, or <jk>null</jk> if the input is null.
+	 * @throws ParseException Invalid JSON in string.
+	 */
+	public static Object parseAnything(String s) throws ParseException {
+		if (isJson(s))
+			return JsonParser.DEFAULT.parse(s, Object.class);
+		return s;
 	}
 
 	/**
@@ -218,61 +236,6 @@ public class RestUtils {
 		String name = s.substring(0, i).trim();
 		String val = s.substring(i+1).trim();
 		return new String[]{name,val};
-	}
-
-	static String resolveNewlineSeparatedAnnotation(String[] value, String fromParent) {
-		if (value.length == 0)
-			return fromParent;
-
-		List<String> l = list();
-		for (String v : value) {
-			if (! "INHERIT".equals(v))
-				l.add(v);
-			else if (fromParent != null)
-				l.add(fromParent);
-		}
-		return Utils.join(l, '\n');
-	}
-
-	private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
-
-	static String[] resolveLinks(String[] links, String[] parentLinks) {
-		if (links.length == 0)
-			return parentLinks;
-
-		List<String> list = list();
-		for (String l : links) {
-			if ("INHERIT".equals(l))
-				addAll(list, parentLinks);
-			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
-				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
-				lm.matches();
-				String key = lm.group(1);
-				int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
-				String remainder = lm.group(3);
-				list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
-			} else {
-				list.add(l);
-			}
-		}
-		return Utils.array(list, String.class);
-	}
-
-	static String[] resolveContent(String[] content, String[] parentContent) {
-		if (content.length == 0)
-			return parentContent;
-
-		List<String> list = list();
-		for (String l : content) {
-			if ("INHERIT".equals(l)) {
-				addAll(list, parentContent);
-			} else if ("NONE".equals(l)) {
-				return new String[0];
-			} else {
-				list.add(l);
-			}
-		}
-		return Utils.array(list, String.class);
 	}
 
 	/**
@@ -365,28 +328,26 @@ public class RestUtils {
 		}
 	}
 
-	private static void add(Map<String,String[]> m, String key, String val) {
-		boolean b = m.containsKey(key);
-		if (val == null) {
-			if (! b)
-				m.put(key, null);
-		} else if (b && m.get(key) != null) {
-			m.put(key, append(m.get(key), val));
-		} else {
-			m.put(key, new String[]{val});
-		}
-	}
-
 	/**
-	 * Parses a string that can consist of a simple string or JSON object/array.
+	 * Converts the specified path segment to a valid context path.
 	 *
-	 * @param s The string to parse.
-	 * @return The parsed value, or <jk>null</jk> if the input is null.
-	 * @throws ParseException Invalid JSON in string.
+	 * <ul>
+	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
+	 * 	<li>Trailing slashes are trimmed.
+	 * 	<li>Leading slash is added if needed.
+	 * </ul>
+	 *
+	 * @param s The value to convert.
+	 * @return The converted path.
 	 */
-	public static Object parseAnything(String s) throws ParseException {
-		if (isJson(s))
-			return JsonParser.DEFAULT.parse(s, Object.class);
+	public static String toValidContextPath(String s) {
+		if (s == null || s.isEmpty())
+			return "";
+		s = trimTrailingSlashes(s);
+		if (s.isEmpty())
+			return s;
+		if (s.charAt(0) != '/')
+			s = '/' + s;
 		return s;
 	}
 
@@ -418,59 +379,71 @@ public class RestUtils {
 	}
 
 	/**
-	 * Normalizes the {@link RestOp#path()} value.
+	 * Efficiently trims the path info part from a request URI.
 	 *
-	 * @param path The path to normalize.
-	 * @return The normalized path.
+	 * <p>
+	 * The result is the URI of the servlet itself.
+	 *
+	 * @param requestURI The value returned by {@link HttpServletRequest#getRequestURL()}
+	 * @param contextPath The value returned by {@link HttpServletRequest#getContextPath()}
+	 * @param servletPath The value returned by {@link HttpServletRequest#getServletPath()}
+	 * @return The same StringBuilder with remainder trimmed.
 	 */
-	public static String fixMethodPath(String path) {
-		if (path == null)
-			return null;
-		if (path.equals("/"))
-			return path;
-		return trimTrailingSlashes(path);
-	}
+	public static StringBuffer trimPathInfo(StringBuffer requestURI, String contextPath, String servletPath) {
+		if (servletPath.equals("/"))
+			servletPath = "";
+		if (contextPath.equals("/"))
+			contextPath = "";
 
-	/**
-	 * Returns <jk>true</jk> if the specified value is a valid context path.
-	 *
-	 * The path must start with a "/" character but not end with a "/" character.
-	 * For servlets in the default (root) context, the value should be "".
-	 *
-	 * @param value The value to test.
-	 * @return <jk>true</jk> if the specified value is a valid context path.
-	 */
-	public static boolean isValidContextPath(String value) {
-		if (value == null)
-			return false;
-		if (value.isEmpty())
-			return true;
-		if (value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
-			return false;
-		return true;
-	}
+		try {
+			// Given URL:  http://hostname:port/servletPath/extra
+			// We want:    http://hostname:port/servletPath
+			int sc = 0;
+			for (int i = 0; i < requestURI.length(); i++) {
+				char c = requestURI.charAt(i);
+				if (c == '/') {
+					sc++;
+					if (sc == 3) {
+						if (servletPath.isEmpty()) {
+							requestURI.setLength(i);
+							return requestURI;
+						}
 
-	/**
-	 * Converts the specified path segment to a valid context path.
-	 *
-	 * <ul>
-	 * 	<li><jk>nulls</jk> and <js>"/"</js> are converted to empty strings.
-	 * 	<li>Trailing slashes are trimmed.
-	 * 	<li>Leading slash is added if needed.
-	 * </ul>
-	 *
-	 * @param s The value to convert.
-	 * @return The converted path.
-	 */
-	public static String toValidContextPath(String s) {
-		if (s == null || s.isEmpty())
-			return "";
-		s = trimTrailingSlashes(s);
-		if (s.isEmpty())
-			return s;
-		if (s.charAt(0) != '/')
-			s = '/' + s;
-		return s;
+						// Make sure context path follows the authority.
+						for (int j = 0; j < contextPath.length(); i++, j++)
+							if (requestURI.charAt(i) != contextPath.charAt(j))
+								throw new Exception("case=1");
+
+						// Make sure servlet path follows the authority.
+						for (int j = 0; j < servletPath.length(); i++, j++)
+							if (requestURI.charAt(i) != servletPath.charAt(j))
+								throw new Exception("case=2");
+
+						// Make sure servlet path isn't a false match (e.g. /foo2 should not match /foo)
+						c = (requestURI.length() == i ? '/' : requestURI.charAt(i));
+						if (c == '/' || c == '?') {
+							requestURI.setLength(i);
+							return requestURI;
+						}
+
+						throw new Exception("case=3");
+					}
+				} else if (c == '?') {
+					if (sc != 2)
+						throw new Exception("case=4");
+					if (servletPath.isEmpty()) {
+						requestURI.setLength(i);
+						return requestURI;
+					}
+					throw new Exception("case=5");
+				}
+			}
+			if (servletPath.isEmpty())
+				return requestURI;
+			throw new Exception("case=6");
+		} catch (Exception e) {
+			throw new BasicRuntimeException(e, "Could not find servlet path in request URI.  URI=''{0}'', servletPath=''{1}''", requestURI, servletPath);
+		}
 	}
 
 	/**
@@ -484,23 +457,13 @@ public class RestUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if the specified value is a valid servlet path.
-	 *
-	 * This path must with a "/" character and includes either the servlet name or a path to the servlet,
-	 * but does not include any extra path information or a query string.
-	 * Should be an empty string ("") if the servlet used to process this request was matched using the "/*" pattern.
+	 * Throws a {@link RuntimeException} if the method {@link #isValidPathInfo(String)} returns <jk>false</jk> for the specified value.
 	 *
 	 * @param value The value to test.
-	 * @return <jk>true</jk> if the specified value is a valid servlet path.
 	 */
-	public static boolean isValidServletPath(String value) {
-		if (value == null)
-			return false;
-		if (value.isEmpty())
-			return true;
-		if (value.equals("/") || value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
-			return false;
-		return true;
+	public static void validatePathInfo(String value) {
+		if (! isValidPathInfo(value))
+			throw new BasicRuntimeException("Value is not a valid path-info path: [{0}]", value);
 	}
 
 	/**
@@ -513,30 +476,68 @@ public class RestUtils {
 			throw new BasicRuntimeException("Value is not a valid servlet path: [{0}]", value);
 	}
 
-	/**
-	 * Returns <jk>true</jk> if the specified value is a valid path-info path.
-	 *
-	 * The extra path information follows the servlet path but precedes the query string and will start with a "/" character.
-	 * The value should be null if there was no extra path information.
-	 *
-	 * @param value The value to test.
-	 * @return <jk>true</jk> if the specified value is a valid path-info path.
-	 */
-	public static boolean isValidPathInfo(String value) {
-		if (value == null)
-			return true;
-		if (value.isEmpty() || value.charAt(0) != '/')
-			return false;
-		return true;
+	private static void add(Map<String,String[]> m, String key, String val) {
+		boolean b = m.containsKey(key);
+		if (val == null) {
+			if (! b)
+				m.put(key, null);
+		} else if (b && m.get(key) != null) {
+			m.put(key, append(m.get(key), val));
+		} else {
+			m.put(key, new String[]{val});
+		}
 	}
 
-	/**
-	 * Throws a {@link RuntimeException} if the method {@link #isValidPathInfo(String)} returns <jk>false</jk> for the specified value.
-	 *
-	 * @param value The value to test.
-	 */
-	public static void validatePathInfo(String value) {
-		if (! isValidPathInfo(value))
-			throw new BasicRuntimeException("Value is not a valid path-info path: [{0}]", value);
+	static String[] resolveContent(String[] content, String[] parentContent) {
+		if (content.length == 0)
+			return parentContent;
+
+		List<String> list = list();
+		for (String l : content) {
+			if ("INHERIT".equals(l)) {
+				addAll(list, parentContent);
+			} else if ("NONE".equals(l)) {
+				return new String[0];
+			} else {
+				list.add(l);
+			}
+		}
+		return Utils.array(list, String.class);
+	}
+
+	static String[] resolveLinks(String[] links, String[] parentLinks) {
+		if (links.length == 0)
+			return parentLinks;
+
+		List<String> list = list();
+		for (String l : links) {
+			if ("INHERIT".equals(l))
+				addAll(list, parentLinks);
+			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
+				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
+				lm.matches();
+				String key = lm.group(1);
+				int index = Math.min(list.size(), Integer.parseInt(lm.group(2)));
+				String remainder = lm.group(3);
+				list.add(index, key.isEmpty() ? remainder : key + ":" + remainder);
+			} else {
+				list.add(l);
+			}
+		}
+		return Utils.array(list, String.class);
+	}
+
+	static String resolveNewlineSeparatedAnnotation(String[] value, String fromParent) {
+		if (value.length == 0)
+			return fromParent;
+
+		List<String> l = list();
+		for (String v : value) {
+			if (! "INHERIT".equals(v))
+				l.add(v);
+			else if (fromParent != null)
+				l.add(fromParent);
+		}
+		return Utils.join(l, '\n');
 	}
 }

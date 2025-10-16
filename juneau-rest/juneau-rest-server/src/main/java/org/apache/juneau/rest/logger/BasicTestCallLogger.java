@@ -54,6 +54,16 @@ import jakarta.servlet.http.*;
  */
 public class BasicTestCallLogger extends CallLogger {
 
+	private static boolean isNoTrace(HttpServletRequest req) {
+		Object o = req.getAttribute("NoTrace");
+		if (o != null)
+			return "true".equalsIgnoreCase(o.toString());
+		String s = req.getHeader("No-Trace");
+		if (s != null)
+			return "true".equalsIgnoreCase(s);
+		return emptyIfNull(req.getQueryString()).contains("noTrace=true");
+	}
+
 	/**
 	 * Constructor.
 	 *
@@ -95,15 +105,5 @@ public class BasicTestCallLogger extends CallLogger {
 					.build()
 			)
 		;
-	}
-
-	private static boolean isNoTrace(HttpServletRequest req) {
-		Object o = req.getAttribute("NoTrace");
-		if (o != null)
-			return "true".equalsIgnoreCase(o.toString());
-		String s = req.getHeader("No-Trace");
-		if (s != null)
-			return "true".equalsIgnoreCase(s);
-		return emptyIfNull(req.getQueryString()).contains("noTrace=true");
 	}
 }

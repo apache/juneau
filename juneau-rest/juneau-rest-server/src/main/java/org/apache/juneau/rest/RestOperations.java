@@ -36,35 +36,6 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 public class RestOperations {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Represents a null value for the {@link Rest#restOperationsClass()} annotation.
-	 */
-	@SuppressWarnings("javadoc")
-	public final class Void extends RestOperations {
-		public Void(Builder builder) throws Exception {
-			super(builder);
-		}
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -84,15 +55,6 @@ public class RestOperations {
 			set = set();
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected RestOperations buildDefault() {
-			return new RestOperations(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Adds a method context to this builder.
 		 *
@@ -102,7 +64,6 @@ public class RestOperations {
 		public Builder add(RestOpContext value) {
 			return add(value.getHttpMethod(), value);
 		}
-
 		/**
 		 * Adds a method context to this builder.
 		 *
@@ -118,23 +79,42 @@ public class RestOperations {
 			set.add(value);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected RestOperations buildDefault() {
+			return new RestOperations(this);
+		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Represents a null value for the {@link Rest#restOperationsClass()} annotation.
+	 */
+	@SuppressWarnings("javadoc")
+	public final class Void extends RestOperations {
+		public Void(Builder builder) throws Exception {
+			super(builder);
+		}
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final Map<String,List<RestOpContext>> map;
 	private RestOpContext[] list;
 

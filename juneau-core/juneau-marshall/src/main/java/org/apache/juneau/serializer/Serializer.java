@@ -68,47 +68,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 public class Serializer extends BeanTraverseContext {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Represents no Serializer.
-	 */
-	public static abstract class Null extends Serializer {
-		private Null(Builder builder) {
-			super(builder);
-		}
-	}
-
-	/**
-	 * Instantiates a builder of the specified serializer class.
-	 *
-	 * <p>
-	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
-	 * or protected constructor of the class.
-	 *
-	 * @param c The builder to create.
-	 * @return A new builder.
-	 */
-	public static Builder createSerializerBuilder(Class<? extends Serializer> c) {
-		return (Builder)Context.createBuilder(c);
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -145,29 +104,6 @@ public class Serializer extends BeanTraverseContext {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(Serializer copyFrom) {
-			super(copyFrom);
-			produces = copyFrom.produces;
-			accept = copyFrom.accept;
-			addBeanTypes = copyFrom.addBeanTypes;
-			addRootType = copyFrom.addRootType;
-			keepNullProperties = copyFrom.keepNullProperties;
-			sortCollections = copyFrom.sortCollections;
-			sortMaps = copyFrom.sortMaps;
-			trimEmptyCollections = copyFrom.trimEmptyCollections;
-			trimEmptyMaps = copyFrom.trimEmptyMaps;
-			trimStrings = copyFrom.trimStrings;
-			uriContext = copyFrom.uriContext;
-			uriRelativity = copyFrom.uriRelativity;
-			uriResolution = copyFrom.uriResolution;
-			listener = copyFrom.listener;
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -188,59 +124,27 @@ public class Serializer extends BeanTraverseContext {
 			listener = copyFrom.listener;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public Serializer build() {
-			return build(Serializer.class);
-		}
-
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				produces,
-				accept,
-				addBeanTypes,
-				addRootType,
-				keepNullProperties,
-				sortCollections,
-				sortMaps,
-				trimEmptyCollections,
-				trimEmptyMaps,
-				trimStrings,
-				uriContext,
-				uriRelativity,
-				uriResolution,
-				listener
-			);
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
-
 		/**
-		 * Specifies the media type that this serializer produces.
+		 * Copy constructor.
 		 *
-		 * @param value The value for this setting.
-		 * @return This object.
+		 * @param copyFrom The bean to copy from.
 		 */
-		public Builder produces(String value) {
-			this.produces = value;
-			return this;
-		}
-
-		/**
-		 * Returns the current value for the 'produces' property.
-		 *
-		 * @return The current value for the 'produces' property.
-		 */
-		public String getProduces() {
-			return produces;
+		protected Builder(Serializer copyFrom) {
+			super(copyFrom);
+			produces = copyFrom.produces;
+			accept = copyFrom.accept;
+			addBeanTypes = copyFrom.addBeanTypes;
+			addRootType = copyFrom.addRootType;
+			keepNullProperties = copyFrom.keepNullProperties;
+			sortCollections = copyFrom.sortCollections;
+			sortMaps = copyFrom.sortMaps;
+			trimEmptyCollections = copyFrom.trimEmptyCollections;
+			trimEmptyMaps = copyFrom.trimEmptyMaps;
+			trimStrings = copyFrom.trimStrings;
+			uriContext = copyFrom.uriContext;
+			uriRelativity = copyFrom.uriRelativity;
+			uriResolution = copyFrom.uriResolution;
+			listener = copyFrom.listener;
 		}
 
 		/**
@@ -266,15 +170,6 @@ public class Serializer extends BeanTraverseContext {
 		public Builder accept(String value) {
 			this.accept = value;
 			return this;
-		}
-
-		/**
-		 * Returns the current value for the 'accept' property.
-		 *
-		 * @return The current value for the 'accept' property.
-		 */
-		public String getAccept() {
-			return accept;
 		}
 
 		/**
@@ -331,7 +226,6 @@ public class Serializer extends BeanTraverseContext {
 			addBeanTypes = value;
 			return this;
 		}
-
 		/**
 		 * Add type attribute to root nodes.
 		 *
@@ -385,6 +279,384 @@ public class Serializer extends BeanTraverseContext {
 		 */
 		public Builder addRootType(boolean value) {
 			addRootType = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder annotations(Annotation...values) {
+			super.annotations(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder apply(AnnotationWorkList work) {
+			super.apply(work);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Class<?>...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanClassVisibility(Visibility value) {
+			super.beanClassVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanConstructorVisibility(Visibility value) {
+			super.beanConstructorVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanContext(BeanContext.Builder value) {
+			super.beanContext(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanDictionary(java.lang.Class<?>...values) {
+			super.beanDictionary(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanFieldVisibility(Visibility value) {
+			super.beanFieldVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
+			super.beanInterceptor(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMapPutReturnsOldValue() {
+			super.beanMapPutReturnsOldValue();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanMethodVisibility(Visibility value) {
+			super.beanMethodVisibility(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanProperties(String beanClassName, String properties) {
+			super.beanProperties(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
+			super.beanPropertiesExcludes(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
+			super.beanPropertiesReadOnly(beanClassName, properties);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
+			super.beanPropertiesWriteOnly(beanClassName, properties);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireDefaultConstructor() {
+			super.beansRequireDefaultConstructor();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSerializable() {
+			super.beansRequireSerializable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder beansRequireSettersForGetters() {
+			super.beansRequireSettersForGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Serializer build() {
+			return build(Serializer.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
+			super.dictionaryOn(on, values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableBeansRequireSomeProperties() {
+			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreMissingSetters() {
+			super.disableIgnoreMissingSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreTransientFields() {
+			super.disableIgnoreTransientFields();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableIgnoreUnknownNullBeanProperties() {
+			super.disableIgnoreUnknownNullBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableInterfaceProxies() {
+			super.disableInterfaceProxies();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, String json) {
+			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters() {
+			super.findFluentSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder findFluentSetters(Class<?> on) {
+			super.findFluentSetters(on);
+			return this;
+		}
+
+		/**
+		 * Returns the current value for the 'accept' property.
+		 *
+		 * @return The current value for the 'accept' property.
+		 */
+		public String getAccept() {
+			return accept;
+		}
+
+		/**
+		 * Returns the current value for the 'produces' property.
+		 *
+		 * @return The current value for the 'produces' property.
+		 */
+		public String getProduces() {
+			return produces;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				produces,
+				accept,
+				addBeanTypes,
+				addRootType,
+				keepNullProperties,
+				sortCollections,
+				sortMaps,
+				trimEmptyCollections,
+				trimEmptyMaps,
+				trimStrings,
+				uriContext,
+				uriRelativity,
+				uriResolution,
+				listener
+			);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnGetters() {
+			super.ignoreInvocationExceptionsOnGetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreInvocationExceptionsOnSetters() {
+			super.ignoreInvocationExceptionsOnSetters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions() {
+			super.ignoreRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreRecursions(boolean value) {
+			super.ignoreRecursions(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder initialDepth(int value) {
+			super.initialDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
 			return this;
 		}
 
@@ -483,6 +755,59 @@ public class Serializer extends BeanTraverseContext {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanClasses(java.lang.Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		/**
+		 * Specifies the media type that this serializer produces.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder produces(String value) {
+			this.produces = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
 		/**
 		 * Sort arrays and collections alphabetically.
 		 *
@@ -562,6 +887,54 @@ public class Serializer extends BeanTraverseContext {
 		 */
 		public Builder sortMaps(boolean value) {
 			sortMaps = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
 			return this;
 		}
 
@@ -699,6 +1072,30 @@ public class Serializer extends BeanTraverseContext {
 			return this;
 		}
 
+		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
 		/**
 		 * URI context bean.
 		 *
@@ -814,413 +1211,6 @@ public class Serializer extends BeanTraverseContext {
 			uriResolution = value;
 			return this;
 		}
-		@Override /* Overridden from Builder */
-		public Builder annotations(Annotation...values) {
-			super.annotations(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder apply(AnnotationWorkList work) {
-			super.apply(work);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Class<?>...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanClassVisibility(Visibility value) {
-			super.beanClassVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanConstructorVisibility(Visibility value) {
-			super.beanConstructorVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanContext(BeanContext.Builder value) {
-			super.beanContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanDictionary(java.lang.Class<?>...values) {
-			super.beanDictionary(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanFieldVisibility(Visibility value) {
-			super.beanFieldVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanInterceptor(Class<?> on, Class<? extends org.apache.juneau.swap.BeanInterceptor<?>> value) {
-			super.beanInterceptor(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMapPutReturnsOldValue() {
-			super.beanMapPutReturnsOldValue();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanMethodVisibility(Visibility value) {
-			super.beanMethodVisibility(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanProperties(String beanClassName, String properties) {
-			super.beanProperties(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(String beanClassName, String properties) {
-			super.beanPropertiesExcludes(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(String beanClassName, String properties) {
-			super.beanPropertiesReadOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(String beanClassName, String properties) {
-			super.beanPropertiesWriteOnly(beanClassName, properties);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireDefaultConstructor() {
-			super.beansRequireDefaultConstructor();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSerializable() {
-			super.beansRequireSerializable();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder beansRequireSettersForGetters() {
-			super.beansRequireSettersForGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
-			super.dictionaryOn(on, values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableBeansRequireSomeProperties() {
-			super.disableBeansRequireSomeProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreMissingSetters() {
-			super.disableIgnoreMissingSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreTransientFields() {
-			super.disableIgnoreTransientFields();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableIgnoreUnknownNullBeanProperties() {
-			super.disableIgnoreUnknownNullBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableInterfaceProxies() {
-			super.disableInterfaceProxies();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, String json) {
-			super.example(pojoClass, json);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters() {
-			super.findFluentSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder findFluentSetters(Class<?> on) {
-			super.findFluentSetters(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnGetters() {
-			super.ignoreInvocationExceptionsOnGetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreInvocationExceptionsOnSetters() {
-			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
 
 		@Override /* Overridden from Builder */
 		public Builder useEnumNames() {
@@ -1233,48 +1223,38 @@ public class Serializer extends BeanTraverseContext {
 			super.useJavaBeanIntrospector();
 			return this;
 		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions() {
-			super.ignoreRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreRecursions(boolean value) {
-			super.ignoreRecursions(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder initialDepth(int value) {
-			super.initialDepth(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
-			return this;
+	/**
+	 * Represents no Serializer.
+	 */
+	public static abstract class Null extends Serializer {
+		private Null(Builder builder) {
+			super(builder);
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+	/**
+	 * Instantiates a builder of the specified serializer class.
+	 *
+	 * <p>
+	 * Looks for a public static method called <c>create</c> that returns an object that can be passed into a public
+	 * or protected constructor of the class.
+	 *
+	 * @param c The builder to create.
+	 * @return A new builder.
+	 */
+	public static Builder createSerializerBuilder(Class<? extends Serializer> c) {
+		return (Builder)Context.createBuilder(c);
+	}
 	final String produces, accept;
 	final boolean
 		addBeanTypes,
@@ -1332,6 +1312,82 @@ public class Serializer extends BeanTraverseContext {
 		return SerializerSession.create(this);
 	}
 
+	/**
+	 * Performs an action on the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
+	 *
+	 * <p>
+	 * The order of the media types are the same as those in the <c>accept</c> parameter.
+	 *
+	 * @param action The action to perform on the media types.
+	 * @return This object.
+	 */
+	public final Serializer forEachAcceptMediaType(Consumer<MediaType> action) {
+		for (MediaType m : acceptMediaTypes)
+			action.accept(m);
+		return this;
+	}
+
+	/**
+	 * Returns the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
+	 *
+	 * <p>
+	 * Note that the order of these ranges are from high to low q-value.
+	 *
+	 * @return The list of media types.  Never <jk>null</jk>.
+	 */
+	public final MediaRanges getMediaTypeRanges() {
+		return acceptRanges;
+	}
+	/**
+	 * Returns the first entry in the <c>accept</c> parameter passed into the constructor.
+	 *
+	 * <p>
+	 * This signifies the 'primary' media type for this serializer.
+	 *
+	 * @return The media type.  Never <jk>null</jk>.
+	 */
+	public final MediaType getPrimaryMediaType() {
+		return acceptMediaTypes[0];
+	}
+
+	/**
+	 * Optional method that returns the response <c>Content-Type</c> for this serializer if it is different from
+	 * the matched media type.
+	 *
+	 * <p>
+	 * This method is specified to override the content type for this serializer.
+	 * For example, the {@link org.apache.juneau.json.Json5Serializer} class returns that it handles media type
+	 * <js>"text/json5"</js>, but returns <js>"text/json"</js> as the actual content type.
+	 * This allows clients to request specific 'flavors' of content using specialized <c>Accept</c> header values.
+	 *
+	 * <p>
+	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
+	 * or client).
+	 *
+	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
+	 */
+	public final MediaType getResponseContentType() {
+		return producesMediaType;
+	}
+
+	/**
+	 * Optional method that specifies HTTP request headers for this serializer.
+	 *
+	 * <p>
+	 * For example, {@link SoapXmlSerializer} needs to set a <c>SOAPAction</c> header.
+	 *
+	 * <p>
+	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
+	 * or client).
+	 *
+	 * @param session The current session.
+	 * @return
+	 * 	The HTTP headers to set on HTTP requests.
+	 * 	Never <jk>null</jk>.
+	 */
+	public Map<String,String> getResponseHeaders(SerializerSession session) {
+		return Collections.emptyMap();
+	}
 	@Override /* Overridden from Context */
 	public SerializerSession getSession() {
 		return createSession().build();
@@ -1346,9 +1402,20 @@ public class Serializer extends BeanTraverseContext {
 		return false;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Convenience methods
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
+	 * depending on the serializer type.
+	 *
+	 * @param o The object to serialize.
+	 * @return
+	 * 	The serialized object.
+	 * 	<br>Character-based serializers will return a <c>String</c>
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public Object serialize(Object o) throws SerializeException {
+		return getSession().serialize(o);
+	}
 
 	/**
 	 * Serializes a POJO to the specified output stream or writer.
@@ -1379,21 +1446,6 @@ public class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
-	 * depending on the serializer type.
-	 *
-	 * @param o The object to serialize.
-	 * @return
-	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <c>String</c>
-	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public Object serialize(Object o) throws SerializeException {
-		return getSession().serialize(o);
-	}
-
-	/**
 	 * Convenience method for serializing an object to a String.
 	 *
 	 * <p>
@@ -1409,10 +1461,6 @@ public class Serializer extends BeanTraverseContext {
 		return getSession().serializeToString(o);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Serializes a POJO to the specified pipe.
 	 *
@@ -1425,88 +1473,49 @@ public class Serializer extends BeanTraverseContext {
 	protected void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		throw new UnsupportedOperationException();
 	}
-
 	/**
-	 * Optional method that specifies HTTP request headers for this serializer.
+	 * Serializer listener.
 	 *
-	 * <p>
-	 * For example, {@link SoapXmlSerializer} needs to set a <c>SOAPAction</c> header.
-	 *
-	 * <p>
-	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
-	 * or client).
-	 *
-	 * @param session The current session.
+	 * @see Serializer.Builder#listener(Class)
 	 * @return
-	 * 	The HTTP headers to set on HTTP requests.
-	 * 	Never <jk>null</jk>.
+	 * 	Class used to listen for errors and warnings that occur during serialization.
 	 */
-	public Map<String,String> getResponseHeaders(SerializerSession session) {
-		return Collections.emptyMap();
+	protected final Class<? extends SerializerListener> getListener() {
+		return listener;
 	}
 
 	/**
-	 * Returns the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
+	 * URI context bean.
 	 *
-	 * <p>
-	 * Note that the order of these ranges are from high to low q-value.
-	 *
-	 * @return The list of media types.  Never <jk>null</jk>.
+	 * @see Serializer.Builder#uriContext(UriContext)
+	 * @return
+	 * 	Bean used for resolution of URIs to absolute or root-relative form.
 	 */
-	public final MediaRanges getMediaTypeRanges() {
-		return acceptRanges;
+	protected final UriContext getUriContext() {
+		return uriContext;
 	}
 
 	/**
-	 * Returns the first entry in the <c>accept</c> parameter passed into the constructor.
+	 * URI relativity.
 	 *
-	 * <p>
-	 * This signifies the 'primary' media type for this serializer.
-	 *
-	 * @return The media type.  Never <jk>null</jk>.
+	 * @see Serializer.Builder#uriRelativity(UriRelativity)
+	 * @return
+	 * 	Defines what relative URIs are relative to when serializing any of the following:
 	 */
-	public final MediaType getPrimaryMediaType() {
-		return acceptMediaTypes[0];
+	protected final UriRelativity getUriRelativity() {
+		return uriRelativity;
 	}
 
 	/**
-	 * Performs an action on the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
+	 * URI resolution.
 	 *
-	 * <p>
-	 * The order of the media types are the same as those in the <c>accept</c> parameter.
-	 *
-	 * @param action The action to perform on the media types.
-	 * @return This object.
+	 * @see Serializer.Builder#uriResolution(UriResolution)
+	 * @return
+	 * 	Defines the resolution level for URIs when serializing URIs.
 	 */
-	public final Serializer forEachAcceptMediaType(Consumer<MediaType> action) {
-		for (MediaType m : acceptMediaTypes)
-			action.accept(m);
-		return this;
+	protected final UriResolution getUriResolution() {
+		return uriResolution;
 	}
-
-	/**
-	 * Optional method that returns the response <c>Content-Type</c> for this serializer if it is different from
-	 * the matched media type.
-	 *
-	 * <p>
-	 * This method is specified to override the content type for this serializer.
-	 * For example, the {@link org.apache.juneau.json.Json5Serializer} class returns that it handles media type
-	 * <js>"text/json5"</js>, but returns <js>"text/json"</js> as the actual content type.
-	 * This allows clients to request specific 'flavors' of content using specialized <c>Accept</c> header values.
-	 *
-	 * <p>
-	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
-	 * or client).
-	 *
-	 * @return The response content type.  If <jk>null</jk>, then the matched media type is used.
-	 */
-	public final MediaType getResponseContentType() {
-		return producesMediaType;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -1532,14 +1541,14 @@ public class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Serializer listener.
+	 * Don't trim null bean property values.
 	 *
-	 * @see Serializer.Builder#listener(Class)
+	 * @see Serializer.Builder#keepNullProperties()
 	 * @return
-	 * 	Class used to listen for errors and warnings that occur during serialization.
+	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
-	protected final Class<? extends SerializerListener> getListener() {
-		return listener;
+	protected final boolean isKeepNullProperties() {
+		return keepNullProperties;
 	}
 
 	/**
@@ -1587,17 +1596,6 @@ public class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Don't trim null bean property values.
-	 *
-	 * @see Serializer.Builder#keepNullProperties()
-	 * @return
-	 * 	<jk>true</jk> if null bean values are serialized to the output.
-	 */
-	protected final boolean isKeepNullProperties() {
-		return keepNullProperties;
-	}
-
-	/**
 	 * Trim strings.
 	 *
 	 * @see Serializer.Builder#trimStrings()
@@ -1607,44 +1605,6 @@ public class Serializer extends BeanTraverseContext {
 	protected final boolean isTrimStrings() {
 		return trimStrings;
 	}
-
-	/**
-	 * URI context bean.
-	 *
-	 * @see Serializer.Builder#uriContext(UriContext)
-	 * @return
-	 * 	Bean used for resolution of URIs to absolute or root-relative form.
-	 */
-	protected final UriContext getUriContext() {
-		return uriContext;
-	}
-
-	/**
-	 * URI relativity.
-	 *
-	 * @see Serializer.Builder#uriRelativity(UriRelativity)
-	 * @return
-	 * 	Defines what relative URIs are relative to when serializing any of the following:
-	 */
-	protected final UriRelativity getUriRelativity() {
-		return uriRelativity;
-	}
-
-	/**
-	 * URI resolution.
-	 *
-	 * @see Serializer.Builder#uriResolution(UriResolution)
-	 * @return
-	 * 	Defines the resolution level for URIs when serializing URIs.
-	 */
-	protected final UriResolution getUriResolution() {
-		return uriResolution;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()

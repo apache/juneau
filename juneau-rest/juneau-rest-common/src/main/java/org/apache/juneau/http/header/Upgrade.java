@@ -90,11 +90,6 @@ import org.apache.juneau.http.annotation.*;
  */
 @Header("Upgrade")
 public class Upgrade extends BasicCsvHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 	private static final String NAME = "Upgrade";
 
@@ -136,11 +131,6 @@ public class Upgrade extends BasicCsvHeader {
 	public static Upgrade of(Supplier<String[]> value) {
 		return value == null ? null : new Upgrade(value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 *

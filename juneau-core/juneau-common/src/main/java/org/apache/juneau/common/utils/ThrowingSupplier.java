@@ -18,6 +18,8 @@ package org.apache.juneau.common.utils;
 
 /**
  * A supplier that throws an exception.
+ *
+ * @param <T> The supplier type.
  */
 @FunctionalInterface
 public interface ThrowingSupplier<T> {

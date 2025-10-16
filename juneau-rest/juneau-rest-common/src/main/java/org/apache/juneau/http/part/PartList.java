@@ -48,16 +48,11 @@ import org.apache.juneau.svl.*;
  */
 public class PartList extends ControlledArrayList<NameValuePair> {
 
-	private static final long serialVersionUID = 1L;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/** Represents no part list in annotations. */
 	public static final class Void extends PartList {
 		private static final long serialVersionUID = 1L;
 	}
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Instantiates a new part list.
@@ -117,11 +112,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 			x.add(BasicPart.of(pairs[i], pairs[i+1]));
 		return x;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private VarResolver varResolver;
 	boolean caseInsensitive;
 
@@ -143,128 +133,14 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	/**
-	 * Makes a copy of this list.
+	 * Adds the specified parts to the end of the parts in this list.
 	 *
-	 * @return A new copy of this list.
-	 */
-	public PartList copy() {
-		return new PartList(this);
-	}
-
-	/**
-	 * Adds a collection of default parts.
-	 *
-	 * <p>
-	 * Default parts are set if they're not already in the list.
-	 *
-	 * @param parts The list of default parts.
+	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public PartList setDefault(List<NameValuePair> parts) {
-		if (parts != null)
-			parts.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
-		return this;
-	}
-
-	/**
-	 * Makes a copy of this list of parts and adds a collection of default parts.
-	 *
-	 * <p>
-	 * Default parts are set if they're not already in the list.
-	 *
-	 * @param parts The list of default parts.
-	 * @return A new list, or the same list if the parts were empty.
-	 */
-	public PartList setDefault(NameValuePair...parts) {
-		if (parts != null)
-			setDefault(Arrays.asList(parts));
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the part with the same name.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public PartList setDefault(String name, Object value) {
-		return setDefault(createPart(name, value));
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * @param name The header name.
-	 * @param value The header value.
-	 * @return This object.
-	 */
-	public PartList setDefault(String name, Supplier<?> value) {
-		return setDefault(createPart(name, value));
-	}
-
-	//-------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Allows part values to contain SVL variables.
-	 *
-	 * <p>
-	 * Resolves variables in part values when using the following methods:
-	 * <ul>
-	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
-	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
-	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
-	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
-	 * </ul>
-	 *
-	 * <p>
-	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
-	 *
-	 * @return This object.
-	 */
-	public PartList resolving() {
-		return resolving(VarResolver.DEFAULT);
-	}
-
-	/**
-	 * Allows part values to contain SVL variables.
-	 *
-	 * <p>
-	 * Resolves variables in part values when using the following methods:
-	 * <ul>
-	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
-	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
-	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
-	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
-	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
-	 * </ul>
-	 *
-	 * @param varResolver The variable resolver to use for resolving variables.
-	 * @return This object.
-	 */
-	public PartList resolving(VarResolver varResolver) {
-		assertModifiable();
-		this.varResolver = varResolver;
-		return this;
-	}
-
-	/**
-	 * Specifies that the parts in this list should be treated as case-sensitive.
-	 *
-	 * <p>
-	 * The default behavior is case-sensitive.
-	 *
-	 * @param value The new value for this setting.
-	 * @return This object.
-	 */
-	public PartList caseInsensitive(boolean value) {
-		assertModifiable();
-		caseInsensitive = value;
+	public PartList append(List<NameValuePair> values) {
+		if (values != null)
+			values.forEach(this::append);
 		return this;
 	}
 
@@ -277,6 +153,19 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public PartList append(NameValuePair value) {
 		if (value != null)
 			add(value);
+		return this;
+	}
+
+	/**
+	 * Adds the specified parts to the end of the parts in this list.
+	 *
+	 * @param values The parts to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList append(NameValuePair...values) {
+		if (values != null)
+			for (NameValuePair value : values)
+				append(value);
 		return this;
 	}
 
@@ -310,296 +199,118 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	public PartList append(String name, Supplier<?> value) {
 		return append(createPart(name, value));
 	}
-
 	/**
-	 * Adds the specified parts to the end of the parts in this list.
-	 *
-	 * @param values The parts to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList append(NameValuePair...values) {
-		if (values != null)
-			for (NameValuePair value : values)
-				append(value);
-		return this;
-	}
-
-	/**
-	 * Adds the specified parts to the end of the parts in this list.
-	 *
-	 * @param values The parts to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList append(List<NameValuePair> values) {
-		if (values != null)
-			values.forEach(this::append);
-		return this;
-	}
-
-	/**
-	 * Adds the specified part to the beginning of the parts in this list.
-	 *
-	 * @param value The part to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList prepend(NameValuePair value) {
-		if (value != null)
-			add(0, value);
-		return this;
-	}
-
-	/**
-	 * Appends the specified part to the beginning of this list.
+	 * Specifies that the parts in this list should be treated as case-sensitive.
 	 *
 	 * <p>
-	 * The part is added as a {@link BasicPart}.
+	 * The default behavior is case-sensitive.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public PartList caseInsensitive(boolean value) {
+		assertModifiable();
+		caseInsensitive = value;
+		return this;
+	}
+
+	/**
+	 * Tests if parts with the given name are contained within this list.
+	 *
+	 * <p>
+	 * Part name comparison is case insensitive.
 	 *
 	 * @param name The part name.
-	 * @param value The part value.
-	 * @return This object.
+	 * @return <jk>true</jk> if at least one part with the name is present.
 	 */
-	public PartList prepend(String name, Object value) {
-		return prepend(createPart(name, value));
+	public boolean contains(String name) {
+		return stream().anyMatch(x -> eq(x.getName(), name));
 	}
 
 	/**
-	 * Appends the specified part to the beginning of this list using a value supplier.
+	 * Makes a copy of this list.
+	 *
+	 * @return A new copy of this list.
+	 */
+	public PartList copy() {
+		return new PartList(this);
+	}
+
+	/**
+	 * Performs an action on all the matching parts in this list.
 	 *
 	 * <p>
-	 * The part is added as a {@link BasicPart}.
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public PartList forEach(Predicate<NameValuePair> filter, Consumer<NameValuePair> action) {
+		forEach(x -> consume(filter, action, x));
+		return this;
+	}
+
+	/**
+	 * Performs an action on all parts in this list with the specified name.
 	 *
 	 * <p>
-	 * Value is re-evaluated on each call to {@link BasicPart#getValue()}.
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param name The parts name.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public PartList forEach(String name, Consumer<NameValuePair> action) {
+		return forEach(x -> eq(name, x.getName()), action);
+	}
+
+	/**
+	 * Performs an action on the values for all matching parts in this list.
+	 *
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public PartList forEachValue(Predicate<NameValuePair> filter, Consumer<String> action) {
+		return forEach(filter, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Performs an action on the values of all matching parts in this list.
 	 *
 	 * @param name The part name.
-	 * @param value The part value supplier.
+	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
-	public PartList prepend(String name, Supplier<?> value) {
-		return prepend(createPart(name, value));
+	public PartList forEachValue(String name, Consumer<String> action) {
+		return forEach(name, x -> action.accept(x.getValue()));
 	}
 
 	/**
-	 * Adds the specified parts to the beginning of the parts in this list.
-	 *
-	 * @param values The parts to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList prepend(NameValuePair...values) {
-		if (values != null)
-			prepend(alist(values));
-		return this;
-	}
-
-	/**
-	 * Adds the specified parts to the beginning of the parts in this list.
-	 *
-	 * @param values The parts to add.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList prepend(List<NameValuePair> values) {
-		if (values != null)
-			addAll(0, values);
-		return this;
-	}
-
-	/**
-	 * Removes the specified part from this list.
-	 *
-	 * @param value The part to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList remove(NameValuePair value) {
-		if (value != null)
-			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
-		return this;
-	}
-
-	/**
-	 * Removes the specified parts from this list.
-	 *
-	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList remove(NameValuePair...values) {
-		for (NameValuePair value : values)
-			remove(value);
-		return this;
-	}
-
-	/**
-	 * Removes the specified parts from this list.
-	 *
-	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList remove(List<NameValuePair> values) {
-		if (values != null)
-			values.forEach(this::remove);
-		return this;
-	}
-
-	/**
-	 * Removes the part with the specified name from this list.
-	 *
-	 * @param name The part name.
-	 * @return This object.
-	 */
-	public PartList remove(String name) {
-		removeIf(x -> eq(x.getName(), name));
-		return this;
-	}
-
-	/**
-	 * Removes the part with the specified name from this list.
-	 *
-	 * @param names The part name.
-	 * @return This object.
-	 */
-	public PartList remove(String...names) {
-		if (names != null)
-			for (String name : names)
-				remove(name);
-		return this;
-	}
-
-	/**
-	 * Adds or replaces the part(s) with the same name.
+	 * Gets a part representing all of the part values with the given name.
 	 *
 	 * <p>
-	 * If no part with the same name is found the given part is added to the end of the list.
+	 * Same as {@link #get(String, Class)} but the part name is pulled from the name or value attribute of the {@link FormData}/{@link Query}/{@link Path} annotation.
 	 *
-	 * @param value The part to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
+	 * <h5 class='figure'>Example</h5>
+	 * <p class='bjava'>
+	 * 	Age <jv>age</jv> = <jv>partList</jv>.get(Age.<jk>class</jk>);
+	 * </p>
+	 *
+	 * @param <T> The part implementation class.
+	 * @param type The part implementation class.
+	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
 	 */
-	public PartList set(NameValuePair value) {
-		if (value != null) {
-			boolean replaced = false;
-			for (int i = 0, j = size(); i < j; i++) {
-				NameValuePair x = get(i);
-				if (eq(x.getName(), value.getName())) {
-					if (replaced) {
-						remove(i);
-						j--;
-					} else {
-						set(i, value);
-						replaced = true;
-					}
-				}
-			}
+	public <T> Optional<T> get(Class<T> type) {
+		Utils.assertArgNotNull("type", type);
 
-			if (! replaced)
-				add(value);
-		}
+		String name = PartBeanMeta.of(type).getSchema().getName();
+		Utils.assertArg(name != null, "Part name could not be found on bean type ''{0}''", type.getName());
 
-		return this;
-	}
-
-	/**
-	 * Adds or replaces the part(s) with the same name.
-	 *
-	 * <p>
-	 * If no part with the same name is found the given part is added to the end of the list.
-	 *
-	 * @param values The part to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList set(NameValuePair...values) {
-		if (values != null)
-			set(alist(values));
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the parts with the same name.
-	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * @return This object.
-	 */
-	public PartList set(String name, Object value) {
-		return set(createPart(name, value));
-	}
-
-	/**
-	 * Replaces the first occurrence of the parts with the same name.
-	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * @return This object.
-	 */
-	public PartList set(String name, Supplier<?> value) {
-		return set(createPart(name, value));
-	}
-
-	/**
-	 * Replaces the first occurrence of the parts with the same name.
-	 *
-	 * <p>
-	 * If no part with the same name is found the given part is added to the end of the list.
-	 *
-	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public PartList set(List<NameValuePair> values) {
-
-		if (values != null) {
-			for (NameValuePair h : values) {
-				if (h != null) {
-					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
-						NameValuePair x = get(i2);
-						if (eq(x.getName(), h.getName())) {
-							remove(i2);
-							j2--;
-						}
-					}
-				}
-			}
-
-			for (NameValuePair x : values) {
-				if (x != null) {
-					add(x);
-				}
-			}
-		}
-
-		return this;
-	}
-
-	/**
-	 * Gets the first part with the given name.
-	 *
-	 * <p>
-	 * Part name comparison is case sensitive by default.
-	 *
-	 * @param name The part name.
-	 * @return The first matching part, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<NameValuePair> getFirst(String name) {
-		for (int i = 0; i < size(); i++) {
-			NameValuePair x = get(i);
-			if (eq(x.getName(), name))
-				return Utils.opt(x);
-		}
-		return opte();
-	}
-
-	/**
-	 * Gets the last part with the given name.
-	 *
-	 * <p>
-	 * Part name comparison is case sensitive by default.
-	 *
-	 * @param name The part name.
-	 * @return The last matching part, or {@link Optional#empty()} if not found.
-	 */
-	public Optional<NameValuePair> getLast(String name) {
-		for (int i = size() - 1; i >= 0; i--) {
-			NameValuePair x = get(i);
-			if (eq(x.getName(), name))
-				return Utils.opt(x);
-		}
-		return opte();
+		return get(name, type);
 	}
 
 	/**
@@ -703,30 +414,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	/**
-	 * Gets a part representing all of the part values with the given name.
-	 *
-	 * <p>
-	 * Same as {@link #get(String, Class)} but the part name is pulled from the name or value attribute of the {@link FormData}/{@link Query}/{@link Path} annotation.
-	 *
-	 * <h5 class='figure'>Example</h5>
-	 * <p class='bjava'>
-	 * 	Age <jv>age</jv> = <jv>partList</jv>.get(Age.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The part implementation class.
-	 * @param type The part implementation class.
-	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
-	 */
-	public <T> Optional<T> get(Class<T> type) {
-		Utils.assertArgNotNull("type", type);
-
-		String name = PartBeanMeta.of(type).getSchema().getName();
-		Utils.assertArg(name != null, "Part name could not be found on bean type ''{0}''", type.getName());
-
-		return get(name, type);
-	}
-
-	/**
 	 * Gets all of the parts.
 	 *
 	 * <p>
@@ -765,25 +452,39 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	/**
-	 * Performs an action on the values for all matching parts in this list.
+	 * Gets the first part with the given name.
 	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
-	 * @param action An action to perform on each element.
-	 * @return This object.
+	 * <p>
+	 * Part name comparison is case sensitive by default.
+	 *
+	 * @param name The part name.
+	 * @return The first matching part, or {@link Optional#empty()} if not found.
 	 */
-	public PartList forEachValue(Predicate<NameValuePair> filter, Consumer<String> action) {
-		return forEach(filter, x -> action.accept(x.getValue()));
+	public Optional<NameValuePair> getFirst(String name) {
+		for (int i = 0; i < size(); i++) {
+			NameValuePair x = get(i);
+			if (eq(x.getName(), name))
+				return Utils.opt(x);
+		}
+		return opte();
 	}
 
 	/**
-	 * Performs an action on the values of all matching parts in this list.
+	 * Gets the last part with the given name.
+	 *
+	 * <p>
+	 * Part name comparison is case sensitive by default.
 	 *
 	 * @param name The part name.
-	 * @param action An action to perform on each element.
-	 * @return This object.
+	 * @return The last matching part, or {@link Optional#empty()} if not found.
 	 */
-	public PartList forEachValue(String name, Consumer<String> action) {
-		return forEach(name, x -> action.accept(x.getValue()));
+	public Optional<NameValuePair> getLast(String name) {
+		for (int i = size() - 1; i >= 0; i--) {
+			NameValuePair x = get(i);
+			if (eq(x.getName(), name))
+				return Utils.opt(x);
+		}
+		return opte();
 	}
 
 	/**
@@ -794,19 +495,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public String[] getValues(String name) {
 		return stream().filter(x -> eq(x.getName(), name)).map(NameValuePair::getValue).toArray(String[]::new);
-	}
-
-	/**
-	 * Tests if parts with the given name are contained within this list.
-	 *
-	 * <p>
-	 * Part name comparison is case insensitive.
-	 *
-	 * @param name The part name.
-	 * @return <jk>true</jk> if at least one part with the name is present.
-	 */
-	public boolean contains(String name) {
-		return stream().anyMatch(x -> eq(x.getName(), name));
 	}
 
 	/**
@@ -830,36 +518,338 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	}
 
 	/**
-	 * Performs an action on all parts in this list with the specified name.
+	 * Adds the specified parts to the beginning of the parts in this list.
 	 *
-	 * <p>
-	 * This is the preferred method for iterating over parts as it does not involve
-	 * creation or copy of lists/arrays.
-	 *
-	 * @param name The parts name.
-	 * @param action An action to perform on each element.
+	 * @param values The parts to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
-	public PartList forEach(String name, Consumer<NameValuePair> action) {
-		return forEach(x -> eq(name, x.getName()), action);
-	}
-
-	/**
-	 * Performs an action on all the matching parts in this list.
-	 *
-	 * <p>
-	 * This is the preferred method for iterating over parts as it does not involve
-	 * creation or copy of lists/arrays.
-	 *
-	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
-	 * @param action An action to perform on each element.
-	 * @return This object.
-	 */
-	public PartList forEach(Predicate<NameValuePair> filter, Consumer<NameValuePair> action) {
-		forEach(x -> consume(filter, action, x));
+	public PartList prepend(List<NameValuePair> values) {
+		if (values != null)
+			addAll(0, values);
 		return this;
 	}
 
+	/**
+	 * Adds the specified part to the beginning of the parts in this list.
+	 *
+	 * @param value The part to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList prepend(NameValuePair value) {
+		if (value != null)
+			add(0, value);
+		return this;
+	}
+
+	/**
+	 * Adds the specified parts to the beginning of the parts in this list.
+	 *
+	 * @param values The parts to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList prepend(NameValuePair...values) {
+		if (values != null)
+			prepend(alist(values));
+		return this;
+	}
+
+	/**
+	 * Appends the specified part to the beginning of this list.
+	 *
+	 * <p>
+	 * The part is added as a {@link BasicPart}.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return This object.
+	 */
+	public PartList prepend(String name, Object value) {
+		return prepend(createPart(name, value));
+	}
+
+	/**
+	 * Appends the specified part to the beginning of this list using a value supplier.
+	 *
+	 * <p>
+	 * The part is added as a {@link BasicPart}.
+	 *
+	 * <p>
+	 * Value is re-evaluated on each call to {@link BasicPart#getValue()}.
+	 *
+	 * @param name The part name.
+	 * @param value The part value supplier.
+	 * @return This object.
+	 */
+	public PartList prepend(String name, Supplier<?> value) {
+		return prepend(createPart(name, value));
+	}
+
+	/**
+	 * Removes the specified parts from this list.
+	 *
+	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList remove(List<NameValuePair> values) {
+		if (values != null)
+			values.forEach(this::remove);
+		return this;
+	}
+
+	/**
+	 * Removes the specified part from this list.
+	 *
+	 * @param value The part to remove.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList remove(NameValuePair value) {
+		if (value != null)
+			removeIf(x -> eq(x.getName(), value.getName()) && eq(x.getValue(), value.getValue()));
+		return this;
+	}
+
+	/**
+	 * Removes the specified parts from this list.
+	 *
+	 * @param values The parts to remove.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList remove(NameValuePair...values) {
+		for (NameValuePair value : values)
+			remove(value);
+		return this;
+	}
+
+	/**
+	 * Removes the part with the specified name from this list.
+	 *
+	 * @param name The part name.
+	 * @return This object.
+	 */
+	public PartList remove(String name) {
+		removeIf(x -> eq(x.getName(), name));
+		return this;
+	}
+
+	/**
+	 * Removes the part with the specified name from this list.
+	 *
+	 * @param names The part name.
+	 * @return This object.
+	 */
+	public PartList remove(String...names) {
+		if (names != null)
+			for (String name : names)
+				remove(name);
+		return this;
+	}
+
+	/**
+	 * Allows part values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in part values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
+	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
+	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
+	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
+	 * </ul>
+	 *
+	 * <p>
+	 * Uses {@link VarResolver#DEFAULT} to resolve variables.
+	 *
+	 * @return This object.
+	 */
+	public PartList resolving() {
+		return resolving(VarResolver.DEFAULT);
+	}
+
+	/**
+	 * Allows part values to contain SVL variables.
+	 *
+	 * <p>
+	 * Resolves variables in part values when using the following methods:
+	 * <ul>
+	 * 	<li class='jm'>{@link #append(String, Object) append(String,Object)}
+	 * 	<li class='jm'>{@link #append(String, Supplier) append(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #prepend(String, Object) prepend(String,Object)}
+	 * 	<li class='jm'>{@link #prepend(String, Supplier) prepend(String,Supplier&lt;?&gt;)}
+	 * 	<li class='jm'>{@link #set(String, Object) set(String,Object)}
+	 * 	<li class='jm'>{@link #set(String, Supplier) set(String,Supplier&lt;?&gt;)}
+	 * </ul>
+	 *
+	 * @param varResolver The variable resolver to use for resolving variables.
+	 * @return This object.
+	 */
+	public PartList resolving(VarResolver varResolver) {
+		assertModifiable();
+		this.varResolver = varResolver;
+		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the parts with the same name.
+	 *
+	 * <p>
+	 * If no part with the same name is found the given part is added to the end of the list.
+	 *
+	 * @param values The parts to replace.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList set(List<NameValuePair> values) {
+
+		if (values != null) {
+			for (NameValuePair h : values) {
+				if (h != null) {
+					for (int i2 = 0, j2 = size(); i2 < j2; i2++) {
+						NameValuePair x = get(i2);
+						if (eq(x.getName(), h.getName())) {
+							remove(i2);
+							j2--;
+						}
+					}
+				}
+			}
+
+			for (NameValuePair x : values) {
+				if (x != null) {
+					add(x);
+				}
+			}
+		}
+
+		return this;
+	}
+
+	/**
+	 * Adds or replaces the part(s) with the same name.
+	 *
+	 * <p>
+	 * If no part with the same name is found the given part is added to the end of the list.
+	 *
+	 * @param value The part to replace.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList set(NameValuePair value) {
+		if (value != null) {
+			boolean replaced = false;
+			for (int i = 0, j = size(); i < j; i++) {
+				NameValuePair x = get(i);
+				if (eq(x.getName(), value.getName())) {
+					if (replaced) {
+						remove(i);
+						j--;
+					} else {
+						set(i, value);
+						replaced = true;
+					}
+				}
+			}
+
+			if (! replaced)
+				add(value);
+		}
+
+		return this;
+	}
+
+	/**
+	 * Adds or replaces the part(s) with the same name.
+	 *
+	 * <p>
+	 * If no part with the same name is found the given part is added to the end of the list.
+	 *
+	 * @param values The part to replace.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public PartList set(NameValuePair...values) {
+		if (values != null)
+			set(alist(values));
+		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the parts with the same name.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return This object.
+	 */
+	public PartList set(String name, Object value) {
+		return set(createPart(name, value));
+	}
+
+	/**
+	 * Replaces the first occurrence of the parts with the same name.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return This object.
+	 */
+	public PartList set(String name, Supplier<?> value) {
+		return set(createPart(name, value));
+	}
+
+	/**
+	 * Adds a collection of default parts.
+	 *
+	 * <p>
+	 * Default parts are set if they're not already in the list.
+	 *
+	 * @param parts The list of default parts.
+	 * @return This object.
+	 */
+	public PartList setDefault(List<NameValuePair> parts) {
+		if (parts != null)
+			parts.stream().filter(x -> x != null && ! contains(x.getName())).forEach(this::set);
+		return this;
+	}
+
+	/**
+	 * Makes a copy of this list of parts and adds a collection of default parts.
+	 *
+	 * <p>
+	 * Default parts are set if they're not already in the list.
+	 *
+	 * @param parts The list of default parts.
+	 * @return A new list, or the same list if the parts were empty.
+	 */
+	public PartList setDefault(NameValuePair...parts) {
+		if (parts != null)
+			setDefault(Arrays.asList(parts));
+		return this;
+	}
+
+	/**
+	 * Replaces the first occurrence of the part with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public PartList setDefault(String name, Object value) {
+		return setDefault(createPart(name, value));
+	}
+
+	/**
+	 * Replaces the first occurrence of the headers with the same name.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	public PartList setDefault(String name, Supplier<?> value) {
+		return setDefault(createPart(name, value));
+	}
+
+	@Override /* Overridden from ControlledArrayList */
+	public PartList setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 	/**
 	 * Returns a stream of the parts in this list with the specified name.
 	 *
@@ -871,34 +861,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 */
 	public Stream<NameValuePair> stream(String name) {
 		return stream().filter(x->eq(name, x.getName()));
-	}
-
-	//-------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-------------------------------------------------------------------------------------------------------------
-
-	private NameValuePair createPart(String name, Object value) {
-		boolean isResolving = varResolver != null;
-
-		if (value instanceof Supplier<?>) {
-			Supplier<?> value2 = (Supplier<?>)value;
-			return isResolving ? new BasicPart(name, resolver(value2)) : new BasicPart(name, value2);
-		}
-		return isResolving ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
-	}
-
-	private Supplier<Object> resolver(Object input) {
-		return ()->varResolver.resolve(Utils.s(unwrap(input)));
-	}
-
-	private Object unwrap(Object o) {
-		while (o instanceof Supplier)
-			o = ((Supplier<?>)o).get();
-		return o;
-	}
-
-	private boolean eq(String s1, String s2) {
-		return caseInsensitive ? Utils.eqic(s1, s2) : Utils.eq(s1, s2);
 	}
 
 	/**
@@ -919,9 +881,27 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		});
 		return sb.toString();
 	}
-	@Override /* Overridden from ControlledArrayList */
-	public PartList setUnmodifiable() {
-		super.setUnmodifiable();
-		return this;
+
+	private NameValuePair createPart(String name, Object value) {
+		boolean isResolving = varResolver != null;
+
+		if (value instanceof Supplier<?>) {
+			Supplier<?> value2 = (Supplier<?>)value;
+			return isResolving ? new BasicPart(name, resolver(value2)) : new BasicPart(name, value2);
+		}
+		return isResolving ? new BasicPart(name, resolver(value)) : new BasicPart(name, value);
+	}
+
+	private boolean eq(String s1, String s2) {
+		return caseInsensitive ? Utils.eqic(s1, s2) : Utils.eq(s1, s2);
+	}
+
+	private Supplier<Object> resolver(Object input) {
+		return ()->varResolver.resolve(Utils.s(unwrap(input)));
+	}
+	private Object unwrap(Object o) {
+		while (o instanceof Supplier)
+			o = ((Supplier<?>)o).get();
+		return o;
 	}
 }

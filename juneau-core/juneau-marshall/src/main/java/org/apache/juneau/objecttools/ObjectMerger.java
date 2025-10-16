@@ -81,42 +81,6 @@ import org.apache.juneau.*;
  */
 public class ObjectMerger {
 
-	/**
-	 * Create a proxy interface on top of zero or more POJOs.
-	 *
-	 * <p>
-	 * This is a shortcut to calling <code>merge(interfaceClass, <jk>false</jk>, pojos);</code>
-	 *
-	 * @param <T> The pojo types.
-	 * @param interfaceClass The common interface class.
-	 * @param pojos
-	 * 	Zero or more POJOs to merge.
-	 * 	<br>Can contain nulls.
-	 * @return A proxy interface over the merged POJOs.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T merge(Class<T> interfaceClass, T...pojos) {
-		return merge(interfaceClass, false, pojos);
-	}
-
-	/**
-	 * Create a proxy interface on top of zero or more POJOs.
-	 *
-	 * @param <T> The pojo types.
-	 * @param interfaceClass The common interface class.
-	 * @param callAllNonGetters
-	 * 	If <jk>true</jk>, when calling a method that's not a getter, the method will be invoked on all POJOs.
-	 * 	<br>Otherwise, the method will only be called on the first POJO.
-	 * @param pojos
-	 * 	Zero or more POJOs to merge.
-	 * 	<br>Can contain nulls.
-	 * @return A proxy interface over the merged POJOs.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T merge(Class<T> interfaceClass, boolean callAllNonGetters, T...pojos) {
-		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new MergeInvocationHandler(callAllNonGetters, pojos));
-	}
-
 	private static class MergeInvocationHandler implements InvocationHandler {
 		private final Object[] pojos;
 		private final boolean callAllNonGetters;
@@ -152,5 +116,41 @@ public class ObjectMerger {
 			}
 			return r;
 		}
+	}
+
+	/**
+	 * Create a proxy interface on top of zero or more POJOs.
+	 *
+	 * @param <T> The pojo types.
+	 * @param interfaceClass The common interface class.
+	 * @param callAllNonGetters
+	 * 	If <jk>true</jk>, when calling a method that's not a getter, the method will be invoked on all POJOs.
+	 * 	<br>Otherwise, the method will only be called on the first POJO.
+	 * @param pojos
+	 * 	Zero or more POJOs to merge.
+	 * 	<br>Can contain nulls.
+	 * @return A proxy interface over the merged POJOs.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T merge(Class<T> interfaceClass, boolean callAllNonGetters, T...pojos) {
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new MergeInvocationHandler(callAllNonGetters, pojos));
+	}
+
+	/**
+	 * Create a proxy interface on top of zero or more POJOs.
+	 *
+	 * <p>
+	 * This is a shortcut to calling <code>merge(interfaceClass, <jk>false</jk>, pojos);</code>
+	 *
+	 * @param <T> The pojo types.
+	 * @param interfaceClass The common interface class.
+	 * @param pojos
+	 * 	Zero or more POJOs to merge.
+	 * 	<br>Can contain nulls.
+	 * @return A proxy interface over the merged POJOs.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T merge(Class<T> interfaceClass, T...pojos) {
+		return merge(interfaceClass, false, pojos);
 	}
 }

@@ -28,11 +28,6 @@ import java.util.*;
  * @serial exclude
  */
 public class ResourceDescriptions extends ArrayList<ResourceDescription> {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -43,11 +38,6 @@ public class ResourceDescriptions extends ArrayList<ResourceDescription> {
 	public static ResourceDescriptions create() {
 		return new ResourceDescriptions();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Adds a new {@link ResourceDescription} to this list.
 	 *

@@ -43,20 +43,6 @@ import org.apache.juneau.swap.*;
 public @interface BeanConfig {
 
 	/**
-	 * Optional rank for this config.
-	 *
-	 * <p>
-	 * Can be used to override default ordering and application of config annotations.
-	 *
-	 * @return The annotation value.
-	 */
-	int rank() default 0;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BeanContext
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Minimum bean class visibility.
 	 *
 	 * <p>
@@ -86,7 +72,6 @@ public @interface BeanConfig {
 	 * @return The annotation value.
 	 */
 	String beanClassVisibility() default "";
-
 	/**
 	 * Minimum bean constructor visibility.
 	 *
@@ -286,54 +271,6 @@ public @interface BeanConfig {
 	String beansRequireSettersForGetters() default "";
 
 	/**
-	 * Beans don't require at least one property.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, then a Java class doesn't need to contain at least 1 property to be considered a bean.
-	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableBeansRequireSomeProperties() default "";
-
-	/**
-	 * Bean type property name.
-	 *
-	 * <p>
-	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
-	 * parser knows the data type to reconstruct.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Default value: <js>"_type"</js>.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link Bean#typePropertyName()}
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String typePropertyName() default "";
-
-	/**
 	 * Debug mode.
 	 *
 	 * <p>
@@ -416,6 +353,131 @@ public @interface BeanConfig {
 	 * @return The annotation value.
 	 */
 	Class<?>[] dictionary_replace() default {};
+
+	/**
+	 * Beans don't require at least one property.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, then a Java class doesn't need to contain at least 1 property to be considered a bean.
+	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableBeansRequireSomeProperties() default "";
+
+	/**
+	 * Don't silently ignore missing setters.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will throw a {@code BeanRuntimeException}.
+	 * <br>Otherwise it will be sliently ignored.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreMissingSetters()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableIgnoreMissingSetters() default "";
+
+	/**
+	 * Don't ignore transient fields.
+	 *
+	 * <p>
+	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreTransientFields()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableIgnoreTransientFields() default "";
+
+	/**
+	 * Don't ignore unknown properties with null values.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@code BeanRuntimeException}.
+	 * Otherwise it will be silently ignored.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableIgnoreUnknownNullBeanProperties() default "";
+
+	/**
+	 * Don't use interface proxies.
+	 *
+	 * <p>
+	 * Disables the feature where interfaces will be instantiated as proxy classes through the use of an
+	 * {@link InvocationHandler} if there is no other way of instantiating them.
+	 * <br>Setting this to <js>"true"</js> causes this to be a {@link BeanRuntimeException}.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String disableInterfaceProxies() default "";
 
 	/**
 	 * Find fluent setters.
@@ -502,55 +564,6 @@ public @interface BeanConfig {
 	String ignoreInvocationExceptionsOnSetters() default "";
 
 	/**
-	 * Don't silently ignore missing setters.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will throw a {@code BeanRuntimeException}.
-	 * <br>Otherwise it will be sliently ignored.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreMissingSetters()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableIgnoreMissingSetters() default "";
-
-	/**
-	 * Don't ignore transient fields.
-	 *
-	 * <p>
-	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreTransientFields()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableIgnoreTransientFields() default "";
-
-	/**
 	 * Ignore unknown properties.
 	 *
 	 * <p>
@@ -598,31 +611,6 @@ public @interface BeanConfig {
 	 * @return The annotation value.
 	 */
 	String ignoreUnknownEnumValues() default "";
-
-	/**
-	 * Don't ignore unknown properties with null values.
-	 *
-	 * <p>
-	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@code BeanRuntimeException}.
-	 * Otherwise it will be silently ignored.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableIgnoreUnknownNullBeanProperties() default "";
 
 	/**
 	 * Identifies a set of interfaces.
@@ -811,6 +799,16 @@ public @interface BeanConfig {
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Void.class;
 
 	/**
+	 * Optional rank for this config.
+	 *
+	 * <p>
+	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
+	 */
+	int rank() default 0;
+
+	/**
 	 * Sort bean properties.
 	 *
 	 * <p>
@@ -906,6 +904,29 @@ public @interface BeanConfig {
 	String timeZone() default "";
 
 	/**
+	 * Bean type property name.
+	 *
+	 * <p>
+	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
+	 * parser knows the data type to reconstruct.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Default value: <js>"_type"</js>.
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Bean#typePropertyName()}
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String typePropertyName() default "";
+
+	/**
 	 * Use enum names.
 	 *
 	 * <p>
@@ -928,32 +949,6 @@ public @interface BeanConfig {
 	 * @return The annotation value.
 	 */
 	String useEnumNames() default "";
-
-	/**
-	 * Don't use interface proxies.
-	 *
-	 * <p>
-	 * Disables the feature where interfaces will be instantiated as proxy classes through the use of an
-	 * {@link InvocationHandler} if there is no other way of instantiating them.
-	 * <br>Setting this to <js>"true"</js> causes this to be a {@link BeanRuntimeException}.
-	 *
-	 * <ul class='values'>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js> (default)
-	 * </ul>
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String disableInterfaceProxies() default "";
 
 	/**
 	 * Use Java Introspector.

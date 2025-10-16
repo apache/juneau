@@ -31,11 +31,6 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 public class ByteArrayResource extends BasicResource {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Constructor.
 	 */
@@ -62,10 +57,22 @@ public class ByteArrayResource extends BasicResource {
 		super(copyFrom);
 	}
 
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource addHeader(String name, String value) {
+		super.addHeader(name, value);
+		return this;
+	}
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource addHeaders(Header...values) {
+		super.addHeaders(values);
+		return this;
+	}
+
 	@Override
 	public ByteArrayResource copy() {
 		return new ByteArrayResource(this);
 	}
+
 	@Override /* Overridden from BasicResource */
 	public ByteArrayResource setCached() throws IOException{
 		super.setCached();
@@ -97,13 +104,13 @@ public class ByteArrayResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentEncoding(String value) {
+	public ByteArrayResource setContentEncoding(ContentEncoding value) {
 		super.setContentEncoding(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentEncoding(ContentEncoding value) {
+	public ByteArrayResource setContentEncoding(String value) {
 		super.setContentEncoding(value);
 		return this;
 	}
@@ -115,14 +122,26 @@ public class ByteArrayResource extends BasicResource {
 	}
 
 	@Override /* Overridden from BasicResource */
+	public ByteArrayResource setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
 	public ByteArrayResource setContentType(String value) {
 		super.setContentType(value);
 		return this;
 	}
 
 	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setContentType(ContentType value) {
-		super.setContentType(value);
+	public ByteArrayResource setHeader(String name, String value) {
+		super.setHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource setHeaders(Header...values) {
+		super.setHeaders(values);
 		return this;
 	}
 
@@ -135,30 +154,6 @@ public class ByteArrayResource extends BasicResource {
 	@Override /* Overridden from BasicResource */
 	public ByteArrayResource setUnmodifiable() {
 		super.setUnmodifiable();
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setHeader(String name, String value) {
-		super.setHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource addHeader(String name, String value) {
-		super.addHeader(name, value);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource setHeaders(Header...values) {
-		super.setHeaders(values);
-		return this;
-	}
-
-	@Override /* Overridden from BasicResource */
-	public ByteArrayResource addHeaders(Header...values) {
-		super.addHeaders(values);
 		return this;
 	}
 }

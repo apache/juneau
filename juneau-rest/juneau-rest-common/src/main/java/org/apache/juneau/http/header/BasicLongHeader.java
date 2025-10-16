@@ -44,11 +44,6 @@ import org.apache.juneau.http.annotation.*;
 @Header
 @Schema(type="integer",format="int64")
 public class BasicLongHeader extends BasicHeader {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -62,7 +57,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicLongHeader of(String name, String value) {
+	public static BasicLongHeader of(String name, Long value) {
 		return value == null ? null : new BasicLongHeader(name, value);
 	}
 
@@ -77,7 +72,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicLongHeader of(String name, Long value) {
+	public static BasicLongHeader of(String name, String value) {
 		return value == null ? null : new BasicLongHeader(name, value);
 	}
 
@@ -97,13 +92,23 @@ public class BasicLongHeader extends BasicHeader {
 	public static BasicLongHeader of(String name, Supplier<Long> value) {
 		return value == null ? null : new BasicLongHeader(name, value);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final Long value;
 	private final Supplier<Long> supplier;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public BasicLongHeader(String name, Long value) {
+		super(name, value);
+		this.value = value;
+		this.supplier = null;
+	}
 
 	/**
 	 * Constructor.
@@ -118,21 +123,6 @@ public class BasicLongHeader extends BasicHeader {
 	public BasicLongHeader(String name, String value) {
 		super(name, value);
 		this.value = parse(value);
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
-	 */
-	public BasicLongHeader(String name, Long value) {
-		super(name, value);
-		this.value = value;
 		this.supplier = null;
 	}
 
@@ -154,11 +144,6 @@ public class BasicLongHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Overridden from Header */
-	public String getValue() {
-		return Utils.s(value());
-	}
-
 	/**
 	 * Returns the header value as a {@link Long} wrapped in an {@link Optional}.
 	 *
@@ -166,15 +151,6 @@ public class BasicLongHeader extends BasicHeader {
 	 */
 	public Optional<Long> asLong() {
 		return Utils.opt(value());
-	}
-
-	/**
-	 * Returns the header value as a {@link Long}.
-	 *
-	 * @return The header value as a {@link Long}.  Can be <jk>null</jk>.
-	 */
-	public Long toLong() {
-		return value();
 	}
 
 	/**
@@ -196,6 +172,11 @@ public class BasicLongHeader extends BasicHeader {
 		return new FluentLongAssertion<>(value(), this);
 	}
 
+	@Override /* Overridden from Header */
+	public String getValue() {
+		return Utils.s(value());
+	}
+
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.
 	 *
@@ -208,6 +189,15 @@ public class BasicLongHeader extends BasicHeader {
 	public Long orElse(Long other) {
 		Long x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns the header value as a {@link Long}.
+	 *
+	 * @return The header value as a {@link Long}.  Can be <jk>null</jk>.
+	 */
+	public Long toLong() {
+		return value();
 	}
 
 	private Long parse(String value) {

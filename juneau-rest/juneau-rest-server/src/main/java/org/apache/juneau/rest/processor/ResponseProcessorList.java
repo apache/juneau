@@ -33,25 +33,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class ResponseProcessorList {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -69,15 +50,6 @@ public class ResponseProcessorList {
 			this.entries = list();
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected ResponseProcessorList buildDefault() {
-			return new ResponseProcessorList(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Appends the specified rest response processor classes to the list.
 		 *
@@ -89,7 +61,6 @@ public class ResponseProcessorList {
 			addAll(entries, (Object[])Utils.assertClassArrayArgIsType("values", ResponseProcessor.class, values));
 			return this;
 		}
-
 		/**
 		 * Appends the specified rest response processor objects to the list.
 		 *
@@ -100,22 +71,41 @@ public class ResponseProcessorList {
 			addAll(entries, (Object[])values);
 			return this;
 		}
+
 		@Override /* Overridden from BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
 			return this;
 		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
-	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
+		@Override /* Overridden from BeanBuilder */
+		protected ResponseProcessorList buildDefault() {
+			return new ResponseProcessorList(this);
+		}
+	}
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
+		if (o instanceof ResponseProcessor)
+			return (ResponseProcessor)o;
+		try {
+			return bs.createBean(ResponseProcessor.class).type((Class<?>)o).run();
+		} catch (ExecutableException e) {
+			throw new ConfigException(e, "Could not instantiate class {0}", o);
+		}
+	}
 
 	private final ResponseProcessor[] entries;
 
@@ -132,16 +122,6 @@ public class ResponseProcessorList {
 				.stream()
 				.map(x -> instantiate(x, bs))
 				.toArray(ResponseProcessor[]::new);
-	}
-
-	private static ResponseProcessor instantiate(Object o, BeanStore bs) {
-		if (o instanceof ResponseProcessor)
-			return (ResponseProcessor)o;
-		try {
-			return bs.createBean(ResponseProcessor.class).type((Class<?>)o).run();
-		} catch (ExecutableException e) {
-			throw new ConfigException(e, "Could not instantiate class {0}", o);
-		}
 	}
 
 	/**

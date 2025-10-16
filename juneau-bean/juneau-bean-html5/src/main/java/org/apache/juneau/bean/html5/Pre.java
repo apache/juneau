@@ -91,7 +91,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='jc'>{@link HtmlBuilder}
  * 	<ul class='javatree'>
  * 		<li class='jm'>{@link HtmlBuilder#pre() pre()}
- * 		<li class='jm'>{@link HtmlBuilder#pre(Object, Object...) pre(Object, Object...)}
+ * 		<li class='jm'>{@link HtmlBuilder#pre(Object...) pre(Object...)}
  * 	</ul>
  * </ul>
  * </p>
@@ -116,26 +116,38 @@ public class Pre extends HtmlElementMixed {
 	public Pre(Object...children) {
 		children(children);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Xml(format=MIXED_PWS)
-	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
-	@Override
-	public List<Object> getChildren() {
-		return super.getChildren();
-	}
 	@Override /* Overridden from HtmlElement */
 	public Pre _class(String value) {  // NOSONAR - Intentional naming.
 		super._class(value);
 		return this;
 	}
-
 	@Override /* Overridden from HtmlElement */
 	public Pre accesskey(String value) {
 		super.accesskey(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Pre attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Pre attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Pre child(Object value) {
+		super.child(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementMixed */
+	public Pre children(Object...value) {
+		super.children(value);
 		return this;
 	}
 
@@ -149,6 +161,13 @@ public class Pre extends HtmlElementMixed {
 	public Pre dir(String value) {
 		super.dir(value);
 		return this;
+	}
+
+	@Xml(format=MIXED_PWS)
+	@Beanp(dictionary=HtmlBeanDictionary.class, name="c")
+	@Override
+	public List<Object> getChildren() {
+		return super.getChildren();
 	}
 
 	@Override /* Overridden from HtmlElement */
@@ -496,30 +515,6 @@ public class Pre extends HtmlElementMixed {
 	@Override /* Overridden from HtmlElement */
 	public Pre translate(Object value) {
 		super.translate(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Pre child(Object value) {
-		super.child(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElementMixed */
-	public Pre children(Object...value) {
-		super.children(value);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Pre attr(String key, Object val) {
-		super.attr(key, val);
-		return this;
-	}
-
-	@Override /* Overridden from HtmlElement */
-	public Pre attrUri(String key, Object val) {
-		super.attrUri(key, val);
 		return this;
 	}
 }

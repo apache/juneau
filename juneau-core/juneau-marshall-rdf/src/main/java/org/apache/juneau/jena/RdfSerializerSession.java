@@ -54,31 +54,6 @@ import com.hp.hpl.jena.rdf.model.*;
 public class RdfSerializerSession extends WriterSerializerSession {
 
 	/**
-	 * Maps RDF writer names to property prefixes that apply to them.
-	 */
-	static final Map<String,String> LANG_PROP_MAP = mapBuilder(String.class,String.class)
-		.add("RDF/XML","rdfXml.").add("RDF/XML-ABBREV","rdfXml.").add("N3","n3.").add("N3-PP","n3.").add("N3-PLAIN","n3.").add("N3-TRIPLES","n3.").add("TURTLE","n3.").add("N-TRIPLE","ntriple.")
-		.build();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	public static Builder create(RdfSerializer ctx) {
-		return new Builder(ctx);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
 	 * Builder class.
 	 */
 	public static class Builder extends WriterSerializerSession.Builder {
@@ -95,14 +70,14 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			this.ctx = ctx;
 		}
 
-		@Override
-		public RdfSerializerSession build() {
-			return new RdfSerializerSession(this);
-		}
 		@Override /* Overridden from Builder */
 		public <T> Builder apply(Class<T> type, Consumer<T> apply) {
 			super.apply(type, apply);
 			return this;
+		}
+		@Override
+		public RdfSerializerSession build() {
+			return new RdfSerializerSession(this);
 		}
 
 		@Override /* Overridden from Builder */
@@ -112,20 +87,14 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder properties(Map<String,Object> value) {
-			super.properties(value);
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder property(String key, Object value) {
-			super.property(key, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder unmodifiable() {
-			super.unmodifiable();
+		public Builder javaMethod(Method value) {
+			super.javaMethod(value);
 			return this;
 		}
 
@@ -154,20 +123,14 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
+		public Builder properties(Map<String,Object> value) {
+			super.properties(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder timeZoneDefault(TimeZone value) {
-			super.timeZoneDefault(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder javaMethod(Method value) {
-			super.javaMethod(value);
+		public Builder property(String key, Object value) {
+			super.property(key, value);
 			return this;
 		}
 
@@ -190,20 +153,32 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder uriContext(UriContext value) {
-			super.uriContext(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder streamCharset(Charset value) {
 			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZoneDefault(TimeZone value) {
+			super.timeZoneDefault(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder unmodifiable() {
+			super.unmodifiable();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriContext(UriContext value) {
+			super.uriContext(value);
 			return this;
 		}
 
@@ -213,11 +188,21 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			return this;
 		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Maps RDF writer names to property prefixes that apply to them.
+	 */
+	static final Map<String,String> LANG_PROP_MAP = mapBuilder(String.class,String.class)
+		.add("RDF/XML","rdfXml.").add("RDF/XML-ABBREV","rdfXml.").add("N3","n3.").add("N3-PP","n3.").add("N3-PLAIN","n3.").add("N3-TRIPLES","n3.").add("TURTLE","n3.").add("N-TRIPLE","ntriple.")
+		.build();
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(RdfSerializer ctx) {
+		return new Builder(ctx);
+	}
 	private final RdfSerializer ctx;
 	private final Property pRoot, pValue;
 	private final Model model;
@@ -268,6 +253,13 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/*
+	 * XML-encoded the specified element name using the {@link XmlUtils#encodeElementName(Object)} method.
+	 */
+	private String encodeElementName(Object o) {
+		return XmlUtils.encodeElementName(toString(o));
+	}
+
+	/*
 	 * XML-encodes the specified string using the {@link XmlUtils#escapeText(Object)} method.
 	 */
 	private String encodeTextInvalidChars(Object o) {
@@ -277,36 +269,15 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return XmlUtils.escapeText(s);
 	}
 
-	/*
-	 * XML-encoded the specified element name using the {@link XmlUtils#encodeElementName(Object)} method.
-	 */
-	private String encodeElementName(Object o) {
-		return XmlUtils.encodeElementName(toString(o));
-	}
-
-	@Override /* Overridden from Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
-
-		Resource r = null;
-
-		ClassMeta<?> cm = getClassMetaForObject(o);
-		if (isLooseCollections() && cm != null && cm.isCollectionOrArray()) {
-			Collection c = cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o);
-			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
-		} else {
-			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);
-			if (n.isLiteral()) {
-				r = model.createResource();
-				r.addProperty(pValue, n);
-			} else {
-				r = n.asResource();
-			}
-
-			if (isAddRootProp())
-				r.addProperty(pRoot, "true");
-		}
-
-		writer.write(model, out.getWriter(), "http://unknown/");
+	private String getUri(Object uri, Object uri2) {
+		String s = null;
+		if (uri != null)
+			s = uri.toString();
+		if ((s == null || s.isEmpty()) && uri2 != null)
+			s = uri2.toString();
+		if (s == null)
+			return null;
+		return getUriResolver().resolve(s);
 	}
 
 	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
@@ -447,36 +418,6 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return n;
 	}
 
-	private String getUri(Object uri, Object uri2) {
-		String s = null;
-		if (uri != null)
-			s = uri.toString();
-		if ((s == null || s.isEmpty()) && uri2 != null)
-			s = uri2.toString();
-		if (s == null)
-			return null;
-		return getUriResolver().resolve(s);
-	}
-
-	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
-
-		m = sort(m);
-
-		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
-
-		ArrayList<Map.Entry<Object,Object>> l = listFrom(m.entrySet());
-		Collections.reverse(l);
-		l.forEach(x -> {
-			Object value = x.getValue();
-			Object key = generalize(x.getKey(), keyType);
-			Namespace ns = getJuneauBpNs();
-			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
-			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
-			if (n != null)
-				r.addProperty(p, n);
-		});
-	}
-
 	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
 		List<BeanPropertyValue> l = new ArrayList<>();
 
@@ -524,6 +465,25 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		});
 	}
 
+	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
+
+		m = sort(m);
+
+		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
+
+		ArrayList<Map.Entry<Object,Object>> l = listFrom(m.entrySet());
+		Collections.reverse(l);
+		l.forEach(x -> {
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
+			Namespace ns = getJuneauBpNs();
+			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
+			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
+			if (n != null)
+				r.addProperty(p, n);
+		});
+	}
+
 	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
 		c.forEach(x -> list.add(serializeAnything(x, false, elementType, null, null, null)));
@@ -558,10 +518,31 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		});
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Common properties
-	//-----------------------------------------------------------------------------------------------------------------
+	@SuppressWarnings("resource")
+	@Override /* Overridden from Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
 
+		Resource r = null;
+
+		ClassMeta<?> cm = getClassMetaForObject(o);
+		if (isLooseCollections() && cm != null && cm.isCollectionOrArray()) {
+			Collection c = cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o);
+			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
+		} else {
+			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);
+			if (n.isLiteral()) {
+				r = model.createResource();
+				r.addProperty(pValue, n);
+			} else {
+				r = n.asResource();
+			}
+
+			if (isAddRootProp())
+				r.addProperty(pRoot, "true");
+		}
+
+		writer.write(model, out.getWriter(), "http://unknown/");
+	}
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
@@ -571,6 +552,16 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	protected final RdfCollectionFormat getCollectionFormat() {
 		return ctx.getCollectionFormat();
+	}
+
+	/**
+	 * All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaSettings() {
+		return ctx.getJenaSettings();
 	}
 
 	/**
@@ -605,36 +596,55 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	protected final String getLanguage() {
 		return ctx.getLanguage();
 	}
-
 	/**
-	 * Collections should be serialized and parsed as loose collections.
+	 * Default namespaces.
 	 *
-	 * @see RdfSerializer.Builder#looseCollections()
+	 * @see RdfSerializer.Builder#namespaces(Namespace...)
 	 * @return
-	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
-	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 * 	The default list of namespaces associated with this serializer.
 	 */
-	protected final boolean isLooseCollections() {
-		return ctx.isLooseCollections();
+	protected final Namespace[] getNamespaces() {
+		return ctx.getNamespaces();
+	}
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
+		return ctx.getRdfBeanMeta(bm);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Jena properties
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
-	 * All Jena-related configuration properties.
+	 * Returns the language-specific metadata on the specified bean property.
 	 *
-	 * @return
-	 * 	A map of all Jena-related configuration properties.
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
 	 */
-	protected final Map<String,Object> getJenaSettings() {
-		return ctx.getJenaSettings();
+	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? RdfBeanPropertyMeta.DEFAULT : ctx.getRdfBeanPropertyMeta(bpm);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Properties
-	//-----------------------------------------------------------------------------------------------------------------
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		return ctx.getRdfClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
+	}
 
 	/**
 	 * Add <js>"_type"</js> properties when needed.
@@ -659,7 +669,6 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	protected final boolean isAddLiteralTypes() {
 		return ctx.isAddLiteralTypes();
 	}
-
 	/**
 	 * Add RDF root identifier property to root node.
 	 *
@@ -684,14 +693,15 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Default namespaces.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
-	 * @see RdfSerializer.Builder#namespaces(Namespace...)
+	 * @see RdfSerializer.Builder#looseCollections()
 	 * @return
-	 * 	The default list of namespaces associated with this serializer.
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
 	 */
-	protected final Namespace[] getNamespaces() {
-		return ctx.getNamespaces();
+	protected final boolean isLooseCollections() {
+		return ctx.isLooseCollections();
 	}
 
 	/**
@@ -704,49 +714,5 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 */
 	protected final boolean isUseXmlNamespaces() {
 		return ctx.isUseXmlNamespaces();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Extended metadata
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the language-specific metadata on the specified class.
-	 *
-	 * @param cm The class to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
-		return ctx.getRdfClassMeta(cm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean.
-	 *
-	 * @param bm The bean to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
-		return ctx.getRdfBeanMeta(bm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
-		return bpm == null ? RdfBeanPropertyMeta.DEFAULT : ctx.getRdfBeanPropertyMeta(bpm);
-	}
-
-	/**
-	 * Returns the language-specific metadata on the specified bean property.
-	 *
-	 * @param bpm The bean property to return the metadata on.
-	 * @return The metadata.
-	 */
-	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
-		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
 	}
 }

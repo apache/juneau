@@ -28,9 +28,6 @@ import org.apache.juneau.rest.util.*;
  */
 public class RestChildMatch {
 
-	private UrlPathMatch pathMatch;
-	private RestContext childContext;
-
 	/**
 	 * Creator.
 	 *
@@ -41,6 +38,9 @@ public class RestChildMatch {
 	public static RestChildMatch create(UrlPathMatch pathMatch, RestContext childContext) {
 		return new RestChildMatch(pathMatch, childContext);
 	}
+	private UrlPathMatch pathMatch;
+
+	private RestContext childContext;
 
 	/**
 	 * Constructor.
@@ -54,20 +54,20 @@ public class RestChildMatch {
 	}
 
 	/**
-	 * Returns the path matching results of the REST child match.
-	 *
-	 * @return The path matching results of the REST child match.
-	 */
-	public UrlPathMatch getPathMatch() {
-		return pathMatch;
-	}
-
-	/**
 	 * Returns the child context of the REST child match.
 	 *
 	 * @return The child context of the REST child match.
 	 */
 	public RestContext getChildContext() {
 		return childContext;
+	}
+
+	/**
+	 * Returns the path matching results of the REST child match.
+	 *
+	 * @return The path matching results of the REST child match.
+	 */
+	public UrlPathMatch getPathMatch() {
+		return pathMatch;
 	}
 }

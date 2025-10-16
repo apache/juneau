@@ -81,34 +81,6 @@ public class MediaRange extends MediaType {
 	}
 
 	/**
-	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
-	 *
-	 * <p>
-	 * The quality value is a float between <c>0.0</c> (unacceptable) and <c>1.0</c> (most acceptable).
-	 *
-	 * <p>
-	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
-	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
-	 *
-	 * @return The 'q' value for this type, never <jk>null</jk>.
-	 */
-	public Float getQValue() {
-		return qValue;
-	}
-
-	/**
-	 * Returns the optional set of custom extensions defined for this type.
-	 *
-	 * <p>
-	 * Values are lowercase and never <jk>null</jk>.
-	 *
-	 * @return The optional list of extensions, never <jk>null</jk>.
-	 */
-	public List<NameValuePair> getExtensions() {
-		return u(alist(extensions));
-	}
-
-	/**
 	 * Performs an action on the optional set of custom extensions defined for this type.
 	 *
 	 * <p>
@@ -123,14 +95,37 @@ public class MediaRange extends MediaType {
 		return this;
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from MediaType */
 	public MediaRange forEachParameter(Consumer<NameValuePair> action) {
 		super.forEachParameter(action);
 		return this;
+	}
+
+	/**
+	 * Returns the optional set of custom extensions defined for this type.
+	 *
+	 * <p>
+	 * Values are lowercase and never <jk>null</jk>.
+	 *
+	 * @return The optional list of extensions, never <jk>null</jk>.
+	 */
+	public List<NameValuePair> getExtensions() {
+		return u(alist(extensions));
+	}
+	/**
+	 * Returns the <js>'q'</js> (quality) value for this type, as described in Section 3.9 of RFC2616.
+	 *
+	 * <p>
+	 * The quality value is a float between <c>0.0</c> (unacceptable) and <c>1.0</c> (most acceptable).
+	 *
+	 * <p>
+	 * If 'q' value doesn't make sense for the context (e.g. this range was extracted from a <js>"content-*"</js>
+	 * header, as opposed to <js>"accept-*"</js> header, its value will always be <js>"1"</js>.
+	 *
+	 * @return The 'q' value for this type, never <jk>null</jk>.
+	 */
+	public Float getQValue() {
+		return qValue;
 	}
 
 	@Override /* Overridden from Object */

@@ -33,25 +33,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class RestOpArgList {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param beanStore The bean store to use for creating beans.
-	 * @return A new builder for this object.
-	 */
-	public static Builder create(BeanStore beanStore) {
-		return new Builder(beanStore);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -69,15 +50,6 @@ public class RestOpArgList {
 			entries = list();
 		}
 
-		@Override /* Overridden from BeanBuilder */
-		protected RestOpArgList buildDefault() {
-			return new RestOpArgList(this);
-		}
-
-		//-------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-------------------------------------------------------------------------------------------------------------
-
 		/**
 		 * Prepends the specified rest op arg classes to the list.
 		 *
@@ -94,18 +66,26 @@ public class RestOpArgList {
 			super.impl(value);
 			return this;
 		}
-
 		@Override /* Overridden from BeanBuilder */
 		public Builder type(Class<?> value) {
 			super.type(value);
 			return this;
 		}
+
+		@Override /* Overridden from BeanBuilder */
+		protected RestOpArgList buildDefault() {
+			return new RestOpArgList(this);
+		}
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
 	private final Class<? extends RestOpArg>[] entries;
 
 	/**

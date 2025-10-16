@@ -31,14 +31,14 @@ public class BasicJettyMicroserviceListener extends BasicMicroserviceListener im
 	public void onCreateServer(JettyMicroservice microservice) {}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onStartServer(JettyMicroservice microservice) {}
-
-	@Override /* Overridden from JettyMicroserviceListener */
 	public void onPostStartServer(JettyMicroservice microservice) {}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onStopServer(JettyMicroservice microservice) {}
+	public void onPostStopServer(JettyMicroservice microservice) {}
 
 	@Override /* Overridden from JettyMicroserviceListener */
-	public void onPostStopServer(JettyMicroservice microservice) {}
+	public void onStartServer(JettyMicroservice microservice) {}
+
+	@Override /* Overridden from JettyMicroserviceListener */
+	public void onStopServer(JettyMicroservice microservice) {}
 }

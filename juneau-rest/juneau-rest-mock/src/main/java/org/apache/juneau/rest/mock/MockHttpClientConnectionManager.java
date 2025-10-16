@@ -42,6 +42,26 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 
 	private ConnectionRequest cr;
 
+	@Override /* Overridden from HttpClientConnectionManager */
+	public void closeExpiredConnections() {}
+
+	@Override /* Overridden from HttpClientConnectionManager */
+	public void closeIdleConnections(long idletime, TimeUnit tunit) {}
+
+	@Override /* Overridden from HttpClientConnectionManager */
+	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		// All MockHttpClientConnectionManagers are considered equal.
+		return o != null && o instanceof MockHttpClientConnectionManager;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return MockHttpClientConnectionManager.class.hashCode();
+	}
+
 	/**
 	 * Post-creation initialization method.
 	 *
@@ -61,39 +81,19 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
+	public void releaseConnection(HttpClientConnection conn, Object newState, long validDuration, TimeUnit timeUnit) {}
+
+	@Override /* Overridden from HttpClientConnectionManager */
 	public ConnectionRequest requestConnection(HttpRoute route, Object state) {
 		return cr;
 	}
 
 	@Override /* Overridden from HttpClientConnectionManager */
-	public void releaseConnection(HttpClientConnection conn, Object newState, long validDuration, TimeUnit timeUnit) {}
-
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {}
-
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void upgrade(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
-
-	@Override /* Overridden from HttpClientConnectionManager */
 	public void routeComplete(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
-
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void closeIdleConnections(long idletime, TimeUnit tunit) {}
-
-	@Override /* Overridden from HttpClientConnectionManager */
-	public void closeExpiredConnections() {}
 
 	@Override /* Overridden from HttpClientConnectionManager */
 	public void shutdown() {}
 
-	@Override /* Overridden from Object */
-	public int hashCode() {
-		return MockHttpClientConnectionManager.class.hashCode();
-	}
-
-	@Override /* Overridden from Object */
-	public boolean equals(Object o) {
-		// All MockHttpClientConnectionManagers are considered equal.
-		return o != null && o instanceof MockHttpClientConnectionManager;
-	}
+	@Override /* Overridden from HttpClientConnectionManager */
+	public void upgrade(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
 }

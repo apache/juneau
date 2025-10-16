@@ -48,15 +48,6 @@ public class Section {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this section exists.
-	 *
-	 * @return <jk>true</jk> if this section exists.
-	 */
-	public boolean isPresent() {
-		return configMap.hasSection(name);
-	}
-
-	/**
 	 * Shortcut for calling <code>asBean(sectionName, c, <jk>false</jk>)</code>.
 	 *
 	 * @param <T> The bean class to create.
@@ -127,23 +118,6 @@ public class Section {
 		}
 
 		return Utils.opt(bm.getBean());
-	}
-
-	/**
-	 * Returns this section as a map.
-	 *
-	 * @return A new {@link JsonMap}, or {@link Optional#empty()} if this section doesn't exist.
-	 */
-	public Optional<JsonMap> asMap() {
-		if (! isPresent())
-			return Utils.opte();
-
-		var keys = configMap.getKeys(name);
-
-		var m = new JsonMap();
-		for (var k : keys)
-			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return Utils.opt(m);
 	}
 
 	/**
@@ -225,6 +199,32 @@ public class Section {
 			}
 			throw new UnsupportedOperationException("Unsupported interface method.  method='" + method + "'");
 		}));
+	}
+
+	/**
+	 * Returns this section as a map.
+	 *
+	 * @return A new {@link JsonMap}, or {@link Optional#empty()} if this section doesn't exist.
+	 */
+	public Optional<JsonMap> asMap() {
+		if (! isPresent())
+			return Utils.opte();
+
+		var keys = configMap.getKeys(name);
+
+		var m = new JsonMap();
+		for (var k : keys)
+			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
+		return Utils.opt(m);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this section exists.
+	 *
+	 * @return <jk>true</jk> if this section exists.
+	 */
+	public boolean isPresent() {
+		return configMap.hasSection(name);
 	}
 
 	/**

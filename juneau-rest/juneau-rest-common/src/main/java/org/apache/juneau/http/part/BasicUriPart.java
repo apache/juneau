@@ -31,24 +31,6 @@ import org.apache.juneau.common.utils.*;
  * </ul>
  */
 public class BasicUriPart extends BasicPart {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Static creator.
-	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
-	 */
-	public static BasicUriPart of(String name, URI value) {
-		if (Utils.isEmpty(name) || value == null)
-			return null;
-		return new BasicUriPart(name, value);
-	}
-
 	/**
 	 * Static creator with delayed value.
 	 *
@@ -65,36 +47,20 @@ public class BasicUriPart extends BasicPart {
 		return new BasicUriPart(name, value);
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Static creator.
+	 *
+	 * @param name The part name.
+	 * @param value The part value.
+	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 */
+	public static BasicUriPart of(String name, URI value) {
+		if (Utils.isEmpty(name) || value == null)
+			return null;
+		return new BasicUriPart(name, value);
+	}
 	private final URI value;
 	private final Supplier<URI> supplier;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The part name.  Must not be <jk>null</jk>.
-	 * @param value The part value.  Can be <jk>null</jk>.
-	 */
-	public BasicUriPart(String name, URI value) {
-		super(name, value);
-		this.value = value;
-		this.supplier = null;
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param name The part name.  Must not be <jk>null</jk>.
-	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
-	 */
-	public BasicUriPart(String name, Supplier<URI> value) {
-		super(name, value);
-		this.value = null;
-		this.supplier = value;
-	}
 
 	/**
 	 * Constructor.
@@ -113,21 +79,36 @@ public class BasicUriPart extends BasicPart {
 	}
 
 	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicUriPart(String name, Supplier<URI> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicUriPart(String name, URI value) {
+		super(name, value);
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
 	 * Returns The part value as a {@link URI} wrapped in an {@link Optional}.
 	 *
 	 * @return The part value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
 		return Utils.opt(value());
-	}
-
-	/**
-	 * Returns The part value as a {@link URI}.
-	 *
-	 * @return The part value as a {@link URI}, or <jk>null</jk> if the value <jk>null</jk>.
-	 */
-	public URI toUri() {
-		return value();
 	}
 
 	/**
@@ -142,6 +123,15 @@ public class BasicUriPart extends BasicPart {
 	public URI orElse(URI other) {
 		URI x = value();
 		return x != null ? x : other;
+	}
+
+	/**
+	 * Returns The part value as a {@link URI}.
+	 *
+	 * @return The part value as a {@link URI}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public URI toUri() {
+		return value();
 	}
 
 	private URI value() {

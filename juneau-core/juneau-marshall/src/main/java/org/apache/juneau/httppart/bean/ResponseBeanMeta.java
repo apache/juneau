@@ -43,28 +43,76 @@ import org.apache.juneau.reflect.*;
  */
 public class ResponseBeanMeta {
 
+	static class Builder {
+		ClassMeta<?> cm;
+		int code;
+		AnnotationWorkList annotations;
+		Class<? extends HttpPartSerializer> partSerializer;
+		Class<? extends HttpPartParser> partParser;
+		HttpPartSchema.Builder schema = HttpPartSchema.create();
+
+		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = map();
+		ResponseBeanPropertyMeta.Builder contentMethod;
+		ResponseBeanPropertyMeta.Builder statusMethod;
+
+		Builder(AnnotationWorkList annotations) {
+			this.annotations = annotations;
+		}
+
+		Builder apply(Response a) {
+			if (a != null) {
+				if (isNotVoid(a.serializer()))
+					partSerializer = a.serializer();
+				if (isNotVoid(a.parser()))
+					partParser = a.parser();
+				schema.apply(a.schema());
+			}
+			return this;
+		}
+
+		Builder apply(StatusCode a) {
+			if (a != null) {
+				if (a.value().length > 0)
+					code = a.value()[0];
+			}
+			return this;
+		}
+
+		Builder apply(Type t) {
+			Class<?> c = ClassUtils.toClass(t);
+			this.cm = BeanContext.DEFAULT.getClassMeta(c);
+			ClassInfo ci = cm.getInfo();
+			ci.forEachPublicMethod(x -> true, x -> {
+				assertNoInvalidAnnotations(x, Query.class, FormData.class);
+				if (x.hasAnnotation(Header.class)) {
+					assertNoArgs(x, Header.class);
+					assertReturnNotVoid(x, Header.class);
+					HttpPartSchema s = HttpPartSchema.create(x.getAnnotation(Header.class), x.getPropertyName());
+					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
+				} else if (x.hasAnnotation(StatusCode.class)) {
+					assertNoArgs(x, Header.class);
+					assertReturnType(x, Header.class, int.class, Integer.class);
+					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, x);
+				} else if (x.hasAnnotation(Content.class)) {
+					if (x.hasNoParams())
+						assertReturnNotVoid(x, Header.class);
+					else
+						assertArgType(x, Header.class, OutputStream.class, Writer.class);
+					contentMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, x);
+				}
+			});
+			return this;
+		}
+
+		ResponseBeanMeta build() {
+			return new ResponseBeanMeta(this);
+		}
+	}
+
 	/**
 	 * Represents a non-existent meta object.
 	 */
 	public static ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(AnnotationWorkList.create()));
-
-	/**
-	 * Create metadata from specified class.
-	 *
-	 * @param t The class annotated with {@link Response}.
-	 * @param annotations The annotations to apply to any new part serializers or parsers.
-	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
-	 */
-	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
-		ClassInfo ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
-		if (ci.hasNoAnnotation(Response.class))
-			return null;
-		Builder b = new Builder(annotations);
-		b.apply(ci.innerType());
-		ci.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
-		ci.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
-		return b.build();
-	}
 
 	/**
 	 * Create metadata from specified method return.
@@ -99,11 +147,23 @@ public class ResponseBeanMeta {
 		mpi.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
+	/**
+	 * Create metadata from specified class.
+	 *
+	 * @param t The class annotated with {@link Response}.
+	 * @param annotations The annotations to apply to any new part serializers or parsers.
+	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
+	 */
+	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
+		ClassInfo ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
+		if (ci.hasNoAnnotation(Response.class))
+			return null;
+		Builder b = new Builder(annotations);
+		b.apply(ci.innerType());
+		ci.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
+		ci.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
+		return b.build();
+	}
 	private final ClassMeta<?> cm;
 	private final Map<String,ResponseBeanPropertyMeta> properties;
 	private final int code;
@@ -111,6 +171,7 @@ public class ResponseBeanMeta {
 	private final ResponseBeanPropertyMeta statusMethod, contentMethod;
 	private final Optional<HttpPartSerializer> partSerializer;
 	private final Optional<HttpPartParser> partParser;
+
 	private final HttpPartSchema schema;
 
 	ResponseBeanMeta(Builder b) {
@@ -141,70 +202,13 @@ public class ResponseBeanMeta {
 		this.properties = u(properties);
 	}
 
-	static class Builder {
-		ClassMeta<?> cm;
-		int code;
-		AnnotationWorkList annotations;
-		Class<? extends HttpPartSerializer> partSerializer;
-		Class<? extends HttpPartParser> partParser;
-		HttpPartSchema.Builder schema = HttpPartSchema.create();
-
-		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = map();
-		ResponseBeanPropertyMeta.Builder contentMethod;
-		ResponseBeanPropertyMeta.Builder statusMethod;
-
-		Builder(AnnotationWorkList annotations) {
-			this.annotations = annotations;
-		}
-
-		Builder apply(Type t) {
-			Class<?> c = ClassUtils.toClass(t);
-			this.cm = BeanContext.DEFAULT.getClassMeta(c);
-			ClassInfo ci = cm.getInfo();
-			ci.forEachPublicMethod(x -> true, x -> {
-				assertNoInvalidAnnotations(x, Query.class, FormData.class);
-				if (x.hasAnnotation(Header.class)) {
-					assertNoArgs(x, Header.class);
-					assertReturnNotVoid(x, Header.class);
-					HttpPartSchema s = HttpPartSchema.create(x.getAnnotation(Header.class), x.getPropertyName());
-					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
-				} else if (x.hasAnnotation(StatusCode.class)) {
-					assertNoArgs(x, Header.class);
-					assertReturnType(x, Header.class, int.class, Integer.class);
-					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, x);
-				} else if (x.hasAnnotation(Content.class)) {
-					if (x.hasNoParams())
-						assertReturnNotVoid(x, Header.class);
-					else
-						assertArgType(x, Header.class, OutputStream.class, Writer.class);
-					contentMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, x);
-				}
-			});
-			return this;
-		}
-
-		Builder apply(Response a) {
-			if (a != null) {
-				if (isNotVoid(a.serializer()))
-					partSerializer = a.serializer();
-				if (isNotVoid(a.parser()))
-					partParser = a.parser();
-				schema.apply(a.schema());
-			}
-			return this;
-		}
-
-		Builder apply(StatusCode a) {
-			if (a != null) {
-				if (a.value().length > 0)
-					code = a.value()[0];
-			}
-			return this;
-		}
-
-		ResponseBeanMeta build() {
-			return new ResponseBeanMeta(this);
-		}
+	/**
+	 * Returns metadata about the class.
+	 *
+	 * @return Metadata about the class.
+	 */
+	public ClassMeta<?> getClassMeta() {
+		return cm;
 	}
 
 	/**
@@ -217,12 +221,12 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns the schema information about the response object.
+	 * Returns the <ja>@Content</ja>-annotated method.
 	 *
-	 * @return The schema information about the response object.
+	 * @return The <ja>@Content</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
-	public HttpPartSchema getSchema() {
-		return schema;
+	public ResponseBeanPropertyMeta getContentMethod() {
+		return contentMethod;
 	}
 
 	/**
@@ -235,24 +239,6 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns the <ja>@Content</ja>-annotated method.
-	 *
-	 * @return The <ja>@Content</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
-	 */
-	public ResponseBeanPropertyMeta getContentMethod() {
-		return contentMethod;
-	}
-
-	/**
-	 * Returns the <ja>@StatusCode</ja>-annotated method.
-	 *
-	 * @return The <ja>@StatusCode</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
-	 */
-	public ResponseBeanPropertyMeta getStatusMethod() {
-		return statusMethod;
-	}
-
-	/**
 	 * Returns the part serializer to use to serialize this response.
 	 *
 	 * @return The part serializer to use to serialize this response.
@@ -262,12 +248,12 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns metadata about the class.
+	 * Returns all the annotated methods on this bean.
 	 *
-	 * @return Metadata about the class.
+	 * @return All the annotated methods on this bean.
 	 */
-	public ClassMeta<?> getClassMeta() {
-		return cm;
+	public Collection<ResponseBeanPropertyMeta> getProperties() {
+		return properties.values();
 	}
 
 	/**
@@ -281,11 +267,20 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns all the annotated methods on this bean.
+	 * Returns the schema information about the response object.
 	 *
-	 * @return All the annotated methods on this bean.
+	 * @return The schema information about the response object.
 	 */
-	public Collection<ResponseBeanPropertyMeta> getProperties() {
-		return properties.values();
+	public HttpPartSchema getSchema() {
+		return schema;
+	}
+
+	/**
+	 * Returns the <ja>@StatusCode</ja>-annotated method.
+	 *
+	 * @return The <ja>@StatusCode</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 */
+	public ResponseBeanPropertyMeta getStatusMethod() {
+		return statusMethod;
 	}
 }

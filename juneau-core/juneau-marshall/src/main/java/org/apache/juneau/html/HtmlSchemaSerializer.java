@@ -61,79 +61,6 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 public class HtmlSchemaSerializer extends HtmlSerializer {
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, all default settings.*/
-	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(create());
-
-	/** Default serializer, all default settings.*/
-	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(create());
-
-	/** Default serializer, single quotes, simple mode. */
-	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(create());
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static subclasses
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default serializer, with whitespace. */
-	public static class Readable extends HtmlSchemaSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Readable(Builder builder) {
-			super(builder.useWhitespace());
-		}
-	}
-
-	/** Default serializer, single quotes, simple mode. */
-	public static class Simple extends HtmlSchemaSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public Simple(Builder builder) {
-			super(builder.quoteChar('\''));
-		}
-	}
-
-	/** Default serializer, single quotes, simple mode, with whitespace. */
-	public static class SimpleReadable extends HtmlSchemaSerializer {
-
-		/**
-		 * Constructor.
-		 *
-		 * @param builder The builder for this object.
-		 */
-		public SimpleReadable(Builder builder) {
-			super(builder.quoteChar('\'').useWhitespace());
-		}
-	}
-
-	//-------------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-------------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Builder class.
 	 */
@@ -155,16 +82,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		/**
 		 * Copy constructor.
 		 *
-		 * @param copyFrom The bean to copy from.
-		 */
-		protected Builder(HtmlSchemaSerializer copyFrom) {
-			super(copyFrom);
-			generatorBuilder = copyFrom.generator.copy().beanContext(beanContext());
-		}
-
-		/**
-		 * Copy constructor.
-		 *
 		 * @param copyFrom The builder to copy from.
 		 */
 		protected Builder(Builder copyFrom) {
@@ -172,27 +89,56 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			generatorBuilder = copyFrom.generatorBuilder.copy().beanContext(beanContext());
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public Builder copy() {
-			return new Builder(this);
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The bean to copy from.
+		 */
+		protected Builder(HtmlSchemaSerializer copyFrom) {
+			super(copyFrom);
+			generatorBuilder = copyFrom.generator.copy().beanContext(beanContext());
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public HtmlSchemaSerializer build() {
-			return cache(CACHE).build(HtmlSchemaSerializer.class);
+		@Override /* Overridden from Builder */
+		public Builder accept(String value) {
+			super.accept(value);
+			return this;
 		}
 
-		@Override /* Overridden from Context.Builder */
-		public HashKey hashKey() {
-			return HashKey.of(
-				super.hashKey(),
-				generatorBuilder.hashKey()
-			);
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes() {
+			super.addBeanTypes();
+			return this;
 		}
 
-		//-----------------------------------------------------------------------------------------------------------------
-		// Properties
-		//-----------------------------------------------------------------------------------------------------------------
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypes(boolean value) {
+			super.addBeanTypes(value);
+			return this;
+		}
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypesHtml() {
+			super.addBeanTypesHtml();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypesHtml(boolean value) {
+			super.addBeanTypesHtml(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypesXml() {
+			super.addBeanTypesXml();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addBeanTypesXml(boolean value) {
+			super.addBeanTypesXml(value);
+			return this;
+		}
 
 		/**
 		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Add descriptions.
@@ -242,6 +188,41 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			generatorBuilder.addExamplesTo(values);
 			return this;
 		}
+		@Override /* Overridden from Builder */
+		public Builder addKeyValueTableHeaders() {
+			super.addKeyValueTableHeaders();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addKeyValueTableHeaders(boolean value) {
+			super.addKeyValueTableHeaders(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addNamespaceUrisToRoot() {
+			super.addNamespaceUrisToRoot();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addNamespaceUrisToRoot(boolean value) {
+			super.addNamespaceUrisToRoot(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType() {
+			super.addRootType();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder addRootType(boolean value) {
+			super.addRootType(value);
+			return this;
+		}
 
 		/**
 		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Allow nested descriptions.
@@ -277,48 +258,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			return this;
 		}
 
-		/**
-		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Schema definition mapper.
-		 *
-		 * <p>
-		 * Interface to use for converting Bean classes to definition IDs and URIs.
-		 * <p>
-		 * Used primarily for defining common definition sections for beans in Swagger JSON.
-		 * <p>
-		 * This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
-		 *
-		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
-		 * @return This object.
-		 */
-		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
-			generatorBuilder.beanDefMapper(value);
-			return this;
-		}
-
-		/**
-		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
-		 *
-		 * <p>
-		 * When enabled, schemas on beans will be serialized as the following:
-		 * <p class='bjson'>
-		 * 	{
-		 * 		type: <js>'object'</js>,
-		 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
-		 * 	}
-		 * </p>
-		 *
-		 * @return This object.
-		 */
-		public Builder useBeanDefs() {
-			generatorBuilder.useBeanDefs();
-			return this;
-		}
 		@Override /* Overridden from Builder */
 		public Builder annotations(Annotation...values) {
 			super.annotations(values);
@@ -332,44 +271,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder applyAnnotations(Object...from) {
-			super.applyAnnotations(from);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
 		public Builder applyAnnotations(Class<?>...from) {
 			super.applyAnnotations(from);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
-			super.cache(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug() {
-			super.debug();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder debug(boolean value) {
-			super.debug(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder impl(Context value) {
-			super.impl(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder type(Class<? extends org.apache.juneau.Context> value) {
-			super.type(value);
+		public Builder applyAnnotations(Object...from) {
+			super.applyAnnotations(from);
 			return this;
 		}
 
@@ -394,6 +303,30 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		@Override /* Overridden from Builder */
 		public Builder beanContext(BeanContext.Builder value) {
 			super.beanContext(value);
+			return this;
+		}
+
+		/**
+		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Schema definition mapper.
+		 *
+		 * <p>
+		 * Interface to use for converting Bean classes to definition IDs and URIs.
+		 * <p>
+		 * Used primarily for defining common definition sections for beans in Swagger JSON.
+		 * <p>
+		 * This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>The default is {@link org.apache.juneau.jsonschema.BasicBeanDefMapper}.
+		 * @return This object.
+		 */
+		public Builder beanDefMapper(Class<? extends BeanDefMapper> value) {
+			generatorBuilder.beanDefMapper(value);
 			return this;
 		}
 
@@ -428,14 +361,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Map<String,Object> values) {
-			super.beanProperties(values);
+		public Builder beanProperties(Class<?> beanClass, String properties) {
+			super.beanProperties(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanProperties(Class<?> beanClass, String properties) {
-			super.beanProperties(beanClass, properties);
+		public Builder beanProperties(Map<String,Object> values) {
+			super.beanProperties(values);
 			return this;
 		}
 
@@ -446,14 +379,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			super.beanPropertiesExcludes(values);
+		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
+			super.beanPropertiesExcludes(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesExcludes(Class<?> beanClass, String properties) {
-			super.beanPropertiesExcludes(beanClass, properties);
+		public Builder beanPropertiesExcludes(Map<String,Object> values) {
+			super.beanPropertiesExcludes(values);
 			return this;
 		}
 
@@ -464,14 +397,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			super.beanPropertiesReadOnly(values);
+		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesReadOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesReadOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesReadOnly(beanClass, properties);
+		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
+			super.beanPropertiesReadOnly(values);
 			return this;
 		}
 
@@ -482,14 +415,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			super.beanPropertiesWriteOnly(values);
+		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
+			super.beanPropertiesWriteOnly(beanClass, properties);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder beanPropertiesWriteOnly(Class<?> beanClass, String properties) {
-			super.beanPropertiesWriteOnly(beanClass, properties);
+		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
+			super.beanPropertiesWriteOnly(values);
 			return this;
 		}
 
@@ -517,6 +450,52 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			return this;
 		}
 
+		@Override /* Overridden from Context.Builder */
+		public HtmlSchemaSerializer build() {
+			return cache(CACHE).build(HtmlSchemaSerializer.class);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* Overridden from Context.Builder */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug() {
+			super.debug();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder debug(boolean value) {
+			super.debug(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder defaultNamespace(Namespace value) {
+			super.defaultNamespace(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions() {
+			super.detectRecursions();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder detectRecursions(boolean value) {
+			super.detectRecursions(value);
+			return this;
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder dictionaryOn(Class<?> on, java.lang.Class<?>...values) {
 			super.dictionaryOn(on, values);
@@ -524,8 +503,44 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder disableAutoDetectNamespaces() {
+			super.disableAutoDetectNamespaces();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableAutoDetectNamespaces(boolean value) {
+			super.disableAutoDetectNamespaces(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder disableBeansRequireSomeProperties() {
 			super.disableBeansRequireSomeProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableDetectLabelParameters() {
+			super.disableDetectLabelParameters();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableDetectLabelParameters(boolean value) {
+			super.disableDetectLabelParameters(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableDetectLinksInStrings() {
+			super.disableDetectLinksInStrings();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder disableDetectLinksInStrings(boolean value) {
+			super.disableDetectLinksInStrings(value);
 			return this;
 		}
 
@@ -554,14 +569,32 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
-		public <T> Builder example(Class<T> pojoClass, T o) {
-			super.example(pojoClass, o);
+		public Builder enableNamespaces() {
+			super.enableNamespaces();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder enableNamespaces(boolean value) {
+			super.enableNamespaces(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
 		public <T> Builder example(Class<T> pojoClass, String json) {
 			super.example(pojoClass, json);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T> Builder example(Class<T> pojoClass, T o) {
+			super.example(pojoClass, o);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder fileCharset(Charset value) {
+			super.fileCharset(value);
 			return this;
 		}
 
@@ -577,6 +610,14 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			return this;
 		}
 
+		@Override /* Overridden from Context.Builder */
+		public HashKey hashKey() {
+			return HashKey.of(
+				super.hashKey(),
+				generatorBuilder.hashKey()
+			);
+		}
+
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnGetters() {
 			super.ignoreInvocationExceptionsOnGetters();
@@ -586,168 +627,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		@Override /* Overridden from Builder */
 		public Builder ignoreInvocationExceptionsOnSetters() {
 			super.ignoreInvocationExceptionsOnSetters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownBeanProperties() {
-			super.ignoreUnknownBeanProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ignoreUnknownEnumValues() {
-			super.ignoreUnknownEnumValues();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
-			super.implClass(interfaceClass, implClass);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			super.implClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaceClass(Class<?> on, Class<?> value) {
-			super.interfaceClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder interfaces(java.lang.Class<?>...value) {
-			super.interfaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder locale(Locale value) {
-			super.locale(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder mediaType(MediaType value) {
-			super.mediaType(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanClasses(java.lang.Class<?>...values) {
-			super.notBeanClasses(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder notBeanPackages(String...values) {
-			super.notBeanPackages(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
-			super.propertyNamer(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties() {
-			super.sortProperties();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sortProperties(java.lang.Class<?>...on) {
-			super.sortProperties(on);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder stopClass(Class<?> on, Class<?> value) {
-			super.stopClass(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
-			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Object...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder swaps(Class<?>...values) {
-			super.swaps(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder timeZone(TimeZone value) {
-			super.timeZone(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typeName(Class<?> on, String value) {
-			super.typeName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(String value) {
-			super.typePropertyName(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder typePropertyName(Class<?> on, String value) {
-			super.typePropertyName(on, value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useEnumNames() {
-			super.useEnumNames();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder useJavaBeanIntrospector() {
-			super.useJavaBeanIntrospector();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions() {
-			super.detectRecursions();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder detectRecursions(boolean value) {
-			super.detectRecursions(value);
 			return this;
 		}
 
@@ -764,44 +643,50 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownBeanProperties() {
+			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder impl(Context value) {
+			super.impl(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClass(Class<?> interfaceClass, Class<?> implClass) {
+			super.implClass(interfaceClass, implClass);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder implClasses(Map<Class<?>,Class<?>> values) {
+			super.implClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder initialDepth(int value) {
 			super.initialDepth(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder maxDepth(int value) {
-			super.maxDepth(value);
+		public Builder interfaceClass(Class<?> on, Class<?> value) {
+			super.interfaceClass(on, value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder accept(String value) {
-			super.accept(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes() {
-			super.addBeanTypes();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypes(boolean value) {
-			super.addBeanTypes(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType() {
-			super.addRootType();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addRootType(boolean value) {
-			super.addRootType(value);
+		public Builder interfaces(java.lang.Class<?>...value) {
+			super.interfaces(value);
 			return this;
 		}
 
@@ -818,14 +703,92 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder labelParameter(String value) {
+			super.labelParameter(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder listener(Class<? extends org.apache.juneau.serializer.SerializerListener> value) {
 			super.listener(value);
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder locale(Locale value) {
+			super.locale(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxDepth(int value) {
+			super.maxDepth(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder maxIndent(int value) {
+			super.maxIndent(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder mediaType(MediaType value) {
+			super.mediaType(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder namespaces(Namespace...values) {
+			super.namespaces(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanClasses(java.lang.Class<?>...values) {
+			super.notBeanClasses(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder notBeanPackages(String...values) {
+			super.notBeanPackages(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder ns() {
+			super.ns();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder produces(String value) {
 			super.produces(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<?> on, Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder propertyNamer(Class<? extends org.apache.juneau.PropertyNamer> value) {
+			super.propertyNamer(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder quoteChar(char value) {
+			super.quoteChar(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder quoteCharOverride(char value) {
+			super.quoteCharOverride(value);
 			return this;
 		}
 
@@ -850,6 +813,66 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		@Override /* Overridden from Builder */
 		public Builder sortMaps(boolean value) {
 			super.sortMaps(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties() {
+			super.sortProperties();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sortProperties(java.lang.Class<?>...on) {
+			super.sortProperties(on);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder sq() {
+			super.sq();
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder stopClass(Class<?> on, Class<?> value) {
+			super.stopClass(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder streamCharset(Charset value) {
+			super.streamCharset(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public <T, S> Builder swap(Class<T> normalClass, Class<S> swappedClass, ThrowingFunction<T,S> swapFunction, ThrowingFunction<S,T> unswapFunction) {
+			super.swap(normalClass, swappedClass, swapFunction, unswapFunction);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Class<?>...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder swaps(Object...values) {
+			super.swaps(values);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder timeZone(TimeZone value) {
+			super.timeZone(value);
 			return this;
 		}
 
@@ -890,6 +913,36 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* Overridden from Builder */
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
+			super.type(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typeName(Class<?> on, String value) {
+			super.typeName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(Class<?> on, String value) {
+			super.typePropertyName(on, value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder typePropertyName(String value) {
+			super.typePropertyName(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder uriAnchorText(AnchorText value) {
+			super.uriAnchorText(value);
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
 		public Builder uriContext(UriContext value) {
 			super.uriContext(value);
 			return this;
@@ -907,39 +960,34 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			return this;
 		}
 
-		@Override /* Overridden from Builder */
-		public Builder fileCharset(Charset value) {
-			super.fileCharset(value);
+		/**
+		 * <i><l>HtmlSchemaSerializer</l> configuration property:&emsp;</i>  Use bean definitions.
+		 *
+		 * <p>
+		 * When enabled, schemas on beans will be serialized as the following:
+		 * <p class='bjson'>
+		 * 	{
+		 * 		type: <js>'object'</js>,
+		 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>
+		 * 	}
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder useBeanDefs() {
+			generatorBuilder.useBeanDefs();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder maxIndent(int value) {
-			super.maxIndent(value);
+		public Builder useEnumNames() {
+			super.useEnumNames();
 			return this;
 		}
 
 		@Override /* Overridden from Builder */
-		public Builder quoteChar(char value) {
-			super.quoteChar(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder quoteCharOverride(char value) {
-			super.quoteCharOverride(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder sq() {
-			super.sq();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder streamCharset(Charset value) {
-			super.streamCharset(value);
+		public Builder useJavaBeanIntrospector() {
+			super.useJavaBeanIntrospector();
 			return this;
 		}
 
@@ -960,138 +1008,65 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			super.ws();
 			return this;
 		}
+	}
 
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypesXml() {
-			super.addBeanTypesXml();
-			return this;
-		}
+	/** Default serializer, with whitespace. */
+	public static class Readable extends HtmlSchemaSerializer {
 
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypesXml(boolean value) {
-			super.addBeanTypesXml(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addNamespaceUrisToRoot() {
-			super.addNamespaceUrisToRoot();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addNamespaceUrisToRoot(boolean value) {
-			super.addNamespaceUrisToRoot(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder defaultNamespace(Namespace value) {
-			super.defaultNamespace(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableAutoDetectNamespaces() {
-			super.disableAutoDetectNamespaces();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableAutoDetectNamespaces(boolean value) {
-			super.disableAutoDetectNamespaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder enableNamespaces() {
-			super.enableNamespaces();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder enableNamespaces(boolean value) {
-			super.enableNamespaces(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder namespaces(Namespace...values) {
-			super.namespaces(values);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder ns() {
-			super.ns();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypesHtml() {
-			super.addBeanTypesHtml();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addBeanTypesHtml(boolean value) {
-			super.addBeanTypesHtml(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addKeyValueTableHeaders() {
-			super.addKeyValueTableHeaders();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder addKeyValueTableHeaders(boolean value) {
-			super.addKeyValueTableHeaders(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableDetectLabelParameters() {
-			super.disableDetectLabelParameters();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableDetectLabelParameters(boolean value) {
-			super.disableDetectLabelParameters(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableDetectLinksInStrings() {
-			super.disableDetectLinksInStrings();
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder disableDetectLinksInStrings(boolean value) {
-			super.disableDetectLinksInStrings(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder labelParameter(String value) {
-			super.labelParameter(value);
-			return this;
-		}
-
-		@Override /* Overridden from Builder */
-		public Builder uriAnchorText(AnchorText value) {
-			super.uriAnchorText(value);
-			return this;
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Readable(Builder builder) {
+			super(builder.useWhitespace());
 		}
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
+	/** Default serializer, single quotes, simple mode. */
+	public static class Simple extends HtmlSchemaSerializer {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public Simple(Builder builder) {
+			super(builder.quoteChar('\''));
+		}
+	}
+
+	/** Default serializer, single quotes, simple mode, with whitespace. */
+	public static class SimpleReadable extends HtmlSchemaSerializer {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param builder The builder for this object.
+		 */
+		public SimpleReadable(Builder builder) {
+			super(builder.quoteChar('\'').useWhitespace());
+		}
+	}
+
+	/** Default serializer, all default settings.*/
+	public static final HtmlSchemaSerializer DEFAULT = new HtmlSchemaSerializer(create());
+	/** Default serializer, all default settings.*/
+	public static final HtmlSchemaSerializer DEFAULT_READABLE = new Readable(create());
+
+	/** Default serializer, single quotes, simple mode. */
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE = new Simple(create());
+
+	/** Default serializer, single quotes, simple mode, with whitespace. */
+	public static final HtmlSchemaSerializer DEFAULT_SIMPLE_READABLE = new SimpleReadable(create());
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 	final JsonSchemaGenerator generator;
 
 	/**
@@ -1120,16 +1095,11 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		return createSession().build();
 	}
 
-	JsonSchemaGenerator getGenerator() {
-		return generator;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other methods
-	//-----------------------------------------------------------------------------------------------------------------
-
 	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
+	}
+	JsonSchemaGenerator getGenerator() {
+		return generator;
 	}
 }

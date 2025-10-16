@@ -27,11 +27,6 @@ import java.util.*;
  * </ul>
  */
 public class HashKey {
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
-
 	/**
 	 * Static creator.
 	 *
@@ -41,22 +36,12 @@ public class HashKey {
 	public static HashKey of(Object...array) {
 		return new HashKey(array);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
 	private final int hashCode;
 	private final Object[] array;
 
 	HashKey(Object[] array) {
 		this.array = array;
 		this.hashCode = Arrays.hashCode(array);
-	}
-
-	@Override
-	public int hashCode() {
-		return hashCode;
 	}
 
 	@Override
@@ -68,6 +53,11 @@ public class HashKey {
 			if (! Objects.equals(array[i], x.array[i]))
 				return false;
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		return hashCode;
 	}
 
 	@Override /* Overridden from Object */

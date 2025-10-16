@@ -112,21 +112,6 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * @param returns
-	 * 	The object to return after a test method is called.
-	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
-	 * used on the same assertion.
-	 */
-	public FluentBooleanAssertion(Boolean value, R returns) {
-		this(null, value, returns);
-	}
-
-	/**
 	 * Chained constructor.
 	 *
 	 * <p>
@@ -147,21 +132,24 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 		super(creator, value, returns);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @param returns
+	 * 	The object to return after a test method is called.
+	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
+	 * used on the same assertion.
+	 */
+	public FluentBooleanAssertion(Boolean value, R returns) {
+		this(null, value, returns);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Asserts that the value is true.
-	 *
-	 * @return The fluent return object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public R isTrue() throws AssertionError {
-		if (Boolean.FALSE.equals(value()))
-			throw error(MSG_valueWasFalse);
-		return returns();
-	}
 
 	/**
 	 * Asserts that the value is false.
@@ -172,6 +160,18 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	public R isFalse() throws AssertionError {
 		if (Boolean.TRUE.equals(value()))
 			throw error(MSG_valueWasTrue);
+		return returns();
+	}
+
+	/**
+	 * Asserts that the value is true.
+	 *
+	 * @return The fluent return object.
+	 * @throws AssertionError If assertion failed.
+	 */
+	public R isTrue() throws AssertionError {
+		if (Boolean.FALSE.equals(value()))
+			throw error(MSG_valueWasFalse);
 		return returns();
 	}
 

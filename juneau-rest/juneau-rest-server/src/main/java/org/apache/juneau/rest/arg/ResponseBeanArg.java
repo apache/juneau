@@ -41,9 +41,6 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 public class ResponseBeanArg implements RestOpArg {
-	final ResponseBeanMeta meta;
-	private final Type type;
-
 	/**
 	 * Static creator.
 	 *
@@ -56,6 +53,9 @@ public class ResponseBeanArg implements RestOpArg {
 			return new ResponseBeanArg(paramInfo, annotations);
 		return null;
 	}
+	final ResponseBeanMeta meta;
+
+	private final Type type;
 
 	/**
 	 * Constructor.

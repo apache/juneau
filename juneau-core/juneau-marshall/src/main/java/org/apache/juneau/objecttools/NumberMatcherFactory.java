@@ -47,30 +47,15 @@ import org.apache.juneau.internal.*;
 public class NumberMatcherFactory extends MatcherFactory {
 
 	/**
-	 * Default reusable matcher.
-	 */
-	public static final NumberMatcherFactory DEFAULT = new NumberMatcherFactory();
-
-	@Override
-	public boolean canMatch(ClassMeta<?> cm) {
-		return cm.isNumber();
-	}
-
-	@Override
-	public AbstractMatcher create(String pattern) {
-		return new NumberMatcher(pattern);
-	}
-
-	/**
 	 * A construct representing a single search pattern.
 	 */
 	private static class NumberMatcher extends AbstractMatcher {
-		NumberRange[] numberRanges;
-		String pattern;
 		private static final AsciiSet
 			SNUM = AsciiSet.of("-0123456789."),
 			NUM = AsciiSet.of("0123456789."),
 			WS = AsciiSet.of(" \t");
+		NumberRange[] numberRanges;
+		String pattern;
 
 		public NumberMatcher(String s) {
 
@@ -317,5 +302,20 @@ public class NumberMatcherFactory extends MatcherFactory {
 				b = !b;
 			return b;
 		}
+	}
+
+	/**
+	 * Default reusable matcher.
+	 */
+	public static final NumberMatcherFactory DEFAULT = new NumberMatcherFactory();
+
+	@Override
+	public boolean canMatch(ClassMeta<?> cm) {
+		return cm.isNumber();
+	}
+
+	@Override
+	public AbstractMatcher create(String pattern) {
+		return new NumberMatcher(pattern);
 	}
 }

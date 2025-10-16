@@ -58,16 +58,45 @@ import org.apache.juneau.common.utils.*;
  */
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ObjectSorter implements ObjectTool<SortArgs> {
+	private static class SortEntry implements Comparable {
+		Object o;
+		ClassMeta<?> cm;
+		BeanSession bs;
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Static
-	//-----------------------------------------------------------------------------------------------------------------
+		Object sortVal;
+		boolean isDesc;
+
+		SortEntry(BeanSession bs, Object o) {
+			this.o = o;
+			this.bs = bs;
+			this.cm = bs.getClassMetaForObject(o);
+		}
+
+		@Override
+		public int compareTo(Object o) {
+			if (isDesc)
+				return Utils.compare(((SortEntry)o).sortVal, this.sortVal);
+			return Utils.compare(this.sortVal, ((SortEntry)o).sortVal);
+		}
+
+		void setSort(String sortCol, boolean isDesc) {
+			this.isDesc = isDesc;
+
+			if (cm == null)
+				sortVal = null;
+			else if (cm.isMap())
+				sortVal = ((Map)o).get(sortCol);
+			else if (cm.isBean())
+				sortVal = bs.toBeanMap(o).get(sortCol);
+			else
+				sortVal = null;
+		}
+	}
 
 	/**
 	 * Default reusable searcher.
 	 */
 	public static final ObjectSorter DEFAULT = new ObjectSorter();
-
 	/**
 	 * Static creator.
 	 *
@@ -75,29 +104,6 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 */
 	public static ObjectSorter create() {
 		return new ObjectSorter();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Convenience method for executing the sorter.
-	 *
-	 * @param <R> The return type.
-	 * @param input The input.
-	 * @param sortArgs The sort arguments.  See {@link SortArgs} for format.
-	 * @return A list of maps/beans matching the
-	 */
-	public <R> List<R> run(Object input, String sortArgs) {
-		Object r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
-		if (r instanceof List)
-			return (List<R>)r;
-		if (r instanceof Collection)
-			return new ArrayList<R>((Collection)r);
-		if (isArray(r))
-			return Arrays.asList((R[])r);
-		return null;
 	}
 
 	@Override /* Overridden from ObjectTool */
@@ -148,38 +154,22 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		return l2;
 	}
 
-	private static class SortEntry implements Comparable {
-		Object o;
-		ClassMeta<?> cm;
-		BeanSession bs;
-
-		Object sortVal;
-		boolean isDesc;
-
-		SortEntry(BeanSession bs, Object o) {
-			this.o = o;
-			this.bs = bs;
-			this.cm = bs.getClassMetaForObject(o);
-		}
-
-		void setSort(String sortCol, boolean isDesc) {
-			this.isDesc = isDesc;
-
-			if (cm == null)
-				sortVal = null;
-			else if (cm.isMap())
-				sortVal = ((Map)o).get(sortCol);
-			else if (cm.isBean())
-				sortVal = bs.toBeanMap(o).get(sortCol);
-			else
-				sortVal = null;
-		}
-
-		@Override
-		public int compareTo(Object o) {
-			if (isDesc)
-				return Utils.compare(((SortEntry)o).sortVal, this.sortVal);
-			return Utils.compare(this.sortVal, ((SortEntry)o).sortVal);
-		}
+	/**
+	 * Convenience method for executing the sorter.
+	 *
+	 * @param <R> The return type.
+	 * @param input The input.
+	 * @param sortArgs The sort arguments.  See {@link SortArgs} for format.
+	 * @return A list of maps/beans matching the
+	 */
+	public <R> List<R> run(Object input, String sortArgs) {
+		Object r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
+		if (r instanceof List)
+			return (List<R>)r;
+		if (r instanceof Collection)
+			return new ArrayList<R>((Collection)r);
+		if (isArray(r))
+			return Arrays.asList((R[])r);
+		return null;
 	}
 }
