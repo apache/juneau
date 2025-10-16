@@ -52,4 +52,10 @@ public class VarResolverException extends BasicRuntimeException {
 	public VarResolverException(String message, Object...args) {
 		this(null, message, args);
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public VarResolverException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

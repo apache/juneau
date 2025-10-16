@@ -144,7 +144,7 @@ public class ExampleAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Example */
+		@Override /* Overridden from Example */
 		public String value() {
 			return value;
 		}

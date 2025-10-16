@@ -169,7 +169,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public List<?> swap(BeanSession session, Object o) throws SerializeException {
 		try {
 			return (List<?>)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
@@ -179,7 +179,7 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, List<?> o, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (unswapMethod != null)

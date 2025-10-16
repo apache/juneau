@@ -180,17 +180,17 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			widgets = copy(copyFrom.widgets);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HtmlDocSerializer build() {
 			return cache(CACHE).build(HtmlDocSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1685,22 +1685,22 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		widgetArray = Utils.array(widgetMap.values(), HtmlWidget.class);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlDocSerializerSession.Builder createSession() {
 		return HtmlDocSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlDocSerializerSession getSession() {
 		return createSession().build();
 	}
 
-	@Override /* XmlSerializer */
+	@Override /* Overridden from XmlSerializer */
 	public HtmlSerializer getSchemaSerializer() {
 		if (schemaSerializer == null)
 			schemaSerializer = HtmlSchemaDocSerializer.create().beanContext(getBeanContext()).build();
@@ -1893,7 +1893,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("header", header)

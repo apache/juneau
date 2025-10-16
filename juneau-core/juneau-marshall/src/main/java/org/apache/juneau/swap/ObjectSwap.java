@@ -411,7 +411,7 @@ public abstract class ObjectSwap<T,S> {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return getClass().getSimpleName() + '<' + getNormalClass().getSimpleName() + "," + getSwapClass().getSimpleName() + '>';
 	}

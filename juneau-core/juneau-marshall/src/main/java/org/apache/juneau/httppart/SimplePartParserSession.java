@@ -33,7 +33,7 @@ import org.apache.juneau.reflect.*;
  */
 public class SimplePartParserSession extends BaseHttpPartParserSession {
 
-	@Override /* HttpPartParserSession */
+	@Override /* Overridden from HttpPartParserSession */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
 		return Mutaters.fromString(toType.getInnerClass(), in);
 	}

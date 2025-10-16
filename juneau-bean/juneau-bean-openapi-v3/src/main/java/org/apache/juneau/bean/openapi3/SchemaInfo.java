@@ -1176,7 +1176,7 @@ public class SchemaInfo extends OpenApiElement {
 		return this;
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
@@ -1220,7 +1220,7 @@ public class SchemaInfo extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public SchemaInfo set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {  // NOSONAR
@@ -1267,7 +1267,7 @@ public class SchemaInfo extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(ref != null, "$ref")

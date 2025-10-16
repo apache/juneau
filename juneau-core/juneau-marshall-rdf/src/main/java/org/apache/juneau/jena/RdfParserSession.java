@@ -227,7 +227,7 @@ public class RdfParserSession extends ReaderParserSession {
 			ctx.getJenaSettings().forEach((k,v) -> rdfReader.setProperty(k, v));
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 
 		RDFReader r = rdfReader;

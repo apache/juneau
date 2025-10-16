@@ -60,4 +60,10 @@ public class ContextRuntimeException extends BasicRuntimeException {
 	public ContextRuntimeException(Throwable cause) {
 		super(cause);
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public ContextRuntimeException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

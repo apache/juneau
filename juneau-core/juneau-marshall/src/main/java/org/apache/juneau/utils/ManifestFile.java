@@ -21,8 +21,11 @@ import static org.apache.juneau.common.utils.IOUtils.*;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
+import java.util.*;
+import java.util.function.*;
 import java.util.jar.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
 
@@ -137,10 +140,72 @@ public class ManifestFile extends JsonMap {
 		mf.getMainAttributes().forEach((k,v) -> put(k.toString(), v.toString()));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		forEach((k,v) -> sb.append(k).append(": ").append(v));
 		return sb.toString();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile inner(Map<String,Object> inner) {
+		super.inner(inner);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile session(BeanSession session) {
+		super.session(session);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile append(String key, Object value) {
+		super.append(key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile append(Map<String,Object> values) {
+		super.append(values);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile appendIf(boolean flag, String key, Object value) {
+		super.appendIf(flag, key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile filtered(Predicate<Object> value) {
+		super.filtered(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile keepAll(String...keys) {
+		super.keepAll(keys);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile setBeanSession(BeanSession value) {
+		super.setBeanSession(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile modifiable() {
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ManifestFile unmodifiable() {
+		return this;
 	}
 }

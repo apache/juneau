@@ -35,12 +35,12 @@ class BasicHttpRequestBase extends HttpRequestBase implements RestRequestCreated
 		this.restRequest = restRequest;
 	}
 
-	@Override /* RestRequestCreated */
+	@Override /* Overridden from RestRequestCreated */
 	public RestRequest getRestRequest() {
 		return restRequest;
 	}
 
-	@Override /* HttpRequestBase */
+	@Override /* Overridden from HttpRequestBase */
 	public String getMethod() {
 		return method;
 	}

@@ -403,4 +403,16 @@ public class HtmlElementVoid extends HtmlElement {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementVoid attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementVoid attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

@@ -739,7 +739,7 @@ public class ObjectRest {
 		return service(DELETE, url, null);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return String.valueOf(root.o);
 	}

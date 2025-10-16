@@ -195,7 +195,7 @@ public class PlainTextParserSession extends ReaderParserSession {
 		super(builder);
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		return convertToType(read(pipe.getReader()), type);
 	}

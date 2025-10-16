@@ -63,7 +63,7 @@ public class PatternExtractVar extends MultipartVar {
 		super(NAME);
 	}
 
-	@Override /* MultipartVar */
+	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		Utils.assertArg(args.length == 3, "Invalid number of arguments passed to $PE var.  Must have 3 arguments.");
 

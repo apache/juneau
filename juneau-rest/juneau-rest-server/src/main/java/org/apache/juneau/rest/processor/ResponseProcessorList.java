@@ -69,7 +69,7 @@ public class ResponseProcessorList {
 			this.entries = list();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected ResponseProcessorList buildDefault() {
 			return new ResponseProcessorList(this);
 		}

@@ -60,7 +60,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	 * @param uri The URI of the schema to retrieve.
 	 * @return The JsonSchema, or <jk>null</jk> if schema was not located and could not be loaded.
 	 */
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public JsonSchema get(Object uri) {
 		var u = toURI(uri);
 		var s = super.get(u);

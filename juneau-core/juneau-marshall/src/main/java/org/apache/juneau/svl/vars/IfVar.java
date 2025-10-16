@@ -64,7 +64,7 @@ public class IfVar extends MultipartVar {
 		super(NAME);
 	}
 
-	@Override /* MultipartVar */
+	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		Utils.assertArg(args.length >= 2 && args.length <= 3, "Invalid number of arguments passed to $IF var.  Must be either $IF{booleanArg,thenValue} or $IF{booleanArg,thenValue,elseValue}");
 

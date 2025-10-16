@@ -81,7 +81,7 @@ public class StringExpressionMatcher {
 		return input != null && exp.matches(input);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return exp.toString();
 	}
@@ -245,7 +245,7 @@ public class StringExpressionMatcher {
 			return false;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "(NEVER)";
 		}
@@ -258,7 +258,7 @@ public class StringExpressionMatcher {
 			this.clauses = clauses.toArray(new Exp[clauses.size()]);
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		boolean matches(String input) {
 			for (Exp e : clauses)
 				if (! e.matches(input))
@@ -266,13 +266,13 @@ public class StringExpressionMatcher {
 			return true;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			for (Exp clause : clauses)
 				clause.appendTokens(set);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "(& " + Utils.join(clauses, " ") + ')';
 		}
@@ -293,13 +293,13 @@ public class StringExpressionMatcher {
 			return false;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			for (Exp clause : clauses)
 				clause.appendTokens(set);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "(| " + Utils.join(clauses, " ") + ')';
 		}
@@ -312,17 +312,17 @@ public class StringExpressionMatcher {
 			this.operand = operand;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		boolean matches(String input) {
 			return operand.equals(input);
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			set.add(operand);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "[= " + operand + "]";
 		}
@@ -337,17 +337,17 @@ public class StringExpressionMatcher {
 			p = Utils.getMatchPattern3(operand);
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		boolean matches(String input) {
 			return p.matcher(input).matches();
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			set.add(operand);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "[* " + p.pattern().replaceAll("\\\\[QE]", "") + "]";
 		}

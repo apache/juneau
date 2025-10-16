@@ -123,7 +123,17 @@ public class MediaRange extends MediaType {
 		return this;
 	}
 
-	@Override /* Object */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Overridden methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from MediaType */
+	public MediaRange forEachParameter(Consumer<NameValuePair> action) {
+		super.forEachParameter(action);
+		return this;
+	}
+
+	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
 	}

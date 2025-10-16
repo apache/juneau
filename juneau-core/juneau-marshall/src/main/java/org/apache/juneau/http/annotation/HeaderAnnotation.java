@@ -235,32 +235,32 @@ public class HeaderAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public String def() {
 			return def;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public Schema schema() {
 			return schema;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public String value() {
 			return value;
 		}

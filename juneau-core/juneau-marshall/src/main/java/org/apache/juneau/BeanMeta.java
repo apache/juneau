@@ -639,7 +639,7 @@ public class BeanMeta<T> {
 			return type.isStrictChildOf(b.setter.getParameterTypes()[0]);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return method.toString();
 		}
@@ -669,6 +669,11 @@ public class BeanMeta<T> {
 				List<Name> ln = list();
 				ctx.forEachAnnotation(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
 				ctx.forEachAnnotation(Name.class, m.inner(), x -> true, x -> ln.add(x));
+
+				// If this method doesn't have @Beanp or @Name, check if it overrides a parent method that does
+				// This ensures property names are inherited correctly, preventing duplicate property definitions
+				inheritParentAnnotations(ctx, m, c, stopClass, lp, ln);
+
 				if (! (m.isVisible(v) || isNotEmpty(lp) || isNotEmpty(ln)))
 					continue;
 
@@ -989,7 +994,64 @@ public class BeanMeta<T> {
 		return name.orElse(null);
 	}
 
-	@Override /* Object */
+	/**
+	 * Finds @Beanp and @Name annotations from parent methods if this method overrides a parent.
+	 * This ensures that property names are inherited from parent methods, preventing duplicate
+	 * property definitions when a child overrides a @Beanp-annotated parent method.
+	 *
+	 * @param ctx The bean context.
+	 * @param method The method to check.
+	 * @param c The current class being inspected.
+	 * @param stopClass Don't look above this class in the hierarchy.
+	 * @param lp List to populate with @Beanp annotations (input/output parameter).
+	 * @param ln List to populate with @Name annotations (input/output parameter).
+	 */
+	static final void inheritParentAnnotations(BeanContext ctx, MethodInfo method, Class<?> c, Class<?> stopClass, List<Beanp> lp, List<Name> ln) {
+		// If this method already has @Beanp or @Name annotations, don't look for parent annotations
+		if (! lp.isEmpty() || ! ln.isEmpty())
+			return;
+
+		String methodName = method.getSimpleName();
+		List<ClassInfo> paramTypes = method.getParamTypes();
+
+		// Walk up the class hierarchy looking for a matching parent method with @Beanp or @Name
+		ClassInfo currentClass = ClassInfo.of(c);
+		ClassInfo sc = currentClass.getSuperclass();
+
+		while (sc != null && ! sc.is(stopClass) && ! sc.is(Object.class)) {
+			// Look for a method with the same signature in the parent class
+			for (MethodInfo parentMethod : sc.getDeclaredMethods()) {
+				if (parentMethod.getSimpleName().equals(methodName) &&
+				    paramTypes.size() == parentMethod.getParamTypes().size()) {
+
+					// Check if parameter types match
+					boolean paramsMatch = true;
+					List<ClassInfo> parentParamTypes = parentMethod.getParamTypes();
+					for (int i = 0; i < paramTypes.size(); i++) {
+						if (! paramTypes.get(i).is(parentParamTypes.get(i).inner())) {
+							paramsMatch = false;
+							break;
+						}
+					}
+
+					if (paramsMatch) {
+						// Found a matching parent method - check for @Beanp and @Name annotations
+						ctx.forEachAnnotation(Beanp.class, parentMethod.inner(), x -> true, x -> lp.add(x));
+						ctx.forEachAnnotation(Name.class, parentMethod.inner(), x -> true, x -> ln.add(x));
+
+						// If we found annotations, we're done
+						if (! lp.isEmpty() || ! ln.isEmpty())
+							return;
+					}
+				}
+			}
+
+			// Move to the next superclass
+			sc = sc.getSuperclass();
+		}
+	}
+
+	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder(c.getName());
 		sb.append(" {\n");
@@ -999,12 +1061,12 @@ public class BeanMeta<T> {
 		return sb.toString();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return classMeta.hashCode();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x,y)->Utils.eq(x.classMeta, y.classMeta));
 	}

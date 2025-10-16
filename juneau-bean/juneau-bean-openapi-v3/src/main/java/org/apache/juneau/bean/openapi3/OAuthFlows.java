@@ -107,7 +107,7 @@ public class OAuthFlows extends OpenApiElement {
 		return new OAuthFlows(this);
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	protected OAuthFlows strict() {
 		super.strict();
 		return this;
@@ -235,7 +235,7 @@ public class OAuthFlows extends OpenApiElement {
 		return this;
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -247,7 +247,7 @@ public class OAuthFlows extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public OAuthFlows set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -262,7 +262,7 @@ public class OAuthFlows extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(authorizationCode != null, "authorizationCode")

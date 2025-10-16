@@ -145,7 +145,7 @@ public class Queryable implements RestConverter {
 		+ "}"
 	;
 
-	@Override /* RestConverter */
+	@Override /* Overridden from RestConverter */
 	public Object convert(RestRequest req, Object o) {
 		if (o == null)
 			return null;

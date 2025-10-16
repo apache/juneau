@@ -201,7 +201,7 @@ public class PathArg implements RestOpArg {
 		throw new ArgException(pi, "@Path used without name or value");
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();
 		if (name.equals("*")) {

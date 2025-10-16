@@ -401,7 +401,7 @@ public class XmlParserSession extends ReaderParserSession {
 		return null;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try {
 			return parseAnything(type, null, getXmlReader(pipe), getOuter(), true, null);
@@ -410,13 +410,13 @@ public class XmlParserSession extends ReaderParserSession {
 		}
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		ClassMeta cm = getClassMeta(m.getClass(), keyType, valueType);
 		return parseIntoMap(pipe, m, cm.getKeyType(), cm.getValueType());
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		ClassMeta cm = getClassMeta(c.getClass(), elementType);
 		return parseIntoCollection(pipe, c, cm.getElementType());

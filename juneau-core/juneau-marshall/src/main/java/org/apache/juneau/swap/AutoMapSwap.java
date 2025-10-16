@@ -169,7 +169,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Map<?,?> swap(BeanSession session, Object o) throws SerializeException {
 		try {
 			return (Map<?,?>)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
@@ -179,7 +179,7 @@ public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, Map<?,?> o, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (unswapMethod != null)

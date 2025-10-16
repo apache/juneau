@@ -193,4 +193,21 @@ public class NetworkAuthenticationRequired extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public NetworkAuthenticationRequired setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public NetworkAuthenticationRequired setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public NetworkAuthenticationRequired setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

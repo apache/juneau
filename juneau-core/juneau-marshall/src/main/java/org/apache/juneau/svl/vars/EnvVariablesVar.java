@@ -53,7 +53,7 @@ public class EnvVariablesVar extends DefaultingVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String varVal) {
 		// Note that lookup is case-insensitive on windows.
 		return System.getenv(varVal);

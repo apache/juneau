@@ -34,22 +34,22 @@ public class ExitCommand extends ConsoleCommand {
 
 	private final Messages mb = Messages.of(ExitCommand.class, "Messages");
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getName() {
 		return "exit";
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getInfo() {
 		return mb.getString("info");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getDescription() {
 		return mb.getString("description");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		try {
 			Microservice.getInstance().stop().exit();

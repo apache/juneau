@@ -38,7 +38,7 @@ public class IteratorSwap extends ObjectSwap<Iterator,List> {
 	/**
 	 * Converts the specified {@link Iterator} to a {@link List}.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public List swap(BeanSession session, Iterator o) {
 		List l = new LinkedList();
 		while (o.hasNext())

@@ -107,17 +107,17 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 			soapAction = copyFrom.soapAction;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public SoapXmlSerializer build() {
 			return cache(CACHE).build(SoapXmlSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -869,17 +869,17 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		soapAction = builder.soapAction;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public SoapXmlSerializerSession.Builder createSession() {
 		return SoapXmlSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public SoapXmlSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -888,7 +888,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* SoapXmlMetaProvider */
+	@Override /* Overridden from SoapXmlMetaProvider */
 	public SoapXmlClassMeta getSoapXmlClassMeta(ClassMeta<?> cm) {
 		SoapXmlClassMeta m = soapXmlClassMetas.get(cm);
 		if (m == null) {
@@ -898,7 +898,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		return m;
 	}
 
-	@Override /* SoapXmlMetaProvider */
+	@Override /* Overridden from SoapXmlMetaProvider */
 	public SoapXmlBeanPropertyMeta getSoapXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return SoapXmlBeanPropertyMeta.DEFAULT;
@@ -929,7 +929,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("soapAction", soapAction);
 	}

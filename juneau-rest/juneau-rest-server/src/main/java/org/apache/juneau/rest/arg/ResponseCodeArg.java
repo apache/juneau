@@ -60,7 +60,7 @@ public class ResponseCodeArg implements RestOpArg {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(final RestOpSession opSession) throws Exception {
 		Value<Object> v = new Value();
 		v.listener(o -> opSession.getResponse().setStatus(Integer.parseInt(o.toString())));

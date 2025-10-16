@@ -56,26 +56,26 @@ public abstract class BasicSpringRestServlet extends SpringRestServlet implement
 	// BasicRestConfig methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* BasicRestConfig */
+	@Override /* Overridden from BasicRestConfig */
 	public Swagger getSwagger(RestRequest req) {
 		return req.getSwagger().orElseThrow(NotFound::new);
 	}
 
-	@Override /* BasicRestConfig */
+	@Override /* Overridden from BasicRestConfig */
 	public HttpResource getHtdoc(@Path("/*") String path, Locale locale) throws NotFound {
 		return getContext().getStaticFiles().resolve(path, locale).orElseThrow(NotFound::new);
 	}
 
-	@Override /* BasicRestConfig */
+	@Override /* Overridden from BasicRestConfig */
 	public HttpResource getFavIcon() {
 		String favIcon = getContext().getConfig().get("REST/favicon").orElse("images/juneau.png");
 		return getHtdoc(favIcon, null);
 	}
 
-	@Override /* BasicRestConfig */
+	@Override /* Overridden from BasicRestConfig */
 	public void error() {}
 
-	@Override /* BasicRestConfig */
+	@Override /* Overridden from BasicRestConfig */
 	public RestContextStats getStats(RestRequest req) {
 		return req.getContext().getStats();
 	}

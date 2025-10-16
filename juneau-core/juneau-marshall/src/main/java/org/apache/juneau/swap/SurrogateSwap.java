@@ -85,7 +85,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 		return l;
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public F swap(BeanSession session, T o) throws SerializeException {
 		try {
 			return constructor.newInstance(o);
@@ -94,7 +94,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 		}
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	@SuppressWarnings("unchecked")
 	public T unswap(BeanSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)

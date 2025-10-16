@@ -523,12 +523,12 @@ public class JsonSchema {
 	 */
 	public static class JsonTypeOrJsonTypeArraySwap extends ObjectSwap<Object,Object> {
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (
 				o instanceof Collection
@@ -814,12 +814,12 @@ public class JsonSchema {
 	 */
 	public static class JsonSchemaOrSchemaArraySwap extends ObjectSwap<Object,Object> {
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (
 				o instanceof Collection
@@ -1148,12 +1148,12 @@ public class JsonSchema {
 	 */
 	public static class BooleanOrSchemaArraySwap extends ObjectSwap<Object,Object> {
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (
 				o instanceof Collection
@@ -1413,12 +1413,12 @@ public class JsonSchema {
 	 */
 	public static class BooleanOrSchemaSwap extends ObjectSwap<Object,Object> {
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object swap(BeanSession session, Object o) throws SerializeException {
 			return o;
 		}
 
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public Object unswap(BeanSession session, Object o, ClassMeta<?> hint) throws ParseException {
 			var cm = (
 				o instanceof Boolean
@@ -2206,7 +2206,7 @@ public class JsonSchema {
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}

@@ -519,7 +519,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The status line, or <jk>null</jk> if not yet set.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public ResponseStatusLine getStatusLine() {
 		return new ResponseStatusLine(this, response.getStatusLine());
 	}
@@ -529,7 +529,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param statusline The status line of this response
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setStatusLine(StatusLine statusline) {
 		response.setStatusLine(statusline);
 	}
@@ -543,7 +543,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param ver The HTTP version.
 	 * @param code The status code.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setStatusLine(ProtocolVersion ver, int code) {
 		response.setStatusLine(ver, code);
 	}
@@ -555,7 +555,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param code The status code.
 	 * @param reason The reason phrase, or <jk>null</jk> to omit.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
 		response.setStatusLine(ver, code, reason);
 	}
@@ -566,7 +566,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param code The HTTP status code.
 	 * @throws IllegalStateException If the status line has not be set.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setStatusCode(int code) {
 		response.setStatusCode(code);
 	}
@@ -577,7 +577,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param reason The new reason phrase as a single-line string, or <jk>null</jk> to unset the reason phrase.
 	 * @throws IllegalStateException If the status line has not be set.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setReasonPhrase(String reason) {
 		response.setReasonPhrase(reason);
 	}
@@ -595,7 +595,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The response entity.  Never <jk>null</jk>.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public ResponseContent getEntity() {
 		return responseContent;
 	}
@@ -611,7 +611,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param entity The entity to associate with this response, or <jk>null</jk> to unset.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setEntity(HttpEntity entity) {
 		response.setEntity(entity);
 		this.responseContent = new ResponseContent(client, request, this, parser);
@@ -625,7 +625,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The locale of this response, never <jk>null</jk>.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public Locale getLocale() {
 		return response.getLocale();
 	}
@@ -635,7 +635,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param loc The new locale.
 	 */
-	@Override /* HttpResponse */
+	@Override /* Overridden from HttpResponse */
 	public void setLocale(Locale loc) {
 		response.setLocale(loc);
 	}
@@ -645,7 +645,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return The protocol version this message is compatible with.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ProtocolVersion getProtocolVersion() {
 		return response.getProtocolVersion();
 	}
@@ -659,7 +659,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The header name to check for.
 	 * @return <jk>true</jk> if at least one header with this name is present.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public boolean containsHeader(String name) {
 		return response.containsHeader(name);
 	}
@@ -673,7 +673,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The name of the headers to return.
 	 * @return All the headers with a specified name of this message.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ResponseHeader[] getHeaders(String name) {
 		return headers.stream(name).map(x -> new ResponseHeader(name, request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
 	}
@@ -689,7 +689,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The name of the header to return.
 	 * @return The header, never <jk>null</jk>.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
 		return new ResponseHeader(name, request, this, headers.getFirst(name).orElse(null)).parser(getPartParserSession());
 	}
@@ -705,7 +705,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The name of the header to return.
 	 * @return The header, never <jk>null</jk>.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
 		return new ResponseHeader(name, request, this, headers.getLast(name).orElse(null)).parser(getPartParserSession());
 	}
@@ -730,7 +730,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return All the headers of this message.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ResponseHeader[] getAllHeaders() {
 		return headers.stream().map(x -> new ResponseHeader(x.getName(), request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
 	}
@@ -742,7 +742,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param header The header to append.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header header) {
 		headers.append(header);
 	}
@@ -755,7 +755,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The name of the header.
 	 * @param value The value of the header.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
 		headers.append(name, value);
 	}
@@ -767,7 +767,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param header The header to set.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeader(Header header) {
 		headers.set(header);
 	}
@@ -780,7 +780,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The name of the header.
 	 * @param value The value of the header.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeader(String name, String value) {
 		headers.set(name, value);
 	}
@@ -790,7 +790,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param headers The array of headers to set.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] headers) {
 		this.headers = HeaderList.of(headers);
 	}
@@ -800,7 +800,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param header The header to remove.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header header) {
 		headers.remove(header);
 	}
@@ -810,7 +810,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @param name The name of the headers to remove.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
 		headers.remove(name);
 	}
@@ -820,7 +820,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 *
 	 * @return {@link Iterator} that returns {@link Header} objects in the sequence they are sent over a connection.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator() {
 		return headers.headerIterator();
 	}
@@ -831,7 +831,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param name The name of the headers over which to iterate, or <jk>null</jk> for all headers.
 	 * @return {@link Iterator} that returns {@link Header} objects with the argument name in the sequence they are sent over a connection.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator(String name) {
 		return headers.headerIterator(name);
 	}
@@ -842,7 +842,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @return The parameters effective for this message as set by {@link #setParams(HttpParams)}.
 	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	@Deprecated
 	public HttpParams getParams() {
 		return response.getParams();
@@ -854,7 +854,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * @param params The parameters.
 	 * @deprecated Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	@Deprecated
 	public void setParams(HttpParams params) {
 		response.setParams(params);
@@ -877,7 +877,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * 		try-with-resources cleanup or masking the original exception.
 	 * </ul>
 	 */
-	@Override /* AutoCloseable */
+	@Override /* Overridden from AutoCloseable */
 	public void close() {
 		if (isClosed)
 			return;

@@ -53,12 +53,12 @@ public class ClientVersionMatcher extends RestMatcher {
 		range = new VersionRange(clientVersion.orElse(null));
 	}
 
-	@Override /* RestMatcher */
+	@Override /* Overridden from RestMatcher */
 	public boolean matches(HttpServletRequest req) {
 		return range.matches(req.getHeader(clientVersionHeader));
 	}
 
-	@Override /* RestMatcher */
+	@Override /* Overridden from RestMatcher */
 	public boolean required() {
 		return true;
 	}

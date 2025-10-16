@@ -99,12 +99,12 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 			this.hashCode = 31*(k1 == null ? 0 : k1.hashCode()) + (k2 == null ? 0 : k2.hashCode());
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public int hashCode() {
 			return hashCode;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		@SuppressWarnings("unchecked")
 		public boolean equals(Object o) {
 			Key<K1,K2> ko = (Key<K1,K2>)o;

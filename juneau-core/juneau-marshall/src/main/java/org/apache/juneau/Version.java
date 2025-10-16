@@ -230,12 +230,12 @@ public class Version implements Comparable<Version> {
 		return true;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return o instanceof Version && equals((Version)o);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Utils.join(parts, '.');
 	}

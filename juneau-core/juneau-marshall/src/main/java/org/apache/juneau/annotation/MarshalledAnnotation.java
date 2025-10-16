@@ -159,12 +159,12 @@ public class MarshalledAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Marshalled */
+		@Override /* Overridden from Marshalled */
 		public String example() {
 			return example;
 		}
 
-		@Override /* Marshalled */
+		@Override /* Overridden from Marshalled */
 		public Class<?> implClass() {
 			return implClass;
 		}

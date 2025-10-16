@@ -19,6 +19,8 @@ package org.apache.juneau.svl;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
@@ -116,5 +118,67 @@ class ResolvingJsonMapTest extends TestBase {
 
 		m3.put("foo", map("k1","$X{a}"));
 		assertMap(m, "foo{k1}", "{1}");
+	}
+
+	//====================================================================================================
+	// testFluentSetters - Test fluent setter overrides
+	//====================================================================================================
+	@Test void a05_fluentSetters() {
+		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
+		var m = new ResolvingJsonMap(vr.createSession());
+
+		// Test inner() returns same instance for fluent chaining
+		Map<String,Object> innerMap = new HashMap<>();
+		innerMap.put("test", "$X{a}");
+		assertSame(m, m.inner(innerMap));
+		assertEquals("1", m.get("test"));
+
+		// Test session() returns same instance
+		BeanSession session = BeanContext.DEFAULT.getSession();
+		assertSame(m, m.session(session));
+
+		// Test append(String, Object) returns same instance
+		assertSame(m, m.append("key1", "$X{b}"));
+		assertEquals("2", m.get("key1"));
+
+		// Test append(Map) returns same instance
+		Map<String,Object> appendMap = new HashMap<>();
+		appendMap.put("key2", "$X{c}");
+		assertSame(m, m.append(appendMap));
+		assertEquals("3", m.get("key2"));
+
+		// Test appendIf() returns same instance
+		assertSame(m, m.appendIf(true, "key3", "value3"));
+		assertEquals("value3", m.get("key3"));
+		assertSame(m, m.appendIf(false, "key4", "value4"));
+		assertNull(m.get("key4"));
+
+		// Test filtered() returns same instance
+		assertSame(m, m.filtered(x -> x != null));
+
+		// Test keepAll() returns same instance
+		assertSame(m, m.keepAll("key1", "key2"));
+
+		// Test setBeanSession() returns same instance
+		assertSame(m, m.setBeanSession(session));
+
+		// Test modifiable() returns a new instance when unmodifiable
+		assertSame(m, m.modifiable());
+
+		// Test unmodifiable() returns same instance
+		assertSame(m, m.unmodifiable());
+	}
+
+	@Test void a06_fluentChaining() {
+		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
+		// Test multiple fluent calls can be chained
+		var m = new ResolvingJsonMap(vr.createSession())
+			.append("key1", "$X{a}")
+			.append("key2", "$X{b}")
+			.appendIf(true, "key3", "$X{c}");
+
+		assertEquals("1", m.get("key1"));
+		assertEquals("2", m.get("key2"));
+		assertEquals("3", m.get("key3"));
 	}
 }

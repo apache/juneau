@@ -192,4 +192,21 @@ public class BadRequest extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public BadRequest setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public BadRequest setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public BadRequest setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

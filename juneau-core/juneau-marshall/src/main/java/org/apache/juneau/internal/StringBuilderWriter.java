@@ -63,27 +63,27 @@ public class StringBuilderWriter extends Writer {
 		lock = null;
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(int c) {
 		sb.append((char) c);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(char cbuf[], int start, int length) {
 		sb.append(cbuf, start, length);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(String str) {
 		sb.append(str);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) {
 		sb.append(str.substring(off, off + len));
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public StringBuilderWriter append(CharSequence csq) {
 		if (csq == null)
 			write("null");
@@ -92,27 +92,27 @@ public class StringBuilderWriter extends Writer {
 		return this;
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public StringBuilderWriter append(CharSequence csq, int start, int end) {
 		CharSequence cs = (csq == null ? "null" : csq);
 		write(cs.subSequence(start, end).toString());
 		return this;
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public StringBuilderWriter append(char c) {
 		write(c);
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return sb.toString();
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void flush() {}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void close() throws IOException {}
 }

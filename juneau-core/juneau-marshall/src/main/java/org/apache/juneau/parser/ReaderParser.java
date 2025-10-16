@@ -104,17 +104,17 @@ public class ReaderParser extends Parser {
 			streamCharset = copyFrom.streamCharset;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public ReaderParser build() {
 			return build(ReaderParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -692,17 +692,17 @@ public class ReaderParser extends Parser {
 		fileCharset = builder.fileCharset;
 	}
 
-	@Override /* Parser */
+	@Override /* Overridden from Parser */
 	public final boolean isReaderParser() {
 		return true;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public ReaderParserSession.Builder createSession() {
 		return ReaderParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public ReaderParserSession getSession() {
 		return createSession().build();
 	}
@@ -737,7 +737,7 @@ public class ReaderParser extends Parser {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
 	}

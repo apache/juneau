@@ -40,7 +40,7 @@ public abstract class MenuItemWidget extends Widget {
 	/**
 	 * Returns the Javascript needed for the show and hide actions of the menu item.
 	 */
-	@Override /* Widget */
+	@Override /* Overridden from Widget */
 	public String getScript(RestRequest req, RestResponse res) {
 		return loadScript(req, "scripts/MenuItemWidget.js");
 	}
@@ -113,12 +113,12 @@ public abstract class MenuItemWidget extends Widget {
 	 * Defines a <js>"menu-item"</js> class that needs to be used on the outer element of the HTML returned by the
 	 * {@link #getHtml(RestRequest,RestResponse)} method.
 	 */
-	@Override /* Widget */
+	@Override /* Overridden from Widget */
 	public String getStyle(RestRequest req, RestResponse res) {
 		return loadStyle(req, "styles/MenuItemWidget.css");
 	}
 
-	@Override /* Widget */
+	@Override /* Overridden from Widget */
 	public String getHtml(RestRequest req, RestResponse res) {
 		StringBuilder sb = new StringBuilder();
 

@@ -241,7 +241,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 		ctx = builder.ctx;
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try {
 			out.getWriter().write(serialize(HttpPartType.BODY, getSchema(), o));
@@ -251,7 +251,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Override /* PartSerializer */
+	@Override /* Overridden from PartSerializer */
 	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 
 		ClassMeta<?> type = getClassMetaForObject(value);

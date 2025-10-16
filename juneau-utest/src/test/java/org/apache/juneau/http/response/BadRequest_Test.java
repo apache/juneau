@@ -18,8 +18,13 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.HttpResponses.*;
 import static org.apache.juneau.http.response.BadRequest.*;
+import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
+import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
@@ -52,6 +57,21 @@ class BadRequest_Test extends TestBase {
 		public void f6() throws BadRequest {
 			throw new BadRequest("foo");
 		}
+		@RestGet
+		public void f7() throws BadRequest {
+			throw badRequest().setHeaders(Arrays.asList(
+				BasicHeader.of("Foo", "bar"),
+				BasicHeader.of("Baz", "qux")
+			));
+		}
+		@RestGet
+		public void f8() throws BadRequest {
+			throw badRequest().setContent("Custom content");
+		}
+		@RestGet
+		public void f9() throws BadRequest {
+			throw badRequest().setContent("Another custom message");
+		}
 	}
 
 	@Test void a01_basic() throws Exception {
@@ -76,5 +96,33 @@ class BadRequest_Test extends TestBase {
 		c.get("/f6").run()
 			.assertStatus().asCode().is(STATUS_CODE)
 			.assertContent("foo");
+		c.get("/f7").run()
+			.assertStatus().asCode().is(STATUS_CODE)
+			.assertHeader("Foo").is("bar")
+			.assertHeader("Baz").is("qux");
+		c.get("/f8").run()
+			.assertStatus().asCode().is(STATUS_CODE)
+			.assertContent("Custom content");
+		c.get("/f9").run()
+			.assertStatus().asCode().is(STATUS_CODE)
+			.assertContent("Another custom message");
+	}
+
+	@Test void a02_fluentSetters() {
+		var x = badRequest();
+
+		// Test setHeaders(List<Header>)
+		assertSame(x, x.setHeaders(Arrays.asList(
+			BasicHeader.of("X-Test", "test-value")
+		)));
+		assertEquals("test-value", x.getFirstHeader("X-Test").getValue());
+
+		// Test setContent(String)
+		assertSame(x, x.setContent("test content"));
+
+		// Test setContent(HttpEntity) returns same instance for fluent chaining
+		var x2 = badRequest();
+		HttpEntity entity = x2.getEntity();
+		assertSame(x2, x2.setContent(entity));
 	}
 }

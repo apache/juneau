@@ -40,12 +40,12 @@ public class StringFormatSwap extends StringSwap<Object> {
 		this.format = format;
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, Object o) throws Exception {
 		return String.format(format, o);
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Object unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		return session.convertToType(f, hint);
 	}

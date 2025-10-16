@@ -50,13 +50,13 @@ public class MultiSet<E> extends AbstractSet<E> {
 	/**
 	 * Iterates over all entries in all collections.
 	 */
-	@Override /* Set */
+	@Override /* Overridden from Set */
 	public Iterator<E> iterator() {
 		return new Iterator<>() {
 			int i = 0;
 			Iterator<E> i2 = (l.length > 0 ? l[i++].iterator() : null);
 
-			@Override /* Iterator */
+			@Override /* Overridden from Iterator */
 			public boolean hasNext() {
 				if (i2 == null)
 					return false;
@@ -68,7 +68,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 				return false;
 			}
 
-			@Override /* Iterator */
+			@Override /* Overridden from Iterator */
 			public E next() {
 				if (i2 == null)
 					throw new NoSuchElementException();
@@ -80,7 +80,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 				return i2.next();
 			}
 
-			@Override /* Iterator */
+			@Override /* Overridden from Iterator */
 			public void remove() {
 				if (i2 == null)
 					throw new NoSuchElementException();
@@ -98,7 +98,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 		return Collections.enumeration(this);
 	}
 
-	@Override /* Set */
+	@Override /* Overridden from Set */
 	public int size() {
 		int i = 0;
 		for (Collection<E> c : l)

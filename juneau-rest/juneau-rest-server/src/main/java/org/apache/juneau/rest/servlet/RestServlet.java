@@ -71,7 +71,7 @@ public abstract class RestServlet extends HttpServlet {
 	private AtomicReference<RestContext> context = new AtomicReference<>();
 	private AtomicReference<Exception> initException = new AtomicReference<>();
 
-	@Override /* Servlet */
+	@Override /* Overridden from Servlet */
 	public synchronized void init(ServletConfig servletConfig) throws ServletException {
 		try {
 			if (context.get() != null)
@@ -135,7 +135,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * Subclasses can optionally override this method if they want to tailor the behavior of requests.
 	 */
-	@Override /* Servlet */
+	@Override /* Overridden from Servlet */
 	public void service(HttpServletRequest r1, HttpServletResponse r2) throws ServletException, InternalServerError, IOException {
 		try {
 			if (initException.get() != null)
@@ -149,7 +149,7 @@ public abstract class RestServlet extends HttpServlet {
 		}
 	}
 
-	@Override /* GenericServlet */
+	@Override /* Overridden from GenericServlet */
 	public synchronized void destroy() {
 		if (context.get() != null)
 			context.get().destroy();

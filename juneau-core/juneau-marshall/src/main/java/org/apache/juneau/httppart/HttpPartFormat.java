@@ -235,7 +235,7 @@ public enum HttpPartFormat {
 		return false;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		String s = name().toLowerCase().replace('_','-');
 		return s;

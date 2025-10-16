@@ -96,17 +96,17 @@ public class ArrayUtils {
 		Utils.assertArgNotNull("array", array);
 		return new AbstractSet<>() {
 
-			@Override /* Set */
+			@Override /* Overridden from Set */
 			public Iterator<T> iterator() {
 				return new Iterator<>() {
 					int i = 0;
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public boolean hasNext() {
 						return i < array.length;
 					}
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public T next() {
 						if (i >= array.length)
 							throw new NoSuchElementException();
@@ -115,14 +115,14 @@ public class ArrayUtils {
 						return t;
 					}
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public void remove() {
 						throw new UnsupportedOperationException("Not supported.");
 					}
 				};
 			}
 
-			@Override /* Set */
+			@Override /* Overridden from Set */
 			public int size() {
 				return array.length;
 			}

@@ -53,17 +53,17 @@ public class ResponseHeader extends BasicHeader {
 
 	static final Header NULL_HEADER = new Header() {
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public String getName() {
 			return null;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public String getValue() {
 			return null;
 		}
 
-		@Override /* Header */
+		@Override /* Overridden from Header */
 		public HeaderElement[] getElements() throws org.apache.http.ParseException {
 			return new HeaderElement[0];
 		}
@@ -574,7 +574,7 @@ public class ResponseHeader extends BasicHeader {
 	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
 	 * @throws org.apache.http.ParseException In case of a parsing error.
 	 */
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public HeaderElement[] getElements() throws org.apache.http.ParseException {
 		return elements;
 	}

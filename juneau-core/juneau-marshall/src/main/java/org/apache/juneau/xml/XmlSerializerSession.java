@@ -295,7 +295,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		return w;
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (isEnableNamespaces() && isAutoDetectNamespaces())
 			findNsfMappings(o);

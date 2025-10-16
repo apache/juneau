@@ -1138,277 +1138,277 @@ public class SchemaAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] _default() {
 			return _default;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] _enum() {
 			return _enum;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String $ref() {
 			return $ref;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] additionalProperties() {
 			return additionalProperties;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] allOf() {
 			return allOf;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean aev() {
 			return aev;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean allowEmptyValue() {
 			return allowEmptyValue;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String cf() {
 			return cf;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String collectionFormat() {
 			return collectionFormat;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] d() {
 			return d;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] df() {
 			return df;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String discriminator() {
 			return discriminator;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] e() {
 			return e;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean emax() {
 			return emax;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean emin() {
 			return emin;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean exclusiveMaximum() {
 			return exclusiveMaximum;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean exclusiveMinimum() {
 			return exclusiveMinimum;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public ExternalDocs externalDocs() {
 			return externalDocs;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String f() {
 			return f;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String format() {
 			return format;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean ignore() {
 			return ignore;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public Items items() {
 			return items;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String max() {
 			return max;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long maxi() {
 			return maxi;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String maximum() {
 			return maximum;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long maxItems() {
 			return maxItems;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long maxl() {
 			return maxl;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long maxLength() {
 			return maxLength;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long maxp() {
 			return maxp;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long maxProperties() {
 			return maxProperties;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String min() {
 			return min;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long mini() {
 			return mini;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String minimum() {
 			return minimum;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long minItems() {
 			return minItems;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long minl() {
 			return minl;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long minLength() {
 			return minLength;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long minp() {
 			return minp;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public long minProperties() {
 			return minProperties;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String mo() {
 			return mo;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String multipleOf() {
 			return multipleOf;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String p() {
 			return p;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String pattern() {
 			return pattern;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] properties() {
 			return properties;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean r() {
 			return r;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean readOnly() {
 			return readOnly;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean required() {
 			return required;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean ro() {
 			return ro;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean sie() {
 			return sie;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean skipIfEmpty() {
 			return skipIfEmpty;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String t() {
 			return t;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String title() {
 			return title;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String type() {
 			return type;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean ui() {
 			return ui;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean uniqueItems() {
 			return uniqueItems;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] xml() {
 			return xml;
 		}
@@ -1417,92 +1417,92 @@ public class SchemaAnnotation {
 		// JSON Schema Draft 2020-12 property getters
 		// -----------------------------------------------------------------------------------------------------------------
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] _const() {
 			return _const;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] examples() {
 			return examples;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] $comment() {
 			return $comment;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public boolean deprecatedProperty() {
 			return deprecatedProperty;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String exclusiveMaximumValue() {
 			return exclusiveMaximumValue;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String exclusiveMinimumValue() {
 			return exclusiveMinimumValue;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String contentMediaType() {
 			return contentMediaType;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String contentEncoding() {
 			return contentEncoding;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] prefixItems() {
 			return prefixItems;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] unevaluatedItems() {
 			return unevaluatedItems;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] unevaluatedProperties() {
 			return unevaluatedProperties;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] dependentSchemas() {
 			return dependentSchemas;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] dependentRequired() {
 			return dependentRequired;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] _if() {
 			return _if;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] _then() {
 			return _then;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] _else() {
 			return _else;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String[] $defs() {
 			return $defs;
 		}
 
-		@Override /* Schema */
+		@Override /* Overridden from Schema */
 		public String $id() {
 			return $id;
 		}

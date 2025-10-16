@@ -59,12 +59,12 @@ public class HttpPart implements NameValuePair {
 		this.spart = null;
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getName() {
 		return name;
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getValue() {
 		if (spart != null)
 			return spart;

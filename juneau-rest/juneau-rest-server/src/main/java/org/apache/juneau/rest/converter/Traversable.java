@@ -46,7 +46,7 @@ import org.apache.juneau.swap.*;
  */
 public class Traversable implements RestConverter {
 
-	@Override /* RestConverter */
+	@Override /* Overridden from RestConverter */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object convert(RestRequest req, Object o) throws BasicHttpException, InternalServerError {
 		if (o == null)

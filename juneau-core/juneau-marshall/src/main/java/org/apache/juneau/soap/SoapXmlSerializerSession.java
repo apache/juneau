@@ -217,7 +217,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
 			w.append("<?xml")
@@ -236,7 +236,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 		}
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	public Map<String,String> getResponseHeaders() {
 		return map("SOAPAction",getSoapAction());
 	}

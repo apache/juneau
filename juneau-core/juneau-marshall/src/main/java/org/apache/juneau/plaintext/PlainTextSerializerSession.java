@@ -206,7 +206,7 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 		super(builder);
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		out.getWriter().write(o == null ? "null" : convertToType(o, String.class));
 	}

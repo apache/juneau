@@ -48,7 +48,7 @@ public class ParserInputStream extends InputStream implements Positionable {
 		pipe.setPositionable(this);
 	}
 
-	@Override /* InputStream */
+	@Override /* Overridden from InputStream */
 	public int read() throws IOException {
 		int i = is.read();
 		if (i > 0)
@@ -56,7 +56,7 @@ public class ParserInputStream extends InputStream implements Positionable {
 		return i;
 	}
 
-	@Override /* Positionable */
+	@Override /* Overridden from Positionable */
 	public Position getPosition() {
 		return new Position(pos);
 	}

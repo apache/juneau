@@ -129,7 +129,7 @@ class BeanConfig_Test extends TestBase {
 		public int getAge() { return age; }
 		public void setAge(int v) { age = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return f("Person(name: {0}, age: {1})", name, age);
 		}
@@ -156,17 +156,17 @@ class BeanConfig_Test extends TestBase {
 		protected String zip;
 		public String getZip() { return zip; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public boolean equals(Object o) {
 			return eq(this, (Address)o, (x,y) -> eq(x.getStreet(), y.getStreet()) && eq(x.getCity(), y.getCity()) && eq(x.getState(), y.getState()) && eq(x.getZip(), y.getZip()));
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public int hashCode() {
 			return hash(street, city, state, zip);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return f("Address(street: {0}, city: {1}, state: {2}, zip: {3})", street, city, state, zip);
 		}
@@ -182,7 +182,7 @@ class BeanConfig_Test extends TestBase {
 		public Address getAddress() { return address; }
 		public void setAddress(Address v) { address = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return super.toString() + "@" + this.address;
 		}
@@ -324,7 +324,7 @@ class BeanConfig_Test extends TestBase {
 		public String getName() { return name; }
 		public int getAge() { return age; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return f("toString():name={0},age={1}", name, age);
 		}
@@ -354,7 +354,7 @@ class BeanConfig_Test extends TestBase {
 		public String getName() { return name; }
 		public int getAge() { return age; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return f("toString():name={0},age={1}", name, age);
 		}

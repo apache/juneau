@@ -128,12 +128,12 @@ public class BasicNamedAttribute implements NamedAttribute {
 		return new FluentObjectAssertion<>(getValue(), this);
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getName() {
 		return name;
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public Object getValue() {
 		return unwrap(value);
 	}
@@ -179,7 +179,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 		return o != null ? o : other;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return urlEncode(getName()) + "=" + getValue();
 	}

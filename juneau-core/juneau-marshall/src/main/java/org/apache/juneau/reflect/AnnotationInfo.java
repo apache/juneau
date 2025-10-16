@@ -291,7 +291,7 @@ public class AnnotationInfo<T extends Annotation> {
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.DEFAULT_READABLE.write(toJsonMap());
 	}

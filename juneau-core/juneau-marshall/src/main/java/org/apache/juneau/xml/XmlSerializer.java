@@ -309,17 +309,17 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		textNodeDelimiter = copyFrom.textNodeDelimiter;
 	}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public XmlSerializer build() {
 			return cache(CACHE).build(XmlSerializer.class);
 		}
 
-	@Override /* Context.Builder */
+	@Override /* Overridden from Context.Builder */
 	public HashKey hashKey() {
 		return HashKey.of(
 			super.hashKey(),
@@ -1257,17 +1257,17 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public XmlSerializerSession.Builder createSession() {
 		return XmlSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public XmlSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1276,7 +1276,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
 		XmlClassMeta m = xmlClassMetas.get(cm);
 		if (m == null) {
@@ -1286,7 +1286,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
 		XmlBeanMeta m = xmlBeanMetas.get(bm);
 		if (m == null) {
@@ -1296,7 +1296,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
 		if (m == null) {
@@ -1382,7 +1382,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("autoDetectNamespaces", autoDetectNamespaces)

@@ -33,7 +33,7 @@ import org.apache.juneau.internal.*;
  */
 public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 
-	@Override /* HtmlDocTemplate */
+	@Override /* Overridden from HtmlDocTemplate */
 	public void writeTo(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		w.sTag("html").nl(0);
 		w.sTag(1, "head").nl(1);

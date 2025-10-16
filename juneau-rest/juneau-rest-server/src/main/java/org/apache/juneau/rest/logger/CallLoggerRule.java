@@ -76,7 +76,7 @@ public class CallLoggerRule {
 			super(CallLoggerRule.class, beanStore);
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected CallLoggerRule buildDefault() {
 			return new CallLoggerRule(this);
 		}
@@ -413,7 +413,7 @@ public class CallLoggerRule {
 		return enabledTest;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("codeFilter", statusFilter)

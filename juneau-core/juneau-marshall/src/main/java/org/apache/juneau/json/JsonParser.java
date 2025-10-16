@@ -200,17 +200,17 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public JsonParser build() {
 			return cache(CACHE).build(JsonParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -776,17 +776,17 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		validateEnd = builder.validateEnd;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonParserSession.Builder createSession() {
 		return JsonParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonParserSession getSession() {
 		return createSession().build();
 	}
@@ -795,7 +795,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* JsonMetaProvider */
+	@Override /* Overridden from JsonMetaProvider */
 	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		JsonClassMeta m = jsonClassMetas.get(cm);
 		if (m == null) {
@@ -805,7 +805,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		return m;
 	}
 
-	@Override /* JsonMetaProvider */
+	@Override /* Overridden from JsonMetaProvider */
 	public JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return JsonBeanPropertyMeta.DEFAULT;

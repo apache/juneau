@@ -145,7 +145,7 @@ public class EncoderSet {
 			entries = copyOf(copyFrom.entries);
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected EncoderSet buildDefault() {
 			return new EncoderSet(this);
 		}
@@ -281,7 +281,7 @@ public class EncoderSet {
 		// Other methods
 		//-------------------------------------------------------------------------------------------------------------
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return entries.stream().map(Builder::toString).collect(joining(",","[","]"));
 		}

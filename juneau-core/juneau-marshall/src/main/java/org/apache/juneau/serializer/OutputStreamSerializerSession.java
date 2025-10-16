@@ -199,12 +199,12 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		ctx = builder.ctx;
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	public final boolean isWriterSerializer() {
 		return false;
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected SerializerPipe createPipe(Object output) {
 		return new SerializerPipe(output);
 	}
@@ -216,7 +216,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	 * @return The output serialized to a byte array.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	public final byte[] serialize(Object o) throws SerializeException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
@@ -228,7 +228,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 		return baos.toByteArray();
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		byte[] b = serialize(o);
 		switch(getBinaryFormat()) {

@@ -51,7 +51,7 @@ public class MsgPackOutputStream extends OutputStream {
 		this.os = os;
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public void write(int b) {
 		try {
 			os.write(b);

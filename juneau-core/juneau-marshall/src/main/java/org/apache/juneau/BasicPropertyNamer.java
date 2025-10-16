@@ -38,7 +38,7 @@ import java.beans.*;
  */
 public class BasicPropertyNamer implements PropertyNamer {
 
-	@Override /* PropertyNamer */
+	@Override /* Overridden from PropertyNamer */
 	public String getPropertyName(String name) {
 		return Introspector.decapitalize(name);
 	}

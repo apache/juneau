@@ -69,7 +69,7 @@ public class RestOpArgList {
 			entries = list();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected RestOpArgList buildDefault() {
 			return new RestOpArgList(this);
 		}

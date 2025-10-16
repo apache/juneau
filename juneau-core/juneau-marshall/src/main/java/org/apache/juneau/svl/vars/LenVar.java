@@ -60,7 +60,7 @@ public class LenVar extends MultipartVar {
 		super(NAME);
 	}
 
-	@Override /* MultipartVar */
+	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		Utils.assertArg(args.length <= 2, "Invalid number of arguments passed to $LN var.  Must have 1 or 2 arguments.");
 

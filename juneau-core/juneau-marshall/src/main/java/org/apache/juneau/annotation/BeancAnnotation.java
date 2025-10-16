@@ -133,7 +133,7 @@ public class BeancAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Beanc */
+		@Override /* Overridden from Beanc */
 		public String properties() {
 			return properties;
 		}

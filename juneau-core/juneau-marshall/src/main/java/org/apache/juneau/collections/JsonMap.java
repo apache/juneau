@@ -118,27 +118,27 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		private static final long serialVersionUID = 1L;
 
-		@Override /* Map */
+		@Override /* Overridden from Map */
 		public Set<Map.Entry<String,Object>> entrySet() {
 			return Collections.<String,Object>emptyMap().entrySet();
 		}
 
-		@Override /* Map */
+		@Override /* Overridden from Map */
 		public Set<String> keySet() {
 			return Collections.<String,Object>emptyMap().keySet();
 		}
 
-		@Override /* Map */
+		@Override /* Overridden from Map */
 		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* Map */
+		@Override /* Overridden from Map */
 		public Object remove(Object key) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* Map */
+		@Override /* Overridden from Map */
 		public Collection<Object> values() {
 			return Collections.emptyMap().values();
 		}
@@ -1809,7 +1809,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	// Overridden methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object get(Object key) {
 		Object o = super.get(key);
 		if (o == null && inner != null)
@@ -1817,7 +1817,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return o;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public boolean containsKey(Object key) {
 		if (super.containsKey(key))
 			return true;
@@ -1826,7 +1826,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return false;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<String> keySet() {
 		if (inner == null)
 			return super.keySet();
@@ -1836,7 +1836,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return s;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<Map.Entry<String,Object>> entrySet() {
 		if (inner == null)
 			return super.entrySet();
@@ -1846,46 +1846,46 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		return new AbstractSet<>() {
 
-			@Override /* Iterable */
+			@Override /* Overridden from Iterable */
 			public Iterator<Map.Entry<String,Object>> iterator() {
 
 				return new Iterator<>() {
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public boolean hasNext() {
 						return keys.hasNext();
 					}
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public Map.Entry<String,Object> next() {
 						return new Map.Entry<>() {
 							String key = keys.next();
 
-							@Override /* Map.Entry */
+							@Override /* Overridden from Map.Entry */
 							public String getKey() {
 								return key;
 							}
 
-							@Override /* Map.Entry */
+							@Override /* Overridden from Map.Entry */
 							public Object getValue() {
 								return get(key);
 							}
 
-							@Override /* Map.Entry */
+							@Override /* Overridden from Map.Entry */
 							public Object setValue(Object object) {
 								return put(key, object);
 							}
 						};
 					}
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public void remove() {
 						throw new UnsupportedOperationException("Not supported on read-only object.");
 					}
 				};
 			}
 
-			@Override /* Set */
+			@Override /* Overridden from Set */
 			public int size() {
 				return keySet.size();
 			}
@@ -1901,7 +1901,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		return toString();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(this);
 	}

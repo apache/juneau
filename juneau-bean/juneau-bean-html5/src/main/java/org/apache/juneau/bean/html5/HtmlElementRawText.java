@@ -435,4 +435,16 @@ public class HtmlElementRawText extends HtmlElement {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementRawText attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementRawText attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

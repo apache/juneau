@@ -237,17 +237,17 @@ public class Parser extends BeanContextable {
 			consumes = copyFrom.consumes;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Parser build() {
 			return build(Parser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1031,7 +1031,7 @@ public class Parser extends BeanContextable {
 		}
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -1242,12 +1242,12 @@ public class Parser extends BeanContextable {
 		return getSession().parse(input, type);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public ParserSession.Builder createSession() {
 		return ParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public ParserSession getSession() {
 		return createSession().build();
 	}
@@ -1468,7 +1468,7 @@ public class Parser extends BeanContextable {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("autoCloseStreams", autoCloseStreams)

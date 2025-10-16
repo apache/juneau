@@ -559,4 +559,16 @@ public class Option extends HtmlElementText {
 		super.text(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Option attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

@@ -53,19 +53,19 @@ public class CharSequenceReader extends BufferedReader {
 		this.length = cs.length();
 	}
 
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public int read() {
 		if (next >= length)
 			return -1;
 		return cs.charAt(next++);
 	}
 
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public boolean markSupported() {
 		return false;
 	}
 
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public int read(final char[] cbuf, final int off, final int len) {
 		if (next >= length)
 			return -1;
@@ -84,7 +84,7 @@ public class CharSequenceReader extends BufferedReader {
 		return n;
 	}
 
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public long skip(long ns) {
 		if (next >= length)
 			return 0;
@@ -94,12 +94,12 @@ public class CharSequenceReader extends BufferedReader {
 		return n;
 	}
 
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public void close() {
 		// no-op
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return cs.toString();
 	}

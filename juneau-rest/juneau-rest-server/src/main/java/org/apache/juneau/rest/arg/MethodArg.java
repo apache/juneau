@@ -58,7 +58,7 @@ public class MethodArg implements RestOpArg {
 	protected MethodArg() {
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return opSession.getRequest().getMethod();
 	}

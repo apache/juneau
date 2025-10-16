@@ -117,7 +117,7 @@ public class BasicDatePart extends BasicPart {
 		this.supplier = null;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		ZonedDateTime v = value();
 		return v == null ? null : ISO_DATE_TIME.format(v);

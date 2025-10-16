@@ -41,4 +41,18 @@ public class SchemaValidationException extends ParseException {
 	public SchemaValidationException(String message, Object...args) {
 		super(message, args);
 	}
+
+	@Override /* Overridden from ParseException */
+	public SchemaValidationException getRootCause() {
+		ParseException t = this;
+		while (! (t.getCause() == null || ! (t.getCause() instanceof SchemaValidationException)))
+			t = (SchemaValidationException)t.getCause();
+		return (SchemaValidationException)t;
+	}
+
+	@Override /* Overridden from ParseException */
+	public SchemaValidationException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

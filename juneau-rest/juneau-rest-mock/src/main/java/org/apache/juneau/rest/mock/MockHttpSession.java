@@ -145,60 +145,60 @@ public class MockHttpSession implements HttpSession {
 	// HttpSession methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public long getCreationTime() {
 		return creationTime;
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public String getId() {
 		return id;
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public long getLastAccessedTime() {
 		return lastAccessedTime;
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public ServletContext getServletContext() {
 		return servletContext;
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public void setMaxInactiveInterval(int value) {
 		this.maxInactiveInterval = value;
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public int getMaxInactiveInterval() {
 		return maxInactiveInterval;
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public Object getAttribute(String name) {
 		return attributes.get(name);
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public Enumeration<String> getAttributeNames() {
 		return Collections.enumeration(attributes.keySet());
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public void setAttribute(String name, Object value) {
 		attributes.put(name, value);
 	}
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public void removeAttribute(String name) {
 		attributes.remove(name);
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public void invalidate() {
 	}
 
-	@Override /* HttpSession */
+	@Override /* Overridden from HttpSession */
 	public boolean isNew() {
 		return isNew;
 	}

@@ -98,7 +98,7 @@ public class ObjectViewer implements ObjectTool<ViewArgs> {
 		return (Map)run(BeanContext.DEFAULT_SESSION, input, ViewArgs.create(args));
 	}
 
-	@Override /* ObjectTool */
+	@Override /* Overridden from ObjectTool */
 	public Object run(BeanSession session, Object input, ViewArgs args) {
 
 		if (input == null)

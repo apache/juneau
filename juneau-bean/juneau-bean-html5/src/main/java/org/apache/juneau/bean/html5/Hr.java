@@ -461,4 +461,16 @@ public class Hr extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Hr attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Hr attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

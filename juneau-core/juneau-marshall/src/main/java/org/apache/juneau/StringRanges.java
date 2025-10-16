@@ -238,7 +238,7 @@ public class StringRanges {
 		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
 	}

@@ -441,7 +441,7 @@ public class BeanTraverseSession extends BeanSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("indent", indent, "depth", depth);
 	}

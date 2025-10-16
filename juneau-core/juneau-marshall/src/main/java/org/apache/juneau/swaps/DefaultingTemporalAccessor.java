@@ -51,12 +51,12 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 		this.zoneId = zoneId;
 	}
 
-	@Override /* TemporalAccessor */
+	@Override /* Overridden from TemporalAccessor */
 	public boolean isSupported(TemporalField field) {
 		return inner.isSupported(field);
 	}
 
-	@Override /* TemporalAccessor */
+	@Override /* Overridden from TemporalAccessor */
 	@SuppressWarnings("unchecked")
 	public <R> R query(TemporalQuery<R> query) {
 		R r = inner.query(query);
@@ -104,7 +104,7 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 		return null;
 	}
 
-	@Override /* TemporalAccessor */
+	@Override /* Overridden from TemporalAccessor */
 	public long getLong(TemporalField field) {
 
 		if (isSupported(field))
@@ -131,7 +131,7 @@ public class DefaultingTemporalAccessor implements TemporalAccessor {
 		return 0;
 	}
 
-	@Override /* TemporalAccessor */
+	@Override /* Overridden from TemporalAccessor */
 	public int get(TemporalField field) {
 		if (inner.isSupported(field))
 			return inner.get(field);

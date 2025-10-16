@@ -19,6 +19,7 @@ package org.apache.juneau.http.resource;
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 
@@ -134,6 +135,30 @@ public class StringResource extends BasicResource {
 	@Override /* Overridden from BasicResource */
 	public StringResource setUnmodifiable() {
 		super.setUnmodifiable();
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public StringResource setHeader(String name, String value) {
+		super.setHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public StringResource addHeader(String name, String value) {
+		super.addHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public StringResource setHeaders(Header...values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public StringResource addHeaders(Header...values) {
+		super.addHeaders(values);
 		return this;
 	}
 }

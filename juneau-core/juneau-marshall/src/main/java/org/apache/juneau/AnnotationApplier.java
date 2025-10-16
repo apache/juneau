@@ -275,7 +275,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 			super(Annotation.class, Object.class, r);
 		}
 
-		@Override /* ConfigApply */
+		@Override /* Overridden from ConfigApply */
 		public void apply(AnnotationInfo<Annotation> ai, Object b) { /* no-op */ }
 	}
 }

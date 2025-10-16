@@ -559,172 +559,172 @@ public class SubItemsAnnotation {
 			postConstruct();
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String[] _default() {
 			return _default;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String[] _enum() {
 			return _enum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String $ref() {
 			return $ref;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String cf() {
 			return cf;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String collectionFormat() {
 			return collectionFormat;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String[] df() {
 			return df;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String[] e() {
 			return e;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public boolean emax() {
 			return emax;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public boolean emin() {
 			return emin;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public boolean exclusiveMaximum() {
 			return exclusiveMaximum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public boolean exclusiveMinimum() {
 			return exclusiveMinimum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String f() {
 			return f;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String format() {
 			return format;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String[] items() {
 			return items;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String max() {
 			return max;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long maxi() {
 			return maxi;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String maximum() {
 			return maximum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long maxItems() {
 			return maxItems;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long maxl() {
 			return maxl;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long maxLength() {
 			return maxLength;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String min() {
 			return min;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long mini() {
 			return mini;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String minimum() {
 			return minimum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long minItems() {
 			return minItems;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long minl() {
 			return minl;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public long minLength() {
 			return minLength;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String mo() {
 			return mo;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String multipleOf() {
 			return multipleOf;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String p() {
 			return p;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String pattern() {
 			return pattern;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String t() {
 			return t;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public String type() {
 			return type;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public boolean ui() {
 			return ui;
 		}
 
-		@Override /* SubItems */
+		@Override /* Overridden from SubItems */
 		public boolean uniqueItems() {
 			return uniqueItems;
 		}

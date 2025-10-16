@@ -67,7 +67,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A1-" + f;
 		}
@@ -80,7 +80,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A2-" + f;
 		}
@@ -93,7 +93,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A3-" + f;
 		}
@@ -106,7 +106,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A4-" + f;
 		}
@@ -163,7 +163,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			this.i = i;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "X-" + i;
 		}
@@ -221,7 +221,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			return x;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "C1-" + f;
 		}
@@ -240,7 +240,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "C2-" + f;
 		}
@@ -256,7 +256,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "C3-" + f;
 		}
@@ -269,7 +269,7 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 			x.f = s.substring(3);
 			return x;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "C4" + f;
 		}

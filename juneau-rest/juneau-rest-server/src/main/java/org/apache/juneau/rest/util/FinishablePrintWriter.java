@@ -49,7 +49,7 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 	 * <p>
 	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
 	 */
-	@Override /* Finishable */
+	@Override /* Overridden from Finishable */
 	public void finish() throws IOException {
 		if (f != null)
 			f.finish();

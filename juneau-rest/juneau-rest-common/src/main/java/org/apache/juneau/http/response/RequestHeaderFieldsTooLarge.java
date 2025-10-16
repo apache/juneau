@@ -192,4 +192,21 @@ public class RequestHeaderFieldsTooLarge extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public RequestHeaderFieldsTooLarge setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public RequestHeaderFieldsTooLarge setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public RequestHeaderFieldsTooLarge setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

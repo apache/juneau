@@ -539,4 +539,16 @@ public class Meta extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meta attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

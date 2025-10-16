@@ -70,7 +70,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 			this.comparator = pattern.replaceAll("\\w+", "X").replace("*", "W");
 		}
 
-		@Override /* UrlPathMatcher */
+		@Override /* Overridden from UrlPathMatcher */
 		public UrlPathMatch match(UrlPath pathInfo) {
 			Optional<String> fileName = pathInfo.getFileName();
 			if (fileName.isPresent()) {
@@ -81,7 +81,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 			return null;
 		}
 
-		@Override /* UrlPathMatcher */
+		@Override /* Overridden from UrlPathMatcher */
 		public String getComparator() {
 			return comparator;
 		}
@@ -240,12 +240,12 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	 * 	<li><c>/foo/*</c>
 	 * </ol>
 	 */
-	@Override /* Comparable */
+	@Override /* Overridden from Comparable */
 	public int compareTo(UrlPathMatcher o) {
 		return o.getComparator().compareTo(getComparator());
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return pattern;
 	}

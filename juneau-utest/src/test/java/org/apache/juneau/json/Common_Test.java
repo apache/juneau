@@ -288,7 +288,7 @@ class Common_Test extends TestBase {
 		public boolean isF3() { return f3; }
 		public void setF3(boolean v) { f3 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return ("J(f1: " + this.getF1() + ", f2: " + this.getF2() + ")");
 		}

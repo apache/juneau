@@ -189,7 +189,7 @@ public class Namespace {
 		return uri;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return key;
 	}

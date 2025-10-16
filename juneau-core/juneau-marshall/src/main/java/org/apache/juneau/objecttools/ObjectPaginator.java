@@ -87,7 +87,7 @@ public class ObjectPaginator implements ObjectTool<PageArgs> {
 		return bs.convertToType(r, List.class);
 	}
 
-	@Override /* ObjectTool */
+	@Override /* Overridden from ObjectTool */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Object run(BeanSession session, Object input, PageArgs args) {
 

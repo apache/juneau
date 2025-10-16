@@ -119,7 +119,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Predicate */
+	@Override /* Overridden from Predicate */
 	public boolean test(T t) {
 		failedMessage.remove();
 		var b = inner.test(t);
@@ -185,7 +185,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			this.inner = inner;
 		}
 
-		@Override /* Predicate */
+		@Override /* Overridden from Predicate */
 		public boolean test(T t) {
 			failedMessage.remove();
 			for (var i = 0; i < inner.length; i++) {
@@ -232,7 +232,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			this.inner = inner;
 		}
 
-		@Override /* Predicate */
+		@Override /* Overridden from Predicate */
 		public boolean test(T t) {
 			failedMessage.remove();
 			for (var p : inner)
@@ -269,7 +269,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 			this.inner = inner;
 		}
 
-		@Override /* Predicate */
+		@Override /* Overridden from Predicate */
 		public boolean test(T t) {
 			failedMessage.remove();
 			var p = inner;

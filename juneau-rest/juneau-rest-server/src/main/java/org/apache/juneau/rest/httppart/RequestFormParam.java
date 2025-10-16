@@ -125,7 +125,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	// Retrievers
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* RequestHttpPart */
+	@Override /* Overridden from RequestHttpPart */
 	public String getValue() {
 		if (value == null && part != null)
 			try {
@@ -210,12 +210,19 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 		return part.getSubmittedFileName();
 	}
 
-	@Override /* GENERATED */
+	@Override /* Overridden from RequestHttpPart */
+	public RequestFormParam def(String def) {
+		super.def(def);
+		return this;
+	}
+
+	@Override /* Overridden from RequestHttpPart */
 	public RequestFormParam schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
-	@Override /* GENERATED */
+
+	@Override /* Overridden from RequestHttpPart */
 	public RequestFormParam parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -497,6 +498,24 @@ public class Datalist extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElementContainer */
 	public Datalist children(Object...value) {
 		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Datalist setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Datalist attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Datalist attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 }

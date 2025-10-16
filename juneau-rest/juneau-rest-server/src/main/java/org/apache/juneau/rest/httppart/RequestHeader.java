@@ -204,22 +204,29 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
 	 * @throws BasicHttpException In case of a parsing error.
 	 */
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public HeaderElement[] getElements() throws BasicHttpException {
 		return new HeaderElement[0];
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return getName() + ": " + getValue();
 	}
 
-	@Override /* GENERATED */
+	@Override /* Overridden from RequestHttpPart */
+	public RequestHeader def(String def) {
+		super.def(def);
+		return this;
+	}
+
+	@Override /* Overridden from RequestHttpPart */
 	public RequestHeader schema(HttpPartSchema value) {
 		super.schema(value);
 		return this;
 	}
-	@Override /* GENERATED */
+
+	@Override /* Overridden from RequestHttpPart */
 	public RequestHeader parser(HttpPartParserSession value) {
 		super.parser(value);
 		return this;

@@ -195,4 +195,21 @@ public class Unauthorized extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public Unauthorized setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public Unauthorized setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public Unauthorized setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

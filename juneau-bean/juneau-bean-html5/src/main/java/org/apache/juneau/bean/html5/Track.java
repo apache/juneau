@@ -588,4 +588,16 @@ public class Track extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Track attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Track attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

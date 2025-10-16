@@ -30,12 +30,12 @@ import org.apache.juneau.swap.*;
  */
 public class LocaleSwap extends StringSwap<Locale> {
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, Locale o) throws Exception {
 		return o == null ? null : o.toLanguageTag();
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Locale unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
 		return o == null ? null : Locale.forLanguageTag(o);
 	}

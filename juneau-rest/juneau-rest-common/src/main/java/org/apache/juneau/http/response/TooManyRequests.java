@@ -193,4 +193,21 @@ public class TooManyRequests extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public TooManyRequests setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public TooManyRequests setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public TooManyRequests setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

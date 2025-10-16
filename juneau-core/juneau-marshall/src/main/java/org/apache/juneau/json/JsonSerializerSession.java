@@ -214,7 +214,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		this.ctx = builder.ctx;
 	}
 
-	@Override /* SerializerSesssion */
+	@Override /* Overridden from SerializerSesssion */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getJsonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}

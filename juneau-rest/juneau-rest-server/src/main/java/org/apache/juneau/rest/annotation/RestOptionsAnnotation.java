@@ -365,102 +365,102 @@ public class RestOptionsAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestOptions */
+		@Override /* Overridden from RestOptions */
 		public String value() {
 			return value;
 		}

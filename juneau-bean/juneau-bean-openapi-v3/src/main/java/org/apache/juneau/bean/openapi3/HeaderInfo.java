@@ -429,7 +429,7 @@ public class HeaderInfo extends OpenApiElement {
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
-			case "description" -> (T)getDescription();
+			case "description" -> toType(getDescription(), type);
 			case "required" -> toType(getRequired(), type);
 			case "explode" -> toType(getExplode(), type);
 			case "deprecated" -> toType(getDeprecated(), type);
@@ -464,7 +464,7 @@ public class HeaderInfo extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(ref != null, "$ref")

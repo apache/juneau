@@ -193,4 +193,21 @@ public class Forbidden extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public Forbidden setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public Forbidden setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public Forbidden setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

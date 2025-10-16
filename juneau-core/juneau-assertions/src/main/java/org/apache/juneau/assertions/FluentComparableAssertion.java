@@ -151,7 +151,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentComparableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentComparableAssertion<>(this, function.apply(orElse(null)), returns());
 	}

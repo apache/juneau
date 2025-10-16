@@ -53,17 +53,17 @@ public class BasicBeanDefMapper implements BeanDefMapper {
 		format = new MessageFormat(uriPattern);
 	}
 
-	@Override /* BeanDefMapper */
+	@Override /* Overridden from BeanDefMapper */
 	public String getId(ClassMeta<?> cm) {
 		return cm.getSimpleName();
 	}
 
-	@Override /* BeanDefMapper */
+	@Override /* Overridden from BeanDefMapper */
 	public URI getURI(ClassMeta<?> cm) {
 		return getURI(getId(cm));
 	}
 
-	@Override /* BeanDefMapper */
+	@Override /* Overridden from BeanDefMapper */
 	public URI getURI(String id) {
 		return URI.create(format.format(new Object[]{id}));
 	}

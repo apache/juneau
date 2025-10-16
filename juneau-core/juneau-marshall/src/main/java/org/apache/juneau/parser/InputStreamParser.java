@@ -100,17 +100,17 @@ public class InputStreamParser extends Parser {
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public InputStreamParser build() {
 			return build(InputStreamParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -654,17 +654,17 @@ public class InputStreamParser extends Parser {
 		binaryFormat = builder.binaryFormat;
 	}
 
-	@Override /* Parser */
+	@Override /* Overridden from Parser */
 	public final boolean isReaderParser() {
 		return false;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public InputStreamParserSession.Builder createSession() {
 		return InputStreamParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public InputStreamParserSession getSession() {
 		return createSession().build();
 	}
@@ -688,7 +688,7 @@ public class InputStreamParser extends Parser {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);
 	}

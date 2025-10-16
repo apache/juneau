@@ -1105,7 +1105,7 @@ public class Swagger extends SwaggerElement {
 		return toString();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);
 	}

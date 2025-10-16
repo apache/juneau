@@ -137,7 +137,7 @@ public class UrlPathMatch {
 		return Utils.nullIfEmpty3(path.substring(0, c));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("v", getVars())

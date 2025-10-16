@@ -39,7 +39,7 @@ public class MatchResultSwap extends ObjectSwap<MatchResult,List<String>> {
 	/**
 	 * Converts the specified {@link Enumeration} to a {@link List}.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public List<String> swap(BeanSession session, MatchResult o) {
 		List<String> l = Utils.listOfSize(o.groupCount());
 		for (int i = 0; i <= o.groupCount(); i++)

@@ -135,17 +135,17 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public MsgPackParser build() {
 			return cache(CACHE).build(MsgPackParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return super.hashKey();
 		}
@@ -661,17 +661,17 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public MsgPackParserSession.Builder createSession() {
 		return MsgPackParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public MsgPackParserSession getSession() {
 		return createSession().build();
 	}
@@ -680,7 +680,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* MsgPackMetaProvider */
+	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
 		MsgPackClassMeta m = msgPackClassMetas.get(cm);
 		if (m == null) {
@@ -690,7 +690,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		return m;
 	}
 
-	@Override /* MsgPackMetaProvider */
+	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return MsgPackBeanPropertyMeta.DEFAULT;

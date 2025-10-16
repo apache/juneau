@@ -121,7 +121,7 @@ public class BasicCsvArrayPart extends BasicPart {
 		this.stringValue = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null)
 			return Utils.join(supplier.get(), ',');

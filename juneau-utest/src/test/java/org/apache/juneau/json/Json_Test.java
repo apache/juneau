@@ -284,7 +284,7 @@ class Json_Test extends TestBase{
 			return b;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return String.valueOf(f1);
 		}
@@ -327,7 +327,7 @@ class Json_Test extends TestBase{
 			return b;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return String.valueOf(f1);
 		}

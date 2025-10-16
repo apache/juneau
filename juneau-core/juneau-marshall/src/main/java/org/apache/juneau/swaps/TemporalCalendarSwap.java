@@ -289,7 +289,7 @@ public class TemporalCalendarSwap extends StringSwap<Calendar> {
 		this.formatter = DateUtils.getFormatter(pattern);
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, Calendar o) throws Exception {
 		if (o == null)
 			return null;
@@ -297,7 +297,7 @@ public class TemporalCalendarSwap extends StringSwap<Calendar> {
 		return formatter.format(t);
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Calendar unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		if (f == null)
 			return null;

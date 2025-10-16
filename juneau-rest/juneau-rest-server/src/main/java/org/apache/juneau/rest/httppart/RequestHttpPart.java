@@ -545,7 +545,7 @@ public class RequestHttpPart {
 		return name;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return getName() + "=" + getValue();
 	}

@@ -512,4 +512,16 @@ public class Header extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Header attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Header attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

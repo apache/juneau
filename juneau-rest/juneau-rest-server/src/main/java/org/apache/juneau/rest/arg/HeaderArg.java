@@ -221,7 +221,7 @@ public class HeaderArg implements RestOpArg {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();

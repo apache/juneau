@@ -44,7 +44,7 @@ public class BeanStringSwap<T> extends StringSwap<T> {
 	/**
 	 * Converts the specified bean to a {@link String}.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, T o) {
 		return o.toString();
 	}

@@ -18,6 +18,11 @@ package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 
+import java.util.*;
+
+import org.apache.http.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.reflect.*;
 
@@ -42,5 +47,97 @@ public class ArgException extends InternalServerError {
 	 */
 	public ArgException(ParamInfo pi, String msg, Object...args) {
 		super(format(msg, args) + " on parameter "+pi.getIndex()+" of method "+pi.getMethod().getFullName()+".");
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The object to copy.
+	 */
+	protected ArgException(ArgException copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setHeader2(String name, Object value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from InternalServerError */
+	public ArgException copy() {
+		return new ArgException(this);
 	}
 }

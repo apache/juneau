@@ -120,7 +120,7 @@ public class EntityTags {
 		return copyOf(value);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
 	}

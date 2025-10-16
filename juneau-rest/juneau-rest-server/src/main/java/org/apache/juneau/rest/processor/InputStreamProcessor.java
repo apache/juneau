@@ -34,7 +34,7 @@ import org.apache.juneau.rest.*;
  */
 public class InputStreamProcessor implements ResponseProcessor {
 
-	@Override /* ResponseProcessor */
+	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
 		RestResponse res = opSession.getResponse();

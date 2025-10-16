@@ -170,27 +170,27 @@ public class RdfAnnotation {
 			return this;
 		}
 
-		@Override /* GENERATED - TargetedAnnotationBuilder */
+		@Override /* Overridden from TargetedAnnotationBuilder */
 		public Builder on(String...values) {
 			super.on(values);
 			return this;
 		}
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
+		@Override /* Overridden from TargetedAnnotationTBuilder */
 		public Builder on(Class<?>...value) {
 			super.on(value);
 			return this;
 		}
-		@Override /* GENERATED - TargetedAnnotationTBuilder */
+		@Override /* Overridden from TargetedAnnotationTBuilder */
 		public Builder onClass(Class<?>...value) {
 			super.onClass(value);
 			return this;
 		}
-		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
+		@Override /* Overridden from TargetedAnnotationTMFBuilder */
 		public Builder on(Field...value) {
 			super.on(value);
 			return this;
 		}
-		@Override /* GENERATED - TargetedAnnotationTMFBuilder */
+		@Override /* Overridden from TargetedAnnotationTMFBuilder */
 		public Builder on(Method...value) {
 			super.on(value);
 			return this;
@@ -216,22 +216,22 @@ public class RdfAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Rdf */
+		@Override /* Overridden from Rdf */
 		public boolean beanUri() {
 			return beanUri;
 		}
 
-		@Override /* Rdf */
+		@Override /* Overridden from Rdf */
 		public RdfCollectionFormat collectionFormat() {
 			return collectionFormat;
 		}
 
-		@Override /* Rdf */
+		@Override /* Overridden from Rdf */
 		public String namespace() {
 			return namespace;
 		}
 
-		@Override /* Rdf */
+		@Override /* Overridden from Rdf */
 		public String prefix() {
 			return prefix;
 		}

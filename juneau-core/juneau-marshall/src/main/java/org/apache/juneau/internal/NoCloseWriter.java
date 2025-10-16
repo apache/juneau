@@ -40,57 +40,57 @@ public class NoCloseWriter extends Writer {
 		this.w = w;
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public Writer append(char c) throws IOException {
 		return w.append(c);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public Writer append(CharSequence csq) throws IOException {
 		return w.append(csq);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public Writer append(CharSequence csq, int start, int end) throws IOException {
 		return w.append(csq, start, end);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void close() throws IOException {
 		w.flush();
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void flush() throws IOException {
 		w.flush();
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(char[] cbuf) throws IOException {
 		w.write(cbuf);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int off, int len) throws IOException {
 		w.write(cbuf, off, len);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(int c) throws IOException {
 		w.write(c);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(String str) throws IOException {
 		w.write(str);
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(String str, int off, int len) throws IOException {
 		w.write(str, off, len);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return w.toString();
 	}

@@ -91,7 +91,7 @@ public class PathRemainderArg implements RestOpArg {
 		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
@@ -99,4 +99,3 @@ public class PathRemainderArg implements RestOpArg {
 		return req.getPathParams().get("/*").parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 }
-

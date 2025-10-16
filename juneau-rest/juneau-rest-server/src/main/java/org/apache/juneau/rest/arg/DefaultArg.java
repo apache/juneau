@@ -80,7 +80,7 @@ public class DefaultArg implements RestOpArg {
 		return null;
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return opSession.getBeanStore().getBean(type, name).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}

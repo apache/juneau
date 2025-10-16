@@ -215,7 +215,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentStringAssertion<R> asTransformed(Function<String,String> function) {  // NOSONAR - Intentional.
 		return new FluentStringAssertion<>(this, function.apply(orElse(null)), returns());
 	}

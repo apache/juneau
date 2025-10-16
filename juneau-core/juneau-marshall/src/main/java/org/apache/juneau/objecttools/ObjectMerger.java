@@ -130,7 +130,7 @@ public class ObjectMerger {
 		 * Implemented to handle the method called.
 		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
-		@Override /* InvocationHandler */
+		@Override /* Overridden from InvocationHandler */
 		public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {
 			Object r = null;
 			boolean isGetter = args == null && method.getReturnType() != Void.class;

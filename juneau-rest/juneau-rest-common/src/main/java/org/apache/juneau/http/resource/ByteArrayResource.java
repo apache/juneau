@@ -19,6 +19,7 @@ package org.apache.juneau.http.resource;
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 
@@ -134,6 +135,30 @@ public class ByteArrayResource extends BasicResource {
 	@Override /* Overridden from BasicResource */
 	public ByteArrayResource setUnmodifiable() {
 		super.setUnmodifiable();
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource setHeader(String name, String value) {
+		super.setHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource addHeader(String name, String value) {
+		super.addHeader(name, value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource setHeaders(Header...values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicResource */
+	public ByteArrayResource addHeaders(Header...values) {
+		super.addHeaders(values);
 		return this;
 	}
 }

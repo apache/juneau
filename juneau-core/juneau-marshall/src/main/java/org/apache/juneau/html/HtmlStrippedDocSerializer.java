@@ -104,17 +104,17 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HtmlStrippedDocSerializer build() {
 			return cache(CACHE).build(HtmlStrippedDocSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return super.hashKey();
 		}
@@ -904,17 +904,17 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlStrippedDocSerializerSession.Builder createSession() {
 		return HtmlStrippedDocSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlStrippedDocSerializerSession getSession() {
 		return createSession().build();
 	}

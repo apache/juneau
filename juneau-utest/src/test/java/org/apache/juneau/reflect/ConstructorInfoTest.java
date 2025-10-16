@@ -126,4 +126,16 @@ class ConstructorInfoTest extends TestBase {
 		check("A(),B(),B(int),B(String),B(String,String)", s);
 
 	}
+
+	@Test void forEachParam_fluentChaining() {
+		// Test that forEachParam returns ConstructorInfo for fluent chaining
+		ConstructorInfo result = b_c2.forEachParam(x -> true, x -> {});
+		assertSame(b_c2, result);
+		assertInstanceOf(ConstructorInfo.class, result);
+
+		// Test fluent chaining works
+		int[] count = {0};
+		b_c4.forEachParam(x -> true, x -> count[0]++);
+		assertEquals(2, count[0]);
+	}
 }

@@ -137,6 +137,26 @@ The `D_additionalMethods` test class should contain three tests:
 - Verify all changes work correctly
 - Maintain consistency across similar files
 
+### 11. Fluent Setter Override Formatting
+When adding fluent setter overrides to classes:
+- Include blank lines between each method
+- Each override method should be separated by exactly one blank line
+- Example pattern:
+  ```java
+  @Override /* Overridden from ParentClass */
+  public ChildClass setProperty1(Type value) {
+      super.setProperty1(value);
+      return this;
+  }
+
+  @Override /* Overridden from ParentClass */
+  public ChildClass setProperty2(Type value) {
+      super.setProperty2(value);
+      return this;
+  }
+  ```
+- **Rationale**: Maintains consistency with existing code style and improves readability
+
 ---
 
 # Documentation Guidelines for Apache Juneau

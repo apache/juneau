@@ -69,12 +69,12 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	}
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<Map.Entry<K,V>> entrySet() {
 		return asSet(entries);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public V get(Object key) {
 		for (int i = 0; i < keys.length; i++)
 			if (keys[i].equals(key))
@@ -82,12 +82,12 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		return null;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<K> keySet() {
 		return asSet(keys);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public V put(K key, V value) {
 		for (int i = 0; i < keys.length; i++) {
 			if (keys[i].equals(key)) {
@@ -107,17 +107,17 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 			this.index = index;
 		}
 
-		@Override /* Map.Entry */
+		@Override /* Overridden from Map.Entry */
 		public K getKey() {
 			return keys[index];
 		}
 
-		@Override /* Map.Entry */
+		@Override /* Overridden from Map.Entry */
 		public V getValue() {
 			return values[index];
 		}
 
-		@Override /* Map.Entry */
+		@Override /* Overridden from Map.Entry */
 		public V setValue(V val) {
 			V v = values[index];
 			values[index] = val;

@@ -140,17 +140,17 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public MsgPackSerializer build() {
 			return cache(CACHE).build(MsgPackSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -804,17 +804,17 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		this.addBeanTypesMsgPack = builder.addBeanTypesMsgPack;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public MsgPackSerializerSession.Builder createSession() {
 		return MsgPackSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public MsgPackSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -823,7 +823,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* MsgPackMetaProvider */
+	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackClassMeta getMsgPackClassMeta(ClassMeta<?> cm) {
 		MsgPackClassMeta m = msgPackClassMetas.get(cm);
 		if (m == null) {
@@ -833,7 +833,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		return m;
 	}
 
-	@Override /* MsgPackMetaProvider */
+	@Override /* Overridden from MsgPackMetaProvider */
 	public MsgPackBeanPropertyMeta getMsgPackBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return MsgPackBeanPropertyMeta.DEFAULT;
@@ -858,7 +858,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}

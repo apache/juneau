@@ -380,7 +380,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		return zoneOptional;
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, Temporal o) throws Exception {
 		if (o == null)
 			return null;
@@ -421,7 +421,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Temporal unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		if (f == null)
 			return null;

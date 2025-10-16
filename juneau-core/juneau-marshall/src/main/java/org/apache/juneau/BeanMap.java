@@ -245,7 +245,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 		<li>An exception occurred inside the setter method.
 	 * 	</ul>
 	 */
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object put(String property, Object value) {
 		BeanPropertyMeta p = getPropertyMeta(property);
 		if (p == null) {
@@ -259,7 +259,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		return p.set(this, property, value);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public boolean containsKey(Object property) {
 		// JUNEAU-248: Match the behavior of keySet() - only check properties map, not hiddenProperties
 		String key = emptyIfNull(property);
@@ -331,7 +331,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * 		<li>An exception occurred inside the getter method.
 	 * 	</ol>
 	 */
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object get(Object property) {
 		String pName = s(property);
 		BeanPropertyMeta p = getPropertyMeta(pName);
@@ -431,7 +431,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * <p>
 	 * The returned set is unmodifiable.
 	 */
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<String> keySet() {
 		if (meta.dynaProperty == null)
 			return meta.properties.keySet();
@@ -483,7 +483,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 *
 	 * @return The class type of the wrapped bean.
 	 */
-	@Override /* Delegate */
+	@Override /* Overridden from Delegate */
 	public ClassMeta<T> getClassMeta() {
 		return this.meta.getClassMeta();
 	}
@@ -632,7 +632,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			// map never changes.
 			final Collection<BeanPropertyMeta> pSet = getProperties();
 
-			@Override /* Set */
+			@Override /* Overridden from Set */
 			public Iterator<java.util.Map.Entry<String, Object>> iterator() {
 
 				// Construct our own anonymous iterator that uses iterators against the meta.properties
@@ -642,24 +642,24 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					final Iterator<BeanPropertyMeta> pIterator = pSet.iterator();
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public boolean hasNext() {
 						return pIterator.hasNext();
 					}
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public Map.Entry<String, Object> next() {
 						return new BeanMapEntry(BeanMap.this, pIterator.next(), null);
 					}
 
-					@Override /* Iterator */
+					@Override /* Overridden from Iterator */
 					public void remove() {
 						throw new UnsupportedOperationException("Cannot remove item from iterator.");
 					}
 				};
 			}
 
-			@Override /* Set */
+			@Override /* Overridden from Set */
 			public int size() {
 				return pSet.size();
 			}

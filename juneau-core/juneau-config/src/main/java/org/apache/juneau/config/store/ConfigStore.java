@@ -78,7 +78,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public abstract Builder copy();
 
 		//-----------------------------------------------------------------------------------------------------------------

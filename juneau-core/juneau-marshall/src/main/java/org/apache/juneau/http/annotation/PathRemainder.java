@@ -44,7 +44,7 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
  * <p>
- * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as the 
+ * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as the
  * path remainder after the path pattern match.
  *
  * <h5 class='section'>Example:</h5>
@@ -176,4 +176,3 @@ public @interface PathRemainder {
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 }
-

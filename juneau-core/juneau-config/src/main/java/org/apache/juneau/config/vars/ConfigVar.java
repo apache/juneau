@@ -66,12 +66,12 @@ public class ConfigVar extends DefaultingVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		return session.getBean(Config.class).map(x -> x.get(key).orElse(null)).orElse(null);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public boolean canResolve(VarResolverSession session) {
 		return session.getBean(Config.class).isPresent();
 	}

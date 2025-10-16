@@ -51,12 +51,12 @@ import org.apache.juneau.collections.*;
  */
 public abstract class MapSwap<T> extends ObjectSwap<T,JsonMap> {
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public JsonMap swap(BeanSession session, T o) throws Exception {
 		return super.swap(session, o);
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, JsonMap f, ClassMeta<?> hint) throws Exception {
 		return super.unswap(session, f, hint);
 	}

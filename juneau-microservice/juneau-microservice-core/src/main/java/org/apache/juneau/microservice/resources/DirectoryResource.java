@@ -226,6 +226,34 @@ public class DirectoryResource extends BasicRestServlet {
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
 		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------------------------------------------
+
+		@Override /* Overridden from LinkString */
+		public Action setName(String value) {
+			super.setName(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(java.net.URI value) {
+			super.setUri(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(String value) {
+			super.setUri(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(String value, Object...args) {
+			super.setUri(value, args);
+			return this;
+		}
 	}
 
 	@Response @Schema(description="File or directory details")
@@ -283,7 +311,7 @@ public class DirectoryResource extends BasicRestServlet {
 
 	static class FileResourceComparator implements Comparator<FileResource>, Serializable {
 		private static final long serialVersionUID = 1L;
-		@Override /* Comparator */
+		@Override /* Overridden from Comparator */
 		public int compare(FileResource o1, FileResource o2) {
 			int c = o1.getType().compareTo(o2.getType());
 			return c != 0 ? c : o1.getName().compareTo(o2.getName());

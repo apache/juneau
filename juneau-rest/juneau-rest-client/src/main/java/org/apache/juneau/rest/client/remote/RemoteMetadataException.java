@@ -75,4 +75,10 @@ public class RemoteMetadataException extends BasicRuntimeException {
 		sb.append(". ").append(msg);
 		return sb.toString();
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public RemoteMetadataException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

@@ -83,6 +83,7 @@ public class LogsResource extends BasicRestServlet {
 		return new FileResource(dir, path, allowDeletes, true);
 	}
 
+	@SuppressWarnings("resource")
 	@RestOp(
 		method="VIEW",
 		path="/*",
@@ -219,6 +220,34 @@ public class LogsResource extends BasicRestServlet {
 	public static class Action extends LinkString {
 		public Action(String name, String uri, Object...uriArgs) {
 			super(name, uri, uriArgs);
+		}
+
+		//-----------------------------------------------------------------------------------------------------------------
+		// Overridden methods
+		//-----------------------------------------------------------------------------------------------------------------
+
+		@Override /* Overridden from LinkString */
+		public Action setName(String value) {
+			super.setName(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(java.net.URI value) {
+			super.setUri(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(String value) {
+			super.setUri(value);
+			return this;
+		}
+
+		@Override /* Overridden from LinkString */
+		public Action setUri(String value, Object...args) {
+			super.setUri(value, args);
+			return this;
 		}
 	}
 

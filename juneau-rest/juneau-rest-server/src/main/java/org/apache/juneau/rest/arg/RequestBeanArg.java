@@ -67,7 +67,7 @@ public class RequestBeanArg implements RestOpArg {
 		this.meta = RequestBeanMeta.create(paramInfo, annotations);
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return opSession.getRequest().getRequest(meta);
 	}

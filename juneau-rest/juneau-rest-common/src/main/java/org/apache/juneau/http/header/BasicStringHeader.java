@@ -135,12 +135,12 @@ public class BasicStringHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		return Utils.s(value());
 	}
 
-	@Override /* BasicHeader */
+	@Override /* Overridden from BasicHeader */
 	public Optional<String> asString() {
 		return Utils.opt(value());
 	}

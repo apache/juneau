@@ -268,17 +268,17 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 			quoteCharUon = copyFrom.quoteCharUon;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public UonSerializer build() {
 			return cache(CACHE).build(UonSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1136,22 +1136,22 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		quoteChar = quoteCharUon != null ? quoteCharUon : super.quoteChar() != null ? super.quoteChar() : '\'';
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public  UonSerializerSession.Builder createSession() {
 		return UonSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public UonSerializerSession getSession() {
 		return createSession().build();
 	}
 
-	@Override /* HttpPartSerializer */
+	@Override /* Overridden from HttpPartSerializer */
 	public UonSerializerSession getPartSession() {
 		return UonSerializerSession.create(this).build();
 	}
@@ -1160,7 +1160,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* UonMetaProvider */
+	@Override /* Overridden from UonMetaProvider */
 	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
 		UonClassMeta m = uonClassMetas.get(cm);
 		if (m == null) {
@@ -1170,7 +1170,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		return m;
 	}
 
-	@Override /* UonMetaProvider */
+	@Override /* Overridden from UonMetaProvider */
 	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return UonBeanPropertyMeta.DEFAULT;
@@ -1237,7 +1237,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("encoding", encoding, "addBeanTypes", addBeanTypes, "paramFormat", paramFormat);
 	}

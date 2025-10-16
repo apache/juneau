@@ -506,7 +506,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		return Utils.eqic(s1, s2);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
 		for (String n : getNames())

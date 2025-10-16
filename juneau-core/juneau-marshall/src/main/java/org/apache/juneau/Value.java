@@ -270,7 +270,7 @@ public class Value<T> {
 		throw exceptionSupplier.get();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return "Value("+t+")";
 	}

@@ -172,7 +172,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 		return null;
 	}
 
-	@Override /* ObjectTool */
+	@Override /* Overridden from ObjectTool */
 	public Object run(BeanSession session, Object input, SearchArgs args) {
 
 		ClassMeta<?> type = session.getClassMetaForObject(input);

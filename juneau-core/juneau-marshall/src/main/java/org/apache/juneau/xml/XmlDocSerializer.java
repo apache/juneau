@@ -83,17 +83,17 @@ public class XmlDocSerializer extends XmlSerializer {
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public XmlDocSerializerSession.Builder createSession() {
 		return XmlDocSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public XmlDocSerializerSession getSession() {
 		return createSession().build();
 	}

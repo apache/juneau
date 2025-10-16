@@ -46,7 +46,7 @@ public abstract class StreamedVar extends Var {
 		super(name, true);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String arg) throws Exception {
 		throw new UnsupportedOperationException("Cannot call resolve() on StreamedVar class");
 	}

@@ -47,7 +47,7 @@ public abstract class SimpleVar extends Var {
 		super(name, false);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception {
 		throw new UnsupportedOperationException("Cannot call streamTo() on SimpleVar class");
 	}

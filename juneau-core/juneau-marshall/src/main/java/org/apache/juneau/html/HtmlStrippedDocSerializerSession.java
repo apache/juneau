@@ -209,7 +209,7 @@ public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {
 		super(builder);
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try (HtmlWriter w = getHtmlWriter(out)) {
 			if (o == null

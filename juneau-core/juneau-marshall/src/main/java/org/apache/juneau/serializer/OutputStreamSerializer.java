@@ -92,17 +92,17 @@ public class OutputStreamSerializer extends Serializer {
 			binaryFormat = copyFrom.binaryFormat;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public OutputStreamSerializer build() {
 			return build(OutputStreamSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -752,17 +752,17 @@ public class OutputStreamSerializer extends Serializer {
 		binaryFormat = builder.binaryFormat;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public OutputStreamSerializerSession.Builder createSession() {
 		return OutputStreamSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public OutputStreamSerializerSession getSession() {
 		return createSession().build();
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	public final boolean isWriterSerializer() {
 		return false;
 	}
@@ -798,7 +798,7 @@ public class OutputStreamSerializer extends Serializer {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("binaryFormat", binaryFormat);
 	}

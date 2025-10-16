@@ -193,4 +193,21 @@ public class PreconditionRequired extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public PreconditionRequired setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public PreconditionRequired setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public PreconditionRequired setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

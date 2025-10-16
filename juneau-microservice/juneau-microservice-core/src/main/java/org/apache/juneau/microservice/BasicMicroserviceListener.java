@@ -27,12 +27,12 @@ import org.apache.juneau.config.event.*;
  */
 public class BasicMicroserviceListener implements MicroserviceListener {
 
-	@Override /* MicroserviceListener */
+	@Override /* Overridden from MicroserviceListener */
 	public void onStart(Microservice microservice) {}
 
-	@Override /* MicroserviceListener */
+	@Override /* Overridden from MicroserviceListener */
 	public void onStop(Microservice microservice) {}
 
-	@Override /* MicroserviceListener */
+	@Override /* Overridden from MicroserviceListener */
 	public void onConfigChange(Microservice microservice, ConfigEvents events) {}
 }

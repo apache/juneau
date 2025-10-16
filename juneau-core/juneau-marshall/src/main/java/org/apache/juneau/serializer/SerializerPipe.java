@@ -198,7 +198,7 @@ public class SerializerPipe implements Closeable {
 	/**
 	 * Closes the output pipe.
 	 */
-	@Override /* Closeable */
+	@Override /* Overridden from Closeable */
 	public void close() {
 		try {
 			IOUtils.flush(writer, outputStream);

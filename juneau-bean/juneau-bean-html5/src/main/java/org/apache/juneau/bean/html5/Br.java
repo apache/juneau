@@ -481,4 +481,16 @@ public class Br extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Br attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Br attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

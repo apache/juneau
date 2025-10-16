@@ -134,17 +134,17 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 			validateEnd = copyFrom.validateEnd;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public UonParser build() {
 			return cache(CACHE).build(UonParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -748,22 +748,22 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		validateEnd = builder.validateEnd;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public UonParserSession.Builder createSession() {
 		return UonParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public UonParserSession getSession() {
 		return createSession().build();
 	}
 
-	@Override /* HttpPartParser */
+	@Override /* Overridden from HttpPartParser */
 	public UonParserSession getPartSession() {
 		return UonParserSession.create(this).build();
 	}
@@ -830,7 +830,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* UonMetaProvider */
+	@Override /* Overridden from UonMetaProvider */
 	public UonClassMeta getUonClassMeta(ClassMeta<?> cm) {
 		UonClassMeta m = uonClassMetas.get(cm);
 		if (m == null) {
@@ -840,7 +840,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		return m;
 	}
 
-	@Override /* UonMetaProvider */
+	@Override /* Overridden from UonMetaProvider */
 	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return UonBeanPropertyMeta.DEFAULT;
@@ -894,7 +894,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		return getBeanContext().getClassMeta(t, args);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("decoding", decoding, "validateEnd", validateEnd);
 	}

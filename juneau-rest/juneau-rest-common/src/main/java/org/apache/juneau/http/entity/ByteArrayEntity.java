@@ -80,32 +80,32 @@ public class ByteArrayEntity extends BasicHttpEntity {
 		return contentOrElse(EMPTY);
 	}
 
-	@Override /* AbstractHttpEntity */
+	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		return new String(content(), getCharset());
 	}
 
-	@Override /* AbstractHttpEntity */
+	@Override /* Overridden from AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
 		return content();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isRepeatable() {
 		return true;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public long getContentLength() {
 		return isSupplied() ? super.getContentLength() : content().length;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public InputStream getContent() throws IOException {
 		return new ByteArrayInputStream(content());
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		Utils.assertArgNotNull("out", out);
 		out.write(content());

@@ -493,4 +493,16 @@ public class U extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public U attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public U attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

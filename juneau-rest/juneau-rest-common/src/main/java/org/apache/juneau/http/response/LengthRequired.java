@@ -192,4 +192,21 @@ public class LengthRequired extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public LengthRequired setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public LengthRequired setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public LengthRequired setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

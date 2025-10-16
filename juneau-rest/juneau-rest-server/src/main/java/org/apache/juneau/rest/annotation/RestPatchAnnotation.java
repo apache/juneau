@@ -427,127 +427,127 @@ public class RestPatchAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] consumes() {
 			return consumes;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String defaultContentType() {
 			return defaultContentType;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] defaultRequestFormData() {
 			return defaultRequestFormData;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String maxInput() {
 			return maxInput;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestPatch */
+		@Override /* Overridden from RestPatch */
 		public String value() {
 			return value;
 		}

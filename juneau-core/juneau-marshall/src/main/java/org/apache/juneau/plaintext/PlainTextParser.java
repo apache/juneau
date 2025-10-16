@@ -110,17 +110,17 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public PlainTextParser build() {
 			return cache(CACHE).build(PlainTextParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return super.hashKey();
 		}
@@ -643,17 +643,17 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public PlainTextParserSession.Builder createSession() {
 		return PlainTextParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public PlainTextParserSession getSession() {
 		return createSession().build();
 	}
@@ -662,7 +662,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* PlainTextMetaProvider */
+	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
 		PlainTextClassMeta m = plainTextClassMetas.get(cm);
 		if (m == null) {
@@ -672,7 +672,7 @@ public class PlainTextParser extends ReaderParser implements PlainTextMetaProvid
 		return m;
 	}
 
-	@Override /* PlainTextMetaProvider */
+	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return PlainTextBeanPropertyMeta.DEFAULT;

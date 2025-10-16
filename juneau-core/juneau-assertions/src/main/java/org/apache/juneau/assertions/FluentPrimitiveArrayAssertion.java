@@ -187,12 +187,12 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentPrimitiveArrayAssertion<E,T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentPrimitiveArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	@Override /* FluentBaseAssertion */
+	@Override /* Overridden from FluentBaseAssertion */
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(this, toString(), returns());
 	}

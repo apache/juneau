@@ -43,17 +43,19 @@ class JavaClass:
         self.fluent_setters = []  # List of (method_name, params, return_type)
         self.overridden_methods = set()  # Set of method signatures that are overridden
         
-    def add_fluent_setter(self, method_name, params, return_type):
+    def add_fluent_setter(self, method_name, params, return_type, has_beanp=False):
         """Add a fluent setter method."""
         self.fluent_setters.append({
             'name': method_name,
             'params': params,
-            'return_type': return_type
+            'return_type': return_type,
+            'has_beanp': has_beanp
         })
     
     def add_overridden_method(self, method_name, params):
         """Add an overridden method."""
-        signature = f"{method_name}({params})"
+        normalized_params = normalize_params(params)
+        signature = f"{method_name}({normalized_params})"
         self.overridden_methods.add(signature)
     
     def get_full_name(self):
@@ -61,6 +63,41 @@ class JavaClass:
         if self.package:
             return f"{self.package}.{self.name}"
         return self.name
+
+def normalize_params(params):
+    """
+    Normalize parameter string to types only (remove parameter names).
+    E.g., "Object value, String name" -> "Object,String"
+    """
+    if not params or not params.strip():
+        return ""
+    
+    # Split by comma
+    param_list = params.split(',')
+    types = []
+    
+    for param in param_list:
+        param = param.strip()
+        if not param:
+            continue
+        
+        # Remove annotations (e.g., @NotNull)
+        param = re.sub(r'@\w+\s+', '', param)
+        
+        # Split by whitespace and take all but the last token (which is the parameter name)
+        # E.g., "Object value" -> ["Object", "value"] -> "Object"
+        # E.g., "Map<String,Object> map" -> ["Map<String,Object>", "map"] -> "Map<String,Object>"
+        tokens = param.split()
+        if len(tokens) >= 2:
+            # Everything except the last token is the type
+            type_part = ' '.join(tokens[:-1])
+        else:
+            # Only one token, it's probably just a type (shouldn't happen but handle it)
+            type_part = tokens[0] if tokens else param
+        
+        types.append(type_part.strip())
+    
+    return ','.join(types)
 
 def extract_package(content):
     """Extract package name from Java file content."""
@@ -86,39 +123,70 @@ def extract_class_info(file_path):
             class_name = match.group(1)
             extends = match.group(2).strip() if match.group(2) else None
             
+            # Skip inner classes (they are indented and usually implementation details)
+            # We only want top-level public classes
+            # Check if the matched text starts with whitespace
+            matched_text = match.group(0)
+            if matched_text[0].isspace():
+                # This is an inner class (indented), skip it
+                continue
+            
             # Clean up extends (remove generics for simplicity)
             if extends:
                 extends = re.sub(r'<.*?>', '', extends).strip()
             
             java_class = JavaClass(class_name, file_path, extends, package)
             
+            # Calculate the class body boundaries to avoid finding methods in inner classes
+            # Find the opening brace of the class
+            class_body_start = match.end()
+            
+            # Find the matching closing brace (approximate - find next top-level closing brace)
+            # This is a simplification; we'll search until the next top-level class or EOF
+            next_class_match = class_pattern.search(content, class_body_start)
+            if next_class_match:
+                # If there's another top-level class, search up to that
+                class_body_end = next_class_match.start()
+            else:
+                # Otherwise, search to end of file
+                class_body_end = len(content)
+            
+            # Extract just the class body content
+            class_body = content[class_body_start:class_body_end]
+            
             # Find fluent setters in this class
             # Pattern: public ClassName methodName(...) { ... return this; }
             # We look for methods that return the class type
             method_pattern = re.compile(
-                rf'^\s*(?:@Override\s+)?public\s+{re.escape(class_name)}\s+(\w+)\s*\((.*?)\)\s*\{{',
+                rf'^\s*(?:@\w+\s+)*public\s+{re.escape(class_name)}\s+(\w+)\s*\((.*?)\)\s*\{{',
                 re.MULTILINE
             )
             
-            for method_match in method_pattern.finditer(content):
+            for method_match in method_pattern.finditer(class_body):
                 method_name = method_match.group(1)
                 params = method_match.group(2).strip()
+                
+                # Check if method has @Beanp annotation
+                # Look backwards from the method declaration to check for annotations
+                method_start_pos = method_match.start()
+                preceding_text = class_body[max(0, method_start_pos - 200):method_start_pos]
+                has_beanp = '@Beanp' in preceding_text
                 
                 # Check if this method returns 'this'
                 # Look ahead to see if there's a 'return this;' in the method body
                 method_start = method_match.end()
                 # Find the matching closing brace (simplified - just look for return this)
-                method_body_sample = content[method_start:method_start + 500]
+                method_body_sample = class_body[method_start:method_start + 500]
                 if 'return this;' in method_body_sample or 'return this' in method_body_sample:
-                    java_class.add_fluent_setter(method_name, params, class_name)
+                    java_class.add_fluent_setter(method_name, params, class_name, has_beanp)
             
-            # Find overridden methods
+            # Find overridden methods (also within the class body scope)
             override_pattern = re.compile(
                 r'@Override[^\n]*\n\s*public\s+\w+\s+(\w+)\s*\((.*?)\)',
                 re.MULTILINE
             )
             
-            for override_match in override_pattern.finditer(content):
+            for override_match in override_pattern.finditer(class_body):
                 method_name = override_match.group(1)
                 params = override_match.group(2).strip()
                 java_class.add_overridden_method(method_name, params)
@@ -132,16 +200,25 @@ def extract_class_info(file_path):
         return []
 
 def find_java_files(source_dir):
-    """Find all Java files in the source tree."""
+    """Find all Java files in the source tree, excluding test directories."""
     java_files = []
     
     for root, dirs, files in os.walk(source_dir):
-        # Skip certain directories
+        # Skip certain directories including test directories
         dirs[:] = [d for d in dirs if not d.startswith('.') and d not in {'target', 'node_modules', 'build', 'dist'}]
+        
+        # Skip test directories (src/test, juneau-utest, etc.)
+        root_path = Path(root)
+        if any(part in ['test', 'juneau-utest'] for part in root_path.parts):
+            continue
+        if 'src/test' in str(root_path) or '/test/' in str(root_path):
+            continue
         
         for file in files:
             if file.endswith('.java'):
-                java_files.append(Path(root) / file)
+                # Also skip files with "Test" suffix
+                if not file.endswith('Test.java') and not file.endswith('Tests.java'):
+                    java_files.append(Path(root) / file)
     
     return java_files
 
@@ -174,13 +251,36 @@ def check_missing_overrides(classes, class_map):
         # Get all parent classes with this name (there may be multiple in different packages)
         parent_classes = class_map[parent_name]
         
+        # Filter parent classes by package to avoid false positives from name collisions
+        # Try to match parent classes from the same package or commonly imported packages
+        filtered_parents = []
+        for pc in parent_classes:
+            # If child and parent are in the same package, use it
+            if java_class.package == pc.package:
+                filtered_parents.append(pc)
+            # Otherwise, if there's only one parent class with this name, use it
+            elif len(parent_classes) == 1:
+                filtered_parents.append(pc)
+        
+        # If we couldn't filter by package, fall back to all parent classes
+        # (This maintains backward compatibility but may produce false positives)
+        if not filtered_parents:
+            filtered_parents = parent_classes
+        
         # Check each parent class
-        for parent_class in parent_classes:
+        for parent_class in filtered_parents:
             # Check each fluent setter in the parent
             for setter in parent_class.fluent_setters:
                 method_name = setter['name']
                 params = setter['params']
-                signature = f"{method_name}({params})"
+                normalized_params = normalize_params(params)
+                signature = f"{method_name}({normalized_params})"
+                
+                # Skip methods marked with @Beanp in the parent
+                # These are automatically handled by annotation inheritance (since 9.2.0)
+                # and are less critical for type safety
+                if setter.get('has_beanp'):
+                    continue
                 
                 # Check if this method is overridden in the child class
                 if signature not in java_class.overridden_methods:
@@ -188,7 +288,8 @@ def check_missing_overrides(classes, class_map):
                     # (it might define it without @Override annotation)
                     has_fluent = False
                     for child_setter in java_class.fluent_setters:
-                        if child_setter['name'] == method_name and child_setter['params'] == params:
+                        child_normalized = normalize_params(child_setter['params'])
+                        if child_setter['name'] == method_name and child_normalized == normalized_params:
                             has_fluent = True
                             break
                     

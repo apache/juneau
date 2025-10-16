@@ -1230,7 +1230,7 @@ public class ParserSession extends BeanSession {
 		return ctx.getListener();
 	}
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("javaMethod", javaMethod, "listener", listener, "outer", outer);
 	}

@@ -38,7 +38,7 @@ public class EnumerationSwap extends ObjectSwap<Enumeration,List> {
 	/**
 	 * Converts the specified {@link Enumeration} to a {@link List}.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public List swap(BeanSession session, Enumeration o) {
 		List l = new LinkedList();
 		while (o.hasMoreElements())

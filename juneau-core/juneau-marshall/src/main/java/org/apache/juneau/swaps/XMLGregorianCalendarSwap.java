@@ -56,7 +56,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	/**
 	 * Converts the specified <c>XMLGregorianCalendar</c> to a {@link String}.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, XMLGregorianCalendar b) throws Exception {
 		return b.toXMLFormat();
 	}
@@ -64,7 +64,7 @@ public class XMLGregorianCalendarSwap extends StringSwap<XMLGregorianCalendar> {
 	/**
 	 * Converts the specified {@link String} to an <c>XMLGregorianCalendar</c>.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public XMLGregorianCalendar unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
 		if (Utils.isEmpty(s))
 			return null;

@@ -112,12 +112,12 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			generatorBuilder = copyFrom.generatorBuilder.copy().beanContext(beanContext());
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HtmlSchemaDocSerializer build() {
 			return build(HtmlSchemaDocSerializer.class);
 		}
@@ -1129,17 +1129,17 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		generator = JsonSchemaGenerator.create().beanContext(getBeanContext()).build();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlSchemaDocSerializerSession.Builder createSession() {
 		return HtmlSchemaDocSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlSchemaDocSerializerSession getSession() {
 		return createSession().build();
 	}

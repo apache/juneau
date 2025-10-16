@@ -116,7 +116,7 @@ public class BasicStaticFiles implements StaticFiles {
 	 * @param locale Optional locale.
 	 * @return The resource, or <jk>null</jk> if not found.
 	 */
-	@Override /* StaticFiles */
+	@Override /* Overridden from StaticFiles */
 	public Optional<HttpResource> resolve(String path, Locale locale) {
 		try {
 			Optional<InputStream> is = getStream(path, locale);
@@ -135,22 +135,22 @@ public class BasicStaticFiles implements StaticFiles {
 		return hashCode;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return super.equals(o) && o instanceof BasicStaticFiles && Utils.eq(this, (BasicStaticFiles)o, (x,y)->Utils.eq(x.headers, y.headers));
 	}
 
-	@Override /* FileFinder */
+	@Override /* Overridden from FileFinder */
 	public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 		return fileFinder.getStream(name, locale);
 	}
 
-	@Override /* FileFinder */
+	@Override /* Overridden from FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
 		return fileFinder.getString(name, locale);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("headers", headers)

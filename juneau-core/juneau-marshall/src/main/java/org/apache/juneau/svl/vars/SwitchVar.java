@@ -64,7 +64,7 @@ public class SwitchVar extends MultipartVar {
 		super(NAME);
 	}
 
-	@Override /* MultipartVar */
+	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		Utils.assertArg(args.length >= 2, "Invalid number of arguments passed to $SW var.  Must have 2 or more arguments.");
 

@@ -439,17 +439,17 @@ public class MediaType implements Comparable<MediaType>  {
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return string.hashCode();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof MediaType) && eq(this, (MediaType)o, (x,y)->eq(x.string, y.string));
 	}

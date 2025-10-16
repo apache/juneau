@@ -192,4 +192,21 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public VariantAlsoNegotiates setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public VariantAlsoNegotiates setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public VariantAlsoNegotiates setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

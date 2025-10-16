@@ -224,14 +224,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 		return false;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (UonReader r = getUonReader(pipe, true)) {
 			return parseAnything(type, r, getOuter());
 		}
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (UonReader r = getUonReader(pipe, true)) {
 			if (r.peekSkipWs() == '?')

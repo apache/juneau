@@ -159,7 +159,7 @@ public class StringRange {
 	 *
 	 * @return <jk>true</jk> if object is equivalent.
 	 */
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof StringRange) && eq(this, (StringRange)o, (x,y)->eq(x.string, y.string));
 	}
@@ -169,7 +169,7 @@ public class StringRange {
 	 *
 	 * @return A hash based on this instance's <c>media-type</c>.
 	 */
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return string.hashCode();
 	}
@@ -196,7 +196,7 @@ public class StringRange {
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("*", ""));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
 	}

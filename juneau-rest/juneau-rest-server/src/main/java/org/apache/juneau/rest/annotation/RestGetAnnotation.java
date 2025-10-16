@@ -365,102 +365,102 @@ public class RestGetAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestGet */
+		@Override /* Overridden from RestGet */
 		public String value() {
 			return value;
 		}

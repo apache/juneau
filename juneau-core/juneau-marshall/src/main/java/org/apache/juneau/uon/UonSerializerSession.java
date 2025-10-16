@@ -252,7 +252,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return new UonWriter(this, out, isUseWhitespace(), getMaxIndent(), isEncoding(), isTrimStrings(), plainTextParams, getQuoteChar(), getUriResolver());
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getUonWriter(out).i(getInitialDepth()), o, getExpectedRootType(o), "root", null);
 	}
@@ -441,7 +441,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	@Override /* HttpPartSerializer */
+	@Override /* Overridden from HttpPartSerializer */
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
 		try {
 			// Shortcut for simple types.

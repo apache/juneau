@@ -463,4 +463,16 @@ public class Sup extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Sup attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Sup attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

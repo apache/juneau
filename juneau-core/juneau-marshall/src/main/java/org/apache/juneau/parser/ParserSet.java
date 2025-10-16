@@ -195,7 +195,7 @@ public class ParserSet {
 			return o;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected ParserSet buildDefault() {
 			return new ParserSet(this);
 		}
@@ -457,7 +457,7 @@ public class ParserSet {
 			super.type(value);
 			return this;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return entries.stream().map(this::toString).collect(joining(",","[","]"));
 		}

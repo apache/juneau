@@ -192,4 +192,21 @@ public class PayloadTooLarge extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public PayloadTooLarge setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public PayloadTooLarge setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public PayloadTooLarge setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

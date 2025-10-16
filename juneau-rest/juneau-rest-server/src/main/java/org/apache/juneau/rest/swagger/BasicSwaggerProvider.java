@@ -80,7 +80,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	 * @return A new {@link Swagger} object.
 	 * @throws Exception If an error occurred producing the Swagger.
 	 */
-	@Override /* SwaggerProvider */
+	@Override /* Overridden from SwaggerProvider */
 	public Swagger getSwagger(RestContext context, Locale locale) throws Exception {
 
 		Class<?> c = context.getResourceClass();

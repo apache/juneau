@@ -217,89 +217,119 @@ public class JsonWriter extends SerializerWriter {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter s() {
 		super.s();
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter w(char value) {
 		super.w(value);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter w(String value) {
 		super.w(value);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter q() {
 		super.q();
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(String text) {
 		super.append(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public JsonWriter append(char c) {
 		super.append(c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter appendUri(Object value) {
+		super.appendUri(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter append(char[] value) {
+		super.append(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter ie(int indent) {
+		super.ie(indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter sIf(boolean flag) {
+		super.sIf(flag);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public JsonWriter nlIf(boolean flag, int indent) {
+		super.nlIf(flag, indent);
 		return this;
 	}
 }

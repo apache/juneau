@@ -60,38 +60,38 @@ class MockHttpClientConnectionManager implements HttpClientConnectionManager {
 		};
 	}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public ConnectionRequest requestConnection(HttpRoute route, Object state) {
 		return cr;
 	}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void releaseConnection(HttpClientConnection conn, Object newState, long validDuration, TimeUnit timeUnit) {}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void upgrade(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void routeComplete(HttpClientConnection conn, HttpRoute route, HttpContext context) throws IOException {}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void closeIdleConnections(long idletime, TimeUnit tunit) {}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void closeExpiredConnections() {}
 
-	@Override /* HttpClientConnectionManager */
+	@Override /* Overridden from HttpClientConnectionManager */
 	public void shutdown() {}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return MockHttpClientConnectionManager.class.hashCode();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		// All MockHttpClientConnectionManagers are considered equal.
 		return o != null && o instanceof MockHttpClientConnectionManager;

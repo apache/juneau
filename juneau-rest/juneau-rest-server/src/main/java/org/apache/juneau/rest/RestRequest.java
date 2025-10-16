@@ -1574,7 +1574,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		return opContext.getPartSerializer().getPartSession();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");

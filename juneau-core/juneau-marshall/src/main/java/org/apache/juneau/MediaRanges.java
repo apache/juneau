@@ -235,7 +235,7 @@ public class MediaRanges {
 		return BasicHeaderValueParser.parseElements(emptyIfNull(StringUtils.trim(value)), null);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return string;
 	}

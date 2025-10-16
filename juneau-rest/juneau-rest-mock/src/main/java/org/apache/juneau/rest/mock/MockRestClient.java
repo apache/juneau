@@ -421,7 +421,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			connectionManager(new MockHttpClientConnectionManager());
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
@@ -573,14 +573,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			return logRequests(DetailLevel.NONE, null, null);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder debug() {
 			header("Debug", "true");
 			super.debug();
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public MockRestClient build() {
 			return build(MockRestClient.class);
 		}
@@ -1899,112 +1899,112 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	// Entry point methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest request(RestOperation op) throws RestCallException {
 		return (MockRestRequest)super.request(op);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest get(Object url) throws RestCallException {
 		return (MockRestRequest)super.get(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest get() throws RestCallException {
 		return (MockRestRequest)super.get();
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest put(Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.put(url, body);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest put(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.put(url, body, contentType);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest put(Object url) throws RestCallException {
 		return (MockRestRequest)super.put(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest post(Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.post(url, body);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest post(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.post(url, body, contentType);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest post(Object url) throws RestCallException {
 		return (MockRestRequest)super.post(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest delete(Object url) throws RestCallException {
 		return (MockRestRequest)super.delete(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest options(Object url) throws RestCallException {
 		return (MockRestRequest)super.options(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest head(Object url) throws RestCallException {
 		return (MockRestRequest)super.head(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest formPost(Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.formPost(url, body);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest formPost(Object url) throws RestCallException {
 		return (MockRestRequest)super.formPost(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest formPostPairs(Object url, String...parameters) throws RestCallException {
 		return (MockRestRequest)super.formPostPairs(url, parameters);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest patch(Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.patch(url, body);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest patch(Object url, String body, ContentType contentType) throws RestCallException {
 		return (MockRestRequest)super.patch(url, body, contentType);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest patch(Object url) throws RestCallException {
 		return (MockRestRequest)super.patch(url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest callback(String callString) throws RestCallException {
 		return (MockRestRequest)super.callback(callString);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest request(String method, Object url, Object body) throws RestCallException {
 		return (MockRestRequest)super.request(method, url, body);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest request(String method, Object url) throws RestCallException {
 		return (MockRestRequest)super.request(method, url);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	public MockRestRequest request(String method, Object url, boolean hasBody) throws RestCallException {
 		return (MockRestRequest)super.request(method, url, hasBody);
 	}
@@ -2074,12 +2074,12 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	// RestClient methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	protected MockRestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
 		return new MockRestRequest(this, uri, method, hasBody);
 	}
 
-	@Override /* RestClient */
+	@Override /* Overridden from RestClient */
 	protected MockRestResponse createResponse(RestRequest req, HttpResponse httpResponse, Parser parser) throws RestCallException {
 		return new MockRestResponse(this, req, httpResponse, parser);
 	}
@@ -2088,7 +2088,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	// HttpClientConnection methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void close() throws IOException {
 		// Don't call super.close() because it will close the client.
 		rreq.remove();
@@ -2097,38 +2097,38 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		sres.remove();
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public boolean isOpen() {
 		return true;
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public boolean isStale() {
 		return false;
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void setSocketTimeout(int timeout) {}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public int getSocketTimeout() {
 		return Integer.MAX_VALUE;
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void shutdown() throws IOException {}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public HttpConnectionMetrics getMetrics() {
 		return null;
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public boolean isResponseAvailable(int timeout) throws IOException {
 		return true;
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void sendRequestHeader(HttpRequest request) throws HttpException, IOException {
 		try {
 			RequestLine rl = request.getRequestLine();
@@ -2185,7 +2185,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		return "http://localhost";
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void sendRequestEntity(HttpEntityEnclosingRequest request) throws HttpException, IOException {
 		byte[] body = {};
 		HttpEntity entity = request.getEntity();
@@ -2201,7 +2201,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		sreq.get().content(body);
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public HttpResponse receiveResponseHeader() throws HttpException, IOException {
 		try {
 			MockServletResponse res = MockServletResponse.create();
@@ -2230,7 +2230,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
 		InputStream is = new ByteArrayInputStream(sres.get().getContent());
 		Header contentEncoding = response.getLastHeader("Content-Encoding");
@@ -2239,6 +2239,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		response.setEntity(new InputStreamEntity(is));
 	}
 
-	@Override /* HttpClientConnection */
+	@Override /* Overridden from HttpClientConnection */
 	public void flush() throws IOException {}
 }

@@ -89,4 +89,10 @@ public class ClassMetaRuntimeException extends BasicRuntimeException {
 			return (c == null ? "" : c.getName() + ": ") + cause.getMessage();
 		return null;
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public ClassMetaRuntimeException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

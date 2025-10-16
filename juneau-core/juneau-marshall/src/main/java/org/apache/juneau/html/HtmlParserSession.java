@@ -213,7 +213,7 @@ public class HtmlParserSession extends XmlParserSession {
 		ctx = builder.ctx;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try {
 			return parseAnything(type, getXmlReader(pipe), getOuter(), true, null);
@@ -222,14 +222,14 @@ public class HtmlParserSession extends XmlParserSession {
 		}
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType)
 			throws Exception {
 		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType),
 			(ClassMeta<V>)getClassMeta(valueType), null);
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType)
 			throws Exception {
 		return parseIntoCollection(getXmlReader(pipe), c, getClassMeta(elementType), null);
@@ -778,7 +778,7 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @return The parsed string.
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
-	@Override /* XmlParserSession */
+	@Override /* Overridden from XmlParserSession */
 	protected String parseText(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		StringBuilder sb = getStringBuilder();
@@ -870,19 +870,19 @@ public class HtmlParserSession extends XmlParserSession {
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	@Override /* XmlParserSession */
+	@Override /* Overridden from XmlParserSession */
 	protected String getElementText(XmlReader r) throws IOException, XMLStreamException, ParseException {
 		r.next();
 		return parseText(r);
 	}
 
-	@Override /* XmlParserSession */
+	@Override /* Overridden from XmlParserSession */
 	protected boolean isWhitespaceElement(XmlReader r) {
 		String s = r.getLocalName();
 		return whitespaceElements.contains(s);
 	}
 
-	@Override /* XmlParserSession */
+	@Override /* Overridden from XmlParserSession */
 	protected String parseWhitespaceElement(XmlReader r) throws IOException, ParseException, XMLStreamException {
 
 		HtmlTag tag = HtmlTag.forEvent(this, r);

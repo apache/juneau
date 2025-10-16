@@ -513,4 +513,16 @@ public class HtmlElementContainer extends HtmlElement {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementContainer attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

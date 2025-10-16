@@ -456,4 +456,16 @@ public class Strong extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Strong attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Strong attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

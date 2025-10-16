@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.common.utils.*;
@@ -279,5 +280,67 @@ public class Args extends JsonMap {
 		if (l == null)
 			return Collections.emptyList();
 		return l;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from JsonMap */
+	public Args inner(Map<String,Object> inner) {
+		super.inner(inner);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args session(BeanSession session) {
+		super.session(session);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args append(String key, Object value) {
+		super.append(key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args append(Map<String,Object> values) {
+		super.append(values);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args appendIf(boolean flag, String key, Object value) {
+		super.appendIf(flag, key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args filtered(Predicate<Object> value) {
+		super.filtered(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args keepAll(String...keys) {
+		super.keepAll(keys);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args setBeanSession(BeanSession value) {
+		super.setBeanSession(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args modifiable() {
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public Args unmodifiable() {
+		return this;
 	}
 }

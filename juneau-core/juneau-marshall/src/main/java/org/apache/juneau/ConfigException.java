@@ -62,4 +62,10 @@ public class ConfigException extends BasicRuntimeException {
 		}
 		return sb.toString();
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public ConfigException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

@@ -167,17 +167,17 @@ public class ContentAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Content */
+		@Override /* Overridden from Content */
 		public String def() {
 			return def;
 		}
 
-		@Override /* Content */
+		@Override /* Overridden from Content */
 		public String[] description() {
 			return description;
 		}
 
-		@Override /* Content */
+		@Override /* Overridden from Content */
 		public Schema schema() {
 			return schema;
 		}

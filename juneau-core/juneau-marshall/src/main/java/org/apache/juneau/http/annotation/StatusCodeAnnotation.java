@@ -130,7 +130,7 @@ public class StatusCodeAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Response */
+		@Override /* Overridden from Response */
 		public int[] value() {
 			return value;
 		}

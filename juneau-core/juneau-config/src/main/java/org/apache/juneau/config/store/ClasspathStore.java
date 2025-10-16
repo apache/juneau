@@ -92,12 +92,12 @@ public class ClasspathStore extends ConfigStore {
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public ClasspathStore build() {
 			return build(ClasspathStore.class);
 		}
@@ -164,7 +164,7 @@ public class ClasspathStore extends ConfigStore {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -180,7 +180,7 @@ public class ClasspathStore extends ConfigStore {
 		super(builder);
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) throws IOException {
 		var s = cache.get(name);
 		if (s != null)
@@ -194,7 +194,7 @@ public class ClasspathStore extends ConfigStore {
 		return emptyIfNull(cache.get(name));
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 
 		// This is a no-op.
@@ -211,7 +211,7 @@ public class ClasspathStore extends ConfigStore {
 		return null;
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized boolean exists(String name) {
 		try {
 			return ! read(name).isEmpty();
@@ -220,7 +220,7 @@ public class ClasspathStore extends ConfigStore {
 		}
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized ClasspathStore update(String name, String newContents) {
 		if (newContents == null)
 			cache.remove(name);
@@ -233,7 +233,7 @@ public class ClasspathStore extends ConfigStore {
 	/**
 	 * No-op.
 	 */
-	@Override /* Closeable */
+	@Override /* Overridden from Closeable */
 	public void close() throws IOException {
 		// No-op
 	}

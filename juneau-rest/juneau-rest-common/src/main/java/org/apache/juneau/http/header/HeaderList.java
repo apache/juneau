@@ -933,7 +933,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		return caseSensitive ? Utils.eq(s1, s2) : Utils.eqic(s1, s2);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return "[" + Utils.join(this, ", ") + "]";
 	}

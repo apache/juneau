@@ -187,22 +187,22 @@ public class XmlAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Xml */
+		@Override /* Overridden from Xml */
 		public String childName() {
 			return childName;
 		}
 
-		@Override /* Xml */
+		@Override /* Overridden from Xml */
 		public XmlFormat format() {
 			return format;
 		}
 
-		@Override /* Xml */
+		@Override /* Overridden from Xml */
 		public String namespace() {
 			return namespace;
 		}
 
-		@Override /* Xml */
+		@Override /* Overridden from Xml */
 		public String prefix() {
 			return prefix;
 		}

@@ -133,7 +133,7 @@ public class BasicRuntimeException extends RuntimeException {
 		return this;
 	}
 
-	@Override /* Throwable */
+	@Override /* Overridden from Throwable */
 	public String getMessage() {
 		if (message != null)
 			return message;
@@ -143,19 +143,19 @@ public class BasicRuntimeException extends RuntimeException {
 		return m;
 	}
 
-	@Override /* Throwable */
+	@Override /* Overridden from Throwable */
 	public synchronized Throwable fillInStackTrace() {
 		assertModifiable();
 		return super.fillInStackTrace();
 	}
 
-	@Override /* Throwable */
+	@Override /* Overridden from Throwable */
 	public synchronized Throwable initCause(Throwable cause) {
 		assertModifiable();
 		return super.initCause(cause);
 	}
 
-	@Override /* Throwable */
+	@Override /* Overridden from Throwable */
 	public void setStackTrace(StackTraceElement[] stackTrace) {
 		assertModifiable();
 		super.setStackTrace(stackTrace);

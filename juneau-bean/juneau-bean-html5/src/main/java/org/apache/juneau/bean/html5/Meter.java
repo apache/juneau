@@ -590,4 +590,16 @@ public class Meter extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meter attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Meter attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

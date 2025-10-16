@@ -81,4 +81,10 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 	private static String name(Object o) {
 		return ClassInfo.of(o).getFullName();
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public InvalidDataConversionException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

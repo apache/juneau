@@ -85,7 +85,7 @@ public class TestURIc {
 	}
 
 	public static class TestURIbc {
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "test/uri/b";
 		}

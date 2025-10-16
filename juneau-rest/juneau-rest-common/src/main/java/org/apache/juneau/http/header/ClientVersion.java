@@ -148,7 +148,7 @@ public class ClientVersion extends BasicStringHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null)
 			return Utils.s(supplier.get());

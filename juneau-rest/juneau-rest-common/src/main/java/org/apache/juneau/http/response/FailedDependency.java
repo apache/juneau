@@ -192,4 +192,21 @@ public class FailedDependency extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public FailedDependency setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public FailedDependency setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public FailedDependency setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

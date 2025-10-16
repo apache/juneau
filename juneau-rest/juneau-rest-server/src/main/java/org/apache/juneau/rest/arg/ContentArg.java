@@ -72,7 +72,7 @@ public class ContentArg implements RestOpArg {
 		this.schema = HttpPartSchema.create(Content.class, paramInfo);
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return opSession.getRequest().getContent().setSchema(schema).as(type);
 	}

@@ -904,7 +904,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	/**
 	 * Returns this list as a URL-encoded custom query.
 	 */
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		forEach(p -> {

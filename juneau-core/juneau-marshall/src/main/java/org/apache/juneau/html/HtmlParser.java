@@ -102,17 +102,17 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HtmlParser build() {
 			return cache(CACHE).build(HtmlParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return super.hashKey();
 		}
@@ -677,17 +677,17 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlParserSession.Builder createSession() {
 		return HtmlParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlParserSession getSession() {
 		return createSession().build();
 	}
@@ -696,7 +696,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HtmlMetaProvider */
+	@Override /* Overridden from HtmlMetaProvider */
 	public HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
 		HtmlClassMeta m = htmlClassMetas.get(cm);
 		if (m == null) {
@@ -706,7 +706,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		return m;
 	}
 
-	@Override /* HtmlMetaProvider */
+	@Override /* Overridden from HtmlMetaProvider */
 	public HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return HtmlBeanPropertyMeta.DEFAULT;

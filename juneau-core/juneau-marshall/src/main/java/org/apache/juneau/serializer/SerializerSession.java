@@ -1115,7 +1115,7 @@ public class SerializerSession extends BeanTraverseSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("uriResolver", uriResolver);
 	}

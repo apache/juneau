@@ -25,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -169,7 +168,7 @@ public abstract class SwaggerElement {
 		return m;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}

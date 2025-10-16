@@ -27,18 +27,18 @@ import org.apache.juneau.microservice.*;
  */
 public class BasicJettyMicroserviceListener extends BasicMicroserviceListener implements JettyMicroserviceListener {
 
-	@Override /* JettyMicroserviceListener */
+	@Override /* Overridden from JettyMicroserviceListener */
 	public void onCreateServer(JettyMicroservice microservice) {}
 
-	@Override /* JettyMicroserviceListener */
+	@Override /* Overridden from JettyMicroserviceListener */
 	public void onStartServer(JettyMicroservice microservice) {}
 
-	@Override /* JettyMicroserviceListener */
+	@Override /* Overridden from JettyMicroserviceListener */
 	public void onPostStartServer(JettyMicroservice microservice) {}
 
-	@Override /* JettyMicroserviceListener */
+	@Override /* Overridden from JettyMicroserviceListener */
 	public void onStopServer(JettyMicroservice microservice) {}
 
-	@Override /* JettyMicroserviceListener */
+	@Override /* Overridden from JettyMicroserviceListener */
 	public void onPostStopServer(JettyMicroservice microservice) {}
 }

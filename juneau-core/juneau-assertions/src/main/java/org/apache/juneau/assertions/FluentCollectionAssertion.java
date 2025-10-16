@@ -162,7 +162,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {  // NOSONAR - Intentional.
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}

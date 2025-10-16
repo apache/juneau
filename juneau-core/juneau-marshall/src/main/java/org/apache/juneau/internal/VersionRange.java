@@ -80,7 +80,7 @@ public class VersionRange {
 		return true;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return (minExclusive ? "(" : "[") + minVersion + ',' + maxVersion + (maxExclusive ? ")" : "]");
 	}

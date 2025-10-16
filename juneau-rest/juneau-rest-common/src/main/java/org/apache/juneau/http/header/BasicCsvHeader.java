@@ -151,7 +151,7 @@ public class BasicCsvHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		return Utils.join(value(), ", ");
 	}

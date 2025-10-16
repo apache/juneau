@@ -70,7 +70,7 @@ public class AnnotationImpl implements Annotation {
 	 *
 	 * @return This class.
 	 */
-	@Override /* Annotation */
+	@Override /* Overridden from Annotation */
 	public Class<? extends Annotation> annotationType() {
 		return annotationType;
 	}
@@ -85,14 +85,14 @@ public class AnnotationImpl implements Annotation {
 	    return description;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		if (hashCode == -1)
 			throw new IllegalArgumentException("Programming error. postConstruct() was never called on annotation.");
 		return hashCode;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		if (!annotationType.isInstance(o))
 			return false;
@@ -116,7 +116,7 @@ public class AnnotationImpl implements Annotation {
 		return m;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return toMap().asString();
 	}

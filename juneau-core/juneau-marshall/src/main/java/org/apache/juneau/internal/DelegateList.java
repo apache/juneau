@@ -48,7 +48,7 @@ public class DelegateList<T extends Collection<?>> extends JsonList implements D
 		this.classMeta = classMeta;
 	}
 
-	@Override /* Delegate */
+	@Override /* Overridden from Delegate */
 	public ClassMeta<T> getClassMeta() {
 		return classMeta;
 	}

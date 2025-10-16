@@ -606,4 +606,16 @@ public class Img extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Img attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

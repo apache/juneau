@@ -53,7 +53,7 @@ public class HtmlWidgetVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Overridden from Parameter */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 		HtmlWidgetMap m = session.getBean(HtmlWidgetMap.class).orElseThrow(RuntimeException::new);
 

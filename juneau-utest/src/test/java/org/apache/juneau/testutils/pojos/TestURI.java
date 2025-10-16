@@ -61,7 +61,7 @@ public class TestURI {
 
 	@Uri
 	public static class TestURIb {
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "f8/x8";
 		}

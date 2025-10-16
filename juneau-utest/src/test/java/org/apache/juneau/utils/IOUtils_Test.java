@@ -101,7 +101,7 @@ class IOUtils_Test extends TestBase {
 			closed = true;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return new String(this.toByteArray(), UTF8);
 		}

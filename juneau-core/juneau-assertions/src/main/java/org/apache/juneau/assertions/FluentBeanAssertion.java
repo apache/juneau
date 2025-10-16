@@ -139,7 +139,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentBeanAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentBeanAssertion<>(this, function.apply(orElse(null)), returns());
 	}

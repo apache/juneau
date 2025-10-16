@@ -227,7 +227,7 @@ public class OpenApiParserSession extends UonParserSession {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override /* HttpPartParser */
+	@Override /* Overridden from HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) throws ParseException, SchemaValidationException {
 		if (partType == null)
 			partType = HttpPartType.OTHER;
@@ -253,7 +253,7 @@ public class OpenApiParserSession extends UonParserSession {
 		return t;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		return parseInner(null, HttpPartSchema.DEFAULT, pipe.asString(), type);
 	}

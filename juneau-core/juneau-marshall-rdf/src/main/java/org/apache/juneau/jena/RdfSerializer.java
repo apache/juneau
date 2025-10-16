@@ -158,17 +158,17 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public RdfSerializer build() {
 			return cache(CACHE).build(RdfSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1835,17 +1835,17 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		addBeanTypes = addBeanTypesRdf || super.isAddBeanTypes();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public  RdfSerializerSession.Builder createSession() {
 		return RdfSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public RdfSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1854,7 +1854,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RdfMetaProvider */
+	@Override /* Overridden from RdfMetaProvider */
 	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
 		RdfClassMeta m = rdfClassMetas.get(cm);
 		if (m == null) {
@@ -1864,7 +1864,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* RdfMetaProvider */
+	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
 		RdfBeanMeta m = rdfBeanMetas.get(bm);
 		if (m == null) {
@@ -1874,7 +1874,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* RdfMetaProvider */
+	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
 		RdfBeanPropertyMeta m = rdfBeanPropertyMetas.get(bpm);
 		if (m == null) {
@@ -1884,7 +1884,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
 		XmlClassMeta m = xmlClassMetas.get(cm);
 		if (m == null) {
@@ -1894,7 +1894,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
 		XmlBeanMeta m = xmlBeanMetas.get(bm);
 		if (m == null) {
@@ -1904,7 +1904,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
 		if (m == null) {
@@ -2098,7 +2098,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("addLiteralTypes", addLiteralTypes)

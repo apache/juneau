@@ -220,7 +220,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 
 	private final HtmlDocSerializer ctx;
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected VarResolverSession createDefaultVarResolverSession() {
 		return DEFAULT_VR.createSession();
 	}
@@ -237,7 +237,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		return ctx.navlinks;
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 
 		try (HtmlWriter w = getHtmlWriter(out)) {
@@ -436,7 +436,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("ctx", ctx, "varResolver", getVarResolver());
 	}

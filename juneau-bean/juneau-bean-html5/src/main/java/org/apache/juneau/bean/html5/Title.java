@@ -453,4 +453,16 @@ public class Title extends HtmlElementRawText {
 		super.text(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Title attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Title attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

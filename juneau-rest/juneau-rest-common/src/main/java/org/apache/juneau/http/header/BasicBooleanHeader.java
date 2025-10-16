@@ -152,7 +152,7 @@ public class BasicBooleanHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		return Utils.s(value());
 	}

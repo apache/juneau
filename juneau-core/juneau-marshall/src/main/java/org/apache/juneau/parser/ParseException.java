@@ -165,4 +165,10 @@ public class ParseException extends BasicRuntimeException {
 			t = (ParseException)t.getCause();
 		return t;
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public ParseException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

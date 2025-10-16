@@ -1060,4 +1060,16 @@ public class Input extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Input attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

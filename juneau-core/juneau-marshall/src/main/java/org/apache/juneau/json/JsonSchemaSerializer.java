@@ -164,17 +164,17 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 			generatorBuilder = copyFrom.generatorBuilder.copy().beanContext(beanContext());
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public JsonSchemaSerializer build() {
 			return cache(CACHE).build(JsonSchemaSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1016,17 +1016,17 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		generator = builder.generatorBuilder.build();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonSchemaSerializerSession.Builder createSession() {
 		return JsonSchemaSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonSchemaSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1039,7 +1039,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* JsonSchemaMetaProvider */
+	@Override /* Overridden from JsonSchemaMetaProvider */
 	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
 		JsonSchemaClassMeta m = jsonSchemaClassMetas.get(cm);
 		if (m == null) {
@@ -1049,7 +1049,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		return m;
 	}
 
-	@Override /* JsonSchemaMetaProvider */
+	@Override /* Overridden from JsonSchemaMetaProvider */
 	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
 		JsonSchemaBeanPropertyMeta m = jsonSchemaBeanPropertyMetas.get(bpm);
 		if (m == null) {
@@ -1063,7 +1063,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
 	}

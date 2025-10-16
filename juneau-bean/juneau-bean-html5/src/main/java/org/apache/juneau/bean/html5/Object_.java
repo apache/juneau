@@ -626,4 +626,16 @@ public class Object_ extends HtmlElementMixed {  // NOSONAR - Intentional naming
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Object_ attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Object_ attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

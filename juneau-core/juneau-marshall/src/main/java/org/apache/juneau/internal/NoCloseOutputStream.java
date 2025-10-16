@@ -40,27 +40,27 @@ public class NoCloseOutputStream extends OutputStream {
 		this.os = os;
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public void write(int b) throws IOException {
 		os.write(b);
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public void write(byte[] b) throws IOException {
 		os.write(b);
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public void write(byte[] b, int off, int len) throws IOException {
 		os.write(b, off, len);
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public void flush() throws IOException {
 		os.flush();
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public void close() throws IOException {
 		os.flush();
 	}

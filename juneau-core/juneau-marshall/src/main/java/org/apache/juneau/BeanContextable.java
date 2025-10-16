@@ -89,10 +89,10 @@ public abstract class BeanContextable extends Context {
 			registerBuilders(bcBuilder);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public abstract Builder copy();
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -2907,14 +2907,14 @@ public abstract class BeanContextable extends Context {
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder annotations(Annotation...value) {
 			bcBuilder.annotations(value);
 			super.annotations(value);
 			return this;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder debug() {
 			bcBuilder.debug();
 			super.debug();
@@ -2986,7 +2986,7 @@ public abstract class BeanContextable extends Context {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("beanContext", beanContext.properties());
 	}

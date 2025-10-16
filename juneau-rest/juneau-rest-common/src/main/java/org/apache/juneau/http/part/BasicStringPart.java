@@ -106,7 +106,7 @@ public class BasicStringPart extends BasicPart {
 		return new FluentStringAssertion<>(value(), this);
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		return value();
 	}

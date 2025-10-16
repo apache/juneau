@@ -487,4 +487,16 @@ public class Q extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Q attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Q attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

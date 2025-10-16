@@ -166,7 +166,7 @@ public abstract class OpenApiElement {
 		return m;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT_SORTED.toString(this);
 	}

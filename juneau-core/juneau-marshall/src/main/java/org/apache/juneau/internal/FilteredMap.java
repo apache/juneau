@@ -60,24 +60,24 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 	private Map.Entry<K,V> createEntry(final K key) {
 		return new Map.Entry<>() {
 
-			@Override /* Map.Entry */
+			@Override /* Overridden from Map.Entry */
 			public K getKey() {
 				return key;
 			}
 
-			@Override /* Map.Entry */
+			@Override /* Overridden from Map.Entry */
 			public V getValue() {
 				return innerMap.get(key);
 			}
 
-			@Override /* Map.Entry */
+			@Override /* Overridden from Map.Entry */
 			public V setValue(V v) {
 				return innerMap.put(key, v);
 			}
 		};
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<Map.Entry<K,V>> entrySet() {
 		return entries;
 	}
@@ -93,18 +93,18 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> implements Delegate<Map<K
 			this.entries = entries;
 		}
 
-		@Override /* Set */
+		@Override /* Overridden from Set */
 		public Iterator<E> iterator() {
 			return entries.iterator();
 		}
 
-		@Override /* Set */
+		@Override /* Overridden from Set */
 		public int size() {
 			return entries.size();
 		}
 	}
 
-	@Override /* Delegate */
+	@Override /* Overridden from Delegate */
 	public ClassMeta<Map<K,V>> getClassMeta() {
 		return classMeta;
 	}

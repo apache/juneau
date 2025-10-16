@@ -124,12 +124,12 @@ public class LicenseAnnotation {
 			postConstruct();
 		}
 
-		@Override /* License */
+		@Override /* Overridden from License */
 		public String name() {
 			return name;
 		}
 
-		@Override /* License */
+		@Override /* Overridden from License */
 		public String url() {
 			return url;
 		}

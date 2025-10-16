@@ -46,7 +46,7 @@ import jakarta.servlet.http.*;
 @Rest
 public abstract class BasicRestObjectGroup extends BasicRestObject implements BasicGroupOperations {
 
-	@Override /* BasicGroupOperations */
+	@Override /* Overridden from BasicGroupOperations */
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return ChildResourceDescriptions.of(req);
 	}

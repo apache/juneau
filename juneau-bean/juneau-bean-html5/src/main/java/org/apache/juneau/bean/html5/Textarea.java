@@ -765,4 +765,16 @@ public class Textarea extends HtmlElementRawText {
 		super.text(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Textarea attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

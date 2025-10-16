@@ -235,32 +235,32 @@ public class PathAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Path */
+		@Override /* Overridden from Path */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Path */
+		@Override /* Overridden from Path */
 		public String def() {
 			return def;
 		}
 
-		@Override /* Path */
+		@Override /* Overridden from Path */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
-		@Override /* Path */
+		@Override /* Overridden from Path */
 		public Schema schema() {
 			return schema;
 		}
 
-		@Override /* Path */
+		@Override /* Overridden from Path */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
 		}
 
-		@Override /* Path */
+		@Override /* Overridden from Path */
 		public String value() {
 			return value;
 		}

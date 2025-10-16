@@ -136,17 +136,17 @@ public class ContactAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Contact */
+		@Override /* Overridden from Contact */
 		public String email() {
 			return email;
 		}
 
-		@Override /* Contact */
+		@Override /* Overridden from Contact */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Contact */
+		@Override /* Overridden from Contact */
 		public String url() {
 			return url;
 		}

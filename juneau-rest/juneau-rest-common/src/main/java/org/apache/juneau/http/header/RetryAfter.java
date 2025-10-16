@@ -198,7 +198,7 @@ public class RetryAfter extends BasicDateHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null) {
 			Object o = supplier.get();

@@ -254,12 +254,12 @@ public class Config extends Context implements ConfigEventListener {
 			readOnly = copyFrom.readOnly;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Config build() {
 			return build(Config.class);
 		}
@@ -554,7 +554,7 @@ public class Config extends Context implements ConfigEventListener {
 	private final ConfigMap configMap;
 	private final List<ConfigEventListener> listeners = synced(new LinkedList<>());
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -1185,7 +1185,7 @@ public class Config extends Context implements ConfigEventListener {
 	// Interface methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ConfigEventListener */
+	@Override /* Overridden from ConfigEventListener */
 	public synchronized void onConfigChange(ConfigEvents events) {
 		listeners.forEach(x -> x.onConfigChange(events));
 	}
@@ -1278,7 +1278,7 @@ public class Config extends Context implements ConfigEventListener {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return configMap.toString();
 	}

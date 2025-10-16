@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -486,6 +487,24 @@ public class Tbody extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElementContainer */
 	public Tbody children(Object...value) {
 		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Tbody setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Tbody attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Tbody attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 }

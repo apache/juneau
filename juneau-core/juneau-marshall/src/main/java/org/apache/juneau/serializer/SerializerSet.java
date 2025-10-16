@@ -194,7 +194,7 @@ public class SerializerSet {
 			return o;
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected SerializerSet buildDefault() {
 			return new SerializerSet(this);
 		}
@@ -457,7 +457,7 @@ public class SerializerSet {
 		// Other methods
 		//-------------------------------------------------------------------------------------------------------------
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return entries.stream().map(this::toString).collect(joining(",","[","]"));
 		}

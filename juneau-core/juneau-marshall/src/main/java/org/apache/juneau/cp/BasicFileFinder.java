@@ -98,12 +98,12 @@ public class BasicFileFinder implements FileFinder {
 	// FileFinder methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FileFinder */
+	@Override /* Overridden from FileFinder */
 	public final Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 		return find(name, locale);
 	}
 
-	@Override /* FileFinder */
+	@Override /* Overridden from FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
 		return Utils.opt(read(find(name, locale).orElse(null)));
 	}
@@ -266,12 +266,12 @@ public class BasicFileFinder implements FileFinder {
 		return hashCode;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return o instanceof BasicFileFinder && Utils.eq(this, (BasicFileFinder)o, (x,y)->Utils.eq(x.hashCode, y.hashCode) && Utils.eq(x.getClass(), y.getClass()) && Utils.eq(x.roots, y.roots) && Utils.eq(x.cachingLimit, y.cachingLimit) && Utils.eq(x.includePatterns, y.includePatterns) && Utils.eq(x.excludePatterns, y.excludePatterns));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("class", getClass().getSimpleName())

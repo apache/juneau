@@ -192,4 +192,21 @@ public class InsufficientStorage extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public InsufficientStorage setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -515,6 +516,24 @@ public class Optgroup extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElementContainer */
 	public Optgroup children(Object...value) {
 		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Optgroup setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Optgroup attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Optgroup attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 }

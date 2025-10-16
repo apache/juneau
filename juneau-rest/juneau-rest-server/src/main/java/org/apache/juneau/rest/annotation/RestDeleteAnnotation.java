@@ -321,87 +321,87 @@ public class RestDeleteAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestDelete */
+		@Override /* Overridden from RestDelete */
 		public String value() {
 			return value;
 		}

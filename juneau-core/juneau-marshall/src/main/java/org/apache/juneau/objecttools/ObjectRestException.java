@@ -88,4 +88,10 @@ public class ObjectRestException extends BasicRuntimeException {
 	public int getStatus() {
 		return status;
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public ObjectRestException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

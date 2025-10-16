@@ -289,14 +289,14 @@ public class TemporalDateSwap extends StringSwap<Date> {
 		this.formatter = DateUtils.getFormatter(pattern);
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, Date o) throws Exception {
 		if (o == null)
 			return null;
 		return formatter.format(o.toInstant().atZone(session.getTimeZoneId()));
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Date unswap(BeanSession session, String f, ClassMeta<?> hint) throws Exception {
 		if (f == null)
 			return null;

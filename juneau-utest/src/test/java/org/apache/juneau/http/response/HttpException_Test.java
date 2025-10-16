@@ -20,8 +20,11 @@ import static org.apache.juneau.http.HttpResponses.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
@@ -50,6 +53,17 @@ class HttpException_Test extends TestBase {
 		public void f5() throws BasicHttpException {
 			throw httpException().setStatusCode2(225).setHeader2("Foo", "bar");
 		}
+		@RestGet
+		public void f6() throws BasicHttpException {
+			throw httpException().setStatusCode2(225).setHeaders(Arrays.asList(
+				BasicHeader.of("X-Custom", "value1"),
+				BasicHeader.of("X-Test", "value2")
+			));
+		}
+		@RestGet
+		public void f7() throws BasicHttpException {
+			throw httpException().setStatusCode2(225).setContent("Custom exception content");
+		}
 	}
 
 	@Test void a01_basic() throws Exception {
@@ -71,6 +85,13 @@ class HttpException_Test extends TestBase {
 			.assertStatus().asCode().is(225)
 			.assertContent("")
 			.assertHeader("Foo").is("bar");
+		c.get("/f6").run()
+			.assertStatus().asCode().is(225)
+			.assertHeader("X-Custom").is("value1")
+			.assertHeader("X-Test").is("value2");
+		c.get("/f7").run()
+			.assertStatus().asCode().is(225)
+			.assertContent("Custom exception content");
 	}
 
 	@Test void a02_getRootCause() {
@@ -106,5 +127,23 @@ class HttpException_Test extends TestBase {
 		x = new BasicHttpException(100, new RuntimeException(), "foo{0}","<bar>&baz");
 		assertEquals("foo<bar>&baz\nCaused by (RuntimeException)", x.getFullStackMessage(false));
 		assertEquals("foo bar  baz\nCaused by (RuntimeException)", x.getFullStackMessage(true));
+	}
+
+	@Test void a04_fluentSetters() {
+		var x = httpException().setStatusCode2(500);
+
+		// Test setHeaders(List<Header>) returns same instance for fluent chaining
+		assertSame(x, x.setHeaders(Arrays.asList(
+			BasicHeader.of("X-Fluent-Test", "fluent-value")
+		)));
+		assertEquals("fluent-value", x.getFirstHeader("X-Fluent-Test").getValue());
+
+		// Test setContent(String) returns same instance for fluent chaining
+		assertSame(x, x.setContent("test error content"));
+
+		// Test setContent(HttpEntity) returns same instance for fluent chaining
+		var x2 = httpException().setStatusCode2(500);
+		HttpEntity entity = x2.getEntity();
+		assertSame(x2, x2.setContent(entity));
 	}
 }

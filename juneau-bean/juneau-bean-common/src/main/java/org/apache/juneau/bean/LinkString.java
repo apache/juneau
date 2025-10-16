@@ -173,22 +173,22 @@ public class LinkString implements Comparable<LinkString> {
 	/**
 	 * Returns the name so that the {@link ObjectSearcher} class can search against it.
 	 */
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return name;
 	}
 
-	@Override /* Comparable */
+	@Override /* Overridden from Comparable */
 	public int compareTo(LinkString o) {
 		return name.compareTo(o.name);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof LinkString o2) && Utils.eq(this, o2, (x,y)->x.name.equals(y.name));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return super.hashCode();
 	}

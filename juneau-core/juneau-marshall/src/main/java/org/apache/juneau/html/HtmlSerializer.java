@@ -260,17 +260,17 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			uriAnchorText = copyFrom.uriAnchorText;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HtmlSerializer build() {
 			return cache(CACHE).build(HtmlSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -456,13 +456,13 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 			return this;
 		}
 
-	@Override /* XmlSerializer.Builder */
+	@Override /* Overridden from XmlSerializer.Builder */
 	public Builder disableJsonTags() {
 		super.disableJsonTags();
 		return this;
 	}
 
-	@Override /* XmlSerializer.Builder */
+	@Override /* Overridden from XmlSerializer.Builder */
 	public Builder disableJsonTags(boolean value) {
 		super.disableJsonTags(value);
 		return this;
@@ -1468,17 +1468,17 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		addBeanTypesHtml = builder.addBeanTypesHtml;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlSerializerSession.Builder createSession() {
 		return HtmlSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1498,7 +1498,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HtmlMetaProvider */
+	@Override /* Overridden from HtmlMetaProvider */
 	public HtmlClassMeta getHtmlClassMeta(ClassMeta<?> cm) {
 		HtmlClassMeta m = htmlClassMetas.get(cm);
 		if (m == null) {
@@ -1508,7 +1508,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		return m;
 	}
 
-	@Override /* HtmlMetaProvider */
+	@Override /* Overridden from HtmlMetaProvider */
 	public HtmlBeanPropertyMeta getHtmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return HtmlBeanPropertyMeta.DEFAULT;
@@ -1597,7 +1597,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("uriAnchorText", uriAnchorText)

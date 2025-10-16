@@ -144,12 +144,12 @@ public class RequestAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Request */
+		@Override /* Overridden from Request */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
-		@Override /* Request */
+		@Override /* Overridden from Request */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
 		}

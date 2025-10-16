@@ -403,7 +403,7 @@ public class UriContext {
 		return uri.substring(0, i);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5Serializer.DEFAULT.toString(this);
 	}

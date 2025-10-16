@@ -873,7 +873,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 				a2 = Integer.parseInt(v);
 			}
 
-			@Override /* Object */
+			@Override /* Overridden from Object */
 			public String toString() {
 				return String.valueOf(a2);
 			}
@@ -998,7 +998,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 			return m;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return String.valueOf(f1);
 		}
@@ -1033,7 +1033,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 			return m;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return String.valueOf(f1);
 		}

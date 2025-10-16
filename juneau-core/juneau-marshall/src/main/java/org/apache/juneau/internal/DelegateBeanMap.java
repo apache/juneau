@@ -64,21 +64,21 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		this.keys.add(key);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object put(String key, Object val) {
 		this.overrideValues.put(key, val);
 		this.keys.add(key);
 		return null;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object get(Object key) {
 		if (overrideValues.containsKey(key))
 			return overrideValues.get(key);
 		return super.get(key);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<String> keySet() {
 		return keys;
 	}
@@ -98,18 +98,18 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return this;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object remove(Object key) {
 		keys.remove(key);
 		return null;
 	}
 
-	@Override /* BeanMap */
+	@Override /* Overridden from BeanMap */
 	public BeanMeta<T> getMeta() {
 		return new BeanMetaFiltered<>(super.getMeta(), keys);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public synchronized Set<Entry<String,Object>> entrySet() {
 		Set<Entry<String,Object>> s = set();
 		keys.forEach(k -> {
@@ -125,7 +125,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 		return s;
 	}
 
-	@Override /* BeanMap */
+	@Override /* Overridden from BeanMap */
 	public Collection<BeanPropertyMeta> getProperties() {
 		List<BeanPropertyMeta> l = new ArrayList<>(keys.size());
 		keys.forEach(k -> {
@@ -156,7 +156,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			this.value = value;
 		}
 
-		@Override /* Map.Entry */
+		@Override /* Overridden from Map.Entry */
 		public Object getValue() {
 			return value;
 		}

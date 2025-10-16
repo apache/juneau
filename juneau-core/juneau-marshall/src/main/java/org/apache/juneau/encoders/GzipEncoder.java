@@ -33,12 +33,12 @@ import java.util.zip.*;
  */
 public class GzipEncoder extends Encoder {
 
-	@Override /* Encoder */
+	@Override /* Overridden from Encoder */
 	public OutputStream getOutputStream(OutputStream os) throws IOException {
 		return new FinishableGZIPOutputStream(os);
 	}
 
-	@Override /* Encoder */
+	@Override /* Overridden from Encoder */
 	public InputStream getInputStream(InputStream is) throws IOException {
 		return new GZIPInputStream(is);
 	}
@@ -46,7 +46,7 @@ public class GzipEncoder extends Encoder {
 	/**
 	 * Returns <code>[<js>"gzip"</js>]</code>.
 	 */
-	@Override /* Encoder */
+	@Override /* Overridden from Encoder */
 	public String[] getCodings() {
 		return new String[]{"gzip"};
 	}

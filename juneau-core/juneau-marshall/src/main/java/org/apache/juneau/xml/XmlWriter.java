@@ -563,72 +563,72 @@ public class XmlWriter extends SerializerWriter {
 		return this;
 	}
 
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter s() {
 		super.s();
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter q() {
 		super.q();
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter ie(int indent) {
 		super.ie(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter append(String text) {
 		super.append(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter append(char c) {
 		try {
 			out.write(c);
@@ -637,18 +637,54 @@ public class XmlWriter extends SerializerWriter {
 		}
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter w(char c) {
 		super.w(c);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public XmlWriter w(String s) {
 		super.w(s);
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendUri(Object value) {
+		super.appendUri(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter append(char[] value) {
+		super.append(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter sIf(boolean flag) {
+		super.sIf(flag);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter nlIf(boolean flag, int indent) {
+		super.nlIf(flag, indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendIf(boolean flag, String value) {
+		super.appendIf(flag, value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public XmlWriter appendIf(boolean flag, char value) {
+		super.appendIf(flag, value);
+		return this;
+	}
+
+	@Override /* Overridden from Object */
 	public String toString() {
 		return out.toString();
 	}

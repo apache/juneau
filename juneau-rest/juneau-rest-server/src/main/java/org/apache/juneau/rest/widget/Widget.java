@@ -73,17 +73,17 @@ public abstract class Widget implements HtmlWidget {
 		return session.getBean(RestResponse.class).orElseThrow(InternalServerError::new);
 	}
 
-	@Override /* HtmlWidget */
+	@Override /* Overridden from HtmlWidget */
 	public String getHtml(VarResolverSession session) {
 		return getHtml(req(session), res(session));
 	}
 
-	@Override /* HtmlWidget */
+	@Override /* Overridden from HtmlWidget */
 	public String getScript(VarResolverSession session) {
 		return getScript(req(session), res(session));
 	}
 
-	@Override /* HtmlWidget */
+	@Override /* Overridden from HtmlWidget */
 	public String getStyle(VarResolverSession session) {
 		return getStyle(req(session), res(session));
 	}

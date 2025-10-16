@@ -33,7 +33,7 @@ import org.apache.juneau.rest.util.*;
  */
 public class PlainTextPojoProcessor implements ResponseProcessor {
 
-	@Override /* ResponseProcessor */
+	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
 		RestRequest req = opSession.getRequest();
 		RestResponse res = opSession.getResponse();

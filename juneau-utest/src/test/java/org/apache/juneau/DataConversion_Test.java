@@ -111,7 +111,7 @@ class DataConversion_Test extends TestBase {
 			this.arg = arg;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return arg;
 		}

@@ -132,17 +132,17 @@ public class ResourceDescription implements Comparable<ResourceDescription> {
 		return this;
 	}
 
-	@Override /* Comparable */
+	@Override /* Overridden from Comparable */
 	public int compareTo(ResourceDescription o) {
 		return getName().toString().compareTo(o.getName().toString());
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof ResourceDescription) && Utils.eq(this, (ResourceDescription)o, (x,y)->Utils.eq(x.getName(), y.getName()));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return getName().hashCode();
 	}

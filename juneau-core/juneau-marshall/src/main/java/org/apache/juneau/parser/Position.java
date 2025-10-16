@@ -58,7 +58,7 @@ public class Position {
 		this.position = position;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		List<String> l = list();
 		if (line != -1)

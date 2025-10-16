@@ -213,7 +213,7 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 		genSession = ctx.getGenerator().getSession();
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		try {
 			super.doSerialize(out, genSession.getSchema(o));

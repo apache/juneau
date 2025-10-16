@@ -110,7 +110,7 @@ public class A1 {
 		private int getF8() { return f8; }
 		private void setF8(int v) { f8 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A2";
 		}
@@ -134,7 +134,7 @@ public class A1 {
 		private int getF8() { return f8; }
 		private void setF8(int v) { f8 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A3";
 		}
@@ -158,7 +158,7 @@ public class A1 {
 		private int getF8() { return f8; }
 		private void setF8(int v) { f8 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A4";
 		}
@@ -182,7 +182,7 @@ public class A1 {
 		private int getF8() { return f8; }
 		private void setF8(int v) { f8 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "A5";
 		}

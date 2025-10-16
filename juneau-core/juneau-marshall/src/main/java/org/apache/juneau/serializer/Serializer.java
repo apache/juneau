@@ -188,17 +188,17 @@ public class Serializer extends BeanTraverseContext {
 			listener = copyFrom.listener;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Serializer build() {
 			return build(Serializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1322,17 +1322,17 @@ public class Serializer extends BeanTraverseContext {
 		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(splita(builder.accept)) : new MediaType[] {this.producesMediaType};
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public SerializerSession.Builder createSession() {
 		return SerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public SerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1645,7 +1645,7 @@ public class Serializer extends BeanTraverseContext {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("addBeanTypes", addBeanTypes)

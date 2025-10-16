@@ -43,7 +43,7 @@ public class SimpleRestOperationArg implements RestOpArg {
 		this.function = (Function<RestOpSession,Object>)function;
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return function.apply(opSession);
 	}

@@ -192,4 +192,21 @@ public class NotAcceptable extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public NotAcceptable setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public NotAcceptable setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public NotAcceptable setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

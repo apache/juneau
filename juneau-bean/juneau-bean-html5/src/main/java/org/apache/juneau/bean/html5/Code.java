@@ -489,4 +489,16 @@ public class Code extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Code attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Code attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

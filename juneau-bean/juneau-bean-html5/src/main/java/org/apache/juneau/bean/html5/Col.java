@@ -486,4 +486,16 @@ public class Col extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Col attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Col attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

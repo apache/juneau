@@ -41,12 +41,12 @@ public class QueryMenuItem extends MenuItemWidget {
 			+ loadStyle(req, "styles/QueryMenuItem.css");
 	}
 
-	@Override /* MenuItemWidget */
+	@Override /* Overridden from MenuItemWidget */
 	public String getLabel(RestRequest req, RestResponse res) {
 		return "query";
 	}
 
-	@Override /* MenuItemWidget */
+	@Override /* Overridden from MenuItemWidget */
 	public String getContent(RestRequest req, RestResponse res) {
 		return loadHtml(req, "QueryMenuItem.html");
 	}

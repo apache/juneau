@@ -266,4 +266,10 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 		super.accessible();
 		return this;
 	}
+
+	@Override /* Overridden from ExecutableInfo */
+	public ConstructorInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+		super.forEachParam(filter, action);
+		return this;
+	}
 }

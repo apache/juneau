@@ -792,7 +792,7 @@ public class CallLogger {
 		return thrownStore.getStats(e).orElse(null);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("logger", logger)

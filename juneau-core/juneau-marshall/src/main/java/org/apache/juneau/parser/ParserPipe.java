@@ -357,7 +357,7 @@ public class ParserPipe implements Closeable {
 		return p;
 	}
 
-	@Override /* Closeable */
+	@Override /* Overridden from Closeable */
 	public void close() {
 		try {
 			if (doClose)

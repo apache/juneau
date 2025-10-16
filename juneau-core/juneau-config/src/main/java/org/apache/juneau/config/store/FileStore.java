@@ -121,12 +121,12 @@ public class FileStore extends ConfigStore {
 			extensions = copyFrom.extensions;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public FileStore build() {
 			return build(FileStore.class);
 		}
@@ -352,7 +352,7 @@ public class FileStore extends ConfigStore {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -393,7 +393,7 @@ public class FileStore extends ConfigStore {
 		}
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) throws IOException {
 		name = resolveName(name);
 
@@ -429,7 +429,7 @@ public class FileStore extends ConfigStore {
 		return cache.get(name);
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) throws IOException {
 		name = resolveName(name);
 
@@ -486,7 +486,7 @@ public class FileStore extends ConfigStore {
 		return null;
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized boolean exists(String name) {
 		return Files.exists(resolveFile(name));
 	}
@@ -547,14 +547,14 @@ public class FileStore extends ConfigStore {
 		return Files.isWritable(p);
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized FileStore update(String name, String newContents) {
 		cache.put(name, newContents);
 		super.update(name, newContents);
 		return this;
 	}
 
-	@Override /* Closeable */
+	@Override /* Overridden from Closeable */
 	public synchronized void close() {
 		if (watcher != null)
 			watcher.interrupt();
@@ -588,7 +588,7 @@ public class FileStore extends ConfigStore {
 		}
 
 		@SuppressWarnings("unchecked")
-		@Override /* Thread */
+		@Override /* Overridden from Thread */
 		public void run() {
 			try {
 				WatchKey key;
@@ -606,7 +606,7 @@ public class FileStore extends ConfigStore {
 			}
 		}
 
-		@Override /* Thread */
+		@Override /* Overridden from Thread */
 		public void interrupt() {
 			try {
 				watchService.close();
@@ -640,7 +640,7 @@ public class FileStore extends ConfigStore {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
 	}

@@ -159,12 +159,12 @@ public class HtmlLinkAnnotation {
 			postConstruct();
 		}
 
-		@Override /* HtmlLink */
+		@Override /* Overridden from HtmlLink */
 		public String nameProperty() {
 			return nameProperty;
 		}
 
-		@Override /* HtmlLink */
+		@Override /* Overridden from HtmlLink */
 		public String uriProperty() {
 			return uriProperty;
 		}

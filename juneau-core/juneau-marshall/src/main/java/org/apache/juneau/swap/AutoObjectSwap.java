@@ -170,7 +170,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 		this.unswapConstructor = unswapConstructor == null ? null : bc.getBeanConstructorVisibility().transform(unswapConstructor.inner());
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Object swap(BeanSession session, Object o) throws SerializeException {
 		try {
 			return swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
@@ -180,7 +180,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, Object f, ClassMeta<?> hint) throws ParseException {
 		try {
 			if (unswapMethod != null)

@@ -442,32 +442,32 @@ public class BasicResource implements HttpResource {
 	// Path-through methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public long getContentLength() {
 		return entity.getContentLength();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isRepeatable() {
 		return entity.isRepeatable();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isChunked() {
 		return entity.isChunked();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public Header getContentType() {
 		return entity.getContentType();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public Header getContentEncoding() {
 		return entity.getContentEncoding();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return entity.isStreaming();
 	}
@@ -475,17 +475,17 @@ public class BasicResource implements HttpResource {
 	@Override
 	public void consumeContent() throws IOException {}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public InputStream getContent() throws IOException, UnsupportedOperationException {
 		return entity.getContent();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream outStream) throws IOException {
 		entity.writeTo(outStream);
 	}
 
-	@Override /* HttpResource */
+	@Override /* Overridden from HttpResource */
 	public HeaderList getHeaders() {
 		return headers;
 	}

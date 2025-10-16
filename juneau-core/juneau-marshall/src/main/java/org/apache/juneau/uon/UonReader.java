@@ -64,7 +64,7 @@ public class UonReader extends ParserReader {
 		}
 	}
 
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public int read(char[] cbuf, int off, int len) throws IOException {
 
 		if (! decodeChars)
@@ -197,7 +197,7 @@ public class UonReader extends ParserReader {
 		throw new IOException("Invalid hex character '"+c+"' found in escape pattern.");
 	}
 
-	@Override /* ParserReader */
+	@Override /* Overridden from ParserReader */
 	public UonReader unread() throws IOException {
 		super.unread();
 		return this;

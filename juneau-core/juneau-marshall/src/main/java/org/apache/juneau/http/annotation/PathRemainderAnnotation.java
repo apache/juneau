@@ -212,27 +212,27 @@ public class PathRemainderAnnotation {
 			postConstruct();
 		}
 
-		@Override /* PathRemainder */
+		@Override /* Overridden from PathRemainder */
 		public String def() {
 			return def;
 		}
 
-		@Override /* PathRemainder */
+		@Override /* Overridden from PathRemainder */
 		public String[] description() {
 			return description;
 		}
 
-		@Override /* PathRemainder */
+		@Override /* Overridden from PathRemainder */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
-		@Override /* PathRemainder */
+		@Override /* Overridden from PathRemainder */
 		public Schema schema() {
 			return schema;
 		}
 
-		@Override /* PathRemainder */
+		@Override /* Overridden from PathRemainder */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
 		}

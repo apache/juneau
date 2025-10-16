@@ -150,7 +150,7 @@ public class Items extends OpenApiElement {
 		return new Items(this);
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	protected Items strict() {
 		super.strict();
 		return this;
@@ -676,7 +676,7 @@ public class Items extends OpenApiElement {
 		return this;
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -702,7 +702,7 @@ public class Items extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Items set(String property, Object value) {
 		assertArgNotNull("property", property);
 		return switch (property) {
@@ -731,7 +731,7 @@ public class Items extends OpenApiElement {
 		};
 	}
 
-	@Override /* SwaggerElement */
+	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		var s = setBuilder(String.class)
 			.addIf(ref != null, "$ref")

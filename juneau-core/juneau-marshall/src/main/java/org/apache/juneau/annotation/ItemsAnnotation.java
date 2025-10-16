@@ -516,172 +516,172 @@ public class ItemsAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String[] _default() {
 			return _default;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String[] _enum() {
 			return _enum;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String $ref() {
 			return $ref;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String cf() {
 			return cf;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String collectionFormat() {
 			return collectionFormat;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String[] df() {
 			return df;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String[] e() {
 			return e;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public boolean emax() {
 			return emax;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public boolean emin() {
 			return emin;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public boolean exclusiveMaximum() {
 			return exclusiveMaximum;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public boolean exclusiveMinimum() {
 			return exclusiveMinimum;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String f() {
 			return f;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String format() {
 			return format;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public SubItems items() {
 			return items;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String max() {
 			return max;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long maxi() {
 			return maxi;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String maximum() {
 			return maximum;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long maxItems() {
 			return maxItems;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long maxl() {
 			return maxl;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long maxLength() {
 			return maxLength;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String min() {
 			return min;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long mini() {
 			return mini;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String minimum() {
 			return minimum;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long minItems() {
 			return minItems;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long minl() {
 			return minl;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public long minLength() {
 			return minLength;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String mo() {
 			return mo;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String multipleOf() {
 			return multipleOf;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String p() {
 			return p;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String pattern() {
 			return pattern;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String t() {
 			return t;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public String type() {
 			return type;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public boolean ui() {
 			return ui;
 		}
 
-		@Override /* Items */
+		@Override /* Overridden from Items */
 		public boolean uniqueItems() {
 			return uniqueItems;
 		}

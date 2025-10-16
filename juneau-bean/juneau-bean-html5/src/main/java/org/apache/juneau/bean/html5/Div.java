@@ -489,4 +489,16 @@ public class Div extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Div attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Div attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

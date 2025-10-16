@@ -42,17 +42,17 @@ public class ResponseStatusLine implements StatusLine {
 		this.inner = inner;
 	}
 
-	@Override /* StatusLine */
+	@Override /* Overridden from StatusLine */
 	public ProtocolVersion getProtocolVersion() {
 		return inner.getProtocolVersion();
 	}
 
-	@Override /* StatusLine */
+	@Override /* Overridden from StatusLine */
 	public int getStatusCode() {
 		return inner.getStatusCode();
 	}
 
-	@Override /* StatusLine */
+	@Override /* Overridden from StatusLine */
 	public String getReasonPhrase() {
 		return inner.getReasonPhrase();
 	}
@@ -92,7 +92,7 @@ public class ResponseStatusLine implements StatusLine {
 	// Other methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return inner.toString();
 	}

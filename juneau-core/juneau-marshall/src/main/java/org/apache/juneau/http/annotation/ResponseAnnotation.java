@@ -196,27 +196,27 @@ public class ResponseAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Response */
+		@Override /* Overridden from Response */
 		public String[] examples() {
 			return examples;
 		}
 
-		@Override /* Response */
+		@Override /* Overridden from Response */
 		public Header[] headers() {
 			return headers;
 		}
 
-		@Override /* Response */
+		@Override /* Overridden from Response */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
-		@Override /* Response */
+		@Override /* Overridden from Response */
 		public Schema schema() {
 			return schema;
 		}
 
-		@Override /* Response */
+		@Override /* Overridden from Response */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
 		}

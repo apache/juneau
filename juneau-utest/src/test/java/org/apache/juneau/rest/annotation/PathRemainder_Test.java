@@ -285,5 +285,4 @@ class PathRemainder_Test extends TestBase {
 		f.get("/a/").run().assertContent("");
 		f.get("/a/custom").run().assertContent("custom");
 	}
-
 }

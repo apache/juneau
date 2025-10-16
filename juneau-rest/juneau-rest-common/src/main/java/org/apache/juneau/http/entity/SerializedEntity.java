@@ -149,7 +149,7 @@ public class SerializedEntity extends BasicHttpEntity {
 		return x;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream os) throws IOException {
 		try {
 			os = new NoCloseOutputStream(os);
@@ -169,17 +169,17 @@ public class SerializedEntity extends BasicHttpEntity {
 		}
 	}
 
-	@Override /* BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public boolean isRepeatable() {
 		return true;
 	}
 
-	@Override /* BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public long getContentLength() {
 		return -1;
 	}
 
-	@Override /* BasicHttpEntity */
+	@Override /* Overridden from BasicHttpEntity */
 	public InputStream getContent() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {

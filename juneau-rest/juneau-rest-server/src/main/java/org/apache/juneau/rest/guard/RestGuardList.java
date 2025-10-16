@@ -67,7 +67,7 @@ public class RestGuardList {
 			entries = list();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected RestGuardList buildDefault() {
 			return new RestGuardList(this);
 		}

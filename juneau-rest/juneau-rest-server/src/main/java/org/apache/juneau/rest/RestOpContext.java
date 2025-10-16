@@ -137,12 +137,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		private BeanStore beanStore;
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
 
-		@Override /* BeanContext.Builder */
+		@Override /* Overridden from BeanContext.Builder */
 		public RestOpContext build() {
 			try {
 				return beanStore.createBean(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
@@ -2660,7 +2660,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Context.Builder copy() {
 		throw new UnsupportedOperationException("Method not implemented.");
 	}
@@ -2669,7 +2669,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * compareTo() method is used to keep SimpleMethods ordered in the RestCallRouter list.
 	 * It maintains the order in which matches are made during requests.
 	 */
-	@Override /* Comparable */
+	@Override /* Overridden from Comparable */
 	public int compareTo(RestOpContext o) {
 		int c;
 
@@ -2717,17 +2717,17 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		return 0;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof RestOpContext) && Utils.eq(this, (RestOpContext)o, (x,y)->x.method.equals(y.method));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return method.hashCode();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("defaultRequestFormData", defaultRequestFormData)

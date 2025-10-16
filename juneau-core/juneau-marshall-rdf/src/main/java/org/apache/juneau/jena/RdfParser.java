@@ -140,17 +140,17 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public RdfParser build() {
 			return cache(CACHE).build(RdfParser.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1471,17 +1471,17 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		}
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public RdfParserSession.Builder createSession() {
 		return RdfParserSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public RdfParserSession getSession() {
 		return createSession().build();
 	}
@@ -1490,7 +1490,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* RdfMetaProvider */
+	@Override /* Overridden from RdfMetaProvider */
 	public RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
 		RdfClassMeta m = rdfClassMetas.get(cm);
 		if (m == null) {
@@ -1500,7 +1500,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* RdfMetaProvider */
+	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
 		RdfBeanMeta m = rdfBeanMetas.get(bm);
 		if (m == null) {
@@ -1510,7 +1510,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* RdfMetaProvider */
+	@Override /* Overridden from RdfMetaProvider */
 	public RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
 		RdfBeanPropertyMeta m = rdfBeanPropertyMetas.get(bpm);
 		if (m == null) {
@@ -1520,7 +1520,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlClassMeta getXmlClassMeta(ClassMeta<?> cm) {
 		XmlClassMeta m = xmlClassMetas.get(cm);
 		if (m == null) {
@@ -1530,7 +1530,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {
 		XmlBeanMeta m = xmlBeanMetas.get(bm);
 		if (m == null) {
@@ -1540,7 +1540,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		return m;
 	}
 
-	@Override /* XmlMetaProvider */
+	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
 		XmlBeanPropertyMeta m = xmlBeanPropertyMetas.get(bpm);
 		if (m == null) {
@@ -1643,7 +1643,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("trimWhitespace", trimWhitespace)

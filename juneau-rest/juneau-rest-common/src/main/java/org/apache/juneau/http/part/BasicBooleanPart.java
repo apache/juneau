@@ -112,7 +112,7 @@ public class BasicBooleanPart extends BasicPart {
 		this.supplier = null;
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getValue() {
 		return Utils.s(value());
 	}

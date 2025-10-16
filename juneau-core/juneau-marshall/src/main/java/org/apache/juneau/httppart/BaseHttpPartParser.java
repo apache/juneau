@@ -130,12 +130,12 @@ public abstract class BaseHttpPartParser extends BeanContextable implements Http
 		return getPartSession().parse(partType, schema, in, getClassMeta(toType, toTypeArgs));
 	}
 
-	@Override /* HttpPartParser */
+	@Override /* Overridden from HttpPartParser */
 	public <T> ClassMeta<T> getClassMeta(Class<T> c) {
 		return BeanContext.DEFAULT.getClassMeta(c);
 	}
 
-	@Override /* HttpPartParser */
+	@Override /* Overridden from HttpPartParser */
 	public <T> ClassMeta<T> getClassMeta(Type t, Type...args) {
 		return BeanContext.DEFAULT.getClassMeta(t, args);
 	}

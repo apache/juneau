@@ -70,7 +70,7 @@ public class MethodExecStats {
 			super(MethodExecStats.class, beanStore);
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected MethodExecStats buildDefault() {
 			return new MethodExecStats(this);
 		}
@@ -275,7 +275,7 @@ public class MethodExecStats {
 		return thrownStore;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(this);
 	}

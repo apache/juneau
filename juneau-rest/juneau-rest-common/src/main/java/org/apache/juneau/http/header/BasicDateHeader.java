@@ -152,7 +152,7 @@ public class BasicDateHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		ZonedDateTime x = value();
 		return x == null ? null : RFC_1123_DATE_TIME.format(x);

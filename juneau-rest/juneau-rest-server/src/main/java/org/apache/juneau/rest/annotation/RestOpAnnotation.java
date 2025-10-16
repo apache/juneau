@@ -446,132 +446,132 @@ public class RestOpAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] consumes() {
 			return consumes;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String defaultContentType() {
 			return defaultContentType;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] defaultRequestFormData() {
 			return defaultRequestFormData;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String maxInput() {
 			return maxInput;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String method() {
 			return method;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestOp */
+		@Override /* Overridden from RestOp */
 		public String value() {
 			return value;
 		}

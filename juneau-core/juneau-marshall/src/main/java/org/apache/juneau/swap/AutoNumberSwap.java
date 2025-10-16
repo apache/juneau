@@ -209,7 +209,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 		this.unswapType = unswapType;
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public Number swap(BeanSession session, Object o) throws SerializeException {
 		try {
 			return (Number)swapMethod.invoke(o, getMatchingArgs(swapMethod.getParameterTypes(), session));
@@ -219,7 +219,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public T unswap(BeanSession session, Number o, ClassMeta<?> hint) throws ParseException {
 		if (unswapType == null)
 			throw new ParseException("No unparse methodology found for object.");

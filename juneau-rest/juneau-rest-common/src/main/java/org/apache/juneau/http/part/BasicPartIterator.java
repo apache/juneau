@@ -72,12 +72,12 @@ public class BasicPartIterator implements PartIterator {
 		return (name == null) || eq(name, entries[index].getName());
 	}
 
-	@Override /* Iterator */
+	@Override /* Overridden from Iterator */
 	public boolean hasNext() {
 		return (currentIndex >= 0);
 	}
 
-	@Override /* Iterator */
+	@Override /* Overridden from Iterator */
 	public NameValuePair next() throws NoSuchElementException {
 
 		int current = currentIndex;
@@ -93,7 +93,7 @@ public class BasicPartIterator implements PartIterator {
 	/**
 	 * Not supported.
 	 */
-	@Override /* Iterator */
+	@Override /* Overridden from Iterator */
 	public void remove() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException("Not supported.");
 	}

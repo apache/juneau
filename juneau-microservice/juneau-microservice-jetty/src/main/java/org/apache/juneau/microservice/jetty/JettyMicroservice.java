@@ -155,7 +155,7 @@ public class JettyMicroservice extends Microservice {
 			this.listener = copyFrom.listener;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -349,91 +349,91 @@ public class JettyMicroservice extends Microservice {
 		// Inherited from MicroserviceBuilder
 		//-----------------------------------------------------------------------------------------------------------------
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public JettyMicroservice build() throws Exception {
 			return new JettyMicroservice(this);
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder args(Args args) {
 			super.args(args);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder args(String...args) {
 			super.args(args);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder manifest(Object manifest) throws IOException {
 			super.manifest(manifest);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder logger(Logger logger) {
 			super.logger(logger);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder config(Config config) {
 			super.config(config);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder configName(String configName) {
 			super.configName(configName);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder configStore(ConfigStore configStore) {
 			super.configStore(configStore);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder consoleEnabled(boolean consoleEnabled) {
 			super.consoleEnabled(consoleEnabled);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
 			super.consoleCommands(consoleCommands);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder console(Scanner consoleReader, PrintWriter consoleWriter) {
 			super.console(consoleReader, consoleWriter);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		@SuppressWarnings("unchecked")
 		public Builder vars(Class<? extends Var>...vars) {
 			super.vars(vars);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public <T> Builder varBean(Class<T> c, T value) {
 			super.varBean(c, value);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder workingDir(File path) {
 			super.workingDir(path);
 			return this;
 		}
 
-		@Override /* MicroserviceBuilder */
+		@Override /* Overridden from MicroserviceBuilder */
 		public Builder workingDir(String path) {
 			super.workingDir(path);
 			return this;
@@ -483,25 +483,25 @@ public class JettyMicroservice extends Microservice {
 	// Methods implemented on Microservice API
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Microservice */
+	@Override /* Overridden from Microservice */
 	public synchronized JettyMicroservice init() throws ParseException, IOException {
 		super.init();
 		return this;
 	}
 
-	@Override /* Microservice */
+	@Override /* Overridden from Microservice */
 	public synchronized JettyMicroservice startConsole() throws Exception {
 		super.startConsole();
 		return this;
 	}
 
-	@Override /* Microservice */
+	@Override /* Overridden from Microservice */
 	public synchronized JettyMicroservice stopConsole() throws Exception {
 		super.stopConsole();
 		return this;
 	}
 
-	@Override /* Microservice */
+	@Override /* Overridden from Microservice */
 	public synchronized JettyMicroservice start() throws Exception {
 		super.start();
 		createServer();
@@ -509,18 +509,18 @@ public class JettyMicroservice extends Microservice {
 		return this;
 	}
 
-	@Override /* Microservice */
+	@Override /* Overridden from Microservice */
 	public JettyMicroservice join() throws Exception {
 		server.join();
 		return this;
 	}
 
-	@Override /* Microservice */
+	@Override /* Overridden from Microservice */
 	public synchronized JettyMicroservice stop() throws Exception {
 		final Logger logger = getLogger();
 		final Messages mb2 = messages;
 		Thread t = new Thread("JettyMicroserviceStop") {
-			@Override /* Thread */
+			@Override /* Overridden from Thread */
 			public void run() {
 				try {
 					if (server == null || server.isStopping() || server.isStopped())

@@ -1165,7 +1165,7 @@ public abstract class HtmlElement {
 		}
 		return value;
 	}
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(this);
 	}

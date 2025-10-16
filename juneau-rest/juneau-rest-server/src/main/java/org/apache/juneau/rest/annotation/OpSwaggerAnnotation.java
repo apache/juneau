@@ -249,57 +249,57 @@ public class OpSwaggerAnnotation {
 			postConstruct();
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] consumes() {
 			return consumes;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String deprecated() {
 			return deprecated;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public ExternalDocs externalDocs() {
 			return externalDocs;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String operationId() {
 			return operationId;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] parameters() {
 			return parameters;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] responses() {
 			return responses;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] schemes() {
 			return schemes;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] summary() {
 			return summary;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] tags() {
 			return tags;
 		}
 
-		@Override /* OpSwagger */
+		@Override /* Overridden from OpSwagger */
 		public String[] value() {
 			return value;
 		}

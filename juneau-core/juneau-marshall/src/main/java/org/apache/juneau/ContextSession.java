@@ -263,7 +263,7 @@ public abstract class ContextSession {
 		return filteredMap("debug", debug);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Utils2.toPropertyMap(this).asReadableString();
 	}

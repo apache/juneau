@@ -56,7 +56,7 @@ public class DebugEnablementMap extends ReflectionMap<Enablement> {
 		protected Builder() {
 		}
 
-		@Override /* ReflectionMapBuilder */
+		@Override /* Overridden from ReflectionMapBuilder */
 		public DebugEnablementMap build() {
 			return new DebugEnablementMap(this);
 		}

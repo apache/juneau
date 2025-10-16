@@ -45,7 +45,7 @@ public abstract class MapVar extends DefaultingVar {
 		this.m = m;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String varVal) {
 		return Utils.s(m.get(varVal));
 	}

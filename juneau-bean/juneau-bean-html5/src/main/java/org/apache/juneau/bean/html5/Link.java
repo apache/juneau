@@ -655,4 +655,16 @@ public class Link extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Link attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

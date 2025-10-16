@@ -431,44 +431,44 @@ public class BasicHttpEntity implements HttpEntity {
 		return contentSupplier != null;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public long getContentLength() {
 		return contentLength;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isRepeatable() {
 		return false;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isChunked() {
 		return chunked;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public Header getContentType() {
 		return contentType;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public Header getContentEncoding() {
 		return contentEncoding;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return false;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void consumeContent() throws IOException {}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public InputStream getContent() throws IOException, UnsupportedOperationException {
 		return IOUtils.EMPTY_INPUT_STREAM;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream outStream) throws IOException {}
 }

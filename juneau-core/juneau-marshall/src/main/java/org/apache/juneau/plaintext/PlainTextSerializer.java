@@ -106,17 +106,17 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public PlainTextSerializer build() {
 			return cache(CACHE).build(PlainTextSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return super.hashKey();
 		}
@@ -784,17 +784,17 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public  PlainTextSerializerSession.Builder createSession() {
 		return PlainTextSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public PlainTextSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -803,7 +803,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* PlainTextMetaProvider */
+	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextClassMeta getPlainTextClassMeta(ClassMeta<?> cm) {
 		PlainTextClassMeta m = plainTextClassMetas.get(cm);
 		if (m == null) {
@@ -813,7 +813,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		return m;
 	}
 
-	@Override /* PlainTextMetaProvider */
+	@Override /* Overridden from PlainTextMetaProvider */
 	public PlainTextBeanPropertyMeta getPlainTextBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return PlainTextBeanPropertyMeta.DEFAULT;

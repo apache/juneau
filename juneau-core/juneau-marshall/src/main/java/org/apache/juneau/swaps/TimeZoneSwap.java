@@ -30,12 +30,12 @@ import org.apache.juneau.swap.*;
  */
 public class TimeZoneSwap extends StringSwap<TimeZone> {
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, TimeZone o) throws Exception {
 		return o.getID();
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public TimeZone unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
 		return TimeZone.getTimeZone(o);
 	}

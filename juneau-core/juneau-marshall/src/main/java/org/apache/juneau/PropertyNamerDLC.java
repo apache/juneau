@@ -39,7 +39,7 @@ public class PropertyNamerDLC implements PropertyNamer {
 	/** Reusable instance. */
 	public static final PropertyNamer INSTANCE = new PropertyNamerDLC();
 
-	@Override /* PropertyNamer */
+	@Override /* Overridden from PropertyNamer */
 	public String getPropertyName(String name) {
 		if (Utils.isEmpty(name))
 			return name;

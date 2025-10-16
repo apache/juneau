@@ -675,7 +675,7 @@ public class Microservice implements ConfigEventListener {
 				}
 			}
 			consoleThread = new Thread("ConsoleThread") {
-				@Override /* Thread */
+				@Override /* Overridden from Thread */
 				public void run() {
 					Scanner in = getConsoleReader();
 					PrintWriter out = getConsoleWriter();
@@ -837,7 +837,7 @@ public class Microservice implements ConfigEventListener {
 
 		Runtime.getRuntime().addShutdownHook(
 			new Thread("ShutdownHookThread") {
-				@Override /* Thread */
+				@Override /* Overridden from Thread */
 				public void run() {
 					try {
 						Microservice.this.stop();
@@ -1223,7 +1223,7 @@ public class Microservice implements ConfigEventListener {
 		getLogger().log(level, msg);
 	}
 
-	@Override /* ConfigChangeListener */
+	@Override /* Overridden from ConfigChangeListener */
 	public void onConfigChange(ConfigEvents events) {
 		listener.onConfigChange(this, events);
 	}

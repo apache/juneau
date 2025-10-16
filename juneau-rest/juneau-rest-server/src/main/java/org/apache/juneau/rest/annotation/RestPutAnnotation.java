@@ -427,127 +427,127 @@ public class RestPutAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] consumes() {
 			return consumes;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String defaultContentType() {
 			return defaultContentType;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] defaultRequestFormData() {
 			return defaultRequestFormData;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String maxInput() {
 			return maxInput;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestPut */
+		@Override /* Overridden from RestPut */
 		public String value() {
 			return value;
 		}

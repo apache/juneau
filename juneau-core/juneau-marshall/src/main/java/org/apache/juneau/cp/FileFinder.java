@@ -141,7 +141,7 @@ public interface FileFinder {
 			exclude = new Pattern[0];
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected FileFinder buildDefault() {
 			return new BasicFileFinder(this);
 		}

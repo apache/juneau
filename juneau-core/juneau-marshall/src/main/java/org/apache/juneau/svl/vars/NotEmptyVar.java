@@ -47,7 +47,7 @@ public class NotEmptyVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@Override /* Parameter */
+	@Override /* Overridden from Parameter */
 	public String resolve(VarResolverSession session, String key) {
 		return String.valueOf(! key.trim().isEmpty());
 	}

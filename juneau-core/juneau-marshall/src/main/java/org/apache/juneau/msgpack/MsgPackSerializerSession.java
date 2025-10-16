@@ -196,7 +196,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 		ctx = builder.ctx;
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getMsgPackOutputStream(out), o, getExpectedRootType(o), "root", null);
 	}

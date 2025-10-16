@@ -92,4 +92,26 @@ public class SpringBeanStore extends BeanStore {
 		}
 		return Collections.emptyList().stream().map(x -> (BeanStoreEntry<T>)x);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Overridden methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from BeanStore */
+	public SpringBeanStore clear() {
+		super.clear();
+		return this;
+	}
+
+	@Override /* Overridden from BeanStore */
+	public SpringBeanStore removeBean(Class<?> beanType) {
+		super.removeBean(beanType);
+		return this;
+	}
+
+	@Override /* Overridden from BeanStore */
+	public SpringBeanStore removeBean(Class<?> beanType, String name) {
+		super.removeBean(beanType, name);
+		return this;
+	}
 }

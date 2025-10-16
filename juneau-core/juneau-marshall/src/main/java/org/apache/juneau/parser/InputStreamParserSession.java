@@ -183,7 +183,7 @@ public class InputStreamParserSession extends ParserSession {
 		this.ctx = builder.ctx;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	public final boolean isReaderParser() {
 		return false;
 	}
@@ -206,7 +206,7 @@ public class InputStreamParserSession extends ParserSession {
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
 	@SuppressWarnings("resource")
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	public final ParserPipe createPipe(Object input) {
 		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), ctx.getBinaryFormat()));
 	}

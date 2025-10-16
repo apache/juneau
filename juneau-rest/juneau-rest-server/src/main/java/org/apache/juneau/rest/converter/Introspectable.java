@@ -61,7 +61,7 @@ public class Introspectable implements RestConverter {
 		+ "{in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}"
 	;
 
-	@Override /* RestConverter */
+	@Override /* Overridden from RestConverter */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public Object convert(RestRequest req, Object o) throws InternalServerError {
 		String method = req.getQueryParam("invokeMethod").orElse(null);

@@ -42,7 +42,7 @@ import org.apache.juneau.rest.*;
  */
 public class ResponseBeanProcessor implements ResponseProcessor {
 
-	@Override /* ResponseProcessor */
+	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException {
 
 		RestRequest req = opSession.getRequest();

@@ -188,7 +188,7 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		super(builder);
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (MsgPackInputStream is = new MsgPackInputStream(pipe)) {
 			return parseAnything(type, is, getOuter(), null);

@@ -276,12 +276,12 @@ public class WriterSerializerSession extends SerializerSession {
 		useWhitespace = builder.useWhitespace;
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	public final boolean isWriterSerializer() {
 		return true;
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected SerializerPipe createPipe(Object output) {
 		return new SerializerPipe(output, streamCharset, fileCharset);
 	}
@@ -293,7 +293,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	public final String serialize(Object o) throws SerializeException {
 		StringWriter w = new StringWriter();
 		try {
@@ -304,7 +304,7 @@ public class WriterSerializerSession extends SerializerSession {
 		return w.toString();
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		return serialize(o);
 	}
@@ -368,7 +368,7 @@ public class WriterSerializerSession extends SerializerSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}

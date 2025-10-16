@@ -38,12 +38,12 @@ public class StackTraceElementSwap extends ObjectSwap<StackTraceElement,String> 
 	/**
 	 * Converts the specified {@link Enumeration} to a {@link List}.
 	 */
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, StackTraceElement o) {
 		return o.toString();
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public StackTraceElement unswap(BeanSession session, String in, ClassMeta<?> hint) {
 		String methodName = "", fileName = null;
 		int lineNumber = -1;

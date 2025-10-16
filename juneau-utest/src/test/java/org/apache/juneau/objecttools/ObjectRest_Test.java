@@ -235,7 +235,7 @@ class ObjectRest_Test extends TestBase {
 			this.zip = zip;
 			this.isCurrent = isCurrent;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "Address(street="+street+",city="+city+",state="+state+",zip="+zip+",isCurrent="+isCurrent+")";
 		}
@@ -255,7 +255,7 @@ class ObjectRest_Test extends TestBase {
 			this.addresses = addresses;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "Person(name="+name+",age="+age+")";
 		}

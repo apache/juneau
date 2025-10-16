@@ -389,97 +389,97 @@ public class BeanAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public Class<?>[] dictionary() {
 			return dictionary;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String example() {
 			return example;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String excludeProperties() {
 			return excludeProperties;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public boolean findFluentSetters() {
 			return findFluentSetters;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public Class<?> implClass() {
 			return implClass;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public Class<? extends BeanInterceptor<?>> interceptor() {
 			return interceptor;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public Class<?> interfaceClass() {
 			return interfaceClass;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String p() {
 			return p;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String properties() {
 			return properties;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public Class<? extends PropertyNamer> propertyNamer() {
 			return propertyNamer;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String readOnlyProperties() {
 			return readOnlyProperties;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String ro() {
 			return ro;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public boolean sort() {
 			return sort;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public Class<?> stopClass() {
 			return stopClass;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String typeName() {
 			return typeName;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String typePropertyName() {
 			return typePropertyName;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String writeOnlyProperties() {
 			return writeOnlyProperties;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String wo() {
 			return wo;
 		}
 
-		@Override /* Bean */
+		@Override /* Overridden from Bean */
 		public String xp() {
 			return xp;
 		}

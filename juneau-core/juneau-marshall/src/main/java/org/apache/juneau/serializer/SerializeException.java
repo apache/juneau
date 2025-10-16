@@ -127,9 +127,15 @@ public class SerializeException extends BasicRuntimeException {
 	 * @param cause The inner cause.
 	 * @return This object.
 	 */
-	@Override /* Throwable */
+	@Override /* Overridden from Throwable */
 	public synchronized SerializeException initCause(Throwable cause) {
 		super.initCause(cause);
+		return this;
+	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public SerializeException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
 		return this;
 	}
 }

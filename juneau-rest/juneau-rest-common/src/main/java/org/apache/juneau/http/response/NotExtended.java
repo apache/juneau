@@ -192,4 +192,21 @@ public class NotExtended extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public NotExtended setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public NotExtended setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public NotExtended setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

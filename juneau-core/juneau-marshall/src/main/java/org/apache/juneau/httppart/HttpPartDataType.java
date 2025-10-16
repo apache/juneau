@@ -75,7 +75,7 @@ public enum HttpPartDataType {
 		return valueOf(value.toUpperCase());
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return name().toLowerCase();
 	}

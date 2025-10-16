@@ -133,7 +133,7 @@ public class VarResolver {
 			vars = VarList.of(copyFrom.vars);
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected VarResolver buildDefault() {
 			return new VarResolver(this);
 		}

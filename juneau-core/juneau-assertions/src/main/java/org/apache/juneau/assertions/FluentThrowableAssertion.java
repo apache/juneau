@@ -157,7 +157,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {  // NOSONAR - Intentional.
 		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
 	}

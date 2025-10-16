@@ -100,7 +100,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		return null;
 	}
 
-	@Override /* ObjectTool */
+	@Override /* Overridden from ObjectTool */
 	public Object run(BeanSession session, Object input, SortArgs args) {
 		if (input == null)
 			return null;

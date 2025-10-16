@@ -112,7 +112,7 @@ public class BasicIntegerPart extends BasicPart {
 		this.supplier = null;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		return Utils.s(value());
 	}

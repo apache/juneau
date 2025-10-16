@@ -172,17 +172,17 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			generatorBuilder = copyFrom.generatorBuilder.copy().beanContext(beanContext());
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HtmlSchemaSerializer build() {
 			return cache(CACHE).build(HtmlSchemaSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1105,17 +1105,17 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		generator = builder.generatorBuilder.build();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlSchemaSerializerSession.Builder createSession() {
 		return HtmlSchemaSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public HtmlSchemaSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1128,7 +1128,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("generator", generator);
 	}

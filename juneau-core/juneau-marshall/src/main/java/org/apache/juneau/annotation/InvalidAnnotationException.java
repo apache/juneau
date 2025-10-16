@@ -56,4 +56,10 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 		if (a != null)
 			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", a.getClass().getSimpleName(), onMethod.getDeclaringClass().getSimpleName(), onMethod);
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public InvalidAnnotationException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

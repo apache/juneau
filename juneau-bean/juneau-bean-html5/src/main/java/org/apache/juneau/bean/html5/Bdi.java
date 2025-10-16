@@ -470,4 +470,16 @@ public class Bdi extends HtmlElementText {
 		super.text(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdi attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdi attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

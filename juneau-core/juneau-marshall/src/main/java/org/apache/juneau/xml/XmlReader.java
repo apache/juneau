@@ -86,232 +86,232 @@ public class XmlReader implements XMLStreamReader, Positionable {
 		return pipe;
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public void close() throws XMLStreamException {
 		sr.close();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int getAttributeCount() {
 		return sr.getAttributeCount();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getAttributeLocalName(int index) {
 		return sr.getAttributeLocalName(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public QName getAttributeName(int index) {
 		return sr.getAttributeName(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getAttributeNamespace(int index) {
 		return sr.getAttributeNamespace(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getAttributePrefix(int index) {
 		return sr.getAttributePrefix(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getAttributeType(int index) {
 		return sr.getAttributeType(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getAttributeValue(int index) {
 		return sr.getAttributeValue(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getAttributeValue(String namespaceURI, String localName) {
 		return sr.getAttributeValue(namespaceURI, localName);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getCharacterEncodingScheme() {
 		return sr.getCharacterEncodingScheme();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getElementText() throws XMLStreamException {
 		return sr.getElementText();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getEncoding() {
 		return sr.getEncoding();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int getEventType() {
 		return sr.getEventType();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getLocalName() {
 		return sr.getLocalName();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public Location getLocation() {
 		return sr.getLocation();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public QName getName() {
 		return sr.getName();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public NamespaceContext getNamespaceContext() {
 		return sr.getNamespaceContext();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int getNamespaceCount() {
 		return sr.getNamespaceCount();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getNamespacePrefix(int index) {
 		return sr.getNamespacePrefix(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getNamespaceURI() {
 		return sr.getNamespaceURI();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getNamespaceURI(String prefix) {
 		return sr.getNamespaceURI(prefix);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getNamespaceURI(int index) {
 		return sr.getNamespaceURI(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getPIData() {
 		return sr.getPIData();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getPITarget() {
 		return sr.getPITarget();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getPrefix() {
 		return sr.getPrefix();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public Object getProperty(String name) throws IllegalArgumentException {
 		return sr.getProperty(name);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getText() {
 		return sr.getText();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public char[] getTextCharacters() {
 		return sr.getTextCharacters();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int getTextCharacters(int sourceStart, char[] target, int targetStart, int length) throws XMLStreamException {
 		return sr.getTextCharacters(sourceStart, target, targetStart, length);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int getTextLength() {
 		return sr.getTextLength();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int getTextStart() {
 		return sr.getTextStart();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public String getVersion() {
 		return sr.getVersion();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean hasName() {
 		return sr.hasName();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean hasNext() throws XMLStreamException {
 		return sr.hasNext();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean hasText() {
 		return sr.hasText();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean isAttributeSpecified(int index) {
 		return sr.isAttributeSpecified(index);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean isCharacters() {
 		return sr.isCharacters();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean isEndElement() {
 		return sr.isEndElement();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean isStandalone() {
 		return sr.isStandalone();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean isStartElement() {
 		return sr.isStartElement();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean isWhiteSpace() {
 		return sr.isWhiteSpace();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int next() throws XMLStreamException {
 		return sr.next();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public int nextTag() throws XMLStreamException {
 		return sr.nextTag();
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public void require(int type, String namespaceURI, String localName) throws XMLStreamException {
 		sr.require(type, namespaceURI, localName);
 	}
 
-	@Override /* XMLStreamReader */
+	@Override /* Overridden from XMLStreamReader */
 	public boolean standaloneSet() {
 		return sr.standaloneSet();
 	}
 
-	@Override /* Positionable */
+	@Override /* Overridden from Positionable */
 	public Position getPosition() {
 		Location l = getLocation();
 		return new Position(l.getLineNumber(), l.getColumnNumber());

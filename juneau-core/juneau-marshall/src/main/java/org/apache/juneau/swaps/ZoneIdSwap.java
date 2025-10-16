@@ -30,12 +30,12 @@ import org.apache.juneau.swap.*;
  */
 public class ZoneIdSwap extends StringSwap<ZoneId> {
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, ZoneId o) throws Exception {
 		return o.getId();
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public ZoneId unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
 		return ZoneId.of(o);
 	}

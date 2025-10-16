@@ -148,12 +148,12 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		this.supplier = copyFrom.supplier;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getName() {
 		return name;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null)
 			return Utils.s(supplier.get());
@@ -258,7 +258,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		return asString().orElse(other);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		// Functionality provided for HttpRequest.removeHeader().
 		// Not a perfect equality operator if using SVL vars.
@@ -267,13 +267,13 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 		return Utils.eq(this, (Header)o, (x,y)->Utils.eq(x.name, y.getName()) && Utils.eq(x.getValue(), y.getValue()));
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		// Implemented since we override equals(Object).
 		return super.hashCode();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return getName() + ": " + getValue();
 	}

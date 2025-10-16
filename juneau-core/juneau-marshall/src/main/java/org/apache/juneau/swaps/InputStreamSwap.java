@@ -41,7 +41,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		/**
 		 * Converts the specified {@link InputStream} to a {@link String}.
 		 */
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public String swap(BeanSession session, InputStream is) throws Exception {
 			return base64Encode(toBytes(is));
 		}
@@ -49,7 +49,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		/**
 		 * Converts the specified {@link String} to an {@link InputStream}.
 		 */
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public InputStream unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
 			return toStream(base64Decode(s), hint);
 		}
@@ -62,7 +62,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		/**
 		 * Converts the specified {@link InputStream} to a {@link String}.
 		 */
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public String swap(BeanSession session, InputStream is) throws Exception {
 			return toHex(toBytes(is));
 		}
@@ -70,7 +70,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		/**
 		 * Converts the specified {@link String} to an {@link InputStream}.
 		 */
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public InputStream unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
 			return toStream(fromHex(s), hint);
 		}
@@ -83,7 +83,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		/**
 		 * Converts the specified {@link InputStream} to a {@link String}.
 		 */
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public String swap(BeanSession session, InputStream is) throws Exception {
 			return toSpacedHex(toBytes(is));
 		}
@@ -91,7 +91,7 @@ public abstract class InputStreamSwap extends StringSwap<InputStream> {
 		/**
 		 * Converts the specified {@link String} to an {@link InputStream}.
 		 */
-		@Override /* ObjectSwap */
+		@Override /* Overridden from ObjectSwap */
 		public InputStream unswap(BeanSession session, String s, ClassMeta<?> hint) throws Exception {
 			return toStream(fromSpacedHex(s), hint);
 		}

@@ -104,4 +104,20 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 	 */
 	public ChildResourceDescriptions() {
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Overridden setters (to simplify method chaining)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from ResourceDescriptions */
+	public ChildResourceDescriptions append(String name, String description) {
+		super.append(name, description);
+		return this;
+	}
+
+	@Override /* Overridden from ResourceDescriptions */
+	public ChildResourceDescriptions append(String name, String uri, String description) {
+		super.append(name, uri, description);
+		return this;
+	}
 }

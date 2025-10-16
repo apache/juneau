@@ -146,7 +146,7 @@ class Enum_RoundTripTest extends RoundTripTest_Base {
 			this.val = val;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return val;
 		}

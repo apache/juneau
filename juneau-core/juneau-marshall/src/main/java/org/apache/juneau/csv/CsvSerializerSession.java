@@ -212,7 +212,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 
 		try (CsvWriter w = getCsvWriter(pipe)) {
@@ -295,7 +295,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		try {
 			if (value == null || type == null)
 				return value;
-			
+
 			org.apache.juneau.swap.ObjectSwap swap = type.getSwap(this);
 			if (swap != null) {
 				return swap(swap, value);

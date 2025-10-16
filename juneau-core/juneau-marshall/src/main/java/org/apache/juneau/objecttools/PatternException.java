@@ -40,4 +40,10 @@ public class PatternException extends BasicRuntimeException {
 	public PatternException(String message, Object...args) {
 		super(message, args);
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public PatternException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

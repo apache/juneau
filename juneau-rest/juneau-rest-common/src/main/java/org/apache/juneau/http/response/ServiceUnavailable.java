@@ -193,4 +193,21 @@ public class ServiceUnavailable extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public ServiceUnavailable setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public ServiceUnavailable setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public ServiceUnavailable setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

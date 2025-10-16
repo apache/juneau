@@ -152,27 +152,27 @@ public class JsonList extends LinkedList<Object> {
 	public static final JsonList EMPTY_LIST = new JsonList() {
 		private static final long serialVersionUID = 1L;
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public void add(int location, Object object) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public ListIterator<Object> listIterator(final int location) {
 			return Collections.emptyList().listIterator(location);
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public Object remove(int location) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public List<Object> subList(int start, int end) {
 			return Collections.emptyList().subList(start, end);
 		}
@@ -889,17 +889,17 @@ public class JsonList extends LinkedList<Object> {
 		final Iterator<?> iterator = iterator();
 		return () -> new Iterator<>() {
 
-			@Override /* Iterator */
+			@Override /* Overridden from Iterator */
 			public boolean hasNext() {
 				return iterator.hasNext();
 			}
 
-			@Override /* Iterator */
+			@Override /* Overridden from Iterator */
 			public E next() {
 				return bs().convertToType(iterator.next(), childType);
 			}
 
-			@Override /* Iterator */
+			@Override /* Overridden from Iterator */
 			public void remove() {
 				iterator.remove();
 			}
@@ -1029,17 +1029,17 @@ public class JsonList extends LinkedList<Object> {
 				this.forEach(super::add);
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public void add(int location, Object object) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public Object remove(int location) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
-		@Override /* List */
+		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
 			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
@@ -1063,7 +1063,7 @@ public class JsonList extends LinkedList<Object> {
 		return toString();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(this);
 	}

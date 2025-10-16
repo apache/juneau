@@ -146,7 +146,7 @@ public class UrlEncodingAnnotation {
 			postConstruct();
 		}
 
-		@Override /* UrlEncoding */
+		@Override /* Overridden from UrlEncoding */
 		public boolean expandedParams() {
 			return expandedParams;
 		}

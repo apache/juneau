@@ -214,7 +214,7 @@ public class ConfigEvent {
 		return modifiers;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return switch (type) {
 			case REMOVE_SECTION -> "REMOVE_SECTION(" + section + ")";

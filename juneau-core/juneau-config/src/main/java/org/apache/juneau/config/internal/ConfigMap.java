@@ -580,7 +580,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return u(listeners);
 	}
 
-	@Override /* ConfigStoreListener */
+	@Override /* Overridden from ConfigStoreListener */
 	public void onChange(String newContents) {
 		ConfigEvents changes2 = null;
 		try (var x = lock.write()) {
@@ -598,7 +598,7 @@ public class ConfigMap implements ConfigStoreListener {
 			signal(changes2);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		try (var x = lock.read()) {
 			return asString();

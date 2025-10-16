@@ -397,7 +397,7 @@ public class SerializerWriter extends Writer {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public SerializerWriter append(char c) {
 		try {
 			out.write(c);
@@ -407,7 +407,7 @@ public class SerializerWriter extends Writer {
 		return this;
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void write(char[] cbuf, int off, int len) {
 		try {
 			out.write(cbuf, off, len);
@@ -416,12 +416,12 @@ public class SerializerWriter extends Writer {
 		}
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void flush() throws IOException {
 		out.flush();
 	}
 
-	@Override /* Writer */
+	@Override /* Overridden from Writer */
 	public void close() throws IOException {
 		out.close();
 	}

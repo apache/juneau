@@ -210,42 +210,42 @@ public class SwaggerAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public Contact contact() {
 			return contact;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public ExternalDocs externalDocs() {
 			return externalDocs;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public License license() {
 			return license;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public Tag[] tags() {
 			return tags;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public String[] termsOfService() {
 			return termsOfService;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public String[] title() {
 			return title;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public String[] value() {
 			return value;
 		}
 
-		@Override /* Swagger */
+		@Override /* Overridden from Swagger */
 		public String version() {
 			return version;
 		}

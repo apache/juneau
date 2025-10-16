@@ -96,7 +96,7 @@ public class MockLogger extends Logger {
 		return new MockLogger();
 	}
 
-	@Override /* Logger */
+	@Override /* Overridden from Logger */
 	public synchronized void log(LogRecord record) {
 		logRecords.add(record);
 		try {

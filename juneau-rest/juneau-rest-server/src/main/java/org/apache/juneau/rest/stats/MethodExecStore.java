@@ -81,7 +81,7 @@ public class MethodExecStore {
 			super(MethodExecStore.class, beanStore);
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected MethodExecStore buildDefault() {
 			return new MethodExecStore(this);
 		}

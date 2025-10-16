@@ -88,7 +88,7 @@ public class ParserReader extends Reader implements Positionable {
 	 * @return The character read, or -1 if the end of the stream has been reached.
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public final int read() throws IOException {
 		int c = readFromBuff();
 		if (c == -1)
@@ -286,7 +286,7 @@ public class ParserReader extends Reader implements Positionable {
 	 *
 	 * @throws IOException If a problem occurred trying to read from the reader.
 	 */
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public void close() throws IOException {
 		// No-op
 	}
@@ -428,12 +428,12 @@ public class ParserReader extends Reader implements Positionable {
 	 * <p>
 	 * Default implementation simply calls the same method on the underlying reader.
 	 */
-	@Override /* Reader */
+	@Override /* Overridden from Reader */
 	public int read(char[] cbuf, int off, int len) throws IOException {
 		return unbuffered ? r.read(cbuf, off, 1) : r.read(cbuf, off, len);
 	}
 
-	@Override /* Positionable */
+	@Override /* Overridden from Positionable */
 	public Position getPosition() {
 		return new Position(line, column);
 	}

@@ -86,7 +86,7 @@ public class FileEntity extends BasicHttpEntity {
 		return f;
 	}
 
-	@Override /* AbstractHttpEntity */
+	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
 			stringCache = read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());
@@ -95,7 +95,7 @@ public class FileEntity extends BasicHttpEntity {
 		return read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());
 	}
 
-	@Override /* AbstractHttpEntity */
+	@Override /* Overridden from AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
 		if (isCached() && byteCache == null)
 			byteCache = readBytes(content(), getMaxLength());
@@ -104,24 +104,24 @@ public class FileEntity extends BasicHttpEntity {
 		return readBytes(content());
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isRepeatable() {
 		return true;
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public long getContentLength() {
 		return content().length();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public InputStream getContent() throws IOException {
 		if (isCached())
 			return new ByteArrayInputStream(asBytes());
 		return new FileInputStream(content());
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		Utils.assertArgNotNull("out", out);
 

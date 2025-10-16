@@ -237,7 +237,7 @@ public class ReaderParserSession extends ParserSession {
 		streamCharset = builder.streamCharset;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	public final boolean isReaderParser() {
 		return true;
 	}
@@ -264,7 +264,7 @@ public class ReaderParserSession extends ParserSession {
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
 	@SuppressWarnings("resource")
-	@Override /* ParserSesson */
+	@Override /* Overridden from ParserSesson */
 	public final ParserPipe createPipe(Object input) {
 		return setPipe(new ParserPipe(input, isDebug(), ctx.isStrict(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));
 	}
@@ -295,7 +295,7 @@ public class ReaderParserSession extends ParserSession {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
 	}

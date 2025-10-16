@@ -113,17 +113,17 @@ public class WriterSerializer extends Serializer {
 			useWhitespace = copyFrom.useWhitespace;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public WriterSerializer build() {
 			return build(WriterSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1009,22 +1009,22 @@ public class WriterSerializer extends Serializer {
 		quoteCharValue = quoteCharOverride != null ? quoteCharOverride : quoteChar != null ? quoteChar : '"';
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public WriterSerializerSession.Builder createSession() {
 		return WriterSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public WriterSerializerSession getSession() {
 		return createSession().build();
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	public final boolean isWriterSerializer() {
 		return true;
 	}
@@ -1036,7 +1036,7 @@ public class WriterSerializer extends Serializer {
 	 * @return The output serialized to a string.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	public final String serialize(Object o) throws SerializeException {
 		return getSession().serialize(o);
 	}
@@ -1143,7 +1143,7 @@ public class WriterSerializer extends Serializer {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "maxIndent", maxIndent, "quoteChar", quoteChar, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}

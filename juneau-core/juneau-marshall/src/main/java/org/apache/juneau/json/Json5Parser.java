@@ -66,7 +66,7 @@ public class Json5Parser extends JsonParser {
 		super(builder);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonParser.Builder copy() {
 		return new JsonParser.Builder(this);
 	}

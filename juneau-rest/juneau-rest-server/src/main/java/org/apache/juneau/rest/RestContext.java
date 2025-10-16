@@ -322,12 +322,12 @@ public class RestContext extends Context {
 			}
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
 
-		@Override /* BeanContext.Builder */
+		@Override /* Overridden from BeanContext.Builder */
 		public RestContext build() {
 			try {
 				return beanStore().createBean(RestContext.class).type(getType().orElse(RestContext.class)).builder(RestContext.Builder.class, this).run();
@@ -5314,22 +5314,22 @@ public class RestContext extends Context {
 		// Methods inherited from ServletConfig
 		//----------------------------------------------------------------------------------------------------
 
-		@Override /* ServletConfig */
+		@Override /* Overridden from ServletConfig */
 		public String getInitParameter(String name) {
 			return inner == null ? null : inner.getInitParameter(name);
 		}
 
-		@Override /* ServletConfig */
+		@Override /* Overridden from ServletConfig */
 		public Enumeration<String> getInitParameterNames() {
 			return inner == null ? new Vector<String>().elements() : inner.getInitParameterNames();
 		}
 
-		@Override /* ServletConfig */
+		@Override /* Overridden from ServletConfig */
 		public ServletContext getServletContext() {
 			return inner != null ? inner.getServletContext() : parentContext != null ? parentContext.getBuilder().getServletContext() : null;
 		}
 
-		@Override /* ServletConfig */
+		@Override /* Overridden from ServletConfig */
 		public String getServletName() {
 			return inner == null ? null : inner.getServletName();
 		}
@@ -5542,7 +5542,7 @@ public class RestContext extends Context {
 		return u(s);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public RestSession.Builder createSession() {
 		return RestSession.create(this);
 	}
@@ -6700,7 +6700,7 @@ public class RestContext extends Context {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("allowContentParam", allowContentParam)

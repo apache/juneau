@@ -145,17 +145,17 @@ public class RestInjectAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestInject */
+		@Override /* Overridden from RestInject */
 		public String name() {
 			return name;
 		}
 
-		@Override /* RestInject */
+		@Override /* Overridden from RestInject */
 		public String value() {
 			return value;
 		}
 
-		@Override /* RestInject */
+		@Override /* Overridden from RestInject */
 		public String[] methodScope() {
 			return methodScope;
 		}

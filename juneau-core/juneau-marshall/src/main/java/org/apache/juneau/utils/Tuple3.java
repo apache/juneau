@@ -90,12 +90,12 @@ public class Tuple3<A,B,C> {
 		return c;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return HashCode.of(a,b,c);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return o instanceof Tuple3 && Utils.eq(this, (Tuple3<?,?,?>)o, (x,y)->Utils.eq(x.a,y.a) && Utils.eq(x.b,y.b) && Utils.eq(x.c,y.c));
 	}

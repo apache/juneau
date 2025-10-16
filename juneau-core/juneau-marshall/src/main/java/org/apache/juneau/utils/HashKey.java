@@ -70,7 +70,7 @@ public class HashKey {
 		return true;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("hashCode", hashCode())

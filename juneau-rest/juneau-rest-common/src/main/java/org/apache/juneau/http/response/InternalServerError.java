@@ -192,4 +192,21 @@ public class InternalServerError extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public InternalServerError setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public InternalServerError setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public InternalServerError setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

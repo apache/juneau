@@ -63,7 +63,7 @@ public class PatternReplaceVar extends MultipartVar {
 		super(NAME);
 	}
 
-	@Override /* MultipartVar */
+	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		Utils.assertArg(args.length >= 3, "Invalid number of arguments passed to $PR var.  Must have 3 or more arguments.");
 

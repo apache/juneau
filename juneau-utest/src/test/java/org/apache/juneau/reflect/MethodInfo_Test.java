@@ -412,4 +412,16 @@ class MethodInfo_Test extends TestBase {
 		var s = new TreeSet<>(Arrays.asList(g_a1a, g_a1b, g_a1c, g_a1d, g_a2, g_a3));
 		check("[a1(), a1(int), a1(String), a1(int,int), a2(), a3()]", s);
 	}
+
+	@Test void forEachParam_fluentChaining() {
+		// Test that forEachParam returns MethodInfo for fluent chaining
+		MethodInfo result = g_a1b.forEachParam(x -> true, x -> {});
+		assertSame(g_a1b, result);
+		assertInstanceOf(MethodInfo.class, result);
+
+		// Test fluent chaining works
+		int[] count = {0};
+		g_a1c.forEachParam(x -> true, x -> count[0]++);
+		assertEquals(2, count[0]);
+	}
 }

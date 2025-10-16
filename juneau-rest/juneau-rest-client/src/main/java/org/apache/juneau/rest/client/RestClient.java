@@ -1108,12 +1108,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		protected Builder() {
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			throw new NoSuchMethodError("Not implemented.");
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public RestClient build() {
 			return build(RestClient.class);
 		}
@@ -6258,7 +6258,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		init();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		throw new NoSuchMethodError("Not implemented.");
 	}
@@ -7202,7 +7202,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 				final RemoteMeta rm = new RemoteMeta(interfaceClass);
 
-				@Override /* InvocationHandler */
+				@Override /* Overridden from InvocationHandler */
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					RemoteOperationMeta rom = rm.getOperationMeta(method);
 
@@ -7492,7 +7492,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 				final RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, restUrl2);
 
-				@Override /* InvocationHandler */
+				@Override /* Overridden from InvocationHandler */
 				public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 					RrpcInterfaceMethodMeta rim = rm.getMethodMeta(method);
 
@@ -7815,7 +7815,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @deprecated Use {@link RequestConfig}.
 	 */
 	@Deprecated
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public HttpParams getParams() {
 		return httpClient.getParams();
 	}
@@ -7827,7 +7827,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @deprecated Use {@link HttpClientBuilder}.
 	 */
 	@Deprecated
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public ClientConnectionManager getConnectionManager() {
 		return httpClient.getConnectionManager();
 	}
@@ -7857,7 +7857,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public HttpResponse execute(HttpUriRequest request) throws IOException, ClientProtocolException {
 		return httpClient.execute(request);
 	}
@@ -7879,7 +7879,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public HttpResponse execute(HttpUriRequest request, HttpContext context) throws IOException, ClientProtocolException {
 		return httpClient.execute(request, context);
 	}
@@ -7902,7 +7902,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public HttpResponse execute(HttpHost target, HttpRequest request) throws IOException, ClientProtocolException {
 		return httpClient.execute(target, request);
 	}
@@ -7930,7 +7930,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public HttpResponse execute(HttpHost target, HttpRequest request, HttpContext context) throws IOException, ClientProtocolException {
 		return httpClient.execute(target, request, context);
 	}
@@ -7953,7 +7953,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
 		return httpClient.execute(request, responseHandler);
 	}
@@ -7977,7 +7977,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public <T> T execute(HttpUriRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
 		return httpClient.execute(request, responseHandler, context);
 	}
@@ -8003,7 +8003,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler) throws IOException, ClientProtocolException {
 		return httpClient.execute(target, request, responseHandler);
 	}
@@ -8030,7 +8030,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* HttpClient */
+	@Override /* Overridden from HttpClient */
 	public <T> T execute(HttpHost target, HttpRequest request, ResponseHandler<? extends T> responseHandler, HttpContext context) throws IOException, ClientProtocolException {
 		return httpClient.execute(target, request, responseHandler, context);
 	}
@@ -8141,7 +8141,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return body == null ? null : new StringReader(s(body));
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("errorCodes", errorCodes)

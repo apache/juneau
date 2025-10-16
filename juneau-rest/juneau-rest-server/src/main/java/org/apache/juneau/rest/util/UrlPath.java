@@ -102,7 +102,7 @@ public class UrlPath {
 		return path != null && path.endsWith("/");
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("raw", path)

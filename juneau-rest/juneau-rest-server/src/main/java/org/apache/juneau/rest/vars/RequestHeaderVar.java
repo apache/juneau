@@ -59,22 +59,22 @@ public class RequestHeaderVar extends MultipartResolvingVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	protected boolean allowNested() {
 		return false;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	protected boolean allowRecurse() {
 		return false;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getHeaderParam(key).orElse(null);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public boolean canResolve(VarResolverSession session) {
 		return session.getBean(RestRequest.class).isPresent();
 	}

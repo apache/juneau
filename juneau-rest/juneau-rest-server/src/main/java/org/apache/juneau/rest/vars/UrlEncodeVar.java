@@ -51,7 +51,7 @@ public class UrlEncodeVar extends SimpleVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		return urlEncode(key);
 	}

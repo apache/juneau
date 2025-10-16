@@ -45,7 +45,7 @@ public abstract class DefaultingVar extends SimpleVar {
 		super(name);
 	}
 
-	@Override /* Var*/
+	@Override /* Overridden from Var */
 	public String doResolve(VarResolverSession session, String s) throws Exception {
 		int i = s.indexOf(',');
 		if (i == -1)

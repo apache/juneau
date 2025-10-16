@@ -103,7 +103,7 @@ public class RestOpSession extends ContextSession {
 			return this;
 		}
 
-		@Override /* Session.Builder */
+		@Override /* Overridden from Session.Builder */
 		public RestOpSession build() {
 			return new RestOpSession(this);
 		}
@@ -137,7 +137,7 @@ public class RestOpSession extends ContextSession {
 		}
 	}
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	public RestOpContext getContext() {
 		return ctx;
 	}

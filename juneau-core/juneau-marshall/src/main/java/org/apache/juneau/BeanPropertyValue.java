@@ -91,12 +91,12 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 		return thrown;
 	}
 
-	@Override /* Comparable */
+	@Override /* Overridden from Comparable */
 	public int compareTo(BeanPropertyValue o) {
 		return name.compareTo(o.name);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return JsonMap.create()
 			.append("name", name)

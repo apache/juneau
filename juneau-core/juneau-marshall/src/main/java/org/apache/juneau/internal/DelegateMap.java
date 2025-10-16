@@ -50,7 +50,7 @@ public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 		m.forEach((k,v) -> put(Utils.s(k), v));
 	}
 
-	@Override /* Delegate */
+	@Override /* Overridden from Delegate */
 	public ClassMeta<T> getClassMeta() {
 		return classMeta;
 	}

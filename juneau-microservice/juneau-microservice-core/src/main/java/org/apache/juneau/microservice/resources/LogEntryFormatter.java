@@ -229,7 +229,7 @@ public class LogEntryFormatter extends Formatter {
 		return (i == null ? null : m.group(i));
 	}
 
-	@Override /* Formatter */
+	@Override /* Overridden from Formatter */
 	public String format(LogRecord r) {
 		String msg = formatMessage(r);
 		Throwable t = r.getThrown();

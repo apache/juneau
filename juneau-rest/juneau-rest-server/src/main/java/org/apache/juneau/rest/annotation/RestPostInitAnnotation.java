@@ -105,7 +105,7 @@ public class RestPostInitAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestHook */
+		@Override /* Overridden from RestHook */
 		public boolean childFirst() {
 			return childFirst;
 		}

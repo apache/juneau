@@ -35,27 +35,27 @@ public class ConfigCommand extends ConsoleCommand {
 
 	private final Messages mb = Messages.of(ConfigCommand.class, "Messages");
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getName() {
 		return "config";
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getSynopsis() {
 		return "config [get|set]";
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getInfo() {
 		return mb.getString("info");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getDescription() {
 		return mb.getString("description");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) {
 		Config conf = Microservice.getInstance().getConfig();
 		if (args.size() > 2) {

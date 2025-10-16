@@ -54,7 +54,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public void resolveTo(VarResolverSession session, Writer w, String key) throws Exception {
 		int i = key.indexOf(',');
 		if (i == -1)
@@ -67,17 +67,17 @@ public class SerializedRequestAttrVar extends StreamedVar {
 			s.serialize(w, o);
 	}
 
-	@Override  /* Var */
+	@Override /* Overridden from Var */
 	protected boolean allowNested() {
 		return false;
 	}
 
-	@Override  /* Var */
+	@Override /* Overridden from Var */
 	protected boolean allowRecurse() {
 		return false;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public boolean canResolve(VarResolverSession session) {
 		return session.getBean(RestRequest.class).isPresent();
 	}

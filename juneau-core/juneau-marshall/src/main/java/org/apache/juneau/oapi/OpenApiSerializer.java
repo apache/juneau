@@ -103,17 +103,17 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 			collectionFormat = copyFrom.collectionFormat;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public OpenApiSerializer build() {
 			return cache(CACHE).build(OpenApiSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -936,22 +936,22 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		collectionFormat = builder.collectionFormat;
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public OpenApiSerializerSession.Builder createSession() {
 		return OpenApiSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public OpenApiSerializerSession getSession() {
 		return createSession().build();
 	}
 
-	@Override /* HttpPartSerializer */
+	@Override /* Overridden from HttpPartSerializer */
 	public OpenApiSerializerSession getPartSession() {
 		return OpenApiSerializerSession.create(this).build();
 	}
@@ -960,7 +960,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* OpenApiMetaProvider */
+	@Override /* Overridden from OpenApiMetaProvider */
 	public OpenApiClassMeta getOpenApiClassMeta(ClassMeta<?> cm) {
 		OpenApiClassMeta m = openApiClassMetas.get(cm);
 		if (m == null) {
@@ -970,7 +970,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		return m;
 	}
 
-	@Override /* OpenApiMetaProvider */
+	@Override /* Overridden from OpenApiMetaProvider */
 	public OpenApiBeanPropertyMeta getOpenApiBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return OpenApiBeanPropertyMeta.DEFAULT;

@@ -48,7 +48,7 @@ public interface Setter {
 			this.f = f;
 		}
 
-		@Override /* Setter */
+		@Override /* Overridden from Setter */
 		public void set(Object object, Object value) throws ExecutableException {
 			try {
 				f.set(object, value);
@@ -69,7 +69,7 @@ public interface Setter {
 			this.m = m;
 		}
 
-		@Override /* Setter */
+		@Override /* Overridden from Setter */
 		public void set(Object object, Object value) throws ExecutableException {
 			try {
 				m.invoke(object, value);

@@ -192,4 +192,21 @@ public class UnavailableForLegalReasons extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public UnavailableForLegalReasons setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public UnavailableForLegalReasons setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public UnavailableForLegalReasons setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

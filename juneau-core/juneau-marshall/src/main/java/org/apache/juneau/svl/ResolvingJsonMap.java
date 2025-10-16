@@ -16,6 +16,10 @@
  */
 package org.apache.juneau.svl;
 
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 
 /**
@@ -51,8 +55,72 @@ public class ResolvingJsonMap extends JsonMap {
 		this.varResolver = varResolver;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Object get(Object key) {
 		return varResolver.resolve(super.get(key));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap inner(Map<String,Object> inner) {
+		super.inner(inner);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap session(BeanSession session) {
+		super.session(session);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap append(String key, Object value) {
+		super.append(key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap append(Map<String,Object> values) {
+		super.append(values);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap appendIf(boolean flag, String key, Object value) {
+		super.appendIf(flag, key, value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap filtered(Predicate<Object> value) {
+		super.filtered(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap keepAll(String...keys) {
+		super.keepAll(keys);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap setBeanSession(BeanSession value) {
+		super.setBeanSession(value);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap modifiable() {
+		if (isUnmodifiable())
+			return new ResolvingJsonMap(varResolver).inner(this);
+		return this;
+	}
+
+	@Override /* Overridden from JsonMap */
+	public ResolvingJsonMap unmodifiable() {
+		return this;
 	}
 }

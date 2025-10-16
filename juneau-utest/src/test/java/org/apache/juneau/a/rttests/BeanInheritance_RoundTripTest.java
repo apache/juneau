@@ -71,7 +71,7 @@ class BeanInheritance_RoundTripTest extends RoundTripTest_Base {
 
 		public void setZ(String v) { z = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return ("A1(x: " + x + ", y: " + y + ", z: " + z + ")");
 		}
@@ -138,7 +138,7 @@ class BeanInheritance_RoundTripTest extends RoundTripTest_Base {
 		public A2 getF4() { return f4; }
 		public void setF4(A2 v) { f4 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return super.toString() + " / " + f4;
 		}
@@ -166,7 +166,7 @@ class BeanInheritance_RoundTripTest extends RoundTripTest_Base {
 		public boolean isF3() { return f3; }
 		public void setF3(boolean v) { f3 = v; }
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return ("B2(f1: " + getF1() + ", f2: " + getF2() + ")");
 		}

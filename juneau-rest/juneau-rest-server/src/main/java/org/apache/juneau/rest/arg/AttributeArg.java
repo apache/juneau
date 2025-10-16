@@ -77,7 +77,7 @@ public class AttributeArg implements RestOpArg {
 		return n.get();
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		return opSession.getRequest().getAttribute(name).as(type).orElse(null);
 	}

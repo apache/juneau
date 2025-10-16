@@ -141,17 +141,17 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			ignoreTypes = copyFrom.ignoreTypes == null ? null : new TreeSet<>(copyFrom.ignoreTypes);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public JsonSchemaGenerator build() {
 			return cache(CACHE).build(JsonSchemaGenerator.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -885,17 +885,17 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		jsonParser = builder.jsonParserBuilder.beanContext(getBeanContext()).build();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonSchemaGeneratorSession.Builder createSession() {
 		return JsonSchemaGeneratorSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonSchemaGeneratorSession getSession() {
 		return createSession().build();
 	}
@@ -1038,7 +1038,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("useBeanDefs", useBeanDefs)

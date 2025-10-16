@@ -228,7 +228,7 @@ class Html_Test extends TestBase {
 	@Html(format=PLAIN_TEXT)
 	public static class B1 {
 		public String f1 = "<f1>";
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "<test>";
 		}
@@ -257,7 +257,7 @@ class Html_Test extends TestBase {
 
 	public static class B3 {
 		public String f1 = "<f1>";
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "<test>";
 		}

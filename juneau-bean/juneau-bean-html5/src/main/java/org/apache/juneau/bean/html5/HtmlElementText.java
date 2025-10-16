@@ -434,4 +434,16 @@ public class HtmlElementText extends HtmlElement {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementText attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public HtmlElementText attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

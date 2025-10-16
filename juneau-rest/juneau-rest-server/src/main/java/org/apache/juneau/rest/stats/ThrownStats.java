@@ -285,12 +285,12 @@ public class ThrownStats implements Cloneable {
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return Json5.of(this);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public ThrownStats clone() {
 		return new ThrownStats(this);
 	}

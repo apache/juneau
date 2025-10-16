@@ -48,14 +48,14 @@ public interface AnnotationProvider {
 		private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Field::getAnnotationsByType);
 		private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, Constructor::getAnnotationsByType);
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onClass != null)
 				for (A a : annotations(type, onClass))
 					consume(filter, action, a);
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (type != null && onClass != null)
 				for (A a : annotations(type, onClass))
@@ -64,7 +64,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			A x = null;
 			if (type != null && onClass != null)
@@ -74,14 +74,14 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onClass != null)
 				for (A a : declaredAnnotations(type, onClass))
 					consume(filter, action, a);
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (type != null && onClass != null)
 				for (A a : declaredAnnotations(type, onClass))
@@ -90,7 +90,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			A x = null;
 			if (type != null && onClass != null)
@@ -100,14 +100,14 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onMethod != null)
 				for (A a : annotations(type, onMethod))
 					consume(filter, action, a);
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			if (type != null && onMethod != null)
 				for (A a : annotations(type, onMethod))
@@ -116,7 +116,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			A x = null;
 			if (type != null && onMethod != null)
@@ -126,14 +126,14 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onField != null)
 				for (A a : annotations(type, onField))
 					consume(filter, action, a);
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			if (type != null && onField != null)
 				for (A a : annotations(type, onField))
@@ -142,7 +142,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			A x = null;
 			if (type != null && onField != null)
@@ -152,14 +152,14 @@ public interface AnnotationProvider {
 			return x;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onConstructor != null)
 				for (A a : annotations(type, onConstructor))
 					consume(filter, action, a);
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			if (type != null && onConstructor != null)
 				for (A a : annotations(type, onConstructor))
@@ -168,7 +168,7 @@ public interface AnnotationProvider {
 			return null;
 		}
 
-		@Override /* MetaProvider */
+		@Override /* Overridden from MetaProvider */
 		public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			A x = null;
 			if (type != null && onConstructor != null)

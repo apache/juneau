@@ -29,6 +29,7 @@ import org.apache.juneau.serializer.*;
  * 		This class is not intended for external use.
  * </ul>
  */
+@SuppressWarnings("resource")
 public class CsvWriter extends SerializerWriter {
 
 	/**
@@ -69,69 +70,125 @@ public class CsvWriter extends SerializerWriter {
 		}
 	}
 
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter s() {
 		super.s();
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter q() {
 		super.q();
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
-	@Override /* SerializerWriter */
+
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(String text) {
 		super.append(text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
-	@Override /* SerializerWriter */
+	@Override /* Overridden from SerializerWriter */
 	public CsvWriter append(char c) {
 		super.append(c);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter cr(int depth) {
+		super.cr(depth);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter cre(int depth) {
+		super.cre(depth);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter appendUri(Object value) {
+		super.appendUri(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter append(char[] value) {
+		super.append(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter ie(int indent) {
+		super.ie(indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter sIf(boolean flag) {
+		super.sIf(flag);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter nlIf(boolean flag, int indent) {
+		super.nlIf(flag, indent);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter w(char value) {
+		super.w(value);
+		return this;
+	}
+
+	@Override /* Overridden from SerializerWriter */
+	public CsvWriter w(String value) {
+		super.w(value);
 		return this;
 	}
 }

@@ -23,8 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
@@ -226,7 +224,7 @@ class Csv_Test extends TestBase {
 
 	public static class D {
 		public String name;
-		
+
 		@Swap(DateSwap.class)
 		public Date timestamp;
 

@@ -116,12 +116,12 @@ public class TagAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Tag */
+		@Override /* Overridden from Tag */
 		public ExternalDocs externalDocs() {
 			return externalDocs;
 		}
 
-		@Override /* Tag */
+		@Override /* Overridden from Tag */
 		public String name() {
 			return name;
 		}

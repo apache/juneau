@@ -78,7 +78,7 @@ public enum RestPartType {
 		return false;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return value;
 	}

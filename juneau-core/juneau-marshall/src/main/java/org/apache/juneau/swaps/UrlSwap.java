@@ -30,12 +30,12 @@ import org.apache.juneau.swap.*;
  */
 public class UrlSwap extends StringSwap<URL> {
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public String swap(BeanSession session, URL o) throws Exception {
 		return o.toString();
 	}
 
-	@Override /* ObjectSwap */
+	@Override /* Overridden from ObjectSwap */
 	public URL unswap(BeanSession session, String o, ClassMeta<?> hint) throws Exception {
 		return new URI(o).toURL();
 	}

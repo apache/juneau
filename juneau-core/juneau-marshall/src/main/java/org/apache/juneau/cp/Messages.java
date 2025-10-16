@@ -184,7 +184,7 @@ public class Messages extends ResourceBundle {
 			locale = Locale.getDefault();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected Messages buildDefault() {
 
 			if (! locations.isEmpty()) {
@@ -472,7 +472,7 @@ public class Messages extends ResourceBundle {
 		return null;
 	}
 
-	@Override /* ResourceBundle */
+	@Override /* Overridden from ResourceBundle */
 	protected Object handleGetObject(String key) {
 		String k = keyMap.get(key);
 		if (k == null)
@@ -484,22 +484,22 @@ public class Messages extends ResourceBundle {
 		return parent.handleGetObject(key);
 	}
 
-	@Override /* ResourceBundle */
+	@Override /* Overridden from ResourceBundle */
 	public boolean containsKey(String key) {
 		return keyMap.containsKey(key);
 	}
 
-	@Override /* ResourceBundle */
+	@Override /* Overridden from ResourceBundle */
 	public Set<String> keySet() {
 		return keyMap.keySet();
 	}
 
-	@Override /* ResourceBundle */
+	@Override /* Overridden from ResourceBundle */
 	public Enumeration<String> getKeys() {
 		return Collections.enumeration(keySet());
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		JsonMap m = new JsonMap();
 		for (String k : new TreeSet<>(keySet()))

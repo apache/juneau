@@ -93,7 +93,7 @@ public class ArgsVar extends DefaultingVar {
 		}
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		return args.getArg(key);
 	}

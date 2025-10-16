@@ -530,4 +530,16 @@ public class Fieldset extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Fieldset attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Fieldset attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

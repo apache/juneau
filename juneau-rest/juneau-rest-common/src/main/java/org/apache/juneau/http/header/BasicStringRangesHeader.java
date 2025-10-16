@@ -152,7 +152,7 @@ public class BasicStringRangesHeader extends BasicHeader {
 		this.supplier = value;
 	}
 
-	@Override /* Header */
+	@Override /* Overridden from Header */
 	public String getValue() {
 		return stringValue != null ? stringValue : Utils.s(value());
 	}

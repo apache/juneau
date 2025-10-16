@@ -84,7 +84,7 @@ public class RestChildren {
 			list = Utils.list();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected RestChildren buildDefault() {
 			return new RestChildren(this);
 		}

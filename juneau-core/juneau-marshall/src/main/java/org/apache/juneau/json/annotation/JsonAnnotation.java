@@ -146,7 +146,7 @@ public class JsonAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Json */
+		@Override /* Overridden from Json */
 		public String wrapperAttr() {
 			return wrapperAttr;
 		}

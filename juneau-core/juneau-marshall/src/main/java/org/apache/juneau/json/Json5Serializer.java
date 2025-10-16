@@ -95,7 +95,7 @@ public class Json5Serializer extends JsonSerializer {
 		super(builder.simpleAttrs().quoteChar('\''));
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}

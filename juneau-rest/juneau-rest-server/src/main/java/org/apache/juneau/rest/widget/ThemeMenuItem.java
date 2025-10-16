@@ -37,12 +37,12 @@ public class ThemeMenuItem extends MenuItemWidget {
 
 	private static final String[] BUILT_IN_STYLES = {"devops", "light", "original", "dark"};
 
-	@Override /* Widget */
+	@Override /* Overridden from Widget */
 	public String getLabel(RestRequest req, RestResponse res) {
 		return "themes";
 	}
 
-	@Override /* MenuItemWidget */
+	@Override /* Overridden from MenuItemWidget */
 	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
 		for (String s : BUILT_IN_STYLES) {

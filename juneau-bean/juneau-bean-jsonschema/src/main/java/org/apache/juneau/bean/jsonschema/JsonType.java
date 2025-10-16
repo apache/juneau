@@ -65,7 +65,7 @@ public enum JsonType {
 	/**
 	 * Returns the lowercase form of this enum that's compatible with the JSON-Schema specification.
 	 */
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return value;
 	}

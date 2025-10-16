@@ -208,12 +208,12 @@ public class SerializedPart extends BasicPart {
 		return this;
 	}
 
-	@Override /* Headerable */
+	@Override /* Overridden from Headerable */
 	public SerializedHeader asHeader() {
 		return new SerializedHeader(getName(), value, serializer, schema, skipIfEmpty);
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getValue() {
 		try {
 			Object v = unwrap(value);

@@ -88,7 +88,7 @@ public class ThrownStore {
 			super(ThrownStore.class, beanStore);
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected ThrownStore buildDefault() {
 			return new ThrownStore(this);
 		}

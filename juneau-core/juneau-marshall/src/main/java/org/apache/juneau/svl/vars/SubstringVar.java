@@ -61,7 +61,7 @@ public class SubstringVar extends MultipartVar {
 		super(NAME);
 	}
 
-	@Override /* MultipartVar */
+	@Override /* Overridden from MultipartVar */
 	public String resolve(VarResolverSession session, String[] args) {
 		Utils.assertArg(args.length >= 2 && args.length <= 3, "Invalid number of arguments passed to $ST var.  Must have 2 or 3 arguments.");
 

@@ -213,17 +213,17 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			simpleAttrs = copyFrom.simpleAttrs;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public JsonSerializer build() {
 			return cache(CACHE).build(JsonSerializer.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -1074,17 +1074,17 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		addBeanTypes = addBeanTypesJson || super.isAddBeanTypes();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonSerializerSession.Builder createSession() {
 		return JsonSerializerSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public JsonSerializerSession getSession() {
 		return createSession().build();
 	}
@@ -1108,7 +1108,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	// Extended metadata
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* JsonMetaProvider */
+	@Override /* Overridden from JsonMetaProvider */
 	public JsonClassMeta getJsonClassMeta(ClassMeta<?> cm) {
 		JsonClassMeta m = jsonClassMetas.get(cm);
 		if (m == null) {
@@ -1118,7 +1118,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		return m;
 	}
 
-	@Override /* JsonMetaProvider */
+	@Override /* Overridden from JsonMetaProvider */
 	public JsonBeanPropertyMeta getJsonBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
 			return JsonBeanPropertyMeta.DEFAULT;
@@ -1174,7 +1174,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("simpleAttrs", simpleAttrs, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);
 	}

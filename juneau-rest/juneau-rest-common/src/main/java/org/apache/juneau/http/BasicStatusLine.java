@@ -120,7 +120,7 @@ public class BasicStatusLine implements StatusLine {
 			throw new UnsupportedOperationException("Bean is read-only");
 	}
 
-	@Override /* StatusLine */
+	@Override /* Overridden from StatusLine */
 	public ProtocolVersion getProtocolVersion() {
 		return protocolVersion;
 	}
@@ -140,7 +140,7 @@ public class BasicStatusLine implements StatusLine {
 		return this;
 	}
 
-	@Override /* StatusLine */
+	@Override /* Overridden from StatusLine */
 	public int getStatusCode() {
 		return statusCode;
 	}
@@ -160,7 +160,7 @@ public class BasicStatusLine implements StatusLine {
 		return this;
 	}
 
-	@Override /* StatusLine */
+	@Override /* Overridden from StatusLine */
 	public String getReasonPhrase() {
 		if (reasonPhrase == null) {
 			ReasonPhraseCatalog rfc = Utils.firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
@@ -224,7 +224,7 @@ public class BasicStatusLine implements StatusLine {
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
 	}

@@ -752,4 +752,10 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		super.accessible();
 		return this;
 	}
+
+	@Override /* Overridden from ExecutableInfo */
+	public MethodInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+		super.forEachParam(filter, action);
+		return this;
+	}
 }

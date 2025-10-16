@@ -61,12 +61,12 @@ import org.apache.juneau.serializer.*;
  */
 public class ContentTypeMenuItem extends MenuItemWidget {
 
-	@Override /* MenuItemWidget */
+	@Override /* Overridden from MenuItemWidget */
 	public String getLabel(RestRequest req, RestResponse res) {
 		return "content-type";
 	}
 
-	@Override /* MenuItemWidget */
+	@Override /* Overridden from MenuItemWidget */
 	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
 		Set<MediaType> l = new TreeSet<>();

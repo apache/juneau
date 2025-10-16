@@ -45,32 +45,32 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 		this.f = (os instanceof Finishable ? (Finishable)os : null);
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public final void write(byte[] b, int off, int len) throws IOException {
 		os.write(b, off, len);
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public final void write(int b) throws IOException {
 		os.write(b);
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public final void flush() throws IOException {
 		os.flush();
 	}
 
-	@Override /* OutputStream */
+	@Override /* Overridden from OutputStream */
 	public final void close() throws IOException {
 		os.close();
 	}
 
-	@Override /* ServletOutputStream */
+	@Override /* Overridden from ServletOutputStream */
 	public boolean isReady() {
 		return sos == null ? true : sos.isReady();
 	}
 
-	@Override /* ServletOutputStream */
+	@Override /* Overridden from ServletOutputStream */
 	public void setWriteListener(WriteListener arg0) {
 		if (sos != null)
 			sos.setWriteListener(arg0);
@@ -82,7 +82,7 @@ public class FinishableServletOutputStream extends ServletOutputStream implement
 	 * <p>
 	 * A no-op if the underlying output stream does not implement the {@link Finishable} interface.
 	 */
-	@Override /* Finishable */
+	@Override /* Overridden from Finishable */
 	public void finish() throws IOException {
 		if (f != null)
 			f.finish();

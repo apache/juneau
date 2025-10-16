@@ -122,67 +122,67 @@ public class BiMap<K,V> implements Map<K,V> {
 		return reverse.get(value);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public int size() {
 		return forward.size();
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public boolean isEmpty() {
 		return forward.isEmpty();
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public boolean containsKey(Object key) {
 		return forward.containsKey(key);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public boolean containsValue(Object value) {
 		return reverse.containsKey(value);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public V get(Object key) {
 		return forward.get(key);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public V put(K key, V value) {
 		reverse.put(value, key);
 		return forward.put(key, value);
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public V remove(Object key) {
 		V value = forward.remove(key);
 		reverse.remove(value);
 		return value;
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public void putAll(Map<? extends K,? extends V> m) {
 		forward.putAll(m);
 		m.entrySet().forEach(x -> reverse.put(x.getValue(), x.getKey()));
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public void clear() {
 		forward.clear();
 		reverse.clear();
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<K> keySet() {
 		return forward.keySet();
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Collection<V> values() {
 		return forward.values();
 	}
 
-	@Override /* Map */
+	@Override /* Overridden from Map */
 	public Set<Entry<K,V>> entrySet() {
 		return forward.entrySet();
 	}

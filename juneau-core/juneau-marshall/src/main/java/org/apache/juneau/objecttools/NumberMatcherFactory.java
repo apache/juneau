@@ -255,7 +255,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 			numberRanges = l.toArray(new NumberRange[l.size()]);
 		}
 
-		@Override /* Matcher */
+		@Override /* Overridden from Matcher */
 		public boolean matches(ClassMeta<?> cm, Object o) {
 			Number n = (Number)o;
 			if (numberRanges.length == 0)
@@ -266,7 +266,7 @@ public class NumberMatcherFactory extends MatcherFactory {
 			return false;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return pattern;
 		}

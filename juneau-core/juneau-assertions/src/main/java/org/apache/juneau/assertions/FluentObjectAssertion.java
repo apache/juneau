@@ -676,7 +676,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Returns the string form of the inner object.
 	 * Subclasses can override this method to affect the {@link #asString()} method (and related).
 	 */
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return valueAsString();
 	}

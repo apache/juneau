@@ -164,7 +164,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {  // NOSONAR - Intentional.
 		return new FluentMapAssertion<>(this, function.apply(orElse(null)), returns());
 	}

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.common.utils.*;
@@ -631,6 +632,24 @@ public class Select extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElementContainer */
 	public Select children(Object...value) {
 		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Select setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Select attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 }

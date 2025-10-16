@@ -241,47 +241,47 @@ public class BeanpAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public Class<?>[] dictionary() {
 			return dictionary;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public String format() {
 			return format;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public Class<?>[] params() {
 			return params;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public String properties() {
 			return properties;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public String ro() {
 			return ro;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public Class<?> type() {
 			return type;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public String value() {
 			return value;
 		}
 
-		@Override /* Beanp */
+		@Override /* Overridden from Beanp */
 		public String wo() {
 			return wo;
 		}

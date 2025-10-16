@@ -232,32 +232,32 @@ public class QueryAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Query */
+		@Override /* Overridden from Query */
 		public String name() {
 			return name;
 		}
 
-		@Override /* Query */
+		@Override /* Overridden from Query */
 		public Class<? extends HttpPartParser> parser() {
 			return parser;
 		}
 
-		@Override /* Query */
+		@Override /* Overridden from Query */
 		public Schema schema() {
 			return schema;
 		}
 
-		@Override /* Query */
+		@Override /* Overridden from Query */
 		public Class<? extends HttpPartSerializer> serializer() {
 			return serializer;
 		}
 
-		@Override /* Query */
+		@Override /* Overridden from Query */
 		public String value() {
 			return value;
 		}
 
-		@Override /* Query */
+		@Override /* Overridden from Query */
 		public String def() {
 			return def;
 		}

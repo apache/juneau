@@ -2189,7 +2189,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The HTTP method this request uses, such as GET, PUT, POST, or other.
 	 */
-	@Override /* HttpUriRequest */
+	@Override /* Overridden from HttpUriRequest */
 	public String getMethod() {
 		return request.getMethod();
 	}
@@ -2203,7 +2203,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The original request URI.
 	 */
-	@Override /* HttpUriRequest */
+	@Override /* Overridden from HttpUriRequest */
 	public URI getURI() {
 		return request.getURI();
 	}
@@ -2214,12 +2214,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * If the request has not started, it will abort after the next execution.
 	 * <br>Aborting this request will cause all subsequent executions with this request to fail.
 	 */
-	@Override /* HttpUriRequest */
+	@Override /* Overridden from HttpUriRequest */
 	public void abort() throws UnsupportedOperationException {
 		request.abort();
 	}
 
-	@Override /* HttpUriRequest */
+	@Override /* Overridden from HttpUriRequest */
 	public boolean isAborted() {
 		return request.isAborted();
 	}
@@ -2229,7 +2229,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The request line.
 	 */
-	@Override /* HttpRequest */
+	@Override /* Overridden from HttpRequest */
 	public RequestLine getRequestLine() {
 		return request.getRequestLine();
 	}
@@ -2239,7 +2239,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The protocol version.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ProtocolVersion getProtocolVersion() {
 		return request.getProtocolVersion();
 	}
@@ -2252,7 +2252,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The header name to check for.
 	 * @return <jk>true</jk> if at least one header with this name is present.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public boolean containsHeader(String name) {
 		return headerData.contains(name);
 	}
@@ -2266,7 +2266,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The name of the headers to return.
 	 * @return The headers whose name property equals name.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header[] getHeaders(String name) {
 		return headerData.getAll(name);
 	}
@@ -2281,7 +2281,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The name of the header to return.
 	 * @return The first header whose name property equals name or <jk>null</jk> if no such header could be found.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header getFirstHeader(String name) {
 		return headerData.getFirst(name).orElse(null);
 	}
@@ -2296,7 +2296,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The name of the header to return.
 	 * @return The last header whose name property equals name or <jk>null</jk> if no such header could be found.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header getLastHeader(String name) {
 		return headerData.getLast(name).orElse(null);
 	}
@@ -2308,7 +2308,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return All the headers of this message
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header[] getAllHeaders() {
 		return headerData.getAll();
 	}
@@ -2324,7 +2324,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param header The header to append.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header header) {
 		headerData.append(header);
 	}
@@ -2341,7 +2341,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The name of the header.
 	 * @param value The value of the header.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
 		headerData.append(stringHeader(name, value));
 	}
@@ -2353,7 +2353,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param header The header to set.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeader(Header header) {
 		headerData.set(header);
 	}
@@ -2366,7 +2366,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name The name of the header.
 	 * @param value The value of the header.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeader(String name, String value) {
 		headerData.set(stringHeader(name, value));
 	}
@@ -2376,7 +2376,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param headers The array of headers to set.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] headers) {
 		headerData.set(headers);
 	}
@@ -2386,7 +2386,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param header The header to remove.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header header) {
 		headerData.remove(header);
 	}
@@ -2396,7 +2396,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @param name The name of the headers to remove.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
 		headerData.remove(name);
 	}
@@ -2406,7 +2406,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return Iterator that returns {@link Header} objects in the sequence they are sent over a connection.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator() {
 		return headerData.headerIterator();
 	}
@@ -2417,7 +2417,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param name the name of the headers over which to iterate, or <jk>null</jk> for all headers.
 	 * @return Iterator that returns {@link Header} objects with the argument name in the sequence they are sent over a connection.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator(String name) {
 		return headerData.headerIterator(name);
 	}
@@ -2428,7 +2428,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return The parameters effective for this message as set by {@link #setParams(HttpParams)}.
 	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	@Deprecated
 	public HttpParams getParams() {
 		return request.getParams();
@@ -2440,7 +2440,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param params The parameters.
 	 * @deprecated Use constructor parameters of configuration API provided by HttpClient.
 	 */
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	@Deprecated
 	public void setParams(HttpParams params) {
 		request.setParams(params);
@@ -2451,7 +2451,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The actual request configuration.
 	 */
-	@Override /* Configurable */
+	@Override /* Overridden from Configurable */
 	public RequestConfig getConfig() {
 		return request.getConfig();
 	}
@@ -2654,7 +2654,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		try-with-resources cleanup or masking the original exception.
 	 * </ul>
 	 */
-	@Override /* AutoCloseable */
+	@Override /* Overridden from AutoCloseable */
 	public void close() {
 		try {
 			if (response != null) {
@@ -2669,7 +2669,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 	}
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("client", client.properties())

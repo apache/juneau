@@ -198,7 +198,7 @@ class JsonParser_Test extends TestBase {
 			c.f = s;
 			return c;
 		}
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "f="+f;
 		}

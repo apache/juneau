@@ -231,37 +231,37 @@ public class HtmlAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public String anchorText() {
 			return anchorText;
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public HtmlFormat format() {
 			return format;
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public String link() {
 			return link;
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public boolean noTableHeaders() {
 			return noTableHeaders;
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public boolean noTables() {
 			return noTables;
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public Class<? extends HtmlRender> render() {
 			return render;
 		}
 
-		@Override /* Html */
+		@Override /* Overridden from Html */
 		public String style() {
 			return style;
 		}

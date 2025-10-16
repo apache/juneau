@@ -81,7 +81,7 @@ public interface StaticFiles extends FileFinder {
 			mimeTypes = new ExtendedMimetypesFileTypeMap();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected StaticFiles buildDefault() {
 			return new BasicStaticFiles(this);
 		}

@@ -226,7 +226,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		decoding = builder.decoding;
 	}
 
-	@Override /* ParserSession */
+	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (UonReader r = getUonReader(pipe, decoding)) {
 			T o = parseAnything(type, r, getOuter(), true, null);
@@ -235,7 +235,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		try (UonReader r = getUonReader(pipe, decoding)) {
 			m = parseIntoMap(r, m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
@@ -244,7 +244,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 	}
 
-	@Override /* ReaderParserSession */
+	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		try (UonReader r = getUonReader(pipe, decoding)) {
 			c = parseIntoCollection(r, c, (ClassMeta<E>)getClassMeta(elementType), false, null);
@@ -253,7 +253,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 	}
 
-	@Override /* HttpPartParser */
+	@Override /* Overridden from HttpPartParser */
 	public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
 		if (in == null)
 			return null;
@@ -1000,7 +1000,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ContextSession */
+	@Override /* Overridden from ContextSession */
 	protected JsonMap properties() {
 		return filteredMap("decoding", decoding);
 	}

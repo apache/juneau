@@ -84,7 +84,7 @@ public class RestOperations {
 			set = set();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected RestOperations buildDefault() {
 			return new RestOperations(this);
 		}

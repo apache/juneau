@@ -424,7 +424,7 @@ public class VarResolverSession {
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return "var=" + this.context.getVarMap().keySet() + ", context.beanStore=" + this.context.beanStore + ", session.beanStore=" + beanStore;
 	}

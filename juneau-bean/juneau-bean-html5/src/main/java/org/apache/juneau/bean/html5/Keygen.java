@@ -567,4 +567,16 @@ public class Keygen extends HtmlElementVoid {
 		super.translate(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Keygen attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

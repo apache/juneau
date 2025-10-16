@@ -174,12 +174,12 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	// Transform methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* FluentObjectAssertion */
+	@Override /* Overridden from FluentObjectAssertion */
 	public FluentArrayAssertion<E,R> asTransformed(Function<E[],E[]> function) {  // NOSONAR - Intentional.
 		return new FluentArrayAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
-	@Override /* FluentBaseAssertion */
+	@Override /* Overridden from FluentBaseAssertion */
 	public FluentStringAssertion<R> asString() {
 		return new FluentStringAssertion<>(this, toString(), returns());
 	}

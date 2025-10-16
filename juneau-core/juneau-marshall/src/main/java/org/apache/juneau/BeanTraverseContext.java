@@ -91,10 +91,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 			maxDepth = copyFrom.maxDepth;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public abstract Builder copy();
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -730,7 +730,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		actualDetectRecursions = detectRecursions || ignoreRecursions || super.isDebug();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public abstract Builder copy();
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -787,7 +787,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap("detectRecursions", detectRecursions, "maxDepth", maxDepth, "ignoreRecursions", ignoreRecursions, "initialDepth", initialDepth);
 	}

@@ -475,4 +475,16 @@ public class Bdo extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdo attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Bdo attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

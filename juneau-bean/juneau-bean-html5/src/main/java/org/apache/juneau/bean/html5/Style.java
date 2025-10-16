@@ -524,4 +524,16 @@ public class Style extends HtmlElementRawText {
 		super.text(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Style attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Style attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

@@ -73,7 +73,7 @@ public class FileVar extends DefaultingVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) throws Exception {
 
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
@@ -89,7 +89,7 @@ public class FileVar extends DefaultingVar {
 		return s;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public boolean canResolve(VarResolverSession session) {
 		return session.getBean(RestRequest.class).isPresent();
 	}

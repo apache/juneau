@@ -787,7 +787,7 @@ public class ReflectionMap<V> {
 		return false;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return filteredMap()
 			.append("classEntries", classEntries)

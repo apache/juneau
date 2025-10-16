@@ -356,17 +356,17 @@ public class BeanContext extends Context {
 			propertyNamer = copyFrom.propertyNamer;
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public BeanContext build() {
 			return cache(CACHE).build(BeanContext.class);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -3570,17 +3570,17 @@ public class BeanContext extends Context {
 		defaultSession = createSession().unmodifiable().build();
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public BeanSession.Builder createSession() {
 		return BeanSession.create(this);
 	}
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public BeanSession getSession() {
 		return defaultSession;
 	}
@@ -4560,7 +4560,7 @@ public class BeanContext extends Context {
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	protected JsonMap properties() {
 		return filteredMap()
 			.append("id", System.identityHashCode(this))

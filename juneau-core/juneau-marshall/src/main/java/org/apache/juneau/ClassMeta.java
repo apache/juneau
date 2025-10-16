@@ -1818,7 +1818,7 @@ public class ClassMeta<T> implements Type {
 		return (isPrimitive() && cc == cm.cc);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return toString(false);
 	}
@@ -2207,12 +2207,12 @@ public class ClassMeta<T> implements Type {
 		return this.innerClass.cast(o);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return innerClass.hashCode();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof ClassMeta) && Utils.eq(this, (ClassMeta<?>)o, (x,y)->Utils.eq(x.innerClass, y.innerClass));
 	}

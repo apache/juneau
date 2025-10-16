@@ -74,7 +74,7 @@ public class ManifestFileVar extends DefaultingVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		return MANIFEST_FILE == null ? "" : MANIFEST_FILE.getString(key);
 	}

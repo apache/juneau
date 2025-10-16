@@ -63,7 +63,7 @@ class IgnoredClasses_Test extends TestBase {
 
 	public static class A {
 		public String f1 = "isBean";
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "isNotBean";
 		}

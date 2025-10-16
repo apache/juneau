@@ -1105,6 +1105,10 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * Searches through the class hierarchy (e.g. superclasses, interfaces, packages) for all instances of the
 	 * specified annotation.
 	 *
+	 * <p>
+	 * This method now walks up the method inheritance hierarchy for getter and setter methods, ensuring that
+	 * annotations are properly inherited from overridden parent methods.
+	 *
 	 * @param <A> The class to find annotations for.
 	 * @param a The class to find annotations for.
 	 * @return A list of annotations ordered in parent-to-child order.  Never <jk>null</jk>.
@@ -1120,19 +1124,78 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			ClassInfo.of(field.getType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 		if (getter != null) {
+			// Walk up the inheritance hierarchy for the getter method
+			forEachParentMethod(getter, parentGetter -> {
+				bc.forEachAnnotation(a, parentGetter, x -> true, x -> l.add(x));
+			});
 			bc.forEachAnnotation(a, getter, x -> true, x -> l.add(x));
 			ClassInfo.of(getter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 		if (setter != null) {
+			// Walk up the inheritance hierarchy for the setter method
+			forEachParentMethod(setter, parentSetter -> {
+				bc.forEachAnnotation(a, parentSetter, x -> true, x -> l.add(x));
+			});
 			bc.forEachAnnotation(a, setter, x -> true, x -> l.add(x));
 			ClassInfo.of(setter.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 		if (extraKeys != null) {
+			// Walk up the inheritance hierarchy for the extraKeys method
+			forEachParentMethod(extraKeys, parentExtraKeys -> {
+				bc.forEachAnnotation(a, parentExtraKeys, x -> true, x -> l.add(x));
+			});
 			bc.forEachAnnotation(a, extraKeys, x -> true, x -> l.add(x));
 			ClassInfo.of(extraKeys.getReturnType()).forEachAnnotation(bc, a, x -> true, x -> l.add(x));
 		}
 
 		return l;
+	}
+
+	/**
+	 * Walks up the class hierarchy to find parent methods that match the signature of the given method.
+	 * Executes the consumer for each parent method found, starting from the topmost parent down to
+	 * the immediate parent (but not including the method itself).
+	 *
+	 * @param method The method to find parents for.
+	 * @param consumer The action to perform for each parent method.
+	 */
+	private void forEachParentMethod(Method method, Consumer<Method> consumer) {
+		if (method == null)
+			return;
+
+		String methodName = method.getName();
+		Class<?>[] paramTypes = method.getParameterTypes();
+		Class<?> declaringClass = method.getDeclaringClass();
+
+		// Collect parent methods in a list (we'll reverse it to get parent-to-child order)
+		List<Method> parentMethods = new LinkedList<>();
+
+		// Walk up the class hierarchy
+		Class<?> currentClass = declaringClass.getSuperclass();
+		while (currentClass != null && currentClass != Object.class) {
+			try {
+				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
+				parentMethods.add(parentMethod);
+			} catch (NoSuchMethodException e) {
+				// No matching method in this parent class, continue up the hierarchy
+			}
+			currentClass = currentClass.getSuperclass();
+		}
+
+		// Also check interfaces
+		for (Class<?> iface : declaringClass.getInterfaces()) {
+			try {
+				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
+				parentMethods.add(ifaceMethod);
+			} catch (NoSuchMethodException e) {
+				// No matching method in this interface
+			}
+		}
+
+		// Process in reverse order (parent-to-child) to match the "ParentFirst" semantics
+		for (int i = parentMethods.size() - 1; i >= 0; i--) {
+			consumer.accept(parentMethods.get(i));
+		}
 	}
 
 	/**
@@ -1219,7 +1282,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return o.getClass().getName();
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return name + ": " + this.rawTypeMeta.getInnerClass().getName() + ", field=["+field+"], getter=["+getter+"], setter=["+setter+"]";
 	}
@@ -1266,17 +1329,17 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		return writeOnly;
 	}
 
-	@Override /* Comparable */
+	@Override /* Overridden from Comparable */
 	public int compareTo(BeanPropertyMeta o) {
 		return name.compareTo(o.name);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public int hashCode() {
 		return hashCode;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		return (o instanceof BeanPropertyMeta) && Utils.eq(this, (BeanPropertyMeta)o, (x,y)->Utils.eq(x.name, y.name) && Utils.eq(x.beanMeta, y.beanMeta));
 	}

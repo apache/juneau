@@ -34,32 +34,32 @@ public class HelpCommand extends ConsoleCommand {
 
 	private final Messages mb = Messages.of(HelpCommand.class, "Messages");
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getName() {
 		return "help";
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getSynopsis() {
 		return "help [command]";
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getInfo() {
 		return mb.getString("info");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getDescription() {
 		return mb.getString("description");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public String getExamples() {
 		return mb.getString("examples");
 	}
 
-	@Override /* ConsoleCommand */
+	@Override /* Overridden from ConsoleCommand */
 	public boolean execute(Scanner in, PrintWriter out, Args args) throws Exception {
 		Map<String,ConsoleCommand> commands = Microservice.getInstance().getConsoleCommands();
 		if (args.size() == 1) {

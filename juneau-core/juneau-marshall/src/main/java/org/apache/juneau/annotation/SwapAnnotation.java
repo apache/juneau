@@ -187,22 +187,22 @@ public class SwapAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Swap */
+		@Override /* Overridden from Swap */
 		public Class<?> impl() {
 			return impl;
 		}
 
-		@Override /* Swap */
+		@Override /* Overridden from Swap */
 		public String[] mediaTypes() {
 			return mediaTypes;
 		}
 
-		@Override /* Swap */
+		@Override /* Overridden from Swap */
 		public String template() {
 			return template;
 		}
 
-		@Override /* Swap */
+		@Override /* Overridden from Swap */
 		public Class<?> value() {
 			return value;
 		}

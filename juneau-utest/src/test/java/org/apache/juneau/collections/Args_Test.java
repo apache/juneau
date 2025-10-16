@@ -19,6 +19,8 @@ package org.apache.juneau.collections;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -70,5 +72,64 @@ class Args_Test extends TestBase {
 		assertEquals(1, a.getArgs("foo").size());
 		assertEquals("bar bar", a.getArgs("foo").get(0));
 		assertTrue(a.containsKey("foo"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// test - Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+	@Test void fluentSetters() {
+		Args a = new Args(new String[]{"main1"});
+
+		// Test inner() returns same instance for fluent chaining
+		Map<String,Object> innerMap = new HashMap<>();
+		innerMap.put("test", "value");
+		assertSame(a, a.inner(innerMap));
+
+		// Test session() returns same instance
+		BeanSession session = BeanContext.DEFAULT.getSession();
+		assertSame(a, a.session(session));
+
+		// Test append(String, Object) returns same instance
+		assertSame(a, a.append("key1", "value1"));
+		assertEquals("value1", a.get("key1"));
+
+		// Test append(Map) returns same instance
+		Map<String,Object> appendMap = new HashMap<>();
+		appendMap.put("key2", "value2");
+		assertSame(a, a.append(appendMap));
+		assertEquals("value2", a.get("key2"));
+
+		// Test appendIf() returns same instance
+		assertSame(a, a.appendIf(true, "key3", "value3"));
+		assertEquals("value3", a.get("key3"));
+		assertSame(a, a.appendIf(false, "key4", "value4"));
+		assertNull(a.get("key4"));
+
+		// Test filtered() returns same instance
+		assertSame(a, a.filtered(x -> x != null));
+
+		// Test keepAll() returns same instance
+		assertSame(a, a.keepAll("key1", "key2"));
+
+		// Test setBeanSession() returns same instance
+		assertSame(a, a.setBeanSession(session));
+
+		// Test modifiable() returns same instance
+		assertSame(a, a.modifiable());
+
+		// Test unmodifiable() returns same instance
+		assertSame(a, a.unmodifiable());
+	}
+
+	@Test void fluentChaining() {
+		// Test multiple fluent calls can be chained
+		Args a = new Args(new String[]{"main1"})
+			.append("key1", "value1")
+			.append("key2", "value2")
+			.appendIf(true, "key3", "value3");
+
+		assertEquals("value1", a.get("key1"));
+		assertEquals("value2", a.get("key2"));
+		assertEquals("value3", a.get("key3"));
 	}
 }

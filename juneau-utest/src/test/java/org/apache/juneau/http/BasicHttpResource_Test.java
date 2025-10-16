@@ -175,6 +175,59 @@ class BasicHttpResource_Test extends TestBase {
 		assertNull(x2.getContentEncoding());
 	}
 
+	@Test void a10_setHeader_String_String() {
+		var x = stringResource("foo").setHeader("Foo","bar").setHeader("Foo","baz").setHeader(null,"bar").setHeader("foo",null).getHeaders();
+		assertEquals("Foo: baz", x.getFirst("Foo").get().toString());
+		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
+		assertEmpty(x.getFirst("Bar"));
+		assertEmpty(x.getLast("Bar"));
+		assertList(x.getAll(), "Foo: baz");
+	}
+
+	@Test void a11_setHeaders_array() {
+		// setHeaders() replaces headers, so last value wins for duplicate names
+		var x = stringResource("foo").setHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
+		assertEquals("Foo: baz", x.getFirst("Foo").get().toString());
+		assertEquals("Foo: baz", x.getLast("Foo").get().toString());
+		assertNull(x.getFirst("Bar").get().getValue());
+		assertNull(x.getLast("Bar").get().getValue());
+		assertList(x.getAll(), "Foo: baz", "Bar: null");
+	}
+
+	@Test void a12_fluentSetters() throws Exception {
+		// Test that all resource types return correct type for fluent chaining
+		var s = stringResource("foo");
+		assertSame(s, s.setHeader("X-Test", "value"));
+		assertSame(s, s.addHeader("X-Test2", "value2"));
+		assertSame(s, s.setHeaders(header("X-Test3", "value3")));
+		assertSame(s, s.addHeaders(header("X-Test4", "value4")));
+
+		var ba = byteArrayResource("foo".getBytes());
+		assertSame(ba, ba.setHeader("X-Test", "value"));
+		assertSame(ba, ba.addHeader("X-Test2", "value2"));
+		assertSame(ba, ba.setHeaders(header("X-Test3", "value3")));
+		assertSame(ba, ba.addHeaders(header("X-Test4", "value4")));
+
+		var r = readerResource(reader("foo"));
+		assertSame(r, r.setHeader("X-Test", "value"));
+		assertSame(r, r.addHeader("X-Test2", "value2"));
+		assertSame(r, r.setHeaders(header("X-Test3", "value3")));
+		assertSame(r, r.addHeaders(header("X-Test4", "value4")));
+
+		var st = streamResource(inputStream("foo"));
+		assertSame(st, st.setHeader("X-Test", "value"));
+		assertSame(st, st.addHeader("X-Test2", "value2"));
+		assertSame(st, st.setHeaders(header("X-Test3", "value3")));
+		assertSame(st, st.addHeaders(header("X-Test4", "value4")));
+
+		var f = Files.createTempFile("test","txt").toFile();
+		var fr = fileResource(f);
+		assertSame(fr, fr.setHeader("X-Test", "value"));
+		assertSame(fr, fr.addHeader("X-Test2", "value2"));
+		assertSame(fr, fr.setHeaders(header("X-Test3", "value3")));
+		assertSame(fr, fr.addHeaders(header("X-Test4", "value4")));
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------

@@ -153,7 +153,7 @@ public class RestSession extends ContextSession {
 			return this;
 		}
 
-		@Override /* Session.Builder */
+		@Override /* Overridden from Session.Builder */
 		public RestSession build() {
 			return new RestSession(this);
 		}

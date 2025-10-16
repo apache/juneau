@@ -36,7 +36,7 @@ public class SimplePartSerializerSession extends BaseHttpPartSerializerSession {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Override /* PartSerializer */
+	@Override /* Overridden from PartSerializer */
 	public String serialize(HttpPartType type, HttpPartSchema schema, Object value) {
 		return Mutaters.toString(value);
 	}

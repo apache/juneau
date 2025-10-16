@@ -69,12 +69,12 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		}
 	}
 
-	@Override /* Iterator */
+	@Override /* Overridden from Iterator */
 	public boolean hasNext() {
 		return next != null;
 	}
 
-	@Override /* Iterator */
+	@Override /* Overridden from Iterator */
 	public Entry next() {
 		Entry current = next;
 		Entry prev = next;
@@ -98,17 +98,17 @@ public class LogParser implements Iterable<LogParser.Entry>, Iterator<LogParser.
 		return current;
 	}
 
-	@Override /* Iterator */
+	@Override /* Overridden from Iterator */
 	public void remove() {
 		throw new NoSuchMethodError();
 	}
 
-	@Override /* Iterable */
+	@Override /* Overridden from Iterable */
 	public Iterator<Entry> iterator() {
 		return this;
 	}
 
-	@Override /* Closeable */
+	@Override /* Overridden from Closeable */
 	public void close() throws IOException {
 		br.close();
 	}

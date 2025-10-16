@@ -284,7 +284,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		return XmlUtils.encodeElementName(toString(o));
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
 
 		Resource r = null;

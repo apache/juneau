@@ -141,7 +141,7 @@ enum HtmlTag {
 		return t;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return label;
 	}

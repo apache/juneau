@@ -82,7 +82,7 @@ public class RoleMatcher {
 		return roles != null && exp.matches(roles);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return exp.toString();
 	}
@@ -248,7 +248,7 @@ public class RoleMatcher {
 			return false;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "(NEVER)";
 		}
@@ -261,7 +261,7 @@ public class RoleMatcher {
 			this.clauses = clauses.toArray(new Exp[clauses.size()]);
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
 			for (Exp e : clauses)
 				if (! e.matches(roles))
@@ -269,13 +269,13 @@ public class RoleMatcher {
 			return true;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			for (Exp clause : clauses)
 				clause.appendTokens(set);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "(& " + Utils.join(clauses, " ") + ')';
 		}
@@ -296,13 +296,13 @@ public class RoleMatcher {
 			return false;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			for (Exp clause : clauses)
 				clause.appendTokens(set);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "(| " + Utils.join(clauses, " ") + ')';
 		}
@@ -315,7 +315,7 @@ public class RoleMatcher {
 			this.operand = operand;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
 			for (String role : roles)
 				if (operand.equals(role))
@@ -323,12 +323,12 @@ public class RoleMatcher {
 			return false;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			set.add(operand);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "[= " + operand + "]";
 		}
@@ -343,7 +343,7 @@ public class RoleMatcher {
 			p = Utils.getMatchPattern3(operand);
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		boolean matches(Set<String> roles) {
 			for (String role : roles)
 				if (p.matcher(role).matches())
@@ -351,12 +351,12 @@ public class RoleMatcher {
 			return false;
 		}
 
-		@Override /* Exp */
+		@Override /* Overridden from Exp */
 		void appendTokens(Set<String> set) {
 			set.add(operand);
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return "[* " + p.pattern().replaceAll("\\\\[QE]", "") + "]";
 		}

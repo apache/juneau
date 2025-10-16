@@ -68,7 +68,7 @@ public class RestMatcherList {
 			entries = list();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected RestMatcherList buildDefault() {
 			return new RestMatcherList(this);
 		}

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -507,6 +508,24 @@ public class Dl extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElementContainer */
 	public Dl children(Object...value) {
 		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Dl setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dl attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Dl attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 }

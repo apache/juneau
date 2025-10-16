@@ -280,7 +280,7 @@ public class SerializedHeader extends BasicHeader {
 		return this;
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getValue() {
 		try {
 			Object v = value;

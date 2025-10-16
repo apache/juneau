@@ -185,15 +185,15 @@ public class Content extends Text {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Text */
-	public Content setText(String text) {
-		super.setText(text);
+	@Override /* Overridden from Text */
+	public Content setType(String value) {
+		super.setType(value);
 		return this;
 	}
 
-	@Override /* Text */
-	public Content setType(String type) {
-		super.setType(type);
+	@Override /* Overridden from Text */
+	public Content setText(String value) {
+		super.setText(value);
 		return this;
 	}
 

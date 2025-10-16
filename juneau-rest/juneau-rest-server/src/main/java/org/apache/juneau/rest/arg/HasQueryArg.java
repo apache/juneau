@@ -84,7 +84,7 @@ public class HasQueryArg implements RestOpArg {
 		return firstNonEmpty(x.name(), x.value());
 	}
 
-	@Override /* RestOpArg */
+	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();
 		BeanSession bs = req.getBeanSession();

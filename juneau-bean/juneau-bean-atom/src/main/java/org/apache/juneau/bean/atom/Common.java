@@ -167,7 +167,7 @@ public abstract class Common {
 		return this;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return XmlSerializer.DEFAULT_SQ.toString(this);
 	}

@@ -82,7 +82,7 @@ public class ReaderEntity extends BasicHttpEntity {
 		return Objects.requireNonNull(contentOrElse((Reader) null), "Reader is null.");
 	}
 
-	@Override /* AbstractHttpEntity */
+	@Override /* Overridden from AbstractHttpEntity */
 	public String asString() throws IOException {
 		if (isCached() && stringCache == null)
 			stringCache = read(content(), getMaxLength());
@@ -91,7 +91,7 @@ public class ReaderEntity extends BasicHttpEntity {
 		return read(content());
 	}
 
-	@Override /* AbstractHttpEntity */
+	@Override /* Overridden from AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
 		if (isCached() && byteCache == null)
 			byteCache = readBytes(content());
@@ -100,19 +100,19 @@ public class ReaderEntity extends BasicHttpEntity {
 		return readBytes(content());
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isRepeatable() {
 		return isCached();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public long getContentLength() {
 		if (isCached())
 			return asSafeBytes().length;
 		return super.getContentLength();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public InputStream getContent() throws IOException {
 		if (isCached())
 			return new ByteArrayInputStream(asBytes());
@@ -139,7 +139,7 @@ public class ReaderEntity extends BasicHttpEntity {
 		out.flush();
 	}
 
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return ! isCached();
 	}

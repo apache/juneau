@@ -67,7 +67,7 @@ public class RestConverterList {
 			this.entries = list();
 		}
 
-		@Override /* BeanBuilder */
+		@Override /* Overridden from BeanBuilder */
 		protected RestConverterList buildDefault() {
 			return new RestConverterList(this);
 		}

@@ -427,127 +427,127 @@ public class RestPostAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String clientVersion() {
 			return clientVersion;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] consumes() {
 			return consumes;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String defaultContentType() {
 			return defaultContentType;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] defaultRequestFormData() {
 			return defaultRequestFormData;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] defaultRequestQueryData() {
 			return defaultRequestQueryData;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] defaultResponseHeaders() {
 			return defaultResponseHeaders;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public Class<? extends RestMatcher>[] matchers() {
 			return matchers;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String maxInput() {
 			return maxInput;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] path() {
 			return path;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String summary() {
 			return summary;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public OpSwagger swagger() {
 			return swagger;
 		}
 
-		@Override /* RestPost */
+		@Override /* Overridden from RestPost */
 		public String value() {
 			return value;
 		}

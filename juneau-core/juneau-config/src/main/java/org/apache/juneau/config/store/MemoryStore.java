@@ -88,12 +88,12 @@ public class MemoryStore extends ConfigStore {
 			super(copyFrom);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public Builder copy() {
 			return new Builder(this);
 		}
 
-		@Override /* Context.Builder */
+		@Override /* Overridden from Context.Builder */
 		public MemoryStore build() {
 			return build(MemoryStore.class);
 		}
@@ -160,7 +160,7 @@ public class MemoryStore extends ConfigStore {
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	@Override /* Context */
+	@Override /* Overridden from Context */
 	public Builder copy() {
 		return new Builder(this);
 	}
@@ -176,12 +176,12 @@ public class MemoryStore extends ConfigStore {
 		super(builder);
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized String read(String name) {
 		return emptyIfNull(cache.get(name));
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized String write(String name, String expectedContents, String newContents) {
 
 		// This is a no-op.
@@ -198,12 +198,12 @@ public class MemoryStore extends ConfigStore {
 		return null;
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized boolean exists(String name) {
 		return cache.containsKey(name);
 	}
 
-	@Override /* ConfigStore */
+	@Override /* Overridden from ConfigStore */
 	public synchronized MemoryStore update(String name, String newContents) {
 		if (newContents == null)
 			cache.remove(name);
@@ -216,7 +216,7 @@ public class MemoryStore extends ConfigStore {
 	/**
 	 * No-op.
 	 */
-	@Override /* Closeable */
+	@Override /* Overridden from Closeable */
 	public void close() throws IOException {
 		// No-op
 	}

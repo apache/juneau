@@ -307,12 +307,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		}
 	}
 
-	@Override /* XmlSerializer */
+	@Override /* Overridden from XmlSerializer */
 	public boolean isHtmlMode() {
 		return true;
 	}
 
-	@Override /* Serializer */
+	@Override /* Overridden from Serializer */
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		doSerialize(o, getHtmlWriter(out));
 	}
@@ -332,7 +332,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	@Override /* XmlSerializerSession */
+	@Override /* Overridden from XmlSerializerSession */
 	protected ContentResult serializeAnything(
 			XmlWriter out,
 			Object o,

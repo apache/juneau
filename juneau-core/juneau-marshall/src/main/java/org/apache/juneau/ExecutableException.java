@@ -71,4 +71,10 @@ public class ExecutableException extends BasicRuntimeException {
 		Throwable c = this.getCause();
 		return c instanceof InvocationTargetException ? ((InvocationTargetException)c).getTargetException() : c;
 	}
+
+	@Override /* Overridden from BasicRuntimeException */
+	public ExecutableException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
 }

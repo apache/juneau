@@ -187,7 +187,7 @@ public class Thrown extends BasicCsvHeader {
 			return message;
 		}
 
-		@Override /* Object */
+		@Override /* Overridden from Object */
 		public String toString() {
 			return value;
 		}

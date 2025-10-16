@@ -599,4 +599,16 @@ public class Iframe extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public Iframe attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Iframe attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

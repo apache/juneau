@@ -348,7 +348,7 @@ public class BasicHttpResponse implements HttpResponse {
 		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder().append(statusLine).append(' ').append(headers);
 		if (content != null)
@@ -356,123 +356,123 @@ public class BasicHttpResponse implements HttpResponse {
 		return sb.toString();
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public ProtocolVersion getProtocolVersion() {
 		return statusLine.getProtocolVersion();
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public boolean containsHeader(String name) {
 		return headers.contains(name);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header[] getHeaders(String name) {
 		return headers.getAll(name);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header getFirstHeader(String name) {
 		return headers.getFirst(name).orElse(null);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header getLastHeader(String name) {
 		return headers.getLast(name).orElse(null);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Header[] getAllHeaders() {
 		return headers.getAll();
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void addHeader(Header value) {
 		headers.append(value);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void addHeader(String name, String value) {
 		headers.append(name, value);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeader(Header value) {
 		headers.set(value);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeader(String name, String value) {
 		headers.set(name, value);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setHeaders(Header[] values) {
 		headers.removeAll().append(values);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void removeHeader(Header value) {
 		headers.remove(value);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void removeHeaders(String name) {
 		headers.remove(name);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator() {
 		return headers.headerIterator();
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HeaderIterator headerIterator(String name) {
 		return headers.headerIterator(name);
 	}
 
 	@SuppressWarnings("deprecation")
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HttpParams getParams() {
 		return null;
 	}
 
 	@SuppressWarnings("deprecation")
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setParams(HttpParams params) {
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public StatusLine getStatusLine() {
 		return statusLine;
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(StatusLine value) {
 		setStatusLine(value.getProtocolVersion(), value.getStatusCode(), value.getReasonPhrase());
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
 		statusLine.setProtocolVersion(ver).setStatusCode(code);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
 		statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
 		statusLine.setStatusCode(code);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setReasonPhrase(String reason) throws IllegalStateException {
 		statusLine.setReasonPhrase(reason);
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
 		if (content == null)
@@ -480,18 +480,18 @@ public class BasicHttpResponse implements HttpResponse {
 		return content;
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setEntity(HttpEntity entity) {
 		assertModifiable();
 		this.content = entity;
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public Locale getLocale() {
 		return statusLine.getLocale();
 	}
 
-	@Override /* HttpMessage */
+	@Override /* Overridden from HttpMessage */
 	public void setLocale(Locale loc) {
 		statusLine.setLocale(loc);
 	}

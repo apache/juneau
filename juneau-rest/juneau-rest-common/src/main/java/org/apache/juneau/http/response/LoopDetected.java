@@ -192,4 +192,21 @@ public class LoopDetected extends BasicHttpException {
 		super.setStatusLine(value);
 		return this;
 	}
+	@Override /* Overridden from BasicHttpException */
+	public LoopDetected setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public LoopDetected setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* Overridden from BasicHttpException */
+	public LoopDetected setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
 }

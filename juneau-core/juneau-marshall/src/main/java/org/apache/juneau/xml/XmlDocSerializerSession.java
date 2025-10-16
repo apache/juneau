@@ -206,7 +206,7 @@ public class XmlDocSerializerSession extends XmlSerializerSession {
 		super(builder);
 	}
 
-	@Override /* SerializerSession */
+	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe out, Object o) throws java.io.IOException, SerializeException {
 		try (XmlWriter w = getXmlWriter(out)) {
 			w.append("<?xml")

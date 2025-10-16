@@ -73,12 +73,12 @@ public class BasicHeaderIterator implements HeaderIterator {
 		return (name == null) || eq(name, entries[index].getName());
 	}
 
-	@Override /* HeaderIterator */
+	@Override /* Overridden from HeaderIterator */
 	public boolean hasNext() {
 		return (currentIndex >= 0);
 	}
 
-	@Override /* HeaderIterator */
+	@Override /* Overridden from HeaderIterator */
 	public Header nextHeader() throws NoSuchElementException {
 
 		int current = currentIndex;
@@ -91,7 +91,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 		return entries[current];
 	}
 
-	@Override /* HeaderIterator */
+	@Override /* Overridden from HeaderIterator */
 	public final Object next() throws NoSuchElementException {
 		return nextHeader();
 	}
@@ -99,7 +99,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	/**
 	 * Not supported.
 	 */
-	@Override /* HeaderIterator */
+	@Override /* Overridden from HeaderIterator */
 	public void remove() {
 		throw new UnsupportedOperationException("Not supported.");
 	}

@@ -83,17 +83,17 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 		super(NAME);
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	protected boolean allowNested() {
 		return false;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	protected boolean allowRecurse() {
 		return false;
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) throws BasicHttpException, InternalServerError {
 		try {
 			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
@@ -138,7 +138,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 		}
 	}
 
-	@Override /* Var */
+	@Override /* Overridden from Var */
 	public boolean canResolve(VarResolverSession session) {
 		return session.getBean(RestRequest.class).isPresent();
 	}

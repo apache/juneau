@@ -489,4 +489,16 @@ public class H3 extends HtmlElementMixed {
 		super.children(value);
 		return this;
 	}
+
+	@Override /* Overridden from HtmlElement */
+	public H3 attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public H3 attrUri(String key, Object val) {
+		super.attrUri(key, val);
+		return this;
+	}
 }

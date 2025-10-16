@@ -50,13 +50,13 @@ class OverrideableHttpServletRequest extends HttpServletRequestWrapper {
 		return this;
 	}
 
-	@Override /* HttpServletRequest */
+	@Override /* Overridden from HttpServletRequest */
 	public String getPathInfo() {
 		// Note that pathInfo can never be empty.
 		return pathInfo == null ? super.getPathInfo() : pathInfo.charAt(0) == (char)0 ? null : pathInfo;
 	}
 
-	@Override /* HttpServletRequest */
+	@Override /* Overridden from HttpServletRequest */
 	public String getServletPath() {
 		return servletPath == null ? super.getServletPath() : servletPath;
 	}

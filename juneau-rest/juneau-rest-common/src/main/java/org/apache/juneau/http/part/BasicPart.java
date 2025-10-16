@@ -160,17 +160,17 @@ public class BasicPart implements NameValuePair, Headerable {
 		return new FluentStringAssertion<>(getValue(), this);
 	}
 
-	@Override /* Headerable */
+	@Override /* Overridden from Headerable */
 	public BasicHeader asHeader() {
 		return BasicHeader.of(name, Utils.s(value));
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getName() {
 		return name;
 	}
 
-	@Override /* NameValuePair */
+	@Override /* Overridden from NameValuePair */
 	public String getValue() {
 		return Utils.s(unwrap(value));
 	}
@@ -184,7 +184,7 @@ public class BasicPart implements NameValuePair, Headerable {
 		return unwrap(value);
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return getName() + "=" + getValue();
 	}

@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
+import java.util.*;
 
 import org.apache.juneau.annotation.*;
 
@@ -502,6 +503,24 @@ public class Colgroup extends HtmlElementContainer {
 	@Override /* Overridden from HtmlElementContainer */
 	public Colgroup children(Object...value) {
 		super.children(value);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElementContainer */
+	public Colgroup setChildren(List<Object> children) {
+		super.setChildren(children);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Colgroup attr(String key, Object val) {
+		super.attr(key, val);
+		return this;
+	}
+
+	@Override /* Overridden from HtmlElement */
+	public Colgroup attrUri(String key, Object val) {
+		super.attrUri(key, val);
 		return this;
 	}
 }

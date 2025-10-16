@@ -1201,7 +1201,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return <jk>true</jk> if the entity is repeatable, <jk>false</jk> otherwise.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isRepeatable() {
 		return cached || entity.isRepeatable();
 	}
@@ -1218,7 +1218,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return <jk>true</jk> if chunked encoding is preferred for this entity, or <jk>false</jk> if it is not.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isChunked() {
 		return entity.isChunked();
 	}
@@ -1230,7 +1230,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	The number of bytes of the content, or a negative number if unknown.
 	 * 	<br>If the content length is known but exceeds {@link Long#MAX_VALUE}, a negative number is returned.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public long getContentLength() {
 		return body != null ? body.length : entity.getContentLength();
 	}
@@ -1244,7 +1244,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return The <c>Content-Type</c> header for this entity, or <jk>null</jk> if the content type is unknown.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public ResponseHeader getContentType() {
 		return new ResponseHeader("Content-Type", request, response, entity.getContentType());
 	}
@@ -1258,7 +1258,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return The <c>Content-Encoding</c> header for this entity, or <jk>null</jk> if the content encoding is unknown.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public ResponseHeader getContentEncoding() {
 		return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding());
 	}
@@ -1277,7 +1277,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return Content stream of the entity.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public InputStream getContent() throws IOException, UnsupportedOperationException {
 		return asInputStream();
 	}
@@ -1291,7 +1291,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @param outstream The output stream to write entity content to.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public void writeTo(OutputStream outstream) throws IOException {
 		pipeTo(outstream);
 	}
@@ -1305,7 +1305,7 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * @return <jk>true</jk> if the entity content is streamed, <jk>false</jk> otherwise.
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	public boolean isStreaming() {
 		return cached ? false : entity.isStreaming();
 	}
@@ -1321,7 +1321,7 @@ public class ResponseContent implements HttpEntity {
 	 * @deprecated Use standard java convention to ensure resource deallocation by calling {@link InputStream#close()} on
 	 * the input stream returned by {@link #getContent()}
 	 */
-	@Override /* HttpEntity */
+	@Override /* Overridden from HttpEntity */
 	@Deprecated
 	public void consumeContent() throws IOException {
 		entity.consumeContent();

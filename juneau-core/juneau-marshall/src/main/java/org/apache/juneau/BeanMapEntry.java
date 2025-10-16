@@ -67,7 +67,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 		this.pName = pName;
 	}
 
-	@Override /* Map.Entry */
+	@Override /* Overridden from Map.Entry */
 	public String getKey() {
 		return meta.getName();
 	}
@@ -83,7 +83,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 * {@link Swap#value() @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 */
-	@Override /* Map.Entry */
+	@Override /* Overridden from Map.Entry */
 	public Object getValue() {
 		return meta.get(this.beanMap, pName);
 	}
@@ -108,7 +108,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 	 *
 	 * @return  The set value after it's been converted.
 	 */
-	@Override /* Map.Entry */
+	@Override /* Overridden from Map.Entry */
 	public Object setValue(Object value) {
 		return meta.set(this.beanMap, pName, value);
 	}
@@ -131,7 +131,7 @@ public class BeanMapEntry implements Map.Entry<String,Object> {
 		return this.meta;
 	}
 
-	@Override /* Object */
+	@Override /* Overridden from Object */
 	public String toString() {
 		return this.getKey() + "=" + this.getValue();
 	}

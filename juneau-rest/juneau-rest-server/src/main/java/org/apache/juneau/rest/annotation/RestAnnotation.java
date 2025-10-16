@@ -740,252 +740,252 @@ public class RestAnnotation {
 			postConstruct();
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String disableContentParam() {
 			return disableContentParam;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String allowedHeaderParams() {
 			return allowedHeaderParams;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String allowedMethodHeaders() {
 			return allowedMethodHeaders;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String allowedMethodParams() {
 			return allowedMethodParams;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends BeanStore> beanStore() {
 			return beanStore;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends CallLogger> callLogger() {
 			return callLogger;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<?>[] children() {
 			return children;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String clientVersionHeader() {
 			return clientVersionHeader;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String config() {
 			return config;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String[] consumes() {
 			return consumes;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends RestConverter>[] converters() {
 			return converters;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String debug() {
 			return debug;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends DebugEnablement> debugEnablement() {
 			return debugEnablement;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String debugOn() {
 			return debugOn;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String defaultAccept() {
 			return defaultAccept;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String defaultCharset() {
 			return defaultCharset;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String defaultContentType() {
 			return defaultContentType;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String[] defaultRequestAttributes() {
 			return defaultRequestAttributes;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String[] defaultRequestHeaders() {
 			return defaultRequestHeaders;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String[] defaultResponseHeaders() {
 			return defaultResponserHeaders;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends RestGuard>[] guards() {
 			return guards;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String maxInput() {
 			return maxInput;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String messages() {
 			return messages;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<?>[] parsers() {
 			return parsers;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends HttpPartParser> partParser() {
 			return partParser;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends HttpPartSerializer> partSerializer() {
 			return partSerializer;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String path() {
 			return path;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String[] produces() {
 			return produces;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String renderResponseStackTraces() {
 			return renderResponseStackTraces;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends ResponseProcessor>[] responseProcessors() {
 			return responseProcessors;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends RestChildren> restChildrenClass() {
 			return restChildrenClass;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends RestOpArg>[] restOpArgs() {
 			return restOpArgs;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends RestOperations> restOperationsClass() {
 			return restOperationsClass;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String roleGuard() {
 			return roleGuard;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String rolesDeclared() {
 			return rolesDeclared;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends Serializer>[] serializers() {
 			return serializers;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String siteName() {
 			return siteName;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends StaticFiles> staticFiles() {
 			return staticFiles;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Swagger swagger() {
 			return swagger;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Class<? extends SwaggerProvider> swaggerProvider() {
 			return swaggerProvider;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String[] title() {
 			return title;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String uriAuthority() {
 			return uriAuthority;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String uriContext() {
 			return uriContext;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String uriRelativity() {
 			return uriRelativity;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public String uriResolution() {
 			return uriResolution;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Query[] queryParams() {
 			return queryParams;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Header[] headerParams() {
 			return headerParams;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public Path[] pathParams() {
 			return pathParams;
 		}
 
-		@Override /* Rest */
+		@Override /* Overridden from Rest */
 		public FormData[] formDataParams() {
 			return formDataParams;
 		}
