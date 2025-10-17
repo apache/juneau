@@ -116,7 +116,7 @@ public class LocalDir {
 	 * When unpackaged, calling Class.getResource(path) on a directory returns a URL starting with "file:".
 	 * We perform a test to make the behavior the same regardless of whether we're packaged or not.
 	 */
-	private boolean isClasspathFile(URL url) {
+	private static boolean isClasspathFile(URL url) {
 		try {
 			if (url == null)
 				return false;

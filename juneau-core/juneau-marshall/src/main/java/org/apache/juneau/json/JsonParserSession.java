@@ -604,7 +604,7 @@ public class JsonParserSession extends ReaderParserSession {
 			if (s.equals(keyword))
 				return;
 			throw new ParseException(this, "Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''", keyword, s);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
 			throw new ParseException(this, "Unrecognized syntax.  Expected=''{0}'', found end-of-file.", keyword);
 		}
 	}
@@ -697,7 +697,7 @@ public class JsonParserSession extends ReaderParserSession {
 						String n = r.read(4);
 						try {
 							r.replace(Integer.parseInt(n, 16), 6);
-						} catch (NumberFormatException e) {
+						} catch (@SuppressWarnings("unused") NumberFormatException e) {
 							throw new ParseException(this, "Invalid Unicode escape sequence in string.");
 						}
 						break;

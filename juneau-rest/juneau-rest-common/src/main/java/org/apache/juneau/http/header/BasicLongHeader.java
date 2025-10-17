@@ -200,11 +200,11 @@ public class BasicLongHeader extends BasicHeader {
 		return value();
 	}
 
-	private Long parse(String value) {
+	private static Long parse(String value) {
 		try {
 			return value == null ? null : Long.parseLong(value);
 		} catch (NumberFormatException e) {
-			throw new BasicRuntimeException("Value ''{0}'' could not be parsed as a long.", value);
+			throw new BasicRuntimeException(e, "Value ''{0}'' could not be parsed as a long.", value);
 		}
 	}
 

@@ -208,11 +208,11 @@ class ConfigFileStoreTest extends TestBase {
 		assertFalse(cs.exists("Foox"));
 	}
 
-	private void assertFileExists(String name) {
+	private static void assertFileExists(String name) {
 		assertTrue(new File(DIR, name).exists());
 	}
 
-	private void assertFileNotExists(String name) {
+	private static void assertFileNotExists(String name) {
 		assertTrue(! new File(DIR, name).exists());
 	}
 }

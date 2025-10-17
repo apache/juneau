@@ -1930,7 +1930,7 @@ public class StringUtils {
 		if (needsDecode) {
 			try {
 				return URLDecoder.decode(s, "UTF-8");
-			} catch (UnsupportedEncodingException e) {/* Won't happen */}
+			} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {/* Won't happen */}
 		}
 		return s;
 	}
@@ -1954,7 +1954,7 @@ public class StringUtils {
 		if (needsEncode) {
 			try {
 				return URLEncoder.encode(s, "UTF-8");
-			} catch (UnsupportedEncodingException e) {/* Won't happen */}
+			} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {/* Won't happen */}
 		}
 
 		return s;
@@ -1985,7 +1985,7 @@ public class StringUtils {
 				else
 					try {
 						sb.append(URLEncoder.encode(""+c, "UTF-8"));  // Yuck.
-					} catch (UnsupportedEncodingException e) {
+					} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {
 						// Not possible.
 					}
 			}

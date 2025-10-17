@@ -73,7 +73,7 @@ public class AttributeArg implements RestOpArg {
 		return opSession.getRequest().getAttribute(name).as(type).orElse(null);
 	}
 
-	private String getName(ParamInfo paramInfo) {
+	private static String getName(ParamInfo paramInfo) {
 		Value<String> n = Value.empty();
 		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));

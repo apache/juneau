@@ -63,7 +63,7 @@ public class MsgPackOutputStream extends OutputStream {
 		}
 	}
 
-	private int getUtf8ByteLength(CharSequence cs) {
+	private static int getUtf8ByteLength(CharSequence cs) {
 		int count = 0;
 		for (int i = 0, len = cs.length(); i < len; i++) {
 			char ch = cs.charAt(i);

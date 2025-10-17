@@ -108,7 +108,6 @@ class SeeOtherRoot_Test extends TestBase {
 	@Test void a05_reusableInstance() {
 		// Test that INSTANCE is available and usable
 		assertNotNull(SeeOtherRoot.INSTANCE);
-		assertTrue(SeeOtherRoot.INSTANCE instanceof SeeOtherRoot);
 	}
 
 	@Test void a06_copy() throws Exception {

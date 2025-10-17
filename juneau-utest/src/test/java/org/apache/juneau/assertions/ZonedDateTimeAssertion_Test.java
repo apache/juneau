@@ -35,7 +35,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private ZonedDateTimeAssertion test(ZonedDateTime value) {
+	private static ZonedDateTimeAssertion test(ZonedDateTime value) {
 		return assertZonedDateTime(value).setSilent();
 	}
 

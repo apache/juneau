@@ -6233,7 +6233,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				httpClient.close();
 			if (executorService != null && executorServiceShutdownOnClose)
 				executorService.shutdown();
-		} catch (Throwable t) {}
+		} catch (@SuppressWarnings("unused") Throwable t) {}
 		if (creationStack != null)
 			closedStack = Thread.currentThread().getStackTrace();
 	}
@@ -7519,14 +7519,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		return request(op(method, uri, body));
 	}
 
-	private Supplier<String> msg(String msg, Object...args) {
+	private static Supplier<String> msg(String msg, Object...args) {
 		return ()->args.length == 0 ? msg : MessageFormat.format(msg, args);
 	}
 
-	private RestOperation op(String method, Object url, Object body) {
+	private static RestOperation op(String method, Object url, Object body) {
 		return RestOperation.of(method, url, body);
 	}
-	private Reader stringBody(String body) {
+	private static Reader stringBody(String body) {
 		return body == null ? null : new StringReader(s(body));
 	}
 

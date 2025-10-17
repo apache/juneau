@@ -32,7 +32,7 @@ class ComparableAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <T extends Comparable<T>> ComparableAssertion<T> test(T value) {
+	private static <T extends Comparable<T>> ComparableAssertion<T> test(T value) {
 		return assertComparable(value).setSilent();
 	}
 

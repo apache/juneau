@@ -3366,7 +3366,7 @@ public class BeanContext extends Context {
 			return this;
 		}
 
-		private int integer(boolean...values) {
+		private static int integer(boolean...values) {
 			int n = 0;
 			for (boolean b : values)
 				n = (n << 1) | (b ? 1 : 0);

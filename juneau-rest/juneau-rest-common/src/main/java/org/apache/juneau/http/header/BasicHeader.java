@@ -98,6 +98,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * 	<br>Can also be an <l>Object</l> {@link Supplier}.
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings("unchecked")
 	public BasicHeader(String name, Object value) {
 		Utils.assertArg(Utils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;

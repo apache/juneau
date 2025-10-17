@@ -76,7 +76,7 @@ public class Version implements Comparable<Version> {
 		for (int i = 0; i < sParts.length; i++) {
 			try {
 				parts[i] = sParts[i].isEmpty() ? 0 : Integer.parseInt(sParts[i]);
-			} catch (NumberFormatException e) {
+			} catch (@SuppressWarnings("unused") NumberFormatException e) {
 				parts[i] = Integer.MAX_VALUE;
 			}
 		}
@@ -243,6 +243,11 @@ public class Version implements Comparable<Version> {
 			if (v.parts[i] > 0)
 				return true;
 		return ! exclusive;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return Arrays.hashCode(parts);
 	}
 
 	@Override /* Overridden from Object */

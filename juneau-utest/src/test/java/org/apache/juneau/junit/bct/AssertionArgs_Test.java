@@ -413,7 +413,7 @@ class AssertionArgs_Test extends TestBase {
 	}
 
 	// Helper method to create a mock converter for testing
-	private BeanConverter createMockConverter() {
+	private static BeanConverter createMockConverter() {
 		return new BeanConverter() {
 			@Override
 			public String stringify(Object o) {
@@ -462,7 +462,7 @@ class AssertionArgs_Test extends TestBase {
 	}
 
 	// Helper method to create a custom converter for testing
-	private BeanConverter createCustomConverter() {
+	private static BeanConverter createCustomConverter() {
 		return new BeanConverter() {
 			@Override
 			public String stringify(Object o) {

@@ -95,7 +95,7 @@ class SerializedPart_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private HttpPartSchema.Builder schema(HttpPartDataType dataType) {
+	private static HttpPartSchema.Builder schema(HttpPartDataType dataType) {
 		return HttpPartSchema.create().type(dataType);
 	}
 }

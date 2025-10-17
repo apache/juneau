@@ -120,7 +120,7 @@ class MsgPackParser_Test extends TestBase {
 		assertJson("{'1':2}", r);
 	}
 
-	private InputStream is(String spacedHex) {
+	private static InputStream is(String spacedHex) {
 		return new CloseableByteArrayInputStream(StringUtils.fromSpacedHex(spacedHex));
 	}
 }

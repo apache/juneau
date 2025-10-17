@@ -235,7 +235,7 @@ public class DirectoryResource extends BasicRestServlet {
 		res.setContentType("application/octet-stream");
 		try {
 			return new FileContents(getFile(path));
-		} catch (FileNotFoundException e) {
+		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}
@@ -293,7 +293,7 @@ public class DirectoryResource extends BasicRestServlet {
 		res.setContentType("text/plain");
 		try {
 			return new FileContents(getFile(path));
-		} catch (FileNotFoundException e) {
+		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
 	}

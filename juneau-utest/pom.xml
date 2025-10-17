@@ -142,6 +142,7 @@
 					<instructions>
 						<Automatic-Module-Name>org.apache.juneau.core.test</Automatic-Module-Name>
 					</instructions>
+					<supportIncrementalBuild>true</supportIncrementalBuild>
 				</configuration>
 				<executions>
 				<execution>

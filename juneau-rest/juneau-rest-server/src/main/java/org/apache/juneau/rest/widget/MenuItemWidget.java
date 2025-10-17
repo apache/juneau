@@ -207,7 +207,7 @@ public abstract class MenuItemWidget extends Widget {
 		return loadStyle(req, "styles/MenuItemWidget.css");
 	}
 
-	private Integer getId(RestRequest req) {
+	private static Integer getId(RestRequest req) {
 		Integer id = req.getAttribute("LastMenuItemId").as(Integer.class).orElse(0) + 1;
 		req.setAttribute("LastMenuItemId", id);
 		return id;

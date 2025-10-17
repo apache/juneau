@@ -27,7 +27,6 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 
-@SuppressWarnings("unchecked")
 public class RoundTrip_Tester {
 
 	public static Builder create(int index, String label) {

@@ -525,7 +525,7 @@ class UonParser_Test extends TestBase {
 		assertList(x2, "456");
 	}
 
-	private Reader reader(String in) {
+	private static Reader reader(String in) {
 		return new CloseableStringReader(in);
 	}
 }

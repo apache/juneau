@@ -58,7 +58,7 @@ public class ResourceBundleUtils {
 	public static ResourceBundle findBundle(String baseName, Locale locale, ClassLoader loader) {
 		try {
 			return ResourceBundle.getBundle(baseName, locale, loader);
-		} catch (MissingResourceException e) {}
+		} catch (@SuppressWarnings("unused") MissingResourceException e) {}
 		return null;
 	}
 }

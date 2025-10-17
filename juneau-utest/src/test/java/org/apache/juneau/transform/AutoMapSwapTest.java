@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"rawtypes"})
 class AutoMapSwapTest extends TestBase {
 
 	private static final Map<String,String> STRINGMAP = map("foo","bar");

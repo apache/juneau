@@ -301,7 +301,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @param cm The meta to check.
 	 * @return <jk>true</jk> if the specified meta is an {@link Optional}.
 	 */
-	protected final boolean isOptional(ClassMeta<?> cm) {
+	protected final static boolean isOptional(ClassMeta<?> cm) {
 		return (cm != null && cm.isOptional());
 	}
 

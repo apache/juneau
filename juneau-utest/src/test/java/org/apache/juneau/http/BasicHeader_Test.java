@@ -108,11 +108,11 @@ class BasicHeader_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private BasicHeader header(String name, Object val) {
+	private static BasicHeader header(String name, Object val) {
 		return basicHeader(name, val);
 	}
 
-	private BasicHeader header(String name, Supplier<?> val) {
+	private static BasicHeader header(String name, Supplier<?> val) {
 		return basicHeader(name, val);
 	}
 }

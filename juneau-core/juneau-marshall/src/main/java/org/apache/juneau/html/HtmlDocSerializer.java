@@ -1567,7 +1567,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			return this;
 		}
 
-		private List<String> merge(List<String> old, String[] newValues) {
+		private static List<String> merge(List<String> old, String[] newValues) {
 			List<String> x = Utils.listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
@@ -1583,7 +1583,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			return x;
 		}
 
-		private List<String> mergeNavLinks(List<String> old, String[] newValues) {
+		private static List<String> mergeNavLinks(List<String> old, String[] newValues) {
 			List<String> x = Utils.listOfSize(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
@@ -1682,7 +1682,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	public HtmlDocSerializerSession getSession() {
 		return createSession().build();
 	}
-	private <T> T newInstance(Class<T> c) {
+
+	<T> T newInstance(Class<T> c) {
 		try {
 			return c.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
@@ -1690,7 +1691,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 	}
 
-	private String[] toArray(List<String> x) {
+	private static String[] toArray(List<String> x) {
 		return x.toArray(new String[x.size()]);
 	}
 

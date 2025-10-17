@@ -917,7 +917,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	private Supplier<Object> resolver(Object input) {
 		return ()->varResolver.resolve(Utils.s(unwrap(input)));
 	}
-	private Object unwrap(Object o) {
+	private static Object unwrap(Object o) {
 		while (o instanceof Supplier)
 			o = ((Supplier<?>)o).get();
 		return o;

@@ -122,11 +122,11 @@ public abstract class Widget implements HtmlWidget {
 		return getStyle(req(session), res(session));
 	}
 
-	private RestRequest req(VarResolverSession session) {
+	private static RestRequest req(VarResolverSession session) {
 		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 	}
 
-	private RestResponse res(VarResolverSession session) {
+	private static RestResponse res(VarResolverSession session) {
 		return session.getBean(RestResponse.class).orElseThrow(InternalServerError::new);
 	}
 

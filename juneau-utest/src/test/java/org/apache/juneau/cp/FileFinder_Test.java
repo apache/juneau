@@ -30,11 +30,11 @@ import org.junit.jupiter.api.*;
 
 public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public.
 
-	private String read(FileFinder ff, String path) throws Exception {
+	private static String read(FileFinder ff, String path) throws Exception {
 		return toUtf8(ff.getStream(path, null).orElse(null));
 	}
 
-	private String read(FileFinder ff, String path, Locale locale) throws Exception {
+	private static String read(FileFinder ff, String path, Locale locale) throws Exception {
 		return toUtf8(ff.getStream(path, locale).orElse(null));
 	}
 

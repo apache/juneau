@@ -133,13 +133,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return this;
 		}
 
-		private ObjectSwap getPropertySwap(Beanp p) {
+		private static ObjectSwap getPropertySwap(Beanp p) {
 			if (! p.format().isEmpty())
 				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
 			return null;
 		}
 
-		private ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
+		private static ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
 			Class<?> c = s.value();
 			if (isVoid(c))
 				c = s.impl();
@@ -956,7 +956,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @param method The method to find parents for.
 	 * @param consumer The action to perform for each parent method.
 	 */
-	private void forEachParentMethod(Method method, Consumer<Method> consumer) {
+	private static void forEachParentMethod(Method method, Consumer<Method> consumer) {
 		if (method == null)
 			return;
 
@@ -973,7 +973,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			try {
 				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
 				parentMethods.add(parentMethod);
-			} catch (NoSuchMethodException e) {
+			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
 				// No matching method in this parent class, continue up the hierarchy
 			}
 			currentClass = currentClass.getSuperclass();
@@ -984,7 +984,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			try {
 				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
 				parentMethods.add(ifaceMethod);
-			} catch (NoSuchMethodException e) {
+			} catch (@SuppressWarnings("unused") NoSuchMethodException e) {
 				// No matching method in this interface
 			}
 		}

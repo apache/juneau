@@ -411,7 +411,7 @@ public class BeanCreator<T> {
 		return isStaticCreateMethod(m, type.inner());
 	}
 
-	private boolean isStaticCreateMethod(MethodInfo m, Class<?> type) {
+	private static boolean isStaticCreateMethod(MethodInfo m, Class<?> type) {
 		return m.isStatic()
 			&& m.isNotDeprecated()
 			&& m.hasReturnType(type)

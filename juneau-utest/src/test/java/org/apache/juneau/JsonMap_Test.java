@@ -236,17 +236,17 @@ class JsonMap_Test extends TestBase {
 		checkStep(1, in, JsonMap.ofJson(in).getString("𤭢𤭢"), "𤭢𤭢");
 	}
 
-	private String getDeepString(JsonMap m, String url) {
+	private static String getDeepString(JsonMap m, String url) {
 		var r = ObjectRest.create(m);
 		return (String)r.get(url);
 	}
 
-	private Boolean getDeepBoolean(JsonMap m, String url) {
+	private static Boolean getDeepBoolean(JsonMap m, String url) {
 		var r = ObjectRest.create(m);
 		return (Boolean)r.get(url);
 	}
 
-	private void checkStep(int step, String input, String output, String expectedValue) {
+	private static void checkStep(int step, String input, String output, String expectedValue) {
 		if (!output.equals(expectedValue)) {
 			var msg = "Step #" + step + " failed: [" + input + "]->[" + output + "]...Expected value=[" + expectedValue + "]";
 			fail(msg);

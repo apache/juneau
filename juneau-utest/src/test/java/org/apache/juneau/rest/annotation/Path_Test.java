@@ -405,7 +405,7 @@ class Path_Test extends TestBase {
 		public String f(RequestPathParams path) {
 			return format("f: {0}", path.toString());
 		}
-		private String format(String msg, Object...args) {
+		private static String format(String msg, Object...args) {
 			return StringUtils.format(msg, args);
 		}
 	}

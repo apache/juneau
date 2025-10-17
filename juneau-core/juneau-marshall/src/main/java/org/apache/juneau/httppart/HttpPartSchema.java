@@ -618,7 +618,7 @@ public class HttpPartSchema {
 				if (Utils.isNotEmpty(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
+				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
 			}
 			return this;
 		}
@@ -1166,7 +1166,7 @@ public class HttpPartSchema {
 				if (Utils.isNotEmpty(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
+				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
 			}
 			return this;
 		}
@@ -2376,7 +2376,7 @@ public class HttpPartSchema {
 				if (Utils.isNotEmpty(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
-				throw new ContextRuntimeException("Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
+				throw new ContextRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
 			}
 			return this;
 		}
@@ -2478,7 +2478,7 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		private Long firstNmo(Long...l) {
+		private static Long firstNmo(Long...l) {
 			for (Long ll : l)
 				if (ll != null && ll != -1)
 					return ll;
@@ -2497,17 +2497,17 @@ public class HttpPartSchema {
 		 * @param type The expected type of the attribute value.
 		 * @return The attribute value, or <jk>null</jk> if not found or not of the expected type.
 		 */
-		private <T> T getAnnotationValue(Annotation a, String attributeName, Class<T> type) {
+		private static <T> T getAnnotationValue(Annotation a, String attributeName, Class<T> type) {
 			try {
 				Method m = a.annotationType().getDeclaredMethod(attributeName);
 				Object value = m.invoke(a);
 				return type.isInstance(value) ? type.cast(value) : null;
-			} catch (Exception e) {
+			} catch (@SuppressWarnings("unused") Exception e) {
 				return null;
 			}
 		}
 
-		private String joinnlOrNull(String[]...s) {
+		private static String joinnlOrNull(String[]...s) {
 			for (String[] ss : s)
 				if (ss.length > 0)
 					return Utils.joinnl(ss);
@@ -2520,27 +2520,27 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		private Boolean resolve(Boolean newValue, Boolean oldValue) {
+		private static Boolean resolve(Boolean newValue, Boolean oldValue) {
 			return newValue == null ? oldValue : newValue;
 		}
 
-		private Long resolve(Long newValue, Long oldValue) {
+		private static Long resolve(Long newValue, Long oldValue) {
 			return (newValue == null || newValue == -1) ? oldValue : newValue;
 		}
 
-		private Boolean resolve(String newValue, Boolean oldValue) {
+		private static Boolean resolve(String newValue, Boolean oldValue) {
 			return Utils.isEmpty(newValue) ? oldValue : Boolean.valueOf(newValue);
 		}
 
-		private Long resolve(String newValue, Long oldValue) {
+		private static Long resolve(String newValue, Long oldValue) {
 			return Utils.isEmpty(newValue) ? oldValue : Long.parseLong(newValue);
 		}
 
-		private Number toNumber(String...s) {
+		private static Number toNumber(String...s) {
 			return HttpPartSchema.toNumber(s);
 		}
 
-		private Set<String> toSet(String[]...s) {
+		private static Set<String> toSet(String[]...s) {
 			return HttpPartSchema.toSet(s);
 		}
 
@@ -2915,9 +2915,10 @@ public class HttpPartSchema {
 								exclusiveMaximum(true);
 						}
 						break;
+					default:
 					// Silently ignore other validation annotations we don't support yet
 				}
-			} catch (Exception e) {
+			} catch (@SuppressWarnings("unused") Exception e) {
 				// If reflection fails, just skip this annotation - it's optional
 			}
 			return this;
@@ -4185,7 +4186,7 @@ public class HttpPartSchema {
 				.append("parsedType", parsedType)
 			;
 			return m.toString();
-		} catch (Exception e) {
+		} catch (@SuppressWarnings("unused") Exception e) {
 			return "";
 		}
 	}
@@ -4322,6 +4323,7 @@ public class HttpPartSchema {
 			case FILE:
 			case NO_TYPE:
 				break;
+			default: break;
 		}
 		return o;
 	}
@@ -4334,27 +4336,27 @@ public class HttpPartSchema {
 		return _const == null || _const.equals(x);
 	}
 
-	private boolean isValidDate(String x) {
+	private static boolean isValidDate(String x) {
 		// RFC 3339 full-date: YYYY-MM-DD (relaxed to allow various date formats)
 		return x.matches("^\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}.*");
 	}
 
-	private boolean isValidDateTime(String x) {
+	private static boolean isValidDateTime(String x) {
 		// RFC 3339 date-time (relaxed to allow various datetime formats)
 		return x.matches("^\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}[T\\s]\\d{1,2}:\\d{1,2}.*");
 	}
 
-	private boolean isValidDateTimeZone(String x) {
+	private static boolean isValidDateTimeZone(String x) {
 		// RFC 3339 date-time with time zone
 		return x.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?[+-]\\d{2}:\\d{2}$");
 	}
 
-	private boolean isValidDuration(String x) {
+	private static boolean isValidDuration(String x) {
 		// RFC 3339 Appendix A duration (ISO 8601)
 		return x.matches("^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$");
 	}
 
-	private boolean isValidEmail(String x) {
+	private static boolean isValidEmail(String x) {
 		// RFC 5321 simplified email validation
 		return x.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
 	}
@@ -4429,27 +4431,27 @@ public class HttpPartSchema {
 				default:
 					return true;
 			}
-		} catch (Exception e) {
+		} catch (@SuppressWarnings("unused") Exception e) {
 			return false;
 		}
 	}
 
-	private boolean isValidHostname(String x) {
+	private static boolean isValidHostname(String x) {
 		// RFC 1123 hostname validation
 		return x.matches("^([a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?\\.)*[a-zA-Z0-9]([a-zA-Z0-9\\-]{0,61}[a-zA-Z0-9])?$");
 	}
 
-	private boolean isValidIdnEmail(String x) {
+	private static boolean isValidIdnEmail(String x) {
 		// RFC 6531 - allows international characters
 		return x.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
 	}
 
-	private boolean isValidIdnHostname(String x) {
+	private static boolean isValidIdnHostname(String x) {
 		// RFC 5890 - allows international characters
 		return x.matches("^[^\\s]+$");
 	}
 
-	private boolean isValidIpv4(String x) {
+	private static boolean isValidIpv4(String x) {
 		// RFC 2673 IPv4 validation
 		String[] parts = x.split("\\.");
 		if (parts.length != 4)
@@ -4459,29 +4461,29 @@ public class HttpPartSchema {
 				int val = Integer.parseInt(part);
 				if (val < 0 || val > 255)
 					return false;
-			} catch (NumberFormatException e) {
+			} catch (@SuppressWarnings("unused") NumberFormatException e) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private boolean isValidIpv6(String x) {
+	private static boolean isValidIpv6(String x) {
 		// RFC 4291 IPv6 validation (simplified)
 		return x.matches("^([0-9a-fA-F]{0,4}:){7}[0-9a-fA-F]{0,4}$|^::([0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,7}:$");
 	}
 
-	private boolean isValidIri(String x) {
+	private static boolean isValidIri(String x) {
 		// RFC 3987 IRI validation (allows international characters)
 		return x.matches("^[a-zA-Z][a-zA-Z0-9+.-]*:.+");
 	}
 
-	private boolean isValidIriReference(String x) {
+	private static boolean isValidIriReference(String x) {
 		// RFC 3987 IRI reference (allows international characters)
 		return x.length() > 0;
 	}
 
-	private boolean isValidJsonPointer(String x) {
+	private static boolean isValidJsonPointer(String x) {
 		// RFC 6901 JSON Pointer validation
 		return x.isEmpty() || x.matches("^(/[^/]*)*$");
 	}
@@ -4592,17 +4594,17 @@ public class HttpPartSchema {
 		return pattern == null || pattern.matcher(x).matches();
 	}
 
-	private boolean isValidRegex(String x) {
+	private static boolean isValidRegex(String x) {
 		// ECMA-262 regex validation
 		try {
 			java.util.regex.Pattern.compile(x);
 			return true;
-		} catch (Exception e) {
+		} catch (@SuppressWarnings("unused") Exception e) {
 			return false;
 		}
 	}
 
-	private boolean isValidRelativeJsonPointer(String x) {
+	private static boolean isValidRelativeJsonPointer(String x) {
 		// Relative JSON Pointer validation
 		return x.matches("^(0|[1-9][0-9]*)(#|(/[^/]*)*)$");
 	}
@@ -4611,7 +4613,7 @@ public class HttpPartSchema {
 		return x != null || ! required;
 	}
 
-	private boolean isValidTime(String x) {
+	private static boolean isValidTime(String x) {
 		// RFC 3339 time
 		return x.matches("^\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?$");
 	}
@@ -4637,7 +4639,8 @@ public class HttpPartSchema {
 		return true;
 	}
 
-	private boolean isValidUri(String x) {
+	@SuppressWarnings("unused")
+	private static boolean isValidUri(String x) {
 		// RFC 3986 URI validation
 		try {
 			new java.net.URI(x);
@@ -4647,7 +4650,8 @@ public class HttpPartSchema {
 		}
 	}
 
-	private boolean isValidUriReference(String x) {
+	@SuppressWarnings("unused")
+	private static boolean isValidUriReference(String x) {
 		// RFC 3986 URI reference (can be relative)
 		try {
 			new java.net.URI(x);
@@ -4657,17 +4661,17 @@ public class HttpPartSchema {
 		}
 	}
 
-	private boolean isValidUriTemplate(String x) {
+	private static boolean isValidUriTemplate(String x) {
 		// RFC 6570 URI Template validation (simplified)
 		return x.matches("^[^\\s]*$");
 	}
 
-	private boolean isValidUuid(String x) {
+	private static boolean isValidUuid(String x) {
 		// RFC 4122 UUID validation
 		return x.matches("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 	}
 
-	private boolean resolve(Boolean b) {
+	private static boolean resolve(Boolean b) {
 		return b == null ? false : b;
 	}
 }

@@ -137,7 +137,7 @@ class ByteArrayResource_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private Header header(String name, Object val) {
+	private static Header header(String name, Object val) {
 		return BasicHeader.of(name, val);
 	}
 }

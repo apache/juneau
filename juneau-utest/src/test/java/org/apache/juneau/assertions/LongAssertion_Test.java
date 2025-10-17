@@ -32,7 +32,7 @@ class LongAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private LongAssertion test(Long value) {
+	private static LongAssertion test(Long value) {
 		return assertLong(value).setSilent();
 	}
 

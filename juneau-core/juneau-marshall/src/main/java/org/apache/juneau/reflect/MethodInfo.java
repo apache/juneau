@@ -701,13 +701,13 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
 	}
 
-	private void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	private static void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (ci != null)
 			for (Annotation a : ci._getDeclaredAnnotations())
 				AnnotationInfo.of(ci, a).accept(filter, action);
 	}
 
-	private void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	private static void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
 				AnnotationInfo.of(p, a).accept(filter, action);

@@ -34,7 +34,7 @@ class MapAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <K,V> MapAssertion<K,V> test(Map<K,V> value) {
+	private static <K,V> MapAssertion<K,V> test(Map<K,V> value) {
 		return assertMap(value).setSilent();
 	}
 

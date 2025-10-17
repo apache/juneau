@@ -134,7 +134,7 @@ class Restx_ReqAttrs_Test extends TestBase {
 			return transform(attrs);
 		}
 
-		private JsonMap transform(RequestAttributes attrs) {
+		private static JsonMap transform(RequestAttributes attrs) {
 			var m = new JsonMap();
 			for (Map.Entry<String,Object> e : attrs.asMap().entrySet()) {
 				if (e.getKey().startsWith("p"))

@@ -546,7 +546,7 @@ public class Entry {
 	public String toString() {
  		return isPresent() ? config.varSession.resolve(value) : null;
 	}
-	private boolean isArray(Type t) {
+	private static boolean isArray(Type t) {
 		if (! (t instanceof Class))
 			return false;
 		var c = (Class<?>)t;
@@ -561,7 +561,7 @@ public class Entry {
 		return value == null;
 	}
 
-	private boolean isSimpleType(Type t) {
+	private static boolean isSimpleType(Type t) {
 		if (! (t instanceof Class))
 			return false;
 		var c = (Class<?>)t;

@@ -62,7 +62,7 @@ class StringRange_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private StringRange of(String val) {
+	private static StringRange of(String val) {
 		return new StringRange(val);
 	}
 }

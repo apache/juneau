@@ -43,7 +43,7 @@ public class ArrayAssertion_Test extends TestBase {
 		@Override public String toString() { return "a="+a+",b="+b; }
 	}
 
-	private <E> ArrayAssertion<E> test(E[] value) {
+	private static <E> ArrayAssertion<E> test(E[] value) {
 		return assertArray(value).setSilent();
 	}
 

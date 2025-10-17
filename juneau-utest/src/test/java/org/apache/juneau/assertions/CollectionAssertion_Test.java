@@ -35,7 +35,7 @@ class CollectionAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <T> CollectionAssertion<T> test(Collection<T> value) {
+	private static <T> CollectionAssertion<T> test(Collection<T> value) {
 		return assertCollection(value).setSilent();
 	}
 

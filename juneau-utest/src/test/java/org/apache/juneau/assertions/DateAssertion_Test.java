@@ -36,7 +36,7 @@ class DateAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private DateAssertion test(Date value) {
+	private static DateAssertion test(Date value) {
 		return assertDate(value).setSilent();
 	}
 

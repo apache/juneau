@@ -221,7 +221,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 		try {
 			return string(in).map(Integer::parseInt);
 		} catch (NumberFormatException e) {
-			throw new ConfigException("Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
+			throw new ConfigException(e, "Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
 		}
 	}
 

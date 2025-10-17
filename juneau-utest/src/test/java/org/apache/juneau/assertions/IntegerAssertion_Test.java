@@ -31,7 +31,7 @@ class IntegerAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private IntegerAssertion test(Integer value) {
+	private static IntegerAssertion test(Integer value) {
 		return assertInteger(value).setSilent();
 	}
 

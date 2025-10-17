@@ -793,7 +793,6 @@ class BeanMap_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static class M4<T extends Number> extends M1<T> {
 		public M4() {
 			this.x = (T)Integer.valueOf(3);
@@ -846,7 +845,6 @@ class BeanMap_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static class N4<T extends Number> extends N1<T> {
 		public N4() {
 			setX((T)Integer.valueOf(3));

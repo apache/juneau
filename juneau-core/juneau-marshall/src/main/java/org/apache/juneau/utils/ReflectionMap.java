@@ -205,7 +205,7 @@ public class ReflectionMap<V> {
 						}
 					}
 				});
-			} catch (IndexOutOfBoundsException e) {
+			} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
 				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
 			}
 
@@ -497,6 +497,7 @@ public class ReflectionMap<V> {
 	 *
 	 * @param b Initializer object.
 	 */
+	@SuppressWarnings("unchecked")
 	protected ReflectionMap(Builder<V> b) {
 		this.classEntries = b.classEntries.toArray(new ClassEntry[b.classEntries.size()]);
 		this.methodEntries = b.methodEntries.toArray(new MethodEntry[b.methodEntries.size()]);

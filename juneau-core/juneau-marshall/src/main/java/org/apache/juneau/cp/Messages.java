@@ -246,6 +246,7 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override /* Overridden from BeanBuilder */
 		protected Messages buildDefault() {
 
@@ -479,7 +480,7 @@ public class Messages extends ResourceBundle {
 		try {
 			if (rbKeys.contains(k))
 				return rb.getObject(k);
-		} catch (MissingResourceException e) { /* Shouldn't happen */ }
+		} catch (@SuppressWarnings("unused") MissingResourceException e) { /* Shouldn't happen */ }
 		return parent.handleGetObject(key);
 	}
 }

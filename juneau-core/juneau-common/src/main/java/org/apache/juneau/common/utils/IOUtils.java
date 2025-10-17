@@ -106,7 +106,7 @@ public class IOUtils {
 		try {
 			if (is != null)
 				is.close();
-		} catch (IOException e) { /* ignore */ }
+		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class IOUtils {
 		try {
 			if (os != null)
 				os.close();
-		} catch (IOException e) { /* ignore */ }
+		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class IOUtils {
 		try {
 			if (r != null)
 				r.close();
-		} catch (IOException e) { /* ignore */ }
+		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class IOUtils {
 		try {
 			if (w != null)
 				w.close();
-		} catch (IOException e) { /* ignore */ }
+		} catch (@SuppressWarnings("unused") IOException e) { /* ignore */ }
 	}
 
 	/**

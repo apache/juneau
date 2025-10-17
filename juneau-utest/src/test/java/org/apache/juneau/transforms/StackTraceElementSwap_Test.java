@@ -28,11 +28,11 @@ import org.junit.jupiter.api.*;
  */
 class StackTraceElementSwap_Test extends TestBase {
 
-	private String write(StackTraceElement ste) {
+	private static String write(StackTraceElement ste) {
 		return Json5.of(ste);
 	}
 
-	private StackTraceElement read(String in) throws Exception {
+	private static StackTraceElement read(String in) throws Exception {
 		return Json5.DEFAULT.read(in, StackTraceElement.class);
 	}
 

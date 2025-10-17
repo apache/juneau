@@ -189,7 +189,7 @@ public class BasicPart implements NameValuePair, Headerable {
 		return getName() + "=" + getValue();
 	}
 
-	private Object unwrap(Object o) {
+	private static Object unwrap(Object o) {
 		while (o instanceof Supplier)
 			o = ((Supplier<?>)o).get();
 		return o;

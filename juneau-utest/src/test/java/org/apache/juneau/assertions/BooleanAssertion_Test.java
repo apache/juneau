@@ -32,7 +32,7 @@ class BooleanAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private BooleanAssertion test(Boolean value) {
+	private static BooleanAssertion test(Boolean value) {
 		return assertBoolean(value).setSilent();
 	}
 

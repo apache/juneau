@@ -79,7 +79,6 @@ class Assertion_Test extends TestBase {
 			.asCausedBy().asCausedBy().isNull();
 	}
 
-	@SuppressWarnings("unused")
 	@Test void a02_out() {
 		var out = new CapturingPrintStream();
 

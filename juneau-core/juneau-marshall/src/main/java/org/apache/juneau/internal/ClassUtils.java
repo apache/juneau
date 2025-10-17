@@ -127,7 +127,7 @@ public class ClassUtils {
 			if (x != null)
 				x.setAccessible(true);
 			return true;
-		} catch (SecurityException e) {
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
 	}
@@ -143,7 +143,7 @@ public class ClassUtils {
 			if (x != null)
 				x.setAccessible(true);
 			return true;
-		} catch (SecurityException e) {
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
 	}
@@ -159,7 +159,7 @@ public class ClassUtils {
 			if (x != null)
 				x.setAccessible(true);
 			return true;
-		} catch (SecurityException e) {
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
 	}

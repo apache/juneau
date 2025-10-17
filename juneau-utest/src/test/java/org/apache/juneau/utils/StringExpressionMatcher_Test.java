@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  */
 class StringExpressionMatcher_Test extends TestBase {
 
-	private void test(String expression, String toString, String[] shouldMatch, String[] shouldNotMatch) {
+	private static void test(String expression, String toString, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new StringExpressionMatcher(expression));
 		assertEquals(toString, m.toString());
 		for (var i : shouldMatch)

@@ -106,7 +106,7 @@ public class EntityTags {
 		return string;
 	}
 
-	private EntityTag[] parse(String value) {
+	private static EntityTag[] parse(String value) {
 		if (value == null)
 			return null;
 		String[] s = splita(value);

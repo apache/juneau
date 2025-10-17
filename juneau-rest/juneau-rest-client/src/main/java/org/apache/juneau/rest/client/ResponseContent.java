@@ -555,7 +555,6 @@ public class ResponseContent implements HttpEntity {
 	 * 	<br>For responses without a body(e.g. HTTP 204), returns an empty stream.
 	 * @throws IOException If a stream or illegal state exception was thrown.
 	 */
-	@SuppressWarnings("resource")
 	public InputStream asInputStream() throws IOException {
 		try {
 			if (body != null)
@@ -821,12 +820,11 @@ public class ResponseContent implements HttpEntity {
 	/**
 	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>, <jv>args</jv>)</c>.
 	 *
-	 * @param <T> The object type to create.
 	 * @param type The object type to create.
 	 * @param args Optional type arguments.
 	 * @return A new fluent assertion.
 	 */
-	public <T> FluentAnyAssertion<Object,ResponseContent> assertObject(Type type, Type...args) {
+	public FluentAnyAssertion<Object,ResponseContent> assertObject(Type type, Type...args) {
 		return new FluentResponseBodyAssertion<>(this, this).as(type, args);
 	}
 

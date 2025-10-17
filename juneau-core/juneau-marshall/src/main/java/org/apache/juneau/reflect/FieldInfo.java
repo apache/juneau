@@ -492,7 +492,7 @@ public class FieldInfo implements Comparable<FieldInfo> {
 			if (f != null)
 				f.setAccessible(true);
 			return true;
-		} catch (SecurityException e) {
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
 	}

@@ -664,7 +664,7 @@ class HtmlDocConfig_Test extends TestBase {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private RestClient client(Class<?> c) {
+	private static RestClient client(Class<?> c) {
 		return MockRestClient.build(c);
 	}
 }

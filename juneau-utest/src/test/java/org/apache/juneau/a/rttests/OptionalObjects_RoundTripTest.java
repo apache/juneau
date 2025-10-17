@@ -377,7 +377,6 @@ class OptionalObjects_RoundTripTest extends RoundTripTest_Base {
 		assertFalse(x.f1[0].isPresent());
 	}
 
-	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
 	void b07c_arrayOfOptionalIntegers_listWithNull(RoundTrip_Tester t) throws Exception {

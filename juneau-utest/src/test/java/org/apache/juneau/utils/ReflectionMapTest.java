@@ -30,7 +30,7 @@ class ReflectionMapTest extends TestBase {
 		return ReflectionMap.create(Number.class);
 	}
 
-	private void checkEntries(ReflectionMap<?> m, boolean hasClass, boolean hasMethods, boolean hasFields, boolean hasConstructors) {
+	private static void checkEntries(ReflectionMap<?> m, boolean hasClass, boolean hasMethods, boolean hasFields, boolean hasConstructors) {
 		assertEquals(m.classEntries.length == 0, ! hasClass);
 		assertEquals(m.methodEntries.length == 0, ! hasMethods);
 		assertEquals(m.fieldEntries.length == 0, ! hasFields);
@@ -54,7 +54,7 @@ class ReflectionMapTest extends TestBase {
 		checkEntries(A1_FULL, true, false, true, false);
 	}
 
-	private void checkA(Class<?> c, boolean match_A1_SIMPLE, boolean match_A1b_SIMPLE, boolean match_A1_FULL) {
+	private static void checkA(Class<?> c, boolean match_A1_SIMPLE, boolean match_A1b_SIMPLE, boolean match_A1_FULL) {
 		assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c, null).isPresent());
 		assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c, null).isPresent());
 		assertEquals(match_A1_FULL, A1_FULL.find(c, null).isPresent());
@@ -130,7 +130,7 @@ class ReflectionMapTest extends TestBase {
 		checkEntries(B1m1ssi_FULL, false, true, false, false);
 	}
 
-	private void checkB(Method m, boolean match_B1m1_SIMPLE, boolean match_B1m1i_SIMPLE, boolean match_B1m1s_SIMPLE, boolean match_B1m1ss_SIMPLE,
+	private static void checkB(Method m, boolean match_B1m1_SIMPLE, boolean match_B1m1i_SIMPLE, boolean match_B1m1s_SIMPLE, boolean match_B1m1ss_SIMPLE,
 			boolean match_B1m1si_SIMPLE, boolean match_B1m1ssi_SIMPLE, boolean match_B1m1_FULL, boolean match_B1m1i_FULL, boolean match_B1m1s_FULL,
 			boolean match_B1m1ss_FULL, boolean match_B1m1si_FULL, boolean match_B1m1ssi_FULL) {
 
@@ -205,7 +205,7 @@ class ReflectionMapTest extends TestBase {
 		checkEntries(C1f1_FULL, false, true, true, false);
 	}
 
-	private void checkC(Field f, boolean match_C1f1_SIMPLE, boolean match_C1f1_FULL) {
+	private static void checkC(Field f, boolean match_C1f1_SIMPLE, boolean match_C1f1_FULL) {
 		assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f, null).isPresent());
 		assertEquals(match_C1f1_FULL, C1f1_FULL.find(f, null).isPresent());
 
@@ -266,7 +266,7 @@ class ReflectionMapTest extends TestBase {
 		checkEntries(Dssi_FULL, false, false, false, true);
 	}
 
-	private void checkD(Constructor<?> c, boolean match_D_SIMPLE, boolean match_Di_SIMPLE, boolean match_Ds_SIMPLE, boolean match_Dss_SIMPLE,
+	private static void checkD(Constructor<?> c, boolean match_D_SIMPLE, boolean match_Di_SIMPLE, boolean match_Ds_SIMPLE, boolean match_Dss_SIMPLE,
 			boolean match_Dsi_SIMPLE, boolean match_Dssi_SIMPLE, boolean match_D_FULL, boolean match_Di_FULL, boolean match_Ds_FULL,
 			boolean match_Dss_FULL, boolean match_Dsi_FULL, boolean match_Dssi_FULL) {
 

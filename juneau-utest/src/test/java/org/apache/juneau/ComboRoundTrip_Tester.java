@@ -179,7 +179,6 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("msgPackT", create(b, MsgPackParser.create().typePropertyName("t")));
 	}
 
-	@SuppressWarnings("unchecked")
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
 		tb.serializerApply.accept(sb);
 		sb.swaps(tb.swaps);
@@ -192,7 +191,6 @@ public class ComboRoundTrip_Tester<T> {
 		return sb.build();
 	}
 
-	@SuppressWarnings("unchecked")
 	private Parser create(Builder<?> tb, Parser.Builder pb) {
 		tb.parserApply.accept(pb);
 		pb.swaps(tb.swaps);
@@ -244,7 +242,6 @@ public class ComboRoundTrip_Tester<T> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testParse(String testName) throws Exception {
 		var s = serializers.get(testName);
 		var exp = expected.get(testName);
@@ -269,7 +266,6 @@ public class ComboRoundTrip_Tester<T> {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void testParseVerify(String testName) throws Exception {
 		var s = serializers.get(testName);
 		var p = parsers.get(testName);

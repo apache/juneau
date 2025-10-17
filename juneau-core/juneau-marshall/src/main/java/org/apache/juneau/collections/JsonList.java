@@ -118,7 +118,7 @@ public class JsonList extends LinkedList<Object> {
 		@SuppressWarnings("synthetic-access")
 		UnmodifiableJsonList(JsonList contents) {
 			if (contents != null)
-				this.forEach(super::add);
+				contents.forEach(super::add);
 		}
 
 		@Override /* Overridden from List */

@@ -794,7 +794,7 @@ public abstract class ExecutableInfo {
 			if (e != null)
 				e.setAccessible(true);
 			return true;
-		} catch (SecurityException e) {
+		} catch (@SuppressWarnings("unused") SecurityException e) {
 			return false;
 		}
 	}

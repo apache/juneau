@@ -52,7 +52,7 @@ public enum CallLoggingDetail {
 		if (! Utils.isEmpty(s)) {
 			try {
 				return valueOf(s.toUpperCase());
-			} catch (IllegalArgumentException  e) {}
+			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {}
 		}
 		return null;
 	}

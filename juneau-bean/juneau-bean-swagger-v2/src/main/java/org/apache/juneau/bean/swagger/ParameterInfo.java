@@ -656,6 +656,7 @@ public class ParameterInfo extends SwaggerElement {
 		return this;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override /* Overridden from SwaggerElement */
 	public ParameterInfo set(String property, Object value) {
 		assertArgNotNull("property", property);

@@ -212,7 +212,7 @@ public class BasicMediaRangesHeader extends BasicStringHeader {
 		return value();
 	}
 
-	private MediaRanges parse(String value) {
+	private static MediaRanges parse(String value) {
 		return value == null ? null : MediaRanges.of(value);
 	}
 

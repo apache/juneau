@@ -124,14 +124,14 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return outer;
 	}
 
-	private void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
+	private static void addOperationIfTagMatches(Div tagBlockContents, Session s, String path, String method, Operation op, Tag t) {
 		if ((t == null && (op.getTags() == null || op.getTags().isEmpty())) ||
 			(t != null && op.getTags() != null && op.getTags().contains(t.getName()))) {
 			tagBlockContents.child(opBlock(s, path, method, op));
 		}
 	}
 
-	private Div examples(Session s, Parameter pi) {
+	private static Div examples(Session s, Parameter pi) {
 		var m = new JsonMap();
 
 		try {
@@ -148,7 +148,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return examplesDiv(m);
 	}
 
-	private Div examples(Session s, Response ri) {
+	private static Div examples(Session s, Response ri) {
 		var m = new JsonMap();
 		try {
 			var content = ri.getContent();
@@ -175,7 +175,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return examplesDiv(m);
 	}
 
-	private Div examplesDiv(JsonMap m) {
+	private static Div examplesDiv(JsonMap m) {
 		if (m.isEmpty())
 			return null;
 
@@ -201,7 +201,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the informational summary before the ops.
-	private Table header(Session s) {
+	private static Table header(Session s) {
 		var table = table()._class("header");
 
 		var info = s.openApi.getInfo();
@@ -251,7 +251,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return table;
 	}
 
-	private Div headers(Response ri) {
+	private static Div headers(Response ri) {
 		if (ri.getHeaders() == null)
 			return null;
 
@@ -275,14 +275,14 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		return headers;
 	}
 
-	private Div modelBlock(String modelName, SchemaInfo model) {
+	private static Div modelBlock(String modelName, SchemaInfo model) {
 		return div()._class("op-block op-block-closed model").children(
 			modelBlockSummary(modelName, model),
 			div(model)._class("op-block-contents")
 		);
 	}
 
-	private HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
+	private static HtmlElement modelBlockSummary(String modelName, SchemaInfo model) {
 		return div()._class("op-block-summary").children(
 			span(modelName)._class("method-button"),
 			model.getDescription() != null ? span(toBRL(model.getDescription()))._class("summary") : null
@@ -290,7 +290,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the contents under the "Model" header.
-	private Div modelsBlockContents(Session s) {
+	private static Div modelsBlockContents(Session s) {
 		var modelBlockContents = div()._class("tag-block-contents");
 		if (s.openApi.getComponents() != null && s.openApi.getComponents().getSchemas() != null) {
 			s.openApi.getComponents().getSchemas().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
@@ -299,11 +299,11 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the "Model" header.
-	private HtmlElement modelsBlockSummary() {
+	private static HtmlElement modelsBlockSummary() {
 		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
 	}
 
-	private Div opBlock(Session s, String path, String opName, Operation op) {
+	private static Div opBlock(Session s, String path, String opName, Operation op) {
 
 		var opClass = op.getDeprecated() != null && op.getDeprecated() ? "deprecated" : opName.toLowerCase();
 		if (!(op.getDeprecated() != null && op.getDeprecated()) && !STANDARD_METHODS.contains(opClass))
@@ -315,7 +315,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		);
 	}
 
-	private HtmlElement opBlockSummary(String path, String opName, Operation op) {
+	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
 		return div()._class("op-block-summary").children(
 			span(opName.toUpperCase())._class("method-button"),
 			span(path)._class("path"),
@@ -323,7 +323,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		).onclick("toggleOpBlock(this)");
 	}
 
-	private Div tableContainer(Session s, Operation op) {
+	private static Div tableContainer(Session s, Operation op) {
 		var tableContainer = div()._class("table-container");
 
 		if (op.getDescription() != null)
@@ -379,7 +379,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
-	private Div tagBlockContents(Session s, Tag t) {
+	private static Div tagBlockContents(Session s, Tag t) {
 		var tagBlockContents = div()._class("tag-block-contents");
 
 		if (s.openApi.getPaths() != null) {
@@ -408,7 +408,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 	}
 
 	// Creates the "pet  Everything about your Pets  ext-link" header.
-	private HtmlElement tagBlockSummary(Tag t) {
+	private static HtmlElement tagBlockSummary(Tag t) {
 		var ed = t.getExternalDocs();
 
 		var content = ed != null && ed.getDescription() != null ? ed.getDescription() : (ed != null ? ed.getUrl() : null);

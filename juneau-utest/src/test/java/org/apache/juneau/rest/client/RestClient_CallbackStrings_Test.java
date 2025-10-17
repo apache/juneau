@@ -42,7 +42,7 @@ class RestClient_CallbackStrings_Test extends TestBase {
 		public JsonMap put(RestRequest req) throws Exception {
 			return JsonMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getContent().asString());
 		}
-		private Map<String,Object> getFooHeaders(RestRequest req) {
+		private static Map<String,Object> getFooHeaders(RestRequest req) {
 			var m = new TreeMap<String,Object>();
 			req.getHeaders().stream().filter(x -> x.getName().startsWith("Foo-")).forEach(x -> m.put(x.getName(), x.getValue()));
 			return m;

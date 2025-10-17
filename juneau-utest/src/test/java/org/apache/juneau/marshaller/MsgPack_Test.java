@@ -57,11 +57,11 @@ class MsgPack_Test extends TestBase {
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private OutputStream baos() {
+	private static OutputStream baos() {
 		return new ByteArrayOutputStream();
 	}
 
-	private byte[] bytes(Object o) {
+	private static byte[] bytes(Object o) {
 		return ((ByteArrayOutputStream)o).toByteArray();
 	}
 }

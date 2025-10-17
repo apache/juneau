@@ -370,7 +370,7 @@ public class FileStore extends ConfigStore {
 					case MEDIUM -> com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
 					case HIGH   -> com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
 				};
-			} catch (Exception e) {
+			} catch (@SuppressWarnings("unused") Exception e) {
 				/* Ignore */
 			}
 			return null;
@@ -547,7 +547,7 @@ public class FileStore extends ConfigStore {
 					throw new IOException("Could not create file: " + p);
 				}
 			}
-		} catch (IOException e) {
+		} catch (@SuppressWarnings("unused") IOException e) {
 			return false;
 		}
 		return Files.isWritable(p);

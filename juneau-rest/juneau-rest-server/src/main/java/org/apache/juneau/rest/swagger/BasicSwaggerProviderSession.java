@@ -662,7 +662,7 @@ public class BasicSwaggerProviderSession {
 			piri.put(examplesKey, examples);
 	}
 
-	private void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) throws Exception {
+	private static void addParamExample(RestOpContext sm, JsonMap piri, RestPartType in, Type type) throws Exception {
 
 		String s = piri.getString("example");
 
@@ -691,7 +691,7 @@ public class BasicSwaggerProviderSession {
 	}
 
 	@SafeVarargs
-	private final <T> T firstNonEmpty(T...t) {
+	private final static <T> T firstNonEmpty(T...t) {
 		for (T oo : t)
 			if (! Utils.isEmpty(oo))
 				return oo;
@@ -701,7 +701,7 @@ public class BasicSwaggerProviderSession {
 	/**
 	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
-	private JsonMap fixSwaggerExtensions(JsonMap om) {
+	private static JsonMap fixSwaggerExtensions(JsonMap om) {
 		Predicate<Object> nn = Utils::isNotNull;
 		om
 			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
@@ -712,7 +712,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private JsonMap getOperation(JsonMap om, String path, String httpMethod) {
+	private static JsonMap getOperation(JsonMap om, String path, String httpMethod) {
 		if (! om.containsKey("paths"))
 			om.put("paths", new JsonMap());
 		om = om.getMap("paths");
@@ -744,13 +744,13 @@ public class BasicSwaggerProviderSession {
 		return om;
 	}
 
-	private boolean isMulti(Header h) {
+	private static boolean isMulti(Header h) {
 		if ("*".equals(h.name()) || "*".equals(h.value()))
 			return true;
 		return false;
 	}
 
-	private JsonList merge(JsonList...lists) {
+	private static JsonList merge(JsonList...lists) {
 		JsonList l = lists[0];
 		for (int i = 1; i < lists.length; i++) {
 			if (lists[i] != null) {
@@ -762,7 +762,7 @@ public class BasicSwaggerProviderSession {
 		return l;
 	}
 
-	private JsonMap merge(JsonMap...maps) {
+	private static JsonMap merge(JsonMap...maps) {
 		JsonMap m = maps[0];
 		for (int i = 1; i < maps.length; i++) {
 			if (maps[i] != null) {
@@ -992,7 +992,7 @@ public class BasicSwaggerProviderSession {
 		}
 	}
 
-	private JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
+	private static JsonMap pushupSchemaFields(RestPartType type, JsonMap param, JsonMap schema) {
 		Predicate<Object> ne = Utils::isNotEmpty;
 		if (schema != null && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
@@ -1154,7 +1154,7 @@ public class BasicSwaggerProviderSession {
 		return nullIfEmpty(om);
 	}
 
-	private Set<String> toSet(String[] ss) {
+	private static Set<String> toSet(String[] ss) {
 		if (ss.length == 0)
 			return null;
 		Set<String> set = set();

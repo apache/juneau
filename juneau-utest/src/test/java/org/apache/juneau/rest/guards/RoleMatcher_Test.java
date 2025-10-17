@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.*;
  */
 class RoleMatcher_Test extends TestBase {
 
-	private void test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
+	private static void test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new RoleMatcher(expression));
 		assertEquals(toString, m.toString(), "m.toString() didn't match.");
 		assertEquals(expressionRoles, Utils.join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
@@ -47,7 +47,7 @@ class RoleMatcher_Test extends TestBase {
 				fail("Matcher "+m+" should not have matched '"+i+"' but did.");
 	}
 
-	private Set<String> toSet(String input) {
+	private static Set<String> toSet(String input) {
 		if (input == null)
 			return null;
 		if (input.indexOf(',') == -1)

@@ -124,7 +124,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return outer;
 	}
 
-	private Div examples(Session s, ParameterInfo pi) {
+	private static Div examples(Session s, ParameterInfo pi) {
 		var isBody = "body".equals(pi.getIn());
 
 		var m = new JsonMap();
@@ -153,7 +153,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return examplesDiv(m);
 	}
 
-	private Div examples(Session s, ResponseInfo ri) {
+	private static Div examples(Session s, ResponseInfo ri) {
 		var si = ri.getSchema();
 
 		var m = new JsonMap();
@@ -176,7 +176,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return examplesDiv(m);
 	}
 
-	private Div examplesDiv(JsonMap m) {
+	private static Div examplesDiv(JsonMap m) {
 		if (m.isEmpty())
 			return null;
 
@@ -202,7 +202,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the informational summary before the ops.
-	private Table header(Session s) {
+	private static Table header(Session s) {
 		var table = table()._class("header");
 
 		var info = s.swagger.getInfo();
@@ -252,7 +252,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return table;
 	}
 
-	private Div headers(ResponseInfo ri) {
+	private static Div headers(ResponseInfo ri) {
 		if (ri.getHeaders() == null)
 			return null;
 
@@ -276,14 +276,14 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return headers;
 	}
 
-	private Div modelBlock(String modelName, JsonMap model) {
+	private static Div modelBlock(String modelName, JsonMap model) {
 		return div()._class("op-block op-block-closed model").children(
 			modelBlockSummary(modelName, model),
 			div(model)._class("op-block-contents")
 		);
 	}
 
-	private HtmlElement modelBlockSummary(String modelName, JsonMap model) {
+	private static HtmlElement modelBlockSummary(String modelName, JsonMap model) {
 		return div()._class("op-block-summary").children(
 			span(modelName)._class("method-button"),
 			model.containsKey("description") ? span(toBRL(model.remove("description").toString()))._class("summary") : null
@@ -291,18 +291,18 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the contents under the "Model" header.
-	private Div modelsBlockContents(Session s) {
+	private static Div modelsBlockContents(Session s) {
 		var modelBlockContents = div()._class("tag-block-contents");
 		s.swagger.getDefinitions().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
 		return modelBlockContents;
 	}
 
 	// Creates the "Model" header.
-	private HtmlElement modelsBlockSummary() {
+	private static HtmlElement modelsBlockSummary() {
 		return div()._class("tag-block-summary").children(span("Models")._class("name")).onclick("toggleTagBlock(this)");
 	}
 
-	private Div opBlock(Session s, String path, String opName, Operation op) {
+	private static Div opBlock(Session s, String path, String opName, Operation op) {
 
 		var opClass = op.isDeprecated() ? "deprecated" : opName.toLowerCase();
 		if (! op.isDeprecated() && ! STANDARD_METHODS.contains(opClass))
@@ -314,7 +314,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		);
 	}
 
-	private HtmlElement opBlockSummary(String path, String opName, Operation op) {
+	private static HtmlElement opBlockSummary(String path, String opName, Operation op) {
 		return div()._class("op-block-summary").children(
 			span(opName.toUpperCase())._class("method-button"),
 			span(path)._class("path"),
@@ -322,7 +322,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		).onclick("toggleOpBlock(this)");
 	}
 
-	private Div tableContainer(Session s, Operation op) {
+	private static Div tableContainer(Session s, Operation op) {
 		var tableContainer = div()._class("table-container");
 
 		if (op.getDescription() != null)
@@ -378,7 +378,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the contents under the "pet  Everything about your Pets  ext-link" header.
-	private Div tagBlockContents(Session s, Tag t) {
+	private static Div tagBlockContents(Session s, Tag t) {
 		var tagBlockContents = div()._class("tag-block-contents");
 
 		if (s.swagger.getPaths() != null) {
@@ -394,7 +394,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	// Creates the "pet  Everything about your Pets  ext-link" header.
-	private HtmlElement tagBlockSummary(Tag t) {
+	private static HtmlElement tagBlockSummary(Tag t) {
 		var ed = t.getExternalDocs();
 
 		var children = new ArrayList<HtmlElement>();

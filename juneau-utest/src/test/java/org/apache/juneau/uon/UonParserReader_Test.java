@@ -25,7 +25,7 @@ import org.apache.juneau.common.utils.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"resource"})
+@SuppressWarnings({})
 class UonParserReader_Test extends TestBase {
 
 	//====================================================================================================
@@ -183,7 +183,7 @@ class UonParserReader_Test extends TestBase {
 		assertEquals(-1, r.readCodePoint());
 	}
 
-	private String escape(String s) throws UnsupportedEncodingException {
+	private static String escape(String s) throws UnsupportedEncodingException {
 		var sb = new StringBuilder();
 		byte[] b = s.getBytes("UTF-8");
 		for (byte element : b)
@@ -191,7 +191,7 @@ class UonParserReader_Test extends TestBase {
 		return sb.toString();
 	}
 
-	private UonReader r(String in, boolean decodeChars) throws Exception {
+	private static UonReader r(String in, boolean decodeChars) throws Exception {
 		return new UonReader(new ParserPipe(in), decodeChars);
 	}
 

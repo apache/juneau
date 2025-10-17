@@ -33,7 +33,7 @@ class VersionAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private VersionAssertion test(Version value) {
+	private static VersionAssertion test(Version value) {
 		return assertVersion(value).setSilent();
 	}
 

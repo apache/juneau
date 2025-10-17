@@ -92,7 +92,7 @@ public class HelpCommand extends ConsoleCommand {
 		return "help [command]";
 	}
 
-	private String indent(String in) {
+	private static String indent(String in) {
 		if (in == null)
 			return "";
 		return in.replaceAll("\n", "\n\t");

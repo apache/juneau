@@ -242,9 +242,8 @@ class Swapper_Test extends TestBase {
 				try {
 					if (future.isDone()) {
 						return future.get();
-					} else {
-						return "<pending>";
 					}
+					return "<pending>";
 				} catch (Exception e) {
 					return "<error:" + e.getMessage() + ">";
 				}

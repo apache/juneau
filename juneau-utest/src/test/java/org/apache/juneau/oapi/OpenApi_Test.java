@@ -39,11 +39,11 @@ public class OpenApi_Test extends TestBase {
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;
 
-	private String serialize(HttpPartSchema schema, Object in) throws Exception {
+	private static String serialize(HttpPartSchema schema, Object in) throws Exception {
 		return DS.serialize(null, schema, in);
 	}
 
-	private <T> T parse(HttpPartSchema schema, String in, Class<T> c, Class<?>...args) throws Exception {
+	private static <T> T parse(HttpPartSchema schema, String in, Class<T> c, Class<?>...args) throws Exception {
 		return DP.parse(null, schema, in, DP.getClassMeta(c, args));
 	}
 
@@ -859,7 +859,7 @@ public class OpenApi_Test extends TestBase {
 	// Helpers
 	//---------------------------------------------------------------------------------------------
 
-	private Calendar cal(String in) {
+	private static Calendar cal(String in) {
 		return DatatypeConverter.parseDateTime(toValidISO8601DT(in));
 	}
 }

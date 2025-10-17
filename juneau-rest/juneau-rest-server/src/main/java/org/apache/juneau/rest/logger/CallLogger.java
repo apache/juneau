@@ -661,13 +661,13 @@ public class CallLogger {
 			.asReadableString();
 	}
 
-	private byte[] getRequestContent(HttpServletRequest req) {
+	private static byte[] getRequestContent(HttpServletRequest req) {
 		if (req instanceof CachingHttpServletRequest)
 			return ((CachingHttpServletRequest)req).getContent();
 		return Utils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
 	}
 
-	private byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
+	private static byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
 		if (res instanceof CachingHttpServletResponse)
 			return ((CachingHttpServletResponse)res).getContent();
 		return Utils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);

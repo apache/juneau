@@ -827,7 +827,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		}
 		return m;
 	}
-	private <T> T newInstance(Class<T> c) {
+	private static <T> T newInstance(Class<T> c) {
 		try {
 			return c.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {

@@ -236,7 +236,7 @@ public class Assertion {
 					.addBean(Object[].class,new Object[0])
 					.createBean(throwable)
 					.run();
-			} catch (ExecutableException e) {
+			} catch (@SuppressWarnings("unused") ExecutableException e) {
 				// If we couldn't create requested exception, just throw a RuntimeException.
 				throw new BasicRuntimeException(cause, msg);
 			}

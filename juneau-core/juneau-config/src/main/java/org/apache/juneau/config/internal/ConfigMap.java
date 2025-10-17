@@ -666,12 +666,12 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 	}
 
-	private void checkKeyName(String s) {
+	private static void checkKeyName(String s) {
 		if (! isValidKeyName(s))
 			throw new IllegalArgumentException("Invalid key name: '"+s+"'");
 	}
 
-	private void checkSectionName(String s) {
+	private static void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
 			throw new IllegalArgumentException("Invalid section name: '"+s+"'");
 	}
@@ -739,7 +739,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return changes2;
 	}
 
-	private boolean isValidConfigName(String s) {
+	private static boolean isValidConfigName(String s) {
 		if (s == null)
 			return false;
 		s = s.trim();
@@ -758,7 +758,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return true;
 	}
 
-	private boolean isValidKeyName(String s) {
+	private static boolean isValidKeyName(String s) {
 		if (s == null)
 			return false;
 		s = s.trim();
@@ -772,7 +772,7 @@ public class ConfigMap implements ConfigStoreListener {
 		return true;
 	}
 
-	private boolean isValidNewSectionName(String s) {
+	private static boolean isValidNewSectionName(String s) {
 		if (s == null)
 			return false;
 		s = s.trim();
@@ -822,7 +822,7 @@ public class ConfigMap implements ConfigStoreListener {
 						try {
 							if (! imports2.containsKey(importName))
 								imports2.put(importName, store.getMap(importName));
-						} catch (StackOverflowError e) {
+						} catch (@SuppressWarnings("unused") StackOverflowError e) {
 							throw new IOException("Import loop detected in configuration '"+name+"'->'"+importName+"'");
 						}
 					}

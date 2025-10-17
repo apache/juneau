@@ -34,7 +34,7 @@ class ListAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <E> ListAssertion<E> test(List<E> value) {
+	private static <E> ListAssertion<E> test(List<E> value) {
 		return assertList(value).setSilent();
 	}
 

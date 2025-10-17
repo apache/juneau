@@ -711,7 +711,7 @@ public class BeanSession extends ContextSession {
 	 *
 	 * @return The name property name.  Never <jk>null</jk>.
 	 */
-	public final String getNamePropertyName() {
+	public final static String getNamePropertyName() {
 		return "_name";
 	}
 

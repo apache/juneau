@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 class RrpcRestOpSession_Test extends TestBase {

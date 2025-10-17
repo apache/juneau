@@ -435,6 +435,8 @@ public class ClassMeta<T> implements Type {
 					case OPTIONAL:
 					case VOID:
 						break;
+					default:
+						break;
 				}
 			}
 

@@ -200,11 +200,11 @@ public class XmlParserSession extends ReaderParserSession {
 				switch(c) {
 					case 'm': return (s.equals("number") ? NUMBER : UNKNOWN);
 					case 'l': return (s.equals("null") ? NULL : UNKNOWN);
+					default: return NUMBER;
 				}
-				//return NUMBER;
 			}
+			default: return UNKNOWN;
 		}
-		return UNKNOWN;
 	}
 	private final XmlParser ctx;
 

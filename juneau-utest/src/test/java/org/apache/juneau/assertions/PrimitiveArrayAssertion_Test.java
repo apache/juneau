@@ -33,11 +33,11 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private PrimitiveArrayAssertion<Integer,int[]> intArray(int[] value) {
+	private static PrimitiveArrayAssertion<Integer,int[]> intArray(int[] value) {
 		return assertIntArray(value).setSilent();
 	}
 
-	private PrimitiveArrayAssertion<Byte,byte[]> byteArray(byte[] value) {
+	private static PrimitiveArrayAssertion<Byte,byte[]> byteArray(byte[] value) {
 		return assertByteArray(value).setSilent();
 	}
 

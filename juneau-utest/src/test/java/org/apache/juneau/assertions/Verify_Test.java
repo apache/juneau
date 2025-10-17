@@ -31,7 +31,7 @@ class Verify_Test extends TestBase {
 	// Helpers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private StringAssertion test(Object value) {
+	private static StringAssertion test(Object value) {
 		return assertString(value).setSilent();
 	}
 

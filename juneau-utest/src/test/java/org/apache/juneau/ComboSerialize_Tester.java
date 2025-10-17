@@ -138,7 +138,6 @@ public class ComboSerialize_Tester<T> {
 		serializers.put("msgPackT", create(b, MsgPackSerializer.create().typePropertyName("t").addBeanTypes().addRootType()));
 	}
 
-	@SuppressWarnings("unchecked")
 	private Serializer create(Builder<?> tb, Serializer.Builder sb) {
 		tb.serializerApply.accept(sb);
 		sb.swaps(tb.swaps);

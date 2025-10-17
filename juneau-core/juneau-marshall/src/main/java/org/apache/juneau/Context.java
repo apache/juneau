@@ -674,7 +674,7 @@ public abstract class Context implements AnnotationProvider {
 			return getContextConstructor().invoke(this);
 		}
 
-		private AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
+		private static AnnotationWorkList traverse(AnnotationWorkList work, Object x) {
 			Utils.traverse(x, y -> {
 				if (x instanceof Class<?> x2)
 					work.add(ClassInfo.of(x2).getAnnotationList(CONTEXT_APPLY_FILTER));

@@ -34,7 +34,7 @@ class StringListAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private StringListAssertion test(List<String> value) {
+	private static StringListAssertion test(List<String> value) {
 		return assertStringList(value).setSilent();
 	}
 

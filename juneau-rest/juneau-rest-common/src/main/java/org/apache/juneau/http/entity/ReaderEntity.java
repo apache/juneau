@@ -207,7 +207,6 @@ public class ReaderEntity extends BasicHttpEntity {
 		out.flush();
 	}
 
-	@SuppressWarnings("resource") // Caller closes
 	private Reader content() {
 		return Objects.requireNonNull(contentOrElse((Reader) null), "Reader is null.");
 	}

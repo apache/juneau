@@ -34,7 +34,7 @@ class AnyAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <T> AnyAssertion<T> test(T value) {
+	private static <T> AnyAssertion<T> test(T value) {
 		return assertAny(value).setSilent();
 	}
 

@@ -213,7 +213,7 @@ class MaxIndent_Test extends TestBase {
 		testSerialize("urlEncoding", s, input.urlEnc, input);
 	}
 
-	private void testSerialize(String testName, Serializer s, String expected, Input input) throws Exception {
+	private static void testSerialize(String testName, Serializer s, String expected, Input input) throws Exception {
 		try {
 			var r = s.serializeToString(input.in);
 

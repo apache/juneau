@@ -212,7 +212,7 @@ class MsgPackSerializerTest extends TestBase {
 		public int age = 21;
 	}
 
-	private void test(Object input, String expected) throws Exception {
+	private static void test(Object input, String expected) throws Exception {
 		byte[] b = MsgPackSerializer.DEFAULT.serialize(input);
 		assertEquals(expected, StringUtils.toSpacedHex(b));
 	}

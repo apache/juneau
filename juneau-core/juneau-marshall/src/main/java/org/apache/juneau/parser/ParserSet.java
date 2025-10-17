@@ -419,7 +419,6 @@ public class ParserSet {
 	 * <p>
 	 * Used by {@link ParserSet.Builder#set(Class...)}
 	 */
-	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Parser {
 		protected Inherit(Parser.Builder builder) {
 			super(builder);
@@ -431,7 +430,6 @@ public class ParserSet {
 	 * <p>
 	 * Used by {@link ParserSet.Builder#add(Class...)}
 	 */
-	@SuppressWarnings("javadoc")
 	public static abstract class NoInherit extends Parser {
 		protected NoInherit(Parser.Builder builder) {
 			super(builder);

@@ -118,7 +118,7 @@ class RestrictedVarsTest extends TestBase {
 		}
 	}
 
-	private void test(VarResolver vr, String s, String expected) throws IOException {
+	private static void test(VarResolver vr, String s, String expected) throws IOException {
 		var sw = new StringWriter();
 		vr.resolveTo(s, sw);
 		assertEquals(expected, sw.toString());

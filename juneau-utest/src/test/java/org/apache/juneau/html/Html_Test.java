@@ -201,7 +201,7 @@ class Html_Test extends TestBase {
 		assertEquals(expected, r);
 	}
 
-	private String strip(String html) {
+	private static String strip(String html) {
 		return html
 			.replace("<table><tr><th>key</th><th>value</th></tr>", "")
 			.replace("</table>", "")

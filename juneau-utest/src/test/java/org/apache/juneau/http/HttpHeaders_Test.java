@@ -75,18 +75,18 @@ class HttpHeaders_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private BasicHeader header(String name, Object val) {
+	private static BasicHeader header(String name, Object val) {
 		return basicHeader(name, val);
 	}
 
-	private BasicPart part(String name, Object val) {
+	private static BasicPart part(String name, Object val) {
 		return basicPart(name, val);
 	}
 
 	/**
 	 * Asserts the JSON5 representation of the specified object.
 	 */
-	private void assertTypeAndJson(Class<?> c, String json, Object value) {
+	private static void assertTypeAndJson(Class<?> c, String json, Object value) {
 		assertInstanceOf(c, value);
 		assertEquals(json, Json5.DEFAULT.write(value));
 	}

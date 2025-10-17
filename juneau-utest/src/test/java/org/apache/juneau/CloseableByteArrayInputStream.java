@@ -29,7 +29,7 @@ public class CloseableByteArrayInputStream extends ByteArrayInputStream {
 	}
 
 	@Override
-	public int read() {
+	public synchronized int read() {
 		if (isClosed)
 			throw new IllegalStateException("Stream is closed");
 		return super.read();

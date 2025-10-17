@@ -158,11 +158,11 @@ class ParserReader_Test extends TestBase {
 	// Utility methods
 	//====================================================================================================
 
-	private String read(ParserReader r) throws IOException {
+	private static String read(ParserReader r) throws IOException {
 		return read(r, Integer.MAX_VALUE);
 	}
 
-	private String read(ParserReader r, int length) throws IOException {
+	private static String read(ParserReader r, int length) throws IOException {
 		var sb = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			int c = r.read();
@@ -173,7 +173,7 @@ class ParserReader_Test extends TestBase {
 		return sb.toString();
 	}
 
-	private ParserReader createParserReader(Object in) throws Exception {
+	private static ParserReader createParserReader(Object in) throws Exception {
 		return new ParserReader(new ParserPipe(in));
 	}
 }

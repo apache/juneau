@@ -27,8 +27,6 @@ package org.apache.juneau.swap;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders">POJO Builders</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
  * </ul>
- *
- * @param <T> The type of objects that this builder creates.
  */
-public interface Builder<T> {
+public interface Builder {
 }

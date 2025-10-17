@@ -514,7 +514,6 @@ class Utils {
 	 * @return A list of parsed tokens.
 	 * @see NestedTokenizer#tokenize(String)
 	 */
-	@SuppressWarnings("javadoc")
 	public static List<NestedTokenizer.Token> tokenize(String fields) {
 		return NestedTokenizer.tokenize(fields);
 	}

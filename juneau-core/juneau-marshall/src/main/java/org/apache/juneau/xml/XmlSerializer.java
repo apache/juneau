@@ -1185,7 +1185,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	/** Default serializer, single quotes, whitespace added. */
 	public static final XmlSerializer DEFAULT_NS_SQ_READABLE = new NsSqReadable(create());
 
-	@SuppressWarnings("javadoc")
 	protected static final Namespace
 		DEFAULT_JUNEAU_NAMESPACE = Namespace.of("juneau", "http://www.apache.org/2013/Juneau"),
 		DEFAULT_XS_NAMESPACE = Namespace.of("xs", "http://www.w3.org/2001/XMLSchema");

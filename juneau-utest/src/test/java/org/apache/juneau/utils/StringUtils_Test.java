@@ -422,7 +422,7 @@ class StringUtils_Test extends TestBase {
 		assertList(split2test("1,2\\\\,"), "1", "2\\", "");
 	}
 
-	private List<String> split2test(String s) {
+	private static List<String> split2test(String s) {
 		var l = new ArrayList<String>();
 		Utils.split(s, l::add);
 		return l;

@@ -199,11 +199,11 @@ public class BasicIntegerHeader extends BasicHeader {
 		return value();
 	}
 
-	private Integer parse(String value) {
+	private static Integer parse(String value) {
 		try {
 			return value == null ? null : Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			throw new BasicRuntimeException("Value ''{0}'' could not be parsed as an integer.", value);
+			throw new BasicRuntimeException(e, "Value ''{0}'' could not be parsed as an integer.", value);
 		}
 	}
 

@@ -332,7 +332,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	/**
 	 * Checks if an object is a text node (String or primitive type).
 	 */
-	private boolean isTextNode(Object o) {
+	private static boolean isTextNode(Object o) {
 		if (o == null)
 			return false;
 		Class<?> c = o.getClass();
@@ -643,7 +643,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 					try {
 						findNsfMappings(value);
-					} catch (Throwable x) {
+					} catch (@SuppressWarnings("unused") Throwable x) {
 						// Ignore
 					}
 				});

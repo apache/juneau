@@ -130,7 +130,7 @@ class Remote_ResponseAnnotation_Test extends TestBase {
 		return MockRestClient.create(rest).build().getRemote(t);
 	}
 
-	private static <T> MockRestClient.Builder client(Class<?> rest) {
+	private static MockRestClient.Builder client(Class<?> rest) {
 		return MockRestClient.create(rest);
 	}
 }

@@ -174,7 +174,7 @@ public class ClasspathStore extends ConfigStore {
 	public synchronized boolean exists(String name) {
 		try {
 			return ! read(name).isEmpty();
-		} catch (IOException e) {
+		} catch (@SuppressWarnings("unused") IOException e) {
 			return false;
 		}
 	}

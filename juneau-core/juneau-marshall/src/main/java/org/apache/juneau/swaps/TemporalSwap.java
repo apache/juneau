@@ -395,7 +395,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 		return (Temporal)parseMethod.invoke(null, ta);
 	}
 
-	private final TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
+	private final static TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
 		return new DefaultingTemporalAccessor(t, zoneId);
 	}
 

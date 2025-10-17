@@ -624,7 +624,7 @@ public class ParserSession extends BeanSession {
 			return doParse(pipe, getArgsClassMeta(argTypes));
 		} catch (ParseException e) {
 			throw e;
-		} catch (StackOverflowError e) {
+		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
@@ -661,7 +661,7 @@ public class ParserSession extends BeanSession {
 			return doParseIntoCollection(pipe, c, elementType);
 		} catch (ParseException e) {
 			throw e;
-		} catch (StackOverflowError e) {
+		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
 			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.",
@@ -731,7 +731,7 @@ public class ParserSession extends BeanSession {
 			return doParse(pipe, type);
 		} catch (ParseException | IOException e) {
 			throw e;
-		} catch (StackOverflowError e) {
+		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (Exception e) {
 			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.",

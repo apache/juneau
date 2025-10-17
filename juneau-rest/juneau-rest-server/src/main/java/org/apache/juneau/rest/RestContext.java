@@ -3742,7 +3742,7 @@ public class RestContext extends Context {
 			return this;
 		}
 
-		private void runInitHooks(BeanStore beanStore, Supplier<?> resource) throws ServletException {
+		private static void runInitHooks(BeanStore beanStore, Supplier<?> resource) throws ServletException {
 
 			Object r = resource.get();
 
@@ -6165,7 +6165,7 @@ public class RestContext extends Context {
 		return debugEnablement.isDebug(this, call.getRequest());
 	}
 
-	private Set<String> newCaseInsensitiveSet(String value) {
+	private static Set<String> newCaseInsensitiveSet(String value) {
 		Set<String> s = new TreeSet<>(String.CASE_INSENSITIVE_ORDER) {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -6181,7 +6181,7 @@ public class RestContext extends Context {
 		return new MethodInvoker(m, getMethodExecStats(m));
 	}
 
-	private Throwable unwrap(Throwable t) {
+	private static Throwable unwrap(Throwable t) {
 		if (t instanceof InvocationTargetException) {
 			return ((InvocationTargetException)t).getTargetException();
 		}
@@ -6359,7 +6359,7 @@ public class RestContext extends Context {
 			PrintWriter w = null;
 			try {
 				w = res.getWriter();
-			} catch (IllegalStateException x) {
+			} catch (@SuppressWarnings("unused") IllegalStateException x) {
 				w = new PrintWriter(new OutputStreamWriter(res.getOutputStream(), UTF8));
 			}
 

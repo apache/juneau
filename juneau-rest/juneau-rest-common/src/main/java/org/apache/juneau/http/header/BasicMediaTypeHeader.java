@@ -314,7 +314,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 		return value();
 	}
 
-	private MediaType parse(String value) {
+	private static MediaType parse(String value) {
 		// If this happens to be a multi-value, use the last value.
 		if (value != null) {
 			int i = value.indexOf(',');

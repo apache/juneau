@@ -38,7 +38,6 @@ class BeanConfig_Test extends TestBase {
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test void a01_basic() {
 
 		var bc = BeanContext.DEFAULT;
@@ -577,13 +576,13 @@ class BeanConfig_Test extends TestBase {
 	public static class DummyPojoSwapC extends MapSwap<C> {}
 	public static class C {}
 
-	private void assertSameCache(Parser.Builder p1b, Parser.Builder p2b) {
+	private static void assertSameCache(Parser.Builder p1b, Parser.Builder p2b) {
 		var p1 = p1b.build();
 		var p2 = p2b.build();
 		assertTrue(p1.getBeanContext().hasSameCache(p2.getBeanContext()));
 	}
 
-	private void assertDifferentCache(Parser.Builder p1b, Parser.Builder p2b) {
+	private static void assertDifferentCache(Parser.Builder p1b, Parser.Builder p2b) {
 		var p1 = p1b.build();
 		var p2 = p2b.build();
 		assertFalse(p1.getBeanContext().hasSameCache(p2.getBeanContext()));

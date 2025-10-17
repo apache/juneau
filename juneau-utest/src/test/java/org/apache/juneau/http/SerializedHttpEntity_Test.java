@@ -104,11 +104,11 @@ class SerializedHttpEntity_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private HttpPartSchema.Builder schema() {
+	private static HttpPartSchema.Builder schema() {
 		return HttpPartSchema.create();
 	}
 
-	private RestClient checkHeaderClient(String header) {
+	private static RestClient checkHeaderClient(String header) {
 		return MockRestClient.create(A.class).rootUrl("http://localhost/checkHeader").json5().header("Check",header).ignoreErrors().build();
 	}
 }

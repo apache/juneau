@@ -28,11 +28,11 @@ import org.junit.jupiter.api.*;
 
 class UrlPathMatcher_Test extends TestBase {
 
-	private void check(UrlPathMatcher p, String path, String expected) {
+	private static void check(UrlPathMatcher p, String path, String expected) {
 		assertString(expected, p.match(UrlPath.of(path)));
 	}
 
-	private void shouldNotMatch(UrlPathMatcher p, String...paths) {
+	private static void shouldNotMatch(UrlPathMatcher p, String...paths) {
 		for (String path : paths)
 			assertNull(p.match(UrlPath.of(path)));
 	}

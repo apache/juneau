@@ -32,7 +32,7 @@ class ByteArrayAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private ByteArrayAssertion test(byte[] value) {
+	private static ByteArrayAssertion test(byte[] value) {
 		return assertBytes(value).setSilent();
 	}
 

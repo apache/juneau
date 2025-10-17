@@ -165,7 +165,7 @@ public class RemoteOperationMeta {
 			});
 		}
 
-		private void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
+		private static void processFormDataDefaults(MethodInfo mi, Map<String,String> defaults) {
 			mi.getAnnotationList().forEach(FormData.class, null, x -> {
 				FormData fd = x.inner();
 				String name = firstNonEmpty(fd.name(), fd.value());
@@ -185,7 +185,7 @@ public class RemoteOperationMeta {
 			});
 		}
 
-		private void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
+		private static void processHeaderDefaults(MethodInfo mi, Map<String,String> defaults) {
 			// Check for individual @Header annotations
 			mi.getAnnotationList().forEach(Header.class, null, x -> {
 				Header h = x.inner();
@@ -207,7 +207,7 @@ public class RemoteOperationMeta {
 			});
 		}
 
-		private void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
+		private static void processPathDefaults(MethodInfo mi, Map<String,String> defaults) {
 			mi.getAnnotationList().forEach(Path.class, null, x -> {
 				Path p = x.inner();
 				String name = firstNonEmpty(p.name(), p.value());
@@ -227,7 +227,7 @@ public class RemoteOperationMeta {
 			});
 		}
 
-		private void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
+		private static void processQueryDefaults(MethodInfo mi, Map<String,String> defaults) {
 			mi.getAnnotationList().forEach(Query.class, null, x -> {
 				Query q = x.inner();
 				String name = firstNonEmpty(q.name(), q.value());

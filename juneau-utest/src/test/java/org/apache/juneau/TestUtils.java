@@ -437,7 +437,7 @@ public class TestUtils extends Utils2 {
 	 * @throws AssertionError if the List size or contents don't match expected values
 	 * @see #l(Object) for converting other collection types to Lists
 	 */
-	public static <T> void assertList(Object actual, Object...expected) {
+	public static void assertList(Object actual, Object...expected) {
 		BctAssertions.assertList(actual, expected);
 	}
 
@@ -513,7 +513,6 @@ public class TestUtils extends Utils2 {
 	/**
 	 * Converts the specified object to a string and then replaces any newlines with pipes for easy comparison during testing.
 	 * @param value
-	 * @return
 	 */
 	public static String pipedLines(Object value) {
 		return r(value).replaceAll("\\r?\\n", "|");
@@ -814,8 +813,6 @@ public class TestUtils extends Utils2 {
 
 	/**
 	 * Gets the swagger for the specified @Resource-annotated object.
-	 * @param c
-	 * @return
 	 */
 	public static Swagger getSwagger(Class<?> c) {
 		try {

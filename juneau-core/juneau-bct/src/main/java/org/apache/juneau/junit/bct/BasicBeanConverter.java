@@ -392,11 +392,22 @@ public class BasicBeanConverter implements BeanConverter {
 		 *    <li><b>Wrappers:</b> Optional, Supplier → unwrapping/evaluation</li>
 		 * </ul>
 		 *
-		 * <p>Default settings include:</p>
+		 * <p>Default settings configured by this method:</p>
 		 * <ul>
-		 *    <li><code>nullValue</code> = <js>"&lt;null&gt;"</js></li>
-		 *    <li><code>emptyValue</code> = <js>"&lt;empty&gt;"</js></li>
-		 *    <li><code>classNameFormat</code> = <js>"simple"</js></li>
+		 *    <li><code>{@link #SETTING_nullValue}</code> = <js>"&lt;null&gt;"</js> - String representation for null values</li>
+		 *    <li><code>{@link #SETTING_selfValue}</code> = <js>"&lt;self&gt;"</js> - Special property name for self-reference</li>
+		 *    <li><code>{@link #SETTING_classNameFormat}</code> = <js>"simple"</js> - Simple class name format</li>
+		 * </ul>
+		 *
+		 * <p>Additional settings that can be configured (not set by default):</p>
+		 * <ul>
+		 *    <li><code>{@link #SETTING_fieldSeparator}</code> - Delimiter between collection elements (default: <js>","</js>)</li>
+		 *    <li><code>{@link #SETTING_collectionPrefix}</code> - Prefix for collection content (default: <js>"["</js>)</li>
+		 *    <li><code>{@link #SETTING_collectionSuffix}</code> - Suffix for collection content (default: <js>"]"</js>)</li>
+		 *    <li><code>{@link #SETTING_mapPrefix}</code> - Prefix for map content (default: <js>"{"</js>)</li>
+		 *    <li><code>{@link #SETTING_mapSuffix}</code> - Suffix for map content (default: <js>"}"</js>)</li>
+		 *    <li><code>{@link #SETTING_mapEntrySeparator}</code> - Separator between map keys and values (default: <js>"="</js>)</li>
+		 *    <li><code>{@link #SETTING_calendarFormat}</code> - DateTimeFormatter for calendar objects (default: <jsf>ISO_INSTANT</jsf>)</li>
 		 * </ul>
 		 *
 		 * <p><b>Note:</b> This should typically be called after custom handlers to avoid
@@ -513,18 +524,136 @@ public class BasicBeanConverter implements BeanConverter {
 	 */
 	public static final BasicBeanConverter DEFAULT = builder().defaultSettings().build();
 
-	@SuppressWarnings("javadoc")
-	public static final String
-		SETTING_nullValue = "nullValue",
-		SETTING_selfValue = "selfValue",
-		SETTING_fieldSeparator = "fieldSeparator",
-		SETTING_collectionPrefix = "collectionPrefix",
-		SETTING_collectionSuffix = "collectionSuffix",
-		SETTING_mapPrefix = "mapPrefix",
-		SETTING_mapSuffix = "mapSuffix",
-		SETTING_mapEntrySeparator = "mapEntrySeparator",
-		SETTING_calendarFormat = "calendarFormat",
-		SETTING_classNameFormat = "classNameFormat";
+	/**
+	 * Setting key for the string representation of null values.
+	 * 
+	 * <p>Default value: <js>"&lt;null&gt;"</js></p>
+	 * 
+	 * <p>This setting controls how null values are displayed when stringified.
+	 * Used by the converter when encountering null objects during conversion.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 */
+	public static final String SETTING_nullValue = "nullValue";
+
+	/**
+	 * Setting key for the special property name that returns the object itself.
+	 * 
+	 * <p>Default value: <js>"&lt;self&gt;"</js></p>
+	 * 
+	 * <p>This setting defines the property name that, when accessed, returns the
+	 * object itself rather than a property of the object. Useful for self-referential
+	 * property access in nested object navigation.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 */
+	public static final String SETTING_selfValue = "selfValue";
+
+	/**
+	 * Setting key for the delimiter between collection elements and map entries.
+	 * 
+	 * <p>Default value: <js>","</js></p>
+	 * 
+	 * <p>This setting controls the separator used between elements when converting
+	 * collections, arrays, and maps to string representations.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 */
+	public static final String SETTING_fieldSeparator = "fieldSeparator";
+
+	/**
+	 * Setting key for the prefix character(s) used around collection content.
+	 * 
+	 * <p>Default value: <js>"["</js></p>
+	 * 
+	 * <p>This setting defines the opening bracket or prefix used when displaying
+	 * collection and array contents in string format.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 * @see #SETTING_collectionSuffix
+	 */
+	public static final String SETTING_collectionPrefix = "collectionPrefix";
+
+	/**
+	 * Setting key for the suffix character(s) used around collection content.
+	 * 
+	 * <p>Default value: <js>"]"</js></p>
+	 * 
+	 * <p>This setting defines the closing bracket or suffix used when displaying
+	 * collection and array contents in string format.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 * @see #SETTING_collectionPrefix
+	 */
+	public static final String SETTING_collectionSuffix = "collectionSuffix";
+
+	/**
+	 * Setting key for the prefix character(s) used around map content.
+	 * 
+	 * <p>Default value: <js>"{"</js></p>
+	 * 
+	 * <p>This setting defines the opening brace or prefix used when displaying
+	 * map contents in string format.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 * @see #SETTING_mapSuffix
+	 */
+	public static final String SETTING_mapPrefix = "mapPrefix";
+
+	/**
+	 * Setting key for the suffix character(s) used around map content.
+	 * 
+	 * <p>Default value: <js>"}"</js></p>
+	 * 
+	 * <p>This setting defines the closing brace or suffix used when displaying
+	 * map contents in string format.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 * @see #SETTING_mapPrefix
+	 */
+	public static final String SETTING_mapSuffix = "mapSuffix";
+
+	/**
+	 * Setting key for the separator between map keys and values.
+	 * 
+	 * <p>Default value: <js>"="</js></p>
+	 * 
+	 * <p>This setting controls the separator used between keys and values when
+	 * converting map entries to string representations (e.g., "key=value").</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 */
+	public static final String SETTING_mapEntrySeparator = "mapEntrySeparator";
+
+	/**
+	 * Setting key for the DateTimeFormatter used for calendar objects.
+	 * 
+	 * <p>Default value: <jsf>ISO_INSTANT</jsf></p>
+	 * 
+	 * <p>This setting defines the date/time format used when converting Calendar
+	 * objects to string representations. Must be a valid DateTimeFormatter instance.</p>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 * @see java.time.format.DateTimeFormatter
+	 */
+	public static final String SETTING_calendarFormat = "calendarFormat";
+
+	/**
+	 * Setting key for the format used when displaying class names.
+	 * 
+	 * <p>Default value: <js>"simple"</js></p>
+	 * 
+	 * <p>This setting controls how class names are displayed in string representations.
+	 * Valid values are:</p>
+	 * <ul>
+	 *    <li><js>"simple"</js> - Simple class name only (e.g., "String")</li>
+	 *    <li><js>"canonical"</js> - Canonical class name (e.g., "java.lang.String")</li>
+	 *    <li><js>"full"</js> - Full class name with package (e.g., "java.lang.String")</li>
+	 * </ul>
+	 * 
+	 * @see Builder#addSetting(String, Object)
+	 */
+	public static final String SETTING_classNameFormat = "classNameFormat";
 
 	/**
 	 * Creates a new builder for configuring a BasicBeanConverter instance.

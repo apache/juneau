@@ -37,7 +37,6 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		public List<Long>[] f1;
 	}
 
-	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a01_arrayOfListOfLongs(RoundTrip_Tester t) throws Exception {
@@ -65,7 +64,6 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 		public List<Long>[][] f1;
 	}
 
-	@SuppressWarnings("unchecked")
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a03_2dArrayOfListOfLongs(RoundTrip_Tester t) throws Exception {

@@ -438,7 +438,7 @@ public class JettyMicroservice extends Microservice {
 				port = new Random().nextInt(32767 - ports[0] + 1) + ports[0];
 			try (ServerSocket ss = new ServerSocket(port)) {
 				return port;
-			} catch (IOException e) {}
+			} catch (@SuppressWarnings("unused") IOException e) {}
 		}
 		return 0;
 	}
@@ -647,7 +647,7 @@ public class JettyMicroservice extends Microservice {
 		String hostname = "localhost";
 		try {
 			hostname = InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {}
+		} catch (@SuppressWarnings("unused") UnknownHostException e) {}
 		return hostname;
 	}
 

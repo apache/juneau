@@ -427,7 +427,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test void getObject1() {
 		var c = init(
 			"a1={foo:123}",
@@ -468,7 +467,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test void getObject2() {
 		var c = init(
 			"a1=(foo=123)",
@@ -675,7 +673,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test void getObjectWithDefault3() {
 		var c = init(
 			"a1={foo:123}",
@@ -721,7 +718,6 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	//	public <T> T getObjectWithDefault(String key, Parser parser, T def, Type type, Type...args) throws ParseException
 	//====================================================================================================
-	@SuppressWarnings("unchecked")
 	@Test void getObjectWithDefault4() {
 		var c = init(
 			"a1=(foo=123)",
@@ -1128,7 +1124,7 @@ class Config_Test extends TestBase {
 		testXor("𤭢"); // 4-byte UTF-8 character
 	}
 
-	private void testXor(String in) {
+	private static void testXor(String in) {
 		var e = new XorEncodeMod();
 		var s = e.apply(in);
 		var s2 = e.remove(s);

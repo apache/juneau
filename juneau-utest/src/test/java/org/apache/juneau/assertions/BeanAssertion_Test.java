@@ -33,7 +33,7 @@ class BeanAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <T> BeanAssertion<T> test(T value) {
+	private static <T> BeanAssertion<T> test(T value) {
 		return assertBean(value).setSilent();
 	}
 

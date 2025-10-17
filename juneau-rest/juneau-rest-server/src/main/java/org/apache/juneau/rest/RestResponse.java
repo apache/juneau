@@ -410,7 +410,6 @@ public class RestResponse extends HttpServletResponseWrapper {
 						setHeader("content-encoding", encoding);
 				}
 			}
-			@SuppressWarnings("resource")
 			ServletOutputStream sos = getOutputStream();
 			os = new FinishableServletOutputStream(encoder == null ? sos : encoder.getOutputStream(sos));
 		}
@@ -836,7 +835,6 @@ public class RestResponse extends HttpServletResponseWrapper {
 		return content == null ? null : content.orElse(null);
 	}
 
-	@SuppressWarnings("resource")
 	private FinishablePrintWriter getWriter(boolean raw, boolean autoflush) throws NotAcceptable, IOException {
 		if (w != null)
 			return w;
@@ -849,7 +847,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 			OutputStream out = (raw ? getOutputStream() : getNegotiatedOutputStream());
 			w = new FinishablePrintWriter(out, getCharacterEncoding(), autoflush);
 			return w;
-		} catch (UnsupportedEncodingException e) {
+		} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {
 			String ce = getCharacterEncoding();
 			setCharacterEncoding("UTF-8");
 			throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);

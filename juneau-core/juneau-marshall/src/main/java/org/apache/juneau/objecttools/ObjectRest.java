@@ -194,7 +194,7 @@ public class ObjectRest {
 	private static int parseInt(String key) {
 		try {
 			return Integer.parseInt(key);
-		} catch (NumberFormatException e) {
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
 			throw new ObjectRestException(HTTP_BAD_REQUEST,
 				"Cannot address an item in an array with a non-integer key ''{0}''", key
 			);

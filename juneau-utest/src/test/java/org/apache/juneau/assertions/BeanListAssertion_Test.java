@@ -35,7 +35,7 @@ class BeanListAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private BeanListAssertion<A> test(List<A> value) {
+	private static BeanListAssertion<A> test(List<A> value) {
 		return assertBeanList(value).setSilent();
 	}
 	private static final A A1 = A.of(1,2), A1a = A.of(1,2), A2 = A.of(3,4), A3 = A.of(5,6);

@@ -232,7 +232,7 @@ class BasicHttpResource_Test extends TestBase {
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	private BasicHeader header(String name, Object val) {
+	private static BasicHeader header(String name, Object val) {
 		return new BasicHeader(name, val);
 	}
 }

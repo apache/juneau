@@ -640,7 +640,7 @@ public class BeanStore {
 		if (readOnly)
 			throw new IllegalStateException("Method cannot be used because BeanStore is read-only.");
 	}
-	private String findBeanName(ParamInfo pi) {
+	private static String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
 		if (n != null)
 			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);

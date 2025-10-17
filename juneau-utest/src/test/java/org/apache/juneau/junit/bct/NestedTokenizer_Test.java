@@ -463,14 +463,14 @@ class NestedTokenizer_Test extends TestBase {
 	/**
 	 * Creates a simple token for testing.
 	 */
-	private Token token(String value) {
+	private static Token token(String value) {
 		return new Token(value);
 	}
 
 	/**
 	 * Asserts that a token has the expected value and nested tokens.
 	 */
-	private void assertToken(Token actual, String expectedValue, String... expectedNested) {
+	private static void assertToken(Token actual, String expectedValue, String... expectedNested) {
 		assertEquals(expectedValue, actual.getValue());
 		if (expectedNested.length == 0) {
 			assertFalse(actual.hasNested());
@@ -486,7 +486,7 @@ class NestedTokenizer_Test extends TestBase {
 	/**
 	 * Tests that parsing and toString are inverse operations.
 	 */
-	private void assertRoundTrip(String input) {
+	private static void assertRoundTrip(String input) {
 		var tokens = tokenize(input);
 		var rebuilt = tokens.stream()
 			.map(Token::toString)

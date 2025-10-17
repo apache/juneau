@@ -1120,7 +1120,7 @@ public class Config extends Context implements ConfigEventListener {
 		return removeMods(ce.getModifiers(), ce.getValue());
 	}
 
-	private boolean isSimpleType(Type t) {
+	private static boolean isSimpleType(Type t) {
 		if (! (t instanceof Class))
 			return false;
 		var c = (Class<?>)t;
@@ -1133,7 +1133,7 @@ public class Config extends Context implements ConfigEventListener {
 		return s;
 	}
 
-	private String section(String section) {
+	private static String section(String section) {
 		Utils.assertArgNotNull("section", section);
 		if (Utils.isEmpty(section))
 			return "";
@@ -1177,14 +1177,14 @@ public class Config extends Context implements ConfigEventListener {
 			return r.substring(1, r.length()-1);
 		return r;
 	}
-	private String skey(String key) {
+	private static String skey(String key) {
 		var i = key.indexOf('/');
 		if (i == -1)
 			return key;
 		return key.substring(i+1);
 	}
 
-	private String sname(String key) {
+	private static String sname(String key) {
 		Utils.assertArgNotNull("key", key);
 		var i = key.indexOf('/');
 		if (i == -1)

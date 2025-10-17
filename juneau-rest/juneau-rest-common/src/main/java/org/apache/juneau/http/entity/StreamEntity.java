@@ -205,7 +205,6 @@ public class StreamEntity extends BasicHttpEntity {
 		}
 	}
 
-	@SuppressWarnings("resource") // Caller closes
 	private InputStream content() {
 		return Objects.requireNonNull(contentOrElse((InputStream) null), "Input stream is null.");
 	}

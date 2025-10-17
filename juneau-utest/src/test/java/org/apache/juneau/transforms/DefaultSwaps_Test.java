@@ -50,19 +50,19 @@ class DefaultSwaps_Test extends TestBase {
 
 	private static final WriterSerializer SERIALIZER = Json5Serializer.DEFAULT;
 
-	private void test1(String expected, Object o) throws Exception {
+	private static void test1(String expected, Object o) throws Exception {
 		assertEquals(expected, SERIALIZER.serialize(o));
 	}
 
-	private void test2(String expected, Object o, Class<?> configClass) throws Exception {
+	private static void test2(String expected, Object o, Class<?> configClass) throws Exception {
 		assertEquals(expected, SERIALIZER.copy().applyAnnotations(configClass).build().serialize(o));
 	}
 
-	private void test3(String expected, Object o, Class<?> swap) throws Exception {
+	private static void test3(String expected, Object o, Class<?> swap) throws Exception {
 		assertEquals(expected, SERIALIZER.copy().swaps(swap).build().serializeToString(o));
 	}
 
-	private void test4(String expected, Object o, Class<?> swap, Class<?> configClass) throws Exception {
+	private static void test4(String expected, Object o, Class<?> swap, Class<?> configClass) throws Exception {
 		assertEquals(expected, SERIALIZER.copy().swaps(swap).applyAnnotations(configClass).build().serializeToString(o));
 	}
 

@@ -56,12 +56,11 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	/**
 	 * Performs an action on all matching annotations in this list.
 	 *
-	 * @param <A> The annotation type.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
+	public AnnotationList forEach(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		forEach(x -> consume(filter, action, x));
 		return this;
 	}

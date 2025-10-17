@@ -32,11 +32,10 @@ public interface Consumer4<A,B,C,D> {
 	/**
 	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
 	 *
-	 * @param <V> The return type.
 	 * @param after The operation to perform after this operation.
 	 * @return A composed {@link Consumer} that performs in sequence this operation followed by the after operation.
 	 */
-	default <V> Consumer4<A,B,C,D> andThen(Consumer4<? super A,? super B,? super C, ? super D> after) {  // NOSONAR - false positive on generics
+	default Consumer4<A,B,C,D> andThen(Consumer4<? super A,? super B,? super C, ? super D> after) {  // NOSONAR - false positive on generics
 		return (A a, B b, C c, D d) -> {
 			apply(a, b, c, d);
 			after.apply(a, b, c, d);

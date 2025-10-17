@@ -159,7 +159,7 @@ public class Flag {
 		return this;
 	}
 
-	private void runSnippet(Snippet snippet) {
+	private static void runSnippet(Snippet snippet) {
 		try {
 			snippet.run();
 		} catch (Error | RuntimeException e) {

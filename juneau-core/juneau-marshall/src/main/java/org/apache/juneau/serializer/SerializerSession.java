@@ -563,7 +563,7 @@ public class SerializerSession extends BeanTraverseSession {
 			doSerialize(pipe, o);
 		} catch (SerializeException | IOException e) {
 			throw e;
-		} catch (StackOverflowError e) {
+		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new SerializeException(this,
 				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		} catch (Exception e) {
@@ -676,7 +676,7 @@ public class SerializerSession extends BeanTraverseSession {
 		return s;
 	}
 
-	private boolean isSortable(Collection<?> c) {
+	private static boolean isSortable(Collection<?> c) {
 		if (c == null)
 			return false;
 		for (Object o : c)

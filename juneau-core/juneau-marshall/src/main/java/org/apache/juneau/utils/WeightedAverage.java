@@ -41,7 +41,7 @@ public class WeightedAverage {
 				if (weight != 0) {
 					value = (value * (w1/weight)) + (v.floatValue() * (w2/weight));
 				}
-			} catch (ArithmeticException ae) {
+			} catch (@SuppressWarnings("unused") ArithmeticException ae) {
 				throw new ArithmeticException("Weight overflow.");
 			}
 		}

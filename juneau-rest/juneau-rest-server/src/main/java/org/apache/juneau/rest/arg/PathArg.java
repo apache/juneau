@@ -185,7 +185,7 @@ public class PathArg implements RestOpArg {
 		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 
-	private String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
+	private static String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
 		String p = findName(pi).orElse(null);
 		if (p != null)
 			return p;

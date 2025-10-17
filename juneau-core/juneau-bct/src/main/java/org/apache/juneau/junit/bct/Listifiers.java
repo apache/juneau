@@ -354,6 +354,7 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Stream} objects
 	 * @see Stream
 	 */
+	@SuppressWarnings("unchecked")
 	public static Listifier<Stream> streamListifier() {
 		return (bc, stream) -> stream.toList();
 	}

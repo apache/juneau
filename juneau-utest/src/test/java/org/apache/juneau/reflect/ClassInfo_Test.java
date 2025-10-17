@@ -194,7 +194,7 @@ public class ClassInfo_Test extends TestBase {
 	interface BI2 extends BI1 {}
 	interface BI3 {}
 	interface BI4 {}
-	@SuppressWarnings("unused") static class BC1 implements BI1, BI2 {}
+	static class BC1 implements BI1, BI2 {}
 	static class BC2 extends BC1 implements BI3 {}
 	static class BC3 extends BC2 {}
 
@@ -280,7 +280,7 @@ public class ClassInfo_Test extends TestBase {
 	}
 	interface CI3 {}
 	interface CI4 {}
-	@SuppressWarnings("unused") abstract static class CC1 implements CI1, CI2 {
+	abstract static class CC1 implements CI1, CI2 {
 		@Override
 		public void i1a() {}
 		protected void c1b() {}
@@ -529,7 +529,7 @@ public class ClassInfo_Test extends TestBase {
 	@A(2) interface GI2 extends GI1 {}
 	@A(3) interface GI3 {}
 	@A(4) interface GI4 {}
-	@SuppressWarnings("unused") @A(5) static class G1 implements GI1, GI2 {}
+	@A(5) static class G1 implements GI1, GI2 {}
 	@A(6) static class G2 extends G1 implements GI3 {}
 	@A(7) static class G3 extends G2 {}
 	static class G4 extends G3 {}
@@ -625,7 +625,7 @@ public class ClassInfo_Test extends TestBase {
 	@A(2) @AConfig(2) interface GBI2 extends GBI1 {}
 	@A(3) @AConfig(3) interface GBI3 {}
 	@A(4) @AConfig(4) interface GBI4 {}
-	@SuppressWarnings("unused") @A(5) @AConfig(5) static class GB1 implements GBI1, GBI2 {}
+	@A(5) @AConfig(5) static class GB1 implements GBI1, GBI2 {}
 	@A(6) @AConfig(6) static class GB2 extends GB1 implements GBI3 {}
 	@A(7) @AConfig(7) static class GB3 extends GB2 {}
 	static class GB4 extends GB3 {}

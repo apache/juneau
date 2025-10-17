@@ -55,11 +55,11 @@ class Xml_Test extends TestBase {
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private Writer stringWriter() {
+	private static Writer stringWriter() {
 		return new StringWriter();
 	}
 
-	private Reader stringReader(String s) {
+	private static Reader stringReader(String s) {
 		return new StringReader(s);
 	}
 }

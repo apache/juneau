@@ -34,19 +34,19 @@ class ThrowableAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <V extends Throwable> ThrowableAssertion<V> test(V value) {
+	private static <V extends Throwable> ThrowableAssertion<V> test(V value) {
 		return assertThrowable(value).setSilent();
 	}
 
-	private Throwable throwable() {
+	private static Throwable throwable() {
 		return new RuntimeException();
 	}
 
-	private Throwable throwable(String msg) {
+	private static Throwable throwable(String msg) {
 		return new RuntimeException(msg);
 	}
 
-	private Throwable throwable(Throwable inner) {
+	private static Throwable throwable(Throwable inner) {
 		return new RuntimeException(inner);
 	}
 	//-----------------------------------------------------------------------------------------------------------------

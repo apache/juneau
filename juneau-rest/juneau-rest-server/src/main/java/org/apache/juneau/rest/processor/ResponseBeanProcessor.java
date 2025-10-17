@@ -130,7 +130,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 		return NEXT;  // Let PojoProcessor serialize it.
 	}
 
-	private Iterable<?> iterate(Object o) {
+	private static Iterable<?> iterate(Object o) {
 		if (o == null)
 			return Collections.emptyList();
 		if (o instanceof Map)

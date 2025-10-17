@@ -239,7 +239,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	public static class BBuilder implements org.apache.juneau.swap.Builder<B> {
+	public static class BBuilder implements org.apache.juneau.swap.Builder {
 		public int a;
 	}
 
@@ -263,7 +263,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 		}
 	}
 
-	public static class CBuilder implements org.apache.juneau.swap.Builder<B> {
+	public static class CBuilder implements org.apache.juneau.swap.Builder {
 		public int a;
 
 		public C build() {

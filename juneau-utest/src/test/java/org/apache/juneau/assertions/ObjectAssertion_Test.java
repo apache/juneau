@@ -35,7 +35,7 @@ class ObjectAssertion_Test extends TestBase {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	private <T> ObjectAssertion<T> test(T value) {
+	private static <T> ObjectAssertion<T> test(T value) {
 		return assertObject(value).setSilent();
 	}
 
