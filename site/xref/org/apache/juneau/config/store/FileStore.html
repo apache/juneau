@@ -378,7 +378,7 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 					<strong class="jxr_keyword">case</strong> MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 					<strong class="jxr_keyword">case</strong> HIGH   -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 				};
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) {
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<em class="jxr_comment">/* Ignore */</em>
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 			}
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -555,7 +555,7 @@
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"Could not create file: "</span> + p);
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 				}
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 			}
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {
 <a class="jxr_linenumber" name="L551" href="#L551">551</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L552" href="#L552">552</a> 		}
 <a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">return</strong> Files.isWritable(p);

@@ -362,15 +362,16 @@
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * @return A {@link Listifier} for {@link Stream} objects</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * @see Stream</em>
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Listifier&lt;Stream&gt; streamListifier() {
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">return</strong> (bc, stream) -&gt; stream.toList();
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	}
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">private</strong> <a name="Listifiers" href="../../../../../org/apache/juneau/junit/bct/Listifiers.html#Listifiers">Listifiers</a>() {}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Listifier&lt;Stream&gt; streamListifier() {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">return</strong> (bc, stream) -&gt; stream.toList();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">private</strong> <a name="Listifiers" href="../../../../../org/apache/juneau/junit/bct/Listifiers.html#Listifiers">Listifiers</a>() {}
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -430,7 +430,7 @@
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertList(split2test(<span class="jxr_string">"1,2&#92;&#92;&#92;&#92;,"</span>), <span class="jxr_string">"1"</span>, <span class="jxr_string">"2&#92;&#92;"</span>, <span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<strong class="jxr_keyword">private</strong> List&lt;String&gt; split2test(String s) {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; split2test(String s) {
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 		Utils.split(s, l::add);
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">return</strong> l;

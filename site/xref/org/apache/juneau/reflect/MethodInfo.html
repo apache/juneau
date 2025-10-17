@@ -709,13 +709,13 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 	}
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotationInfo(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotationInfo(<a name="ClassInfo" href="../../../../org/apache/juneau/reflect/ClassInfo.html#ClassInfo">ClassInfo</a> ci, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">if</strong> (ci != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 			<strong class="jxr_keyword">for</strong> (Annotation a : ci._getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 				AnnotationInfo.of(ci, a).accept(filter, action);
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 	}
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotationInfo(Package p, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachDeclaredAnnotationInfo(Package p, Predicate&lt;AnnotationInfo&lt;?&gt;&gt; filter, Consumer&lt;AnnotationInfo&lt;?&gt;&gt; action) {
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<strong class="jxr_keyword">for</strong> (Annotation a : p.getDeclaredAnnotations())
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 				AnnotationInfo.of(p, a).accept(filter, action);

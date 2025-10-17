@@ -925,7 +925,7 @@
 <a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;Object&gt; resolver(Object input) {
 <a class="jxr_linenumber" name="L918" href="#L918">918</a> 		<strong class="jxr_keyword">return</strong> ()-&gt;varResolver.resolve(Utils.s(unwrap(input)));
 <a class="jxr_linenumber" name="L919" href="#L919">919</a> 	}
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	<strong class="jxr_keyword">private</strong> Object unwrap(Object o) {
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object unwrap(Object o) {
 <a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<strong class="jxr_keyword">while</strong> (o instanceof Supplier)
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> 			o = ((Supplier&lt;?&gt;)o).get();
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> 		<strong class="jxr_keyword">return</strong> o;

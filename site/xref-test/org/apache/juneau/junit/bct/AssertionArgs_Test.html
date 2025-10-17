@@ -421,7 +421,7 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<em class="jxr_comment">// Helper method to create a mock converter for testing</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<strong class="jxr_keyword">private</strong> BeanConverter createMockConverter() {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BeanConverter createMockConverter() {
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanConverter() {
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 			@Override
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">public</strong> String stringify(Object o) {
@@ -470,7 +470,7 @@
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<em class="jxr_comment">// Helper method to create a custom converter for testing</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<strong class="jxr_keyword">private</strong> BeanConverter createCustomConverter() {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BeanConverter createCustomConverter() {
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanConverter() {
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 			@Override
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">public</strong> String stringify(Object o) {

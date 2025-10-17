@@ -36,11 +36,11 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">class</strong> <a name="UrlPathMatcher_Test" href="../../../../../org/apache/juneau/rest/util/UrlPathMatcher_Test.html#UrlPathMatcher_Test">UrlPathMatcher_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> check(UrlPathMatcher p, String path, String expected) {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> check(UrlPathMatcher p, String path, String expected) {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertString(expected, p.match(UrlPath.of(path)));
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  	}
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> shouldNotMatch(UrlPathMatcher p, String...paths) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> shouldNotMatch(UrlPathMatcher p, String...paths) {
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">for</strong> (String path : paths)
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  			assertNull(p.match(UrlPath.of(path)));
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	}

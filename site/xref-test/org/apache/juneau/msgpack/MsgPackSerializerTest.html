@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> age = 21;
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> test(Object input, String expected) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> test(Object input, String expected) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		byte[] b = MsgPackSerializer.DEFAULT.serialize(input);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(expected, StringUtils.toSpacedHex(b));
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}

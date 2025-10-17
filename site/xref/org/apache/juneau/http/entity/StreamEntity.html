@@ -213,11 +213,10 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@SuppressWarnings(<span class="jxr_string">"resource"</span>) <em class="jxr_comment">// Caller closes</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<strong class="jxr_keyword">private</strong> InputStream content() {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> Objects.requireNonNull(contentOrElse((InputStream) <strong class="jxr_keyword">null</strong>), <span class="jxr_string">"Input stream is null."</span>);
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">private</strong> InputStream content() {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> Objects.requireNonNull(contentOrElse((InputStream) <strong class="jxr_keyword">null</strong>), <span class="jxr_string">"Input stream is null."</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

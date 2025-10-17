@@ -385,28 +385,27 @@
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertFalse(x.f1[0].isPresent());
 <a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<strong class="jxr_keyword">void</strong> b07c_arrayOfOptionalIntegers_listWithNull(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B07();
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		x.f1 = a(n(Optional.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		x = t.roundTrip(x);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertEquals(1, x.f1.length);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertFalse(x.f1[0].isPresent());
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	@ParameterizedTest
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">void</strong> b07d_arrayOfOptionalIntegers_nullField(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B07();
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		x.f1 = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		x = t.roundTrip(x);
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertNull(x.f1);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> }
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">void</strong> b07c_arrayOfOptionalIntegers_listWithNull(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B07();
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		x.f1 = a(n(Optional.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">if</strong> (t.isValidationOnly())
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(1, x.f1.length);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertFalse(x.f1[0].isPresent());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	@MethodSource(<span class="jxr_string">"testers"</span>)
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<strong class="jxr_keyword">void</strong> b07d_arrayOfOptionalIntegers_nullField(<a name="RoundTrip_Tester" href="../../../../../org/apache/juneau/a/rttests/RoundTrip_Tester.html#RoundTrip_Tester">RoundTrip_Tester</a> t) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> B07();
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		x.f1 = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		x = t.roundTrip(x);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		assertNull(x.f1);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

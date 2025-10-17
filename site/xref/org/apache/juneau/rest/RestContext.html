@@ -3750,7 +3750,7 @@
 <a class="jxr_linenumber" name="L3742" href="#L3742">3742</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L3743" href="#L3743">3743</a> 		}
 <a class="jxr_linenumber" name="L3744" href="#L3744">3744</a> 
-<a class="jxr_linenumber" name="L3745" href="#L3745">3745</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> runInitHooks(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L3745" href="#L3745">3745</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runInitHooks(<a name="BeanStore" href="../../../../org/apache/juneau/cp/BeanStore.html#BeanStore">BeanStore</a> beanStore, Supplier&lt;?&gt; resource) <strong class="jxr_keyword">throws</strong> ServletException {
 <a class="jxr_linenumber" name="L3746" href="#L3746">3746</a> 
 <a class="jxr_linenumber" name="L3747" href="#L3747">3747</a> 			Object r = resource.get();
 <a class="jxr_linenumber" name="L3748" href="#L3748">3748</a> 
@@ -6173,7 +6173,7 @@
 <a class="jxr_linenumber" name="L6165" href="#L6165">6165</a> 		<strong class="jxr_keyword">return</strong> debugEnablement.isDebug(<strong class="jxr_keyword">this</strong>, call.getRequest());
 <a class="jxr_linenumber" name="L6166" href="#L6166">6166</a> 	}
 <a class="jxr_linenumber" name="L6167" href="#L6167">6167</a> 
-<a class="jxr_linenumber" name="L6168" href="#L6168">6168</a> 	<strong class="jxr_keyword">private</strong> Set&lt;String&gt; newCaseInsensitiveSet(String value) {
+<a class="jxr_linenumber" name="L6168" href="#L6168">6168</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; newCaseInsensitiveSet(String value) {
 <a class="jxr_linenumber" name="L6169" href="#L6169">6169</a> 		Set&lt;String&gt; s = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(String.CASE_INSENSITIVE_ORDER) {
 <a class="jxr_linenumber" name="L6170" href="#L6170">6170</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
 <a class="jxr_linenumber" name="L6171" href="#L6171">6171</a> 			@Override
@@ -6189,7 +6189,7 @@
 <a class="jxr_linenumber" name="L6181" href="#L6181">6181</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="MethodInvoker" href="../../../../org/apache/juneau/rest/stats/MethodInvoker.html#MethodInvoker">MethodInvoker</a>(m, getMethodExecStats(m));
 <a class="jxr_linenumber" name="L6182" href="#L6182">6182</a> 	}
 <a class="jxr_linenumber" name="L6183" href="#L6183">6183</a> 
-<a class="jxr_linenumber" name="L6184" href="#L6184">6184</a> 	<strong class="jxr_keyword">private</strong> Throwable unwrap(Throwable t) {
+<a class="jxr_linenumber" name="L6184" href="#L6184">6184</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Throwable unwrap(Throwable t) {
 <a class="jxr_linenumber" name="L6185" href="#L6185">6185</a> 		<strong class="jxr_keyword">if</strong> (t instanceof InvocationTargetException) {
 <a class="jxr_linenumber" name="L6186" href="#L6186">6186</a> 			<strong class="jxr_keyword">return</strong> ((InvocationTargetException)t).getTargetException();
 <a class="jxr_linenumber" name="L6187" href="#L6187">6187</a> 		}
@@ -6367,7 +6367,7 @@
 <a class="jxr_linenumber" name="L6359" href="#L6359">6359</a> 			PrintWriter w = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L6360" href="#L6360">6360</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L6361" href="#L6361">6361</a> 				w = res.getWriter();
-<a class="jxr_linenumber" name="L6362" href="#L6362">6362</a> 			} <strong class="jxr_keyword">catch</strong> (IllegalStateException x) {
+<a class="jxr_linenumber" name="L6362" href="#L6362">6362</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IllegalStateException x) {
 <a class="jxr_linenumber" name="L6363" href="#L6363">6363</a> 				w = <strong class="jxr_keyword">new</strong> PrintWriter(<strong class="jxr_keyword">new</strong> OutputStreamWriter(res.getOutputStream(), UTF8));
 <a class="jxr_linenumber" name="L6364" href="#L6364">6364</a> 			}
 <a class="jxr_linenumber" name="L6365" href="#L6365">6365</a> 

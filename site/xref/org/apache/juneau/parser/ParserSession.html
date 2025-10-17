@@ -632,7 +632,7 @@
 <a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<strong class="jxr_keyword">return</strong> doParse(pipe, getArgsClassMeta(argTypes));
 <a class="jxr_linenumber" name="L625" href="#L625">625</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		} <strong class="jxr_keyword">catch</strong> (StackOverflowError e) {
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) StackOverflowError e) {
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Depth too deep.  Stack overflow occurred."</span>);
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, e, <span class="jxr_string">"I/O exception occurred.  exception={0}, message={1}."</span>,
@@ -669,7 +669,7 @@
 <a class="jxr_linenumber" name="L661" href="#L661">661</a> 			<strong class="jxr_keyword">return</strong> doParseIntoCollection(pipe, c, elementType);
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		} <strong class="jxr_keyword">catch</strong> (StackOverflowError e) {
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) StackOverflowError e) {
 <a class="jxr_linenumber" name="L665" href="#L665">665</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Depth too deep.  Stack overflow occurred."</span>);
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, e, <span class="jxr_string">"I/O exception occurred.  exception={0}, message={1}."</span>,
@@ -739,7 +739,7 @@
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 			<strong class="jxr_keyword">return</strong> doParse(pipe, type);
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> | IOException e) {
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		} <strong class="jxr_keyword">catch</strong> (StackOverflowError e) {
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) StackOverflowError e) {
 <a class="jxr_linenumber" name="L735" href="#L735">735</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Depth too deep.  Stack overflow occurred."</span>);
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, e, <span class="jxr_string">"Exception occurred.  exception={0}, message={1}."</span>,

@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">class</strong> <a name="StringExpressionMatcher_Test" href="../../../../org/apache/juneau/utils/StringExpressionMatcher_Test.html#StringExpressionMatcher_Test">StringExpressionMatcher_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> test(String expression, String toString, String[] shouldMatch, String[] shouldNotMatch) {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> test(String expression, String toString, String[] shouldMatch, String[] shouldNotMatch) {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> m = safe(()-&gt;<strong class="jxr_keyword">new</strong> StringExpressionMatcher(expression));
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertEquals(toString, m.toString());
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i : shouldMatch)

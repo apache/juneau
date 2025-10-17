@@ -403,7 +403,7 @@
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">return</strong> (Temporal)parseMethod.invoke(<strong class="jxr_keyword">null</strong>, ta);
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> TemporalAccessor defaulting(TemporalAccessor t, ZoneId zoneId) {
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="DefaultingTemporalAccessor" href="../../../../org/apache/juneau/swaps/DefaultingTemporalAccessor.html#DefaultingTemporalAccessor">DefaultingTemporalAccessor</a>(t, zoneId);
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
 <a class="jxr_linenumber" name="L401" href="#L401">401</a> 

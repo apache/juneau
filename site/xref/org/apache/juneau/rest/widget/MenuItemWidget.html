@@ -215,7 +215,7 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">return</strong> loadStyle(req, <span class="jxr_string">"styles/MenuItemWidget.css"</span>);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">private</strong> Integer getId(RestRequest req) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Integer getId(RestRequest req) {
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		Integer id = req.getAttribute(<span class="jxr_string">"LastMenuItemId"</span>).as(Integer.<strong class="jxr_keyword">class</strong>).orElse(0) + 1;
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		req.setAttribute(<span class="jxr_string">"LastMenuItemId"</span>, id);
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">return</strong> id;

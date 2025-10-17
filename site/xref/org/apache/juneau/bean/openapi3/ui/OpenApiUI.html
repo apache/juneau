@@ -132,14 +132,14 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">outer</strong>;
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addOperationIfTagMatches(<a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> tagBlockContents, Session s, String path, String method, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op, <a name="Tag" href="../../../../../../org/apache/juneau/bean/openapi3/Tag.html#Tag">Tag</a> t) {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addOperationIfTagMatches(<a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> tagBlockContents, Session s, String path, String method, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op, <a name="Tag" href="../../../../../../org/apache/juneau/bean/openapi3/Tag.html#Tag">Tag</a> t) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> ((t == <strong class="jxr_keyword">null</strong> &amp;&amp; (op.getTags() == <strong class="jxr_keyword">null</strong> || op.getTags().isEmpty())) ||
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			(t != <strong class="jxr_keyword">null</strong> &amp;&amp; op.getTags() != <strong class="jxr_keyword">null</strong> &amp;&amp; op.getTags().contains(t.getName()))) {
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			tagBlockContents.child(opBlock(s, path, method, op));
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> examples(Session s, <a name="Parameter" href="../../../../../../org/apache/juneau/bean/openapi3/Parameter.html#Parameter">Parameter</a> pi) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> examples(Session s, <a name="Parameter" href="../../../../../../org/apache/juneau/bean/openapi3/Parameter.html#Parameter">Parameter</a> pi) {
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">try</strong> {
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">return</strong> examplesDiv(m);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> examples(Session s, <a name="Response" href="../../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> ri) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> examples(Session s, <a name="Response" href="../../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> ri) {
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">var</strong> content = ri.getContent();
@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> examplesDiv(m);
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> examplesDiv(<a name="JsonMap" href="../../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> examplesDiv(<a name="JsonMap" href="../../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> m) {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (m.isEmpty())
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_comment">// Creates the informational summary before the ops.</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<strong class="jxr_keyword">private</strong> <a name="Table" href="../../../../../../org/apache/juneau/bean/html5/Table.html#Table">Table</a> header(Session s) {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Table" href="../../../../../../org/apache/juneau/bean/html5/Table.html#Table">Table</a> header(Session s) {
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> table = table()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"header"</span>);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> info = s.openApi.getInfo();
@@ -259,7 +259,7 @@
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">return</strong> table;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> headers(<a name="Response" href="../../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> ri) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> headers(<a name="Response" href="../../../../../../org/apache/juneau/bean/openapi3/Response.html#Response">Response</a> ri) {
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (ri.getHeaders() == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 
@@ -283,14 +283,14 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">return</strong> headers;
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> modelBlock(String modelName, <a name="SchemaInfo" href="../../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> model) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> modelBlock(String modelName, <a name="SchemaInfo" href="../../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> model) {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">return</strong> div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"op-block op-block-closed model"</span>).children(
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			modelBlockSummary(modelName, model),
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 			div(model)._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"op-block-contents"</span>)
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		);
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<strong class="jxr_keyword">private</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> modelBlockSummary(String modelName, <a name="SchemaInfo" href="../../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> model) {
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> modelBlockSummary(String modelName, <a name="SchemaInfo" href="../../../../../../org/apache/juneau/bean/openapi3/SchemaInfo.html#SchemaInfo">SchemaInfo</a> model) {
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">return</strong> div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"op-block-summary"</span>).children(
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 			span(modelName)._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"method-button"</span>),
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 			model.getDescription() != <strong class="jxr_keyword">null</strong> ? span(toBRL(model.getDescription()))._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"summary"</span>) : <strong class="jxr_keyword">null</strong>
@@ -298,7 +298,7 @@
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_comment">// Creates the contents under the "Model" header.</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> modelsBlockContents(Session s) {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> modelsBlockContents(Session s) {
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">var</strong> modelBlockContents = div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"tag-block-contents"</span>);
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (s.openApi.getComponents() != <strong class="jxr_keyword">null</strong> &amp;&amp; s.openApi.getComponents().getSchemas() != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 			s.openApi.getComponents().getSchemas().forEach((k,v) -&gt; modelBlockContents.child(modelBlock(k,v)));
@@ -307,11 +307,11 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<em class="jxr_comment">// Creates the "Model" header.</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">private</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> modelsBlockSummary() {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> modelsBlockSummary() {
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">return</strong> div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"tag-block-summary"</span>).children(span(<span class="jxr_string">"Models"</span>)._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"name"</span>)).onclick(<span class="jxr_string">"toggleTagBlock(this)"</span>);
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> opBlock(Session s, String path, String opName, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> opBlock(Session s, String path, String opName, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op) {
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> opClass = op.getDeprecated() != <strong class="jxr_keyword">null</strong> &amp;&amp; op.getDeprecated() ? <span class="jxr_string">"deprecated"</span> : opName.toLowerCase();
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">if</strong> (!(op.getDeprecated() != <strong class="jxr_keyword">null</strong> &amp;&amp; op.getDeprecated()) &amp;&amp; !STANDARD_METHODS.contains(opClass))
@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		);
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">private</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> opBlockSummary(String path, String opName, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> opBlockSummary(String path, String opName, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op) {
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">return</strong> div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"op-block-summary"</span>).children(
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			span(opName.toUpperCase())._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"method-button"</span>),
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 			span(path)._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"path"</span>),
@@ -331,7 +331,7 @@
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 		).onclick(<span class="jxr_string">"toggleOpBlock(this)"</span>);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> tableContainer(Session s, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> tableContainer(Session s, <a name="Operation" href="../../../../../../org/apache/juneau/bean/openapi3/Operation.html#Operation">Operation</a> op) {
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> tableContainer = div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"table-container"</span>);
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">if</strong> (op.getDescription() != <strong class="jxr_keyword">null</strong>)
@@ -387,7 +387,7 @@
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_comment">// Creates the contents under the "pet  Everything about your Pets  ext-link" header.</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">private</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> tagBlockContents(Session s, <a name="Tag" href="../../../../../../org/apache/juneau/bean/openapi3/Tag.html#Tag">Tag</a> t) {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="Div" href="../../../../../../org/apache/juneau/bean/html5/Div.html#Div">Div</a> tagBlockContents(Session s, <a name="Tag" href="../../../../../../org/apache/juneau/bean/openapi3/Tag.html#Tag">Tag</a> t) {
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> tagBlockContents = div()._<strong class="jxr_keyword">class</strong>(<span class="jxr_string">"tag-block-contents"</span>);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">if</strong> (s.openApi.getPaths() != <strong class="jxr_keyword">null</strong>) {
@@ -416,7 +416,7 @@
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<em class="jxr_comment">// Creates the "pet  Everything about your Pets  ext-link" header.</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">private</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> tagBlockSummary(<a name="Tag" href="../../../../../../org/apache/juneau/bean/openapi3/Tag.html#Tag">Tag</a> t) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="HtmlElement" href="../../../../../../org/apache/juneau/bean/html5/HtmlElement.html#HtmlElement">HtmlElement</a> tagBlockSummary(<a name="Tag" href="../../../../../../org/apache/juneau/bean/openapi3/Tag.html#Tag">Tag</a> t) {
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">var</strong> ed = t.getExternalDocs();
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> content = ed != <strong class="jxr_keyword">null</strong> &amp;&amp; ed.getDescription() != <strong class="jxr_keyword">null</strong> ? ed.getDescription() : (ed != <strong class="jxr_keyword">null</strong> ? ed.getUrl() : <strong class="jxr_keyword">null</strong>);

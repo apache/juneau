@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">return</strong> ReflectionMap.create(Number.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	}
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkEntries(ReflectionMap&lt;?&gt; m, <strong class="jxr_keyword">boolean</strong> hasClass, <strong class="jxr_keyword">boolean</strong> hasMethods, <strong class="jxr_keyword">boolean</strong> hasFields, <strong class="jxr_keyword">boolean</strong> hasConstructors) {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkEntries(ReflectionMap&lt;?&gt; m, <strong class="jxr_keyword">boolean</strong> hasClass, <strong class="jxr_keyword">boolean</strong> hasMethods, <strong class="jxr_keyword">boolean</strong> hasFields, <strong class="jxr_keyword">boolean</strong> hasConstructors) {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  		assertEquals(m.classEntries.length == 0, ! hasClass);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertEquals(m.methodEntries.length == 0, ! hasMethods);
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertEquals(m.fieldEntries.length == 0, ! hasFields);
@@ -62,7 +62,7 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		checkEntries(A1_FULL, <strong class="jxr_keyword">true</strong>, false, <strong class="jxr_keyword">true</strong>, false);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkA(Class&lt;?&gt; c, <strong class="jxr_keyword">boolean</strong> match_A1_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_A1b_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_A1_FULL) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkA(Class&lt;?&gt; c, <strong class="jxr_keyword">boolean</strong> match_A1_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_A1b_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_A1_FULL) {
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertEquals(match_A1_SIMPLE, A1_SIMPLE.find(c, <strong class="jxr_keyword">null</strong>).isPresent());
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertEquals(match_A1b_SIMPLE, A1b_SIMPLE.find(c, <strong class="jxr_keyword">null</strong>).isPresent());
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertEquals(match_A1_FULL, A1_FULL.find(c, <strong class="jxr_keyword">null</strong>).isPresent());
@@ -138,7 +138,7 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		checkEntries(B1m1ssi_FULL, false, <strong class="jxr_keyword">true</strong>, false, false);
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkB(Method m, <strong class="jxr_keyword">boolean</strong> match_B1m1_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1i_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1s_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1ss_SIMPLE,
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkB(Method m, <strong class="jxr_keyword">boolean</strong> match_B1m1_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1i_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1s_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1ss_SIMPLE,
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<strong class="jxr_keyword">boolean</strong> match_B1m1si_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1ssi_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_B1m1_FULL, <strong class="jxr_keyword">boolean</strong> match_B1m1i_FULL, <strong class="jxr_keyword">boolean</strong> match_B1m1s_FULL,
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">boolean</strong> match_B1m1ss_FULL, <strong class="jxr_keyword">boolean</strong> match_B1m1si_FULL, <strong class="jxr_keyword">boolean</strong> match_B1m1ssi_FULL) {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
@@ -213,7 +213,7 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		checkEntries(C1f1_FULL, false, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>, false);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkC(Field f, <strong class="jxr_keyword">boolean</strong> match_C1f1_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_C1f1_FULL) {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkC(Field f, <strong class="jxr_keyword">boolean</strong> match_C1f1_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_C1f1_FULL) {
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(match_C1f1_SIMPLE, C1f1_SIMPLE.find(f, <strong class="jxr_keyword">null</strong>).isPresent());
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertEquals(match_C1f1_FULL, C1f1_FULL.find(f, <strong class="jxr_keyword">null</strong>).isPresent());
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		checkEntries(Dssi_FULL, false, false, false, <strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkD(Constructor&lt;?&gt; c, <strong class="jxr_keyword">boolean</strong> match_D_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Di_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Ds_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Dss_SIMPLE,
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkD(Constructor&lt;?&gt; c, <strong class="jxr_keyword">boolean</strong> match_D_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Di_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Ds_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Dss_SIMPLE,
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">boolean</strong> match_Dsi_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_Dssi_SIMPLE, <strong class="jxr_keyword">boolean</strong> match_D_FULL, <strong class="jxr_keyword">boolean</strong> match_Di_FULL, <strong class="jxr_keyword">boolean</strong> match_Ds_FULL,
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">boolean</strong> match_Dss_FULL, <strong class="jxr_keyword">boolean</strong> match_Dsi_FULL, <strong class="jxr_keyword">boolean</strong> match_Dssi_FULL) {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 

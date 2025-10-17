@@ -141,13 +141,13 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">private</strong> ObjectSwap getPropertySwap(Beanp p) {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ObjectSwap getPropertySwap(Beanp p) {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">if</strong> (! p.format().isEmpty())
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 				<strong class="jxr_keyword">return</strong> BeanCreator.of(ObjectSwap.<strong class="jxr_keyword">class</strong>).type(StringFormatSwap.<strong class="jxr_keyword">class</strong>).arg(String.<strong class="jxr_keyword">class</strong>, p.format()).run();
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">private</strong> ObjectSwap getPropertySwap(Swap s) <strong class="jxr_keyword">throws</strong> RuntimeException {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ObjectSwap getPropertySwap(Swap s) <strong class="jxr_keyword">throws</strong> RuntimeException {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			Class&lt;?&gt; c = s.value();
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<strong class="jxr_keyword">if</strong> (isVoid(c))
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				c = s.impl();
@@ -964,7 +964,7 @@
 <a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * @param method The method to find parents for.</em>
 <a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 * @param consumer The action to perform for each parent method.</em>
 <a class="jxr_linenumber" name="L958" href="#L958">958</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> forEachParentMethod(Method method, Consumer&lt;Method&gt; consumer) {
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> forEachParentMethod(Method method, Consumer&lt;Method&gt; consumer) {
 <a class="jxr_linenumber" name="L960" href="#L960">960</a> 		<strong class="jxr_keyword">if</strong> (method == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L961" href="#L961">961</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L962" href="#L962">962</a> 
@@ -981,7 +981,7 @@
 <a class="jxr_linenumber" name="L973" href="#L973">973</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L974" href="#L974">974</a> 				Method parentMethod = currentClass.getDeclaredMethod(methodName, paramTypes);
 <a class="jxr_linenumber" name="L975" href="#L975">975</a> 				parentMethods.add(parentMethod);
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			} <strong class="jxr_keyword">catch</strong> (NoSuchMethodException e) {
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L977" href="#L977">977</a> 				<em class="jxr_comment">// No matching method in this parent class, continue up the hierarchy</em>
 <a class="jxr_linenumber" name="L978" href="#L978">978</a> 			}
 <a class="jxr_linenumber" name="L979" href="#L979">979</a> 			currentClass = currentClass.getSuperclass();
@@ -992,7 +992,7 @@
 <a class="jxr_linenumber" name="L984" href="#L984">984</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L985" href="#L985">985</a> 				Method ifaceMethod = iface.getDeclaredMethod(methodName, paramTypes);
 <a class="jxr_linenumber" name="L986" href="#L986">986</a> 				parentMethods.add(ifaceMethod);
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			} <strong class="jxr_keyword">catch</strong> (NoSuchMethodException e) {
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchMethodException e) {
 <a class="jxr_linenumber" name="L988" href="#L988">988</a> 				<em class="jxr_comment">// No matching method in this interface</em>
 <a class="jxr_linenumber" name="L989" href="#L989">989</a> 			}
 <a class="jxr_linenumber" name="L990" href="#L990">990</a> 		}

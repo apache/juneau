@@ -446,7 +446,7 @@
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 				port = <strong class="jxr_keyword">new</strong> Random().nextInt(32767 - ports[0] + 1) + ports[0];
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">try</strong> (ServerSocket ss = <strong class="jxr_keyword">new</strong> ServerSocket(port)) {
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 				<strong class="jxr_keyword">return</strong> port;
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {}
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IOException e) {}
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">return</strong> 0;
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 	}
@@ -655,7 +655,7 @@
 <a class="jxr_linenumber" name="L647" href="#L647">647</a> 		String hostname = <span class="jxr_string">"localhost"</span>;
 <a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L649" href="#L649">649</a> 			hostname = InetAddress.getLocalHost().getHostName();
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		} <strong class="jxr_keyword">catch</strong> (UnknownHostException e) {}
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) UnknownHostException e) {}
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">return</strong> hostname;
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 	}
 <a class="jxr_linenumber" name="L653" href="#L653">653</a> 

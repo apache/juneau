@@ -250,228 +250,227 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 				<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 					<strong class="jxr_keyword">if</strong> (future.isDone()) {
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 						<strong class="jxr_keyword">return</strong> future.get();
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 						<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;pending&gt;"</span>;
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 					}
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;error:"</span> + e.getMessage() + <span class="jxr_string">"&gt;"</span>;
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				}
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			};
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<em class="jxr_comment">// Test completed future</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">var</strong> completedFuture = CompletableFuture.completedFuture(<span class="jxr_string">"done"</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			assertEquals(<span class="jxr_string">"done"</span>, futureSwapper.apply(converter, completedFuture));
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<em class="jxr_comment">// Test pending future</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> pendingFuture = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			assertEquals(<span class="jxr_string">"&lt;pending&gt;"</span>, futureSwapper.apply(converter, pendingFuture));
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<em class="jxr_comment">// Test failed future</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">var</strong> failedFuture = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			failedFuture.completeExceptionally(<strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"failed"</span>));
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">var</strong> result = (String) futureSwapper.apply(converter, failedFuture);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			assertTrue(result.startsWith(<span class="jxr_string">"&lt;error:"</span>));
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			assertTrue(result.contains(<span class="jxr_string">"failed"</span>));
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		@Test
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">void</strong> d05_customObjectSwapping() {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			Swapper&lt;TestWrapper&gt; wrapperSwapper = (converter, wrapper) -&gt; wrapper.getValue();
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"inner_value"</span>);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">var</strong> result = wrapperSwapper.apply(converter, wrapper);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			assertEquals(<span class="jxr_string">"inner_value"</span>, result);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		}
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<em class="jxr_comment">// Integration Tests</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Nested
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<strong class="jxr_keyword">class</strong> E_integration <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		@Test
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">void</strong> e01_converterIntegration() {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<em class="jxr_comment">// Test integration with custom converter</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<strong class="jxr_keyword">var</strong> customConverter = BasicBeanConverter.builder()
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				.defaultSettings()
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				.addSwapper(TestWrapper.<strong class="jxr_keyword">class</strong>, (converter, wrapper) -&gt; wrapper.getValue())
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				.build();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"swapped_content"</span>);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">var</strong> result = customConverter.stringify(wrapper);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			assertEquals(<span class="jxr_string">"swapped_content"</span>, result);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		@Test
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">void</strong> e02_multipleSwapperRegistration() {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> customConverter = BasicBeanConverter.builder()
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				.defaultSettings()
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				.addSwapper(TestWrapper.<strong class="jxr_keyword">class</strong>, (converter, wrapper) -&gt; <span class="jxr_string">"WRAPPER:"</span> + wrapper.getValue())
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				.addSwapper(TestContainer.<strong class="jxr_keyword">class</strong>, (converter, container) -&gt; <span class="jxr_string">"CONTAINER:"</span> + container.content)
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				.build();
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<em class="jxr_comment">// Test wrapper swapper</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			assertEquals(<span class="jxr_string">"WRAPPER:test"</span>, customConverter.stringify(wrapper));
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<em class="jxr_comment">// Test container swapper</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">var</strong> container = <strong class="jxr_keyword">new</strong> TestContainer(<span class="jxr_string">"content"</span>);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			assertEquals(<span class="jxr_string">"CONTAINER:content"</span>, customConverter.stringify(container));
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		}
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		@Test
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">void</strong> e03_converterPassthrough() {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<em class="jxr_comment">// Test that converter parameter is properly passed</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			Swapper&lt;TestContainer&gt; containerSwapper = (converter, container) -&gt; {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 				<em class="jxr_comment">// Use the converter parameter to stringify the content</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"CONTAINER["</span> + converter.stringify(container.content) + <span class="jxr_string">"]"</span>;
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			};
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">var</strong> container = <strong class="jxr_keyword">new</strong> TestContainer(<span class="jxr_string">"inner_content"</span>);
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">var</strong> result = containerSwapper.apply(converter, container);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			assertEquals(<span class="jxr_string">"CONTAINER[inner_content]"</span>, result);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		@Test
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">void</strong> e04_nestedConverterCalls() {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			<em class="jxr_comment">// Test swapper that makes nested converter calls</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			Swapper&lt;TestComplexObject&gt; complexSwapper = (converter, obj) -&gt; {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				<strong class="jxr_keyword">var</strong> itemsStr = converter.stringify(obj.items);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"COMPLEX{items="</span> + itemsStr + <span class="jxr_string">", count="</span> + obj.items.size() + <span class="jxr_string">"}"</span>;
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			};
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> complex = <strong class="jxr_keyword">new</strong> TestComplexObject(Arrays.asList(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>));
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">var</strong> result = complexSwapper.apply(converter, complex);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			assertTrue(result.toString().contains(<span class="jxr_string">"COMPLEX{items="</span>));
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			assertTrue(result.toString().contains(<span class="jxr_string">"count=3"</span>));
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		@Test
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">void</strong> e05_swapperChaining() {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<em class="jxr_comment">// Test that swapped objects can be swapped again</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder()
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				.defaultSettings()
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				.addSwapper(TestWrapper.<strong class="jxr_keyword">class</strong>, (conv, wrapper) -&gt; <strong class="jxr_keyword">new</strong> TestContainer(wrapper.getValue()))
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				.addSwapper(TestContainer.<strong class="jxr_keyword">class</strong>, (conv, container) -&gt; <span class="jxr_string">"CHAINED:"</span> + container.content)
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				.build();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"hello"</span>);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">var</strong> result = converter.stringify(wrapper);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<em class="jxr_comment">// Should unwrap the wrapper, create a container, then process the container</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			assertEquals(<span class="jxr_string">"CHAINED:hello"</span>, result);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		}
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		@Test
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">void</strong> e06_swapperWithListification() {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<em class="jxr_comment">// Test swapper integration with listification</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder()
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 				.defaultSettings()
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				.addSwapper(TestContainer.<strong class="jxr_keyword">class</strong>, (conv, container) -&gt; Arrays.asList(container.content, <span class="jxr_string">"extra"</span>))
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				.build();
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">var</strong> container = <strong class="jxr_keyword">new</strong> TestContainer(<span class="jxr_string">"test"</span>);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">var</strong> list = converter.listify(container);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertEquals(2, list.size());
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			assertEquals(<span class="jxr_string">"test"</span>, list.get(0));
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertEquals(<span class="jxr_string">"extra"</span>, list.get(1));
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		}
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_comment">// Performance Tests</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Nested
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<strong class="jxr_keyword">class</strong> F_performance <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		@Test
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">void</strong> f01_simpleSwapperPerformance() {
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			Swapper&lt;String&gt; simpleSwapper = (converter, str) -&gt; str.toUpperCase();
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<em class="jxr_comment">// Test that simple swappers execute quickly</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 1000; i++) {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 				simpleSwapper.apply(converter, <span class="jxr_string">"test"</span> + i);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			}
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">var</strong> durationMs = (end - start) / 1_000_000;
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			assertTrue(durationMs &lt; 100, <span class="jxr_string">"Simple swapper should execute quickly, took: "</span> + durationMs + <span class="jxr_string">"ms"</span>);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		}
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		@Test
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">void</strong> f02_complexSwapperPerformance() {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			Swapper&lt;List&lt;String&gt;&gt; complexSwapper = (converter, list) -&gt; {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 				<strong class="jxr_keyword">return</strong> list.stream()
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					.map(String::toUpperCase)
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 					.sorted()
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					.toList();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			};
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">var</strong> testList = Arrays.asList(<span class="jxr_string">"z"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"m"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"x"</span>);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 100; i++) {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				complexSwapper.apply(converter, testList);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">var</strong> durationMs = (end - start) / 1_000_000;
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertTrue(durationMs &lt; 1000, <span class="jxr_string">"Complex swapper should complete reasonably quickly, took: "</span> + durationMs + <span class="jxr_string">"ms"</span>);
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		}
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_comment">// Helper Classes and Methods</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<em class="jxr_comment">// ====================================================================================================</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SwapperMethods {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">static</strong> String addPrefix(BeanConverter converter, String str) {
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"PREFIX:"</span> + str;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestWrapper {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">final</strong> String value;
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		TestWrapper(String value) {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">this</strong>.value = value;
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		}
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		String getValue() { <strong class="jxr_keyword">return</strong> value; }
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestContainer {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">final</strong> String content;
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		TestContainer(String content) {
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">this</strong>.content = content;
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		}
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestComplexObject {
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; items;
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		TestComplexObject(List&lt;String&gt; items) {
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">this</strong>.items = items;
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		}
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	}
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> }
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 					}
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;pending&gt;"</span>;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;error:"</span> + e.getMessage() + <span class="jxr_string">"&gt;"</span>;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			};
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<em class="jxr_comment">// Test completed future</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">var</strong> completedFuture = CompletableFuture.completedFuture(<span class="jxr_string">"done"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			assertEquals(<span class="jxr_string">"done"</span>, futureSwapper.apply(converter, completedFuture));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<em class="jxr_comment">// Test pending future</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">var</strong> pendingFuture = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			assertEquals(<span class="jxr_string">"&lt;pending&gt;"</span>, futureSwapper.apply(converter, pendingFuture));
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<em class="jxr_comment">// Test failed future</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">var</strong> failedFuture = <strong class="jxr_keyword">new</strong> CompletableFuture&lt;String&gt;();
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			failedFuture.completeExceptionally(<strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"failed"</span>));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">var</strong> result = (String) futureSwapper.apply(converter, failedFuture);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			assertTrue(result.startsWith(<span class="jxr_string">"&lt;error:"</span>));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			assertTrue(result.contains(<span class="jxr_string">"failed"</span>));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		@Test
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">void</strong> d05_customObjectSwapping() {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			Swapper&lt;TestWrapper&gt; wrapperSwapper = (converter, wrapper) -&gt; wrapper.getValue();
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"inner_value"</span>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">var</strong> result = wrapperSwapper.apply(converter, wrapper);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			assertEquals(<span class="jxr_string">"inner_value"</span>, result);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_comment">// Integration Tests</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Nested
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">class</strong> E_integration <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		@Test
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">void</strong> e01_converterIntegration() {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<em class="jxr_comment">// Test integration with custom converter</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">var</strong> customConverter = BasicBeanConverter.builder()
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				.defaultSettings()
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				.addSwapper(TestWrapper.<strong class="jxr_keyword">class</strong>, (converter, wrapper) -&gt; wrapper.getValue())
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				.build();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"swapped_content"</span>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">var</strong> result = customConverter.stringify(wrapper);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			assertEquals(<span class="jxr_string">"swapped_content"</span>, result);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		@Test
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">void</strong> e02_multipleSwapperRegistration() {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">var</strong> customConverter = BasicBeanConverter.builder()
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				.defaultSettings()
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				.addSwapper(TestWrapper.<strong class="jxr_keyword">class</strong>, (converter, wrapper) -&gt; <span class="jxr_string">"WRAPPER:"</span> + wrapper.getValue())
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				.addSwapper(TestContainer.<strong class="jxr_keyword">class</strong>, (converter, container) -&gt; <span class="jxr_string">"CONTAINER:"</span> + container.content)
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				.build();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<em class="jxr_comment">// Test wrapper swapper</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			assertEquals(<span class="jxr_string">"WRAPPER:test"</span>, customConverter.stringify(wrapper));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<em class="jxr_comment">// Test container swapper</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">var</strong> container = <strong class="jxr_keyword">new</strong> TestContainer(<span class="jxr_string">"content"</span>);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			assertEquals(<span class="jxr_string">"CONTAINER:content"</span>, customConverter.stringify(container));
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		@Test
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">void</strong> e03_converterPassthrough() {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<em class="jxr_comment">// Test that converter parameter is properly passed</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			Swapper&lt;TestContainer&gt; containerSwapper = (converter, container) -&gt; {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				<em class="jxr_comment">// Use the converter parameter to stringify the content</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"CONTAINER["</span> + converter.stringify(container.content) + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			};
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">var</strong> container = <strong class="jxr_keyword">new</strong> TestContainer(<span class="jxr_string">"inner_content"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">var</strong> result = containerSwapper.apply(converter, container);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			assertEquals(<span class="jxr_string">"CONTAINER[inner_content]"</span>, result);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		@Test
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">void</strong> e04_nestedConverterCalls() {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<em class="jxr_comment">// Test swapper that makes nested converter calls</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			Swapper&lt;TestComplexObject&gt; complexSwapper = (converter, obj) -&gt; {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 				<strong class="jxr_keyword">var</strong> itemsStr = converter.stringify(obj.items);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"COMPLEX{items="</span> + itemsStr + <span class="jxr_string">", count="</span> + obj.items.size() + <span class="jxr_string">"}"</span>;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			};
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> complex = <strong class="jxr_keyword">new</strong> TestComplexObject(Arrays.asList(<span class="jxr_string">"x"</span>, <span class="jxr_string">"y"</span>, <span class="jxr_string">"z"</span>));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">var</strong> result = complexSwapper.apply(converter, complex);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			assertTrue(result.toString().contains(<span class="jxr_string">"COMPLEX{items="</span>));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			assertTrue(result.toString().contains(<span class="jxr_string">"count=3"</span>));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		@Test
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">void</strong> e05_swapperChaining() {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<em class="jxr_comment">// Test that swapped objects can be swapped again</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder()
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				.defaultSettings()
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 				.addSwapper(TestWrapper.<strong class="jxr_keyword">class</strong>, (conv, wrapper) -&gt; <strong class="jxr_keyword">new</strong> TestContainer(wrapper.getValue()))
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				.addSwapper(TestContainer.<strong class="jxr_keyword">class</strong>, (conv, container) -&gt; <span class="jxr_string">"CHAINED:"</span> + container.content)
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 				.build();
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">var</strong> wrapper = <strong class="jxr_keyword">new</strong> TestWrapper(<span class="jxr_string">"hello"</span>);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">var</strong> result = converter.stringify(wrapper);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<em class="jxr_comment">// Should unwrap the wrapper, create a container, then process the container</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			assertEquals(<span class="jxr_string">"CHAINED:hello"</span>, result);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		}
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		@Test
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">void</strong> e06_swapperWithListification() {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<em class="jxr_comment">// Test swapper integration with listification</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.builder()
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				.defaultSettings()
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 				.addSwapper(TestContainer.<strong class="jxr_keyword">class</strong>, (conv, container) -&gt; Arrays.asList(container.content, <span class="jxr_string">"extra"</span>))
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				.build();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">var</strong> container = <strong class="jxr_keyword">new</strong> TestContainer(<span class="jxr_string">"test"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">var</strong> list = converter.listify(container);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertEquals(2, list.size());
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertEquals(<span class="jxr_string">"test"</span>, list.get(0));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			assertEquals(<span class="jxr_string">"extra"</span>, list.get(1));
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<em class="jxr_comment">// Performance Tests</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	@Nested
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<strong class="jxr_keyword">class</strong> F_performance <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		@Test
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">void</strong> f01_simpleSwapperPerformance() {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			Swapper&lt;String&gt; simpleSwapper = (converter, str) -&gt; str.toUpperCase();
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<em class="jxr_comment">// Test that simple swappers execute quickly</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 1000; i++) {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				simpleSwapper.apply(converter, <span class="jxr_string">"test"</span> + i);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">var</strong> durationMs = (end - start) / 1_000_000;
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			assertTrue(durationMs &lt; 100, <span class="jxr_string">"Simple swapper should execute quickly, took: "</span> + durationMs + <span class="jxr_string">"ms"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		@Test
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">void</strong> f02_complexSwapperPerformance() {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			Swapper&lt;List&lt;String&gt;&gt; complexSwapper = (converter, list) -&gt; {
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 				<strong class="jxr_keyword">return</strong> list.stream()
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 					.map(String::toUpperCase)
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					.sorted()
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 					.toList();
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			};
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> converter = BasicBeanConverter.DEFAULT;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">var</strong> testList = Arrays.asList(<span class="jxr_string">"z"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"m"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">var</strong> start = System.nanoTime();
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; 100; i++) {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				complexSwapper.apply(converter, testList);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			}
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">var</strong> end = System.nanoTime();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">var</strong> durationMs = (end - start) / 1_000_000;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			assertTrue(durationMs &lt; 1000, <span class="jxr_string">"Complex swapper should complete reasonably quickly, took: "</span> + durationMs + <span class="jxr_string">"ms"</span>);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<em class="jxr_comment">// Helper Classes and Methods</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_comment">// ====================================================================================================</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SwapperMethods {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">static</strong> String addPrefix(BeanConverter converter, String str) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"PREFIX:"</span> + str;
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		}
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestWrapper {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">final</strong> String value;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		TestWrapper(String value) {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">this</strong>.value = value;
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		String getValue() { <strong class="jxr_keyword">return</strong> value; }
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestContainer {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">final</strong> String content;
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		TestContainer(String content) {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">this</strong>.content = content;
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestComplexObject {
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; items;
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		TestComplexObject(List&lt;String&gt; items) {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			<strong class="jxr_keyword">this</strong>.items = items;
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

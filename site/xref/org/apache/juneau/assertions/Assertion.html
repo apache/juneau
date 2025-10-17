@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 					.addBean(Object[].<strong class="jxr_keyword">class</strong>,<strong class="jxr_keyword">new</strong> Object[0])
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 					.createBean(throwable)
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 					.run();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../org/apache/juneau/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) <a name="ExecutableException" href="../../../../org/apache/juneau/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 				<em class="jxr_comment">// If we couldn't create requested exception, just throw a RuntimeException.</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(cause, msg);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 			}

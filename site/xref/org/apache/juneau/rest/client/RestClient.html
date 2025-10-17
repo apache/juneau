@@ -6241,7 +6241,7 @@
 <a class="jxr_linenumber" name="L6233" href="#L6233">6233</a> 				httpClient.close();
 <a class="jxr_linenumber" name="L6234" href="#L6234">6234</a> 			<strong class="jxr_keyword">if</strong> (executorService != <strong class="jxr_keyword">null</strong> &amp;&amp; executorServiceShutdownOnClose)
 <a class="jxr_linenumber" name="L6235" href="#L6235">6235</a> 				executorService.shutdown();
-<a class="jxr_linenumber" name="L6236" href="#L6236">6236</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {}
+<a class="jxr_linenumber" name="L6236" href="#L6236">6236</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Throwable t) {}
 <a class="jxr_linenumber" name="L6237" href="#L6237">6237</a> 		<strong class="jxr_keyword">if</strong> (creationStack != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L6238" href="#L6238">6238</a> 			closedStack = Thread.currentThread().getStackTrace();
 <a class="jxr_linenumber" name="L6239" href="#L6239">6239</a> 	}
@@ -7527,14 +7527,14 @@
 <a class="jxr_linenumber" name="L7519" href="#L7519">7519</a> 		<strong class="jxr_keyword">return</strong> request(op(method, uri, body));
 <a class="jxr_linenumber" name="L7520" href="#L7520">7520</a> 	}
 <a class="jxr_linenumber" name="L7521" href="#L7521">7521</a> 
-<a class="jxr_linenumber" name="L7522" href="#L7522">7522</a> 	<strong class="jxr_keyword">private</strong> Supplier&lt;String&gt; msg(String msg, Object...args) {
+<a class="jxr_linenumber" name="L7522" href="#L7522">7522</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; msg(String msg, Object...args) {
 <a class="jxr_linenumber" name="L7523" href="#L7523">7523</a> 		<strong class="jxr_keyword">return</strong> ()-&gt;args.length == 0 ? msg : MessageFormat.format(msg, args);
 <a class="jxr_linenumber" name="L7524" href="#L7524">7524</a> 	}
 <a class="jxr_linenumber" name="L7525" href="#L7525">7525</a> 
-<a class="jxr_linenumber" name="L7526" href="#L7526">7526</a> 	<strong class="jxr_keyword">private</strong> <a name="RestOperation" href="../../../../../org/apache/juneau/rest/client/RestOperation.html#RestOperation">RestOperation</a> op(String method, Object url, Object body) {
+<a class="jxr_linenumber" name="L7526" href="#L7526">7526</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="RestOperation" href="../../../../../org/apache/juneau/rest/client/RestOperation.html#RestOperation">RestOperation</a> op(String method, Object url, Object body) {
 <a class="jxr_linenumber" name="L7527" href="#L7527">7527</a> 		<strong class="jxr_keyword">return</strong> RestOperation.of(method, url, body);
 <a class="jxr_linenumber" name="L7528" href="#L7528">7528</a> 	}
-<a class="jxr_linenumber" name="L7529" href="#L7529">7529</a> 	<strong class="jxr_keyword">private</strong> Reader stringBody(String body) {
+<a class="jxr_linenumber" name="L7529" href="#L7529">7529</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Reader stringBody(String body) {
 <a class="jxr_linenumber" name="L7530" href="#L7530">7530</a> 		<strong class="jxr_keyword">return</strong> body == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : <strong class="jxr_keyword">new</strong> StringReader(s(body));
 <a class="jxr_linenumber" name="L7531" href="#L7531">7531</a> 	}
 <a class="jxr_linenumber" name="L7532" href="#L7532">7532</a> 

@@ -207,11 +207,11 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> value();
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> Integer parse(String value) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Integer parse(String value) {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Integer.parseInt(value);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(<span class="jxr_string">"Value ''{0}'' could not be parsed as an integer."</span>, value);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BasicRuntimeException" href="../../../../../org/apache/juneau/BasicRuntimeException.html#BasicRuntimeException">BasicRuntimeException</a>(e, <span class="jxr_string">"Value ''{0}'' could not be parsed as an integer."</span>, value);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		}
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 

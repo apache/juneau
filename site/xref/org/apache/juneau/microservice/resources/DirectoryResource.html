@@ -243,7 +243,7 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 		res.setContentType(<span class="jxr_string">"application/octet-stream"</span>);
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FileContents(getFile(path));
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		} <strong class="jxr_keyword">catch</strong> (FileNotFoundException e) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) FileNotFoundException e) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"File not found"</span>);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 		res.setContentType(<span class="jxr_string">"text/plain"</span>);
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> FileContents(getFile(path));
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		} <strong class="jxr_keyword">catch</strong> (FileNotFoundException e) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) FileNotFoundException e) {
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"File not found"</span>);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}

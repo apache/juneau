@@ -244,17 +244,17 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		checkStep(1, in, JsonMap.ofJson(in).getString(<span class="jxr_string">"𤭢𤭢"</span>), <span class="jxr_string">"𤭢𤭢"</span>);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">private</strong> String getDeepString(JsonMap m, String url) {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getDeepString(JsonMap m, String url) {
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> r = ObjectRest.create(m);
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> (String)r.get(url);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">private</strong> Boolean getDeepBoolean(JsonMap m, String url) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Boolean getDeepBoolean(JsonMap m, String url) {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> r = ObjectRest.create(m);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">return</strong> (Boolean)r.get(url);
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkStep(<strong class="jxr_keyword">int</strong> step, String input, String output, String expectedValue) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkStep(<strong class="jxr_keyword">int</strong> step, String input, String output, String expectedValue) {
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">if</strong> (!output.equals(expectedValue)) {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">var</strong> msg = <span class="jxr_string">"Step #"</span> + step + <span class="jxr_string">" failed: ["</span> + input + <span class="jxr_string">"]-&gt;["</span> + output + <span class="jxr_string">"]...Expected value=["</span> + expectedValue + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			fail(msg);

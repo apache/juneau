@@ -87,17 +87,16 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.asCausedBy().asCausedBy().isNull();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@SuppressWarnings(<span class="jxr_string">"unused"</span>)
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a02_out() {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> <a name="CapturingPrintStream" href="../../../../org/apache/juneau/utest/utils/CapturingPrintStream.html#CapturingPrintStream">CapturingPrintStream</a>();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			assertString(<span class="jxr_string">"x"</span>).setOut(out).isNull();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		} <strong class="jxr_keyword">catch</strong> (BasicAssertionError e) { <em class="jxr_comment">/* Ignore */</em> }
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertString(out).isContains(<span class="jxr_string">"Value was not null."</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> a02_out() {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> <a name="CapturingPrintStream" href="../../../../org/apache/juneau/utest/utils/CapturingPrintStream.html#CapturingPrintStream">CapturingPrintStream</a>();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			assertString(<span class="jxr_string">"x"</span>).setOut(out).isNull();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		} <strong class="jxr_keyword">catch</strong> (BasicAssertionError e) { <em class="jxr_comment">/* Ignore */</em> }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertString(out).isContains(<span class="jxr_string">"Value was not null."</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

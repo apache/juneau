@@ -1938,7 +1938,7 @@
 <a class="jxr_linenumber" name="L1930" href="#L1930">1930</a> 		<strong class="jxr_keyword">if</strong> (needsDecode) {
 <a class="jxr_linenumber" name="L1931" href="#L1931">1931</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1932" href="#L1932">1932</a> 				<strong class="jxr_keyword">return</strong> URLDecoder.decode(s, <span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 			} <strong class="jxr_keyword">catch</strong> (UnsupportedEncodingException e) {<em class="jxr_comment">/* Won't happen */</em>}
+<a class="jxr_linenumber" name="L1933" href="#L1933">1933</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) UnsupportedEncodingException e) {<em class="jxr_comment">/* Won't happen */</em>}
 <a class="jxr_linenumber" name="L1934" href="#L1934">1934</a> 		}
 <a class="jxr_linenumber" name="L1935" href="#L1935">1935</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L1936" href="#L1936">1936</a> 	}
@@ -1962,7 +1962,7 @@
 <a class="jxr_linenumber" name="L1954" href="#L1954">1954</a> 		<strong class="jxr_keyword">if</strong> (needsEncode) {
 <a class="jxr_linenumber" name="L1955" href="#L1955">1955</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1956" href="#L1956">1956</a> 				<strong class="jxr_keyword">return</strong> URLEncoder.encode(s, <span class="jxr_string">"UTF-8"</span>);
-<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 			} <strong class="jxr_keyword">catch</strong> (UnsupportedEncodingException e) {<em class="jxr_comment">/* Won't happen */</em>}
+<a class="jxr_linenumber" name="L1957" href="#L1957">1957</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) UnsupportedEncodingException e) {<em class="jxr_comment">/* Won't happen */</em>}
 <a class="jxr_linenumber" name="L1958" href="#L1958">1958</a> 		}
 <a class="jxr_linenumber" name="L1959" href="#L1959">1959</a> 
 <a class="jxr_linenumber" name="L1960" href="#L1960">1960</a> 		<strong class="jxr_keyword">return</strong> s;
@@ -1993,7 +1993,7 @@
 <a class="jxr_linenumber" name="L1985" href="#L1985">1985</a> 				<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L1986" href="#L1986">1986</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L1987" href="#L1987">1987</a> 						sb.append(URLEncoder.encode(<span class="jxr_string">""</span>+c, <span class="jxr_string">"UTF-8"</span>));  <em class="jxr_comment">// Yuck.</em>
-<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 					} <strong class="jxr_keyword">catch</strong> (UnsupportedEncodingException e) {
+<a class="jxr_linenumber" name="L1988" href="#L1988">1988</a> 					} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) UnsupportedEncodingException e) {
 <a class="jxr_linenumber" name="L1989" href="#L1989">1989</a> 						<em class="jxr_comment">// Not possible.</em>
 <a class="jxr_linenumber" name="L1990" href="#L1990">1990</a> 					}
 <a class="jxr_linenumber" name="L1991" href="#L1991">1991</a> 			}

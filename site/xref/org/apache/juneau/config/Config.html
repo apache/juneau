@@ -1128,7 +1128,7 @@
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 		<strong class="jxr_keyword">return</strong> removeMods(ce.getModifiers(), ce.getValue());
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 	}
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 
-<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSimpleType(Type t) {
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSimpleType(Type t) {
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 		<strong class="jxr_keyword">if</strong> (! (t instanceof Class))
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		<strong class="jxr_keyword">var</strong> c = (Class&lt;?&gt;)t;
@@ -1141,7 +1141,7 @@
 <a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 	}
 <a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 
-<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 	<strong class="jxr_keyword">private</strong> String section(String section) {
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String section(String section) {
 <a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> 		Utils.assertArgNotNull(<span class="jxr_string">"section"</span>, section);
 <a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> 		<strong class="jxr_keyword">if</strong> (Utils.isEmpty(section))
 <a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
@@ -1185,14 +1185,14 @@
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 			<strong class="jxr_keyword">return</strong> r.substring(1, r.length()-1);
 <a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> 		<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> 	}
-<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<strong class="jxr_keyword">private</strong> String skey(String key) {
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String skey(String key) {
 <a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> 		<strong class="jxr_keyword">var</strong> i = key.indexOf('/');
 <a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> 		<strong class="jxr_keyword">if</strong> (i == -1)
 <a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> 			<strong class="jxr_keyword">return</strong> key;
 <a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> 		<strong class="jxr_keyword">return</strong> key.substring(i+1);
 <a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> 	}
 <a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> 
-<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 	<strong class="jxr_keyword">private</strong> String sname(String key) {
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String sname(String key) {
 <a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> 		Utils.assertArgNotNull(<span class="jxr_string">"key"</span>, key);
 <a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> 		<strong class="jxr_keyword">var</strong> i = key.indexOf('/');
 <a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> 		<strong class="jxr_keyword">if</strong> (i == -1)

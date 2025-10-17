@@ -146,57 +146,56 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		serializers.put(<span class="jxr_string">"msgPackT"</span>, create(b, MsgPackSerializer.create().typePropertyName(<span class="jxr_string">"t"</span>).addBeanTypes().addRootType()));
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">private</strong> Serializer create(Builder&lt;?&gt; tb, Serializer.Builder sb) {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		tb.serializerApply.accept(sb);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		sb.swaps(tb.swaps);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		tb.applies.forEach(x -&gt; {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (x.getA().equals(BeanContext.Builder.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				sb.beanContext((Consumer&lt;BeanContext.Builder&gt;) x.getB());
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.getA().isInstance(sb))
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 				sb.apply(Serializer.Builder.<strong class="jxr_keyword">class</strong>, (Consumer&lt;Serializer.Builder&gt;) x.getB());
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		});
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">return</strong> sb.build();
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(String testName, String expected) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"SKIP"</span>.equals(expected) || skipTest.test(testName);
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSerialize(String testName) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> s = serializers.get(testName);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> exp = expected.get(testName);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">if</strong> (isSkipped(testName + <span class="jxr_string">"-serialize"</span>, exp)) <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">var</strong> r = s.serializeToString(in.get());
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<em class="jxr_comment">// Specifying "xxx" in the expected results will spit out what we should populate the field with.</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (eq(exp, <span class="jxr_string">"xxx"</span>)) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				System.out.println(getClass().getName() + <span class="jxr_string">": "</span> + label + <span class="jxr_string">"/"</span> + testName + <span class="jxr_string">"=\n"</span> + r.replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;n"</span>).replaceAll(<span class="jxr_string">"\t"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;t"</span>)); <em class="jxr_comment">// NOT DEBUG</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				System.out.println(r);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<strong class="jxr_keyword">if</strong> (s instanceof MsgPackSerializer) {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 					System.out.println(<span class="jxr_string">"decoded=["</span>+<strong class="jxr_keyword">new</strong> String(StringUtils.fromHex(r))+<span class="jxr_string">"]"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			}
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			assertEquals(exp, r, fms(<span class="jxr_string">"{0}/{1} serialize-normal failed."</span>, label, testName));
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">if</strong> (exceptionMsg == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			assertContains(exceptionMsg, e.getMessage());
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">if</strong> (exceptionMsg == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BasicAssertionError(e, <span class="jxr_string">"{0}/{1} failed.  exception={2}"</span>, label, testName, e.getLocalizedMessage());
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			assertContains(exceptionMsg, e.getMessage());
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Override
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"ComboSerializeTester: "</span> + label;
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">private</strong> Serializer create(Builder&lt;?&gt; tb, Serializer.Builder sb) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		tb.serializerApply.accept(sb);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		sb.swaps(tb.swaps);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		tb.applies.forEach(x -&gt; {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">if</strong> (x.getA().equals(BeanContext.Builder.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				sb.beanContext((Consumer&lt;BeanContext.Builder&gt;) x.getB());
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (x.getA().isInstance(sb))
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				sb.apply(Serializer.Builder.<strong class="jxr_keyword">class</strong>, (Consumer&lt;Serializer.Builder&gt;) x.getB());
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		});
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">return</strong> sb.build();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSkipped(String testName, String expected) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"SKIP"</span>.equals(expected) || skipTest.test(testName);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testSerialize(String testName) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> s = serializers.get(testName);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> exp = expected.get(testName);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">if</strong> (isSkipped(testName + <span class="jxr_string">"-serialize"</span>, exp)) <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">var</strong> r = s.serializeToString(in.get());
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<em class="jxr_comment">// Specifying "xxx" in the expected results will spit out what we should populate the field with.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">if</strong> (eq(exp, <span class="jxr_string">"xxx"</span>)) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				System.out.println(getClass().getName() + <span class="jxr_string">": "</span> + label + <span class="jxr_string">"/"</span> + testName + <span class="jxr_string">"=\n"</span> + r.replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;n"</span>).replaceAll(<span class="jxr_string">"\t"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;t"</span>)); <em class="jxr_comment">// NOT DEBUG</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				System.out.println(r);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">if</strong> (s instanceof MsgPackSerializer) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 					System.out.println(<span class="jxr_string">"decoded=["</span>+<strong class="jxr_keyword">new</strong> String(StringUtils.fromHex(r))+<span class="jxr_string">"]"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			assertEquals(exp, r, fms(<span class="jxr_string">"{0}/{1} serialize-normal failed."</span>, label, testName));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		} <strong class="jxr_keyword">catch</strong> (AssertionError e) {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">if</strong> (exceptionMsg == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			assertContains(exceptionMsg, e.getMessage());
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">if</strong> (exceptionMsg == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BasicAssertionError(e, <span class="jxr_string">"{0}/{1} failed.  exception={2}"</span>, label, testName, e.getLocalizedMessage());
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			assertContains(exceptionMsg, e.getMessage());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	@Override
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"ComboSerializeTester: "</span> + label;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.parser.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  @SuppressWarnings({<span class="jxr_string">"resource"</span>})
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  @SuppressWarnings({})
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">class</strong> UonParserReader_Test <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<em class="jxr_comment">//====================================================================================================</em>
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(-1, r.readCodePoint());
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">private</strong> String escape(String s) <strong class="jxr_keyword">throws</strong> UnsupportedEncodingException {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String escape(String s) <strong class="jxr_keyword">throws</strong> UnsupportedEncodingException {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		byte[] b = s.getBytes(<span class="jxr_string">"UTF-8"</span>);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">for</strong> (byte element : b)
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> UonReader r(String in, <strong class="jxr_keyword">boolean</strong> decodeChars) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> UonReader r(String in, <strong class="jxr_keyword">boolean</strong> decodeChars) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UonReader(<strong class="jxr_keyword">new</strong> ParserPipe(in), decodeChars);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 

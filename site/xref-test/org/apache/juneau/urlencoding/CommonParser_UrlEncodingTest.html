@@ -156,17 +156,16 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	@Test <strong class="jxr_keyword">void</strong> a05_collections() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> s = UrlEncodingSerializer.DEFAULT;
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> p2 = UrlEncodingParser.DEFAULT;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> l = JsonList.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertEquals(<span class="jxr_string">"0=foo&amp;1=bar"</span>, s.serialize(l));
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"0=foo&amp;1=bar"</span>;
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> l2 = (LinkedList&lt;String&gt;)p2.parse(in, LinkedList.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertList(l2, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> a05_collections() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> s = UrlEncodingSerializer.DEFAULT;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> p2 = UrlEncodingParser.DEFAULT;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> l = JsonList.of(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(<span class="jxr_string">"0=foo&amp;1=bar"</span>, s.serialize(l));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> in = <span class="jxr_string">"0=foo&amp;1=bar"</span>;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">var</strong> l2 = (LinkedList&lt;String&gt;)p2.parse(in, LinkedList.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertList(l2, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

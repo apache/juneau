@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">return</strong> string(in).map(Integer::parseInt);
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(<span class="jxr_string">"Invalid syntax for integer on annotation @{0}({1}): {2}"</span>, ca.getSimpleName(), loc, in);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ConfigException" href="../../../org/apache/juneau/ConfigException.html#ConfigException">ConfigException</a>(e, <span class="jxr_string">"Invalid syntax for integer on annotation @{0}({1}): {2}"</span>, ca.getSimpleName(), loc, in);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 

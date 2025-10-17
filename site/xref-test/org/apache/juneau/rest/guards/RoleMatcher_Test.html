@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">class</strong> <a name="RoleMatcher_Test" href="../../../../../org/apache/juneau/rest/guards/RoleMatcher_Test.html#RoleMatcher_Test">RoleMatcher_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">var</strong> m = safe(()-&gt;<strong class="jxr_keyword">new</strong> RoleMatcher(expression));
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(toString, m.toString(), <span class="jxr_string">"m.toString() didn't match."</span>);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(expressionRoles, Utils.join(m.getRolesInExpression(), <span class="jxr_string">","</span>), <span class="jxr_string">"m.getRolesInExpression() didn't match."</span>);
@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  				fail(<span class="jxr_string">"Matcher "</span>+m+<span class="jxr_string">" should not have matched '"</span>+i+<span class="jxr_string">"' but did."</span>);
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> Set&lt;String&gt; toSet(String input) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; toSet(String input) {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">if</strong> (input == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">if</strong> (input.indexOf(',') == -1)

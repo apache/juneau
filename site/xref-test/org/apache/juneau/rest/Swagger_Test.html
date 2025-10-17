@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> testMethod() { <em class="jxr_comment">/* no-op */</em> }
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> org.apache.juneau.bean.swagger.Swagger getSwaggerWithFile(Object resource) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.bean.swagger.Swagger getSwaggerWithFile(Object resource) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> rc = RestContext.create(resource.getClass(),<strong class="jxr_keyword">null</strong>,<strong class="jxr_keyword">null</strong>).init(()-&gt;resource).defaultClasses(TestClasspathFileFinder.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> roc = RestOpContext.create(Swagger_Test.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"testMethod"</span>), rc).build();
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> call = RestSession.create(rc).resource(resource).req(<strong class="jxr_keyword">new</strong> MockServletRequest()).res(<strong class="jxr_keyword">new</strong> MockServletResponse()).build();

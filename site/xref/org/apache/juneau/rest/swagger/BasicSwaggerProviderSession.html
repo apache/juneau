@@ -670,7 +670,7 @@
 <a class="jxr_linenumber" name="L662" href="#L662">662</a> 			piri.put(examplesKey, examples);
 <a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> addParamExample(<a name="RestOpContext" href="../../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> sm, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> piri, <a name="RestPartType" href="../../../../../org/apache/juneau/rest/httppart/RestPartType.html#RestPartType">RestPartType</a> in, Type type) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addParamExample(<a name="RestOpContext" href="../../../../../org/apache/juneau/rest/RestOpContext.html#RestOpContext">RestOpContext</a> sm, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> piri, <a name="RestPartType" href="../../../../../org/apache/juneau/rest/httppart/RestPartType.html#RestPartType">RestPartType</a> in, Type type) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L666" href="#L666">666</a> 
 <a class="jxr_linenumber" name="L667" href="#L667">667</a> 		String s = piri.getString(<span class="jxr_string">"example"</span>);
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 
@@ -699,7 +699,7 @@
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> 	}
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> 
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> 	@SafeVarargs
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> &lt;T&gt; T firstNonEmpty(T...t) {
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T firstNonEmpty(T...t) {
 <a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">for</strong> (T oo : t)
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 			<strong class="jxr_keyword">if</strong> (! Utils.isEmpty(oo))
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 				<strong class="jxr_keyword">return</strong> oo;
@@ -709,7 +709,7 @@
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.</em>
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> fixSwaggerExtensions(<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om) {
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> fixSwaggerExtensions(<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om) {
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 		Predicate&lt;Object&gt; nn = Utils::isNotNull;
 <a class="jxr_linenumber" name="L706" href="#L706">706</a> 		om
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 			.appendIf(nn, <span class="jxr_string">"discriminator"</span>, om.remove(<span class="jxr_string">"x-discriminator"</span>))
@@ -720,7 +720,7 @@
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 		<strong class="jxr_keyword">return</strong> nullIfEmpty(om);
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 	}
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> 
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> getOperation(<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om, String path, String httpMethod) {
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> getOperation(<a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om, String path, String httpMethod) {
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">if</strong> (! om.containsKey(<span class="jxr_string">"paths"</span>))
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 			om.put(<span class="jxr_string">"paths"</span>, <strong class="jxr_keyword">new</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a>());
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> 		om = om.getMap(<span class="jxr_string">"paths"</span>);
@@ -752,13 +752,13 @@
 <a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">return</strong> om;
 <a class="jxr_linenumber" name="L745" href="#L745">745</a> 	}
 <a class="jxr_linenumber" name="L746" href="#L746">746</a> 
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isMulti(Header h) {
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isMulti(Header h) {
 <a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(h.name()) || <span class="jxr_string">"*"</span>.equals(h.value()))
 <a class="jxr_linenumber" name="L749" href="#L749">749</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L750" href="#L750">750</a> 		<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L751" href="#L751">751</a> 	}
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> 
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> merge(JsonList...lists) {
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonList" href="../../../../../org/apache/juneau/collections/JsonList.html#JsonList">JsonList</a> merge(JsonList...lists) {
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> 		JsonList l = lists[0];
 <a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; lists.length; i++) {
 <a class="jxr_linenumber" name="L756" href="#L756">756</a> 			<strong class="jxr_keyword">if</strong> (lists[i] != <strong class="jxr_keyword">null</strong>) {
@@ -770,7 +770,7 @@
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> 	}
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> 
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> merge(JsonMap...maps) {
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> merge(JsonMap...maps) {
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> 		JsonMap m = maps[0];
 <a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 1; i &lt; maps.length; i++) {
 <a class="jxr_linenumber" name="L768" href="#L768">768</a> 			<strong class="jxr_keyword">if</strong> (maps[i] != <strong class="jxr_keyword">null</strong>) {
@@ -1000,7 +1000,7 @@
 <a class="jxr_linenumber" name="L992" href="#L992">992</a> 		}
 <a class="jxr_linenumber" name="L993" href="#L993">993</a> 	}
 <a class="jxr_linenumber" name="L994" href="#L994">994</a> 
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 	<strong class="jxr_keyword">private</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> pushupSchemaFields(<a name="RestPartType" href="../../../../../org/apache/juneau/rest/httppart/RestPartType.html#RestPartType">RestPartType</a> type, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> param, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> schema) {
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> pushupSchemaFields(<a name="RestPartType" href="../../../../../org/apache/juneau/rest/httppart/RestPartType.html#RestPartType">RestPartType</a> type, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> param, <a name="JsonMap" href="../../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> schema) {
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 		Predicate&lt;Object&gt; ne = Utils::isNotEmpty;
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 		<strong class="jxr_keyword">if</strong> (schema != <strong class="jxr_keyword">null</strong> &amp;&amp; ! schema.isEmpty()) {
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 			<strong class="jxr_keyword">if</strong> (type == BODY || type == RESPONSE) {
@@ -1162,7 +1162,7 @@
 <a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> 		<strong class="jxr_keyword">return</strong> nullIfEmpty(om);
 <a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> 	}
 <a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> 
-<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	<strong class="jxr_keyword">private</strong> Set&lt;String&gt; toSet(String[] ss) {
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; toSet(String[] ss) {
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 		<strong class="jxr_keyword">if</strong> (ss.length == 0)
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		Set&lt;String&gt; set = set();

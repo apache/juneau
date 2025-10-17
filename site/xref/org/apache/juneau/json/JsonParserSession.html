@@ -612,7 +612,7 @@
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">if</strong> (s.equals(keyword))
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 				<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''"</span>, keyword, s);
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		} <strong class="jxr_keyword">catch</strong> (IndexOutOfBoundsException e) {
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IndexOutOfBoundsException e) {
 <a class="jxr_linenumber" name="L608" href="#L608">608</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Unrecognized syntax.  Expected=''{0}'', found end-of-file."</span>, keyword);
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 		}
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 	}
@@ -705,7 +705,7 @@
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 						String n = r.read(4);
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 						<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L699" href="#L699">699</a> 							r.replace(Integer.parseInt(n, 16), 6);
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 						} <strong class="jxr_keyword">catch</strong> (NumberFormatException e) {
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 						} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
 <a class="jxr_linenumber" name="L701" href="#L701">701</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Invalid Unicode escape sequence in string."</span>);
 <a class="jxr_linenumber" name="L702" href="#L702">702</a> 						}
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 						<strong class="jxr_keyword">break</strong>;

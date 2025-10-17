@@ -571,7 +571,7 @@
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 			doSerialize(pipe, o);
 <a class="jxr_linenumber" name="L564" href="#L564">564</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> | IOException e) {
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		} <strong class="jxr_keyword">catch</strong> (StackOverflowError e) {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) StackOverflowError e) {
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<strong class="jxr_keyword">this</strong>,
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 				<span class="jxr_string">"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop."</span>);
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
@@ -684,7 +684,7 @@
 <a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> isSortable(Collection&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSortable(Collection&lt;?&gt; c) {
 <a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">for</strong> (Object o : c)
