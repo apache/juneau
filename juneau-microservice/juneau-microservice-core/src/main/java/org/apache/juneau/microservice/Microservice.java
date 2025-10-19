@@ -306,7 +306,7 @@ public class Microservice implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
-			CollectionUtils2.addAll(this.consoleCommands, consoleCommands);
+			CollectionUtils.addAll(this.consoleCommands, consoleCommands);
 			return this;
 		}
 

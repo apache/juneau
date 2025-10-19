@@ -84,7 +84,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(Collection<String> sortArgs) {
-		Map<String,Boolean> sort = CollectionUtils2.map();
+		Map<String,Boolean> sort = CollectionUtils.map();
 		sortArgs.forEach(s -> {
 			boolean isDesc = false;
 			if (endsWith(s, '-', '+')) {

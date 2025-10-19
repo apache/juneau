@@ -109,7 +109,7 @@ public class EncoderSet {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			entries = CollectionUtils2.copyOf(copyFrom.entries);
+			entries = CollectionUtils.copyOf(copyFrom.entries);
 		}
 
 		/**
@@ -148,7 +148,7 @@ public class EncoderSet {
 		 * @return This object.
 		 */
 		public Builder add(Encoder...values) {
-			CollectionUtils2.prependAll(entries, (Object[])values);
+			CollectionUtils.prependAll(entries, (Object[])values);
 			return this;
 		}
 

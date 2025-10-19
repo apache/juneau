@@ -53,7 +53,7 @@ public class MockServletResponse implements HttpServletResponse {
 	private int sc;
 	private String msg;
 
-	private Map<String,String[]> headerMap = CollectionUtils2.map();
+	private Map<String,String[]> headerMap = CollectionUtils.map();
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addCookie(Cookie cookie) {}

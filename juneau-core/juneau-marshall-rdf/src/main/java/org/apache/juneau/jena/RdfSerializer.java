@@ -1173,7 +1173,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			namespaces = CollectionUtils2.addAll(namespaces, values);
+			namespaces = CollectionUtils.addAll(namespaces, values);
 			return this;
 		}
 

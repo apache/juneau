@@ -105,7 +105,7 @@ public class HeaderInfo extends OpenApiElement {
 		this.ref = copyFrom.ref;
 		this.explode = copyFrom.explode;
 		this.deprecated = copyFrom.deprecated;
-		this.examples = CollectionUtils2.copyOf(copyFrom.examples, Example::copy);
+		this.examples = CollectionUtils.copyOf(copyFrom.examples, Example::copy);
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public HeaderInfo setExamples(Map<String,Example> value) {
-		examples = CollectionUtils2.copyOf(value);
+		examples = CollectionUtils.copyOf(value);
 		return this;
 	}
 

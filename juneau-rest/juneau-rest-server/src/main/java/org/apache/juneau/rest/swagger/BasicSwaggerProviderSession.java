@@ -234,7 +234,7 @@ public class BasicSwaggerProviderSession {
 		if (produces.isEmpty())
 			produces.addAll(context.getProduces());
 
-		Map<String,JsonMap> tagMap = CollectionUtils2.map();
+		Map<String,JsonMap> tagMap = CollectionUtils.map();
 		if (omSwagger.containsKey("tags")) {
 			for (JsonMap om : omSwagger.getList("tags").elements(JsonMap.class)) {
 				String name = om.getString("name");

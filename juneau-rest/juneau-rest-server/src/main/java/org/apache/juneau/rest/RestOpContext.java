@@ -358,7 +358,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			consumes = CollectionUtils2.addAll(consumes, values);
+			consumes = CollectionUtils.addAll(consumes, values);
 			return this;
 		}
 
@@ -1114,7 +1114,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder path(String...values) {
-			path = CollectionUtils2.prependAll(path, values);
+			path = CollectionUtils.prependAll(path, values);
 			return this;
 		}
 
@@ -1145,7 +1145,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			produces = CollectionUtils2.addAll(produces, values);
+			produces = CollectionUtils.addAll(produces, values);
 			return this;
 		}
 
@@ -1240,7 +1240,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String...values) {
-			rolesDeclared = CollectionUtils2.addAll(rolesDeclared, values);
+			rolesDeclared = CollectionUtils.addAll(rolesDeclared, values);
 			return this;
 		}
 

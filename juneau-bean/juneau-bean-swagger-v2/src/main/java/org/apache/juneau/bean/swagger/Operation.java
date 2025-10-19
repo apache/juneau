@@ -180,15 +180,15 @@ public class Operation extends SwaggerElement {
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
 
-		this.consumes = CollectionUtils2.copyOf(copyFrom.consumes);
+		this.consumes = CollectionUtils.copyOf(copyFrom.consumes);
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.operationId = copyFrom.operationId;
-		this.produces = CollectionUtils2.copyOf(copyFrom.produces);
-		this.schemes = CollectionUtils2.copyOf(copyFrom.schemes);
+		this.produces = CollectionUtils.copyOf(copyFrom.produces);
+		this.schemes = CollectionUtils.copyOf(copyFrom.schemes);
 		this.summary = copyFrom.summary;
-		this.tags = CollectionUtils2.copyOf(copyFrom.tags);
+		this.tags = CollectionUtils.copyOf(copyFrom.tags);
 
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
@@ -200,7 +200,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
-			this.responses = CollectionUtils2.map();
+			this.responses = CollectionUtils.map();
 			copyFrom.responses.forEach((k, v) -> this.responses.put(k, v.copy()));
 		}
 
@@ -209,8 +209,8 @@ public class Operation extends SwaggerElement {
 		} else {
 			this.security = list();
 			copyFrom.security.forEach(x -> {
-				Map<String,List<String>> m2 = CollectionUtils2.map();
-				x.forEach((k, v) -> m2.put(k, CollectionUtils2.copyOf(v)));
+				Map<String,List<String>> m2 = CollectionUtils.map();
+				x.forEach((k, v) -> m2.put(k, CollectionUtils.copyOf(v)));
 				this.security.add(m2);
 			});
 		}
@@ -385,7 +385,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		Map<String,List<String>> m = CollectionUtils2.map();
+		Map<String,List<String>> m = CollectionUtils.map();
 		m.put(scheme, alist(alternatives));
 		security = listBuilder(security).add(m).build();
 		return this;
@@ -694,7 +694,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(Collection<MediaType> value) {
-		consumes = CollectionUtils2.setFrom(value);
+		consumes = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -793,7 +793,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(Collection<ParameterInfo> value) {
-		parameters = CollectionUtils2.listFrom(value);
+		parameters = CollectionUtils.listFrom(value);
 		return this;
 	}
 
@@ -825,7 +825,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(Collection<MediaType> value) {
-		produces = CollectionUtils2.setFrom(value);
+		produces = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -858,7 +858,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setResponses(Map<String,ResponseInfo> value) {
-		responses = CollectionUtils2.copyOf(value);
+		responses = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -881,7 +881,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(Collection<String> value) {
-		schemes = CollectionUtils2.setFrom(value);
+		schemes = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -913,7 +913,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSecurity(Collection<Map<String,List<String>>> value) {
-		security = CollectionUtils2.listFrom(value);
+		security = CollectionUtils.listFrom(value);
 		return this;
 	}
 
@@ -963,7 +963,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(Collection<String> value) {
-		tags = CollectionUtils2.setFrom(value);
+		tags = CollectionUtils.setFrom(value);
 		return this;
 	}
 

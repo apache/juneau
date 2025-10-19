@@ -55,7 +55,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 					.map(TO_STRING)
 					.collect(Collectors.joining(","));
 			if (isArray(t))
-				return apply(ArrayUtils2.toList(t, Object.class));
+				return apply(ArrayUtils.toList(t, Object.class));
 			if (t instanceof JsonMap)
 				return ((JsonMap)t).toString();
 			if (t instanceof Map)

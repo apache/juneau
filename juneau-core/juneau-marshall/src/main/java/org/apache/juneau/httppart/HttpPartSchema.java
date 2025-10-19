@@ -1942,7 +1942,7 @@ public class HttpPartSchema {
 		public Builder property(String key, Builder value) {
 			if (key != null && value != null) {
 				if (properties == null)
-					properties = CollectionUtils2.map();
+					properties = CollectionUtils.map();
 				properties.put(key, value);
 			}
 			return this;
@@ -1967,7 +1967,7 @@ public class HttpPartSchema {
 		public Builder property(String key, HttpPartSchema value) {
 			if (key != null && value != null) {
 				if (properties == null)
-					properties = CollectionUtils2.map();
+					properties = CollectionUtils.map();
 				properties.put(key, value);
 			}
 			return this;
@@ -3511,7 +3511,7 @@ public class HttpPartSchema {
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
-		Map<String,HttpPartSchema> m = CollectionUtils2.map();
+		Map<String,HttpPartSchema> m = CollectionUtils.map();
 		in.forEach((k, v) -> m.put(k, build(v, noValidate)));
 		return u(m);
 	}
@@ -3525,7 +3525,7 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? emptySet() : u(CollectionUtils2.copyOf(in));
+		return in == null ? emptySet() : u(CollectionUtils.copyOf(in));
 	}
 
 	final static JsonMap toJsonMap(String[] ss) {

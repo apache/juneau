@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.beans.*;
@@ -100,7 +99,7 @@ public class BeanFilter {
 					interceptor(x.interceptor());
 				if (isNotVoid(x.implClass()))
 					implClass(x.implClass());
-				if (ArrayUtils2.isNotEmptyArray(x.dictionary()))
+				if (ArrayUtils.isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
 				if (isNotEmpty(x.example()))
 					example(x.example());
@@ -718,10 +717,10 @@ public class BeanFilter {
 	BeanFilter(Builder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = CollectionUtils2.copyOf(builder.properties);
-		this.excludeProperties = CollectionUtils2.copyOf(builder.excludeProperties);
-		this.readOnlyProperties = CollectionUtils2.copyOf(builder.readOnlyProperties);
-		this.writeOnlyProperties = CollectionUtils2.copyOf(builder.writeOnlyProperties);
+		this.properties = CollectionUtils.copyOf(builder.properties);
+		this.excludeProperties = CollectionUtils.copyOf(builder.excludeProperties);
+		this.readOnlyProperties = CollectionUtils.copyOf(builder.readOnlyProperties);
+		this.writeOnlyProperties = CollectionUtils.copyOf(builder.writeOnlyProperties);
 		this.example = builder.example;
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;

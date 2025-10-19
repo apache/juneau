@@ -86,7 +86,7 @@ public abstract class HtmlElement {
 	 */
 	public HtmlElement attr(String key, Object val) {
 		if (attrs == null)
-			attrs = CollectionUtils2.map();
+			attrs = CollectionUtils.map();
 		if (val == null)
 			attrs.remove(key);
 		else {
@@ -117,7 +117,7 @@ public abstract class HtmlElement {
 	 */
 	public HtmlElement attrUri(String key, Object val) {
 		if (attrs == null)
-			attrs = CollectionUtils2.map();
+			attrs = CollectionUtils.map();
 		attrs.put(key, StringUtils.toURI(val));
 		return this;
 	}

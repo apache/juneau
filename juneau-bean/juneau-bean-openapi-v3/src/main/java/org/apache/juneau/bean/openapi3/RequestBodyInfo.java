@@ -86,7 +86,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 		this.description = copyFrom.description;
 		this.required = copyFrom.required;
-		this.content = CollectionUtils2.copyOf(copyFrom.content, MediaType::copy);
+		this.content = CollectionUtils.copyOf(copyFrom.content, MediaType::copy);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public RequestBodyInfo setContent(Map<String,MediaType> value) {
-		content = CollectionUtils2.copyOf(value);
+		content = CollectionUtils.copyOf(value);
 		return this;
 	}
 

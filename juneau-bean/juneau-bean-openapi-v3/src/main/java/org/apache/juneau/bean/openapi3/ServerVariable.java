@@ -90,7 +90,7 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable(ServerVariable copyFrom) {
 		super(copyFrom);
 
-		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
+		this._enum = CollectionUtils.copyOf(copyFrom._enum);
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 	}
@@ -268,7 +268,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
-		_enum = CollectionUtils2.listFrom(value);
+		_enum = CollectionUtils.listFrom(value);
 		return this;
 	}
 

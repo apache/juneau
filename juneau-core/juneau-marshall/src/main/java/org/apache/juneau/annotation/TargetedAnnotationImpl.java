@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import org.apache.juneau.common.utils.*;
 
@@ -37,7 +36,7 @@ public class TargetedAnnotationImpl extends AnnotationImpl {
 	 */
 	public TargetedAnnotationImpl(TargetedAnnotationBuilder<?> b) {
 		super(b);
-		this.on = ArrayUtils2.copyOf(b.on);
+		this.on = ArrayUtils.copyOf(b.on);
 	}
 
 	/**

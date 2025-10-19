@@ -102,7 +102,7 @@ public class RestChildren {
 		return new Builder(beanStore);
 	}
 
-	private final Map<String,RestContext> children = CollectionUtils2.synced(CollectionUtils2.map());
+	private final Map<String,RestContext> children = CollectionUtils.synced(CollectionUtils.map());
 
 	/**
 	 * Constructor.

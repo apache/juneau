@@ -180,7 +180,7 @@ public class ParserSet {
 		 * @return This object.
 		 */
 		public Builder add(Parser...s) {
-			CollectionUtils2.prependAll(entries, (Object[])s);
+			CollectionUtils.prependAll(entries, (Object[])s);
 			return this;
 		}
 

@@ -120,7 +120,7 @@ public class Items extends OpenApiElement {
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
-		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
+		this._enum = CollectionUtils.copyOf(copyFrom._enum);
 		this.ref = copyFrom.ref;
 	}
 
@@ -430,7 +430,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setCollectionFormat(String value) {
-		if (isStrict() && ! ArrayUtils2.contains(value, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, VALID_COLLECTION_FORMATS);
 		collectionFormat = value;
 		return this;
@@ -469,7 +469,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = CollectionUtils2.listFrom(value);
+		_enum = CollectionUtils.listFrom(value);
 		return this;
 	}
 
@@ -702,7 +702,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setType(String value) {
-		if (isStrict() && ! ArrayUtils2.contains(value, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
 			throw new IllegalArgumentException("Invalid value passed in to setType(String).  Value='" + value + "', valid values=" + Json5Serializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
 		return this;

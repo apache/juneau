@@ -1343,11 +1343,11 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 			return def;
 		String[] r = null;
 		if (s instanceof Collection)
-			r = ArrayUtils2.toStringArray((Collection<?>)s);
+			r = ArrayUtils.toStringArray((Collection<?>)s);
 		else if (s instanceof String[])
 			r = (String[])s;
 		else if (s instanceof Object[])
-			r = ArrayUtils2.toStringArray(alist((Object[])s));
+			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
 			r = StringUtils.splita(Utils.s(s));
 		return (r.length == 0 ? def : r);

@@ -192,7 +192,7 @@ class RoundTripBeanMaps_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_implMap(RoundTrip_Tester t) throws Exception {
-		var l = CollectionUtils2.map("foo",new CBean());
+		var l = CollectionUtils.map("foo",new CBean());
 
 		l.get("foo").setF1("bar");
 		l = t.roundTrip(l, Map.class, String.class, IBean.class);

@@ -54,7 +54,7 @@ public class AnnotationImpl implements Annotation {
 	 */
 	public AnnotationImpl(AnnotationBuilder<?> b) {
 		this.annotationType = b.annotationType;
-		this.description = ArrayUtils2.copyOf(b.description);
+		this.description = ArrayUtils.copyOf(b.description);
 	}
 
 	/**

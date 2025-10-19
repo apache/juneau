@@ -102,8 +102,8 @@ public class ResponseInfo extends SwaggerElement {
 
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
-		this.headers = CollectionUtils2.copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.examples = CollectionUtils.copyOf(copyFrom.examples);
+		this.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setExamples(Map<String,Object> value) {
-		examples = CollectionUtils2.copyOf(value);
+		examples = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -330,7 +330,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
-		headers = CollectionUtils2.copyOf(value);
+		headers = CollectionUtils.copyOf(value);
 		return this;
 	}
 

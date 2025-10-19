@@ -38,7 +38,7 @@ public abstract class OpenApiElement {
 
 	OpenApiElement(OpenApiElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = CollectionUtils2.copyOf(copyFrom.extra);
+		this.extra = CollectionUtils.copyOf(copyFrom.extra);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public abstract class OpenApiElement {
 		if (strict)
 			throw new RuntimeException("Cannot set property '" + property + "' in strict mode.");
 		if (extra == null)
-			extra = CollectionUtils2.map();
+			extra = CollectionUtils.map();
 		extra.put(property, value);
 		return this;
 	}

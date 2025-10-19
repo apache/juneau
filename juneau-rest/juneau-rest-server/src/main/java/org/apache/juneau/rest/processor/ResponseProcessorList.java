@@ -58,7 +58,7 @@ public class ResponseProcessorList {
 		 * @throws IllegalArgumentException if any class does not extend from {@link ResponseProcessor}.
 		 */
 		public Builder add(Class<?>...values) {
-			CollectionUtils2.addAll(entries, (Object[])Utils.assertClassArrayArgIsType("values", ResponseProcessor.class, values));
+			CollectionUtils.addAll(entries, (Object[])Utils.assertClassArrayArgIsType("values", ResponseProcessor.class, values));
 			return this;
 		}
 
@@ -69,7 +69,7 @@ public class ResponseProcessorList {
 		 * @return This object.
 		 */
 		public Builder add(ResponseProcessor...values) {
-			CollectionUtils2.addAll(entries, (Object[])values);
+			CollectionUtils.addAll(entries, (Object[])values);
 			return this;
 		}
 

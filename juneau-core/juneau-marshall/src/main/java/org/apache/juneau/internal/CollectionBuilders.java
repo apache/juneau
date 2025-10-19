@@ -110,7 +110,7 @@ public class CollectionBuilders {
 	 * @return The wrapped set.
 	 */
 	public static <E> Set<E> synced(Set<E> value) {
-		return CollectionUtils2.synced(value);
+		return CollectionUtils.synced(value);
 	}
 
 	private CollectionBuilders() {}

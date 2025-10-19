@@ -97,7 +97,7 @@ public class Encoding extends OpenApiElement {
 		this.style = copyFrom.style;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		this.headers = CollectionUtils2.copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class Encoding extends OpenApiElement {
 	 * @return This object
 	 */
 	public Encoding setHeaders(Map<String,HeaderInfo> value) {
-		headers = CollectionUtils2.copyOf(value);
+		headers = CollectionUtils.copyOf(value);
 		return this;
 	}
 

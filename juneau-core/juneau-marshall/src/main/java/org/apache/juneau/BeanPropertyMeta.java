@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.lang.annotation.*;
@@ -221,7 +220,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (field != null || Utils.isNotEmpty(lp)) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
-					rawTypeMeta = bc.resolveClassMeta(CollectionUtils2.last(lp), innerField.getGenericType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), innerField.getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
 				lp.forEach(x -> {
@@ -229,7 +228,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						swap = getPropertySwap(x);
 					if (! x.properties().isEmpty())
 						properties = StringUtils.splita(x.properties());
-					CollectionUtils2.addAll(bdClasses, x.dictionary());
+					CollectionUtils.addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -243,14 +242,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, getter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(CollectionUtils2.last(lp), getter.getGenericReturnType(), typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
 				lp.forEach(x -> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (properties != null && ! x.properties().isEmpty())
 						properties = StringUtils.splita(x.properties());
-					CollectionUtils2.addAll(bdClasses, x.dictionary());
+					CollectionUtils.addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -263,14 +262,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, setter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
-					rawTypeMeta = bc.resolveClassMeta(CollectionUtils2.last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
+					rawTypeMeta = bc.resolveClassMeta(CollectionUtils.last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
 				lp.forEach(x -> {
 					if (swap == null)
 						swap = getPropertySwap(x);
 					if (properties != null && ! x.properties().isEmpty())
 						properties = StringUtils.splita(x.properties());
-					CollectionUtils2.addAll(bdClasses, x.dictionary());
+					CollectionUtils.addAll(bdClasses, x.dictionary());
 					if (! x.ro().isEmpty())
 						readOnly = Boolean.valueOf(x.ro());
 					if (! x.wo().isEmpty())
@@ -492,7 +491,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					// Copy any existing array values into the temporary list.
 					Object oldArray = invokeGetter(bean, pName);
-					ArrayUtils2.copyToList(oldArray, l);
+					ArrayUtils.copyToList(oldArray, l);
 				}
 
 				// Add new entry to our array.
@@ -759,7 +758,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	public Map<String,Object> getDynaMap(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		if (isDyna) {
 			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
-				Map<String,Object> m = CollectionUtils2.map();
+				Map<String,Object> m = CollectionUtils.map();
 				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safe(() -> m.put(x, getter.invoke(bean, x))));
 				return m;
 			}
@@ -1289,7 +1288,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Object array = ArrayUtils2.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
+		Object array = ArrayUtils.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		invokeSetter(bean, name, array);
 	}
 

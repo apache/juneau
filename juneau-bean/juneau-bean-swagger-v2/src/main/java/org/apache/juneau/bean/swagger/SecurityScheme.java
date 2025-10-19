@@ -106,7 +106,7 @@ public class SecurityScheme extends SwaggerElement {
 		this.flow = copyFrom.flow;
 		this.in = copyFrom.in;
 		this.name = copyFrom.name;
-		this.scopes = CollectionUtils2.copyOf(copyFrom.scopes);
+		this.scopes = CollectionUtils.copyOf(copyFrom.scopes);
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.type = copyFrom.type;
 	}
@@ -374,7 +374,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SecurityScheme setScopes(Map<String,String> value) {
-		scopes = CollectionUtils2.copyOf(value);
+		scopes = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -414,7 +414,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SecurityScheme setType(String value) {
-		if (isStrict() && ! ArrayUtils2.contains(value, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
 			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;

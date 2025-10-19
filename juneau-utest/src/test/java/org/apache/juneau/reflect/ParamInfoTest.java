@@ -65,7 +65,7 @@ class ParamInfoTest extends TestBase {
 			if (t instanceof List)
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
 			if (isArray(t))
-				return StreamSupport.stream(ArrayUtils2.toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
+				return StreamSupport.stream(ArrayUtils.toList(t, Object.class).spliterator(), false).map(this).collect(Collectors.joining(","));
 			if (t instanceof MethodInfo)
 				return ((MethodInfo)t).getDeclaringClass().getSimpleName() + '.' + ((MethodInfo)t).getShortName();
 			if (t instanceof CA)

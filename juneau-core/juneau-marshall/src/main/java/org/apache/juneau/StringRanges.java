@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -146,7 +145,7 @@ public class StringRanges {
 	 */
 	public StringRanges(StringRange...value) {
 		this.string = StringUtils.join(value, ", ");
-		this.value = ArrayUtils2.copyOf(value);
+		this.value = ArrayUtils.copyOf(value);
 	}
 
 	/**

@@ -94,7 +94,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 		private static <T> List<T> copy(List<T> s) {
-			return s == null || s.isEmpty() ? null : CollectionUtils2.copyOf(s);
+			return s == null || s.isEmpty() ? null : CollectionUtils.copyOf(s);
 		}
 
 		private static <T> List<T> copy(T[] s) {
@@ -1565,7 +1565,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder widgets(Class<? extends HtmlWidget>...values) {
-			CollectionUtils2.addAll(widgets(), values);
+			CollectionUtils.addAll(widgets(), values);
 			return this;
 		}
 
@@ -1663,7 +1663,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nowrap = builder.nowrap;
 		resolveBodyVars = builder.resolveBodyVars;
 		template = builder.template;
-		widgets = builder.widgets == null ? Collections.emptyList() : CollectionUtils2.copyOf(builder.widgets);
+		widgets = builder.widgets == null ? Collections.emptyList() : CollectionUtils.copyOf(builder.widgets);
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();

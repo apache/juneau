@@ -441,6 +441,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : CollectionUtils2.sortedList(comparator, value());
+		return valueIsNull() ? null : CollectionUtils.sortedList(comparator, value());
 	}
 }

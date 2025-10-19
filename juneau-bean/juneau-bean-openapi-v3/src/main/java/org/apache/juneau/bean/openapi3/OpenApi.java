@@ -106,11 +106,11 @@ public class OpenApi extends OpenApiElement {
 		super(copyFrom);
 		this.openapi = copyFrom.openapi;
 		this.info = copyFrom.info;
-		this.servers = CollectionUtils2.copyOf(copyFrom.servers);
-		this.paths = CollectionUtils2.copyOf(copyFrom.paths);
+		this.servers = CollectionUtils.copyOf(copyFrom.servers);
+		this.paths = CollectionUtils.copyOf(copyFrom.paths);
 		this.components = copyFrom.components;
-		this.security = CollectionUtils2.copyOf(copyFrom.security);
-		this.tags = CollectionUtils2.copyOf(copyFrom.tags);
+		this.security = CollectionUtils.copyOf(copyFrom.security);
+		this.tags = CollectionUtils.copyOf(copyFrom.tags);
 		this.externalDocs = copyFrom.externalDocs;
 	}
 

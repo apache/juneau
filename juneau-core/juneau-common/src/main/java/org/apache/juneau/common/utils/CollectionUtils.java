@@ -25,7 +25,7 @@ import java.util.function.*;
  * limitations under the License.
  */
 
-public class CollectionUtils2 {
+public class CollectionUtils {
 
 	/**
 	 * Adds all the specified values to the specified collection.
@@ -602,5 +602,5 @@ public class CollectionUtils2 {
 		return value == null ? null : Collections.synchronizedSet(value);
 	}
 
-	private CollectionUtils2() {}
+	private CollectionUtils() {}
 }

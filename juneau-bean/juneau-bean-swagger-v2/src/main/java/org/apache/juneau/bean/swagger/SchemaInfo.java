@@ -127,11 +127,11 @@ public class SchemaInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
-		this.allOf = CollectionUtils2.copyOf(copyFrom.allOf);
+		this.allOf = CollectionUtils.copyOf(copyFrom.allOf);
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 		this.discriminator = copyFrom.discriminator;
-		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
+		this._enum = CollectionUtils.copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -151,12 +151,12 @@ public class SchemaInfo extends SwaggerElement {
 		this.readOnly = copyFrom.readOnly;
 		this.ref = copyFrom.ref;
 		this.required = copyFrom.required;
-		this.requiredProperties = CollectionUtils2.copyOf(copyFrom.requiredProperties);
+		this.requiredProperties = CollectionUtils.copyOf(copyFrom.requiredProperties);
 		this.title = copyFrom.title;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
-		this.properties = CollectionUtils2.copyOf(copyFrom.properties, SchemaInfo::copy);
+		this.properties = CollectionUtils.copyOf(copyFrom.properties, SchemaInfo::copy);
 	}
 
 	/**
@@ -677,7 +677,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(Collection<SchemaInfo> value) {
-		allOf = CollectionUtils2.setFrom(value);
+		allOf = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -747,7 +747,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils2.setFrom(value);
+		_enum = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -994,7 +994,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
-		properties = CollectionUtils2.copyOf(value);
+		properties = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -1057,7 +1057,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(Collection<String> value) {
-		requiredProperties = CollectionUtils2.setFrom(value);
+		requiredProperties = CollectionUtils.setFrom(value);
 		return this;
 	}
 

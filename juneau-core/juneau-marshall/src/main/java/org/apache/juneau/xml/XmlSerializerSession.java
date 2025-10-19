@@ -17,7 +17,6 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
@@ -313,7 +312,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (defaultNamespace != null && (ns.uri.equals(defaultNamespace.uri) || ns.name.equals(defaultNamespace.name)))
 			defaultNamespace = ns;
 		else
-			namespaces = ArrayUtils2.append(namespaces, ns);
+			namespaces = ArrayUtils.append(namespaces, ns);
 	}
 
 	private Namespace findDefaultNamespace(Namespace n) {

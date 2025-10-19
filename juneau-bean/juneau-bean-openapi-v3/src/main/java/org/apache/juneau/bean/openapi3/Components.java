@@ -106,15 +106,15 @@ public class Components extends OpenApiElement {
 	 */
 	public Components(Components copyFrom) {
 		super(copyFrom);
-		this.schemas = CollectionUtils2.copyOf(copyFrom.schemas);
-		this.responses = CollectionUtils2.copyOf(copyFrom.responses);
-		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
-		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
-		this.requestBodies = CollectionUtils2.copyOf(copyFrom.requestBodies);
-		this.headers = CollectionUtils2.copyOf(copyFrom.headers);
-		this.securitySchemes = CollectionUtils2.copyOf(copyFrom.securitySchemes);
-		this.links = CollectionUtils2.copyOf(copyFrom.links);
-		this.callbacks = CollectionUtils2.copyOf(copyFrom.callbacks);
+		this.schemas = CollectionUtils.copyOf(copyFrom.schemas);
+		this.responses = CollectionUtils.copyOf(copyFrom.responses);
+		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
+		this.examples = CollectionUtils.copyOf(copyFrom.examples);
+		this.requestBodies = CollectionUtils.copyOf(copyFrom.requestBodies);
+		this.headers = CollectionUtils.copyOf(copyFrom.headers);
+		this.securitySchemes = CollectionUtils.copyOf(copyFrom.securitySchemes);
+		this.links = CollectionUtils.copyOf(copyFrom.links);
+		this.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
 	}
 
 	/**

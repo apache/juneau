@@ -17,7 +17,6 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,19 +33,19 @@ class ArrayUtilsTest extends TestBase {
 	@Test void a01_appendArrayToArray() {
 		String[] s = {};
 
-		s = ArrayUtils2.append(s, "a", "b");
+		s = ArrayUtils.append(s, "a", "b");
 		assertList(s, "a", "b");
 
-		s = ArrayUtils2.append(s, "c");
+		s = ArrayUtils.append(s, "c");
 		assertList(s, "a", "b", "c");
 
-		s = ArrayUtils2.append(s);
+		s = ArrayUtils.append(s);
 		assertList(s, "a", "b", "c");
 
-		var o = ArrayUtils2.append((Object[])null);
+		var o = ArrayUtils.append((Object[])null);
 		assertEmpty(o);
 
-		s = ArrayUtils2.append((String[])null, "a", "b");
+		s = ArrayUtils.append((String[])null, "a", "b");
 		assertList(s, "a", "b");
 	}
 
@@ -54,10 +53,10 @@ class ArrayUtilsTest extends TestBase {
 	// asSet(T[])
 	//====================================================================================================
 	@Test void a02_asSet() {
-		assertThrows(IllegalArgumentException.class, ()->ArrayUtils2.asSet((String[])null));
+		assertThrows(IllegalArgumentException.class, ()->ArrayUtils.asSet((String[])null));
 
 		var s = a("a");
-		var i = ArrayUtils2.asSet(s).iterator();
+		var i = ArrayUtils.asSet(s).iterator();
 		assertEquals("a", i.next());
 
 		assertThrows(UnsupportedOperationException.class, i::remove);
@@ -71,12 +70,12 @@ class ArrayUtilsTest extends TestBase {
 		var s1 = a("a");
 		var s2 = a("b");
 
-		assertList(ArrayUtils2.combine(s1, s2), "a", "b");
-		assertList(ArrayUtils2.combine(s1), "a");
-		assertList(ArrayUtils2.combine(s2), "b");
-		assertList(ArrayUtils2.combine(s1,null), "a");
-		assertList(ArrayUtils2.combine(null,s2), "b");
-		assertNull(ArrayUtils2.combine(null,null));
-		assertNull(ArrayUtils2.combine());
+		assertList(ArrayUtils.combine(s1, s2), "a", "b");
+		assertList(ArrayUtils.combine(s1), "a");
+		assertList(ArrayUtils.combine(s2), "b");
+		assertList(ArrayUtils.combine(s1,null), "a");
+		assertList(ArrayUtils.combine(null,s2), "b");
+		assertNull(ArrayUtils.combine(null,null));
+		assertNull(ArrayUtils.combine());
 	}
 }

@@ -21,7 +21,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-public class ArrayUtils2 {
+public class ArrayUtils {
 
 	/**
 	 * Returns the last entry in an array.

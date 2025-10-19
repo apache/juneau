@@ -42,7 +42,7 @@ public class ThemeMenuItem extends MenuItemWidget {
 	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
 		for (String s : BUILT_IN_STYLES) {
-			java.net.URI uri = req.getUri(true, CollectionUtils2.<String,Object>map("stylesheet", "htdocs/themes/" + s + ".css"));
+			java.net.URI uri = req.getUri(true, CollectionUtils.<String,Object>map("stylesheet", "htdocs/themes/" + s + ".css"));
 			div.children(a(uri, s), br());
 		}
 		return div;

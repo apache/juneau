@@ -1627,7 +1627,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		ClassMeta<?> k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new JsonMap(this) : CollectionUtils2.map();
+		return (k == null || k.isString()) ? new JsonMap(this) : CollectionUtils.map();
 	}
 
 	/**

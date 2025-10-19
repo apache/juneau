@@ -61,7 +61,7 @@ public class DefaultClassList {
 	 * @param value The object to copy.
 	 */
 	public DefaultClassList(DefaultClassList value) {
-		entries = CollectionUtils2.copyOf(value.entries);
+		entries = CollectionUtils.copyOf(value.entries);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class DefaultClassList {
 	 * @return This object.
 	 */
 	public DefaultClassList add(Class<?>...values) {
-		CollectionUtils2.prependAll(entries, values);
+		CollectionUtils.prependAll(entries, values);
 		return this;
 	}
 

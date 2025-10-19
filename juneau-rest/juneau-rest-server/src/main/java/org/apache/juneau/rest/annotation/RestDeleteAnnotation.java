@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
@@ -319,14 +317,14 @@ public class RestDeleteAnnotation {
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
-			this.defaultRequestQueryData = ArrayUtils2.copyOf(b.defaultRequestQueryData);
-			this.defaultRequestAttributes = ArrayUtils2.copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = ArrayUtils2.copyOf(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = ArrayUtils2.copyOf(b.defaultResponseHeaders);
-			this.encoders = ArrayUtils2.copyOf(b.encoders);
-			this.guards = ArrayUtils2.copyOf(b.guards);
-			this.matchers = ArrayUtils2.copyOf(b.matchers);
-			this.path = ArrayUtils2.copyOf(b.path);
+			this.defaultRequestQueryData = ArrayUtils.copyOf(b.defaultRequestQueryData);
+			this.defaultRequestAttributes = ArrayUtils.copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = ArrayUtils.copyOf(b.defaultRequestHeaders);
+			this.defaultResponseHeaders = ArrayUtils.copyOf(b.defaultResponseHeaders);
+			this.encoders = ArrayUtils.copyOf(b.encoders);
+			this.guards = ArrayUtils.copyOf(b.guards);
+			this.matchers = ArrayUtils.copyOf(b.matchers);
+			this.path = ArrayUtils.copyOf(b.path);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
 			this.summary = b.summary;

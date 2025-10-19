@@ -18,7 +18,6 @@ package org.apache.juneau.xml.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 
@@ -53,7 +52,7 @@ public class XmlAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Xml> ai, Context.Builder b) {
 			Xml a = ai.inner();
-			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
+			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}

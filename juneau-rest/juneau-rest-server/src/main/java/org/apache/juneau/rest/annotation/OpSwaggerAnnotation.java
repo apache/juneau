@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
@@ -191,17 +189,17 @@ public class OpSwaggerAnnotation {
 
 		Impl(Builder b) {
 			super(b);
-			this.consumes = ArrayUtils2.copyOf(b.consumes);
+			this.consumes = ArrayUtils.copyOf(b.consumes);
 			this.deprecated = b.deprecated;
 			this.externalDocs = b.externalDocs;
 			this.operationId = b.operationId;
-			this.parameters = ArrayUtils2.copyOf(b.parameters);
-			this.produces = ArrayUtils2.copyOf(b.produces);
-			this.responses = ArrayUtils2.copyOf(b.responses);
-			this.schemes = ArrayUtils2.copyOf(b.schemes);
-			this.summary = ArrayUtils2.copyOf(b.summary);
-			this.tags = ArrayUtils2.copyOf(b.tags);
-			this.value = ArrayUtils2.copyOf(b.value);
+			this.parameters = ArrayUtils.copyOf(b.parameters);
+			this.produces = ArrayUtils.copyOf(b.produces);
+			this.responses = ArrayUtils.copyOf(b.responses);
+			this.schemes = ArrayUtils.copyOf(b.schemes);
+			this.summary = ArrayUtils.copyOf(b.summary);
+			this.tags = ArrayUtils.copyOf(b.tags);
+			this.value = ArrayUtils.copyOf(b.value);
 			postConstruct();
 		}
 

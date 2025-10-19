@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -94,7 +93,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	@Override /* Overridden from Map */
 	public Set<Map.Entry<K,V>> entrySet() {
-		return ArrayUtils2.asSet(entries);
+		return ArrayUtils.asSet(entries);
 	}
 
 	@Override /* Overridden from Map */
@@ -107,7 +106,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	@Override /* Overridden from Map */
 	public Set<K> keySet() {
-		return ArrayUtils2.asSet(keys);
+		return ArrayUtils.asSet(keys);
 	}
 
 	@Override /* Overridden from Map */

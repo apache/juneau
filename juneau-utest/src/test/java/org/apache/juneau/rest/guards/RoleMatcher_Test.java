@@ -54,7 +54,7 @@ class RoleMatcher_Test extends TestBase {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return CollectionUtils2.sortedSet(StringUtils.splita(input));
+		return CollectionUtils.sortedSet(StringUtils.splita(input));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

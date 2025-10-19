@@ -112,7 +112,7 @@ public class Parameter extends OpenApiElement {
 		this.allowReserved = copyFrom.allowReserved;
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
+		this.examples = CollectionUtils.copyOf(copyFrom.examples);
 	}
 
 	/**

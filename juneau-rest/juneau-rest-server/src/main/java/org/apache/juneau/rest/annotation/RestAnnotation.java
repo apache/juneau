@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
@@ -735,50 +733,50 @@ public class RestAnnotation {
 			this.allowedMethodParams = b.allowedMethodParams;
 			this.beanStore = b.beanStore;
 			this.callLogger = b.callLogger;
-			this.children = ArrayUtils2.copyOf(b.children);
+			this.children = ArrayUtils.copyOf(b.children);
 			this.clientVersionHeader = b.clientVersionHeader;
 			this.config = b.config;
-			this.consumes = ArrayUtils2.copyOf(b.consumes);
-			this.converters = ArrayUtils2.copyOf(b.converters);
+			this.consumes = ArrayUtils.copyOf(b.consumes);
+			this.converters = ArrayUtils.copyOf(b.converters);
 			this.debug = b.debug;
 			this.debugEnablement = b.debugEnablement;
 			this.debugOn = b.debugOn;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
 			this.defaultContentType = b.defaultContentType;
-			this.defaultRequestAttributes = ArrayUtils2.copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = ArrayUtils2.copyOf(b.defaultRequestHeaders);
-			this.defaultResponserHeaders = ArrayUtils2.copyOf(b.defaultResponseHeaders);
-			this.encoders = ArrayUtils2.copyOf(b.encoders);
-			this.guards = ArrayUtils2.copyOf(b.guards);
+			this.defaultRequestAttributes = ArrayUtils.copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = ArrayUtils.copyOf(b.defaultRequestHeaders);
+			this.defaultResponserHeaders = ArrayUtils.copyOf(b.defaultResponseHeaders);
+			this.encoders = ArrayUtils.copyOf(b.encoders);
+			this.guards = ArrayUtils.copyOf(b.guards);
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
-			this.parsers = ArrayUtils2.copyOf(b.parsers);
+			this.parsers = ArrayUtils.copyOf(b.parsers);
 			this.partParser = b.partParser;
 			this.partSerializer = b.partSerializer;
 			this.path = b.path;
-			this.produces = ArrayUtils2.copyOf(b.produces);
+			this.produces = ArrayUtils.copyOf(b.produces);
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
-			this.responseProcessors = ArrayUtils2.copyOf(b.responseProcessors);
+			this.responseProcessors = ArrayUtils.copyOf(b.responseProcessors);
 			this.restChildrenClass = b.restChildrenClass;
 			this.restOperationsClass = b.restOperationsClass;
-			this.restOpArgs = ArrayUtils2.copyOf(b.restOpArgs);
+			this.restOpArgs = ArrayUtils.copyOf(b.restOpArgs);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
-			this.serializers = ArrayUtils2.copyOf(b.serializers);
+			this.serializers = ArrayUtils.copyOf(b.serializers);
 			this.siteName = b.siteName;
 			this.staticFiles = b.staticFiles;
 			this.swagger = b.swagger;
 			this.swaggerProvider = b.swaggerProvider;
-			this.title = ArrayUtils2.copyOf(b.title);
+			this.title = ArrayUtils.copyOf(b.title);
 			this.uriAuthority = b.uriAuthority;
 			this.uriContext = b.uriContext;
 			this.uriRelativity = b.uriRelativity;
 			this.uriResolution = b.uriResolution;
-			this.queryParams = ArrayUtils2.copyOf(b.queryParams);
-			this.headerParams = ArrayUtils2.copyOf(b.headerParams);
-			this.pathParams = ArrayUtils2.copyOf(b.pathParams);
-			this.formDataParams = ArrayUtils2.copyOf(b.formDataParams);
+			this.queryParams = ArrayUtils.copyOf(b.queryParams);
+			this.headerParams = ArrayUtils.copyOf(b.headerParams);
+			this.pathParams = ArrayUtils.copyOf(b.pathParams);
+			this.formDataParams = ArrayUtils.copyOf(b.formDataParams);
 			postConstruct();
 		}
 

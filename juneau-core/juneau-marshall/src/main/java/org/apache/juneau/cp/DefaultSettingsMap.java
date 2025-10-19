@@ -53,14 +53,14 @@ public class DefaultSettingsMap {
 	 * @param value The object to copy.
 	 */
 	public DefaultSettingsMap(DefaultSettingsMap value) {
-		entries = CollectionUtils2.copyOf(value.entries);
+		entries = CollectionUtils.copyOf(value.entries);
 	}
 
 	/**
 	 * Constructor.
 	 */
 	protected DefaultSettingsMap() {
-		entries = CollectionUtils2.map();
+		entries = CollectionUtils.map();
 	}
 
 	/**

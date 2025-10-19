@@ -91,7 +91,7 @@ public class Server extends OpenApiElement {
 
 		this.url = copyFrom.url;
 		this.description = copyFrom.description;
-		this.variables = CollectionUtils2.copyOf(copyFrom.variables, ServerVariable::copy);
+		this.variables = CollectionUtils.copyOf(copyFrom.variables, ServerVariable::copy);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class Server extends OpenApiElement {
 	 * @return This object
 	 */
 	public Server setVariables(Map<String,ServerVariable> value) {
-		variables = CollectionUtils2.copyOf(value);
+		variables = CollectionUtils.copyOf(value);
 		return this;
 	}
 

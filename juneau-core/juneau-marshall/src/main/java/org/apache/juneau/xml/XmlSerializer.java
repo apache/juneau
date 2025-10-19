@@ -176,7 +176,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			disableJsonTags = copyFrom.disableJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
 			defaultNamespace = copyFrom.defaultNamespace;
-			namespaces = CollectionUtils2.copyOf(copyFrom.namespaces);
+			namespaces = CollectionUtils.copyOf(copyFrom.namespaces);
 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 		}
 
@@ -817,7 +817,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			namespaces = CollectionUtils2.addAll(namespaces, values);
+			namespaces = CollectionUtils.addAll(namespaces, values);
 			return this;
 		}
 

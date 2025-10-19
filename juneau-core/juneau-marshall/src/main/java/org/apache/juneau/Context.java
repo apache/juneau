@@ -117,7 +117,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Builder copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.type;
-			annotations = CollectionUtils2.listFrom(copyFrom.annotations, true);
+			annotations = CollectionUtils.listFrom(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -129,7 +129,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Context copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
-			annotations = CollectionUtils2.listFrom(copyFrom.annotations, true);
+			annotations = CollectionUtils.listFrom(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -305,7 +305,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
-			annotations = CollectionUtils2.addAll(annotations, values);
+			annotations = CollectionUtils.addAll(annotations, values);
 			return this;
 		}
 
@@ -317,7 +317,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return This object.
 		 */
 		public Builder annotations(List<Annotation> values) {
-			annotations = CollectionUtils2.addAll(annotations, values);
+			annotations = CollectionUtils.addAll(annotations, values);
 			return this;
 		}
 

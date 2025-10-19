@@ -109,8 +109,8 @@ public class PathItem extends OpenApiElement {
 		this.head = copyFrom.head;
 		this.patch = copyFrom.patch;
 		this.trace = copyFrom.trace;
-		this.servers = CollectionUtils2.copyOf(copyFrom.servers);
-		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
+		this.servers = CollectionUtils.copyOf(copyFrom.servers);
+		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
 	}
 
 	/**

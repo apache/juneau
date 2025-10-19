@@ -196,7 +196,7 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
-			Map<String,Method> x = CollectionUtils2.map();
+			Map<String,Method> x = CollectionUtils.map();
 			Object r = resource.get();
 
 			// @formatter:off
@@ -845,7 +845,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder children(Object...values) {
-			CollectionUtils2.addAll(children, values);
+			CollectionUtils.addAll(children, values);
 			return this;
 		}
 
@@ -1032,7 +1032,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			consumes = CollectionUtils2.addAll(consumes, values);
+			consumes = CollectionUtils.addAll(consumes, values);
 			return this;
 		}
 
@@ -2630,7 +2630,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			produces = CollectionUtils2.addAll(produces, values);
+			produces = CollectionUtils.addAll(produces, values);
 			return this;
 		}
 
@@ -3776,7 +3776,7 @@ public class RestContext extends Context {
 
 			Object r = resource.get();
 
-			Map<String,MethodInfo> map = CollectionUtils2.map();
+			Map<String,MethodInfo> map = CollectionUtils.map();
 			// @formatter:off
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class),
@@ -4568,7 +4568,7 @@ public class RestContext extends Context {
 
 			ClassInfo rci = ClassInfo.of(resource.get());
 
-			Map<String,MethodInfo> initMap = CollectionUtils2.map();
+			Map<String,MethodInfo> initMap = CollectionUtils.map();
 			// @formatter:off
 			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class),
@@ -5058,16 +5058,16 @@ public class RestContext extends Context {
 			// @formatter:off
 			produces = builder.produces().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils2.setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-					return u(CollectionUtils2.listFrom(s));
+					return u(CollectionUtils.listFrom(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils2.setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils.setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-					return u(CollectionUtils2.listFrom(s));
+					return u(CollectionUtils.listFrom(s));
 				}
 			);
 			// @formatter:on

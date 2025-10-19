@@ -20,7 +20,6 @@ import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
@@ -262,7 +261,7 @@ public class RestUtils {
 		try {
 			Map<String,String[]> m = map;
 			if (m == null)
-				m = CollectionUtils2.map();
+				m = CollectionUtils.map();
 
 			if (qs == null || ((qs instanceof CharSequence) && Utils.isEmpty(s(qs))))
 				return m;
@@ -484,7 +483,7 @@ public class RestUtils {
 			if (! b)
 				m.put(key, null);
 		} else if (b && m.get(key) != null) {
-			m.put(key, ArrayUtils2.append(m.get(key), val));
+			m.put(key, ArrayUtils.append(m.get(key), val));
 		} else {
 			m.put(key, new String[] { val });
 		}
@@ -497,7 +496,7 @@ public class RestUtils {
 		List<String> list = list();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
-				CollectionUtils2.addAll(list, parentContent);
+				CollectionUtils.addAll(list, parentContent);
 			} else if ("NONE".equals(l)) {
 				return new String[0];
 			} else {
@@ -514,7 +513,7 @@ public class RestUtils {
 		List<String> list = list();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
-				CollectionUtils2.addAll(list, parentLinks);
+				CollectionUtils.addAll(list, parentLinks);
 			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
 				lm.matches();

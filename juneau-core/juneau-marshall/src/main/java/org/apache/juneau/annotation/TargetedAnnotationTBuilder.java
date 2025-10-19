@@ -50,7 +50,7 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	 */
 	public B on(Class<?>...value) {
 		for (Class<?> v : value)
-			on = ArrayUtils2.append(on, v.getName());
+			on = ArrayUtils.append(on, v.getName());
 		return asThis();
 	}
 
@@ -63,7 +63,7 @@ public class TargetedAnnotationTBuilder<B extends TargetedAnnotationTBuilder<B>>
 	@SuppressWarnings("unchecked")
 	public B onClass(Class<?>...value) {
 		for (Class<?> v : value)
-			onClass = ArrayUtils2.append(onClass, v);
+			onClass = ArrayUtils.append(onClass, v);
 		return asThis();
 	}
 }

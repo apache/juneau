@@ -193,7 +193,7 @@ public class FormDataArg implements RestOpArg {
 		if (multi) {
 			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
 			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
-			return cm.isArray() ? ArrayUtils2.toArray(c, cm.getElementType().getInnerClass()) : c;
+			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {

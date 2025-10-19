@@ -86,7 +86,7 @@ public class Callback extends OpenApiElement {
 	 */
 	public Callback(Callback copyFrom) {
 		super(copyFrom);
-		this.callbacks = CollectionUtils2.copyOf(copyFrom.callbacks);
+		this.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
 	}
 
 	/**

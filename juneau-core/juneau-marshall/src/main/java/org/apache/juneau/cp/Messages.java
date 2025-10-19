@@ -382,7 +382,7 @@ public class Messages extends ResourceBundle {
 			});
 		}
 
-		this.keyMap = u(CollectionUtils2.copyOf(keyMap));
+		this.keyMap = u(CollectionUtils.copyOf(keyMap));
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
 

@@ -20,7 +20,7 @@ import static java.util.Collections.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.common.utils.CollectionUtils2.addAll;
+import static org.apache.juneau.common.utils.CollectionUtils.addAll;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -146,7 +146,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addDescriptionsTo(TypeCategory...values) {
-			addDescriptionsTo = CollectionUtils2.addAll(addDescriptionsTo, values);
+			addDescriptionsTo = CollectionUtils.addAll(addDescriptionsTo, values);
 			return this;
 		}
 
@@ -184,7 +184,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addExamplesTo(TypeCategory...values) {
-			addExamplesTo = CollectionUtils2.addAll(addExamplesTo, values);
+			addExamplesTo = CollectionUtils.addAll(addExamplesTo, values);
 			return this;
 		}
 
@@ -600,7 +600,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder ignoreTypes(String...values) {
-			ignoreTypes = CollectionUtils2.addAll(ignoreTypes, values);
+			ignoreTypes = CollectionUtils.addAll(ignoreTypes, values);
 			return this;
 		}
 

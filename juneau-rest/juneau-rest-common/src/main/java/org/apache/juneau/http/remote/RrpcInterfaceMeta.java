@@ -59,10 +59,10 @@ public class RrpcInterfaceMeta {
 
 		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(StringUtils.trimSlashes(x.path())));
 
-		Map<Method,RrpcInterfaceMethodMeta> methods = CollectionUtils2.map();
+		Map<Method,RrpcInterfaceMethodMeta> methods = CollectionUtils.map();
 		ci.forEachPublicMethod(x -> true, x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
 
-		Map<String,RrpcInterfaceMethodMeta> methodsByPath = CollectionUtils2.map();
+		Map<String,RrpcInterfaceMethodMeta> methodsByPath = CollectionUtils.map();
 		methods.values().forEach(x -> methodsByPath.put(x.getPath(), x));
 
 		this.methods = u(methods);

@@ -54,7 +54,7 @@ public class SearchArgs {
 		return new SearchArgs(args);
 	}
 
-	private final Map<String,String> search = CollectionUtils2.map();
+	private final Map<String,String> search = CollectionUtils.map();
 
 	/**
 	 * Constructor.

@@ -91,7 +91,7 @@ public class Discriminator extends OpenApiElement {
 		super(copyFrom);
 
 		this.propertyName = copyFrom.propertyName;
-		this.mapping = CollectionUtils2.copyOf(copyFrom.mapping);
+		this.mapping = CollectionUtils.copyOf(copyFrom.mapping);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
-		mapping = CollectionUtils2.copyOf(value);
+		mapping = CollectionUtils.copyOf(value);
 		return this;
 	}
 

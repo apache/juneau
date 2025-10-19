@@ -203,7 +203,7 @@ public class BeanMeta<T> {
 
 				List<Class<?>> bdClasses = list();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
-					CollectionUtils2.addAll(bdClasses, beanFilter.getBeanDictionary());
+					CollectionUtils.addAll(bdClasses, beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
@@ -454,7 +454,7 @@ public class BeanMeta<T> {
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
-				properties = sortProperties ? CollectionUtils2.sortedMap() : map();
+				properties = sortProperties ? CollectionUtils.sortedMap() : map();
 
 				if (beanFilter != null && beanFilter.getTypeName() != null)
 					dictionaryName = beanFilter.getTypeName();
@@ -545,7 +545,7 @@ public class BeanMeta<T> {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
-			return CollectionUtils2.last(n).value();
+			return CollectionUtils.last(n).value();
 
 		Value<String> name = Value.of(p.isEmpty() ? null : "");
 		p.forEach(x -> {

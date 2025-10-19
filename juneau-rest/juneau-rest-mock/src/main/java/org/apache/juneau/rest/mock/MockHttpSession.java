@@ -47,7 +47,7 @@ public class MockHttpSession implements HttpSession {
 		return new MockHttpSession();
 	}
 
-	private Map<String,Object> attributes = CollectionUtils2.map();
+	private Map<String,Object> attributes = CollectionUtils.map();
 	private long creationTime, lastAccessedTime;
 	private int maxInactiveInterval;
 	private String id;

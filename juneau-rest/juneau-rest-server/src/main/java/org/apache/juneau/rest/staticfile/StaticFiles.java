@@ -129,7 +129,7 @@ public interface StaticFiles extends FileFinder {
 		 * @return This object.
 		 */
 		public Builder headers(Header...headers) {
-			CollectionUtils2.addAll(this.headers, headers);
+			CollectionUtils.addAll(this.headers, headers);
 			return this;
 		}
 

@@ -157,10 +157,10 @@ public class ReflectionMap<V> {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder<V> copyFrom) {
-			classEntries = CollectionUtils2.copyOf(copyFrom.classEntries);
-			methodEntries = CollectionUtils2.copyOf(copyFrom.methodEntries);
-			fieldEntries = CollectionUtils2.copyOf(copyFrom.fieldEntries);
-			constructorEntries = CollectionUtils2.copyOf(copyFrom.constructorEntries);
+			classEntries = CollectionUtils.copyOf(copyFrom.classEntries);
+			methodEntries = CollectionUtils.copyOf(copyFrom.methodEntries);
+			fieldEntries = CollectionUtils.copyOf(copyFrom.fieldEntries);
+			constructorEntries = CollectionUtils.copyOf(copyFrom.constructorEntries);
 		}
 
 		/**

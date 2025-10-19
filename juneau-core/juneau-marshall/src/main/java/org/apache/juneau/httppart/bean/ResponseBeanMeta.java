@@ -50,7 +50,7 @@ public class ResponseBeanMeta {
 		Class<? extends HttpPartParser> partParser;
 		HttpPartSchema.Builder schema = HttpPartSchema.create();
 
-		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = CollectionUtils2.map();
+		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = CollectionUtils.map();
 		ResponseBeanPropertyMeta.Builder contentMethod;
 		ResponseBeanPropertyMeta.Builder statusMethod;
 
@@ -182,9 +182,9 @@ public class ResponseBeanMeta {
 		this.partParser = Utils.opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
-		Map<String,ResponseBeanPropertyMeta> properties = CollectionUtils2.map();
+		Map<String,ResponseBeanPropertyMeta> properties = CollectionUtils.map();
 
-		Map<String,ResponseBeanPropertyMeta> hm = CollectionUtils2.map();
+		Map<String,ResponseBeanPropertyMeta> hm = CollectionUtils.map();
 		b.headerMethods.forEach((k, v) -> {
 			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
 			hm.put(k, pm);

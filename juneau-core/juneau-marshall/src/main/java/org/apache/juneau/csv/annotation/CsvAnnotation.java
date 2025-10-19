@@ -18,7 +18,6 @@ package org.apache.juneau.csv.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 
@@ -52,7 +51,7 @@ public class CsvAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Csv> ai, Context.Builder b) {
 			Csv a = ai.inner();
-			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
+			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}

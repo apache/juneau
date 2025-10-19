@@ -43,7 +43,7 @@ import org.junit.*;
 public class ContentComboTestBase extends RestTestcase {
 
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
-	private static Map<String,RestClient> clients = CollectionUtils2.map();
+	private static Map<String,RestClient> clients = CollectionUtils.map();
 
 	protected RestClient getClient(MediaType mediaType) {
 		String mt = mediaType.toString();

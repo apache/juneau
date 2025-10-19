@@ -89,7 +89,7 @@ public class Link extends OpenApiElement {
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
 		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
-		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
+		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class Link extends OpenApiElement {
 	 * @return This object
 	 */
 	public Link setParameters(Map<String,Object> value) {
-		parameters = CollectionUtils2.copyOf(value);
+		parameters = CollectionUtils.copyOf(value);
 		return this;
 	}
 

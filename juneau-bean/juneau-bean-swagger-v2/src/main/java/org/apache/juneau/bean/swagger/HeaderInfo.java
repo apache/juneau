@@ -108,7 +108,7 @@ public class HeaderInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
-		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
+		this._enum = CollectionUtils.copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -452,7 +452,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setCollectionFormat(String value) {
-		if (isStrict() && ! ArrayUtils2.contains(value, VALID_COLLECTION_FORMATS))
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
@@ -506,7 +506,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setEnum(Collection<Object> value) {
-		_enum = CollectionUtils2.setFrom(value);
+		_enum = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -734,7 +734,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public HeaderInfo setType(String value) {
-		if (isStrict() && ! ArrayUtils2.contains(value, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
 			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;

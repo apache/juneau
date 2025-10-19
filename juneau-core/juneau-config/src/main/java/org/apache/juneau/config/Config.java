@@ -78,7 +78,7 @@ public class Config extends Context implements ConfigEventListener {
 			store = FileStore.DEFAULT;
 			serializer = Json5Serializer.DEFAULT;
 			parser = JsonParser.DEFAULT;
-			mods = CollectionUtils2.map();
+			mods = CollectionUtils.map();
 			mods(XorEncodeMod.INSTANCE);
 			varResolver = VarResolver.DEFAULT;
 			binaryLineLength = env("Config.binaryLineLength", -1);
@@ -98,7 +98,7 @@ public class Config extends Context implements ConfigEventListener {
 			store = copyFrom.store;
 			serializer = copyFrom.serializer;
 			parser = copyFrom.parser;
-			mods = CollectionUtils2.copyOf(copyFrom.mods);
+			mods = CollectionUtils.copyOf(copyFrom.mods);
 			varResolver = copyFrom.varResolver;
 			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
@@ -117,7 +117,7 @@ public class Config extends Context implements ConfigEventListener {
 			store = copyFrom.store;
 			serializer = copyFrom.serializer;
 			parser = copyFrom.parser;
-			mods = CollectionUtils2.copyOf(copyFrom.mods);
+			mods = CollectionUtils.copyOf(copyFrom.mods);
 			varResolver = copyFrom.varResolver;
 			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
@@ -450,7 +450,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	<br>Each call constructs a new list.
 	 */
 	public static synchronized List<String> getCandidateSystemDefaultConfigNames() {
-		var l = CollectionUtils2.listOf(String.class);
+		var l = CollectionUtils.listOf(String.class);
 
 		var s = System.getProperty("juneau.configFile");
 		if (s != null) {
@@ -466,7 +466,7 @@ public class Config extends Context implements ConfigEventListener {
 			l.add(cmd + ".cfg");
 		}
 
-		var files = CollectionUtils2.sortedSet(new File(".").listFiles());
+		var files = CollectionUtils.sortedSet(new File(".").listFiles());
 		for (var f : files)
 			if (f.getName().endsWith(".cfg"))
 				l.add(f.getName());
@@ -534,7 +534,7 @@ public class Config extends Context implements ConfigEventListener {
 	final VarResolverSession varSession;
 
 	private final ConfigMap configMap;
-	private final List<ConfigEventListener> listeners = CollectionUtils2.synced(new LinkedList<>());
+	private final List<ConfigEventListener> listeners = CollectionUtils.synced(new LinkedList<>());
 
 	/**
 	 * Constructor.
@@ -552,7 +552,7 @@ public class Config extends Context implements ConfigEventListener {
 		serializer = builder.serializer;
 		parser = builder.parser;
 		beanSession = parser.getBeanContext().getSession();
-		mods = u(CollectionUtils2.copyOf(builder.mods));
+		mods = u(CollectionUtils.copyOf(builder.mods));
 		varResolver = builder.varResolver;
 		varSession = varResolver.copy().vars(ConfigVar.class).bean(Config.class, this).build().createSession();
 		binaryLineLength = builder.binaryLineLength;

@@ -18,7 +18,6 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.ArrayUtils.*;
 
 import java.lang.annotation.*;
 
@@ -51,7 +50,7 @@ public class SwapAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Swap> ai, BeanContext.Builder b) {
 			Swap a = ai.inner();
-			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
+			if (ArrayUtils.isEmptyArray(a.on()) && ArrayUtils.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}
@@ -158,7 +157,7 @@ public class SwapAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.impl = b.impl;
-			this.mediaTypes = ArrayUtils2.copyOf(b.mediaTypes);
+			this.mediaTypes = ArrayUtils.copyOf(b.mediaTypes);
 			this.template = b.template;
 			this.value = b.value;
 			postConstruct();

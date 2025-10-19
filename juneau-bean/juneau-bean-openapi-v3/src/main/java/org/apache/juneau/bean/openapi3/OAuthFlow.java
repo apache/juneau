@@ -98,7 +98,7 @@ public class OAuthFlow extends OpenApiElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.refreshUrl = copyFrom.refreshUrl;
-		this.scopes = CollectionUtils2.copyOf(copyFrom.scopes);
+		this.scopes = CollectionUtils.copyOf(copyFrom.scopes);
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object
 	 */
 	public OAuthFlow setScopes(Map<String,String> value) {
-		scopes = CollectionUtils2.copyOf(value);
+		scopes = CollectionUtils.copyOf(value);
 		return this;
 	}
 

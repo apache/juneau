@@ -87,7 +87,7 @@ public class RemoteMeta {
 		if (clientVersion != null)
 			headers.append(stringHeader(versionHeader, clientVersion));
 
-		Map<Method,RemoteOperationMeta> operations = CollectionUtils2.map();
+		Map<Method,RemoteOperationMeta> operations = CollectionUtils.map();
 		String path2 = path;
 		ci.forEachPublicMethod(x -> true, x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET")));
 

@@ -89,8 +89,8 @@ public class MediaType extends OpenApiElement {
 
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		this.examples = CollectionUtils2.copyOf(copyFrom.examples, Example::copy);
-		this.encoding = CollectionUtils2.copyOf(copyFrom.encoding, Encoding::copy);
+		this.examples = CollectionUtils.copyOf(copyFrom.examples, Example::copy);
+		this.encoding = CollectionUtils.copyOf(copyFrom.encoding, Encoding::copy);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setEncoding(Map<String,Encoding> value) {
-		encoding = CollectionUtils2.copyOf(value);
+		encoding = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -241,7 +241,7 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setExamples(Map<String,Example> value) {
-		examples = CollectionUtils2.copyOf(value);
+		examples = CollectionUtils.copyOf(value);
 		return this;
 	}
 

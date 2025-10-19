@@ -46,7 +46,7 @@ class XmlConfigAnnotationTest extends TestBase {
 		if (t == null)
 			return null;
 		if (isArray(t))
-			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils2.toList(t, Object.class));
+			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
 		if (t instanceof AA)
 			return "AA";
 		if (t instanceof AB)

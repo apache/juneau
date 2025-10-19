@@ -72,8 +72,8 @@ public class JettyMicroservice extends Microservice {
 		String jettyXml;
 		int[] ports;
 		Boolean jettyXmlResolveVars;
-		Map<String,Servlet> servlets = CollectionUtils2.map();
-		Map<String,Object> servletAttributes = CollectionUtils2.map();
+		Map<String,Servlet> servlets = CollectionUtils.map();
+		Map<String,Object> servletAttributes = CollectionUtils.map();
 		JettyMicroserviceListener listener;
 		JettyServerFactory factory;
 
@@ -92,8 +92,8 @@ public class JettyMicroservice extends Microservice {
 			this.jettyXml = copyFrom.jettyXml;
 			this.ports = copyFrom.ports;
 			this.jettyXmlResolveVars = copyFrom.jettyXmlResolveVars;
-			this.servlets = CollectionUtils2.copyOf(copyFrom.servlets);
-			this.servletAttributes = CollectionUtils2.copyOf(copyFrom.servletAttributes);
+			this.servlets = CollectionUtils.copyOf(copyFrom.servlets);
+			this.servletAttributes = CollectionUtils.copyOf(copyFrom.servletAttributes);
 			this.listener = copyFrom.listener;
 		}
 

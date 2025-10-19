@@ -402,7 +402,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils2.listFrom(getParameterMap().keySet())); }
+	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils.listFrom(getParameterMap().keySet())); }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String[] getParameterValues(String name) {
@@ -542,7 +542,7 @@ public class MockServletRequest implements HttpServletRequest {
 		if (value != null) {
 			String[] v1 = (value instanceof String[]) ? (String[])value : new String[] { value.toString() };
 			String[] v2 = headerMap.get(name);
-			String[] v3 = ArrayUtils2.combine(v2, v1);
+			String[] v3 = ArrayUtils.combine(v2, v1);
 			headerMap.put(name, v3);
 		}
 		return this;

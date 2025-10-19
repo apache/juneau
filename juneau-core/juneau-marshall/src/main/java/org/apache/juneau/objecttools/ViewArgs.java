@@ -65,7 +65,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(Collection<String> viewArgs) {
-		this.view = u(CollectionUtils2.listFrom(viewArgs));
+		this.view = u(CollectionUtils.listFrom(viewArgs));
 	}
 
 	/**

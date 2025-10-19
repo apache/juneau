@@ -1721,9 +1721,9 @@ class RrpcInterface_Test extends TestBase {
 		ABean[][][] x2n = null;
 		var x3 = alist(x2,null);
 		List<ABean[][][]> x3n = null;
-		var x4 = CollectionUtils2.map("foo",ABean.get());
+		var x4 = CollectionUtils.map("foo",ABean.get());
 		Map<String,ABean> x4n = null;
-		var x5 = CollectionUtils2.map("foo",x3);
+		var x5 = CollectionUtils.map("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
@@ -1736,9 +1736,9 @@ class RrpcInterface_Test extends TestBase {
 		SwappedObject[][][] x2n = null;
 		var x3 = alist(x2,null);
 		List<SwappedObject[][][]> x3n = null;
-		var x4 = CollectionUtils2.map(new SwappedObject(),new SwappedObject());
+		var x4 = CollectionUtils.map(new SwappedObject(),new SwappedObject());
 		Map<SwappedObject,SwappedObject> x4n = null;
-		var x5 = CollectionUtils2.map(new SwappedObject(),x3);
+		var x5 = CollectionUtils.map(new SwappedObject(),x3);
 		Map<SwappedObject,List<SwappedObject[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
@@ -1751,9 +1751,9 @@ class RrpcInterface_Test extends TestBase {
 		ImplicitSwappedObject[][][] x2n = null;
 		var x3 = alist(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
-		var x4 = CollectionUtils2.map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		var x4 = CollectionUtils.map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
-		var x5 = CollectionUtils2.map(new ImplicitSwappedObject(),x3);
+		var x5 = CollectionUtils.map(new ImplicitSwappedObject(),x3);
 		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}
@@ -1766,9 +1766,9 @@ class RrpcInterface_Test extends TestBase {
 		TestEnum[][][] x2n = null;
 		var x3 = alist(x2,null);
 		List<TestEnum[][][]> x3n = null;
-		var x4 = CollectionUtils2.map(TestEnum.ONE,TestEnum.TWO);
+		var x4 = CollectionUtils.map(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;
-		var x5 = CollectionUtils2.map(TestEnum.ONE,x3);
+		var x5 = CollectionUtils.map(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		assertDoesNotThrow(()->input.proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n));
 	}

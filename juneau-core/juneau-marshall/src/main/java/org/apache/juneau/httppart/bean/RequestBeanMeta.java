@@ -44,7 +44,7 @@ public class RequestBeanMeta {
 		AnnotationWorkList annotations;
 		BeanCreator<HttpPartSerializer> serializer = BeanCreator.of(HttpPartSerializer.class);
 		BeanCreator<HttpPartParser> parser = BeanCreator.of(HttpPartParser.class);
-		Map<String,RequestBeanPropertyMeta.Builder> properties = CollectionUtils2.map();
+		Map<String,RequestBeanPropertyMeta.Builder> properties = CollectionUtils.map();
 
 		Builder(AnnotationWorkList annotations) {
 			this.annotations = annotations;
@@ -136,7 +136,7 @@ public class RequestBeanMeta {
 		this.cm = b.cm;
 		this.serializer = b.serializer.orElse(null);
 		this.parser = b.parser.orElse(null);
-		Map<String,RequestBeanPropertyMeta> properties = CollectionUtils2.map();
+		Map<String,RequestBeanPropertyMeta> properties = CollectionUtils.map();
 		b.properties.forEach((k, v) -> properties.put(k, v.build(serializer, parser)));
 		this.properties = u(properties);
 	}

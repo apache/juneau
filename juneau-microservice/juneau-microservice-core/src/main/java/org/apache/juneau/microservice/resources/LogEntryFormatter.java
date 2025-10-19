@@ -198,7 +198,7 @@ public class LogEntryFormatter extends Formatter {
 		sre = sre.replaceAll("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
-		fieldIndexes = CollectionUtils2.mapFrom(fieldIndexes);
+		fieldIndexes = CollectionUtils.mapFrom(fieldIndexes);
 	}
 
 	@SuppressWarnings("deprecation")

@@ -2271,7 +2271,7 @@ public class ClassInfo {
 	FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
 			synchronized (this) {
-				Map<String,FieldInfo> m = CollectionUtils2.map();
+				Map<String,FieldInfo> m = CollectionUtils.map();
 				for (ClassInfo c : _getParents()) {
 					for (FieldInfo f : c._getDeclaredFields()) {
 						String fn = f.getName();
@@ -2279,7 +2279,7 @@ public class ClassInfo {
 							m.put(f.getName(), f);
 					}
 				}
-				List<FieldInfo> l = CollectionUtils2.listFrom(m.values());
+				List<FieldInfo> l = CollectionUtils.listFrom(m.values());
 				l.sort(null);
 				publicFields = l.toArray(new FieldInfo[l.size()]);
 			}

@@ -354,7 +354,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : CollectionUtils2.sortedList(comparator, value());
+		return valueIsNull() ? null : CollectionUtils.sortedList(comparator, value());
 	}
 
 	@Override

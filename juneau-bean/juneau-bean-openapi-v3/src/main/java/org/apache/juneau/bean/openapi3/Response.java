@@ -96,9 +96,9 @@ public class Response extends OpenApiElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.headers = CollectionUtils2.copyOf(copyFrom.headers, HeaderInfo::copy);
-		this.content = CollectionUtils2.copyOf(copyFrom.content, MediaType::copy);
-		this.links = CollectionUtils2.copyOf(copyFrom.links, Link::copy);
+		this.headers = CollectionUtils.copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.content = CollectionUtils.copyOf(copyFrom.content, MediaType::copy);
+		this.links = CollectionUtils.copyOf(copyFrom.links, Link::copy);
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setContent(Map<String,MediaType> value) {
-		content = CollectionUtils2.copyOf(value);
+		content = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setHeaders(Map<String,HeaderInfo> value) {
-		headers = CollectionUtils2.copyOf(value);
+		headers = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -309,7 +309,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setLinks(Map<String,Link> value) {
-		links = CollectionUtils2.copyOf(value);
+		links = CollectionUtils.copyOf(value);
 		return this;
 	}
 

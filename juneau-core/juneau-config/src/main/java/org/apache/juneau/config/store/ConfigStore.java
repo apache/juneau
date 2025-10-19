@@ -195,7 +195,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 */
 	public synchronized ConfigStore register(String name, ConfigStoreListener l) {
 		name = resolveName(name);
-		var s = listeners.computeIfAbsent(name, k -> CollectionUtils2.synced(newSetFromMap(new IdentityHashMap<>())));
+		var s = listeners.computeIfAbsent(name, k -> CollectionUtils.synced(newSetFromMap(new IdentityHashMap<>())));
 		s.add(l);
 		return this;
 	}

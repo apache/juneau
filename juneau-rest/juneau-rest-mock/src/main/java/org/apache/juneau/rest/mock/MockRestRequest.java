@@ -52,8 +52,8 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings("resource")
 public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
-	private Map<String,Object> attributeMap = CollectionUtils2.map();
-	private Map<String,RequestDispatcher> requestDispatcherMap = CollectionUtils2.map();
+	private Map<String,Object> attributeMap = CollectionUtils.map();
+	private Map<String,RequestDispatcher> requestDispatcherMap = CollectionUtils.map();
 	private String characterEncoding, protocol, scheme, serverName, remoteAddr, remoteHost, localName, localAddr, pathInfo, pathTranslated, contextPath, queryString, remoteUser, requestedSessionId,
 		requestURI, servletPath, authType;
 	private Integer serverPort, remotePort, localPort;

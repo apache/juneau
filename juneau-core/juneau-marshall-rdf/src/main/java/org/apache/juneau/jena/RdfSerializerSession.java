@@ -481,7 +481,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
-		ArrayList<Map.Entry<Object,Object>> l = CollectionUtils2.listFrom(m.entrySet());
+		ArrayList<Map.Entry<Object,Object>> l = CollectionUtils.listFrom(m.entrySet());
 		Collections.reverse(l);
 		l.forEach(x -> {
 			Object value = x.getValue();

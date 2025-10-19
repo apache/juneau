@@ -120,34 +120,34 @@ public class Swagger extends SwaggerElement {
 		super(copyFrom);
 
 		this.basePath = copyFrom.basePath;
-		this.consumes = CollectionUtils2.copyOf(copyFrom.consumes);
+		this.consumes = CollectionUtils.copyOf(copyFrom.consumes);
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.host = copyFrom.host;
 		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
-		this.produces = CollectionUtils2.copyOf(copyFrom.produces);
-		this.schemes = CollectionUtils2.copyOf(copyFrom.schemes);
+		this.produces = CollectionUtils.copyOf(copyFrom.produces);
+		this.schemes = CollectionUtils.copyOf(copyFrom.schemes);
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
-		this.definitions = CollectionUtils2.copyOf(copyFrom.definitions, JsonMap::new);
+		this.definitions = CollectionUtils.copyOf(copyFrom.definitions, JsonMap::new);
 
-		this.paths = CollectionUtils2.copyOf(copyFrom.paths, v -> {
+		this.paths = CollectionUtils.copyOf(copyFrom.paths, v -> {
 			var m = new OperationMap();
 			v.forEach((k2, v2) -> m.put(k2, v2.copy()));
 			return m;
 		});
 
-		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters, ParameterInfo::copy);
-		this.responses = CollectionUtils2.copyOf(copyFrom.responses, ResponseInfo::copy);
-		this.securityDefinitions = CollectionUtils2.copyOf(copyFrom.securityDefinitions, SecurityScheme::copy);
+		this.parameters = CollectionUtils.copyOf(copyFrom.parameters, ParameterInfo::copy);
+		this.responses = CollectionUtils.copyOf(copyFrom.responses, ResponseInfo::copy);
+		this.securityDefinitions = CollectionUtils.copyOf(copyFrom.securityDefinitions, SecurityScheme::copy);
 
-		this.security = CollectionUtils2.copyOf(copyFrom.security, x -> {
-			Map<String,List<String>> m2 = CollectionUtils2.map();
-			x.forEach((k, v) -> m2.put(k, CollectionUtils2.copyOf(v)));
+		this.security = CollectionUtils.copyOf(copyFrom.security, x -> {
+			Map<String,List<String>> m2 = CollectionUtils.map();
+			x.forEach((k, v) -> m2.put(k, CollectionUtils.copyOf(v)));
 			return m2;
 		});
 
-		this.tags = CollectionUtils2.copyOf(copyFrom.tags, x -> x.copy());
+		this.tags = CollectionUtils.copyOf(copyFrom.tags, x -> x.copy());
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public Swagger addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		Map<String,List<String>> m = CollectionUtils2.map();
+		Map<String,List<String>> m = CollectionUtils.map();
 		m.put(scheme, alist(alternatives));
 		security = listBuilder(security).sparse().addAll(Collections.singleton(m)).build();
 		return this;
@@ -787,7 +787,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(Collection<MediaType> value) {
-		consumes = CollectionUtils2.setFrom(value);
+		consumes = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -818,7 +818,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setDefinitions(Map<String,JsonMap> value) {
-		definitions = CollectionUtils2.copyOf(value);
+		definitions = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -887,7 +887,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setParameters(Map<String,ParameterInfo> value) {
-		parameters = CollectionUtils2.copyOf(value);
+		parameters = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -921,7 +921,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(Collection<MediaType> value) {
-		produces = CollectionUtils2.setFrom(value);
+		produces = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -952,7 +952,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setResponses(Map<String,ResponseInfo> value) {
-		responses = CollectionUtils2.copyOf(value);
+		responses = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -975,7 +975,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(Collection<String> value) {
-		schemes = CollectionUtils2.setFrom(value);
+		schemes = CollectionUtils.setFrom(value);
 		return this;
 	}
 
@@ -1007,7 +1007,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurity(Collection<Map<String,List<String>>> value) {
-		security = CollectionUtils2.listFrom(value);
+		security = CollectionUtils.listFrom(value);
 		return this;
 	}
 
@@ -1023,7 +1023,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSecurityDefinitions(Map<String,SecurityScheme> value) {
-		securityDefinitions = CollectionUtils2.copyOf(value);
+		securityDefinitions = CollectionUtils.copyOf(value);
 		return this;
 	}
 
@@ -1060,7 +1060,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Collection<Tag> value) {
-		tags = CollectionUtils2.setFrom(value);
+		tags = CollectionUtils.setFrom(value);
 		return this;
 	}
 

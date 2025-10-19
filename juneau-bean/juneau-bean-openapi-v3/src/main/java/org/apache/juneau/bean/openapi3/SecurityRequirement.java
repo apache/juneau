@@ -48,7 +48,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 */
 	public SecurityRequirement(SecurityRequirement copyFrom) {
 		super(copyFrom);
-		this.requirements = CollectionUtils2.copyOf(copyFrom.requirements);
+		this.requirements = CollectionUtils.copyOf(copyFrom.requirements);
 	}
 
 	/**

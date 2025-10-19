@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.annotation;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-
 import java.lang.annotation.*;
 import java.nio.charset.*;
 
@@ -423,27 +421,27 @@ public class RestPostAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
-			this.consumes = ArrayUtils2.copyOf(b.consumes);
-			this.converters = ArrayUtils2.copyOf(b.converters);
+			this.consumes = ArrayUtils.copyOf(b.consumes);
+			this.converters = ArrayUtils.copyOf(b.converters);
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
 			this.defaultContentType = b.defaultContentType;
-			this.defaultRequestFormData = ArrayUtils2.copyOf(b.defaultRequestFormData);
-			this.defaultRequestQueryData = ArrayUtils2.copyOf(b.defaultRequestQueryData);
-			this.defaultRequestAttributes = ArrayUtils2.copyOf(b.defaultRequestAttributes);
-			this.defaultRequestHeaders = ArrayUtils2.copyOf(b.defaultRequestHeaders);
-			this.defaultResponseHeaders = ArrayUtils2.copyOf(b.defaultResponseHeaders);
-			this.encoders = ArrayUtils2.copyOf(b.encoders);
-			this.guards = ArrayUtils2.copyOf(b.guards);
-			this.matchers = ArrayUtils2.copyOf(b.matchers);
+			this.defaultRequestFormData = ArrayUtils.copyOf(b.defaultRequestFormData);
+			this.defaultRequestQueryData = ArrayUtils.copyOf(b.defaultRequestQueryData);
+			this.defaultRequestAttributes = ArrayUtils.copyOf(b.defaultRequestAttributes);
+			this.defaultRequestHeaders = ArrayUtils.copyOf(b.defaultRequestHeaders);
+			this.defaultResponseHeaders = ArrayUtils.copyOf(b.defaultResponseHeaders);
+			this.encoders = ArrayUtils.copyOf(b.encoders);
+			this.guards = ArrayUtils.copyOf(b.guards);
+			this.matchers = ArrayUtils.copyOf(b.matchers);
 			this.maxInput = b.maxInput;
-			this.parsers = ArrayUtils2.copyOf(b.parsers);
-			this.path = ArrayUtils2.copyOf(b.path);
-			this.produces = ArrayUtils2.copyOf(b.produces);
+			this.parsers = ArrayUtils.copyOf(b.parsers);
+			this.path = ArrayUtils.copyOf(b.path);
+			this.produces = ArrayUtils.copyOf(b.produces);
 			this.roleGuard = b.roleGuard;
 			this.rolesDeclared = b.rolesDeclared;
-			this.serializers = ArrayUtils2.copyOf(b.serializers);
+			this.serializers = ArrayUtils.copyOf(b.serializers);
 			this.summary = b.summary;
 			this.swagger = b.swagger;
 			this.value = b.value;

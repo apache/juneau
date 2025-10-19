@@ -204,7 +204,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Overridden from Serializer */
-	public Map<String,String> getResponseHeaders() { return CollectionUtils2.map("SOAPAction", getSoapAction()); }
+	public Map<String,String> getResponseHeaders() { return CollectionUtils.map("SOAPAction", getSoapAction()); }
 
 	/**
 	 * The SOAPAction HTTP header value to set on responses.

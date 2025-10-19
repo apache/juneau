@@ -114,18 +114,18 @@ public class Operation extends OpenApiElement {
 	 */
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
-		this.tags = CollectionUtils2.copyOf(copyFrom.tags);
+		this.tags = CollectionUtils.copyOf(copyFrom.tags);
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
 		this.externalDocs = copyFrom.externalDocs;
-		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
+		this.parameters = CollectionUtils.copyOf(copyFrom.parameters);
 		this.requestBody = copyFrom.requestBody;
-		this.responses = CollectionUtils2.copyOf(copyFrom.responses);
-		this.callbacks = CollectionUtils2.copyOf(copyFrom.callbacks);
+		this.responses = CollectionUtils.copyOf(copyFrom.responses);
+		this.callbacks = CollectionUtils.copyOf(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;
-		this.security = CollectionUtils2.copyOf(copyFrom.security);
-		this.servers = CollectionUtils2.copyOf(copyFrom.servers);
+		this.security = CollectionUtils.copyOf(copyFrom.security);
+		this.servers = CollectionUtils.copyOf(copyFrom.servers);
 	}
 
 	/**

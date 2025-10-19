@@ -176,7 +176,7 @@ public class SerializerSet {
 		 * @return This object.
 		 */
 		public Builder add(Serializer...s) {
-			CollectionUtils2.prependAll(entries, (Object[])s);
+			CollectionUtils.prependAll(entries, (Object[])s);
 			return this;
 		}
 

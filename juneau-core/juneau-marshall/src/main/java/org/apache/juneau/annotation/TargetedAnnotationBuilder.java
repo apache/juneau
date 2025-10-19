@@ -50,7 +50,7 @@ public class TargetedAnnotationBuilder<B extends TargetedAnnotationBuilder<B>> e
 	 */
 	public B on(String...values) {
 		for (String v : values)
-			on = ArrayUtils2.append(on, v);
+			on = ArrayUtils.append(on, v);
 		return asThis();
 	}
 }

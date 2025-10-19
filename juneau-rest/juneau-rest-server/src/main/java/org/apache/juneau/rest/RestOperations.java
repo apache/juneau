@@ -126,9 +126,9 @@ public class RestOperations {
 	 * @param builder The builder containing the settings for this object.
 	 */
 	public RestOperations(Builder builder) {
-		Map<String,List<RestOpContext>> m = CollectionUtils2.map();
+		Map<String,List<RestOpContext>> m = CollectionUtils.map();
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
-			m.put(e.getKey(), CollectionUtils2.listFrom(e.getValue()));
+			m.put(e.getKey(), CollectionUtils.listFrom(e.getValue()));
 		this.map = m;
 		this.list = Utils.array(builder.set, RestOpContext.class);
 	}
