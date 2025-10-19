@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='extlink'&gt;&lt;a class="doclink" href="<a href="https://tools.ietf.org/html/rfc4287" target="alexandria_uri">https://tools.ietf.org/html/rfc4287</a>"&gt;RFC 4287 - The Atom Syndication Format&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  @Bean(typeName=<span class="jxr_string">"icon"</span>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  @Bean(typeName = <span class="jxr_string">"icon"</span>)
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Icon" href="../../../../../org/apache/juneau/bean/atom/Icon.html#Icon">Icon</a> <strong class="jxr_keyword">extends</strong> <a name="Common" href="../../../../../org/apache/juneau/bean/atom/Common.html#Common">Common</a> {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> URI uri;
@@ -98,24 +98,24 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">public</strong> <a name="Icon" href="../../../../../org/apache/juneau/bean/atom/Icon.html#Icon">Icon</a>(Object uri) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		setUri(uri);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;uri&lt;/property&gt;.</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * The URI of this icon.</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Xml(format=TEXT)
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">public</strong> URI getUri() {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">return</strong> uri;
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Override <em class="jxr_comment">/* Overridden from Common */</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">public</strong> <a name="Icon" href="../../../../../org/apache/juneau/bean/atom/Icon.html#Icon">Icon</a> setBase(Object value) {
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">super</strong>.setBase(value);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * Bean property getter:  &lt;property&gt;uri&lt;/property&gt;.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * The URI of this icon.</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Xml(format = TEXT)
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">public</strong> URI getUri() { <strong class="jxr_keyword">return</strong> uri; }
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Override <em class="jxr_comment">/* Overridden from Common */</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> <a name="Icon" href="../../../../../org/apache/juneau/bean/atom/Icon.html#Icon">Icon</a> setBase(Object value) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">super</strong>.setBase(value);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Override <em class="jxr_comment">/* Overridden from Common */</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">public</strong> <a name="Icon" href="../../../../../org/apache/juneau/bean/atom/Icon.html#Icon">Icon</a> setLang(String value) {
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">super</strong>.setLang(value);

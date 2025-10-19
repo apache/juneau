@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * A collection of {@link Beanp @Beanp annotations}.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Documented
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Target({METHOD,TYPE})
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Target({ METHOD, TYPE })
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Retention(RUNTIME)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Inherited
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> @<strong class="jxr_keyword">interface</strong> Array {
@@ -90,9 +90,9 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> TargetedAnnotationMFBuilder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		Class&lt;?&gt; type=<strong class="jxr_keyword">void</strong>.<strong class="jxr_keyword">class</strong>;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		Class&lt;?&gt;[] dictionary=<strong class="jxr_keyword">new</strong> Class[0], params=<strong class="jxr_keyword">new</strong> Class[0];
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		String format=<span class="jxr_string">""</span>, name=<span class="jxr_string">""</span>, properties=<span class="jxr_string">""</span>, ro=<span class="jxr_string">""</span>, value=<span class="jxr_string">""</span>, wo=<span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		Class&lt;?&gt; type = <strong class="jxr_keyword">void</strong>.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		Class&lt;?&gt;[] dictionary = <strong class="jxr_keyword">new</strong> Class[0], params = <strong class="jxr_keyword">new</strong> Class[0];
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		String format = <span class="jxr_string">""</span>, name = <span class="jxr_string">""</span>, properties = <span class="jxr_string">""</span>, ro = <span class="jxr_string">""</span>, value = <span class="jxr_string">""</span>, wo = <span class="jxr_string">""</span>;
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">		 * Constructor.</em>
@@ -276,48 +276,54 @@
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">return</strong> wo;
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 	}
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_javadoccomment">/** Default value */</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Beanp DEFAULT = create().build();
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * Creates a copy of the specified annotation.</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * @param a The annotation to copy.s</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * @param r The var resolver for resolving any variables.</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @return A copy of the specified annotation.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Beanp copy(Beanp a, <a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> r) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">return</strong>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			create()
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			.dictionary(a.dictionary())
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			.format(r.resolve(a.format()))
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			.name(r.resolve(a.name()))
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			.on(r.resolve(a.on()))
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			.params(a.params())
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			.properties(r.resolve(a.properties()))
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			.ro(r.resolve(a.ro()))
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.type(a.type())
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.value(r.resolve(a.value()))
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			.wo(r.resolve(a.wo()))
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			.build();
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * @param on The targets this annotation applies to.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create(String...on) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">return</strong> create().on(on);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<em class="jxr_javadoccomment">/** Default value */</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Beanp DEFAULT = create().build();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * Creates a copy of the specified annotation.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @param a The annotation to copy.s</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @param r The var resolver for resolving any variables.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * @return A copy of the specified annotation.</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Beanp copy(Beanp a, <a name="VarResolverSession" href="../../../../org/apache/juneau/svl/VarResolverSession.html#VarResolverSession">VarResolverSession</a> r) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			create()
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			.dictionary(a.dictionary())
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			.format(r.resolve(a.format()))
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			.name(r.resolve(a.name()))
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			.on(r.resolve(a.on()))
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.params(a.params())
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			.properties(r.resolve(a.properties()))
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			.ro(r.resolve(a.ro()))
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			.type(a.type())
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			.value(r.resolve(a.value()))
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			.wo(r.resolve(a.wo()))
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			.build();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * @param on The targets this annotation applies to.</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create(String...on) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">return</strong> create().on(on);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

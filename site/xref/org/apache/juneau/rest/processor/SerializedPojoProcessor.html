@@ -72,56 +72,56 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  				<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  					res.setHeader(ContentType.of(responseType.toString()));
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  				SerializerSession session = s
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  					.createSession()
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					.properties(req.getAttributes().asMap())
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  					.javaMethod(req.getOpContext().getJavaMethod())
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					.locale(req.getLocale())
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  					.timeZone(req.getTimeZone().orElse(<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  					.mediaType(mediaType)
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					.apply(WriterSerializerSession.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  					.schema(schema)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					.uriContext(req.getUriContext())
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					.resolver(req.getVarResolverSession())
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  					.build();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String&gt; h : session.getResponseHeaders().entrySet())
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  					res.addHeader(h.getKey(), h.getValue());
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<strong class="jxr_keyword">if</strong> (! session.isWriterSerializer()) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					<strong class="jxr_keyword">if</strong> (req.isPlainText()) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  						FinishablePrintWriter w = res.getNegotiatedWriter();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  						ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  						session.serialize(o, baos);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  						w.flush();
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  						w.finish();
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  						FinishableServletOutputStream os = res.getNegotiatedOutputStream();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  						session.serialize(o, os);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  						os.flush();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  						os.finish();
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					}
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  					FinishablePrintWriter w = res.getNegotiatedWriter();
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 					session.serialize(o, w);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					w.flush();
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					w.finish();
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				}
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e);
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			}
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">return</strong> FINISHED;
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		}
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">return</strong> FINISHED;
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotAcceptable" href="../../../../../org/apache/juneau/http/response/NotAcceptable.html#NotAcceptable">NotAcceptable</a>(
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<span class="jxr_string">"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}"</span>,
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			req.getHeaderParam(<span class="jxr_string">"Accept"</span>).orElse(<span class="jxr_string">""</span>), Json5.of(res.getOpContext().getSerializers().getSupportedMediaTypes())
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  				<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				SerializerSession session = s
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					.createSession()
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  					.properties(req.getAttributes().asMap())
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					.javaMethod(req.getOpContext().getJavaMethod())
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  					.locale(req.getLocale())
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  					.timeZone(req.getTimeZone().orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					.mediaType(mediaType)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  					.apply(WriterSerializerSession.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					.schema(schema)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					.uriContext(req.getUriContext())
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  					.resolver(req.getVarResolverSession())
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  					.build();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  				<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  				<strong class="jxr_keyword">for</strong> (Map.Entry&lt;String,String&gt; h : session.getResponseHeaders().entrySet())
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					res.addHeader(h.getKey(), h.getValue());
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  				<strong class="jxr_keyword">if</strong> (! session.isWriterSerializer()) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  					<strong class="jxr_keyword">if</strong> (req.isPlainText()) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  						FinishablePrintWriter w = res.getNegotiatedWriter();
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  						ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  						session.serialize(o, baos);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  						w.write(StringUtils.toSpacedHex(baos.toByteArray()));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  						w.flush();
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  						w.finish();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  						FinishableServletOutputStream os = res.getNegotiatedOutputStream();
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  						session.serialize(o, os);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  						os.flush();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  						os.finish();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  					}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					FinishablePrintWriter w = res.getNegotiatedWriter();
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					session.serialize(o, w);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					w.flush();
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					w.finish();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				}
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="SerializeException" href="../../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a> e) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">return</strong> FINISHED;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">return</strong> FINISHED;
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotAcceptable" href="../../../../../org/apache/juneau/http/response/NotAcceptable.html#NotAcceptable">NotAcceptable</a>(<span class="jxr_string">"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}"</span>, req.getHeaderParam(<span class="jxr_string">"Accept"</span>).orElse(<span class="jxr_string">""</span>),
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			Json5.of(res.getOpContext().getSerializers().getSupportedMediaTypes()));
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> }
 </pre>

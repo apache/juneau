@@ -69,8 +69,8 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<strong class="jxr_keyword">var</strong> colTypes = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[cc];
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; cc; i++) {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  				columns[i+offset] = rsmd.getColumnName(i+1);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  				colTypes[i] = rsmd.getColumnType(i+1);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  				columns[i + offset] = rsmd.getColumnName(i + 1);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  				colTypes[i] = rsmd.getColumnType(i + 1);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			}
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">while</strong> (--pos &gt; 0 &amp;&amp; rs.next()) { <em class="jxr_comment">/* Skip to the specified position. */</em> }
@@ -81,8 +81,8 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				<strong class="jxr_keyword">if</strong> (includeRowNums)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  					row[0] = rowNum++;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; cc; i++) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					<strong class="jxr_keyword">var</strong> o = readEntry(rs, i+1, colTypes[i]);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					row[i+offset] = o;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					<strong class="jxr_keyword">var</strong> o = readEntry(rs, i + 1, colTypes[i]);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					row[i + offset] = o;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  				}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  				add(<strong class="jxr_keyword">new</strong> SimpleMap&lt;&gt;(columns, row));
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			}
@@ -117,12 +117,13 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">case</strong> Types.LONGVARCHAR -&gt; <span class="jxr_string">"longvarchar["</span> + count(rs.getAsciiStream(col)) + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">case</strong> Types.LONGNVARCHAR -&gt; <span class="jxr_string">"longnvarchar["</span> + count(rs.getCharacterStream(col)) + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 				<strong class="jxr_keyword">case</strong> Types.TIMESTAMP -&gt; rs.getTimestamp(col); <em class="jxr_comment">// Oracle returns com.oracle.TIMESTAMP objects from getObject()</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">default</strong> -&gt; rs.getObject(col); };
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">return</strong> e.getLocalizedMessage();
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> }
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">default</strong> -&gt; rs.getObject(col);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			};
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">return</strong> e.getLocalizedMessage();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

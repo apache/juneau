@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">for</strong> (<a name="Serializer" href="../../../../../org/apache/juneau/serializer/Serializer.html#Serializer">Serializer</a> s : req.getOpContext().getSerializers().getSerializers())
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			l.add(s.getPrimaryMediaType());
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">for</strong> (<a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> mt : l) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			URI uri = req.getUri(<strong class="jxr_keyword">true</strong>, CollectionUtils.&lt;String,Object&gt;map(<span class="jxr_string">"plainText"</span>,<span class="jxr_string">"true"</span>,<span class="jxr_string">"Accept"</span>,mt.toString()));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			URI uri = req.getUri(<strong class="jxr_keyword">true</strong>, CollectionUtils.&lt;String,Object&gt;map(<span class="jxr_string">"plainText"</span>, <span class="jxr_string">"true"</span>, <span class="jxr_string">"Accept"</span>, mt.toString()));
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			div.children(a(uri, mt), br());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">return</strong> div;

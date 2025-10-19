@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.eclipse.jgit.transport.PushResult;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  @SuppressWarnings({<span class="jxr_string">"javadoc"</span>,<span class="jxr_string">"unused"</span>})
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  @SuppressWarnings({ <span class="jxr_string">"javadoc"</span>, <span class="jxr_string">"unused"</span> })
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> GitControl {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> String localPath, remotePath;
@@ -75,40 +75,38 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		add.addFilepattern(<span class="jxr_string">"."</span>).call();
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> branch(String name) <strong class="jxr_keyword">throws</strong> RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException,
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			CheckoutConflictException, GitAPIException {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		git.checkout().setName(name).setStartPoint(<span class="jxr_string">"origin/"</span>.concat(name)).call();
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@SuppressWarnings(<span class="jxr_string">"resource"</span>)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> cloneRepo() <strong class="jxr_keyword">throws</strong> IOException, NoFilepatternException, GitAPIException {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		Git.cloneRepository().setURI(remotePath).setDirectory(<strong class="jxr_keyword">new</strong> File(localPath)).call();
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> commitToRepo(String message) <strong class="jxr_keyword">throws</strong> IOException, NoHeadException, NoMessageException,
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		git.commit().setMessage(message).call();
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> pullFromRepo()
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">throws</strong> IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException,
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			InvalidRemoteException, CanceledException, RefNotFoundException, NoHeadException, GitAPIException {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		git.pull().call();
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> pushToRepo() <strong class="jxr_keyword">throws</strong> IOException, JGitInternalException, InvalidRemoteException, GitAPIException {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		PushCommand pc = git.push();
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		pc.setCredentialsProvider(cp).setForce(<strong class="jxr_keyword">true</strong>).setPushAll();
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			Iterator&lt;PushResult&gt; it = pc.call().iterator();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">if</strong> (it.hasNext()) {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				System.out.println(it.next().toString());
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			}
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		} <strong class="jxr_keyword">catch</strong> (InvalidRemoteException e) {
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			e.printStackTrace();
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		}
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> branch(String name) <strong class="jxr_keyword">throws</strong> RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		git.checkout().setName(name).setStartPoint(<span class="jxr_string">"origin/"</span>.concat(name)).call();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@SuppressWarnings(<span class="jxr_string">"resource"</span>)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> cloneRepo() <strong class="jxr_keyword">throws</strong> IOException, NoFilepatternException, GitAPIException {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		Git.cloneRepository().setURI(remotePath).setDirectory(<strong class="jxr_keyword">new</strong> File(localPath)).call();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> commitToRepo(String message)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">throws</strong> IOException, NoHeadException, NoMessageException, ConcurrentRefUpdateException, JGitInternalException, WrongRepositoryStateException, GitAPIException {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		git.commit().setMessage(message).call();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> pullFromRepo() <strong class="jxr_keyword">throws</strong> IOException, WrongRepositoryStateException, InvalidConfigurationException, DetachedHeadException, InvalidRemoteException, CanceledException, RefNotFoundException,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		NoHeadException, GitAPIException {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		git.pull().call();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> pushToRepo() <strong class="jxr_keyword">throws</strong> IOException, JGitInternalException, InvalidRemoteException, GitAPIException {
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		PushCommand pc = git.push();
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		pc.setCredentialsProvider(cp).setForce(<strong class="jxr_keyword">true</strong>).setPushAll();
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			Iterator&lt;PushResult&gt; it = pc.call().iterator();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">if</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  				System.out.println(it.next().toString());
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		} <strong class="jxr_keyword">catch</strong> (InvalidRemoteException e) {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			e.printStackTrace();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  				<strong class="jxr_keyword">if</strong> (output != <strong class="jxr_keyword">null</strong> || ! res.getOutputStreamCalled())
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  					res.setContent(output);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException|IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		} <strong class="jxr_keyword">catch</strong> (IllegalAccessException | IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"Error occurred invoking method ''{0}''."</span>, <strong class="jxr_keyword">inner</strong>().getFullName());
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		} <strong class="jxr_keyword">catch</strong> (InvocationTargetException e) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  			RestResponse res = opSession.getResponse();

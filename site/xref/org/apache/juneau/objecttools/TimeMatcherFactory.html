@@ -76,28 +76,28 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CalendarP(c.getTime(), precision);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">public</strong> Calendar getCalendar() {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">public</strong> CalendarP roll(<strong class="jxr_keyword">int</strong> amount) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">return</strong> roll(precision, amount);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">public</strong> CalendarP roll(<strong class="jxr_keyword">int</strong> field, <strong class="jxr_keyword">int</strong> amount) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			c.add(field, amount);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * A construct representing a single search pattern.</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TimeMatcher <strong class="jxr_keyword">extends</strong> <a name="AbstractMatcher" href="../../../../org/apache/juneau/objecttools/AbstractMatcher.html#AbstractMatcher">AbstractMatcher</a> {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			DT = AsciiSet.of(<span class="jxr_string">"0123456789-:T./"</span>),
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			WS = AsciiSet.of(<span class="jxr_string">" \t"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">public</strong> Calendar getCalendar() { <strong class="jxr_keyword">return</strong> c; }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">public</strong> CalendarP roll(<strong class="jxr_keyword">int</strong> amount) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">return</strong> roll(precision, amount);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">public</strong> CalendarP roll(<strong class="jxr_keyword">int</strong> field, <strong class="jxr_keyword">int</strong> amount) {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			c.add(field, amount);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * A construct representing a single search pattern.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TimeMatcher <strong class="jxr_keyword">extends</strong> <a name="AbstractMatcher" href="../../../../org/apache/juneau/objecttools/AbstractMatcher.html#AbstractMatcher">AbstractMatcher</a> {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="AsciiSet" href="../../../../org/apache/juneau/common/utils/AsciiSet.html#AsciiSet">AsciiSet</a>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			DT = AsciiSet.of(<span class="jxr_string">"0123456789-:T./"</span>),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			WS = AsciiSet.of(<span class="jxr_string">" \t"</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_comment">// @formatter:on</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		TimestampRange[] ranges;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		List&lt;TimestampRange&gt; l = <strong class="jxr_keyword">new</strong> LinkedList&lt;&gt;();
@@ -143,10 +143,10 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 						eq = Equality.LT;
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\'') {
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 						state = S05;
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&quot;') {
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 						state = S06;
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (DT.contains(c)) {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 						state = S08;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 						mark = i;
@@ -162,10 +162,10 @@
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 						eq = Equality.GTE;
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\'') {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 						state = S05;
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&quot;') {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 						state = S06;
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (DT.contains(c)) {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 						state = S08;
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 						mark = i;
@@ -181,10 +181,10 @@
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 						eq = Equality.LTE;
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\'') {
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 						state = S05;
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&quot;') {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 						state = S06;
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (DT.contains(c)) {
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 						state = S08;
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 						mark = i;
@@ -197,10 +197,10 @@
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 						state = S04;
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\'') {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 						state = S05;
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&quot;') {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 						state = S06;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (DT.contains(c)) {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 						state = S08;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 						mark = i;
@@ -253,13 +253,13 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\'') {
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 						state = S05;
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 						l.add(<strong class="jxr_keyword">new</strong> TimestampRange(f, eq, s1));
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 						eq = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 						s1 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&quot;') {
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 						state = S06;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 						l.add(<strong class="jxr_keyword">new</strong> TimestampRange(f, eq, s1));
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 						eq = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 						s1 = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (DT.contains(c)) {
@@ -277,10 +277,10 @@
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 						state = S10;
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\'') {
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 						state = S11;
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&quot;') {
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 						state = S12;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 						mark = i+1;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 						mark = i + 1;
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (DT.contains(c)) {
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 						state = S13;
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 						mark = i;
@@ -481,16 +481,18 @@
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @return TODO</em>
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<strong class="jxr_keyword">protected</strong> String[] getTimestampFormatStrings() {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm:ss"</span>,
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm"</span>,
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH"</span>,
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<span class="jxr_string">"yyyy-MM-dd"</span>,
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<span class="jxr_string">"yyyy-MM"</span>,
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<span class="jxr_string">"yyyy"</span>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		};
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> }
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm:ss"</span>,
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH:mm"</span>,
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<span class="jxr_string">"yyyy-MM-dd'T'HH"</span>,
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<span class="jxr_string">"yyyy-MM-dd"</span>,
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<span class="jxr_string">"yyyy-MM"</span>,
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<span class="jxr_string">"yyyy"</span>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		};
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

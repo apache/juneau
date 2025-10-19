@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  				<strong class="jxr_keyword">double</strong> w1 = weight, w2 = w;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  				weight = Math.addExact(weight, w);
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  				<strong class="jxr_keyword">if</strong> (weight != 0) {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  					value = (value * (w1/weight)) + (v.floatValue() * (w2/weight));
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  					value = (value * (w1 / weight)) + (v.floatValue() * (w2 / weight));
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  				}
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ArithmeticException ae) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ArithmeticException(<span class="jxr_string">"Weight overflow."</span>);
@@ -61,10 +61,8 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * @return The weighted average of all numbers.</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getValue() {
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">return</strong> value;
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getValue() { <strong class="jxr_keyword">return</strong> value; }
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

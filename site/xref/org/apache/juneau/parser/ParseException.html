@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a>(e);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getMessage(<a name="ParserSession" href="../../../../org/apache/juneau/parser/ParserSession.html#ParserSession">ParserSession</a> session, String msg, Object... args) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String getMessage(<a name="ParserSession" href="../../../../org/apache/juneau/parser/ParserSession.html#ParserSession">ParserSession</a> session, String msg, Object...args) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">if</strong> (args.length != 0)
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  			msg = format(msg, args);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			JsonMap lastLocation = session.getLastLocation();
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">if</strong> (lastLocation != <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  				sb.append(<span class="jxr_string">"\n\tWhile parsing into: "</span>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  				lastLocation.forEach((k,v) -&gt; sb.append(<span class="jxr_string">"\n\t\t"</span>).append(k).append(<span class="jxr_string">": "</span>).append(v));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  				lastLocation.forEach((k, v) -&gt; sb.append(<span class="jxr_string">"\n\t\t"</span>).append(k).append(<span class="jxr_string">": "</span>).append(v));
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			String lines = session.getInputAsString();

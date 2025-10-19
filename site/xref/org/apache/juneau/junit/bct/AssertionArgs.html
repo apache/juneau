@@ -202,7 +202,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * @param args The parameters to substitute into the message template.</em>
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * @return This instance for method chaining.</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<strong class="jxr_keyword">public</strong> <a name="AssertionArgs" href="../../../../../org/apache/juneau/junit/bct/AssertionArgs.html#AssertionArgs">AssertionArgs</a> setMessage(String message, Object... args) {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<strong class="jxr_keyword">public</strong> <a name="AssertionArgs" href="../../../../../org/apache/juneau/junit/bct/AssertionArgs.html#AssertionArgs">AssertionArgs</a> setMessage(String message, Object...args) {
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		messageSupplier = fs(message, args);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
@@ -243,39 +243,35 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @return An Optional containing the custom converter, or empty if using default behavior.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">protected</strong> Optional&lt;BeanConverter&gt; getBeanConverter() {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> ofNullable(beanConverter);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * Gets the base message supplier for composition with assertion-specific messages.</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * @return The configured message supplier, or null if no custom message was set.</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">protected</strong> Supplier&lt;String&gt; getMessage() {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">return</strong> messageSupplier;
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * Composes the final error message by combining custom and assertion-specific messages.</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method implements the message composition strategy used throughout the assertion framework:&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 *     &lt;li&gt;&lt;b&gt;No Custom Message:&lt;/b&gt; Returns the assertion-specific message as-is&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 *     &lt;li&gt;&lt;b&gt;With Custom Message:&lt;/b&gt; Returns &lt;code&gt;"{custom}, Caused by: {assertion}"&lt;/code&gt;&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This allows tests to provide high-level context while preserving the specific</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * technical details about what assertion failed.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @param msg The assertion-specific message template.</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * @param args Parameters for the assertion-specific message.</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * @return A supplier that produces the composed error message.</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">protected</strong> Supplier&lt;String&gt; getMessage(String msg, Object...args) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">return</strong> messageSupplier == <strong class="jxr_keyword">null</strong> ? fs(msg, args) : fs(<span class="jxr_string">"{0}, Caused by: {1}"</span>, messageSupplier.get(), f(msg, args));
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> }
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">protected</strong> Optional&lt;BeanConverter&gt; getBeanConverter() { <strong class="jxr_keyword">return</strong> ofNullable(beanConverter); }
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * Gets the base message supplier for composition with assertion-specific messages.</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * @return The configured message supplier, or null if no custom message was set.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">protected</strong> Supplier&lt;String&gt; getMessage() { <strong class="jxr_keyword">return</strong> messageSupplier; }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * Composes the final error message by combining custom and assertion-specific messages.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method implements the message composition strategy used throughout the assertion framework:&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 *     &lt;li&gt;&lt;b&gt;No Custom Message:&lt;/b&gt; Returns the assertion-specific message as-is&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 *     &lt;li&gt;&lt;b&gt;With Custom Message:&lt;/b&gt; Returns &lt;code&gt;"{custom}, Caused by: {assertion}"&lt;/code&gt;&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This allows tests to provide high-level context while preserving the specific</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 * technical details about what assertion failed.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * @param msg The assertion-specific message template.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * @param args Parameters for the assertion-specific message.</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * @return A supplier that produces the composed error message.</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">protected</strong> Supplier&lt;String&gt; getMessage(String msg, Object...args) {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">return</strong> messageSupplier == <strong class="jxr_keyword">null</strong> ? fs(msg, args) : fs(<span class="jxr_string">"{0}, Caused by: {1}"</span>, messageSupplier.get(), f(msg, args));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

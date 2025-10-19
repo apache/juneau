@@ -51,10 +51,10 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> AnnotationBuilder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		String $ref=<span class="jxr_string">""</span>, cf=<span class="jxr_string">""</span>, collectionFormat=<span class="jxr_string">""</span>, f=<span class="jxr_string">""</span>, format=<span class="jxr_string">""</span>, max=<span class="jxr_string">""</span>, maximum=<span class="jxr_string">""</span>, min=<span class="jxr_string">""</span>, minimum=<span class="jxr_string">""</span>, mo=<span class="jxr_string">""</span>, multipleOf=<span class="jxr_string">""</span>, p=<span class="jxr_string">""</span>, pattern=<span class="jxr_string">""</span>, t=<span class="jxr_string">""</span>, type=<span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">long</strong> maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		String $ref = <span class="jxr_string">""</span>, cf = <span class="jxr_string">""</span>, collectionFormat = <span class="jxr_string">""</span>, f = <span class="jxr_string">""</span>, format = <span class="jxr_string">""</span>, max = <span class="jxr_string">""</span>, maximum = <span class="jxr_string">""</span>, min = <span class="jxr_string">""</span>, minimum = <span class="jxr_string">""</span>, mo = <span class="jxr_string">""</span>, multipleOf = <span class="jxr_string">""</span>, p = <span class="jxr_string">""</span>, pattern = <span class="jxr_string">""</span>, t = <span class="jxr_string">""</span>, type = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">long</strong> maxItems = -1, maxLength = -1, maxi = -1, maxl = -1, minItems = -1, minLength = -1, mini = -1, minl = -1;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">boolean</strong> emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		String[] _<strong class="jxr_keyword">default</strong>={}, _enum={}, df={}, e={}, items={};
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		String[] _<strong class="jxr_keyword">default</strong> = {}, _enum = {}, df = {}, e = {}, items = {};
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">		 * Constructor.</em>
@@ -676,53 +676,57 @@
 <a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * @param a The annotation to check.</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> empty(org.apache.juneau.annotation.SubItems a) {
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">return</strong> a == <strong class="jxr_keyword">null</strong> || DEFAULT.equals(a);
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	}
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * Merges the contents of the specified annotation into the specified generic map.</em>
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 * @param om The map to copy the contents to.</em>
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 * @param a The annotation to apply.</em>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 * @return The same map with the annotation contents applied.</em>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">	 * @throws ParseException Invalid JSON found in value.</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> merge(<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om, <a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> a) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">if</strong> (SubItemsAnnotation.empty(a))
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 			<strong class="jxr_keyword">return</strong> om;
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		<strong class="jxr_keyword">return</strong> om
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 			.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a._<strong class="jxr_keyword">default</strong>(), a.df()))
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			.appendFirst(nec, <span class="jxr_string">"enum"</span>, parseSet(a._enum()), parseSet(a.e()))
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, a.exclusiveMaximum() || a.emax())
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMinimum"</span>, a.exclusiveMinimum() || a.emin())
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			.appendFirst(ne, <span class="jxr_string">"format"</span>, a.format(), a.f())
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 			.appendIf(nem, <span class="jxr_string">"items"</span>, parseMap(a.items()))
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			.appendFirst(ne, <span class="jxr_string">"maximum"</span>, a.maximum(), a.max())
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 			.appendFirst(nm1, <span class="jxr_string">"maxItems"</span>, a.maxItems(), a.maxi())
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 			.appendFirst(nm1, <span class="jxr_string">"maxLength"</span>, a.maxLength(), a.maxl())
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			.appendFirst(ne, <span class="jxr_string">"minimum"</span>, a.minimum(), a.min())
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			.appendFirst(nm1, <span class="jxr_string">"minItems"</span>, a.minItems(), a.mini())
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			.appendFirst(nm1, <span class="jxr_string">"minLength"</span>, a.minLength(), a.minl())
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			.appendFirst(ne, <span class="jxr_string">"multipleOf"</span>, a.multipleOf(), a.mo())
-<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			.appendFirst(ne, <span class="jxr_string">"pattern"</span>, a.pattern(), a.p())
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			.appendFirst(ne, <span class="jxr_string">"type"</span>, a.type(), a.t())
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			.appendIf(nf, <span class="jxr_string">"uniqueItems"</span>, a.uniqueItems() || a.ui())
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			.appendIf(ne, <span class="jxr_string">"$ref"</span>, a.$ref())
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		;
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	}
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> }
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * @param a The annotation to check.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> empty(org.apache.juneau.annotation.SubItems a) {
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<strong class="jxr_keyword">return</strong> a == <strong class="jxr_keyword">null</strong> || DEFAULT.equals(a);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	}
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 * Merges the contents of the specified annotation into the specified generic map.</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 * @param om The map to copy the contents to.</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">	 * @param a The annotation to apply.</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 * @return The same map with the annotation contents applied.</em>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 * @throws ParseException Invalid JSON found in value.</em>
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> merge(<a name="JsonMap" href="../../../../org/apache/juneau/collections/JsonMap.html#JsonMap">JsonMap</a> om, <a name="SubItems" href="../../../../org/apache/juneau/annotation/SubItems.html#SubItems">SubItems</a> a) <strong class="jxr_keyword">throws</strong> <a name="ParseException" href="../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<strong class="jxr_keyword">if</strong> (SubItemsAnnotation.empty(a))
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			<strong class="jxr_keyword">return</strong> om;
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		Predicate&lt;String&gt; ne = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::isNotEmpty;
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		Predicate&lt;Boolean&gt; nf = Utils::isTrue;
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		Predicate&lt;Long&gt; nm1 = Utils::isNotMinusOne;
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		<strong class="jxr_keyword">return</strong> om
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			.appendFirst(ne, <span class="jxr_string">"collectionFormat"</span>, a.collectionFormat(), a.cf())
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			.appendIf(ne, <span class="jxr_string">"default"</span>, joinnl(a._<strong class="jxr_keyword">default</strong>(), a.df()))
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			.appendFirst(nec, <span class="jxr_string">"enum"</span>, parseSet(a._enum()), parseSet(a.e()))
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMaximum"</span>, a.exclusiveMaximum() || a.emax())
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			.appendIf(nf, <span class="jxr_string">"exclusiveMinimum"</span>, a.exclusiveMinimum() || a.emin())
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 			.appendFirst(ne, <span class="jxr_string">"format"</span>, a.format(), a.f())
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 			.appendIf(nem, <span class="jxr_string">"items"</span>, parseMap(a.items()))
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			.appendFirst(ne, <span class="jxr_string">"maximum"</span>, a.maximum(), a.max())
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 			.appendFirst(nm1, <span class="jxr_string">"maxItems"</span>, a.maxItems(), a.maxi())
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 			.appendFirst(nm1, <span class="jxr_string">"maxLength"</span>, a.maxLength(), a.maxl())
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 			.appendFirst(ne, <span class="jxr_string">"minimum"</span>, a.minimum(), a.min())
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 			.appendFirst(nm1, <span class="jxr_string">"minItems"</span>, a.minItems(), a.mini())
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			.appendFirst(nm1, <span class="jxr_string">"minLength"</span>, a.minLength(), a.minl())
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 			.appendFirst(ne, <span class="jxr_string">"multipleOf"</span>, a.multipleOf(), a.mo())
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 			.appendFirst(ne, <span class="jxr_string">"pattern"</span>, a.pattern(), a.p())
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			.appendFirst(ne, <span class="jxr_string">"type"</span>, a.type(), a.t())
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 			.appendIf(nf, <span class="jxr_string">"uniqueItems"</span>, a.uniqueItems() || a.ui())
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 			.appendIf(ne, <span class="jxr_string">"$ref"</span>, a.$ref())
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		;
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 	}
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

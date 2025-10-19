@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @throws Exception Gets converted to 500 response.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * @return The thread dump contents.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@RestPost(path=<span class="jxr_string">"/jetty/dump"</span>, description=<span class="jxr_string">"Generates and saves the jetty thread dump file to jetty-thread-dump.log."</span>)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@RestPost(path = <span class="jxr_string">"/jetty/dump"</span>, description = <span class="jxr_string">"Generates and saves the jetty thread dump file to jetty-thread-dump.log."</span>)
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <a name="Ok" href="../../../../../../org/apache/juneau/http/response/Ok.html#Ok">Ok</a> createJettyDump(RestRequest req, <a name="RestResponse" href="../../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		String dump = JettyMicroservice.getInstance().getServer().dump();
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">try</strong> (FileWriter fw = <strong class="jxr_keyword">new</strong> FileWriter(req.getConfig().get(<span class="jxr_string">"Logging/logDir"</span>).orElse(<span class="jxr_string">""</span>) + <span class="jxr_string">"/jetty-thread-dump.log"</span>)) {
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * @param res The response.</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @return The thread dump contents.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@RestGet(path=<span class="jxr_string">"/jetty/dump"</span>, description=<span class="jxr_string">"Generates and retrieves the jetty thread dump."</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@RestGet(path = <span class="jxr_string">"/jetty/dump"</span>, description = <span class="jxr_string">"Generates and retrieves the jetty thread dump."</span>)
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">public</strong> Reader getJettyDump(RestRequest req, <a name="RestResponse" href="../../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		res.setContentType(<span class="jxr_string">"text/plain"</span>);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> StringReader(JettyMicroservice.getInstance().getServer().dump());

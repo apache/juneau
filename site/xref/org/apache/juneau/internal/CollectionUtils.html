@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The entry type.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; copyOf(List&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E, ? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; copyOf(List&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E,? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper) {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">return</strong> copyOf(l, valueMapper, LinkedList::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
@@ -164,7 +164,7 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * @param listFactory The factory for creating the list.</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; copyOf(List&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E, ? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper, Supplier&lt;List&lt;E&gt;&gt; listFactory) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; copyOf(List&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E,? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper, Supplier&lt;List&lt;E&gt;&gt; listFactory) {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">if</strong> (l == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">return</strong> l.stream().map(valueMapper).collect(toCollection(listFactory));
@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * @param valueMapper The function to apply to each value in the map.</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; copyOf(Map&lt;K,V&gt; m, Function&lt;? <strong class="jxr_keyword">super</strong> V, ? <strong class="jxr_keyword">extends</strong> V&gt; valueMapper) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; copyOf(Map&lt;K,V&gt; m, Function&lt;? <strong class="jxr_keyword">super</strong> V,? <strong class="jxr_keyword">extends</strong> V&gt; valueMapper) {
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">return</strong> copyOf(m, valueMapper, LinkedHashMap::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 
@@ -205,26 +205,26 @@
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * @param mapFactory The factory for creating the map.</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * @return A new map with the same keys as the specified map, but with values transformed by the specified function.  Null if the map being copied was null.</em>
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; copyOf(Map&lt;K,V&gt; m, Function&lt;? <strong class="jxr_keyword">super</strong> V, ? <strong class="jxr_keyword">extends</strong> V&gt; valueMapper, Supplier&lt;Map&lt;K,V&gt;&gt; mapFactory) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; copyOf(Map&lt;K,V&gt; m, Function&lt;? <strong class="jxr_keyword">super</strong> V,? <strong class="jxr_keyword">extends</strong> V&gt; valueMapper, Supplier&lt;Map&lt;K,V&gt;&gt; mapFactory) {
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">if</strong> (m == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">return</strong> m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -&gt; valueMapper.apply(e.getValue()), (a, b) -&gt; b, mapFactory));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_comment">//	/**</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_comment">//	 * Convenience method for creating an {@link ArrayList}.</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_comment">//	 *</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_comment">//	 * @param &lt;E&gt; The element type.</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_comment">//	 * @param values The values to initialize the list with.</em>
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_comment">//	 * @return A new modifiable list.</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_comment">//	 */</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_comment">//	@SafeVarargs</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_comment">//	public static &lt;E&gt; List&lt;E&gt; list2(E...values) {</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_comment">//		ArrayList&lt;E&gt; l = new ArrayList&lt;&gt;(values.length);</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_comment">//		for (E v : values)</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_comment">//			l.add(v);</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_comment">//		return l;</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_comment">//	}</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_comment">//	/**</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<em class="jxr_comment">//	 * Convenience method for creating an {@link ArrayList}.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_comment">//	 *</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_comment">//	 * @param &lt;E&gt; The element type.</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<em class="jxr_comment">//	 * @param values The values to initialize the list with.</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_comment">//	 * @return A new modifiable list.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_comment">//	 */</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_comment">//	@SafeVarargs</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_comment">//	public static &lt;E&gt; List&lt;E&gt; list2(E...values) {</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<em class="jxr_comment">//		ArrayList&lt;E&gt; l = new ArrayList&lt;&gt;(values.length);</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<em class="jxr_comment">//		for (E v : values)</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">//			l.add(v);</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">//		return l;</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_comment">//	}</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * Creates a new set from the specified collection.</em>
@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * @param &lt;E&gt; The entry type.</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; copyOf(Set&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E, ? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; copyOf(Set&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E,? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper) {
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> copyOf(l, valueMapper, LinkedHashSet::<strong class="jxr_keyword">new</strong>);
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
@@ -258,7 +258,7 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * @param setFactory The factory for creating sets.</em>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @return A new list with the same values as the specified list, but with values transformed by the specified function.  Null if the list being copied was null.</em>
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; copyOf(Set&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E, ? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper, Supplier&lt;Set&lt;E&gt;&gt; setFactory) {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; copyOf(Set&lt;E&gt; l, Function&lt;? <strong class="jxr_keyword">super</strong> E,? <strong class="jxr_keyword">extends</strong> E&gt; valueMapper, Supplier&lt;Set&lt;E&gt;&gt; setFactory) {
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">if</strong> (l == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;  <em class="jxr_comment">// NOSONAR - Intentional.</em>
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">return</strong> l.stream().map(valueMapper).collect(toCollection(setFactory));
@@ -272,7 +272,7 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * @param action The action to perform.</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; <strong class="jxr_keyword">void</strong> forEachReverse(E[] value, Consumer&lt;E&gt; action) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = value.length-1; i &gt;= 0; i--)
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = value.length - 1; i &gt;= 0; i--)
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 			action.accept(value[i]);
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; <strong class="jxr_keyword">void</strong> forEachReverse(List&lt;E&gt; value, Consumer&lt;E&gt; action) {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">if</strong> (value instanceof ArrayList) {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = value.size()-1; i &gt;= 0; i--)
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = value.size() - 1; i &gt;= 0; i--)
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				action.accept(value.get(i));
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 			ListIterator&lt;E&gt; i = value.listIterator(value.size());
@@ -304,7 +304,7 @@
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; E last(E[] l) {
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">if</strong> (l == <strong class="jxr_keyword">null</strong> || l.length == 0)
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">return</strong> l[l.length-1];
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">return</strong> l[l.length - 1];
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 
 <a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -317,7 +317,7 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; E last(List&lt;E&gt; l) {
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (l == <strong class="jxr_keyword">null</strong> || l.isEmpty())
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">return</strong> l.get(l.size()-1);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">return</strong> l.get(l.size() - 1);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -608,7 +608,7 @@
 <a class="jxr_linenumber" name="L600" href="#L600">600</a> 	@SafeVarargs
 <a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; sortedList(E...values) {
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 		List&lt;E&gt; l = list(values);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		Collections.sort((List&lt;Comparable&gt;) l);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		Collections.sort((List&lt;Comparable&gt;)l);
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">return</strong> l;
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 	}
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 
@@ -677,7 +677,7 @@
 <a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 * @return The wrapped list.</em>
 <a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L671" href="#L671">671</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; List&lt;E&gt; synced(List&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong>: Collections.synchronizedList(value);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedList(value);
 <a class="jxr_linenumber" name="L673" href="#L673">673</a> 	}
 <a class="jxr_linenumber" name="L674" href="#L674">674</a> 
 <a class="jxr_linenumber" name="L675" href="#L675">675</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -689,7 +689,7 @@
 <a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * @return The wrapped map.</em>
 <a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L683" href="#L683">683</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;K,V&gt; Map&lt;K,V&gt; synced(Map&lt;K,V&gt; value) {
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong>: Collections.synchronizedMap(value);
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedMap(value);
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> 	}
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> 
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -700,7 +700,7 @@
 <a class="jxr_linenumber" name="L692" href="#L692">692</a> <em class="jxr_javadoccomment">	 * @return The wrapped set.</em>
 <a class="jxr_linenumber" name="L693" href="#L693">693</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L694" href="#L694">694</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;E&gt; Set&lt;E&gt; synced(Set&lt;E&gt; value) {
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong>: Collections.synchronizedSet(value);
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">return</strong> value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : Collections.synchronizedSet(value);
 <a class="jxr_linenumber" name="L696" href="#L696">696</a> 	}
 <a class="jxr_linenumber" name="L697" href="#L697">697</a> 
 <a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<strong class="jxr_keyword">private</strong> <a name="CollectionUtils" href="../../../../org/apache/juneau/internal/CollectionUtils.html#CollectionUtils">CollectionUtils</a>() {}

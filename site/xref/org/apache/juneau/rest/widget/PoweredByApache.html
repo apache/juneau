@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Override <em class="jxr_comment">/* Overridden from Widget */</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> String getHtml(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		UriResolver r = req.getUriResolver();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;a href='http://apache.org'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='"</span>+r.resolve(<span class="jxr_string">"servlet:/htdocs/asf.png"</span>)+<span class="jxr_string">"'&gt;"</span>;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;a href='http://apache.org'&gt;&lt;img style='float:right;padding-right:20px;height:32px' src='"</span> + r.resolve(<span class="jxr_string">"servlet:/htdocs/asf.png"</span>) + <span class="jxr_string">"'&gt;"</span>;
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  }
 </pre>

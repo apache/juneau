@@ -46,39 +46,36 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="RestChildMatch" href="../../../../org/apache/juneau/rest/RestChildMatch.html#RestChildMatch">RestChildMatch</a> create(<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> pathMatch, <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext) {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RestChildMatch" href="../../../../org/apache/juneau/rest/RestChildMatch.html#RestChildMatch">RestChildMatch</a>(pathMatch, childContext);
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> pathMatch;
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 * @param pathMatch The path matching results.</em>
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * @param childContext The child context.</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">protected</strong> <a name="RestChildMatch" href="../../../../org/apache/juneau/rest/RestChildMatch.html#RestChildMatch">RestChildMatch</a>(<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> pathMatch, <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">this</strong>.pathMatch = pathMatch;
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">this</strong>.childContext = childContext;
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * Returns the child context of the REST child match.</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * @return The child context of the REST child match.</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">public</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> getChildContext() {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">return</strong> childContext;
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * Returns the path matching results of the REST child match.</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * @return The path matching results of the REST child match.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> getPathMatch() {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> pathMatch;
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> pathMatch;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * @param pathMatch The path matching results.</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 * @param childContext The child context.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">protected</strong> <a name="RestChildMatch" href="../../../../org/apache/juneau/rest/RestChildMatch.html#RestChildMatch">RestChildMatch</a>(<a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> pathMatch, <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> childContext) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">this</strong>.pathMatch = pathMatch;
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">this</strong>.childContext = childContext;
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * Returns the child context of the REST child match.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @return The child context of the REST child match.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <a name="RestContext" href="../../../../org/apache/juneau/rest/RestContext.html#RestContext">RestContext</a> getChildContext() { <strong class="jxr_keyword">return</strong> childContext; }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * Returns the path matching results of the REST child match.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @return The path matching results of the REST child match.</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <a name="UrlPathMatch" href="../../../../org/apache/juneau/rest/util/UrlPathMatch.html#UrlPathMatch">UrlPathMatch</a> getPathMatch() { <strong class="jxr_keyword">return</strong> pathMatch; }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

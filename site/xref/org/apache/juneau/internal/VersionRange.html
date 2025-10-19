@@ -54,10 +54,10 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <a name="VersionRange" href="../../../../org/apache/juneau/internal/VersionRange.html#VersionRange">VersionRange</a>(String range) {
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		range = range.trim();
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">if</strong> (! range.isEmpty()) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">char</strong> c1 = range.charAt(0), c2 = range.charAt(range.length()-1);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">char</strong> c1 = range.charAt(0), c2 = range.charAt(range.length() - 1);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">int</strong> c = range.indexOf(',');
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">if</strong> (c &gt; -1 &amp;&amp; (c1 == '[' || c1 == '(') &amp;&amp; (c2 == ']' || c2 == ')')) {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  				String v1 = range.substring(1, c), v2 = range.substring(c+1, range.length()-1);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  				String v1 = range.substring(1, c), v2 = range.substring(c + 1, range.length() - 1);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  				minVersion = <strong class="jxr_keyword">new</strong> <a name="Version" href="../../../../org/apache/juneau/Version.html#Version">Version</a>(v1);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  				maxVersion = <strong class="jxr_keyword">new</strong> <a name="Version" href="../../../../org/apache/juneau/Version.html#Version">Version</a>(v2);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  				minExclusive = c1 == '(';

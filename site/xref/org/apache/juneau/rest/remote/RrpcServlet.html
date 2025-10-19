@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestRpc" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestRpc</a>"&gt;REST/RPC&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  @SuppressWarnings({<span class="jxr_string">"serial"</span>,<span class="jxr_string">"javadoc"</span>})
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  @SuppressWarnings({ <span class="jxr_string">"serial"</span>, <span class="jxr_string">"javadoc"</span> })
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> RrpcServlet <strong class="jxr_keyword">extends</strong> <a name="BasicRestServlet" href="../../../../../org/apache/juneau/rest/servlet/BasicRestServlet.html#BasicRestServlet">BasicRestServlet</a> {
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,RrpcInterfaceMeta&gt; serviceMap = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
@@ -180,58 +180,52 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">if</strong> (types.length == 0) {
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 			t.child(tr(td(<span class="jxr_string">"No arguments"</span>).colspan(3).style(<span class="jxr_string">"text-align:center"</span>)));
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			t.child(tr(th(<span class="jxr_string">"Index"</span>),th(<span class="jxr_string">"Type"</span>),th(<span class="jxr_string">"Value"</span>)));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			t.child(tr(th(<span class="jxr_string">"Index"</span>), th(<span class="jxr_string">"Type"</span>), th(<span class="jxr_string">"Value"</span>)));
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; types.length; i++) {
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 				String type = Mutaters.toString(types[i]);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 				t.child(tr(td(i), td(type), td(input().name(String.valueOf(i)).type(<span class="jxr_string">"text"</span>))));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 		}
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		t.child(
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			tr(
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				td().colspan(3).style(<span class="jxr_string">"text-align:right"</span>).children(
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 					types.length == 0 ? <strong class="jxr_keyword">null</strong> : button(<span class="jxr_string">"reset"</span>, <span class="jxr_string">"Reset"</span>),
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 					button(<span class="jxr_string">"button"</span>,<span class="jxr_string">"Cancel"</span>).onclick(<span class="jxr_string">"window.location.href='/'"</span>),
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 					button(<span class="jxr_string">"submit"</span>, <span class="jxr_string">"Submit"</span>)
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				)
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			)
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">return</strong> div(form().id(<span class="jxr_string">"form"</span>).action(<span class="jxr_string">"request:/"</span>).method(POST).children(t));
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<strong class="jxr_keyword">private</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a> getInterfaceClass(String javaInterface) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		RrpcInterfaceMeta rm = serviceMap.get(javaInterface);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">if</strong> (rm == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : getServiceMap().keySet()) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<strong class="jxr_keyword">if</strong> (c.getName().equals(javaInterface)) {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 					rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(c, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					serviceMap.put(javaInterface, rm);
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 					<strong class="jxr_keyword">return</strong> rm;
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 				}
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			}
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Interface class not found"</span>);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		}
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> rm;
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">return</strong> getInterfaceClass(javaInterface).getMethodsByPath();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * Returns the list of interfaces to their implementation objects.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * @return The service map.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception.</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <strong class="jxr_keyword">throws</strong> Exception;
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> }
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		t.child(tr(td().colspan(3).style(<span class="jxr_string">"text-align:right"</span>).children(types.length == 0 ? <strong class="jxr_keyword">null</strong> : button(<span class="jxr_string">"reset"</span>, <span class="jxr_string">"Reset"</span>), button(<span class="jxr_string">"button"</span>, <span class="jxr_string">"Cancel"</span>).onclick(<span class="jxr_string">"window.location.href='/'"</span>),
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			button(<span class="jxr_string">"submit"</span>, <span class="jxr_string">"Submit"</span>))));
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">return</strong> div(form().id(<span class="jxr_string">"form"</span>).action(<span class="jxr_string">"request:/"</span>).method(POST).children(t));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * Return the &lt;c&gt;Class&lt;/c&gt; given it's name if it exists in the services map.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">private</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a> getInterfaceClass(String javaInterface) <strong class="jxr_keyword">throws</strong> NotFound, Exception {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		RrpcInterfaceMeta rm = serviceMap.get(javaInterface);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">if</strong> (rm == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c : getServiceMap().keySet()) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">if</strong> (c.getName().equals(javaInterface)) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 					rm = <strong class="jxr_keyword">new</strong> <a name="RrpcInterfaceMeta" href="../../../../../org/apache/juneau/http/remote/RrpcInterfaceMeta.html#RrpcInterfaceMeta">RrpcInterfaceMeta</a>(c, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					serviceMap.put(javaInterface, rm);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 					<strong class="jxr_keyword">return</strong> rm;
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="NotFound" href="../../../../../org/apache/juneau/http/response/NotFound.html#NotFound">NotFound</a>(<span class="jxr_string">"Interface class not found"</span>);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">return</strong> rm;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">private</strong> Map&lt;String,RrpcInterfaceMethodMeta&gt; getMethods(String javaInterface) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">return</strong> getInterfaceClass(javaInterface).getMethodsByPath();
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * Returns the list of interfaces to their implementation objects.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * @return The service map.</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <strong class="jxr_keyword">throws</strong> Exception;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

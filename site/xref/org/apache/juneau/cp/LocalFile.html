@@ -59,7 +59,7 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">this</strong>.clazzPath = Utils.assertArgNotNull(<span class="jxr_string">"clazzPath"</span>, clazzPath);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">this</strong>.path = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">int</strong> i = clazzPath.lastIndexOf('/');
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">this</strong>.name = i == -1 ? clazzPath : clazzPath.substring(i+1);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">this</strong>.name = i == -1 ? clazzPath : clazzPath.substring(i + 1);
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -81,7 +81,7 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @throws IOException If file could not be read.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <a name="LocalFile" href="../../../../org/apache/juneau/cp/LocalFile.html#LocalFile">LocalFile</a> cache() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">synchronized</strong>(<strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">this</strong>.cache = readBytes(read());
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -92,36 +92,34 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @return The name of this file.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> String getName() {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> name;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * Returns the contents of this file.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @return An input stream of the contents of this file.</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * @throws IOException If file could not be read.</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">public</strong> InputStream read() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">synchronized</strong>(<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">if</strong> (cache != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ByteArrayInputStream(cache);
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		}
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">if</strong> (clazz != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">return</strong> clazz.getResourceAsStream(clazzPath);
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">return</strong> Files.newInputStream(path);
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	}
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * Returns the size of this file.</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @return The size of this file in bytes, or &lt;c&gt;-1&lt;/c&gt; if not known.</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * @throws IOException If file size could not be determined.</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> size() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">return</strong> (path == <strong class="jxr_keyword">null</strong> ? -1 : Files.size(path));
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * Returns the contents of this file.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * @return An input stream of the contents of this file.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * @throws IOException If file could not be read.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> InputStream read() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">if</strong> (cache != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ByteArrayInputStream(cache);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">if</strong> (clazz != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">return</strong> clazz.getResourceAsStream(clazzPath);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">return</strong> Files.newInputStream(path);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * Returns the size of this file.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * @return The size of this file in bytes, or &lt;c&gt;-1&lt;/c&gt; if not known.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * @throws IOException If file size could not be determined.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">long</strong> size() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">return</strong> (path == <strong class="jxr_keyword">null</strong> ? -1 : Files.size(path));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

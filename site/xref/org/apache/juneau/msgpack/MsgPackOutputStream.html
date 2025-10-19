@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> OutputStream os;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> L2X31 = ((<strong class="jxr_keyword">long</strong>)(1&lt;&lt;30))*2;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> L2X31 = ((<strong class="jxr_keyword">long</strong>)(1 &lt;&lt; 30)) * 2;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
@@ -94,24 +94,24 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0, len = in.length(); i &lt; len; i++) {
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">int</strong> c = (in.charAt(i) &amp; 0xFFFF);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">if</strong> (c &lt;= 0x7F) {
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				write((byte) (c &amp; 0xFF));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				write((byte)(c &amp; 0xFF));
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  				count++;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c &lt;= 0x7FF) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				write((byte) (0xC0 + ((c&gt;&gt;6) &amp; 0x1F)));
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				write((byte) (0x80 + (c &amp; 0x3F)));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				write((byte)(0xC0 + ((c &gt;&gt; 6) &amp; 0x1F)));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				write((byte)(0x80 + (c &amp; 0x3F)));
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  				count += 2;
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c &gt;= 0xD800 &amp;&amp; c &lt;= 0xDFFF) {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">int</strong> jchar2 = in.charAt(++i) &amp; 0xFFFF;
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<strong class="jxr_keyword">int</strong> n = (c&lt;&lt;10) + jchar2 + 0xFCA02400;
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				write((byte) (0xF0 + ((n&gt;&gt;18) &amp; 0x07)));
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				write((byte) (0x80 + ((n&gt;&gt;12) &amp; 0x3F)));
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				write((byte) (0x80 + ((n&gt;&gt;6) &amp; 0x3F)));
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				write((byte) (0x80 + (n &amp; 0x3F)));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				<strong class="jxr_keyword">int</strong> n = (c &lt;&lt; 10) + jchar2 + 0xFCA02400;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				write((byte)(0xF0 + ((n &gt;&gt; 18) &amp; 0x07)));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				write((byte)(0x80 + ((n &gt;&gt; 12) &amp; 0x3F)));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				write((byte)(0x80 + ((n &gt;&gt; 6) &amp; 0x3F)));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				write((byte)(0x80 + (n &amp; 0x3F)));
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 				count += 4;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				write((byte) (0xE0 + ((c&gt;&gt;12) &amp; 0x0F)));
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				write((byte) (0x80 + ((c&gt;&gt;6) &amp; 0x3F)));
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				write((byte) (0x80 + (c &amp; 0x3F)));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				write((byte)(0xE0 + ((c &gt;&gt; 12) &amp; 0x0F)));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				write((byte)(0x80 + ((c &gt;&gt; 6) &amp; 0x3F)));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				write((byte)(0x80 + (c &amp; 0x3F)));
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 				count += 3;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		}
@@ -158,21 +158,21 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * Appends two bytes to the stream.</em>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	MsgPackOutputStream append2(<strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">return</strong> append1(i&gt;&gt;8).append1(i);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">return</strong> append1(i &gt;&gt; 8).append1(i);
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 	}
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * Appends four bytes to the stream.</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	MsgPackOutputStream append4(<strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">return</strong> append1(i&gt;&gt;24).append1(i&gt;&gt;16).append1(i&gt;&gt;8).append1(i);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">return</strong> append1(i &gt;&gt; 24).append1(i &gt;&gt; 16).append1(i &gt;&gt; 8).append1(i);
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * Appends eight bytes to the stream.</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	MsgPackOutputStream append8(<strong class="jxr_keyword">long</strong> l) {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">return</strong> append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;56)).append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;48)).append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;40)).append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;32)).append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;24)).append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;16)).append1((<strong class="jxr_keyword">int</strong>)(l&gt;&gt;8)).append1((<strong class="jxr_keyword">int</strong>)(l));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">return</strong> append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 56)).append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 48)).append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 40)).append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 32)).append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 24)).append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 16)).append1((<strong class="jxr_keyword">int</strong>)(l &gt;&gt; 8)).append1((<strong class="jxr_keyword">int</strong>)(l));
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -200,9 +200,9 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<em class="jxr_comment">// * N is the length of data</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1&lt;&lt;8))
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1 &lt;&lt; 8))
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> append1(BIN8).append1(b.length).append(b);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1&lt;&lt;16))
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1 &lt;&lt; 16))
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">return</strong> append1(BIN16).append2(b.length).append(b);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> append1(BIN32).append4(b.length).append(b);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
@@ -213,245 +213,247 @@
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	MsgPackOutputStream appendBinary(InputStream is) {
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		IOUtils.pipe(is, baos, x -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(x); });
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		byte[] b = baos.toByteArray();
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		IOUtils.pipe(is, baos, x -&gt; {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(x);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		});
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<em class="jxr_comment">// bin 8 stores a byte array whose length is up to (2^8)-1 bytes:</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<em class="jxr_comment">// +--------+--------+========+</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<em class="jxr_comment">// | 0xc4   |XXXXXXXX|  data  |</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		byte[] b = baos.toByteArray();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<em class="jxr_comment">// bin 8 stores a byte array whose length is up to (2^8)-1 bytes:</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<em class="jxr_comment">// +--------+--------+========+</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<em class="jxr_comment">// bin 16 stores a byte array whose length is up to (2^16)-1 bytes:</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<em class="jxr_comment">// +--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<em class="jxr_comment">// | 0xc5   |YYYYYYYY|YYYYYYYY|  data  |</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<em class="jxr_comment">// | 0xc4   |XXXXXXXX|  data  |</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<em class="jxr_comment">// +--------+--------+========+</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<em class="jxr_comment">// bin 16 stores a byte array whose length is up to (2^16)-1 bytes:</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<em class="jxr_comment">// +--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<em class="jxr_comment">// bin 32 stores a byte array whose length is up to (2^32)-1 bytes:</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// | 0xc6   |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|  data  |</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_comment">// | 0xc5   |YYYYYYYY|YYYYYYYY|  data  |</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<em class="jxr_comment">// +--------+--------+--------+========+</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// bin 32 stores a byte array whose length is up to (2^32)-1 bytes:</em>
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<em class="jxr_comment">// where</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<em class="jxr_comment">// * XXXXXXXX is a 8-bit unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<em class="jxr_comment">// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<em class="jxr_comment">// * N is the length of data</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1&lt;&lt;8))
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">return</strong> append1(BIN8).append1(b.length).append(b);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1&lt;&lt;16))
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">return</strong> append1(BIN16).append2(b.length).append(b);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> append1(BIN32).append4(b.length).append(b);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * Appends a boolean to the stream.</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	MsgPackOutputStream appendBoolean(<strong class="jxr_keyword">boolean</strong> b) {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">return</strong> append1(b ? TRUE : FALSE);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * Appends a double to the stream.</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	MsgPackOutputStream appendDouble(<strong class="jxr_keyword">double</strong> d) {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<em class="jxr_comment">// FLOAT64      = 0xCB,  //   float 64       11001011     0xcb</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">return</strong> append1(FLOAT64).append8(Double.doubleToLongBits(d));
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * Appends a float to the stream.</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	MsgPackOutputStream appendFloat(<strong class="jxr_keyword">float</strong> f) {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<em class="jxr_comment">// FLOAT32      = 0xCA,  //   float 32       11001010     0xca</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">return</strong> append1(FLOAT32).append4(Float.floatToIntBits(f));
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<em class="jxr_comment">// | 0xc6   |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|  data  |</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+========+</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<em class="jxr_comment">// where</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<em class="jxr_comment">// * XXXXXXXX is a 8-bit unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<em class="jxr_comment">// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<em class="jxr_comment">// * N is the length of data</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1 &lt;&lt; 8))
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">return</strong> append1(BIN8).append1(b.length).append(b);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (b.length &lt; (1 &lt;&lt; 16))
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">return</strong> append1(BIN16).append2(b.length).append(b);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> append1(BIN32).append4(b.length).append(b);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * Appends a boolean to the stream.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	MsgPackOutputStream appendBoolean(<strong class="jxr_keyword">boolean</strong> b) {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">return</strong> append1(b ? TRUE : FALSE);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * Appends a double to the stream.</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	MsgPackOutputStream appendDouble(<strong class="jxr_keyword">double</strong> d) {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<em class="jxr_comment">// FLOAT64      = 0xCB,  //   float 64       11001011     0xcb</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">return</strong> append1(FLOAT64).append8(Double.doubleToLongBits(d));
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	}
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * Appends a float to the stream.</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	MsgPackOutputStream appendFloat(<strong class="jxr_keyword">float</strong> f) {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<em class="jxr_comment">// FLOAT32      = 0xCA,  //   float 32       11001010     0xca</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">return</strong> append1(FLOAT32).append4(Float.floatToIntBits(f));
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * Appends an integer to the stream.</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	MsgPackOutputStream appendInt(<strong class="jxr_keyword">int</strong> i) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<em class="jxr_comment">// POSFIXINT_L  = 0x00,  //   pos fixint     0xxxxxxx     0x00 - 0x7f</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<em class="jxr_comment">// POSFIXINT_U  = 0x7F,</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<em class="jxr_comment">// UINT8        = 0xCC,  //   uint 8         11001100     0xcc</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<em class="jxr_comment">// UINT16       = 0xCD,  //   uint 16        11001101     0xcd</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<em class="jxr_comment">// UINT32       = 0xCE,  //   uint 32        11001110     0xce</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<em class="jxr_comment">// UINT64       = 0xCF,  //   uint 64        11001111     0xcf</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<em class="jxr_comment">// INT8         = 0xD0,  //   int 8          11010000     0xd0</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<em class="jxr_comment">// INT16        = 0xD1,  //   int 16         11010001     0xd1</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<em class="jxr_comment">// INT32        = 0xD2,  //   int 32         11010010     0xd2</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<em class="jxr_comment">// INT64        = 0xD3,  //   int 64         11010011     0xd3</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<em class="jxr_comment">// NEGFIXINT_L  = 0xE0,  //   neg fixint     111xxxxx     0xe0 - 0xff</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_comment">// NEGFIXINT_U  = 0xFF;</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">if</strong> (i &gt;= 0) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">if</strong> (i &lt; (1&lt;&lt;7))
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">return</strong> append1(i);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">if</strong> (i &lt; (1&lt;&lt;15))
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<strong class="jxr_keyword">return</strong> append1(INT16).append2(i);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">return</strong> append1(INT32).append4(i);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		}
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -(1&lt;&lt;6))
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">return</strong> append((byte)(0xE0 | -i));
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -(1&lt;&lt;7))
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">return</strong> append1(INT8).append1(i);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -(1&lt;&lt;15))
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">return</strong> append1(INT16).append2(i);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">return</strong> append1(INT32).append4(i);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * Appends a long to the stream.</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	MsgPackOutputStream appendLong(<strong class="jxr_keyword">long</strong> l) {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">if</strong> (l &lt; L2X31 &amp;&amp; l &gt; -(L2X31))
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">return</strong> appendInt((<strong class="jxr_keyword">int</strong>)l);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">return</strong> append1(INT64).append8(l);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * Appends a NULL flag to the stream.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	MsgPackOutputStream appendNull() {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">return</strong> append1(NIL);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * Appends a generic Number to the stream.</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	MsgPackOutputStream appendNumber(Number n) {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		Class&lt;?&gt; c = n.getClass();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">if</strong> (c == Integer.<strong class="jxr_keyword">class</strong> || c == Short.<strong class="jxr_keyword">class</strong> || c == Byte.<strong class="jxr_keyword">class</strong> || c == AtomicInteger.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">return</strong> appendInt(n.intValue());
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">if</strong> (c == Long.<strong class="jxr_keyword">class</strong> || c == AtomicLong.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">return</strong> appendLong(n.longValue());
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">if</strong> (c == Float.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">return</strong> appendFloat(n.floatValue());
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">if</strong> (c == Double.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">return</strong> appendDouble(n.doubleValue());
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">if</strong> (c == BigInteger.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">return</strong> appendLong(n.longValue());
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">if</strong> (c == BigDecimal.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">return</strong> appendDouble(n.doubleValue());
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> appendInt(0);
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * Appends a string to the stream.</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	MsgPackOutputStream appendString(CharSequence cs) {
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<em class="jxr_comment">// fixstr stores a byte array whose length is up to 31 bytes:</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<em class="jxr_comment">// +--------+========+</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<em class="jxr_comment">// |101XXXXX|  data  |</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * Appends an integer to the stream.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	MsgPackOutputStream appendInt(<strong class="jxr_keyword">int</strong> i) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<em class="jxr_comment">// POSFIXINT_L  = 0x00,  //   pos fixint     0xxxxxxx     0x00 - 0x7f</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<em class="jxr_comment">// POSFIXINT_U  = 0x7F,</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<em class="jxr_comment">// UINT8        = 0xCC,  //   uint 8         11001100     0xcc</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<em class="jxr_comment">// UINT16       = 0xCD,  //   uint 16        11001101     0xcd</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<em class="jxr_comment">// UINT32       = 0xCE,  //   uint 32        11001110     0xce</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<em class="jxr_comment">// UINT64       = 0xCF,  //   uint 64        11001111     0xcf</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<em class="jxr_comment">// INT8         = 0xD0,  //   int 8          11010000     0xd0</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<em class="jxr_comment">// INT16        = 0xD1,  //   int 16         11010001     0xd1</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<em class="jxr_comment">// INT32        = 0xD2,  //   int 32         11010010     0xd2</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_comment">// INT64        = 0xD3,  //   int 64         11010011     0xd3</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<em class="jxr_comment">// NEGFIXINT_L  = 0xE0,  //   neg fixint     111xxxxx     0xe0 - 0xff</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<em class="jxr_comment">// NEGFIXINT_U  = 0xFF;</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">if</strong> (i &gt;= 0) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">if</strong> (i &lt; (1 &lt;&lt; 7))
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<strong class="jxr_keyword">return</strong> append1(i);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">if</strong> (i &lt; (1 &lt;&lt; 15))
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				<strong class="jxr_keyword">return</strong> append1(INT16).append2(i);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">return</strong> append1(INT32).append4(i);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -(1 &lt;&lt; 6))
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<strong class="jxr_keyword">return</strong> append((byte)(0xE0 | -i));
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -(1 &lt;&lt; 7))
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">return</strong> append1(INT8).append1(i);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">if</strong> (i &gt; -(1 &lt;&lt; 15))
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">return</strong> append1(INT16).append2(i);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">return</strong> append1(INT32).append4(i);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * Appends a long to the stream.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	MsgPackOutputStream appendLong(<strong class="jxr_keyword">long</strong> l) {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">if</strong> (l &lt; L2X31 &amp;&amp; l &gt; -(L2X31))
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">return</strong> appendInt((<strong class="jxr_keyword">int</strong>)l);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">return</strong> append1(INT64).append8(l);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * Appends a NULL flag to the stream.</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	MsgPackOutputStream appendNull() {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">return</strong> append1(NIL);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * Appends a generic Number to the stream.</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	MsgPackOutputStream appendNumber(Number n) {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		Class&lt;?&gt; c = n.getClass();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">if</strong> (c == Integer.<strong class="jxr_keyword">class</strong> || c == Short.<strong class="jxr_keyword">class</strong> || c == Byte.<strong class="jxr_keyword">class</strong> || c == AtomicInteger.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">return</strong> appendInt(n.intValue());
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">if</strong> (c == Long.<strong class="jxr_keyword">class</strong> || c == AtomicLong.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">return</strong> appendLong(n.longValue());
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">if</strong> (c == Float.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">return</strong> appendFloat(n.floatValue());
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">if</strong> (c == Double.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">return</strong> appendDouble(n.doubleValue());
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">if</strong> (c == BigInteger.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">return</strong> appendLong(n.longValue());
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">if</strong> (c == BigDecimal.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">return</strong> appendDouble(n.doubleValue());
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">return</strong> appendInt(0);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * Appends a string to the stream.</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	MsgPackOutputStream appendString(CharSequence cs) {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<em class="jxr_comment">// fixstr stores a byte array whose length is up to 31 bytes:</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<em class="jxr_comment">// +--------+========+</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<em class="jxr_comment">// str 8 stores a byte array whose length is up to (2^8)-1 bytes:</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<em class="jxr_comment">// +--------+--------+========+</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<em class="jxr_comment">// |  0xd9  |YYYYYYYY|  data  |</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<em class="jxr_comment">// |101XXXXX|  data  |</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<em class="jxr_comment">// +--------+========+</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<em class="jxr_comment">// str 8 stores a byte array whose length is up to (2^8)-1 bytes:</em>
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<em class="jxr_comment">// +--------+--------+========+</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<em class="jxr_comment">// str 16 stores a byte array whose length is up to (2^16)-1 bytes:</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<em class="jxr_comment">// +--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<em class="jxr_comment">// |  0xda  |ZZZZZZZZ|ZZZZZZZZ|  data  |</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<em class="jxr_comment">// |  0xd9  |YYYYYYYY|  data  |</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<em class="jxr_comment">// +--------+--------+========+</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<em class="jxr_comment">// str 16 stores a byte array whose length is up to (2^16)-1 bytes:</em>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<em class="jxr_comment">// +--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// str 32 stores a byte array whose length is up to (2^32)-1 bytes:</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<em class="jxr_comment">// |  0xdb  |AAAAAAAA|AAAAAAAA|AAAAAAAA|AAAAAAAA|  data  |</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<em class="jxr_comment">// |  0xda  |ZZZZZZZZ|ZZZZZZZZ|  data  |</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<em class="jxr_comment">// +--------+--------+--------+========+</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<em class="jxr_comment">// str 32 stores a byte array whose length is up to (2^32)-1 bytes:</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+========+</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<em class="jxr_comment">// where</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<em class="jxr_comment">// * XXXXX is a 5-bit unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<em class="jxr_comment">// * YYYYYYYY is a 8-bit unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ is a 16-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<em class="jxr_comment">// * AAAAAAAA_AAAAAAAA_AAAAAAAA_AAAAAAAA is a 32-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<em class="jxr_comment">// * N is the length of data</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">int</strong> length = getUtf8ByteLength(cs);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">if</strong> (length &lt; 32)
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			append1(0xA0 + length);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (length &lt; (1&lt;&lt;8))
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			append1(STR8).append1(length);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (length &lt; (1&lt;&lt;16))
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			append1(STR16).append2(length);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			append1(STR32).append4(length);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">int</strong> length2 = writeUtf8To(cs, os);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<em class="jxr_comment">// |  0xdb  |AAAAAAAA|AAAAAAAA|AAAAAAAA|AAAAAAAA|  data  |</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+========+</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<em class="jxr_comment">// where</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<em class="jxr_comment">// * XXXXX is a 5-bit unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<em class="jxr_comment">// * YYYYYYYY is a 8-bit unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ is a 16-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<em class="jxr_comment">// * AAAAAAAA_AAAAAAAA_AAAAAAAA_AAAAAAAA is a 32-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<em class="jxr_comment">// * N is the length of data</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">int</strong> length = getUtf8ByteLength(cs);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">if</strong> (length &lt; 32)
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			append1(0xA0 + length);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (length &lt; (1 &lt;&lt; 8))
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			append1(STR8).append1(length);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (length &lt; (1 &lt;&lt; 16))
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			append1(STR16).append2(length);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			append1(STR32).append4(length);
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">if</strong> (length != length2)
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Unexpected length.  Expected={0}, Actual={1}"</span>, length, length2);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * Appends an array data type flag to the stream.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	MsgPackOutputStream startArray(<strong class="jxr_keyword">int</strong> size) {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<em class="jxr_comment">// fixarray stores an array whose length is up to 15 elements:</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<em class="jxr_comment">// +--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<em class="jxr_comment">// |1001XXXX|    N objects    |</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">int</strong> length2 = writeUtf8To(cs, os);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">if</strong> (length != length2)
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="SerializeException" href="../../../../org/apache/juneau/serializer/SerializeException.html#SerializeException">SerializeException</a>(<span class="jxr_string">"Unexpected length.  Expected={0}, Actual={1}"</span>, length, length2);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * Appends an array data type flag to the stream.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	MsgPackOutputStream startArray(<strong class="jxr_keyword">int</strong> size) {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<em class="jxr_comment">// fixarray stores an array whose length is up to 15 elements:</em>
 <a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<em class="jxr_comment">// +--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<em class="jxr_comment">// array 16 stores an array whose length is up to (2^16)-1 elements:</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<em class="jxr_comment">// +--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<em class="jxr_comment">// |  0xdc  |YYYYYYYY|YYYYYYYY|    N objects    |</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		<em class="jxr_comment">// |1001XXXX|    N objects    |</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<em class="jxr_comment">// +--------+~~~~~~~~~~~~~~~~~+</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<em class="jxr_comment">// array 16 stores an array whose length is up to (2^16)-1 elements:</em>
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<em class="jxr_comment">// +--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<em class="jxr_comment">// array 32 stores an array whose length is up to (2^32)-1 elements:</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<em class="jxr_comment">// |  0xdd  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|    N objects    |</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<em class="jxr_comment">// |  0xdc  |YYYYYYYY|YYYYYYYY|    N objects    |</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<em class="jxr_comment">// +--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<em class="jxr_comment">// array 32 stores an array whose length is up to (2^32)-1 elements:</em>
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// where</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<em class="jxr_comment">// * XXXX is a 4-bit unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<em class="jxr_comment">// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<em class="jxr_comment">//     N is the size of a array</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">if</strong> (size &lt; 16)
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			<strong class="jxr_keyword">return</strong> append1(0x90 + size);
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">if</strong> (size &lt; (1&lt;&lt;16))
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">return</strong> append1(ARRAY16).append2(size);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">return</strong> append1(ARRAY32).append4(size);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * Appends a map data type flag to the stream.</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	MsgPackOutputStream startMap(<strong class="jxr_keyword">int</strong> size) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<em class="jxr_comment">// fixmap stores a map whose length is up to 15 elements</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<em class="jxr_comment">// +--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<em class="jxr_comment">// |1000XXXX|   N*2 objects   |</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<em class="jxr_comment">// |  0xdd  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|    N objects    |</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<em class="jxr_comment">// where</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<em class="jxr_comment">// * XXXX is a 4-bit unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<em class="jxr_comment">// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<em class="jxr_comment">//     N is the size of a array</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">if</strong> (size &lt; 16)
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<strong class="jxr_keyword">return</strong> append1(0x90 + size);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">if</strong> (size &lt; (1 &lt;&lt; 16))
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">return</strong> append1(ARRAY16).append2(size);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">return</strong> append1(ARRAY32).append4(size);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * Appends a map data type flag to the stream.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	MsgPackOutputStream startMap(<strong class="jxr_keyword">int</strong> size) {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<em class="jxr_comment">// fixmap stores a map whose length is up to 15 elements</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<em class="jxr_comment">// +--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// map 16 stores a map whose length is up to (2^16)-1 elements</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<em class="jxr_comment">// +--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// |  0xde  |YYYYYYYY|YYYYYYYY|   N*2 objects   |</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<em class="jxr_comment">// |1000XXXX|   N*2 objects   |</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<em class="jxr_comment">// +--------+~~~~~~~~~~~~~~~~~+</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<em class="jxr_comment">// map 16 stores a map whose length is up to (2^16)-1 elements</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<em class="jxr_comment">// +--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// map 32 stores a map whose length is up to (2^32)-1 elements</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<em class="jxr_comment">// |  0xdf  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|   N*2 objects   |</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// |  0xde  |YYYYYYYY|YYYYYYYY|   N*2 objects   |</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// +--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<em class="jxr_comment">// map 32 stores a map whose length is up to (2^32)-1 elements</em>
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<em class="jxr_comment">// where</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<em class="jxr_comment">// * XXXX is a 4-bit unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<em class="jxr_comment">// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<em class="jxr_comment">// * N is the size of a map</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<em class="jxr_comment">// * odd elements in objects are keys of a map</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<em class="jxr_comment">// * the next element of a key is its associated value</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">if</strong> (size &lt; 16)
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">return</strong> append1(0x80 + size);
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">if</strong> (size &lt; (1&lt;&lt;16))
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">return</strong> append1(MAP16).append2(size);
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">return</strong> append1(MAP32).append4(size);
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> }
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<em class="jxr_comment">// |  0xdf  |ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|ZZZZZZZZ|   N*2 objects   |</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<em class="jxr_comment">// +--------+--------+--------+--------+--------+~~~~~~~~~~~~~~~~~+</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<em class="jxr_comment">// where</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<em class="jxr_comment">// * XXXX is a 4-bit unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<em class="jxr_comment">// * YYYYYYYY_YYYYYYYY is a 16-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<em class="jxr_comment">// * ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ_ZZZZZZZZ is a 32-bit big-endian unsigned integer which represents N</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<em class="jxr_comment">// * N is the size of a map</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<em class="jxr_comment">// * odd elements in objects are keys of a map</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<em class="jxr_comment">// * the next element of a key is its associated value</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">if</strong> (size &lt; 16)
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">return</strong> append1(0x80 + size);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">if</strong> (size &lt; (1 &lt;&lt; 16))
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">return</strong> append1(MAP16).append2(size);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> append1(MAP32).append4(size);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

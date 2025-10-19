@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/HttpParts" target="alexandria_uri">https://juneau.apache.org/docs/topics/HttpParts</a>"&gt;HTTP Parts&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  @SuppressWarnings({<span class="jxr_string">"unchecked"</span>,<span class="jxr_string">"resource"</span>})
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  @SuppressWarnings({ <span class="jxr_string">"unchecked"</span>, <span class="jxr_string">"resource"</span> })
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> RequestContent {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> byte[] content;
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Parse into an int array.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;int&lt;/jk&gt;[] &lt;jv&gt;content2&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(&lt;jk&gt;int&lt;/jk&gt;[].&lt;jk&gt;class&lt;/jk&gt;);</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Parse into a bean.&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * 	MyBean &lt;jv&gt;content3&lt;/jv&gt; = &lt;jv&gt;req&lt;/jv&gt;.getContent().as(MyBean.&lt;jk&gt;class&lt;/jk&gt;);</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 *</em>
@@ -361,252 +361,247 @@
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * @return The content length of the content in bytes.</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getContentLength() {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * Returns the HTTP content content as an {@link InputStream}.</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * @return The negotiated input stream.</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<strong class="jxr_keyword">public</strong> ServletInputStream getInputStream() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">if</strong> (content != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(content);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getContentLength() { <strong class="jxr_keyword">return</strong> contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength; }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 * Returns the HTTP content content as an {@link InputStream}.</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * @return The negotiated input stream.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> ServletInputStream getInputStream() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">if</strong> (content != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(content);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		Encoder enc = getEncoder();
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		Encoder enc = getEncoder();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		InputStream is = req.getHttpServletRequest().getInputStream();
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		InputStream is = req.getHttpServletRequest().getInputStream();
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">if</strong> (enc == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(is, maxInput);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(enc.getInputStream(is), maxInput);
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * Returns the parser and media type matching the request &lt;c&gt;Content-Type&lt;/c&gt; header.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * @return</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * 	The parser matching the request &lt;c&gt;Content-Type&lt;/c&gt; header, or {@link Optional#empty()} if no matching parser was</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * 	found.</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * 	Includes the matching media type.</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;ParserMatch&gt; getParserMatch() {
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">if</strong> (mediaType != <strong class="jxr_keyword">null</strong> &amp;&amp; parser != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">return</strong> Utils.opt(<strong class="jxr_keyword">new</strong> <a name="ParserMatch" href="../../../../../org/apache/juneau/parser/ParserMatch.html#ParserMatch">ParserMatch</a>(mediaType, parser));
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		MediaType mt = getMediaType();
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">return</strong> Utils.opt(mt).map(x -&gt; parsers.getParserMatch(x));
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * Returns the HTTP content content as a {@link Reader}.</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">if</strong> (enc == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(is, maxInput);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundedServletInputStream" href="../../../../../org/apache/juneau/rest/util/BoundedServletInputStream.html#BoundedServletInputStream">BoundedServletInputStream</a>(enc.getInputStream(is), maxInput);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * Returns the parser and media type matching the request &lt;c&gt;Content-Type&lt;/c&gt; header.</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * @return</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * 	The parser matching the request &lt;c&gt;Content-Type&lt;/c&gt; header, or {@link Optional#empty()} if no matching parser was</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * 	found.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * 	Includes the matching media type.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;ParserMatch&gt; getParserMatch() {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">if</strong> (mediaType != <strong class="jxr_keyword">null</strong> &amp;&amp; parser != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">return</strong> Utils.opt(<strong class="jxr_keyword">new</strong> <a name="ParserMatch" href="../../../../../org/apache/juneau/parser/ParserMatch.html#ParserMatch">ParserMatch</a>(mediaType, parser));
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		MediaType mt = getMediaType();
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">return</strong> Utils.opt(mt).map(x -&gt; parsers.getParserMatch(x));
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	}
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * Returns the HTTP content content as a {@link Reader}.</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</em>
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &amp;content=xxx} in the URL query string.</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * 		Automatically handles GZipped input streams.</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * @return The content contents as a reader.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">public</strong> BufferedReader getReader() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		Reader r = getUnbufferedReader();
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">if</strong> (r instanceof BufferedReader)
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			<strong class="jxr_keyword">return</strong> (BufferedReader)r;
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">int</strong> len = req.getHttpServletRequest().getContentLength();
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">int</strong> buffSize = len &lt;= 0 ? 8192 : Math.max(len, 8192);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BufferedReader(r, buffSize);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * Sets the max input value for this content.</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<strong class="jxr_keyword">public</strong> RequestContent maxInput(<strong class="jxr_keyword">long</strong> value) {
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">this</strong>.maxInput = value;
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * Sets the media type of this content.</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">public</strong> RequestContent mediaType(<a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> value) {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">this</strong>.mediaType = value;
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * Sets the parser to use for this content.</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">public</strong> RequestContent parser(<a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> value) {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">this</strong>.parser = value;
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * Sets the parsers to use for parsing this content.</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<strong class="jxr_keyword">public</strong> RequestContent parsers(<a name="ParserSet" href="../../../../../org/apache/juneau/parser/ParserSet.html#ParserSet">ParserSet</a> value) {
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">this</strong>.parsers = value;
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * Sets the schema for this content.</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * @param schema The new schema for this content.</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<strong class="jxr_keyword">public</strong> RequestContent setSchema(<a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema) {
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">this</strong>.schema = schema;
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">return</strong> req.getBeanSession().getClassMeta(type);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Type type, Type...args) {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">return</strong> req.getBeanSession().getClassMeta(type, args);
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	}
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">private</strong> <a name="Encoder" href="../../../../../org/apache/juneau/encoders/Encoder.html#Encoder">Encoder</a> getEncoder() <strong class="jxr_keyword">throws</strong> <a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a> {
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">if</strong> (encoder == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			String ce = req.getHeaderParam(<span class="jxr_string">"content-encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(ce)) {
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				ce = ce.trim();
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 				encoder = encoders.getEncoder(ce);
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 				<strong class="jxr_keyword">if</strong> (encoder == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a>(
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 						<span class="jxr_string">"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}"</span>,
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 						req.getHeaderParam(<span class="jxr_string">"content-encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>), Json5.of(encoders.getSupportedEncodings())
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 					);
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			}
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">if</strong> (encoder != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				contentLength = -1;
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		}
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<em class="jxr_comment">// Note that if this is the identity encoder, we want to return null</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<em class="jxr_comment">// so that we don't needlessly wrap the input stream.</em>
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		<strong class="jxr_keyword">if</strong> (encoder == IdentityEncoder.INSTANCE)
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">return</strong> encoder;
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	}
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T getInner(ClassMeta&lt;T&gt; cm) <strong class="jxr_keyword">throws</strong> BadRequest, UnsupportedMediaType, <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a> {
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 			<strong class="jxr_keyword">return</strong> parse(cm);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a> e) {
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SchemaValidationException" href="../../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> e) {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BadRequest" href="../../../../../org/apache/juneau/http/response/BadRequest.html#BadRequest">BadRequest</a>(<span class="jxr_string">"Validation failed on request content. "</span> + e.getLocalizedMessage());
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BadRequest" href="../../../../../org/apache/juneau/http/response/BadRequest.html#BadRequest">BadRequest</a>(e, <span class="jxr_string">"Could not convert request content content to class type ''{0}''."</span>, cm);
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"I/O exception occurred while parsing request content."</span>);
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"Exception occurred while parsing request content."</span>);
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		}
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	}
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<strong class="jxr_keyword">private</strong> <a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> getMediaType() {
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">if</strong> (mediaType != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 			<strong class="jxr_keyword">return</strong> mediaType;
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		Optional&lt;ContentType&gt; ct = req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">if</strong> (!ct.isPresent() &amp;&amp; content != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 			<strong class="jxr_keyword">return</strong> MediaType.UON;
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">return</strong> ct.isPresent() ? ct.get().asMediaType().orElse(<strong class="jxr_keyword">null</strong>) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	}
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<em class="jxr_comment">/* Workhorse method */</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T parse(ClassMeta&lt;T&gt; cm) <strong class="jxr_keyword">throws</strong> SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">if</strong> (cm.isReader())
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			<strong class="jxr_keyword">return</strong> (T)getReader();
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">if</strong> (cm.isInputStream())
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			<strong class="jxr_keyword">return</strong> (T)getInputStream();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * 		Automatically handles GZipped input streams.</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * @return The content contents as a reader.</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<strong class="jxr_keyword">public</strong> BufferedReader getReader() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		Reader r = getUnbufferedReader();
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">if</strong> (r instanceof BufferedReader)
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			<strong class="jxr_keyword">return</strong> (BufferedReader)r;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">int</strong> len = req.getHttpServletRequest().getContentLength();
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">int</strong> buffSize = len &lt;= 0 ? 8192 : Math.max(len, 8192);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BufferedReader(r, buffSize);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * Sets the max input value for this content.</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> RequestContent maxInput(<strong class="jxr_keyword">long</strong> value) {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">this</strong>.maxInput = value;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * Sets the media type of this content.</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">public</strong> RequestContent mediaType(<a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> value) {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">this</strong>.mediaType = value;
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * Sets the parser to use for this content.</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">public</strong> RequestContent parser(<a name="Parser" href="../../../../../org/apache/juneau/parser/Parser.html#Parser">Parser</a> value) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">this</strong>.parser = value;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * Sets the parsers to use for parsing this content.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<strong class="jxr_keyword">public</strong> RequestContent parsers(<a name="ParserSet" href="../../../../../org/apache/juneau/parser/ParserSet.html#ParserSet">ParserSet</a> value) {
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">this</strong>.parsers = value;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	}
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * Sets the schema for this content.</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * @param schema The new schema for this content.</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<strong class="jxr_keyword">public</strong> RequestContent setSchema(<a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema) {
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">this</strong>.schema = schema;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">return</strong> req.getBeanSession().getClassMeta(type);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	}
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; ClassMeta&lt;T&gt; getClassMeta(Type type, Type...args) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">return</strong> req.getBeanSession().getClassMeta(type, args);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<strong class="jxr_keyword">private</strong> <a name="Encoder" href="../../../../../org/apache/juneau/encoders/Encoder.html#Encoder">Encoder</a> getEncoder() <strong class="jxr_keyword">throws</strong> <a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a> {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">if</strong> (encoder == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			String ce = req.getHeaderParam(<span class="jxr_string">"content-encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">if</strong> (isNotEmpty(ce)) {
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 				ce = ce.trim();
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				encoder = encoders.getEncoder(ce);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">if</strong> (encoder == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a>(<span class="jxr_string">"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}"</span>,
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 						req.getHeaderParam(<span class="jxr_string">"content-encoding"</span>).orElse(<strong class="jxr_keyword">null</strong>), Json5.of(encoders.getSupportedEncodings()));
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			}
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">if</strong> (encoder != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 				contentLength = -1;
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		}
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<em class="jxr_comment">// Note that if this is the identity encoder, we want to return null</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<em class="jxr_comment">// so that we don't needlessly wrap the input stream.</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">if</strong> (encoder == IdentityEncoder.INSTANCE)
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">return</strong> encoder;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T getInner(ClassMeta&lt;T&gt; cm) <strong class="jxr_keyword">throws</strong> BadRequest, UnsupportedMediaType, <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a> {
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 			<strong class="jxr_keyword">return</strong> parse(cm);
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a> e) {
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="SchemaValidationException" href="../../../../../org/apache/juneau/httppart/SchemaValidationException.html#SchemaValidationException">SchemaValidationException</a> e) {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BadRequest" href="../../../../../org/apache/juneau/http/response/BadRequest.html#BadRequest">BadRequest</a>(<span class="jxr_string">"Validation failed on request content. "</span> + e.getLocalizedMessage());
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		} <strong class="jxr_keyword">catch</strong> (<a name="ParseException" href="../../../../../org/apache/juneau/parser/ParseException.html#ParseException">ParseException</a> e) {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BadRequest" href="../../../../../org/apache/juneau/http/response/BadRequest.html#BadRequest">BadRequest</a>(e, <span class="jxr_string">"Could not convert request content content to class type ''{0}''."</span>, cm);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"I/O exception occurred while parsing request content."</span>);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InternalServerError" href="../../../../../org/apache/juneau/http/response/InternalServerError.html#InternalServerError">InternalServerError</a>(e, <span class="jxr_string">"Exception occurred while parsing request content."</span>);
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		}
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<strong class="jxr_keyword">private</strong> <a name="MediaType" href="../../../../../org/apache/juneau/MediaType.html#MediaType">MediaType</a> getMediaType() {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">if</strong> (mediaType != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 			<strong class="jxr_keyword">return</strong> mediaType;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		Optional&lt;ContentType&gt; ct = req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">if</strong> (! ct.isPresent() &amp;&amp; content != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<strong class="jxr_keyword">return</strong> MediaType.UON;
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">return</strong> ct.isPresent() ? ct.get().asMediaType().orElse(<strong class="jxr_keyword">null</strong>) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<em class="jxr_comment">/* Workhorse method */</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T parse(ClassMeta&lt;T&gt; cm) <strong class="jxr_keyword">throws</strong> SchemaValidationException, ParseException, UnsupportedMediaType, IOException {
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">if</strong> (cm.isReader())
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			<strong class="jxr_keyword">return</strong> (T)getReader();
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">if</strong> (cm.isInputStream())
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">return</strong> (T)getInputStream();
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		Optional&lt;TimeZone&gt; timeZone = req.getTimeZone();
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		Locale locale = req.getLocale();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		ParserMatch pm = getParserMatch().orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		Optional&lt;TimeZone&gt; timeZone = req.getTimeZone();
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		Locale locale = req.getLocale();
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		ParserMatch pm = getParserMatch().orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<strong class="jxr_keyword">if</strong> (schema == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			schema = HttpPartSchema.DEFAULT;
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">if</strong> (pm != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			Parser p = pm.getParser();
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			MediaType mediaType = pm.getMediaType();
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 			ParserSession session = p
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 				.createSession()
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				.properties(req.getAttributes().asMap())
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 				.javaMethod(req.getOpContext().getJavaMethod())
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				.locale(locale)
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 				.timeZone(timeZone.orElse(<strong class="jxr_keyword">null</strong>))
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 				.mediaType(mediaType)
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 				.apply(ReaderParser.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(req.getCharset()))
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				.schema(schema)
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 				.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 				.<strong class="jxr_keyword">outer</strong>(req.getContext().getResource())
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 				.build();
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<strong class="jxr_keyword">try</strong> (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 				T o = session.parse(in, cm);
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 				<strong class="jxr_keyword">if</strong> (schema != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 					schema.validateOutput(o, cm.getBeanContext());
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 				<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			}
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		}
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">if</strong> (cm.hasReaderMutater())
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">return</strong> cm.getReaderMutater().mutate(getReader());
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">if</strong> (cm.hasInputStreamMutater())
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			<strong class="jxr_keyword">return</strong> cm.getInputStreamMutater().mutate(getInputStream());
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">if</strong> (schema == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			schema = HttpPartSchema.DEFAULT;
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (pm != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			Parser p = pm.getParser();
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			MediaType mediaType = pm.getMediaType();
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			<em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			ParserSession session = p
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 				.createSession()
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 				.properties(req.getAttributes().asMap())
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				.javaMethod(req.getOpContext().getJavaMethod())
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 				.locale(locale)
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				.timeZone(timeZone.orElse(<strong class="jxr_keyword">null</strong>))
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 				.mediaType(mediaType)
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				.apply(ReaderParser.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(req.getCharset()))
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 				.schema(schema)
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 				.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 				.<strong class="jxr_keyword">outer</strong>(req.getContext().getResource())
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				.build();
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">try</strong> (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 				T o = session.parse(in, cm);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 				<strong class="jxr_keyword">if</strong> (schema != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 					schema.validateOutput(o, cm.getBeanContext());
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 				<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			}
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		}
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">if</strong> (cm.hasReaderMutater())
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<strong class="jxr_keyword">return</strong> cm.getReaderMutater().mutate(getReader());
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">if</strong> (cm.hasInputStreamMutater())
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">return</strong> cm.getInputStreamMutater().mutate(getInputStream());
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		MediaType mt = getMediaType();
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		MediaType mt = getMediaType();
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">if</strong> ((Utils.isEmpty(Utils.s(mt)) || mt.toString().startsWith(<span class="jxr_string">"text/plain"</span>)) &amp;&amp; cm.hasStringMutater())
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			<strong class="jxr_keyword">return</strong> cm.getStringMutater().mutate(asString());
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		Optional&lt;ContentType&gt; ct = req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a>(
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 			<span class="jxr_string">"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}"</span>,
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			ct.isPresent() ? ct.get().asMediaType().orElse(<strong class="jxr_keyword">null</strong>) : <span class="jxr_string">"not-specified"</span>, Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes())
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		);
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	}
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</em>
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @return An unbuffered reader.</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<strong class="jxr_keyword">protected</strong> Reader getUnbufferedReader() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">if</strong> (content != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="CharSequenceReader" href="../../../../../org/apache/juneau/internal/CharSequenceReader.html#CharSequenceReader">CharSequenceReader</a>(<strong class="jxr_keyword">new</strong> String(content, UTF8));
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> InputStreamReader(getInputStream(), req.getCharset());
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	}
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	<strong class="jxr_keyword">boolean</strong> isLoaded() {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">return</strong> content != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	}
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> }
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">if</strong> ((Utils.isEmpty(Utils.s(mt)) || mt.toString().startsWith(<span class="jxr_string">"text/plain"</span>)) &amp;&amp; cm.hasStringMutater())
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			<strong class="jxr_keyword">return</strong> cm.getStringMutater().mutate(asString());
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		Optional&lt;ContentType&gt; ct = req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="UnsupportedMediaType" href="../../../../../org/apache/juneau/http/response/UnsupportedMediaType.html#UnsupportedMediaType">UnsupportedMediaType</a>(<span class="jxr_string">"Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}"</span>,
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 			ct.isPresent() ? ct.get().asMediaType().orElse(<strong class="jxr_keyword">null</strong>) : <span class="jxr_string">"not-specified"</span>, Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	}
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * @return An unbuffered reader.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	<strong class="jxr_keyword">protected</strong> Reader getUnbufferedReader() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">if</strong> (content != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="CharSequenceReader" href="../../../../../org/apache/juneau/internal/CharSequenceReader.html#CharSequenceReader">CharSequenceReader</a>(<strong class="jxr_keyword">new</strong> String(content, UTF8));
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> InputStreamReader(getInputStream(), req.getCharset());
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 	}
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	<strong class="jxr_keyword">boolean</strong> isLoaded() { <strong class="jxr_keyword">return</strong> content != <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -226,7 +226,7 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @return The enum.</em>
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartFormat" href="../../../../org/apache/juneau/httppart/HttpPartFormat.html#HttpPartFormat">HttpPartFormat</a> fromString(String value) {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		value = value.toUpperCase().replace('-','_');
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		value = value.toUpperCase().replace('-', '_');
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">return</strong> valueOf(value);
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 
@@ -245,7 +245,7 @@
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		String s = name().toLowerCase().replace('_','-');
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		String s = name().toLowerCase().replace('_', '-');
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> s;
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> }

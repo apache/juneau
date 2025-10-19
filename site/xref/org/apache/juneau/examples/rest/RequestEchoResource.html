@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * @param req The HTTP servlet request.</em>
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @return The same request to serialize as the response.</em>
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@RestOp(method=<span class="jxr_string">"*"</span>, path=<span class="jxr_string">"/*"</span>, converters={Traversable.<strong class="jxr_keyword">class</strong>,Queryable.<strong class="jxr_keyword">class</strong>}, summary=<span class="jxr_string">"Serializes the incoming HttpServletRequest object."</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@RestOp(method = <span class="jxr_string">"*"</span>, path = <span class="jxr_string">"/*"</span>, converters = { Traversable.<strong class="jxr_keyword">class</strong>, Queryable.<strong class="jxr_keyword">class</strong> }, summary = <span class="jxr_string">"Serializes the incoming HttpServletRequest object."</span>)
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">public</strong> HttpServletRequest doGet(RestRequest req) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<em class="jxr_comment">// Just echo the request back as the response.</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">return</strong> req.getHttpServletRequest();

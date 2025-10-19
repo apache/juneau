@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			PROPERTIES_METHODS.put(o.getClass(), methods);
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		JsonMap m = JsonMap.create().append(<span class="jxr_string">"id"</span>, identity(o));
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		methods.forEach((k,v) -&gt; m.put(k, v.invoke(o)));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		methods.forEach((k, v) -&gt; m.put(k, v.invoke(o)));
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> m;
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  

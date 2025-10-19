@@ -51,9 +51,9 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		Contact contact = ContactAnnotation.DEFAULT;
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		License license = LicenseAnnotation.DEFAULT;
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		String version=<span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		String[] termsOfService={}, title={}, value={};
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		Tag[] tags={};
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		String version = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		String[] termsOfService = {}, title = {}, value = {};
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		Tag[] tags = {};
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">		 * Constructor.</em>
@@ -226,24 +226,26 @@
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<em class="jxr_javadoccomment">/** Default value */</em>
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Swagger" href="../../../../../org/apache/juneau/rest/annotation/Swagger.html#Swagger">Swagger</a> DEFAULT = create().build();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * @param a The annotation to check.</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> empty(<a name="Swagger" href="../../../../../org/apache/juneau/rest/annotation/Swagger.html#Swagger">Swagger</a> a) {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> a == <strong class="jxr_keyword">null</strong> || DEFAULT.equals(a);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 * Instantiates a new builder for this class.</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * @return A new builder object.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @param a The annotation to check.</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the specified annotation contains all default values.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> empty(<a name="Swagger" href="../../../../../org/apache/juneau/rest/annotation/Swagger.html#Swagger">Swagger</a> a) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">return</strong> a == <strong class="jxr_keyword">null</strong> || DEFAULT.equals(a);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

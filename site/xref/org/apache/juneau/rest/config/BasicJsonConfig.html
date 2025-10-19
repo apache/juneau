@@ -90,23 +90,24 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics</a>"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  @Rest(
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">// Default serializers for all Java methods in the class.</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	serializers={
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		JsonSerializer.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		Json5Serializer.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	},
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_comment">// Default parsers for all Java methods in the class.</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	parsers={
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		JsonParser.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		Json5Parser.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	},
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	defaultAccept=<span class="jxr_string">"text/json"</span>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> )
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> BasicJsonConfig <strong class="jxr_keyword">extends</strong> DefaultConfig {}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_comment">// @formatter:off</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  @Rest(
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">// Default serializers for all Java methods in the class.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	serializers={
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		JsonSerializer.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		Json5Serializer.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	},
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<em class="jxr_comment">// Default parsers for all Java methods in the class.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	parsers={
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		JsonParser.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		Json5Parser.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	},
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	defaultAccept=<span class="jxr_string">"text/json"</span>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> )
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> BasicJsonConfig <strong class="jxr_keyword">extends</strong> DefaultConfig {}
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

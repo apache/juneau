@@ -69,12 +69,12 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> article(<a name="HtmlDocSerializerSession" href="../../../../org/apache/juneau/html/HtmlDocSerializerSession.html#HtmlDocSerializerSession">HtmlDocSerializerSession</a> session, <a name="HtmlWriter" href="../../../../org/apache/juneau/html/HtmlWriter.html#HtmlWriter">HtmlWriter</a> w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// To allow for page formatting using CSS, we encapsulate the data inside two div tags:</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<em class="jxr_comment">// &lt;div class='outerdata'&gt;&lt;div class='data' id='data'&gt;...&lt;/div&gt;&lt;/div&gt;</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		w.oTag(4, <span class="jxr_string">"div"</span>).attr(<span class="jxr_string">"class"</span>,<span class="jxr_string">"outerdata"</span>).append('&gt;').nl(4);
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		w.oTag(5, <span class="jxr_string">"div"</span>).attr(<span class="jxr_string">"class"</span>,<span class="jxr_string">"data"</span>).attr(<span class="jxr_string">"id"</span>, <span class="jxr_string">"data"</span>).append('&gt;').nl(5);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		w.oTag(4, <span class="jxr_string">"div"</span>).attr(<span class="jxr_string">"class"</span>, <span class="jxr_string">"outerdata"</span>).append('&gt;').nl(4);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		w.oTag(5, <span class="jxr_string">"div"</span>).attr(<span class="jxr_string">"class"</span>, <span class="jxr_string">"data"</span>).attr(<span class="jxr_string">"id"</span>, <span class="jxr_string">"data"</span>).append('&gt;').nl(5);
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			w.append(6, <span class="jxr_string">"&lt;null/&gt;"</span>).nl(6);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Utils.isEmpty(o)){
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (Utils.isEmpty(o)) {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			String m = session.getNoResultsMessage();
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">if</strong> (exists(m))
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  				w.append(6, session.resolve(m)).nl(6);
@@ -315,7 +315,7 @@
 <a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<strong class="jxr_keyword">if</strong> (l.matches(<span class="jxr_string">"(?s)&#92;&#92;S+&#92;&#92;:.*"</span>)) {
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 					<strong class="jxr_keyword">int</strong> i = l.indexOf(':');
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 					String key = l.substring(0, i);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					String val = l.substring(i+1).trim();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					String val = l.substring(i + 1).trim();
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 					<strong class="jxr_keyword">if</strong> (val.startsWith(<span class="jxr_string">"&lt;"</span>))
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 						w.nl(4).appendln(5, val);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 					<strong class="jxr_keyword">else</strong>

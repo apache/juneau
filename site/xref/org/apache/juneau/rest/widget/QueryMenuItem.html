@@ -54,11 +54,9 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Override
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> String getStyle(RestRequest req, <a name="RestResponse" href="../../../../../org/apache/juneau/rest/RestResponse.html#RestResponse">RestResponse</a> res) {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.getStyle(req, res)
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			+ <span class="jxr_string">"\n"</span>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			+ loadStyle(req, <span class="jxr_string">"styles/QueryMenuItem.css"</span>);
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.getStyle(req, res) + <span class="jxr_string">"\n"</span> + loadStyle(req, <span class="jxr_string">"styles/QueryMenuItem.css"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

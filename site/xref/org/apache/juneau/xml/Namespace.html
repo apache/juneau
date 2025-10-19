@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/XmlBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/XmlBasics</a>"&gt;XML Basics&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  @Bean(sort=<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  @Bean(sort = <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a> {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ConcurrentHashMap&lt;String,Namespace&gt; CACHE = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			Collection c = (Collection)o;
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			Namespace[] n = <strong class="jxr_keyword">new</strong> <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>[c.size()];
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">for</strong> (Object o2 : c){
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">for</strong> (Object o2 : c) {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">if</strong> (o2 instanceof <a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>)
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 					n[i++] = (<a name="Namespace" href="../../../../org/apache/juneau/xml/Namespace.html#Namespace">Namespace</a>)o2;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o2 instanceof CharSequence)
@@ -141,7 +141,7 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> of(key, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">if</strong> (key.startsWith(<span class="jxr_string">"http://"</span>) || key.startsWith(<span class="jxr_string">"https://"</span>))
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">return</strong> of(<strong class="jxr_keyword">null</strong>, key);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> of(key.substring(0, i).trim(), key.substring(i+1).trim());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> of(key.substring(0, i).trim(), key.substring(i + 1).trim());
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -184,24 +184,20 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * @return The namespace name.</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">public</strong> String getName() {
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">return</strong> name;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * Returns the namespace URI.</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * @return The namespace URI.</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<strong class="jxr_keyword">public</strong> String getUri() {
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> uri;
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">return</strong> key;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> }
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * Returns the namespace URI.</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * @return The namespace URI.</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">public</strong> String getUri() { <strong class="jxr_keyword">return</strong> uri; }
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> key;
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

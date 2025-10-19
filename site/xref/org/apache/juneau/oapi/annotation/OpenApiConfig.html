@@ -43,10 +43,10 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/OpenApiBasics" target="alexandria_uri">https://juneau.apache.org/docs/topics/OpenApiBasics</a>"&gt;OpenApi Basics&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @Target({TYPE,METHOD})
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @Target({ TYPE, METHOD })
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  @Retention(RUNTIME)
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  @Inherited
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @ContextApply({OpenApiConfigAnnotation.SerializerApply.<strong class="jxr_keyword">class</strong>,OpenApiConfigAnnotation.ParserApply.<strong class="jxr_keyword">class</strong>})
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @ContextApply({ OpenApiConfigAnnotation.SerializerApply.<strong class="jxr_keyword">class</strong>, OpenApiConfigAnnotation.ParserApply.<strong class="jxr_keyword">class</strong> })
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> @<strong class="jxr_keyword">interface</strong> OpenApiConfig {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -75,49 +75,50 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	String collectionFormat() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * Default format for HTTP parts.</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()}.</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * &lt;ul class='values javatree'&gt;</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link HttpPartFormat}</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#UON UON} - UON notation (e.g. &lt;js&gt;"'foo bar'"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#INT64 INT64} - Signed 64 bits.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. &lt;js&gt;"00FF"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. &lt;js&gt;"00 FF"&lt;/js&gt;).</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#DATE DATE} - An &lt;a href='<a href="http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html" target="alexandria_uri">http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html</a>#anchor14'&gt;RFC3339 full-date&lt;/a&gt;.</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#DATE_TIME DATE_TIME} - An &lt;a href='<a href="http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html" target="alexandria_uri">http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html</a>#anchor14'&gt;RFC3339 date-time&lt;/a&gt;.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.oapi.OpenApiParser.Builder#format(HttpPartFormat)}</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	String format() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * Optional rank for this config.</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * Can be used to override default ordering and application of config annotations.</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">int</strong> rank() <strong class="jxr_keyword">default</strong> 0;
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * Default format for HTTP parts.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()}.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * &lt;ul class='values javatree'&gt;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jc'&gt;{@link HttpPartFormat}</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * 	&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#UON UON} - UON notation (e.g. &lt;js&gt;"'foo bar'"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#INT64 INT64} - Signed 64 bits.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#FLOAT FLOAT} - 32-bit floating point number.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#DOUBLE DOUBLE} - 64-bit floating point number.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#BYTE BYTE} - BASE-64 encoded characters.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#BINARY BINARY} - Hexadecimal encoded octets (e.g. &lt;js&gt;"00FF"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#BINARY_SPACED BINARY_SPACED} - Spaced-separated hexadecimal encoded octets (e.g. &lt;js&gt;"00 FF"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#DATE DATE} - An &lt;a href='<a href="http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html" target="alexandria_uri">http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html</a>#anchor14'&gt;RFC3339 full-date&lt;/a&gt;.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#DATE_TIME DATE_TIME} - An &lt;a href='<a href="http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html" target="alexandria_uri">http://xml2rfc.ietf.org/public/rfc/html/rfc3339.html</a>#anchor14'&gt;RFC3339 date-time&lt;/a&gt;.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#PASSWORD PASSWORD} - Used to hint UIs the input needs to be obscured.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * 		&lt;li class='jf'&gt;{@link HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * 	&lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * 	&lt;li class='jm'&gt;{@link org.apache.juneau.oapi.OpenApiParser.Builder#format(HttpPartFormat)}</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	String format() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * Optional rank for this config.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * Can be used to override default ordering and application of config annotations.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">int</strong> rank() <strong class="jxr_keyword">default</strong> 0;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

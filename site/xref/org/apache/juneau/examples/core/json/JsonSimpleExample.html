@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 * @throws Exception Unused.</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@SuppressWarnings({ <span class="jxr_string">"unused"</span>, <span class="jxr_string">"rawtypes"</span> })
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> Exception{
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<em class="jxr_comment">// Juneau provides static constants with the most commonly used configurations</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<em class="jxr_comment">// Get a reference to a serializer - converting POJO to flat format</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<em class="jxr_comment">// Produces</em>
@@ -56,7 +56,7 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<em class="jxr_comment">// Get a reference to a parser - converts that flat format back into the POJO</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		JsonParser jsonParser = JsonParser.DEFAULT;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		Pojo pojo = <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"id"</span>,<span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		Pojo pojo = <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"id"</span>, <span class="jxr_string">"name"</span>);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		String flat = jsonSerializer.serialize(pojo);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<em class="jxr_comment">// Print out the created POJO in JSON format.</em>

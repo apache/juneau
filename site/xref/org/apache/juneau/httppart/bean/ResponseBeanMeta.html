@@ -130,7 +130,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class, or &lt;jk&gt;null&lt;/jk&gt; if class not annotated with {@link Response}.</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> create(<a name="MethodInfo" href="../../../../../org/apache/juneau/reflect/MethodInfo.html#MethodInfo">MethodInfo</a> m, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">if</strong> (! (m.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>) || m.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>,Optional.<strong class="jxr_keyword">class</strong>).hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)))
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">if</strong> (! (m.hasAnnotation(Response.<strong class="jxr_keyword">class</strong>) || m.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).hasAnnotation(Response.<strong class="jxr_keyword">class</strong>)))
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		Builder b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 		b.apply(m.getReturnType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType());
@@ -151,147 +151,133 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		Builder b = <strong class="jxr_keyword">new</strong> Builder(annotations);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		b.apply(mpi.getParameterType().unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>).innerType());
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		mpi.forEachAnnotation(Response.<strong class="jxr_keyword">class</strong>, x-&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		mpi.forEachAnnotation(Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		mpi.forEachAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">return</strong> b.build();
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Create metadata from specified class.</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * @param t The class annotated with {@link Response}.</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part serializers or parsers.</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class, or &lt;jk&gt;null&lt;/jk&gt; if class not annotated with {@link Response}.</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> create(Type t, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		ClassInfo ci = ClassInfo.of(t).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">if</strong> (ci.hasNoAnnotation(Response.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		Builder b = <strong class="jxr_keyword">new</strong> Builder(annotations);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		b.apply(ci.innerType());
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		ci.forEachAnnotation(Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		ci.forEachAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> b.build();
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; cm;
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,ResponseBeanPropertyMeta&gt; properties;
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> code;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,ResponseBeanPropertyMeta&gt; headerMethods;
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> statusMethod, contentMethod;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Optional&lt;HttpPartSerializer&gt; partSerializer;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Optional&lt;HttpPartParser&gt; partParser;
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema;
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * Create metadata from specified class.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * @param t The class annotated with {@link Response}.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part serializers or parsers.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class, or &lt;jk&gt;null&lt;/jk&gt; if class not annotated with {@link Response}.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="ResponseBeanMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanMeta.html#ResponseBeanMeta">ResponseBeanMeta</a> create(Type t, <a name="AnnotationWorkList" href="../../../../../org/apache/juneau/AnnotationWorkList.html#AnnotationWorkList">AnnotationWorkList</a> annotations) {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		ClassInfo ci = ClassInfo.of(t).unwrap(Value.<strong class="jxr_keyword">class</strong>, Optional.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">if</strong> (ci.hasNoAnnotation(Response.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		Builder b = <strong class="jxr_keyword">new</strong> Builder(annotations);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		b.apply(ci.innerType());
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		ci.forEachAnnotation(Response.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		ci.forEachAnnotation(StatusCode.<strong class="jxr_keyword">class</strong>, x -&gt; <strong class="jxr_keyword">true</strong>, x -&gt; b.apply(x));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">return</strong> b.build();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ClassMeta&lt;?&gt; cm;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,ResponseBeanPropertyMeta&gt; properties;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> code;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,ResponseBeanPropertyMeta&gt; headerMethods;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> statusMethod, contentMethod;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Optional&lt;HttpPartSerializer&gt; partSerializer;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Optional&lt;HttpPartParser&gt; partParser;
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	ResponseBeanMeta(Builder b) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">this</strong>.cm = b.cm;
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">this</strong>.code = b.code;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">this</strong>.partSerializer = Utils.opt(b.partSerializer).map(x -&gt; HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">this</strong>.partParser = Utils.opt(b.partParser).map(x -&gt; HttpPartParser.creator().type(x).apply(b.annotations).create());
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">this</strong>.schema = b.schema.build();
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		Map&lt;String,ResponseBeanPropertyMeta&gt; properties = map();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> schema;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	ResponseBeanMeta(Builder b) {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">this</strong>.cm = b.cm;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">this</strong>.code = b.code;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">this</strong>.partSerializer = Utils.opt(b.partSerializer).map(x -&gt; HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">this</strong>.partParser = Utils.opt(b.partParser).map(x -&gt; HttpPartParser.creator().type(x).apply(b.annotations).create());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">this</strong>.schema = b.schema.build();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		Map&lt;String,ResponseBeanPropertyMeta&gt; hm = map();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		b.headerMethods.forEach((k,v) -&gt; {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			hm.put(k, pm);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			properties.put(pm.getGetter().getName(), pm);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		});
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">this</strong>.headerMethods = u(hm);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">this</strong>.contentMethod = b.contentMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.contentMethod.schema(schema).build(partSerializer, partParser);
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">this</strong>.statusMethod = b.statusMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.statusMethod.build(opte(), opte());
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (contentMethod != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			properties.put(contentMethod.getGetter().getName(), contentMethod);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">if</strong> (statusMethod != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			properties.put(statusMethod.getGetter().getName(), statusMethod);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">this</strong>.properties = u(properties);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * Returns metadata about the class.</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class.</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">public</strong> ClassMeta&lt;?&gt; getClassMeta() {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">return</strong> cm;
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		Map&lt;String,ResponseBeanPropertyMeta&gt; properties = map();
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		Map&lt;String,ResponseBeanPropertyMeta&gt; hm = map();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		b.headerMethods.forEach((k, v) -&gt; {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			hm.put(k, pm);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			properties.put(pm.getGetter().getName(), pm);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		});
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">this</strong>.headerMethods = u(hm);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">this</strong>.contentMethod = b.contentMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.contentMethod.schema(schema).build(partSerializer, partParser);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">this</strong>.statusMethod = b.statusMethod == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : b.statusMethod.build(opte(), opte());
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">if</strong> (contentMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			properties.put(contentMethod.getGetter().getName(), contentMethod);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">if</strong> (statusMethod != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			properties.put(statusMethod.getGetter().getName(), statusMethod);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">this</strong>.properties = u(properties);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * Returns metadata about the class.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * @return Metadata about the class.</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">public</strong> ClassMeta&lt;?&gt; getClassMeta() { <strong class="jxr_keyword">return</strong> cm; }
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * Returns the HTTP status code.</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @return The HTTP status code.</em>
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCode() {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> code;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * Returns the &lt;ja&gt;@Content&lt;/ja&gt;-annotated method.</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 * @return The &lt;ja&gt;@Content&lt;/ja&gt;-annotated method, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> getContentMethod() {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">return</strong> contentMethod;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * Returns metadata about the &lt;ja&gt;@Header&lt;/ja&gt;-annotated methods.</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * @return Metadata about the &lt;ja&gt;@Header&lt;/ja&gt;-annotated methods, or an empty collection if none exist.</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;ResponseBeanPropertyMeta&gt; getHeaderMethods() {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">return</strong> headerMethods.values();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * Returns the part serializer to use to serialize this response.</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * @return The part serializer to use to serialize this response.</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;HttpPartSerializer&gt; getPartSerializer() {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">return</strong> partSerializer;
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * Returns all the annotated methods on this bean.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * @return All the annotated methods on this bean.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> getCode() { <strong class="jxr_keyword">return</strong> code; }
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * Returns the &lt;ja&gt;@Content&lt;/ja&gt;-annotated method.</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * @return The &lt;ja&gt;@Content&lt;/ja&gt;-annotated method, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> getContentMethod() { <strong class="jxr_keyword">return</strong> contentMethod; }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * Returns metadata about the &lt;ja&gt;@Header&lt;/ja&gt;-annotated methods.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * @return Metadata about the &lt;ja&gt;@Header&lt;/ja&gt;-annotated methods, or an empty collection if none exist.</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;ResponseBeanPropertyMeta&gt; getHeaderMethods() { <strong class="jxr_keyword">return</strong> headerMethods.values(); }
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * Returns the part serializer to use to serialize this response.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @return The part serializer to use to serialize this response.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;HttpPartSerializer&gt; getPartSerializer() { <strong class="jxr_keyword">return</strong> partSerializer; }
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * Returns all the annotated methods on this bean.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * @return All the annotated methods on this bean.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;ResponseBeanPropertyMeta&gt; getProperties() { <strong class="jxr_keyword">return</strong> properties.values(); }
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * Returns metadata about the bean property with the specified method getter name.</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * @param name The bean method getter name.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * @return Metadata about the bean property, or &lt;jk&gt;null&lt;/jk&gt; if none found.</em>
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> Collection&lt;ResponseBeanPropertyMeta&gt; getProperties() {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">return</strong> properties.values();
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> getProperty(String name) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">return</strong> properties.get(name);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * Returns metadata about the bean property with the specified method getter name.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * Returns the schema information about the response object.</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * @param name The bean method getter name.</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @return Metadata about the bean property, or &lt;jk&gt;null&lt;/jk&gt; if none found.</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> getProperty(String name) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">return</strong> properties.get(name);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * Returns the schema information about the response object.</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * @return The schema information about the response object.</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> getSchema() {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">return</strong> schema;
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * Returns the &lt;ja&gt;@StatusCode&lt;/ja&gt;-annotated method.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * @return The &lt;ja&gt;@StatusCode&lt;/ja&gt;-annotated method, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> getStatusMethod() {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> statusMethod;
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> }
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * @return The schema information about the response object.</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<strong class="jxr_keyword">public</strong> <a name="HttpPartSchema" href="../../../../../org/apache/juneau/httppart/HttpPartSchema.html#HttpPartSchema">HttpPartSchema</a> getSchema() { <strong class="jxr_keyword">return</strong> schema; }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * Returns the &lt;ja&gt;@StatusCode&lt;/ja&gt;-annotated method.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * @return The &lt;ja&gt;@StatusCode&lt;/ja&gt;-annotated method, or &lt;jk&gt;null&lt;/jk&gt; if it doesn't exist.</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<strong class="jxr_keyword">public</strong> <a name="ResponseBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/ResponseBeanPropertyMeta.html#ResponseBeanPropertyMeta">ResponseBeanPropertyMeta</a> getStatusMethod() { <strong class="jxr_keyword">return</strong> statusMethod; }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

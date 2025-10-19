@@ -46,7 +46,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> main(String[] args) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		Pojo aPojo = <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"a"</span>,<span class="jxr_string">"&lt;pojo&gt;"</span>);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		Pojo aPojo = <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"a"</span>, <span class="jxr_string">"&lt;pojo&gt;"</span>);
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">		 * Xml Serializers can be configured using properties defined in XmlSerializer.</em>
@@ -60,7 +60,7 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<em class="jxr_comment">// the output will be padded with spaces after format characters.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		System.out.println(withWhitespace);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		HashMap&lt;String, List&lt;Pojo&gt;&gt; values = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		HashMap&lt;String,List&lt;Pojo&gt;&gt; values = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		PojoComplex pojoc = <strong class="jxr_keyword">new</strong> <a name="PojoComplex" href="../../../../../../org/apache/juneau/examples/core/pojo/PojoComplex.html#PojoComplex">PojoComplex</a>(<span class="jxr_string">"pojo"</span>, <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"1.0"</span>, <span class="jxr_string">"name0"</span>), values);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<em class="jxr_comment">//Produces</em>
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// the output will add default name space to the xml document root.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		System.out.println(nspaceToRoot);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		Pojo nPojo = <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"a"</span>,<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		Pojo nPojo = <strong class="jxr_keyword">new</strong> <a name="Pojo" href="../../../../../../org/apache/juneau/examples/core/pojo/Pojo.html#Pojo">Pojo</a>(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<em class="jxr_comment">//Produces</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">//&lt;object&gt;&lt;id&gt;a&lt;/id&gt;&lt;/object&gt;</em>
@@ -85,14 +85,13 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<em class="jxr_comment">//Produces</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">//&lt;object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"&gt;&lt;name&gt;&amp;lt;pojo&amp;gt;&lt;/name&gt;&lt;id&gt;a&lt;/id&gt;&lt;/object&gt;</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create(<span class="jxr_string">"http://www.pierobon.org"</span> +
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<span class="jxr_string">"/iis/review1.htm.html#one"</span>)).addNamespaceUrisToRoot().build()
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.serialize(aPojo);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<em class="jxr_comment">// the output will have new default namespace added.</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		System.out.println(dNamsSpace);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  }
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		String dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create(<span class="jxr_string">"http://www.pierobon.org"</span> + <span class="jxr_string">"/iis/review1.htm.html#one"</span>)).addNamespaceUrisToRoot().build()
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			.serialize(aPojo);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<em class="jxr_comment">// the output will have new default namespace added.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		System.out.println(dNamsSpace);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

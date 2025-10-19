@@ -110,7 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the expression evaluates to false.</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> assertArg(<strong class="jxr_keyword">boolean</strong> expression, String msg, Object...args) <strong class="jxr_keyword">throws</strong> IllegalArgumentException {
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">if</strong> (! expression)
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">if</strong> (!expression)
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(MessageFormat.format(msg, args));
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
@@ -211,323 +211,343 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * @return true if the objects are equal according to the test predicate.</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T,U&gt; <strong class="jxr_keyword">boolean</strong> eq(T o1, U o2, BiPredicate&lt;T,U&gt; test) {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">if</strong> (o1 == <strong class="jxr_keyword">null</strong>) { <strong class="jxr_keyword">return</strong> o2 == <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">if</strong> (o2 == <strong class="jxr_keyword">null</strong>) { <strong class="jxr_keyword">return</strong> false; }
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">if</strong> (o1 == o2) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> test.test(o1, o2);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * Escapes a string for safe inclusion in Java source code.</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method converts special characters to their Java escape sequences and</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * converts non-printable ASCII characters to Unicode escape sequences.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Escape mappings:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code "} → {@code \&quot;}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \} → {@code &#92;&#92;}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \n} → {@code &#92;&#92;n}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \r} → {@code &#92;&#92;r}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \t} → {@code &#92;&#92;t}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \f} → {@code &#92;&#92;f}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \b} → {@code &#92;&#92;b}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;Non-printable characters → {@code &#92;&#92;uXXXX}&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;escaped&lt;/jv&gt; = &lt;jsm&gt;escapeForJava&lt;/jsm&gt;(&lt;js&gt;"Hello\nWorld\&quot;Test\&quot;"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Returns: "Hello&#92;&#92;nWorld&#92;&#92;\&quot;Test&#92;&#92;\&quot;"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">if</strong> (o1 == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">return</strong> o2 == <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">if</strong> (o2 == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">if</strong> (o1 == o2) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">return</strong> test.test(o1, o2);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * Escapes a string for safe inclusion in Java source code.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method converts special characters to their Java escape sequences and</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * converts non-printable ASCII characters to Unicode escape sequences.</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Escape mappings:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code "} → {@code \&quot;}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \} → {@code &#92;&#92;}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \n} → {@code &#92;&#92;n}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \r} → {@code &#92;&#92;r}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \t} → {@code &#92;&#92;t}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \f} → {@code &#92;&#92;f}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code \b} → {@code &#92;&#92;b}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;Non-printable characters → {@code &#92;&#92;uXXXX}&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @param s The string to escape.</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * @return The escaped string safe for Java source code.</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string parameter is null.</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String escapeForJava(String s) {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : s.toCharArray()) {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">switch</strong> (c) {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				<strong class="jxr_keyword">case</strong> '\&quot;': sb.append(<span class="jxr_string">"&#92;&#92;\&quot;"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 				<strong class="jxr_keyword">case</strong> '&#92;&#92;': sb.append(<span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">case</strong> '\n': sb.append(<span class="jxr_string">"&#92;&#92;n"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 				<strong class="jxr_keyword">case</strong> '\r': sb.append(<span class="jxr_string">"&#92;&#92;r"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<strong class="jxr_keyword">case</strong> '\t': sb.append(<span class="jxr_string">"&#92;&#92;t"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<strong class="jxr_keyword">case</strong> '\f': sb.append(<span class="jxr_string">"&#92;&#92;f"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				<strong class="jxr_keyword">case</strong> '\b': sb.append(<span class="jxr_string">"&#92;&#92;b"</span>); <strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">default</strong>:
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 					<strong class="jxr_keyword">if</strong> (c &lt; 0x20 || c &gt; 0x7E) {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 						sb.append(String.format(<span class="jxr_string">"&#92;&#92;u%04x"</span>, (<strong class="jxr_keyword">int</strong>)c));
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 						sb.append(c);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					}
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			}
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * Formats a message template with parameters using {@link MessageFormat}.</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method provides convenient message formatting with support for various parameter types.</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * If no arguments are provided, the message is returned as-is. Otherwise, it uses</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * {@link MessageFormat#format(String, Object...)} for parameter substitution.</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;msg&lt;/jv&gt; = &lt;jsm&gt;f&lt;/jsm&gt;(&lt;js&gt;"User {0} has {1} items"&lt;/js&gt;, &lt;js&gt;"Alice"&lt;/js&gt;, 5);</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Returns: "User Alice has 5 items"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;f&lt;/jsm&gt;(&lt;js&gt;"No parameters"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Returns: "No parameters"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @param msg The message template with {@link MessageFormat} placeholders.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @param args Optional parameters for template substitution.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * @return The formatted message string.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the message format is invalid.</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String f(String msg, Object...args) {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> args.length == 0 ? msg : MessageFormat.format(msg, args);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * Creates a {@link Supplier} that formats a message template with parameters.</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method returns a supplier that, when called, will format the message using</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * the {@link MessageFormat#format(String, Object...)} method. This is useful for lazy evaluation of</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * expensive formatting operations.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;escaped&lt;/jv&gt; = &lt;jsm&gt;escapeForJava&lt;/jsm&gt;(&lt;js&gt;"Hello\nWorld\&quot;Test\&quot;"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Returns: "Hello&#92;&#92;nWorld&#92;&#92;\&quot;Test&#92;&#92;\&quot;"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * @param s The string to escape.</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * @return The escaped string safe for Java source code.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * @throws NullPointerException If the string parameter is null.</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String escapeForJava(String s) {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : s.toCharArray()) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">switch</strong> (c) {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">case</strong> '\&quot;':
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				sb.append(<span class="jxr_string">"&#92;&#92;\&quot;"</span>);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">case</strong> '&#92;&#92;':
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				sb.append(<span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">case</strong> '\n':
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				sb.append(<span class="jxr_string">"&#92;&#92;n"</span>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">case</strong> '\r':
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				sb.append(<span class="jxr_string">"&#92;&#92;r"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">case</strong> '\t':
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				sb.append(<span class="jxr_string">"&#92;&#92;t"</span>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">case</strong> '\f':
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				sb.append(<span class="jxr_string">"&#92;&#92;f"</span>);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">case</strong> '\b':
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				sb.append(<span class="jxr_string">"&#92;&#92;b"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">if</strong> (c &lt; 0x20 || c &gt; 0x7E) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 					sb.append(String.format(<span class="jxr_string">"&#92;&#92;u%04x"</span>, (<strong class="jxr_keyword">int</strong>)c));
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 					sb.append(c);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 				}
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			}
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * Formats a message template with parameters using {@link MessageFormat}.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method provides convenient message formatting with support for various parameter types.</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * If no arguments are provided, the message is returned as-is. Otherwise, it uses</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * {@link MessageFormat#format(String, Object...)} for parameter substitution.</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;msg&lt;/jv&gt; = &lt;jsm&gt;f&lt;/jsm&gt;(&lt;js&gt;"User {0} has {1} items"&lt;/js&gt;, &lt;js&gt;"Alice"&lt;/js&gt;, 5);</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Returns: "User Alice has 5 items"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 *   Supplier&amp;lt;String&amp;gt; &lt;jv&gt;msgSupplier&lt;/jv&gt; = &lt;jsm&gt;fs&lt;/jsm&gt;(&lt;js&gt;"Processing {0} records"&lt;/js&gt;, &lt;jv&gt;recordCount&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Later, when needed:&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 *   String &lt;jv&gt;msg&lt;/jv&gt; = &lt;jv&gt;msgSupplier&lt;/jv&gt;.get();  &lt;jc&gt;// "Processing 150 records"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * @param msg The message template with {@link MessageFormat} placeholders.</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 * @param args Optional parameters for template substitution.</em>
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * @return A {@link Supplier} that produces the formatted message when called.</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; fs(String msg, Object...args) {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">return</strong> ()-&gt;f(msg, args);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern}.</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method converts glob-style patterns to regular expressions with the following mappings:</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code *} matches any sequence of characters (including none)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code ?} matches exactly one character&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;All other characters are treated literally&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;pattern&lt;/jv&gt; = &lt;jsm&gt;getGlobMatchPattern&lt;/jsm&gt;(&lt;js&gt;"user_*_temp"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_alice_temp"&lt;/js&gt;).matches();  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_bob_temp"&lt;/js&gt;).matches();    &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"admin_alice_temp"&lt;/js&gt;).matches(); &lt;jc&gt;// false&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * @param s The glob-style wildcard pattern string.</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * @return A compiled {@link Pattern} object, or null if the input string is null.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Pattern getGlobMatchPattern(String s) {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		<strong class="jxr_keyword">return</strong> getGlobMatchPattern(s, 0);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	}
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern} with flags.</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method converts glob-style patterns to regular expressions with the following mappings:</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code *} matches any sequence of characters (including none)&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code ?} matches exactly one character&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;All other characters are treated literally&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Case-insensitive matching&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;pattern&lt;/jv&gt; = &lt;jsm&gt;getGlobMatchPattern&lt;/jsm&gt;(&lt;js&gt;"USER_*"&lt;/js&gt;, Pattern.&lt;jsf&gt;CASE_INSENSITIVE&lt;/jsf&gt;);</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_alice"&lt;/js&gt;).matches();  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @param s The glob-style wildcard pattern string.</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * @param flags Regular expression flags (see {@link Pattern} constants).</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * @return A compiled {@link Pattern} object, or null if the input string is null.</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Pattern getGlobMatchPattern(String s, <strong class="jxr_keyword">int</strong> flags) {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		sb.append(<span class="jxr_string">"&#92;&#92;Q"</span>);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">if</strong> (c == '*')
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				sb.append(<span class="jxr_string">"&#92;&#92;E"</span>).append(<span class="jxr_string">".*"</span>).append(<span class="jxr_string">"&#92;&#92;Q"</span>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '?')
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				sb.append(<span class="jxr_string">"&#92;&#92;E"</span>).append(<span class="jxr_string">"."</span>).append(<span class="jxr_string">"&#92;&#92;Q"</span>);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				sb.append(c);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		}
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		sb.append(<span class="jxr_string">"&#92;&#92;E"</span>);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">return</strong> Pattern.compile(sb.toString(), flags);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * Tests two objects for inequality using {@link Objects#equals(Object, Object)}.</em>
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method is the logical negation of {@link Objects#equals(Object, Object)}.</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * It provides null-safe inequality testing using the standard Java equals contract.</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; notEqual = &lt;jsm&gt;ne&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; notEqual = &lt;jsm&gt;ne&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; notEqual = &lt;jsm&gt;ne&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;, &lt;jk&gt;null&lt;/jk&gt;);        &lt;jc&gt;// false&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The type of objects to compare.</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * @param o1 The first object to compare.</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @param o2 The second object to compare.</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * @return true if the objects are not equal according to {@link Objects#equals(Object, Object)}.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">boolean</strong> ne(T o1, T o2) {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">return</strong> ! eq(o1, o2);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * Safely executes a {@link ThrowingSupplier} and wraps checked exceptions as {@link RuntimeException}.</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method allows checked exceptions to be handled uniformly by converting them to</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * runtime exceptions. {@link RuntimeException}s are re-thrown as-is, while checked</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * exceptions are wrapped in a new {@link RuntimeException}.</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * Typically used in situations where you want to embed code that throws checked exceptions inside fluent</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * chained method calls.</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Safe file reading without explicit exception handling&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;content&lt;/jv&gt; = &lt;jsm&gt;safe&lt;/jsm&gt;(() -&amp;gt; Files.readString(Paths.get(&lt;js&gt;"file.txt"&lt;/js&gt;)));</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Safe URL connection&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;response&lt;/jv&gt; = &lt;jsm&gt;safe&lt;/jsm&gt;(() -&amp;gt; {</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 *       URL &lt;jv&gt;url&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; URL(&lt;js&gt;"<a href="http://example.com" target="alexandria_uri">http://example.com</a>"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;url&lt;/jv&gt;.openConnection().getInputStream().readAllBytes();</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 *   });</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The return type of the supplier.</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * @param s The {@link ThrowingSupplier} to execute safely.</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @return The result of the supplier execution.</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If the supplier throws any checked exception.</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safe(ThrowingSupplier&lt;T&gt; s) {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">return</strong> s.get();
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		}
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * Safely converts an object to its string representation, handling any exceptions that may occur.</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method provides a fail-safe way to call {@code toString()} on any object, ensuring that</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * exceptions thrown by problematic {@code toString()} implementations don't propagate up the call stack.</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * Instead, it returns a descriptive error message containing the exception type and message.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Exception Handling:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;If the object's {@code toString()} method throws any {@code Throwable}, this method catches it</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * and returns a formatted string in the form: {@code "&lt;ExceptionType&gt;: &lt;exception message&gt;"}.&lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Normal case - returns object's toString() result&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 *    String result = &lt;jsm&gt;safeToString&lt;/jsm&gt;(&lt;js&gt;"Hello"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// result = "Hello"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Exception case - returns formatted error message&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 *    Object problematic = &lt;jk&gt;new&lt;/jk&gt; Object() {</em>
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 *       &lt;ja&gt;@Override&lt;/ja&gt;</em>
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 *       &lt;jk&gt;public&lt;/jk&gt; String toString() {</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 *          &lt;jk&gt;throw new&lt;/jk&gt; RuntimeException(&lt;js&gt;"Cannot convert"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 *       }</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 *    };</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 *    String result = &lt;jsm&gt;safeToString&lt;/jsm&gt;(&lt;jv&gt;problematic&lt;/jv&gt;);</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// result = "RuntimeException: Cannot convert"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Object stringification in converters:&lt;/b&gt; Safe conversion of arbitrary objects to strings&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Debugging and logging:&lt;/b&gt; Ensures log statements never fail due to toString() exceptions&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Error handling:&lt;/b&gt; Graceful degradation when objects have problematic string representations&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Third-party object integration:&lt;/b&gt; Safe handling of objects from external libraries&lt;/li&gt;</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @param o The object to convert to a string. May be any object including &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 *    Returns &lt;js&gt;"null"&lt;/js&gt; if the object is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String safeToString(Object o) {
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">return</strong> o.toString();
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) {  <em class="jxr_comment">// NOSONAR</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">return</strong> t(t) + <span class="jxr_string">": "</span> + t.getMessage();
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		}
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	}
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * Returns the simple class name of an object, or null if the object is null.</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method provides a safe way to get type information for debugging and logging.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * It handles &lt;jk&gt;null&lt;/jk&gt; values gracefully by returning &lt;jk&gt;null&lt;/jk&gt; instead of throwing an exception.</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;type&lt;/jv&gt; = &lt;jsm&gt;t&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);        &lt;jc&gt;// "String"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;type&lt;/jv&gt; = &lt;jk&gt;var&lt;/jk&gt;&lt;jsm&gt;t&lt;/jsm&gt;(&lt;jk&gt;new&lt;/jk&gt; ArrayList()); &lt;jc&gt;// "ArrayList"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;type&lt;/jv&gt; = &lt;jsm&gt;t&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;);            &lt;jc&gt;// null&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * @param o The object to get the type name for.</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * @return The simple class name of the object, or &lt;jk&gt;null&lt;/jk&gt; if the object is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String t(Object o) {
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">return</strong> o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o.getClass().getSimpleName();
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;f&lt;/jsm&gt;(&lt;js&gt;"No parameters"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Returns: "No parameters"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * @param msg The message template with {@link MessageFormat} placeholders.</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * @param args Optional parameters for template substitution.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * @return The formatted message string.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the message format is invalid.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String f(String msg, Object...args) {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">return</strong> args.length == 0 ? msg : MessageFormat.format(msg, args);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * Creates a {@link Supplier} that formats a message template with parameters.</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method returns a supplier that, when called, will format the message using</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * the {@link MessageFormat#format(String, Object...)} method. This is useful for lazy evaluation of</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * expensive formatting operations.</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 *   Supplier&amp;lt;String&amp;gt; &lt;jv&gt;msgSupplier&lt;/jv&gt; = &lt;jsm&gt;fs&lt;/jsm&gt;(&lt;js&gt;"Processing {0} records"&lt;/js&gt;, &lt;jv&gt;recordCount&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Later, when needed:&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 *   String &lt;jv&gt;msg&lt;/jv&gt; = &lt;jv&gt;msgSupplier&lt;/jv&gt;.get();  &lt;jc&gt;// "Processing 150 records"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @param msg The message template with {@link MessageFormat} placeholders.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @param args Optional parameters for template substitution.</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @return A {@link Supplier} that produces the formatted message when called.</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Supplier&lt;String&gt; fs(String msg, Object...args) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">return</strong> () -&gt; f(msg, args);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	}
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern}.</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method converts glob-style patterns to regular expressions with the following mappings:</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code *} matches any sequence of characters (including none)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code ?} matches exactly one character&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;All other characters are treated literally&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;pattern&lt;/jv&gt; = &lt;jsm&gt;getGlobMatchPattern&lt;/jsm&gt;(&lt;js&gt;"user_*_temp"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_alice_temp"&lt;/js&gt;).matches();  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_bob_temp"&lt;/js&gt;).matches();    &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"admin_alice_temp"&lt;/js&gt;).matches(); &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * @param s The glob-style wildcard pattern string.</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * @return A compiled {@link Pattern} object, or null if the input string is null.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Pattern getGlobMatchPattern(String s) {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">return</strong> getGlobMatchPattern(s, 0);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	}
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern} with flags.</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method converts glob-style patterns to regular expressions with the following mappings:</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code *} matches any sequence of characters (including none)&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;{@code ?} matches exactly one character&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 *   &lt;li&gt;All other characters are treated literally&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Case-insensitive matching&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;pattern&lt;/jv&gt; = &lt;jsm&gt;getGlobMatchPattern&lt;/jsm&gt;(&lt;js&gt;"USER_*"&lt;/js&gt;, Pattern.&lt;jsf&gt;CASE_INSENSITIVE&lt;/jsf&gt;);</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;matches&lt;/jv&gt; = &lt;jv&gt;pattern&lt;/jv&gt;.matcher(&lt;js&gt;"user_alice"&lt;/js&gt;).matches();  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * @param s The glob-style wildcard pattern string.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * @param flags Regular expression flags (see {@link Pattern} constants).</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * @return A compiled {@link Pattern} object, or null if the input string is null.</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Pattern getGlobMatchPattern(String s, <strong class="jxr_keyword">int</strong> flags) {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		sb.append(<span class="jxr_string">"&#92;&#92;Q"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">if</strong> (c == '*')
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 				sb.append(<span class="jxr_string">"&#92;&#92;E"</span>).append(<span class="jxr_string">".*"</span>).append(<span class="jxr_string">"&#92;&#92;Q"</span>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '?')
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 				sb.append(<span class="jxr_string">"&#92;&#92;E"</span>).append(<span class="jxr_string">"."</span>).append(<span class="jxr_string">"&#92;&#92;Q"</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				sb.append(c);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		}
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		sb.append(<span class="jxr_string">"&#92;&#92;E"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">return</strong> Pattern.compile(sb.toString(), flags);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 * Tests two objects for inequality using {@link Objects#equals(Object, Object)}.</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method is the logical negation of {@link Objects#equals(Object, Object)}.</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * It provides null-safe inequality testing using the standard Java equals contract.</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; notEqual = &lt;jsm&gt;ne&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"world"&lt;/js&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; notEqual = &lt;jsm&gt;ne&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;js&gt;"hello"&lt;/js&gt;);  &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;boolean&lt;/jk&gt; notEqual = &lt;jsm&gt;ne&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;, &lt;jk&gt;null&lt;/jk&gt;);        &lt;jc&gt;// false&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The type of objects to compare.</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 * @param o1 The first object to compare.</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * @param o2 The second object to compare.</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * @return true if the objects are not equal according to {@link Objects#equals(Object, Object)}.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; <strong class="jxr_keyword">boolean</strong> ne(T o1, T o2) {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">return</strong> !eq(o1, o2);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * Safely executes a {@link ThrowingSupplier} and wraps checked exceptions as {@link RuntimeException}.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method allows checked exceptions to be handled uniformly by converting them to</em>
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * runtime exceptions. {@link RuntimeException}s are re-thrown as-is, while checked</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * exceptions are wrapped in a new {@link RuntimeException}.</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * Typically used in situations where you want to embed code that throws checked exceptions inside fluent</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * chained method calls.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Safe file reading without explicit exception handling&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;content&lt;/jv&gt; = &lt;jsm&gt;safe&lt;/jsm&gt;(() -&amp;gt; Files.readString(Paths.get(&lt;js&gt;"file.txt"&lt;/js&gt;)));</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Safe URL connection&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;response&lt;/jv&gt; = &lt;jsm&gt;safe&lt;/jsm&gt;(() -&amp;gt; {</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 *       URL &lt;jv&gt;url&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; URL(&lt;js&gt;"<a href="http://example.com" target="alexandria_uri">http://example.com</a>"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;url&lt;/jv&gt;.openConnection().getInputStream().readAllBytes();</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 *   });</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The return type of the supplier.</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * @param s The {@link ThrowingSupplier} to execute safely.</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * @return The result of the supplier execution.</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * @throws RuntimeException If the supplier throws any checked exception.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T safe(ThrowingSupplier&lt;T&gt; s) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">return</strong> s.get();
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * Safely converts an object to its string representation, handling any exceptions that may occur.</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method provides a fail-safe way to call {@code toString()} on any object, ensuring that</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * exceptions thrown by problematic {@code toString()} implementations don't propagate up the call stack.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * Instead, it returns a descriptive error message containing the exception type and message.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Exception Handling:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;If the object's {@code toString()} method throws any {@code Throwable}, this method catches it</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * and returns a formatted string in the form: {@code "&lt;ExceptionType&gt;: &lt;exception message&gt;"}.&lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Normal case - returns object's toString() result&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 *    String result = &lt;jsm&gt;safeToString&lt;/jsm&gt;(&lt;js&gt;"Hello"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// result = "Hello"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// Exception case - returns formatted error message&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 *    Object problematic = &lt;jk&gt;new&lt;/jk&gt; Object() {</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 *       &lt;ja&gt;@Override&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 *       &lt;jk&gt;public&lt;/jk&gt; String toString() {</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 *          &lt;jk&gt;throw new&lt;/jk&gt; RuntimeException(&lt;js&gt;"Cannot convert"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 *       }</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 *    };</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 *    String result = &lt;jsm&gt;safeToString&lt;/jsm&gt;(&lt;jv&gt;problematic&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 *    &lt;jc&gt;// result = "RuntimeException: Cannot convert"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Object stringification in converters:&lt;/b&gt; Safe conversion of arbitrary objects to strings&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Debugging and logging:&lt;/b&gt; Ensures log statements never fail due to toString() exceptions&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Error handling:&lt;/b&gt; Graceful degradation when objects have problematic string representations&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *    &lt;li&gt;&lt;b&gt;Third-party object integration:&lt;/b&gt; Safe handling of objects from external libraries&lt;/li&gt;</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * @param o The object to convert to a string. May be any object including &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * @return The string representation of the object, or a formatted error message if toString() throws an exception.</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 *    Returns &lt;js&gt;"null"&lt;/js&gt; if the object is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String safeToString(Object o) {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">return</strong> o.toString();
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		} <strong class="jxr_keyword">catch</strong> (Throwable t) { <em class="jxr_comment">// NOSONAR</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">return</strong> t(t) + <span class="jxr_string">": "</span> + t.getMessage();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		}
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 	}
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * Tokenizes a string into a list of {@link NestedTokenizer.Token} objects.</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * Returns the simple class name of an object, or null if the object is null.</em>
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method delegates to {@link NestedTokenizer#tokenize(String)} to parse</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * structured field strings into tokens. It's commonly used for parsing field lists</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * and nested property expressions.</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;tokens&lt;/jv&gt; = &lt;jsm&gt;tokenize&lt;/jsm&gt;(&lt;js&gt;"name,address{street,city},age"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Parses nested field expressions&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method provides a safe way to get type information for debugging and logging.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * It handles &lt;jk&gt;null&lt;/jk&gt; values gracefully by returning &lt;jk&gt;null&lt;/jk&gt; instead of throwing an exception.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;type&lt;/jv&gt; = &lt;jsm&gt;t&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);        &lt;jc&gt;// "String"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;type&lt;/jv&gt; = &lt;jk&gt;var&lt;/jk&gt;&lt;jsm&gt;t&lt;/jsm&gt;(&lt;jk&gt;new&lt;/jk&gt; ArrayList()); &lt;jc&gt;// "ArrayList"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 *   &lt;jv&gt;type&lt;/jv&gt; = &lt;jsm&gt;t&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;);            &lt;jc&gt;// null&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * @param fields The field string to tokenize.</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * @return A list of parsed tokens.</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * @see NestedTokenizer#tokenize(String)</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;NestedTokenizer.Token&gt; tokenize(String fields) {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		<strong class="jxr_keyword">return</strong> NestedTokenizer.tokenize(fields);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<strong class="jxr_keyword">private</strong> <a name="Utils" href="../../../../../org/apache/juneau/junit/bct/Utils.html#Utils">Utils</a>() {}
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> }
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * @param o The object to get the type name for.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * @return The simple class name of the object, or &lt;jk&gt;null&lt;/jk&gt; if the object is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String t(Object o) {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">return</strong> o == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : o.getClass().getSimpleName();
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	}
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * Tokenizes a string into a list of {@link NestedTokenizer.Token} objects.</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;This method delegates to {@link NestedTokenizer#tokenize(String)} to parse</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * structured field strings into tokens. It's commonly used for parsing field lists</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * and nested property expressions.</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;tokens&lt;/jv&gt; = &lt;jsm&gt;tokenize&lt;/jsm&gt;(&lt;js&gt;"name,address{street,city},age"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 *   &lt;jc&gt;// Parses nested field expressions&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * @param fields The field string to tokenize.</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 * @return A list of parsed tokens.</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * @see NestedTokenizer#tokenize(String)</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> List&lt;NestedTokenizer.Token&gt; tokenize(String fields) {
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">return</strong> NestedTokenizer.tokenize(fields);
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	}
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">private</strong> <a name="Utils" href="../../../../../org/apache/juneau/junit/bct/Utils.html#Utils">Utils</a>() {}
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

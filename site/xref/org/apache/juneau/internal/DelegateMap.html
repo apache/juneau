@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <a name="DelegateMap" href="../../../../org/apache/juneau/internal/DelegateMap.html#DelegateMap">DelegateMap</a>(T m, BeanSession session) {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">this</strong>.classMeta = session.getClassMetaForObject(m);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		m.forEach((k,v) -&gt; put(Utils.s(k), v));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		m.forEach((k, v) -&gt; put(Utils.s(k), v));
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -79,10 +79,8 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Override <em class="jxr_comment">/* Overridden from Delegate */</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">public</strong> ClassMeta&lt;T&gt; getClassMeta() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">return</strong> classMeta;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  }
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">public</strong> ClassMeta&lt;T&gt; getClassMeta() { <strong class="jxr_keyword">return</strong> classMeta; }
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2025 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

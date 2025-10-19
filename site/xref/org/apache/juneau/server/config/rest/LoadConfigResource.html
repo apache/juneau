@@ -30,13 +30,13 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.servlet.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.server.config.repository.GetConfiguration;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  @Rest(path=<span class="jxr_string">"/configs/*"</span>)
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  @Rest(path = <span class="jxr_string">"/configs/*"</span>)
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  @SuppressWarnings(<span class="jxr_string">"javadoc"</span>)
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="LoadConfigResource" href="../../../../../../org/apache/juneau/server/config/rest/LoadConfigResource.html#LoadConfigResource">LoadConfigResource</a> <strong class="jxr_keyword">extends</strong> <a name="RestServlet" href="../../../../../../org/apache/juneau/rest/servlet/RestServlet.html#RestServlet">RestServlet</a> {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 8247663789227304097L;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@RestGet(path=<span class="jxr_string">"/{project}/{branch}/*"</span>, produces=<span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@RestGet(path = <span class="jxr_string">"/{project}/{branch}/*"</span>, produces = <span class="jxr_string">"application/json"</span>)
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<strong class="jxr_keyword">public</strong> String gets(@Path(<span class="jxr_string">"project"</span>) String project, @Path(<span class="jxr_string">"branch"</span>) String branch) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		JsonSerializer jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
