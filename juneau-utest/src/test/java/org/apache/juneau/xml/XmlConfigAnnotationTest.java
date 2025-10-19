@@ -26,6 +26,7 @@ import javax.xml.stream.events.*;
 import javax.xml.stream.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -45,7 +46,7 @@ class XmlConfigAnnotationTest extends TestBase {
 		if (t == null)
 			return null;
 		if (isArray(t))
-			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils.toList(t, Object.class));
+			return XmlConfigAnnotationTest.TO_STRING.apply(ArrayUtils2.toList(t, Object.class));
 		if (t instanceof AA)
 			return "AA";
 		if (t instanceof AB)

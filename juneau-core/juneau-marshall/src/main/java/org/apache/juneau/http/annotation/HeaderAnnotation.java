@@ -25,6 +25,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -53,7 +54,7 @@ public class HeaderAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Header> ai, BeanContext.Builder b) {
 			Header a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
+			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
 		}

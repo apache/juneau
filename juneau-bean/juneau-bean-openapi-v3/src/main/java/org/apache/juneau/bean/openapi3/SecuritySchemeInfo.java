@@ -17,7 +17,6 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
@@ -340,7 +339,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setIn(String value) {
-		if (isStrict() && ! contains(value, VALID_IN))
+		if (isStrict() && ! ArrayUtils2.contains(value, VALID_IN))
 			throw new BasicRuntimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, VALID_IN);
 		in = value;
 		return this;
@@ -430,7 +429,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SecuritySchemeInfo setType(String value) {
-		if (isStrict() && ! contains(value, VALID_TYPES))
+		if (isStrict() && ! ArrayUtils2.contains(value, VALID_TYPES))
 			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, VALID_TYPES);
 		type = value;
 		return this;

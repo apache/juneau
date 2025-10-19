@@ -24,6 +24,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -52,7 +53,7 @@ public class ResponseAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Response> ai, BeanContext.Builder b) {
 			Response a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
+			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
 		}
@@ -173,8 +174,8 @@ public class ResponseAnnotation {
 
 		Impl(Builder b) {
 			super(b);
-			this.examples = copyOf(b.examples);
-			this.headers = copyOf(b.headers);
+			this.examples = ArrayUtils2.copyOf(b.examples);
+			this.headers = ArrayUtils2.copyOf(b.headers);
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;

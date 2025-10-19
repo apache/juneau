@@ -23,6 +23,7 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
@@ -51,7 +52,7 @@ public class BeanAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Bean> ai, BeanContext.Builder b) {
 			Bean a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
+			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}
@@ -328,7 +329,7 @@ public class BeanAnnotation {
 
 		Impl(Builder b) {
 			super(b);
-			this.dictionary = copyOf(b.dictionary);
+			this.dictionary = ArrayUtils2.copyOf(b.dictionary);
 			this.example = b.example;
 			this.excludeProperties = b.excludeProperties;
 			this.findFluentSetters = b.findFluentSetters;

@@ -492,7 +492,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					// Copy any existing array values into the temporary list.
 					Object oldArray = invokeGetter(bean, pName);
-					copyToList(oldArray, l);
+					ArrayUtils2.copyToList(oldArray, l);
 				}
 
 				// Add new entry to our array.
@@ -1289,7 +1289,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @throws InvocationTargetException Thrown by method invocation.
 	 */
 	protected void setArray(Object bean, List l) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		Object array = toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
+		Object array = ArrayUtils2.toArray(l, this.rawTypeMeta.getElementType().getInnerClass());
 		invokeSetter(bean, name, array);
 	}
 

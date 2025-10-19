@@ -121,7 +121,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return Utils.opt(copyOf(value()));
+		return Utils.opt(ArrayUtils2.copyOf(value()));
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array, or <jk>null</jk> if the value <jk>null</jk>.
 	 */
 	public String[] toArray() {
-		return copyOf(value());
+		return ArrayUtils2.copyOf(value());
 	}
 
 	/**

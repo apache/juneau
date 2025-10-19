@@ -18,6 +18,8 @@ package org.apache.juneau.annotation;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
 
+import org.apache.juneau.common.utils.*;
+
 /**
  * An implementation of an annotation that has an <code>on</code> value targeting classes/methods/fields/constructors.
  *
@@ -35,7 +37,7 @@ public class TargetedAnnotationImpl extends AnnotationImpl {
 	 */
 	public TargetedAnnotationImpl(TargetedAnnotationBuilder<?> b) {
 		super(b);
-		this.on = copyOf(b.on);
+		this.on = ArrayUtils2.copyOf(b.on);
 	}
 
 	/**

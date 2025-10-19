@@ -18,6 +18,7 @@ package org.apache.juneau.annotation;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -49,7 +50,7 @@ public class TargetedAnnotationBuilder<B extends TargetedAnnotationBuilder<B>> e
 	 */
 	public B on(String...values) {
 		for (String v : values)
-			on = ArrayUtils.append(on, v);
+			on = ArrayUtils2.append(on, v);
 		return asThis();
 	}
 }

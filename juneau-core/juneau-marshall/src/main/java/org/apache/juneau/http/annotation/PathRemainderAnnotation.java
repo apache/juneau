@@ -25,6 +25,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -57,7 +58,7 @@ public class PathRemainderAnnotation {
 		@Override
 		public void apply(AnnotationInfo<PathRemainder> ai, BeanContext.Builder b) {
 			PathRemainder a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
+			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
 		}
@@ -179,7 +180,7 @@ public class PathRemainderAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.def = b.def;
-			this.description = copyOf(b.description);
+			this.description = ArrayUtils2.copyOf(b.description);
 			this.parser = b.parser;
 			this.schema = b.schema;
 			this.serializer = b.serializer;

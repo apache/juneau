@@ -100,7 +100,7 @@ public class BeanFilter {
 					interceptor(x.interceptor());
 				if (isNotVoid(x.implClass()))
 					implClass(x.implClass());
-				if (isNotEmptyArray(x.dictionary()))
+				if (ArrayUtils2.isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
 				if (isNotEmpty(x.example()))
 					example(x.example());

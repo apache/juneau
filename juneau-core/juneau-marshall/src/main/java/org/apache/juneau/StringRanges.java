@@ -146,7 +146,7 @@ public class StringRanges {
 	 */
 	public StringRanges(StringRange...value) {
 		this.string = StringUtils.join(value, ", ");
-		this.value = copyOf(value);
+		this.value = ArrayUtils2.copyOf(value);
 	}
 
 	/**

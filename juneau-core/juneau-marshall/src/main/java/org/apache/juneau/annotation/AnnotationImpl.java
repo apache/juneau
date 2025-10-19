@@ -18,7 +18,6 @@ package org.apache.juneau.annotation;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.internal.ArrayUtils.copyOf;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -55,7 +54,7 @@ public class AnnotationImpl implements Annotation {
 	 */
 	public AnnotationImpl(AnnotationBuilder<?> b) {
 		this.annotationType = b.annotationType;
-		this.description = copyOf(b.description);
+		this.description = ArrayUtils2.copyOf(b.description);
 	}
 
 	/**

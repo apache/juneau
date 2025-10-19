@@ -180,7 +180,7 @@ public class MediaType implements Comparable<MediaType> {
 		subTypes = StringUtils.splita(subType, '+');
 		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
 		Arrays.sort(this.subTypesSorted);
-		hasSubtypeMeta = ArrayUtils.contains("*", this.subTypes);
+		hasSubtypeMeta = ArrayUtils2.contains("*", this.subTypes);
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(mediaType);
@@ -409,13 +409,13 @@ public class MediaType implements Comparable<MediaType> {
 			return 0;
 
 		// Subtypes match but are ordered different
-		if (ArrayUtils.equals(subTypesSorted, o.subTypesSorted))
+		if (ArrayUtils2.equals(subTypesSorted, o.subTypesSorted))
 			return c + 7500;
 
 		for (String st1 : subTypes) {
 			if ("*".equals(st1))
 				c += 0;
-			else if (ArrayUtils.contains(st1, o.subTypes))
+			else if (ArrayUtils2.contains(st1, o.subTypes))
 				c += 100;
 			else if (o.hasSubtypeMeta)
 				c += 0;
@@ -425,7 +425,7 @@ public class MediaType implements Comparable<MediaType> {
 		for (String st2 : o.subTypes) {
 			if ("*".equals(st2))
 				c += 0;
-			else if (ArrayUtils.contains(st2, subTypes))
+			else if (ArrayUtils2.contains(st2, subTypes))
 				c += 100;
 			else if (hasSubtypeMeta)
 				c += 0;

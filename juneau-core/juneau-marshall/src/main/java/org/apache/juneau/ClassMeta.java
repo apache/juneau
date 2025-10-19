@@ -188,7 +188,7 @@ public class ClassMeta<T> implements Type {
 					&& x.isNotDeprecated()
 					&& x.hasReturnType(c)
 					&& x.hasParamTypes(String.class)
-					&& ArrayUtils.contains(x.getName(), fromStringMethodNames))
+					&& ArrayUtils2.contains(x.getName(), fromStringMethodNames))
 			).map(MethodInfo::inner)
 			.orElse(null);
 			// @formatter:on

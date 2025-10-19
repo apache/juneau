@@ -484,7 +484,7 @@ public class RestUtils {
 			if (! b)
 				m.put(key, null);
 		} else if (b && m.get(key) != null) {
-			m.put(key, append(m.get(key), val));
+			m.put(key, ArrayUtils2.append(m.get(key), val));
 		} else {
 			m.put(key, new String[] { val });
 		}

@@ -450,19 +450,19 @@ public class SubItemsAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.$ref = b.$ref;
-			this._default = copyOf(b._default);
-			this._enum = copyOf(b._enum);
+			this._default = ArrayUtils2.copyOf(b._default);
+			this._enum = ArrayUtils2.copyOf(b._enum);
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
-			this.df = copyOf(b.df);
-			this.e = copyOf(b.e);
+			this.df = ArrayUtils2.copyOf(b.df);
+			this.e = ArrayUtils2.copyOf(b.e);
 			this.emax = b.emax;
 			this.emin = b.emin;
 			this.exclusiveMaximum = b.exclusiveMaximum;
 			this.exclusiveMinimum = b.exclusiveMinimum;
 			this.f = b.f;
 			this.format = b.format;
-			this.items = copyOf(b.items);
+			this.items = ArrayUtils2.copyOf(b.items);
 			this.max = b.max;
 			this.maxi = b.maxi;
 			this.maximum = b.maximum;

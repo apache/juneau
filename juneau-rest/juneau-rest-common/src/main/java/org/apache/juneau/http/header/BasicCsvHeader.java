@@ -120,7 +120,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String...value) {
 		super(name, StringUtils.join(value, ", "));
-		this.value = copyOf(value);
+		this.value = ArrayUtils2.copyOf(value);
 		this.supplier = null;
 	}
 
@@ -151,7 +151,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return Utils.opt(copyOf(value()));
+		return Utils.opt(ArrayUtils2.copyOf(value()));
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @return The header value as an array.  Can be <jk>null</jk>.
 	 */
 	public String[] toArray() {
-		return copyOf(value());
+		return ArrayUtils2.copyOf(value());
 	}
 
 	/**

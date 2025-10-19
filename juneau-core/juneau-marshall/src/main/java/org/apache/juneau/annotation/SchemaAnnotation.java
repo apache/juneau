@@ -56,7 +56,7 @@ public class SchemaAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
 			Schema a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
+			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
 		}
@@ -942,18 +942,18 @@ public class SchemaAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.$ref = b.$ref;
-			this._default = copyOf(b._default);
-			this._enum = copyOf(b._enum);
-			this.additionalProperties = copyOf(b.additionalProperties);
-			this.allOf = copyOf(b.allOf);
+			this._default = ArrayUtils2.copyOf(b._default);
+			this._enum = ArrayUtils2.copyOf(b._enum);
+			this.additionalProperties = ArrayUtils2.copyOf(b.additionalProperties);
+			this.allOf = ArrayUtils2.copyOf(b.allOf);
 			this.aev = b.aev;
 			this.allowEmptyValue = b.allowEmptyValue;
 			this.cf = b.cf;
 			this.collectionFormat = b.collectionFormat;
-			this.d = copyOf(b.d);
-			this.df = copyOf(b.df);
+			this.d = ArrayUtils2.copyOf(b.d);
+			this.df = ArrayUtils2.copyOf(b.df);
 			this.discriminator = b.discriminator;
-			this.e = copyOf(b.e);
+			this.e = ArrayUtils2.copyOf(b.e);
 			this.emax = b.emax;
 			this.emin = b.emin;
 			this.exclusiveMaximum = b.exclusiveMaximum;
@@ -983,7 +983,7 @@ public class SchemaAnnotation {
 			this.multipleOf = b.multipleOf;
 			this.p = b.p;
 			this.pattern = b.pattern;
-			this.properties = copyOf(b.properties);
+			this.properties = ArrayUtils2.copyOf(b.properties);
 			this.r = b.r;
 			this.readOnly = b.readOnly;
 			this.required = b.required;
@@ -995,7 +995,7 @@ public class SchemaAnnotation {
 			this.type = b.type;
 			this.ui = b.ui;
 			this.uniqueItems = b.uniqueItems;
-			this.xml = copyOf(b.xml);
+			this.xml = ArrayUtils2.copyOf(b.xml);
 			// JSON Schema Draft 2020-12 fields
 			this.deprecatedProperty = b.deprecatedProperty;
 			this.$id = b.$id;
@@ -1003,18 +1003,18 @@ public class SchemaAnnotation {
 			this.contentEncoding = b.contentEncoding;
 			this.exclusiveMaximumValue = b.exclusiveMaximumValue;
 			this.exclusiveMinimumValue = b.exclusiveMinimumValue;
-			this._const = copyOf(b._const);
-			this.examples = copyOf(b.examples);
-			this.$comment = copyOf(b.$comment);
-			this.prefixItems = copyOf(b.prefixItems);
-			this.unevaluatedItems = copyOf(b.unevaluatedItems);
-			this.unevaluatedProperties = copyOf(b.unevaluatedProperties);
-			this.dependentSchemas = copyOf(b.dependentSchemas);
-			this.dependentRequired = copyOf(b.dependentRequired);
-			this._if = copyOf(b._if);
-			this._then = copyOf(b._then);
-			this._else = copyOf(b._else);
-			this.$defs = copyOf(b.$defs);
+			this._const = ArrayUtils2.copyOf(b._const);
+			this.examples = ArrayUtils2.copyOf(b.examples);
+			this.$comment = ArrayUtils2.copyOf(b.$comment);
+			this.prefixItems = ArrayUtils2.copyOf(b.prefixItems);
+			this.unevaluatedItems = ArrayUtils2.copyOf(b.unevaluatedItems);
+			this.unevaluatedProperties = ArrayUtils2.copyOf(b.unevaluatedProperties);
+			this.dependentSchemas = ArrayUtils2.copyOf(b.dependentSchemas);
+			this.dependentRequired = ArrayUtils2.copyOf(b.dependentRequired);
+			this._if = ArrayUtils2.copyOf(b._if);
+			this._then = ArrayUtils2.copyOf(b._then);
+			this._else = ArrayUtils2.copyOf(b._else);
+			this.$defs = ArrayUtils2.copyOf(b.$defs);
 			postConstruct();
 		}
 

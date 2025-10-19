@@ -24,6 +24,7 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -52,7 +53,7 @@ public class MsgPackAnnotation {
 		@Override
 		public void apply(AnnotationInfo<MsgPack> ai, Context.Builder b) {
 			MsgPack a = ai.inner();
-			if (isEmptyArray(a.on(), a.onClass()))
+			if (ArrayUtils2.isEmptyArray(a.on()) && ArrayUtils2.isEmptyArray(a.onClass()))
 				return;
 			b.annotations(copy(a, vr()));
 		}

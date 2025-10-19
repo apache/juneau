@@ -65,7 +65,7 @@ public class EntityTags {
 	 */
 	public EntityTags(EntityTag...value) {
 		this.string = StringUtils.join(value, ", ");
-		this.value = copyOf(value);
+		this.value = ArrayUtils2.copyOf(value);
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class EntityTags {
 	 * @return The entity tags in this object as an array.  Can be <jk>null</jk>.
 	 */
 	public EntityTag[] toArray() {
-		return copyOf(value);
+		return ArrayUtils2.copyOf(value);
 	}
 
 	/**

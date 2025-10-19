@@ -299,7 +299,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 */
 	protected void nav(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		String[] links = session.getNavLinks();
-		if (links.length > 0 && ! ArrayUtils.contains("NONE", links)) {
+		if (links.length > 0 && ! ArrayUtils2.contains("NONE", links)) {
 			w.sTag(3, "ol").nl(3);
 			for (String l : links) {
 				w.sTag(4, "li");

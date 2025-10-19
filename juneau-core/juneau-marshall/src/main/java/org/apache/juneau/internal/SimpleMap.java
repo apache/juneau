@@ -94,7 +94,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	@Override /* Overridden from Map */
 	public Set<Map.Entry<K,V>> entrySet() {
-		return asSet(entries);
+		return ArrayUtils2.asSet(entries);
 	}
 
 	@Override /* Overridden from Map */
@@ -107,7 +107,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 	@Override /* Overridden from Map */
 	public Set<K> keySet() {
-		return asSet(keys);
+		return ArrayUtils2.asSet(keys);
 	}
 
 	@Override /* Overridden from Map */
