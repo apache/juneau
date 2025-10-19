@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -90,7 +90,7 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable(ServerVariable copyFrom) {
 		super(copyFrom);
 
-		this._enum = copyOf(copyFrom._enum);
+		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 	}
@@ -268,7 +268,7 @@ public class ServerVariable extends OpenApiElement {
 	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
-		_enum = listFrom(value);
+		_enum = CollectionUtils2.listFrom(value);
 		return this;
 	}
 

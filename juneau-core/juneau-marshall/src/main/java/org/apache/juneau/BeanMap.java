@@ -259,7 +259,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			// Bean with dyna properties.
 		} else {
-			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? CollectionUtils.sortedMap() : map());
+			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? CollectionUtils2.sortedMap() : map());
 
 			forEachProperty(x -> ! x.isDyna(), bpm -> {
 				try {

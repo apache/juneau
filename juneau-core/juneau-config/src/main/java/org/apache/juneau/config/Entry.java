@@ -440,7 +440,7 @@ public class Entry {
 				throw new BeanRuntimeException(e);
 			}
 		}
-		return Utils.opt(splita(v));
+		return Utils.opt(StringUtils.splita(v));
 	}
 
 	/**

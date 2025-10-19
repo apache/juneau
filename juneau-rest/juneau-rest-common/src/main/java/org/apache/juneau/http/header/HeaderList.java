@@ -892,7 +892,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return "[" + Utils.join(this, ", ") + "]";
+		return "[" + StringUtils.join(this, ", ") + "]";
 	}
 
 	/**

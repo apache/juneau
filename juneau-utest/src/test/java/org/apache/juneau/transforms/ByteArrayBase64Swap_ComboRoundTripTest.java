@@ -108,7 +108,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.verify(x -> verify(x).isType(List.class))
 			.verify(x -> verify(x.get(0)).isType(byte[].class))
 			.build(),
-		tester(4, "MapOfByteArrays", getType(Map.class,String.class,byte[].class), CollectionUtils.mapBuilder(String.class,byte[].class).add("foo",new byte[]{1,2,3}).add("bar",null).add(null,new byte[]{4,5,6}).add("null",new byte[]{7,8,9}).build())
+		tester(4, "MapOfByteArrays", getType(Map.class,String.class,byte[].class), CollectionBuilders.mapBuilder(String.class,byte[].class).add("foo",new byte[]{1,2,3}).add("bar",null).add(null,new byte[]{4,5,6}).add("null",new byte[]{7,8,9}).build())
 			.json("{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}")
 			.jsonT("{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}")
 			.jsonR("{\n\tfoo: 'AQID',\n\tbar: null,\n\tnull: 'BAUG',\n\t'null': 'BwgJ'\n}")

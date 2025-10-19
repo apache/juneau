@@ -17,14 +17,16 @@
 package org.apache.juneau.bean.jsonschema;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.CollectionUtils2.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -557,7 +559,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDefinition(String name, JsonSchema definition) {
 		if (this.definitions == null)
-			this.definitions = map();
+			this.definitions = CollectionUtils2.map();
 		this.definitions.put(name, definition);
 		setMasterOn(definition);
 		return this;
@@ -638,7 +640,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addProperties(JsonSchema...properties) {
 		if (this.properties == null)
-			this.properties = map();
+			this.properties = CollectionUtils2.map();
 		for (var p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class, "Invalid property passed to JsonSchema.addProperties().  Property name was null.");
@@ -687,7 +689,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addPatternProperties(JsonSchemaProperty...properties) {
 		if (this.patternProperties == null)
-			this.patternProperties = map();
+			this.patternProperties = CollectionUtils2.map();
 		for (var p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class, "Invalid property passed to JsonSchema.addProperties().  Property name was null.");
@@ -727,7 +729,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDependency(String name, JsonSchema dependency) {
 		if (this.dependencies == null)
-			this.dependencies = map();
+			this.dependencies = CollectionUtils2.map();
 		this.dependencies.put(name, dependency);
 		setMasterOn(dependency);
 		return this;
@@ -1410,7 +1412,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addAllOf(JsonSchema...allOf) {
 		setMasterOn(allOf);
-		this.allOf = addAll(this.allOf, allOf);
+		this.allOf = CollectionUtils2.addAll(this.allOf, allOf);
 		return this;
 	}
 
@@ -1781,7 +1783,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDef(String name, JsonSchema def) {
 		if (this.defs == null)
-			this.defs = map();
+			this.defs = CollectionUtils2.map();
 		this.defs.put(name, def);
 		setMasterOn(def);
 		return this;
@@ -1911,7 +1913,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDependentSchema(String name, JsonSchema schema) {
 		if (this.dependentSchemas == null)
-			this.dependentSchemas = map();
+			this.dependentSchemas = CollectionUtils2.map();
 		this.dependentSchemas.put(name, schema);
 		setMasterOn(schema);
 		return this;
@@ -1950,7 +1952,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDependentRequired(String name, List<String> required) {
 		if (this.dependentRequired == null)
-			this.dependentRequired = map();
+			this.dependentRequired = CollectionUtils2.map();
 		this.dependentRequired.put(name, required);
 		return this;
 	}

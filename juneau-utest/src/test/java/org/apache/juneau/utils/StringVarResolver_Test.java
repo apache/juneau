@@ -192,7 +192,7 @@ class StringVarResolver_Test extends TestBase {
 		}
 		@Override /* MultipartVar */
 		public String resolve(VarResolverSession session, String[] args) {
-			return Utils.join(args, '+');
+			return StringUtils.join(args, '+');
 		}
 	}
 

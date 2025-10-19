@@ -1005,7 +1005,7 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 		listener = builder.listener;
 
-		String[] _consumes = splita(consumes != null ? consumes : "");
+		String[] _consumes = StringUtils.splita(consumes != null ? consumes : "");
 		this.consumesArray = new MediaType[_consumes.length];
 		for (int i = 0; i < _consumes.length; i++) {
 			this.consumesArray[i] = MediaType.of(_consumes[i]);

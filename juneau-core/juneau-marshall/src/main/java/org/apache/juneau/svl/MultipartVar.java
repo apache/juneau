@@ -18,6 +18,8 @@ package org.apache.juneau.svl;
 
 import static org.apache.juneau.common.utils.Utils.*;
 
+import org.apache.juneau.common.utils.*;
+
 /**
  * Interface for the resolution of vars that consist of a comma-delimited list.
  *
@@ -43,7 +45,7 @@ public abstract class MultipartVar extends SimpleVar {
 
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String s) {
-		String[] s2 = s.indexOf(',') == -1 ? new String[] { s.trim() } : splita(s);
+		String[] s2 = s.indexOf(',') == -1 ? new String[] { s.trim() } : StringUtils.splita(s);
 		return resolve(session, s2);
 	}
 

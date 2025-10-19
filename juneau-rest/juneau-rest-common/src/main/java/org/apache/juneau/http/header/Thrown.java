@@ -155,7 +155,7 @@ public class Thrown extends BasicCsvHeader {
 	 * 	The header value.
 	 */
 	public Thrown(List<Part> value) {
-		super(NAME, Utils.join(value, ", "));
+		super(NAME, StringUtils.join(value, ", "));
 		this.value = u(value);
 	}
 
@@ -168,7 +168,7 @@ public class Thrown extends BasicCsvHeader {
 	public Thrown(String value) {
 		super(NAME, value);
 		List<Part> l = Utils.list();
-		Utils.split(value, x -> l.add(new Part(x)));
+		StringUtils.split(value, x -> l.add(new Part(x)));
 		this.value = value == null ? null : u(l);
 	}
 

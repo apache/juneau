@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -279,7 +278,7 @@ public class BeanStore {
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
 		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
-		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
+		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : CollectionUtils2.map();
 	}
 
 	BeanStore() {

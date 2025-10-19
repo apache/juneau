@@ -19,7 +19,6 @@ package org.apache.juneau.rest.swagger;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 
@@ -92,7 +91,7 @@ public class BasicSwaggerProviderSession {
 	static String joinnl(String[]...s) {
 		for (String[] ss : s) {
 			if (ss.length != 0)
-				return Utils.joinnl(ss).trim();
+				return StringUtils.joinnl(ss).trim();
 		}
 		return "";
 	}
@@ -235,7 +234,7 @@ public class BasicSwaggerProviderSession {
 		if (produces.isEmpty())
 			produces.addAll(context.getProduces());
 
-		Map<String,JsonMap> tagMap = map();
+		Map<String,JsonMap> tagMap = CollectionUtils2.map();
 		if (omSwagger.containsKey("tags")) {
 			for (JsonMap om : omSwagger.getList("tags").elements(JsonMap.class)) {
 				String name = om.getString("name");
@@ -1181,7 +1180,7 @@ public class BasicSwaggerProviderSession {
 			return null;
 		Set<String> set = set();
 		for (String s : ss)
-			Utils.split(s, x -> set.add(x));
+			StringUtils.split(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 }

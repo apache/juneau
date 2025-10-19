@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.soap;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.svl.*;
@@ -203,7 +204,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	}
 
 	@Override /* Overridden from Serializer */
-	public Map<String,String> getResponseHeaders() { return map("SOAPAction", getSoapAction()); }
+	public Map<String,String> getResponseHeaders() { return CollectionUtils2.map("SOAPAction", getSoapAction()); }
 
 	/**
 	 * The SOAPAction HTTP header value to set on responses.

@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.copyOf;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -108,7 +107,7 @@ public class SecurityScheme extends SwaggerElement {
 		this.flow = copyFrom.flow;
 		this.in = copyFrom.in;
 		this.name = copyFrom.name;
-		this.scopes = copyOf(copyFrom.scopes);
+		this.scopes = CollectionUtils2.copyOf(copyFrom.scopes);
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.type = copyFrom.type;
 	}
@@ -376,7 +375,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SecurityScheme setScopes(Map<String,String> value) {
-		scopes = copyOf(value);
+		scopes = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

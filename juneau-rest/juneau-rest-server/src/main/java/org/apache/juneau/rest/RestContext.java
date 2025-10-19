@@ -25,9 +25,7 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.addAll;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 
@@ -198,7 +196,7 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
-			Map<String,Method> x = map();
+			Map<String,Method> x = CollectionUtils2.map();
 			Object r = resource.get();
 
 			// @formatter:off
@@ -326,7 +324,7 @@ public class RestContext extends Context {
 		 * 	<li class='note'>
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
-		
+
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 		 * </ul>
@@ -847,7 +845,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder children(Object...values) {
-			addAll(children, values);
+			CollectionUtils2.addAll(children, values);
 			return this;
 		}
 
@@ -1034,7 +1032,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			consumes = addAll(consumes, values);
+			consumes = CollectionUtils2.addAll(consumes, values);
 			return this;
 		}
 
@@ -2632,7 +2630,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			produces = addAll(produces, values);
+			produces = CollectionUtils2.addAll(produces, values);
 			return this;
 		}
 
@@ -3778,7 +3776,7 @@ public class RestContext extends Context {
 
 			Object r = resource.get();
 
-			Map<String,MethodInfo> map = map();
+			Map<String,MethodInfo> map = CollectionUtils2.map();
 			// @formatter:off
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class),
@@ -4570,7 +4568,7 @@ public class RestContext extends Context {
 
 			ClassInfo rci = ClassInfo.of(resource.get());
 
-			Map<String,MethodInfo> initMap = map();
+			Map<String,MethodInfo> initMap = CollectionUtils2.map();
 			// @formatter:off
 			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class),
@@ -5060,16 +5058,16 @@ public class RestContext extends Context {
 			// @formatter:off
 			produces = builder.produces().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils2.setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-					return u(listFrom(s));
+					return u(CollectionUtils2.listFrom(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : CollectionUtils2.setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-					return u(listFrom(s));
+					return u(CollectionUtils2.listFrom(s));
 				}
 			);
 			// @formatter:on
@@ -5143,7 +5141,7 @@ public class RestContext extends Context {
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
+					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 				} else {
 					RestSession call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
@@ -5158,7 +5156,7 @@ public class RestContext extends Context {
 				RestContext rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
+					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(StringUtils.nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
@@ -5820,7 +5818,7 @@ public class RestContext extends Context {
 				return v == null ? false : super.contains(v);
 			}
 		};
-		split(value, x -> s.add(x));
+		StringUtils.split(value, x -> s.add(x));
 		return u(s);
 	}
 

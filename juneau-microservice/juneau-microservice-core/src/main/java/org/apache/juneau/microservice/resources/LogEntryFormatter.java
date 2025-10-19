@@ -17,7 +17,7 @@
 package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.common.StateEnum.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.text.*;
 import java.util.*;
@@ -198,7 +198,7 @@ public class LogEntryFormatter extends Formatter {
 		sre = sre.replaceAll("\\\\%n", "\\\\n");
 
 		rePattern = Pattern.compile(sre);
-		fieldIndexes = mapFrom(fieldIndexes);
+		fieldIndexes = CollectionUtils2.mapFrom(fieldIndexes);
 	}
 
 	@SuppressWarnings("deprecation")

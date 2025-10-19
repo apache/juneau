@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -109,8 +109,8 @@ public class PathItem extends OpenApiElement {
 		this.head = copyFrom.head;
 		this.patch = copyFrom.patch;
 		this.trace = copyFrom.trace;
-		this.servers = copyOf(copyFrom.servers);
-		this.parameters = copyOf(copyFrom.parameters);
+		this.servers = CollectionUtils2.copyOf(copyFrom.servers);
+		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
 	}
 
 	/**

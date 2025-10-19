@@ -63,7 +63,7 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return "(& " + Utils.join(clauses, " ") + ')';
+			return "(& " + StringUtils.join(clauses, " ") + ')';
 		}
 
 		@Override /* Overridden from Exp */
@@ -120,7 +120,7 @@ public class RoleMatcher {
 
 		Match(String operand) {
 			this.operand = operand;
-			p = Utils.getMatchPattern3(operand);
+			p = StringUtils.getMatchPattern(operand);
 		}
 
 		@Override /* Overridden from Object */
@@ -163,7 +163,7 @@ public class RoleMatcher {
 
 		@Override /* Overridden from Object */
 		public String toString() {
-			return "(| " + Utils.join(clauses, " ") + ')';
+			return "(| " + StringUtils.join(clauses, " ") + ')';
 		}
 
 		@Override /* Overridden from Exp */

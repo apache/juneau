@@ -1,3 +1,13 @@
+package org.apache.juneau.common.utils;
+
+import static java.util.stream.Collectors.*;
+import static org.apache.juneau.common.utils.Utils.*;
+
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.Map.*;
+import java.util.function.*;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,23 +24,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.internal;
 
-import static java.util.stream.Collectors.*;
-import static org.apache.juneau.common.utils.Utils.*;
-
-import java.lang.reflect.*;
-import java.util.*;
-import java.util.function.*;
-
-/**
- * Utility methods for collections.
- *
- * <h5 class='section'>See Also:</h5><ul>
-
- * </ul>
- */
-public class CollectionUtils {
+public class CollectionUtils2 {
 
 	/**
 	 * Adds all the specified values to the specified collection.
@@ -297,29 +292,6 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Instantiates a new builder of the specified list type.
-	 *
-	 * @param <E> The element type.
-	 * @param elementType The element type.
-	 * @param elementTypeArgs The element type args.
-	 * @return A new builder on top of the specified list.
-	 */
-	public static <E> ListBuilder<E> listBuilder(Class<E> elementType, Type...elementTypeArgs) {
-		return new ListBuilder<>(elementType, elementTypeArgs);
-	}
-
-	/**
-	 * Instantiates a new builder on top of the specified list.
-	 *
-	 * @param <E> The element type.
-	 * @param addTo The list to add to.
-	 * @return A new builder on top of the specified list.
-	 */
-	public static <E> ListBuilder<E> listBuilder(List<E> addTo) {
-		return new ListBuilder<>(addTo);
-	}
-
-	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
 	 * @param <E> The element type.
@@ -426,32 +398,6 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Instantiates a new builder of the specified map type.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param keyType The key type.
-	 * @param valueType The value type.
-	 * @param valueTypeArgs The value type args.
-	 * @return A new builder on top of the specified map.
-	 */
-	public static <K,V> MapBuilder<K,V> mapBuilder(Class<K> keyType, Class<V> valueType, Type...valueTypeArgs) {
-		return new MapBuilder<>(keyType, valueType, valueTypeArgs);
-	}
-
-	/**
-	 * Instantiates a new builder on top of the specified map.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param addTo The map to add to.
-	 * @return A new builder on top of the specified map.
-	 */
-	public static <K,V> MapBuilder<K,V> mapBuilder(Map<K,V> addTo) {
-		return new MapBuilder<>(addTo);
-	}
-
-	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
 	 * @param <K> The key type.
@@ -496,29 +442,6 @@ public class CollectionUtils {
 				value.addAll(0, alist(entries));
 		}
 		return value;
-	}
-
-	/**
-	 * Instantiates a new builder of the specified set.
-	 *
-	 * @param <E> The element type.
-	 * @param elementType The element type.
-	 * @param elementTypeArgs The element type args.
-	 * @return A new builder on top of the specified set.
-	 */
-	public static <E> SetBuilder<E> setBuilder(Class<E> elementType, Type...elementTypeArgs) {
-		return new SetBuilder<>(elementType, elementTypeArgs);
-	}
-
-	/**
-	 * Instantiates a new builder on top of the specified set.
-	 *
-	 * @param <E> The element type.
-	 * @param addTo The set to add to.
-	 * @return A new builder on top of the specified set.
-	 */
-	public static <E> SetBuilder<E> setBuilder(Set<E> addTo) {
-		return new SetBuilder<>(addTo);
 	}
 
 	/**
@@ -679,5 +602,5 @@ public class CollectionUtils {
 		return value == null ? null : Collections.synchronizedSet(value);
 	}
 
-	private CollectionUtils() {}
+	private CollectionUtils2() {}
 }

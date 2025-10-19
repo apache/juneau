@@ -93,7 +93,7 @@ public class Script extends HtmlElementRawText {
 	 * @param text The child text node.
 	 */
 	public Script(String type, String...text) {
-		type(type).text(Utils.joinnl(text));
+		type(type).text(StringUtils.joinnl(text));
 	}
 
 	@Override /* Overridden from HtmlElement */

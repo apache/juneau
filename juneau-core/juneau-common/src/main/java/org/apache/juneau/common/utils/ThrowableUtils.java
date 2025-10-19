@@ -117,4 +117,26 @@ public class ThrowableUtils {
 		}
 		return i;
 	}
+
+	/**
+	 * Creates an {@link IllegalArgumentException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new IllegalArgumentException with the formatted message.
+	 */
+	public static IllegalArgumentException illegalArg(String msg, Object...args) {
+		return new IllegalArgumentException(args.length == 0 ? msg : Utils.f(msg, args));
+	}
+
+	/**
+	 * Creates a {@link RuntimeException}.
+	 *
+	 * @param msg The exception message.
+	 * @param args The arguments to substitute into the message.
+	 * @return A new RuntimeException with the formatted message.
+	 */
+	public static RuntimeException runtimeException(String msg, Object...args) {
+		return new RuntimeException(args.length == 0 ? msg : Utils.f(msg, args));
+	}
 }

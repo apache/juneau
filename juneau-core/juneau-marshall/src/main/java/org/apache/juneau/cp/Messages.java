@@ -19,7 +19,7 @@ package org.apache.juneau.cp;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ResourceBundleUtils.*;
 
 import java.text.*;
@@ -268,7 +268,7 @@ public class Messages extends ResourceBundle {
 						} catch (ParseException e) {
 							throw asRuntimeException(e);
 						}
-						x = Messages.create(c).name(ms.name).baseNames(Utils.splita(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
+						x = Messages.create(c).name(ms.name).baseNames(StringUtils.splita(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
 					} else {
 						x = Messages.create(c).name(value).parent(x == null ? null : x.build());
 					}
@@ -382,7 +382,7 @@ public class Messages extends ResourceBundle {
 			});
 		}
 
-		this.keyMap = u(copyOf(keyMap));
+		this.keyMap = u(CollectionUtils2.copyOf(keyMap));
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
 

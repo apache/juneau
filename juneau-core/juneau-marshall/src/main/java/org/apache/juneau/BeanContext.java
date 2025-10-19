@@ -251,10 +251,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = CollectionUtils.listFrom(copyFrom.beanDictionary, true);
-			swaps = CollectionUtils.listFrom(copyFrom.swaps, true);
+			beanDictionary = CollectionUtils2.listFrom(copyFrom.beanDictionary, true);
+			swaps = CollectionUtils2.listFrom(copyFrom.swaps, true);
 			notBeanClasses = classSet(copyFrom.notBeanClasses, true);
-			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages, true);
+			notBeanPackages = CollectionUtils2.sortedSetFrom(copyFrom.notBeanPackages, true);
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -290,10 +290,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = CollectionUtils.copyOf(copyFrom.beanDictionary);
-			swaps = CollectionUtils.copyOf(copyFrom.swaps);
+			beanDictionary = CollectionUtils2.copyOf(copyFrom.beanDictionary);
+			swaps = CollectionUtils2.copyOf(copyFrom.swaps);
 			notBeanClasses = classSet(copyFrom.notBeanClasses);
-			notBeanPackages = CollectionUtils.sortedSetFrom(copyFrom.notBeanPackages);
+			notBeanPackages = CollectionUtils2.sortedSetFrom(copyFrom.notBeanPackages);
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -2326,7 +2326,7 @@ public class BeanContext extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-		
+
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -2364,7 +2364,7 @@ public class BeanContext extends Context {
 		 * 	<jk>public class</jk> MyBeanImpl <jk>implements</jk> MyBean {
 		 * 		...
 		 * 	}
-		
+
 		 * 	<jc>// Create a parser that instantiates MyBeanImpls when parsing MyBeans.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()

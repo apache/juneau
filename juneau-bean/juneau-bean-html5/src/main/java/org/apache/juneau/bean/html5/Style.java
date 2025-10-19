@@ -101,7 +101,7 @@ public class Style extends HtmlElementRawText {
 	 * 	<br>Values will be concatenated with newlines.
 	 */
 	public Style(String...text) {
-		text(Utils.joinnl(text));
+		text(StringUtils.joinnl(text));
 	}
 
 	@Override /* Overridden from HtmlElement */

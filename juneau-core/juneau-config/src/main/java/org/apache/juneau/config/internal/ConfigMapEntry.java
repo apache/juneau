@@ -17,7 +17,7 @@
 package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
 import java.util.*;
@@ -47,7 +47,7 @@ public class ConfigMapEntry {
 		var m1 = key2.indexOf('<');
 		var m2 = key2.indexOf('>');
 
-		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
+		modifiers = StringUtils.nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
 
 		this.key = m1 == -1 ? key2 : key2.substring(0, m1);
 
@@ -55,7 +55,7 @@ public class ConfigMapEntry {
 
 		i = line.indexOf('#');
 		if (i != -1) {
-			var l2 = Utils.splita(line, '#', 2);
+			var l2 = StringUtils.splita(line, '#', 2);
 			line = l2[0];
 			if (l2.length == 2)
 				this.comment = l2[1].trim();
@@ -67,7 +67,7 @@ public class ConfigMapEntry {
 
 		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
-		this.preLines = preLines == null ? Collections.emptyList() : u(copyOf(preLines));
+		this.preLines = preLines == null ? Collections.emptyList() : u(CollectionUtils2.copyOf(preLines));
 	}
 
 	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -76,7 +76,7 @@ public class ConfigMapEntry {
 		this.value = value;
 		this.comment = comment;
 		this.modifiers = modifiers;
-		this.preLines = preLines == null ? Collections.emptyList() : u(copyOf(preLines));
+		this.preLines = preLines == null ? Collections.emptyList() : u(CollectionUtils2.copyOf(preLines));
 	}
 
 	/**

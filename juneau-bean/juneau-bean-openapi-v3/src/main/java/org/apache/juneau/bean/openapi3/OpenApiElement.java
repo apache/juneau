@@ -17,14 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -39,7 +38,7 @@ public abstract class OpenApiElement {
 
 	OpenApiElement(OpenApiElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = copyOf(copyFrom.extra);
+		this.extra = CollectionUtils2.copyOf(copyFrom.extra);
 	}
 
 	/**
@@ -128,7 +127,7 @@ public abstract class OpenApiElement {
 		if (strict)
 			throw new RuntimeException("Cannot set property '" + property + "' in strict mode.");
 		if (extra == null)
-			extra = map();
+			extra = CollectionUtils2.map();
 		extra.put(property, value);
 		return this;
 	}

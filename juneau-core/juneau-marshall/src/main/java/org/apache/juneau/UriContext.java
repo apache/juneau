@@ -125,10 +125,10 @@ public class UriContext {
 	 */
 	public UriContext(String s) throws ParseException {
 		JsonMap m = JsonMap.ofJson(s);
-		this.authority = Utils.nullIfEmpty3(trimSlashes(m.getString("authority")));
-		this.contextRoot = Utils.nullIfEmpty3(trimSlashes(m.getString("contextRoot")));
-		this.servletPath = Utils.nullIfEmpty3(trimSlashes(m.getString("servletPath")));
-		this.pathInfo = Utils.nullIfEmpty3(trimSlashes(m.getString("pathInfo")));
+		this.authority = StringUtils.nullIfEmpty(trimSlashes(m.getString("authority")));
+		this.contextRoot = StringUtils.nullIfEmpty(trimSlashes(m.getString("contextRoot")));
+		this.servletPath = StringUtils.nullIfEmpty(trimSlashes(m.getString("servletPath")));
+		this.pathInfo = StringUtils.nullIfEmpty(trimSlashes(m.getString("pathInfo")));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 
@@ -152,10 +152,10 @@ public class UriContext {
 	 */
 	@Beanc
 	public UriContext(@Name("authority") String authority, @Name("contextRoot") String contextRoot, @Name("servletPath") String servletPath, @Name("pathInfo") String pathInfo) {
-		this.authority = Utils.nullIfEmpty3(trimSlashes(authority));
-		this.contextRoot = Utils.nullIfEmpty3(trimSlashes(contextRoot));
-		this.servletPath = Utils.nullIfEmpty3(trimSlashes(servletPath));
-		this.pathInfo = Utils.nullIfEmpty3(trimSlashes(pathInfo));
+		this.authority = StringUtils.nullIfEmpty(trimSlashes(authority));
+		this.contextRoot = StringUtils.nullIfEmpty(trimSlashes(contextRoot));
+		this.servletPath = StringUtils.nullIfEmpty(trimSlashes(servletPath));
+		this.pathInfo = StringUtils.nullIfEmpty(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 	}
 

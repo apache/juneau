@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -112,7 +112,7 @@ public class Parameter extends OpenApiElement {
 		this.allowReserved = copyFrom.allowReserved;
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		this.examples = copyOf(copyFrom.examples);
+		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
 	}
 
 	/**
@@ -354,7 +354,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setIn(String value) {
-		if (isStrict() && ! contains(value, VALID_IN))
+		if (isStrict() && ! StringUtils.contains(value, VALID_IN))
 			throw new BasicRuntimeException("Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_IN));
 		this.in = value;
 		return this;
@@ -400,7 +400,7 @@ public class Parameter extends OpenApiElement {
 	 * @return This object.
 	 */
 	public Parameter setStyle(String value) {
-		if (isStrict() && ! contains(value, VALID_STYLES))
+		if (isStrict() && ! StringUtils.contains(value, VALID_STYLES))
 			throw new BasicRuntimeException("Invalid value passed in to setStyle(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_STYLES));
 		this.style = value;
 		return this;

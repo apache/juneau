@@ -17,7 +17,6 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -60,10 +59,10 @@ public class RrpcInterfaceMeta {
 
 		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(StringUtils.trimSlashes(x.path())));
 
-		Map<Method,RrpcInterfaceMethodMeta> methods = map();
+		Map<Method,RrpcInterfaceMethodMeta> methods = CollectionUtils2.map();
 		ci.forEachPublicMethod(x -> true, x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
 
-		Map<String,RrpcInterfaceMethodMeta> methodsByPath = map();
+		Map<String,RrpcInterfaceMethodMeta> methodsByPath = CollectionUtils2.map();
 		methods.values().forEach(x -> methodsByPath.put(x.getPath(), x));
 
 		this.methods = u(methods);

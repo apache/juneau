@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -102,8 +102,8 @@ public class ResponseInfo extends SwaggerElement {
 
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
-		this.examples = copyOf(copyFrom.examples);
-		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
+		this.headers = CollectionUtils2.copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -314,7 +314,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setExamples(Map<String,Object> value) {
-		examples = copyOf(value);
+		examples = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
@@ -330,7 +330,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
+		headers = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

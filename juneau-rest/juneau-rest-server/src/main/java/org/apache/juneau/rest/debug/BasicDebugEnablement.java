@@ -108,7 +108,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 			x -> true,
 			x -> {
 				String x2 = varResolver.resolve(x.debugOn());
-				for (Map.Entry<String,String> e : Utils.splitMap(x2, true).entrySet()) {
+				for (Map.Entry<String,String> e : StringUtils.splitMap(x2, true).entrySet()) {
 					String k = e.getKey(), v = e.getValue();
 					if (v.isEmpty())
 						v = "ALWAYS";

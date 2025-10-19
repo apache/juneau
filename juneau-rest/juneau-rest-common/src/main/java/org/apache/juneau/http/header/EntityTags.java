@@ -64,7 +64,7 @@ public class EntityTags {
 	 * @param value The header value.
 	 */
 	public EntityTags(EntityTag...value) {
-		this.string = Utils.join(value, ", ");
+		this.string = StringUtils.join(value, ", ");
 		this.value = copyOf(value);
 	}
 
@@ -110,7 +110,7 @@ public class EntityTags {
 	private static EntityTag[] parse(String value) {
 		if (value == null)
 			return null;
-		String[] s = splita(value);
+		String[] s = StringUtils.splita(value);
 		EntityTag[] v = new EntityTag[s.length];
 		for (int i = 0; i < s.length; i++)
 			v[i] = EntityTag.of(s[i]);

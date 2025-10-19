@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -86,7 +86,7 @@ public class RequestBodyInfo extends OpenApiElement {
 
 		this.description = copyFrom.description;
 		this.required = copyFrom.required;
-		this.content = copyOf(copyFrom.content, MediaType::copy);
+		this.content = CollectionUtils2.copyOf(copyFrom.content, MediaType::copy);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class RequestBodyInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public RequestBodyInfo setContent(Map<String,MediaType> value) {
-		content = copyOf(value);
+		content = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

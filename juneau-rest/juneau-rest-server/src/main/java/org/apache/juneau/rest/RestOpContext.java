@@ -22,7 +22,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
@@ -358,7 +358,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder consumes(MediaType...values) {
-			consumes = addAll(consumes, values);
+			consumes = CollectionUtils2.addAll(consumes, values);
 			return this;
 		}
 
@@ -1114,7 +1114,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder path(String...values) {
-			path = prependAll(path, values);
+			path = CollectionUtils2.prependAll(path, values);
 			return this;
 		}
 
@@ -1145,7 +1145,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder produces(MediaType...values) {
-			produces = addAll(produces, values);
+			produces = CollectionUtils2.addAll(produces, values);
 			return this;
 		}
 
@@ -1240,7 +1240,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * @return This object.
 		 */
 		public Builder rolesDeclared(String...values) {
-			rolesDeclared = addAll(rolesDeclared, values);
+			rolesDeclared = CollectionUtils2.addAll(rolesDeclared, values);
 			return this;
 		}
 
@@ -1299,7 +1299,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private static String joinnlFirstNonEmptyArray(String[]...s) {
 			for (String[] ss : s)
 				if (ss.length > 0)
-					return Utils.joinnl(ss);
+					return StringUtils.joinnl(ss);
 			return null;
 		}
 

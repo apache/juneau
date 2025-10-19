@@ -50,11 +50,11 @@ public class FakeWriterSerializer extends WriterSerializer implements HttpPartSe
 
 		private static String out(Object value) {
 			if (value instanceof List<?> x)
-				value = Utils.join(x, '|');
+				value = StringUtils.join(x, '|');
 			if (value instanceof Collection<?> x)
-				value = Utils.join(x, '|');
+				value = StringUtils.join(x, '|');
 			if (isArray(value))
-				value = Utils.join(toList(value, Object.class), "|");
+				value = StringUtils.join(toList(value, Object.class), "|");
 			return "x" + value + "x";
 		}
 	}

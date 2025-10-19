@@ -38,7 +38,7 @@ class RoleMatcher_Test extends TestBase {
 	private static void test(String expression, String toString, String expressionRoles, String[] shouldMatch, String[] shouldNotMatch) {
 		var m = safe(()->new RoleMatcher(expression));
 		assertEquals(toString, m.toString(), "m.toString() didn't match.");
-		assertEquals(expressionRoles, Utils.join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
+		assertEquals(expressionRoles, StringUtils.join(m.getRolesInExpression(), ","), "m.getRolesInExpression() didn't match.");
 		for (String i : shouldMatch)
 			if (! m.matches(toSet(i)))
 				fail("Matcher "+m+" should have matched '"+i+"' but didn't.");
@@ -54,7 +54,7 @@ class RoleMatcher_Test extends TestBase {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return CollectionUtils.sortedSet(Utils.splita(input));
+		return CollectionUtils2.sortedSet(StringUtils.splita(input));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

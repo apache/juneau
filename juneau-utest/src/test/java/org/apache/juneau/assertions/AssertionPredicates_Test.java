@@ -38,7 +38,7 @@ class AssertionPredicates_Test extends TestBase {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static StringAssertion A1 = assertString("foo").setSilent(), A2 = assertString(empty()).setSilent();
+	private static StringAssertion A1 = assertString("foo").setSilent(), A2 = assertString(opte()).setSilent();
 
 	@Test void a01_any() {
 		assertDoesNotThrow(()->A1.is(any()));

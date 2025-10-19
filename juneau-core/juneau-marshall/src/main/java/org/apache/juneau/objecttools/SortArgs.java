@@ -18,9 +18,10 @@ package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.util.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * Arguments passed to {@link ObjectSorter}.
@@ -83,7 +84,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(Collection<String> sortArgs) {
-		Map<String,Boolean> sort = map();
+		Map<String,Boolean> sort = CollectionUtils2.map();
 		sortArgs.forEach(s -> {
 			boolean isDesc = false;
 			if (endsWith(s, '-', '+')) {
@@ -108,7 +109,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(String sortArgs) {
-		this(alist(splita(sortArgs)));
+		this(alist(StringUtils.splita(sortArgs)));
 	}
 
 	/**

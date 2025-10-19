@@ -19,7 +19,7 @@ package org.apache.juneau.microservice;
 import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.FileUtils.*;
 
 import java.io.*;
@@ -306,7 +306,7 @@ public class Microservice implements ConfigEventListener {
 		 * @return This object.
 		 */
 		public Builder consoleCommands(ConsoleCommand...consoleCommands) {
-			addAll(this.consoleCommands, consoleCommands);
+			CollectionUtils2.addAll(this.consoleCommands, consoleCommands);
 			return this;
 		}
 

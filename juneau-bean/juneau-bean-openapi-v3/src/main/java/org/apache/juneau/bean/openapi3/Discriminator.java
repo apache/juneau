@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -91,7 +91,7 @@ public class Discriminator extends OpenApiElement {
 		super(copyFrom);
 
 		this.propertyName = copyFrom.propertyName;
-		this.mapping = copyOf(copyFrom.mapping);
+		this.mapping = CollectionUtils2.copyOf(copyFrom.mapping);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
-		mapping = copyOf(value);
+		mapping = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

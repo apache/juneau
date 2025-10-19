@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;
@@ -68,7 +69,7 @@ public class ContentTypeMenuItem extends MenuItemWidget {
 		for (Serializer s : req.getOpContext().getSerializers().getSerializers())
 			l.add(s.getPrimaryMediaType());
 		for (MediaType mt : l) {
-			URI uri = req.getUri(true, CollectionUtils.<String,Object>map("plainText", "true", "Accept", mt.toString()));
+			URI uri = req.getUri(true, CollectionUtils2.map("plainText", "true", "Accept", mt.toString()));
 			div.children(a(uri, mt), br());
 		}
 		return div;

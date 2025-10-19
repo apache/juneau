@@ -17,7 +17,7 @@
 package org.apache.juneau.config.store;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.utils.*;
@@ -194,7 +195,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 */
 	public synchronized ConfigStore register(String name, ConfigStoreListener l) {
 		name = resolveName(name);
-		var s = listeners.computeIfAbsent(name, k -> synced(newSetFromMap(new IdentityHashMap<>())));
+		var s = listeners.computeIfAbsent(name, k -> CollectionUtils2.synced(newSetFromMap(new IdentityHashMap<>())));
 		s.add(l);
 		return this;
 	}

@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
@@ -385,7 +386,7 @@ public class RestSession extends ContextSession {
 	public Map<String,String[]> getQueryParams() {
 		if (queryParams == null) {
 			if (req.getMethod().equalsIgnoreCase("POST"))
-				queryParams = RestUtils.parseQuery(req.getQueryString(), map());
+				queryParams = RestUtils.parseQuery(req.getQueryString(), CollectionUtils2.map());
 			else
 				queryParams = req.getParameterMap();
 		}

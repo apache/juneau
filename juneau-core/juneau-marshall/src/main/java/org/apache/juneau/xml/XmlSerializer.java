@@ -18,7 +18,7 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -176,7 +176,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			disableJsonTags = copyFrom.disableJsonTags;
 			enableNamespaces = copyFrom.enableNamespaces;
 			defaultNamespace = copyFrom.defaultNamespace;
-			namespaces = copyOf(copyFrom.namespaces);
+			namespaces = CollectionUtils2.copyOf(copyFrom.namespaces);
 			textNodeDelimiter = copyFrom.textNodeDelimiter;
 		}
 
@@ -817,7 +817,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			namespaces = addAll(namespaces, values);
+			namespaces = CollectionUtils2.addAll(namespaces, values);
 			return this;
 		}
 

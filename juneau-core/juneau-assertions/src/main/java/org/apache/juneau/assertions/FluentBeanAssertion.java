@@ -160,7 +160,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	 * @return This object.
 	 */
 	public FluentMapAssertion<String,Object,R> asPropertyMap(String...names) {
-		return new FluentMapAssertion<>(this, toBeanMap().getProperties(Utils.splita(names, ',')), returns());
+		return new FluentMapAssertion<>(this, toBeanMap().getProperties(StringUtils.splita(names, ',')), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */

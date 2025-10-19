@@ -18,7 +18,7 @@ package org.apache.juneau.jena;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -1173,7 +1173,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * @return This object.
 		 */
 		public Builder namespaces(Namespace...values) {
-			namespaces = addAll(namespaces, values);
+			namespaces = CollectionUtils2.addAll(namespaces, values);
 			return this;
 		}
 

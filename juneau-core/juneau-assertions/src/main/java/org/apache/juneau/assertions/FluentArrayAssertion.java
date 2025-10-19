@@ -17,7 +17,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static java.util.Arrays.*;
 
 import java.io.*;
@@ -189,7 +189,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A fluent string assertion.  Never <jk>null</jk>.
 	 */
 	public FluentStringAssertion<R> asCdl() {
-		return new FluentStringAssertion<>(this, valueIsNull() ? null : Utils.join(value(), ','), returns());
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : StringUtils.join(value(), ','), returns());
 	}
 
 	/**
@@ -200,7 +200,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
 		List<String> l = valueIsNull() ? null : stream(value()).map(function::apply).toList();
-		return new FluentStringAssertion<>(this, Utils.join(l, ','), returns());
+		return new FluentStringAssertion<>(this, StringUtils.join(l, ','), returns());
 	}
 
 	/**
@@ -441,6 +441,6 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : sortedList(comparator, value());
+		return valueIsNull() ? null : CollectionUtils2.sortedList(comparator, value());
 	}
 }

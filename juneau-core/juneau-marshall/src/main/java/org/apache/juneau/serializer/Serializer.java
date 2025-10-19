@@ -27,6 +27,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.utils.*;
@@ -1292,7 +1293,7 @@ public class Serializer extends BeanTraverseContext {
 
 		this.producesMediaType = MediaType.of(produces);
 		this.acceptRanges = accept != null ? MediaRanges.of(accept) : MediaRanges.of(produces);
-		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(splita(builder.accept)) : new MediaType[] { this.producesMediaType };
+		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(StringUtils.splita(builder.accept)) : new MediaType[] { this.producesMediaType };
 	}
 
 	@Override /* Overridden from Context */

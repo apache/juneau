@@ -23,8 +23,7 @@ import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1943,7 +1942,7 @@ public class HttpPartSchema {
 		public Builder property(String key, Builder value) {
 			if (key != null && value != null) {
 				if (properties == null)
-					properties = map();
+					properties = CollectionUtils2.map();
 				properties.put(key, value);
 			}
 			return this;
@@ -1968,7 +1967,7 @@ public class HttpPartSchema {
 		public Builder property(String key, HttpPartSchema value) {
 			if (key != null && value != null) {
 				if (properties == null)
-					properties = map();
+					properties = CollectionUtils2.map();
 				properties.put(key, value);
 			}
 			return this;
@@ -2510,7 +2509,7 @@ public class HttpPartSchema {
 		private static String joinnlOrNull(String[]...s) {
 			for (String[] ss : s)
 				if (ss.length > 0)
-					return Utils.joinnl(ss);
+					return StringUtils.joinnl(ss);
 			return null;
 		}
 
@@ -3512,7 +3511,7 @@ public class HttpPartSchema {
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
-		Map<String,HttpPartSchema> m = map();
+		Map<String,HttpPartSchema> m = CollectionUtils2.map();
 		in.forEach((k, v) -> m.put(k, build(v, noValidate)));
 		return u(m);
 	}
@@ -3526,11 +3525,11 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? emptySet() : u(copyOf(in));
+		return in == null ? emptySet() : u(CollectionUtils2.copyOf(in));
 	}
 
 	final static JsonMap toJsonMap(String[] ss) {
-		String s = Utils.joinnl(ss);
+		String s = StringUtils.joinnl(ss);
 		if (s.isEmpty())
 			return null;
 		if (! isJsonObject(s, true))
@@ -3575,7 +3574,7 @@ public class HttpPartSchema {
 		for (String[] ss : s)
 			if (ss != null)
 				for (String ss2 : ss)
-					Utils.split(ss2, x -> set.add(x));
+					StringUtils.split(ss2, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 
@@ -3792,7 +3791,7 @@ public class HttpPartSchema {
 
 		List<String> notAllowed2 = notAllowed.build();
 		if (! notAllowed2.isEmpty())
-			errors.add("Attributes not allow for type='" + type + "': " + Utils.join(notAllowed2, ","));
+			errors.add("Attributes not allow for type='" + type + "': " + StringUtils.join(notAllowed2, ","));
 		if (invalidFormat)
 			errors.add("Invalid format for type='" + type + "': '" + format + "'");
 		if (exclusiveMaximum && maximum == null)
@@ -3825,7 +3824,7 @@ public class HttpPartSchema {
 			errors.add("Cannot define an array of objects unless array format is 'uon'.");
 
 		if (! errors.isEmpty())
-			throw new ContextRuntimeException("Schema specification errors: \n\t" + Utils.join(errors, "\n\t"), new Object[0]);
+			throw new ContextRuntimeException("Schema specification errors: \n\t" + StringUtils.join(errors, "\n\t"), new Object[0]);
 	}
 
 	/**

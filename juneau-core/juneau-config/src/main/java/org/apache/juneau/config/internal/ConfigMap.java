@@ -21,8 +21,7 @@ import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.io.*;
 import java.util.*;
@@ -46,11 +45,11 @@ public class ConfigMap implements ConfigStoreListener {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
 
-		final List<String> preLines = synced(list());
+		final List<String> preLines = CollectionUtils2.synced(list());
 		private final String rawLine;
 
-		final Map<String,ConfigMapEntry> oentries = synced(map());
-		final Map<String,ConfigMapEntry> entries = synced(map());
+		final Map<String,ConfigMapEntry> oentries = CollectionUtils2.synced(CollectionUtils2.map());
+		final Map<String,ConfigMapEntry> entries = CollectionUtils2.synced(CollectionUtils2.map());
 
 		/**
 		 * Constructor.
@@ -137,7 +136,7 @@ public class ConfigMap implements ConfigStoreListener {
 	class Import {
 
 		private final ConfigMap configMap;
-		private final Map<ConfigEventListener,ConfigEventListener> listenerMap = synced(map());
+		private final Map<ConfigEventListener,ConfigEventListener> listenerMap = CollectionUtils2.synced(CollectionUtils2.map());
 
 		Import(ConfigMap configMap) {
 			this.configMap = configMap;
@@ -192,16 +191,16 @@ public class ConfigMap implements ConfigStoreListener {
 	final String name;                       // The name  of this object.
 
 	// Changes that have been applied since the last load.
-	private final List<ConfigEvent> changes = synced(new ConfigEvents());
+	private final List<ConfigEvent> changes = CollectionUtils2.synced(new ConfigEvents());
 
 	// Registered listeners listening for changes during saves or reloads.
-	private final Set<ConfigEventListener> listeners = synced(set());
+	private final Set<ConfigEventListener> listeners = CollectionUtils2.synced(set());
 
 	// The parsed entries of this map with all changes applied.
-	final Map<String,ConfigSection> entries = synced(map());
+	final Map<String,ConfigSection> entries = CollectionUtils2.synced(CollectionUtils2.map());
 
 	// The original entries of this map before any changes were applied.
-	final Map<String,ConfigSection> oentries = synced(map());
+	final Map<String,ConfigSection> oentries = CollectionUtils2.synced(CollectionUtils2.map());
 
 	// Import statements in this config.
 	final List<Import> imports = new CopyOnWriteArrayList<>();
@@ -243,7 +242,7 @@ public class ConfigMap implements ConfigStoreListener {
 		try (var x = lock.read()) {
 			imports.forEach(y -> m.putAll(y.getConfigMap().asMap()));
 			entries.values().forEach(z -> {
-				var m2 = mapOf(String.class, String.class);
+				var m2 = CollectionUtils2.mapOf(String.class, String.class);
 				z.entries.values().forEach(y -> m2.put(y.key, y.value));
 				m.put(z.name, m2);
 			});
@@ -367,7 +366,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	An unmodifiable set of keys.
 	 */
 	public Set<String> getSections() {
-		var s = imports.isEmpty() ? entries.keySet() : setOf(String.class);
+		var s = imports.isEmpty() ? entries.keySet() : CollectionUtils2.setOf(String.class);
 		if (! imports.isEmpty()) {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getSections()));
 			s.addAll(entries.keySet());
@@ -799,7 +798,7 @@ public class ConfigMap implements ConfigStoreListener {
 		imports.forEach(Import::unregisterAll);
 		imports.clear();
 
-		var imports2 = mapOf(String.class, ConfigMap.class);
+		var imports2 = CollectionUtils2.mapOf(String.class, ConfigMap.class);
 
 		List<String> lines = new LinkedList<>();
 		try (var scanner = new Scanner(contents)) {
@@ -835,7 +834,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		List<Import> irl = listOfSize(imports2.size());
-		forEachReverse(listFrom(imports2.values()), x -> irl.add(new Import(x).register(listeners)));
+		CollectionUtils2.forEachReverse(CollectionUtils2.listFrom(imports2.values()), x -> irl.add(new Import(x).register(listeners)));
 		this.imports.addAll(irl);
 
 		// Add [blank] section.
@@ -877,7 +876,7 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		lines = copyOf(lines);
+		lines = CollectionUtils2.copyOf(lines);
 		var last = lines.size() - 1;
 
 		// S1: Looking for section.
@@ -885,7 +884,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		var state = S1;
 
-		var sections = listOf(ConfigSection.class);
+		var sections = CollectionUtils2.listOf(ConfigSection.class);
 
 		for (var i = last; i >= 0; i--) {
 			var l = lines.get(i);

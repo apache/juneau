@@ -17,7 +17,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.common.utils.IOUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
@@ -481,7 +481,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
-		ArrayList<Map.Entry<Object,Object>> l = listFrom(m.entrySet());
+		ArrayList<Map.Entry<Object,Object>> l = CollectionUtils2.listFrom(m.entrySet());
 		Collections.reverse(l);
 		l.forEach(x -> {
 			Object value = x.getValue();

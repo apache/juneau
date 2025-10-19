@@ -71,7 +71,7 @@ public class Version implements Comparable<Version> {
 	public Version(String value) {
 		if (Utils.isEmpty(value))
 			value = "0";
-		String[] sParts = Utils.splita(value, '.');
+		String[] sParts = StringUtils.splita(value, '.');
 		parts = new int[sParts.length];
 		for (int i = 0; i < sParts.length; i++) {
 			try {
@@ -246,6 +246,6 @@ public class Version implements Comparable<Version> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Utils.join(parts, '.');
+		return StringUtils.join(parts, '.');
 	}
 }

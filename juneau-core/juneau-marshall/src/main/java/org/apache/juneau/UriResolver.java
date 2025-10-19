@@ -136,7 +136,7 @@ public class UriResolver {
 
 		try {
 			String uri = s(o);
-			uri = nullIfEmpty(uri);
+			uri = StringUtils.nullIfEmpty(uri);
 			boolean needsNormalize = hasDotSegments(uri) && resolution != null;
 
 			// Absolute paths are not changed.

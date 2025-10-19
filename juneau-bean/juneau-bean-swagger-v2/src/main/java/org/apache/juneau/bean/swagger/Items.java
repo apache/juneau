@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -105,7 +105,7 @@ public class Items extends SwaggerElement {
 
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
-		this._enum = copyOf(copyFrom._enum);
+		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
 		this.format = copyFrom.format;
@@ -463,7 +463,7 @@ public class Items extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = setFrom(value);
+		_enum = CollectionUtils2.setFrom(value);
 		return this;
 	}
 

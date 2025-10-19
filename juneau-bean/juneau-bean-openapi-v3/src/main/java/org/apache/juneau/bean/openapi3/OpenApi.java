@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -106,11 +106,11 @@ public class OpenApi extends OpenApiElement {
 		super(copyFrom);
 		this.openapi = copyFrom.openapi;
 		this.info = copyFrom.info;
-		this.servers = copyOf(copyFrom.servers);
-		this.paths = copyOf(copyFrom.paths);
+		this.servers = CollectionUtils2.copyOf(copyFrom.servers);
+		this.paths = CollectionUtils2.copyOf(copyFrom.paths);
 		this.components = copyFrom.components;
-		this.security = copyOf(copyFrom.security);
-		this.tags = copyOf(copyFrom.tags);
+		this.security = CollectionUtils2.copyOf(copyFrom.security);
+		this.tags = CollectionUtils2.copyOf(copyFrom.tags);
 		this.externalDocs = copyFrom.externalDocs;
 	}
 

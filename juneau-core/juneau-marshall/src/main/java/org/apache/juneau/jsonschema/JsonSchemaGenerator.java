@@ -20,7 +20,7 @@ import static java.util.Collections.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.addAll;
+import static org.apache.juneau.common.utils.CollectionUtils2.addAll;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -146,7 +146,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addDescriptionsTo(TypeCategory...values) {
-			addDescriptionsTo = addAll(addDescriptionsTo, values);
+			addDescriptionsTo = CollectionUtils2.addAll(addDescriptionsTo, values);
 			return this;
 		}
 
@@ -184,7 +184,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder addExamplesTo(TypeCategory...values) {
-			addExamplesTo = addAll(addExamplesTo, values);
+			addExamplesTo = CollectionUtils2.addAll(addExamplesTo, values);
 			return this;
 		}
 
@@ -600,7 +600,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * @return This object.
 		 */
 		public Builder ignoreTypes(String...values) {
-			ignoreTypes = addAll(ignoreTypes, values);
+			ignoreTypes = CollectionUtils2.addAll(ignoreTypes, values);
 			return this;
 		}
 
@@ -854,7 +854,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		ignoreTypes = builder.ignoreTypes == null ? emptySet() : new TreeSet<>(builder.ignoreTypes);
 
 		Set<Pattern> ignoreTypePatterns = Utils.set();
-		ignoreTypes.forEach(y -> Utils.split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
+		ignoreTypes.forEach(y -> StringUtils.split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
 		this.ignoreTypePatterns = ignoreTypePatterns.toArray(new Pattern[ignoreTypePatterns.size()]);
 
 		try {

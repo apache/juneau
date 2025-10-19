@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.stats;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;

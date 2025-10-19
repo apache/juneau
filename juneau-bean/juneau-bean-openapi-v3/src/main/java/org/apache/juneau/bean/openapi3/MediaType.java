@@ -17,12 +17,13 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -88,8 +89,8 @@ public class MediaType extends OpenApiElement {
 
 		this.schema = copyFrom.schema;
 		this.example = copyFrom.example;
-		this.examples = copyOf(copyFrom.examples, Example::copy);
-		this.encoding = copyOf(copyFrom.encoding, Encoding::copy);
+		this.examples = CollectionUtils2.copyOf(copyFrom.examples, Example::copy);
+		this.encoding = CollectionUtils2.copyOf(copyFrom.encoding, Encoding::copy);
 	}
 
 	/**
@@ -210,7 +211,7 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setEncoding(Map<String,Encoding> value) {
-		encoding = copyOf(value);
+		encoding = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
@@ -240,7 +241,7 @@ public class MediaType extends OpenApiElement {
 	 * @return This object
 	 */
 	public MediaType setExamples(Map<String,Example> value) {
-		examples = copyOf(value);
+		examples = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

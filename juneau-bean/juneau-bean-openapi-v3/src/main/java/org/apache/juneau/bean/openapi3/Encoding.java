@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -97,7 +97,7 @@ public class Encoding extends OpenApiElement {
 		this.style = copyFrom.style;
 		this.explode = copyFrom.explode;
 		this.allowReserved = copyFrom.allowReserved;
-		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.headers = CollectionUtils2.copyOf(copyFrom.headers, HeaderInfo::copy);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public class Encoding extends OpenApiElement {
 	 * @return This object
 	 */
 	public Encoding setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
+		headers = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

@@ -374,19 +374,19 @@ public class OpenApiParserSession extends UonParserSession {
 				if (cf == MULTI)
 					ss = new String[] { in };
 				else if (cf == CSV)
-					ss = Utils.splita(in, ',');
+					ss = StringUtils.splita(in, ',');
 				else if (cf == PIPES)
-					ss = Utils.splita(in, '|');
+					ss = StringUtils.splita(in, '|');
 				else if (cf == SSV)
-					ss = Utils.splitQuoted(in);
+					ss = StringUtils.splitQuoted(in);
 				else if (cf == TSV)
-					ss = Utils.splita(in, '\t');
+					ss = StringUtils.splita(in, '\t');
 				else if (cf == HttpPartCollectionFormat.UONC)
 					return super.parse(partType, null, in, type);
 				else if (cf == NO_COLLECTION_FORMAT) {
 					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
 						return super.parse(partType, null, in, type);
-					ss = Utils.splita(in, ',');
+					ss = StringUtils.splita(in, ',');
 				}
 
 				HttpPartSchema items = schema.getItems();
@@ -419,25 +419,25 @@ public class OpenApiParserSession extends UonParserSession {
 				if (cf == MULTI)
 					ss = new String[] { in };
 				else if (cf == CSV)
-					ss = Utils.splita(in, ',');
+					ss = StringUtils.splita(in, ',');
 				else if (cf == PIPES)
-					ss = Utils.splita(in, '|');
+					ss = StringUtils.splita(in, '|');
 				else if (cf == SSV)
-					ss = Utils.splitQuoted(in);
+					ss = StringUtils.splitQuoted(in);
 				else if (cf == TSV)
-					ss = Utils.splita(in, '\t');
+					ss = StringUtils.splita(in, '\t');
 				else if (cf == HttpPartCollectionFormat.UONC)
 					return super.parse(partType, null, in, type);
 				else if (cf == NO_COLLECTION_FORMAT) {
 					if (firstNonWhitespaceChar(in) == '@' && lastNonWhitespaceChar(in) == ')')
 						return super.parse(partType, null, in, type);
-					ss = Utils.splita(in, ',');
+					ss = StringUtils.splita(in, ',');
 				}
 
 				if (type.isBean()) {
 					BeanMap<T> m = ctx.getBeanContext().newBeanMap(type.getInnerClass());
 					for (String s : ss) {
-						String[] kv = Utils.splita(s, '=', 2);
+						String[] kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
 							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
 						String key = kv[0], value = kv[1];
@@ -461,7 +461,7 @@ public class OpenApiParserSession extends UonParserSession {
 						m = JsonMap.create();
 
 					for (String s : ss) {
-						String[] kv = Utils.splita(s, '=', 2);
+						String[] kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
 							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
 						String key = kv[0], value = kv[1];

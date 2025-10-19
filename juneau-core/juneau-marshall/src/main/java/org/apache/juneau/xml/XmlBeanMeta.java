@@ -17,12 +17,12 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlBeanMeta extends ExtendedBeanMeta {
 
 	private static class XmlBeanMetaBuilder {
-		Map<String,BeanPropertyMeta> attrs = map(), elements = map(), collapsedProperties = map();
+		Map<String,BeanPropertyMeta> attrs = CollectionUtils2.map(), elements = CollectionUtils2.map(), collapsedProperties = CollectionUtils2.map();
 		BeanPropertyMeta attrsProperty, contentProperty;
 		XmlFormat contentFormat = DEFAULT;
 

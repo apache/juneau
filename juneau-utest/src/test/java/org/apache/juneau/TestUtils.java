@@ -29,6 +29,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.common.utils.Utils;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.junit.bct.*;
@@ -803,7 +804,7 @@ public class TestUtils extends Utils2 {
 				m.setAccessible(true);
 				return m.invoke(o);
 			}
-			throw runtimeException("Property {0} not found on object of type {1}", name, classNameOf(o));
+			throw ThrowableUtils.runtimeException("Property {0} not found on object of type {1}", name, classNameOf(o));
 		});
 	}
 

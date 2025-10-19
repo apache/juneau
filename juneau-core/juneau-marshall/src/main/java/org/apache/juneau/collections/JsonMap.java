@@ -1349,7 +1349,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof Object[])
 			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
-			r = splita(Utils.s(s));
+			r = StringUtils.splita(Utils.s(s));
 		return (r.length == 0 ? def : r);
 	}
 

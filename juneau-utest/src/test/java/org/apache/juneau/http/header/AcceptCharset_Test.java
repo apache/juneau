@@ -41,7 +41,7 @@ class AcceptCharset_Test extends TestBase {
 	public static class A {
 		@RestOp
 		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
-			return reader(h == null ? "null" : Utils.join(h, ','));
+			return reader(h == null ? "null" : StringUtils.join(h, ','));
 		}
 	}
 

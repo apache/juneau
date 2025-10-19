@@ -72,7 +72,7 @@ public class SwitchVar extends MultipartVar {
 		for (int i = 1; i < args.length; i++) {
 			String pattern = args[i];
 
-			String[] parts = Utils.splita(pattern, ':', 2);
+			String[] parts = StringUtils.splita(pattern, ':', 2);
 			Utils.assertArg(parts.length >= 2, "Invalid arguments passed to $SW var.  Each case statement must contains 'pattern:value'.");
 
 			Pattern p = Pattern.compile(parts[0].replace("*", ".*").replace("?", "."));

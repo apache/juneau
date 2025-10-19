@@ -20,7 +20,7 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -117,7 +117,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Builder copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.type;
-			annotations = listFrom(copyFrom.annotations, true);
+			annotations = CollectionUtils2.listFrom(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -129,7 +129,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Context copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
-			annotations = listFrom(copyFrom.annotations, true);
+			annotations = CollectionUtils2.listFrom(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -305,7 +305,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return This object.
 		 */
 		public Builder annotations(Annotation...values) {
-			annotations = addAll(annotations, values);
+			annotations = CollectionUtils2.addAll(annotations, values);
 			return this;
 		}
 
@@ -317,7 +317,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return This object.
 		 */
 		public Builder annotations(List<Annotation> values) {
-			annotations = addAll(annotations, values);
+			annotations = CollectionUtils2.addAll(annotations, values);
 			return this;
 		}
 
@@ -682,7 +682,7 @@ public abstract class Context implements AnnotationProvider {
 				else if (x instanceof MethodInfo x2)
 					work.add(x2.getAnnotationList(CONTEXT_APPLY_FILTER));
 				else
-					throw illegalArg("Invalid type passed to applyAnnotations:  {0}", x.getClass().getName());
+					throw ThrowableUtils.illegalArg("Invalid type passed to applyAnnotations:  {0}", x.getClass().getName());
 			});
 			return work;
 		}

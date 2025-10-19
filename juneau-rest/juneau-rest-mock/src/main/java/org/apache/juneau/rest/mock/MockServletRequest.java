@@ -402,7 +402,7 @@ public class MockServletRequest implements HttpServletRequest {
 	}
 
 	@Override /* Overridden from HttpServletRequest */
-	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils.listFrom(getParameterMap().keySet())); }
+	public Enumeration<String> getParameterNames() { return enumeration(CollectionUtils2.listFrom(getParameterMap().keySet())); }
 
 	@Override /* Overridden from HttpServletRequest */
 	public String[] getParameterValues(String name) {
@@ -426,7 +426,7 @@ public class MockServletRequest implements HttpServletRequest {
 			if (isNotEmpty(servletPath))
 				pathInfo = pathInfo.substring(servletPath.length());
 		}
-		return nullIfEmpty(StringUtils.urlDecode(pathInfo));
+		return StringUtils.nullIfEmpty(StringUtils.urlDecode(pathInfo));
 	}
 
 	@Override /* Overridden from HttpServletRequest */
@@ -706,7 +706,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathVars(String...pairs) {
-		return pathVars(CollectionUtils.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
+		return pathVars(CollectionBuilders.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
 	}
 
 	/**

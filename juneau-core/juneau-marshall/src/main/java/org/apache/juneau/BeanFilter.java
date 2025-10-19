@@ -19,7 +19,6 @@ package org.apache.juneau;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.copyOf;
 
 import java.beans.*;
 import java.util.*;
@@ -214,7 +213,7 @@ public class BeanFilter {
 		public Builder excludeProperties(String...value) {
 			this.excludeProperties = set();
 			for (String v : value)
-				Utils.split(v, x -> excludeProperties.add(x));
+				StringUtils.split(v, x -> excludeProperties.add(x));
 			return this;
 		}
 
@@ -399,7 +398,7 @@ public class BeanFilter {
 		public Builder properties(String...value) {
 			this.properties = set();
 			for (String v : value)
-				Utils.split(v, x -> properties.add(x));
+				StringUtils.split(v, x -> properties.add(x));
 			return this;
 		}
 
@@ -488,7 +487,7 @@ public class BeanFilter {
 		public Builder readOnlyProperties(String...value) {
 			this.readOnlyProperties = set();
 			for (String v : value)
-				Utils.split(v, x -> readOnlyProperties.add(x));
+				StringUtils.split(v, x -> readOnlyProperties.add(x));
 			return this;
 		}
 
@@ -687,7 +686,7 @@ public class BeanFilter {
 		public Builder writeOnlyProperties(String...value) {
 			this.writeOnlyProperties = set();
 			for (String v : value)
-				Utils.split(v, x -> writeOnlyProperties.add(x));
+				StringUtils.split(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}
 	}
@@ -719,10 +718,10 @@ public class BeanFilter {
 	BeanFilter(Builder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = copyOf(builder.properties);
-		this.excludeProperties = copyOf(builder.excludeProperties);
-		this.readOnlyProperties = copyOf(builder.readOnlyProperties);
-		this.writeOnlyProperties = copyOf(builder.writeOnlyProperties);
+		this.properties = CollectionUtils2.copyOf(builder.properties);
+		this.excludeProperties = CollectionUtils2.copyOf(builder.excludeProperties);
+		this.readOnlyProperties = CollectionUtils2.copyOf(builder.readOnlyProperties);
+		this.writeOnlyProperties = CollectionUtils2.copyOf(builder.writeOnlyProperties);
 		this.example = builder.example;
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;

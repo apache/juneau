@@ -128,7 +128,7 @@ public class Args extends JsonMap {
 	 * @param args Arguments passed in as a raw command line.
 	 */
 	public Args(String args) {
-		this(Utils.splitQuoted(args));
+		this(StringUtils.splitQuoted(args));
 	}
 
 	/**

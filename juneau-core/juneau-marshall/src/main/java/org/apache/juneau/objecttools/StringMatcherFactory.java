@@ -69,7 +69,7 @@ public class StringMatcherFactory extends MatcherFactory {
 			List<Pattern> ands = new LinkedList<>();
 			List<Pattern> nots = new LinkedList<>();
 
-			for (String s : Utils.splitQuoted(pattern, true)) {
+			for (String s : StringUtils.splitQuoted(pattern, true)) {
 				char c0 = s.charAt(0), c9 = s.charAt(s.length() - 1);
 
 				if (c0 == '/' && c9 == '/' && s.length() > 1) {

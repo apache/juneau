@@ -125,7 +125,7 @@ public abstract class MenuItemWidget extends Widget {
 		// Need a unique number to define unique function names.
 		Integer id = null;
 
-		String pre = Utils.nullIfEmpty3(getBeforeShowScript(req, res)), post = Utils.nullIfEmpty3(getAfterShowScript(req, res));
+		String pre = StringUtils.nullIfEmpty(getBeforeShowScript(req, res)), post = StringUtils.nullIfEmpty(getAfterShowScript(req, res));
 
 		sb.append("\n<div class='menu-item'>");
 		if (pre != null || post != null) {

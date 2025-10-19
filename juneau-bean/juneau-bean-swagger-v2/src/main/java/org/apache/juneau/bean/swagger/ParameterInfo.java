@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.copyOf;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -156,7 +155,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
-		this._enum = copyOf(copyFrom._enum);
+		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -177,7 +176,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 
-		this.examples = copyOf(copyFrom.examples);
+		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
 	}
 
 	/**
@@ -716,7 +715,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Collection<Object> value) {
-		_enum = setFrom(value);
+		_enum = CollectionUtils2.setFrom(value);
 		return this;
 	}
 

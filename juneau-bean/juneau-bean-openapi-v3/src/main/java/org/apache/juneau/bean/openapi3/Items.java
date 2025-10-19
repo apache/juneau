@@ -18,8 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.copyOf;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -122,7 +121,7 @@ public class Items extends OpenApiElement {
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
-		this._enum = copyOf(copyFrom._enum);
+		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
 		this.ref = copyFrom.ref;
 	}
 
@@ -471,7 +470,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = listFrom(value);
+		_enum = CollectionUtils2.listFrom(value);
 		return this;
 	}
 

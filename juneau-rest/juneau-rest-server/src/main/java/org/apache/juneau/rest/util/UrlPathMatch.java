@@ -68,7 +68,7 @@ public class UrlPathMatch {
 			if (c == -1)
 				c = path.length();
 		}
-		return Utils.nullIfEmpty3(path.substring(0, c));
+		return StringUtils.nullIfEmpty(path.substring(0, c));
 	}
 
 	/**

@@ -1223,7 +1223,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(CollectionUtils.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
+			return pathVars(CollectionBuilders.mapBuilder(String.class, String.class).addPairs((Object[])pairs).build());
 		}
 
 		@Override /* Overridden from Builder */

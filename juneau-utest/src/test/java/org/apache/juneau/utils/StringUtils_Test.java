@@ -368,24 +368,24 @@ class StringUtils_Test extends TestBase {
 	// join(Collection,char)
 	//====================================================================================================
 	@Test void a01_join() {
-		assertNull(Utils.join((Object[])null, ","));
-		assertEquals("1", Utils.join(new Object[]{1}, ","));
-		assertEquals("1,2", Utils.join(new Object[]{1,2}, ","));
+		assertNull(StringUtils.join((Object[])null, ","));
+		assertEquals("1", StringUtils.join(new Object[]{1}, ","));
+		assertEquals("1,2", StringUtils.join(new Object[]{1,2}, ","));
 
-		assertNull(Utils.join((Collection<?>)null, ","));
-		assertEquals("1", Utils.join(Arrays.asList(new Integer[]{1}), ","));
-		assertEquals("1,2", Utils.join(Arrays.asList(new Integer[]{1,2}), ","));
+		assertNull(StringUtils.join((Collection<?>)null, ","));
+		assertEquals("1", StringUtils.join(Arrays.asList(new Integer[]{1}), ","));
+		assertEquals("1,2", StringUtils.join(Arrays.asList(new Integer[]{1,2}), ","));
 
-		assertNull(Utils.join((Object[])null, ','));
-		assertEquals("x,y,z", Utils.join(new Object[]{"x,y","z"}, ','));
+		assertNull(StringUtils.join((Object[])null, ','));
+		assertEquals("x,y,z", StringUtils.join(new Object[]{"x,y","z"}, ','));
 
-		assertNull(Utils.join((int[])null, ','));
-		assertEquals("1", Utils.join(new int[]{1}, ','));
-		assertEquals("1,2", Utils.join(new int[]{1,2}, ','));
+		assertNull(StringUtils.join((int[])null, ','));
+		assertEquals("1", StringUtils.join(new int[]{1}, ','));
+		assertEquals("1,2", StringUtils.join(new int[]{1,2}, ','));
 
-		assertNull(Utils.join((Collection<?>)null, ','));
-		assertEquals("1", Utils.join(Arrays.asList(new Integer[]{1}), ','));
-		assertEquals("1,2", Utils.join(Arrays.asList(new Integer[]{1,2}), ','));
+		assertNull(StringUtils.join((Collection<?>)null, ','));
+		assertEquals("1", StringUtils.join(Arrays.asList(new Integer[]{1}), ','));
+		assertEquals("1,2", StringUtils.join(Arrays.asList(new Integer[]{1,2}), ','));
 
 		assertNull(StringUtils.joine((List<?>)null, ','));
 		assertEquals("x\\,y,z", StringUtils.joine(Arrays.asList(new String[]{"x,y","z"}), ','));
@@ -395,17 +395,17 @@ class StringUtils_Test extends TestBase {
 	// split(String,char)
 	//====================================================================================================
 	@Test void a07_split() {
-		assertNull(Utils.splita((String)null));
-		assertEmpty(Utils.splita(""));
-		assertList(Utils.splita("1"), "1");
-		assertList(Utils.splita("1,2"), "1", "2");
-		assertList(Utils.splita("1\\,2"), "1,2");
-		assertList(Utils.splita("1\\\\,2"), "1\\", "2");
-		assertList(Utils.splita("1\\\\\\,2"), "1\\,2");
-		assertList(Utils.splita("1,2\\"), "1", "2\\");
-		assertList(Utils.splita("1,2\\\\"), "1", "2\\");
-		assertList(Utils.splita("1,2\\,"), "1", "2,");
-		assertList(Utils.splita("1,2\\\\,"), "1", "2\\", "");
+		assertNull(StringUtils.splita((String)null));
+		assertEmpty(StringUtils.splita(""));
+		assertList(StringUtils.splita("1"), "1");
+		assertList(StringUtils.splita("1,2"), "1", "2");
+		assertList(StringUtils.splita("1\\,2"), "1,2");
+		assertList(StringUtils.splita("1\\\\,2"), "1\\", "2");
+		assertList(StringUtils.splita("1\\\\\\,2"), "1\\,2");
+		assertList(StringUtils.splita("1,2\\"), "1", "2\\");
+		assertList(StringUtils.splita("1,2\\\\"), "1", "2\\");
+		assertList(StringUtils.splita("1,2\\,"), "1", "2,");
+		assertList(StringUtils.splita("1,2\\\\,"), "1", "2\\", "");
 	}
 
 	@Test void a08_split2() {
@@ -424,7 +424,7 @@ class StringUtils_Test extends TestBase {
 
 	private static List<String> split2test(String s) {
 		var l = new ArrayList<String>();
-		Utils.split(s, l::add);
+		StringUtils.split(s, l::add);
 		return l;
 	}
 
@@ -432,22 +432,22 @@ class StringUtils_Test extends TestBase {
 	// split(String,char,int)
 	//====================================================================================================
 	@Test void a09_splitWithLimit() {
-		assertString("[boo,and,foo]", Utils.splita("boo:and:foo", ':', 10));
-		assertString("[boo,and:foo]", Utils.splita("boo:and:foo", ':', 2));
-		assertString("[boo:and:foo]", Utils.splita("boo:and:foo", ':', 1));
-		assertString("[boo:and:foo]", Utils.splita("boo:and:foo", ':', 0));
-		assertString("[boo:and:foo]", Utils.splita("boo:and:foo", ':', -1));
-		assertString("[boo,and,foo]", Utils.splita("boo : and : foo", ':', 10));
-		assertString("[boo,and : foo]", Utils.splita("boo : and : foo", ':', 2));
+		assertString("[boo,and,foo]", StringUtils.splita("boo:and:foo", ':', 10));
+		assertString("[boo,and:foo]", StringUtils.splita("boo:and:foo", ':', 2));
+		assertString("[boo:and:foo]", StringUtils.splita("boo:and:foo", ':', 1));
+		assertString("[boo:and:foo]", StringUtils.splita("boo:and:foo", ':', 0));
+		assertString("[boo:and:foo]", StringUtils.splita("boo:and:foo", ':', -1));
+		assertString("[boo,and,foo]", StringUtils.splita("boo : and : foo", ':', 10));
+		assertString("[boo,and : foo]", StringUtils.splita("boo : and : foo", ':', 2));
 	}
 
 	//====================================================================================================
 	// nullIfEmpty(String)
 	//====================================================================================================
 	@Test void a10_nullIfEmpty() {
-		assertNull(nullIfEmpty(null));
-		assertNull(nullIfEmpty(""));
-		assertNotNull(nullIfEmpty("x"));
+		assertNull(StringUtils.nullIfEmpty(null));
+		assertNull(StringUtils.nullIfEmpty(""));
+		assertNotNull(StringUtils.nullIfEmpty("x"));
 	}
 
 	//====================================================================================================
@@ -563,16 +563,16 @@ class StringUtils_Test extends TestBase {
 	// parseMap(String,char,char,boolean)
 	//====================================================================================================
 	@Test void a19_splitMap() {
-		assertString("{a=1}", Utils.splitMap("a=1", true));
-		assertString("{a=1,b=2}", Utils.splitMap("a=1,b=2", true));
-		assertString("{a=1,b=2}", Utils.splitMap(" a = 1 , b = 2 ", true));
-		assertString("{ a = 1 , b = 2 }", Utils.splitMap(" a = 1 , b = 2 ", false));
-		assertString("{a=}", Utils.splitMap("a", true));
-		assertString("{a=,b=}", Utils.splitMap("a,b", true));
-		assertString("{a=1,b=}", Utils.splitMap("a=1,b", true));
-		assertString("{a=,b=1}", Utils.splitMap("a,b=1", true));
-		assertString("{a==1}", Utils.splitMap("a\\==1", true));
-		assertString("{a\\=1}", Utils.splitMap("a\\\\=1", true));
+		assertString("{a=1}", StringUtils.splitMap("a=1", true));
+		assertString("{a=1,b=2}", StringUtils.splitMap("a=1,b=2", true));
+		assertString("{a=1,b=2}", StringUtils.splitMap(" a = 1 , b = 2 ", true));
+		assertString("{ a = 1 , b = 2 }", StringUtils.splitMap(" a = 1 , b = 2 ", false));
+		assertString("{a=}", StringUtils.splitMap("a", true));
+		assertString("{a=,b=}", StringUtils.splitMap("a,b", true));
+		assertString("{a=1,b=}", StringUtils.splitMap("a=1,b", true));
+		assertString("{a=,b=1}", StringUtils.splitMap("a,b=1", true));
+		assertString("{a==1}", StringUtils.splitMap("a\\==1", true));
+		assertString("{a\\=1}", StringUtils.splitMap("a\\\\=1", true));
 	}
 
 	//====================================================================================================
@@ -605,25 +605,25 @@ class StringUtils_Test extends TestBase {
 	// splitQuoted(String)
 	//====================================================================================================
 	@Test void a22_splitQuoted() {
-		assertNull(Utils.splitQuoted(null));
-		assertEmpty(Utils.splitQuoted(""));
-		assertEmpty(Utils.splitQuoted(" \t "));
-		assertList(Utils.splitQuoted("foo"), "foo");
-		assertList(Utils.splitQuoted("foo  bar baz"), "foo", "bar", "baz");
-		assertList(Utils.splitQuoted("'foo'"), "foo");
-		assertList(Utils.splitQuoted(" ' foo ' "), " foo ");
-		assertList(Utils.splitQuoted("'foo' 'bar'"), "foo", "bar");
-		assertList(Utils.splitQuoted("\"foo\""), "foo");
-		assertList(Utils.splitQuoted(" \" foo \" "), " foo ");
-		assertList(Utils.splitQuoted("\"foo\" \"bar\""), "foo", "bar");
-		assertList(Utils.splitQuoted("'foo\\'bar'"), "foo'bar");
-		assertList(Utils.splitQuoted("'foo\\\"bar'"), "foo\"bar");
-		assertList(Utils.splitQuoted("'\\'foo\\'bar\\''"), "'foo'bar'");
-		assertList(Utils.splitQuoted("'\\\"foo\\\"bar\\\"'"), "\"foo\"bar\"");
-		assertList(Utils.splitQuoted("'\\'foo\\''"), "'foo'");
-		assertList(Utils.splitQuoted("\"\\\"foo\\\"\""), "\"foo\"");
-		assertList(Utils.splitQuoted("'\"foo\"'"), "\"foo\"");
-		assertList(Utils.splitQuoted("\"'foo'\""), "'foo'");
+		assertNull(StringUtils.splitQuoted(null));
+		assertEmpty(StringUtils.splitQuoted(""));
+		assertEmpty(StringUtils.splitQuoted(" \t "));
+		assertList(StringUtils.splitQuoted("foo"), "foo");
+		assertList(StringUtils.splitQuoted("foo  bar baz"), "foo", "bar", "baz");
+		assertList(StringUtils.splitQuoted("'foo'"), "foo");
+		assertList(StringUtils.splitQuoted(" ' foo ' "), " foo ");
+		assertList(StringUtils.splitQuoted("'foo' 'bar'"), "foo", "bar");
+		assertList(StringUtils.splitQuoted("\"foo\""), "foo");
+		assertList(StringUtils.splitQuoted(" \" foo \" "), " foo ");
+		assertList(StringUtils.splitQuoted("\"foo\" \"bar\""), "foo", "bar");
+		assertList(StringUtils.splitQuoted("'foo\\'bar'"), "foo'bar");
+		assertList(StringUtils.splitQuoted("'foo\\\"bar'"), "foo\"bar");
+		assertList(StringUtils.splitQuoted("'\\'foo\\'bar\\''"), "'foo'bar'");
+		assertList(StringUtils.splitQuoted("'\\\"foo\\\"bar\\\"'"), "\"foo\"bar\"");
+		assertList(StringUtils.splitQuoted("'\\'foo\\''"), "'foo'");
+		assertList(StringUtils.splitQuoted("\"\\\"foo\\\"\""), "\"foo\"");
+		assertList(StringUtils.splitQuoted("'\"foo\"'"), "\"foo\"");
+		assertList(StringUtils.splitQuoted("\"'foo'\""), "'foo'");
 	}
 
 	//====================================================================================================
@@ -699,9 +699,9 @@ class StringUtils_Test extends TestBase {
 	// matchPattern(String)
 	//====================================================================================================
 	@Test void a29_getMatchPattern() {
-		assertTrue(Utils.getMatchPattern3("a").matcher("a").matches());
-		assertTrue(Utils.getMatchPattern3("*a*").matcher("aaa").matches());
-		assertFalse(Utils.getMatchPattern3("*b*").matcher("aaa").matches());
+		assertTrue(StringUtils.getMatchPattern("a").matcher("a").matches());
+		assertTrue(StringUtils.getMatchPattern("*a*").matcher("aaa").matches());
+		assertFalse(StringUtils.getMatchPattern("*b*").matcher("aaa").matches());
 	}
 
 	//====================================================================================================
@@ -811,11 +811,11 @@ class StringUtils_Test extends TestBase {
 	// splitMethodArgs(String)
 	//====================================================================================================
 	@Test void a33_splitMethodArgs() {
-		assertList(Utils.splitMethodArgs("java.lang.String"), "java.lang.String");
-		assertList(Utils.splitMethodArgs("java.lang.String,java.lang.Integer"), "java.lang.String", "java.lang.Integer");
-		assertList(Utils.splitMethodArgs("x,y"), "x","y");
-		assertList(Utils.splitMethodArgs("x,y<a,b>,z"), "x", "y<a,b>", "z");
-		assertList(Utils.splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"), "x", "y<a<b,c>,d<e,f>>", "z");
+		assertList(StringUtils.splitMethodArgs("java.lang.String"), "java.lang.String");
+		assertList(StringUtils.splitMethodArgs("java.lang.String,java.lang.Integer"), "java.lang.String", "java.lang.Integer");
+		assertList(StringUtils.splitMethodArgs("x,y"), "x","y");
+		assertList(StringUtils.splitMethodArgs("x,y<a,b>,z"), "x", "y<a,b>", "z");
+		assertList(StringUtils.splitMethodArgs("x,y<a<b,c>,d<e,f>>,z"), "x", "y<a<b,c>,d<e,f>>", "z");
 	}
 
 	//====================================================================================================
@@ -864,28 +864,28 @@ class StringUtils_Test extends TestBase {
 	// splitNested(String)
 	//====================================================================================================
 	@Test void a37_splitNested() {
-		assertNull(Utils.splitNested(null));
-		assertEmpty(Utils.splitNested(""));
-		assertList(Utils.splitNested("a"), "a");
-		assertList(Utils.splitNested("a,b,c"), "a", "b", "c");
-		assertList(Utils.splitNested("a{b,c},d"), "a{b,c}", "d");
-		assertList(Utils.splitNested("a,b{c,d}"), "a", "b{c,d}");
-		assertList(Utils.splitNested("a,b{c,d{e,f}}"), "a", "b{c,d{e,f}}");
-		assertList(Utils.splitNested("a { b , c } , d "), "a { b , c }", "d");
-		assertList(Utils.splitNested("a\\,b"), "a,b");
-		assertList(Utils.splitNested("a\\\\,b"), "a\\", "b");
+		assertNull(StringUtils.splitNested(null));
+		assertEmpty(StringUtils.splitNested(""));
+		assertList(StringUtils.splitNested("a"), "a");
+		assertList(StringUtils.splitNested("a,b,c"), "a", "b", "c");
+		assertList(StringUtils.splitNested("a{b,c},d"), "a{b,c}", "d");
+		assertList(StringUtils.splitNested("a,b{c,d}"), "a", "b{c,d}");
+		assertList(StringUtils.splitNested("a,b{c,d{e,f}}"), "a", "b{c,d{e,f}}");
+		assertList(StringUtils.splitNested("a { b , c } , d "), "a { b , c }", "d");
+		assertList(StringUtils.splitNested("a\\,b"), "a,b");
+		assertList(StringUtils.splitNested("a\\\\,b"), "a\\", "b");
 	}
 
 	//====================================================================================================
 	// splitNestedInner(String)
 	//====================================================================================================
 	@Test void a38_splitNestedInner() {
-		assertThrowsWithMessage(IllegalArgumentException.class, "String was null.", ()->Utils.splitNestedInner(null));
-		assertThrowsWithMessage(IllegalArgumentException.class, "String was empty.", ()->Utils.splitNestedInner(""));
-		assertList(Utils.splitNestedInner("a{b}"), "b");
-		assertList(Utils.splitNestedInner(" a { b } "), "b");
-		assertList(Utils.splitNestedInner("a{b,c}"), "b", "c");
-		assertList(Utils.splitNestedInner("a{b{c,d},e{f,g}}"), "b{c,d}", "e{f,g}");
+		assertThrowsWithMessage(IllegalArgumentException.class, "String was null.", ()->StringUtils.splitNestedInner(null));
+		assertThrowsWithMessage(IllegalArgumentException.class, "String was empty.", ()->StringUtils.splitNestedInner(""));
+		assertList(StringUtils.splitNestedInner("a{b}"), "b");
+		assertList(StringUtils.splitNestedInner(" a { b } "), "b");
+		assertList(StringUtils.splitNestedInner("a{b,c}"), "b", "c");
+		assertList(StringUtils.splitNestedInner("a{b{c,d},e{f,g}}"), "b{c,d}", "e{f,g}");
 	}
 
 	//====================================================================================================
@@ -1238,12 +1238,12 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void a64_joinObjectArray() {
-		assertEquals("", StringUtils.join((Object[])null, ","));
+		assertNull(StringUtils.join((Object[])null, ","));
 		assertEquals("", StringUtils.join(new Object[]{}, ","));
 		assertEquals("a,b,c", StringUtils.join(new Object[]{"a", "b", "c"}, ","));
 		assertEquals("1-2-3", StringUtils.join(new Object[]{1, 2, 3}, "-"));
 		assertEquals("abc", StringUtils.join(new Object[]{"a", "b", "c"}, ""));
-		assertEquals("a,,c", StringUtils.join(new Object[]{"a", null, "c"}, ","));
+		assertEquals("a,null,c", StringUtils.join(new Object[]{"a", null, "c"}, ","));
 		assertEquals("a;b;c", StringUtils.join(new Object[]{"a", "b", "c"}, ";"));
 	}
 
@@ -1256,11 +1256,11 @@ class StringUtils_Test extends TestBase {
 	}
 
 	@Test void a66_joinCollection() {
-		assertEquals("", StringUtils.join((Collection<?>)null, ","));
+		assertNull(StringUtils.join((Collection<?>)null, ","));
 		assertEquals("", StringUtils.join(Collections.emptyList(), ","));
 		assertEquals("a,b,c", StringUtils.join(Arrays.asList("a", "b", "c"), ","));
 		assertEquals("1-2-3", StringUtils.join(Arrays.asList(1, 2, 3), "-"));
-		assertEquals("a,,c", StringUtils.join(Arrays.asList("a", null, "c"), ","));
+		assertEquals("a,null,c", StringUtils.join(Arrays.asList("a", null, "c"), ","));
 	}
 
 	@Test void a67_joinObjectArrayChar() {
@@ -1276,21 +1276,6 @@ class StringUtils_Test extends TestBase {
 	@Test void a69_joinCollectionChar() {
 		assertEquals("a,b,c", StringUtils.join(Arrays.asList("a", "b", "c"), ','));
 		assertEquals("1-2-3", StringUtils.join(Arrays.asList(1, 2, 3), '-'));
-	}
-
-	@Test void a70_split() {
-		assertArrayEquals(new String[]{}, StringUtils.split(null, ','));
-		assertArrayEquals(new String[]{""}, StringUtils.split("", ','));
-		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a,b,c", ','));
-		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a-b-c", '-'));
-		assertArrayEquals(new String[]{"abc"}, StringUtils.split("abc", ','));
-	}
-
-	@Test void a71_splitWithLimit() {
-		assertArrayEquals(new String[]{}, StringUtils.split(null, ',', 2));
-		assertArrayEquals(new String[]{"a", "b,c,d"}, StringUtils.split("a,b,c,d", ',', 2));
-		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a,b,c", ',', 0));
-		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a,b,c", ',', 10));
 	}
 
 	//====================================================================================================

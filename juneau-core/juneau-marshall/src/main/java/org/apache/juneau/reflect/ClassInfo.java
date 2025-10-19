@@ -17,8 +17,7 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -2272,7 +2271,7 @@ public class ClassInfo {
 	FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
 			synchronized (this) {
-				Map<String,FieldInfo> m = map();
+				Map<String,FieldInfo> m = CollectionUtils2.map();
 				for (ClassInfo c : _getParents()) {
 					for (FieldInfo f : c._getDeclaredFields()) {
 						String fn = f.getName();
@@ -2280,7 +2279,7 @@ public class ClassInfo {
 							m.put(f.getName(), f);
 					}
 				}
-				List<FieldInfo> l = listFrom(m.values());
+				List<FieldInfo> l = CollectionUtils2.listFrom(m.values());
 				l.sort(null);
 				publicFields = l.toArray(new FieldInfo[l.size()]);
 			}

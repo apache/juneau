@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -98,7 +98,7 @@ public class OAuthFlow extends OpenApiElement {
 		this.authorizationUrl = copyFrom.authorizationUrl;
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.refreshUrl = copyFrom.refreshUrl;
-		this.scopes = copyOf(copyFrom.scopes);
+		this.scopes = CollectionUtils2.copyOf(copyFrom.scopes);
 	}
 
 	/**
@@ -248,7 +248,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object
 	 */
 	public OAuthFlow setScopes(Map<String,String> value) {
-		scopes = copyOf(value);
+		scopes = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

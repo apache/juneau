@@ -17,7 +17,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.util.*;
 
@@ -61,7 +61,7 @@ public class DefaultClassList {
 	 * @param value The object to copy.
 	 */
 	public DefaultClassList(DefaultClassList value) {
-		entries = copyOf(value.entries);
+		entries = CollectionUtils2.copyOf(value.entries);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class DefaultClassList {
 	 * @return This object.
 	 */
 	public DefaultClassList add(Class<?>...values) {
-		prependAll(entries, values);
+		CollectionUtils2.prependAll(entries, values);
 		return this;
 	}
 

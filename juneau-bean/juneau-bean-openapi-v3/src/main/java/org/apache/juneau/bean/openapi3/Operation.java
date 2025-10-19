@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -114,18 +114,18 @@ public class Operation extends OpenApiElement {
 	 */
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
-		this.tags = copyOf(copyFrom.tags);
+		this.tags = CollectionUtils2.copyOf(copyFrom.tags);
 		this.summary = copyFrom.summary;
 		this.description = copyFrom.description;
 		this.operationId = copyFrom.operationId;
 		this.externalDocs = copyFrom.externalDocs;
-		this.parameters = copyOf(copyFrom.parameters);
+		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
 		this.requestBody = copyFrom.requestBody;
-		this.responses = copyOf(copyFrom.responses);
-		this.callbacks = copyOf(copyFrom.callbacks);
+		this.responses = CollectionUtils2.copyOf(copyFrom.responses);
+		this.callbacks = CollectionUtils2.copyOf(copyFrom.callbacks);
 		this.deprecated = copyFrom.deprecated;
-		this.security = copyOf(copyFrom.security);
-		this.servers = copyOf(copyFrom.servers);
+		this.security = CollectionUtils2.copyOf(copyFrom.security);
+		this.servers = CollectionUtils2.copyOf(copyFrom.servers);
 	}
 
 	/**

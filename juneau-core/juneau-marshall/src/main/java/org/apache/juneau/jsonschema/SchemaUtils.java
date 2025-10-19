@@ -44,7 +44,7 @@ public class SchemaUtils {
 	public static String joinnl(String[]...s) {
 		for (String[] ss : s) {
 			if (ss.length != 0)
-				return Utils.joinnl(ss).trim();
+				return StringUtils.joinnl(ss).trim();
 		}
 		return "";
 	}

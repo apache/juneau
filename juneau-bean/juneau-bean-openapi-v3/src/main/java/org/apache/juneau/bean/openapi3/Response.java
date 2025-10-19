@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -96,9 +96,9 @@ public class Response extends OpenApiElement {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.headers = copyOf(copyFrom.headers, HeaderInfo::copy);
-		this.content = copyOf(copyFrom.content, MediaType::copy);
-		this.links = copyOf(copyFrom.links, Link::copy);
+		this.headers = CollectionUtils2.copyOf(copyFrom.headers, HeaderInfo::copy);
+		this.content = CollectionUtils2.copyOf(copyFrom.content, MediaType::copy);
+		this.links = CollectionUtils2.copyOf(copyFrom.links, Link::copy);
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setContent(Map<String,MediaType> value) {
-		content = copyOf(value);
+		content = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
@@ -296,7 +296,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
+		headers = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
@@ -309,7 +309,7 @@ public class Response extends OpenApiElement {
 	 * @return This object
 	 */
 	public Response setLinks(Map<String,Link> value) {
-		links = copyOf(value);
+		links = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

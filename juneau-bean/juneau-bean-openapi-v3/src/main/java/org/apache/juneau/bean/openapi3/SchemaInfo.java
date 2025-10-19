@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -155,12 +155,12 @@ public class SchemaInfo extends OpenApiElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		this._enum = copyOf(copyFrom._enum);
-		this.allOf = copyOf(copyFrom.allOf);
-		this.required = copyOf(copyFrom.required);
-		this.anyOf = copyOf(copyFrom.anyOf);
-		this.oneOf = copyOf(copyFrom.oneOf);
-		this.properties = copyOf(copyFrom.properties, SchemaInfo::copy);
+		this._enum = CollectionUtils2.copyOf(copyFrom._enum);
+		this.allOf = CollectionUtils2.copyOf(copyFrom.allOf);
+		this.required = CollectionUtils2.copyOf(copyFrom.required);
+		this.anyOf = CollectionUtils2.copyOf(copyFrom.anyOf);
+		this.oneOf = CollectionUtils2.copyOf(copyFrom.oneOf);
+		this.properties = CollectionUtils2.copyOf(copyFrom.properties, SchemaInfo::copy);
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
 		this.not = copyFrom.not == null ? null : copyFrom.not.copy();
 	}
@@ -769,7 +769,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = listFrom(value);
+		allOf = CollectionUtils2.listFrom(value);
 		return this;
 	}
 
@@ -782,7 +782,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setAnyOf(Collection<Object> value) {
-		anyOf = listFrom(value);
+		anyOf = CollectionUtils2.listFrom(value);
 		return this;
 	}
 
@@ -850,7 +850,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = listFrom(value);
+		_enum = CollectionUtils2.listFrom(value);
 		return this;
 	}
 
@@ -1096,7 +1096,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setOneOf(Collection<Object> value) {
-		oneOf = listFrom(value);
+		oneOf = CollectionUtils2.listFrom(value);
 		return this;
 	}
 
@@ -1125,7 +1125,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setProperties(Map<String,SchemaInfo> value) {
-		properties = copyOf(value);
+		properties = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
@@ -1175,7 +1175,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public SchemaInfo setRequired(Collection<String> value) {
-		required = listFrom(value);
+		required = CollectionUtils2.listFrom(value);
 		return this;
 	}
 

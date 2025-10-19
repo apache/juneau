@@ -20,6 +20,7 @@ import static org.apache.juneau.TestUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
@@ -246,7 +247,7 @@ public class ObjectSearcher_Test extends TestBase {
 
 	@Test void b02_intSearch_twoNumbers() {
 		for (var s : a("f=1 2", "f = 1  2 "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("1,2"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("1,2"));
 	}
 
 	@Test void b03_intSearch_oneNegativeNumber() {
@@ -255,12 +256,12 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void b04_intSearch_twoNegativeNumbers() {
-		assertBeans(run(INT_BEAN_ARRAY, "f=-1 -2"), "f", splita("-2,-1"));
+		assertBeans(run(INT_BEAN_ARRAY, "f=-1 -2"), "f", StringUtils.splita("-2,-1"));
 	}
 
 	@Test void b05_intSearch_simpleRange() {
 		for (var s : a("f=1-2", "f = 1 - 2 ", "f = 1- 2 "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("1,2"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("1,2"));
 	}
 
 	@Test void b06_intSearch_simpleRange_invalid() {
@@ -268,11 +269,11 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void b07_intSearch_twoNumbersThatLookLikeRange() {
-		assertBeans(run(INT_BEAN_ARRAY, "f = 1 -2 "), "f", splita("-2,1"));
+		assertBeans(run(INT_BEAN_ARRAY, "f = 1 -2 "), "f", StringUtils.splita("-2,1"));
 	}
 
 	@Test void b08_intSearch_rangeWithNegativeNumbers() {
-		assertBeans(run(INT_BEAN_ARRAY, "f = -2--1 "), "f", splita("-2,-1"));
+		assertBeans(run(INT_BEAN_ARRAY, "f = -2--1 "), "f", StringUtils.splita("-2,-1"));
 	}
 
 	@Test void b09_intSearch_rangeWithNegativeNumbers_invalidRange() {
@@ -280,16 +281,16 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void b10_intSearch_multipleRanges() {
-		assertBeans(run(INT_BEAN_ARRAY, "f = 0-1 3-4"), "f", splita("0,1,3"));
+		assertBeans(run(INT_BEAN_ARRAY, "f = 0-1 3-4"), "f", StringUtils.splita("0,1,3"));
 	}
 
 	@Test void b11_intSearch_overlappingRanges() {
-		assertBeans(run(INT_BEAN_ARRAY, "f = 0-0 2-2"), "f", splita("0,2"));
+		assertBeans(run(INT_BEAN_ARRAY, "f = 0-0 2-2"), "f", StringUtils.splita("0,2"));
 	}
 
 	@Test void b12_intSearch_LT() {
 		for (var s : a("f = <0", "f<0", "f = < 0 ", "f < 0 "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("-2,-1"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("-2,-1"));
 	}
 
 	@Test void b13_intSearch_LT_negativeNumber() {
@@ -299,55 +300,55 @@ public class ObjectSearcher_Test extends TestBase {
 
 	@Test void b14_intSearch_GT() {
 		for (var s : a("f = >1", "f>1", "f = > 1 ", "f > 1 "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("2,3"));
 	}
 
 	@Test void b15_intSearch_GT_negativeNumber() {
 		for (var s : a("f = >-1", "f>-1", "f = > -1 ", "f > -1 ", "f =  >  -1  ", "f >  -1  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("0,1,2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("0,1,2,3"));
 	}
 
 	@Test void b16_intSearch_LTE() {
 		for (var s : a("f = <=0", "f<=0", "f = <= 0 ", "f <= 0 ", "f =  <=  0  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("-2,-1,0"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("-2,-1,0"));
 	}
 
 	@Test void b17_intSearch_LTE_negativeNumber() {
 		for (var s : a("f = <=-1", "f <=-1", "f = <= -1 ", "f =  <=  -1  ", "f <=  -1  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("-2,-1"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("-2,-1"));
 	}
 
 	@Test void b18_intSearch_GTE() {
 		for (var s : a("f = >=1", "f >=1", "f = >= 1 ", "f >= 1 ", "f =  >=  1  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("1,2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("1,2,3"));
 	}
 
 	@Test void b19_intSearch_GTE_negativeNumber() {
 		for (var s : a("f = >=-1", "f >=-1", "f = >= -1 ", "f >= -1 ", "f =  >=  -1  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("-1,0,1,2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("-1,0,1,2,3"));
 	}
 
 	@Test void b20_intSearch_not_singleNumber() {
 		for (var s : a("f = !1", "f = ! 1 ", "f =  !  1  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("-2,-1,0,2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("-2,-1,0,2,3"));
 	}
 
 	@Test void b21_intSearch_not_range() {
-		assertBeans(run(INT_BEAN_ARRAY, "f = !1-2"), "f", splita("-2,-1,0,3"));
+		assertBeans(run(INT_BEAN_ARRAY, "f = !1-2"), "f", StringUtils.splita("-2,-1,0,3"));
 	}
 
 	@Test void b22_intSearch_not_range_negativeNumbers() {
 		for (var s : a("f = !-2--1", "f = ! -2 - -1", "f =  !  -2  -  -1 "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("0,1,2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("0,1,2,3"));
 	}
 
 	@Test void b23_intSearch_not_looksLikeRange() {
-		assertBeans(run(INT_BEAN_ARRAY, "f = ! -2 -2"), "f", splita("-2,-1,0,1,2,3"));
+		assertBeans(run(INT_BEAN_ARRAY, "f = ! -2 -2"), "f", StringUtils.splita("-2,-1,0,1,2,3"));
 	}
 
 	@Test void b24_intSearch_empty() {
 		for (var s : a("f=", "f = ", "f =  "))
-			assertBeans(run(INT_BEAN_ARRAY, s), "f", splita("-2,-1,0,1,2,3"));
+			assertBeans(run(INT_BEAN_ARRAY, s), "f", StringUtils.splita("-2,-1,0,1,2,3"));
 	}
 
 	@Test void b25_intSearch_badSearches() {

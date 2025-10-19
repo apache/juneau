@@ -90,6 +90,6 @@ public class Position {
 			l.add("position " + position);
 		if (l.isEmpty())
 			l.add("unknown");
-		return Utils.join(l, ", ");
+		return StringUtils.join(l, ", ");
 	}
 }

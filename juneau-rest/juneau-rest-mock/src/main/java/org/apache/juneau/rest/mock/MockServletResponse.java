@@ -17,11 +17,11 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.util.*;
 
@@ -53,7 +53,7 @@ public class MockServletResponse implements HttpServletResponse {
 	private int sc;
 	private String msg;
 
-	private Map<String,String[]> headerMap = map();
+	private Map<String,String[]> headerMap = CollectionUtils2.map();
 
 	@Override /* Overridden from HttpServletResponse */
 	public void addCookie(Cookie cookie) {}

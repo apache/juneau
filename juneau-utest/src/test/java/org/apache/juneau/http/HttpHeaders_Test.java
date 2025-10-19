@@ -25,6 +25,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.internal.*;
@@ -38,7 +39,7 @@ class HttpHeaders_Test extends TestBase {
 		var x2 = serializedPart("X2","2");
 		var x3 = header("X3","3");
 		var x4 = serializedHeader("X4","4");
-		Map.Entry<String,Object> x5 = CollectionUtils.map("X5",(Object)"5").entrySet().iterator().next();
+		Map.Entry<String,Object> x5 = CollectionUtils2.map("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = () -> part("X7","7");
 		Headerable x8 = () -> header("X8","8");

@@ -20,7 +20,6 @@ import static org.apache.juneau.common.utils.IOUtils.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -1386,7 +1385,7 @@ public class BeanSession extends ContextSession {
 				else if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
 				else
-					return (T)toArray(to, new JsonList((Object[])splita(value.toString())).setBeanSession(this));
+					return (T)toArray(to, new JsonList((Object[])StringUtils.splita(value.toString())).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.
@@ -1628,7 +1627,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		ClassMeta<?> k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new JsonMap(this) : map();
+		return (k == null || k.isString()) ? new JsonMap(this) : CollectionUtils2.map();
 	}
 
 	/**

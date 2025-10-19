@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -105,7 +105,7 @@ public class HeaderInfo extends OpenApiElement {
 		this.ref = copyFrom.ref;
 		this.explode = copyFrom.explode;
 		this.deprecated = copyFrom.deprecated;
-		this.examples = copyOf(copyFrom.examples, Example::copy);
+		this.examples = CollectionUtils2.copyOf(copyFrom.examples, Example::copy);
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object
 	 */
 	public HeaderInfo setExamples(Map<String,Example> value) {
-		examples = copyOf(value);
+		examples = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

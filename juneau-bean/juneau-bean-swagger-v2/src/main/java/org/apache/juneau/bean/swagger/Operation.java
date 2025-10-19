@@ -17,8 +17,7 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -181,15 +180,15 @@ public class Operation extends SwaggerElement {
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
 
-		this.consumes = copyOf(copyFrom.consumes);
+		this.consumes = CollectionUtils2.copyOf(copyFrom.consumes);
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.operationId = copyFrom.operationId;
-		this.produces = copyOf(copyFrom.produces);
-		this.schemes = copyOf(copyFrom.schemes);
+		this.produces = CollectionUtils2.copyOf(copyFrom.produces);
+		this.schemes = CollectionUtils2.copyOf(copyFrom.schemes);
 		this.summary = copyFrom.summary;
-		this.tags = copyOf(copyFrom.tags);
+		this.tags = CollectionUtils2.copyOf(copyFrom.tags);
 
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
@@ -201,7 +200,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
-			this.responses = map();
+			this.responses = CollectionUtils2.map();
 			copyFrom.responses.forEach((k, v) -> this.responses.put(k, v.copy()));
 		}
 
@@ -210,8 +209,8 @@ public class Operation extends SwaggerElement {
 		} else {
 			this.security = list();
 			copyFrom.security.forEach(x -> {
-				Map<String,List<String>> m2 = map();
-				x.forEach((k, v) -> m2.put(k, copyOf(v)));
+				Map<String,List<String>> m2 = CollectionUtils2.map();
+				x.forEach((k, v) -> m2.put(k, CollectionUtils2.copyOf(v)));
 				this.security.add(m2);
 			});
 		}
@@ -386,7 +385,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation addSecurity(String scheme, String...alternatives) {
 		assertArgNotNull("scheme", scheme);
-		Map<String,List<String>> m = map();
+		Map<String,List<String>> m = CollectionUtils2.map();
 		m.put(scheme, alist(alternatives));
 		security = listBuilder(security).add(m).build();
 		return this;
@@ -695,7 +694,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setConsumes(Collection<MediaType> value) {
-		consumes = setFrom(value);
+		consumes = CollectionUtils2.setFrom(value);
 		return this;
 	}
 
@@ -794,7 +793,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setParameters(Collection<ParameterInfo> value) {
-		parameters = listFrom(value);
+		parameters = CollectionUtils2.listFrom(value);
 		return this;
 	}
 
@@ -826,7 +825,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setProduces(Collection<MediaType> value) {
-		produces = setFrom(value);
+		produces = CollectionUtils2.setFrom(value);
 		return this;
 	}
 
@@ -859,7 +858,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setResponses(Map<String,ResponseInfo> value) {
-		responses = copyOf(value);
+		responses = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
@@ -882,7 +881,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(Collection<String> value) {
-		schemes = setFrom(value);
+		schemes = CollectionUtils2.setFrom(value);
 		return this;
 	}
 
@@ -914,7 +913,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSecurity(Collection<Map<String,List<String>>> value) {
-		security = listFrom(value);
+		security = CollectionUtils2.listFrom(value);
 		return this;
 	}
 
@@ -964,7 +963,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(Collection<String> value) {
-		tags = setFrom(value);
+		tags = CollectionUtils2.setFrom(value);
 		return this;
 	}
 

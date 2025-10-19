@@ -41,7 +41,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_optional(RoundTrip_Tester t) throws Exception {
-		assertFalse(t.roundTrip(empty()).isPresent());
+		assertFalse(t.roundTrip(opte()).isPresent());
 	}
 
 	@ParameterizedTest

@@ -94,7 +94,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public BasicCsvArrayPart(String name, String value) {
 		super(name, value);
-		this.value = splita(value);
+		this.value = StringUtils.splita(value);
 		this.supplier = null;
 		this.stringValue = value;
 	}
@@ -177,9 +177,9 @@ public class BasicCsvArrayPart extends BasicPart {
 	@Override /* Overridden from Header */
 	public String getValue() {
 		if (supplier != null)
-			return Utils.join(supplier.get(), ',');
+			return StringUtils.join(supplier.get(), ',');
 		if (stringValue != null)
-			stringValue = Utils.join(value, ',');
+			stringValue = StringUtils.join(value, ',');
 		return stringValue;
 	}
 

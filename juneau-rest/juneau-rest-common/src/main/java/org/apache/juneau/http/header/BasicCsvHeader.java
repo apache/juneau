@@ -105,7 +105,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 */
 	public BasicCsvHeader(String name, String value) {
 		super(name, value);
-		this.value = splita(value);
+		this.value = StringUtils.splita(value);
 		this.supplier = null;
 	}
 
@@ -119,7 +119,7 @@ public class BasicCsvHeader extends BasicHeader {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicCsvHeader(String name, String...value) {
-		super(name, Utils.join(value, ", "));
+		super(name, StringUtils.join(value, ", "));
 		this.value = copyOf(value);
 		this.supplier = null;
 	}
@@ -220,7 +220,7 @@ public class BasicCsvHeader extends BasicHeader {
 	}
 
 	@Override /* Overridden from Header */
-	public String getValue() { return Utils.join(value(), ", "); }
+	public String getValue() { return StringUtils.join(value(), ", "); }
 
 	/**
 	 * Return the value if present, otherwise return <c>other</c>.

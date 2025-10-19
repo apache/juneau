@@ -16,9 +16,11 @@
  */
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.util.*;
+
+import org.apache.juneau.common.utils.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -45,7 +47,7 @@ public class MockHttpSession implements HttpSession {
 		return new MockHttpSession();
 	}
 
-	private Map<String,Object> attributes = map();
+	private Map<String,Object> attributes = CollectionUtils2.map();
 	private long creationTime, lastAccessedTime;
 	private int maxInactiveInterval;
 	private String id;

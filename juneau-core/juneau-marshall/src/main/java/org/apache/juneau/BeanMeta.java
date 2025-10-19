@@ -28,6 +28,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -202,7 +203,7 @@ public class BeanMeta<T> {
 
 				List<Class<?>> bdClasses = list();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
-					CollectionUtils.addAll(bdClasses, beanFilter.getBeanDictionary());
+					CollectionUtils2.addAll(bdClasses, beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
@@ -249,7 +250,7 @@ public class BeanMeta<T> {
 						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 					constructor = x;
 					constructorArgs = new String[0];
-					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
+					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.splita(z.properties()));
 					if (! x.hasNumParams(constructorArgs.length)) {
 						if (constructorArgs.length != 0)
 							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -272,7 +273,7 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = splita(z.properties()));
+						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = StringUtils.splita(z.properties()));
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -453,7 +454,7 @@ public class BeanMeta<T> {
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
-				properties = sortProperties ? CollectionUtils.sortedMap() : map();
+				properties = sortProperties ? CollectionUtils2.sortedMap() : map();
 
 				if (beanFilter != null && beanFilter.getTypeName() != null)
 					dictionaryName = beanFilter.getTypeName();
@@ -544,7 +545,7 @@ public class BeanMeta<T> {
 		if (p.isEmpty() && n.isEmpty())
 			return null;
 		if (! n.isEmpty())
-			return CollectionUtils.last(n).value();
+			return CollectionUtils2.last(n).value();
 
 		Value<String> name = Value.of(p.isEmpty() ? null : "");
 		p.forEach(x -> {

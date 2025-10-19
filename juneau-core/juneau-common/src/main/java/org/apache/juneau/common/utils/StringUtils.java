@@ -51,7 +51,7 @@ public class StringUtils {
 
 	private static final AsciiSet numberChars = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
 
-	private static final AsciiSet firstNumberChars =AsciiSet.of("+-.#0123456789");
+	private static final AsciiSet firstNumberChars = AsciiSet.of("+-.#0123456789");
 	private static final AsciiSet octChars = AsciiSet.of("01234567");
 	private static final AsciiSet decChars = AsciiSet.of("0123456789");
 	private static final AsciiSet hexChars = AsciiSet.of("0123456789abcdefABCDEF");
@@ -59,20 +59,21 @@ public class StringUtils {
 	private static final char[] base64m1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
 	// Characters that do not need to be URL-encoded
-	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.!~*'()\\").build();
+	private static final AsciiSet unencodedChars = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("-_.!~*'()\\").build();
 
 	// Characters that really do not need to be URL-encoded
-	private static final AsciiSet unencodedCharsLax = unencodedChars.copy()
-		.chars(":@$,")  // reserved, but can't be confused in a query parameter.
+	private static final AsciiSet unencodedCharsLax = unencodedChars.copy().chars(":@$,")  // reserved, but can't be confused in a query parameter.
 		.chars("{}|\\^[]`")  // unwise characters.
 		.build();
 
 	// Valid HTTP header characters (including quoted strings and comments).
+	// @formatter:off
 	private static final AsciiSet httpHeaderChars = AsciiSet
 		.create()
 		.chars("\t -")
 		.ranges("!-[","]-}")
 		.build();
+	// @formatter:on
 
 	// Maps BASE64 characters to 6-bit nibbles.
 	private static final byte[] base64m2 = new byte[128];
@@ -110,9 +111,8 @@ public class StringUtils {
 
 	private static final char[] HEX = "0123456789ABCDEF".toCharArray();
 
-	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS =
-		AsciiSet.create().ranges("a-z","A-Z","0-9").chars("-_.*/()").build();
-	private static final AsciiSet URI_CHARS = AsciiSet.create().chars("?#+%;/:@&=+$,-_.!~*'()").range('0','9').range('A','Z').range('a','z').build();
+	private static final AsciiSet URL_ENCODE_PATHINFO_VALIDCHARS = AsciiSet.create().ranges("a-z", "A-Z", "0-9").chars("-_.*/()").build();
+	private static final AsciiSet URI_CHARS = AsciiSet.create().chars("?#+%;/:@&=+$,-_.!~*'()").range('0', '9').range('A', 'Z').range('a', 'z').build();
 
 	/**
 	 * Abbreviates a String using ellipses.
@@ -124,7 +124,7 @@ public class StringUtils {
 	public static String abbreviate(String in, int length) {
 		if (in == null || in.length() <= length || in.length() <= 3)
 			return in;
-		return in.substring(0, length-3) + "...";
+		return in.substring(0, length - 3) + "...";
 	}
 
 	/**
@@ -228,6 +228,27 @@ public class StringUtils {
 	}
 
 	/**
+	 * Capitalizes the first character of a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	capitalize(<jk>null</jk>);          <jc>// null</jc>
+	 * 	capitalize(<js>""</js>);            <jc>// ""</jc>
+	 * 	capitalize(<js>"hello"</js>);       <jc>// "Hello"</jc>
+	 * 	capitalize(<js>"Hello"</js>);       <jc>// "Hello"</jc>
+	 * 	capitalize(<js>"HELLO"</js>);       <jc>// "HELLO"</jc>
+	 * </p>
+	 *
+	 * @param str The string to capitalize.
+	 * @return The string with the first character capitalized, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String capitalize(String str) {
+		if (isEmpty(str))
+			return str;
+		return Character.toUpperCase(str.charAt(0)) + str.substring(1);
+	}
+
+	/**
 	 * Returns the character at the specified index in the string without throwing exceptions.
 	 *
 	 * @param s The string.
@@ -240,6 +261,25 @@ public class StringUtils {
 		if (s == null || i < 0 || i >= s.length())
 			return 0;
 		return s.charAt(i);
+	}
+
+	/**
+	 * Cleans a string by removing control characters and normalizing whitespace.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	clean(<js>"hello\u0000\u0001world"</js>);     <jc>// "hello world"</jc>
+	 * 	clean(<js>"hello  \t\n  world"</js>);         <jc>// "hello world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to clean.
+	 * @return The cleaned string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String clean(String str) {
+		if (str == null)
+			return null;
+		str = removeControlChars(str);
+		return normalizeWhitespace(str);
 	}
 
 	/**
@@ -267,13 +307,30 @@ public class StringUtils {
 	 * @throws Exception Exception occurred.
 	 */
 	public static byte[] compress(String contents) throws Exception {
-		var baos = new ByteArrayOutputStream(contents.length()>>1);
+		var baos = new ByteArrayOutputStream(contents.length() >> 1);
 		try (var gos = new GZIPOutputStream(baos)) {
 			gos.write(contents.getBytes());
 			gos.finish();
 			gos.flush();
 		}
 		return baos.toByteArray();
+	}
+
+	/**
+	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 *
+	 * @param s The string to check.
+	 * @param values The characters to check for.
+	 * @return <jk>true</jk> if the string contains any of the specified characters.
+	 */
+	public static boolean contains(String s, char...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (s.indexOf(v) >= 0)
+				return true;
+		}
+		return false;
 	}
 
 	/**
@@ -285,6 +342,23 @@ public class StringUtils {
 	 */
 	public static boolean contains(String value, CharSequence substring) {
 		return value != null && value.contains(substring);
+	}
+
+	/**
+	 * Null-safe {@link String#contains(CharSequence)} operation.
+	 *
+	 * @param s The string to check.
+	 * @param values The substrings to check for.
+	 * @return <jk>true</jk> if the string contains any of the specified substrings.
+	 */
+	public static boolean contains(String s, String...values) {
+		if (s == null || values == null || values.length == 0)
+			return false;
+		for (var v : values) {
+			if (s.contains(v))
+				return true;
+		}
+		return false;
 	}
 
 	/**
@@ -412,7 +486,7 @@ public class StringUtils {
 		if (s != null) {
 			var i = s.length();
 			if (i > 0)
-				return s.charAt(i-1) == c;
+				return s.charAt(i - 1) == c;
 		}
 		return false;
 	}
@@ -428,7 +502,7 @@ public class StringUtils {
 		if (s != null) {
 			var i = s.length();
 			if (i > 0) {
-				var c2 = s.charAt(i-1);
+				var c2 = s.charAt(i - 1);
 				for (var cc : c)
 					if (c2 == cc)
 						return true;
@@ -529,7 +603,7 @@ public class StringUtils {
 					sb.append("+");
 				else
 					sb.append('%').append(toHex2(c));
-				m = i+1;
+				m = i + 1;
 			}
 		}
 		if (sb != null) {
@@ -568,9 +642,9 @@ public class StringUtils {
 	 * @return A new byte array.
 	 */
 	public static byte[] fromHex(String hex) {
-		var buff = ByteBuffer.allocate(hex.length()/2);
-		for (var i = 0; i < hex.length(); i+=2)
-			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		var buff = ByteBuffer.allocate(hex.length() / 2);
+		for (var i = 0; i < hex.length(); i += 2)
+			buff.put((byte)Integer.parseInt(hex.substring(i, i + 2), 16));
 		buff.rewind();
 		return buff.array();
 	}
@@ -582,9 +656,9 @@ public class StringUtils {
 	 * @return The UTF-8 string.
 	 */
 	public static String fromHexToUTF8(String hex) {
-		var buff = ByteBuffer.allocate(hex.length()/2);
-		for (var i = 0; i < hex.length(); i+=2)
-			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		var buff = ByteBuffer.allocate(hex.length() / 2);
+		for (var i = 0; i < hex.length(); i += 2)
+			buff.put((byte)Integer.parseInt(hex.substring(i, i + 2), 16));
 		buff.rewind();  // Fixes Java 11 issue.
 		return UTF_8.decode(buff).toString();
 	}
@@ -596,9 +670,9 @@ public class StringUtils {
 	 * @return A new byte array.
 	 */
 	public static byte[] fromSpacedHex(String hex) {
-		var buff = ByteBuffer.allocate((hex.length()+1)/3);
-		for (var i = 0; i < hex.length(); i+=3)
-			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		var buff = ByteBuffer.allocate((hex.length() + 1) / 3);
+		for (var i = 0; i < hex.length(); i += 3)
+			buff.put((byte)Integer.parseInt(hex.substring(i, i + 2), 16));
 		buff.rewind();
 		return buff.array();
 	}
@@ -610,9 +684,9 @@ public class StringUtils {
 	 * @return The UTF-8 string.
 	 */
 	public static String fromSpacedHexToUTF8(String hex) {
-		var buff = ByteBuffer.allocate((hex.length()+1)/3);
-		for (var i = 0; i < hex.length(); i+=3)
-			buff.put((byte)Integer.parseInt(hex.substring(i, i+2), 16));
+		var buff = ByteBuffer.allocate((hex.length() + 1) / 3);
+		for (var i = 0; i < hex.length(); i += 3)
+			buff.put((byte)Integer.parseInt(hex.substring(i, i + 2), 16));
 		buff.rewind();  // Fixes Java 11 issue.
 		return UTF_8.decode(buff).toString();
 	}
@@ -734,6 +808,41 @@ public class StringUtils {
 	}
 
 	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern(String s) {
+		return getMatchPattern(s, 0);
+	}
+
+	/**
+	 * Converts a string containing <js>"*"</js> meta characters with a regular expression pattern.
+	 *
+	 * @param s The string to create a pattern from.
+	 * @param flags Regular expression flags.
+	 * @return A regular expression pattern.
+	 */
+	public static Pattern getMatchPattern(String s, int flags) {
+		if (s == null)
+			return null;
+		var sb = new StringBuilder();
+		sb.append("\\Q");
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '*')
+				sb.append("\\E").append(".*").append("\\Q");
+			else if (c == '?')
+				sb.append("\\E").append(".").append("\\Q");
+			else
+				sb.append(c);
+		}
+		sb.append("\\E");
+		return Pattern.compile(sb.toString(), flags);
+	}
+
+	/**
 	 * Takes in a string, splits it by lines, and then prepends each line with line numbers.
 	 *
 	 * @param s The string.
@@ -766,9 +875,27 @@ public class StringUtils {
 		if (end > lines.length)
 			end = lines.length;
 		var sb = new StringBuilder();
-		for (var l :  Arrays.asList(lines).subList(start-1, end))
-			sb.append(String.format("%0"+digits+"d", start++)).append(": ").append(l).append("\n");  // NOSONAR - Intentional.
+		for (var l : Arrays.asList(lines).subList(start - 1, end))
+			sb.append(String.format("%0" + digits + "d", start++)).append(": ").append(l).append("\n");  // NOSONAR - Intentional.
 		return sb.toString();
+	}
+
+	/**
+	 * Checks if a string has text (not null, not empty, and contains at least one non-whitespace character).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	hasText(<jk>null</jk>);       <jc>// false</jc>
+	 * 	hasText(<js>""</js>);         <jc>// false</jc>
+	 * 	hasText(<js>"   "</js>);      <jc>// false</jc>
+	 * 	hasText(<js>"hello"</js>);    <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is not null, not empty, and contains at least one non-whitespace character.
+	 */
+	public static boolean hasText(String str) {
+		return isNotBlank(str);
 	}
 
 	/**
@@ -839,6 +966,76 @@ public class StringUtils {
 		}
 		return false;
 	}
+
+	/**
+	 * Checks if a string contains only alphabetic characters (a-z, A-Z).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isAlpha(<jk>null</jk>);         <jc>// false</jc>
+	 * 	isAlpha(<js>""</js>);           <jc>// false</jc>
+	 * 	isAlpha(<js>"abc"</js>);        <jc>// true</jc>
+	 * 	isAlpha(<js>"abc123"</js>);     <jc>// false</jc>
+	 * 	isAlpha(<js>"abc def"</js>);    <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is not null, not empty, and contains only alphabetic characters.
+	 */
+	public static boolean isAlpha(String str) {
+		if (isEmpty(str))
+			return false;
+		for (int i = 0; i < str.length(); i++) {
+			if (! Character.isLetter(str.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a string contains only alphanumeric characters (a-z, A-Z, 0-9).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isAlphaNumeric(<jk>null</jk>);         <jc>// false</jc>
+	 * 	isAlphaNumeric(<js>""</js>);           <jc>// false</jc>
+	 * 	isAlphaNumeric(<js>"abc"</js>);        <jc>// true</jc>
+	 * 	isAlphaNumeric(<js>"abc123"</js>);     <jc>// true</jc>
+	 * 	isAlphaNumeric(<js>"abc def"</js>);    <jc>// false</jc>
+	 * 	isAlphaNumeric(<js>"abc-123"</js>);    <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is not null, not empty, and contains only alphanumeric characters.
+	 */
+	public static boolean isAlphaNumeric(String str) {
+		if (isEmpty(str))
+			return false;
+		for (int i = 0; i < str.length(); i++) {
+			if (! Character.isLetterOrDigit(str.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a string is blank (null, empty, or whitespace only).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isBlank(<jk>null</jk>);       <jc>// true</jc>
+	 * 	isBlank(<js>""</js>);         <jc>// true</jc>
+	 * 	isBlank(<js>"   "</js>);      <jc>// true</jc>
+	 * 	isBlank(<js>"hello"</js>);    <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is null, empty, or contains only whitespace characters.
+	 */
+	public static boolean isBlank(String str) {
+		return str == null || str.trim().isEmpty();
+	}
+
 	/**
 	 * Returns <jk>true</jk> if the specified string is numeric.
 	 *
@@ -886,6 +1083,49 @@ public class StringUtils {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Checks if a string contains only digit characters (0-9).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isDigit(<jk>null</jk>);         <jc>// false</jc>
+	 * 	isDigit(<js>""</js>);           <jc>// false</jc>
+	 * 	isDigit(<js>"123"</js>);        <jc>// true</jc>
+	 * 	isDigit(<js>"abc123"</js>);     <jc>// false</jc>
+	 * 	isDigit(<js>"12.3"</js>);       <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is not null, not empty, and contains only digit characters.
+	 */
+	public static boolean isDigit(String str) {
+		if (isEmpty(str))
+			return false;
+		for (int i = 0; i < str.length(); i++) {
+			if (! Character.isDigit(str.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Checks if a string is empty (null or zero length).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isEmpty(<jk>null</jk>);       <jc>// true</jc>
+	 * 	isEmpty(<js>""</js>);         <jc>// true</jc>
+	 * 	isEmpty(<js>"   "</js>);      <jc>// false</jc>
+	 * 	isEmpty(<js>"hello"</js>);    <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is null or has zero length.
+	 */
+	public static boolean isEmpty(String str) {
+		return str == null || str.isEmpty();
 	}
 
 	/**
@@ -940,7 +1180,7 @@ public class StringUtils {
 		var c2 = lastNonWhitespaceChar(s);
 		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
 			return true;
-		return (isOneOf(s, "true","false","null") || isNumeric(s));
+		return (isOneOf(s, "true", "false", "null") || isNumeric(s));
 	}
 
 	/**
@@ -960,7 +1200,7 @@ public class StringUtils {
 			var i = s.lastIndexOf(']');
 			if (i == -1)
 				return false;
-			s = s.substring(i+1);
+			s = s.substring(i + 1);
 			return firstRealCharacter(s) == -1;
 		}
 		return false;
@@ -983,10 +1223,28 @@ public class StringUtils {
 			var i = s.lastIndexOf('}');
 			if (i == -1)
 				return false;
-			s = s.substring(i+1);
+			s = s.substring(i + 1);
 			return firstRealCharacter(s) == -1;
 		}
 		return false;
+	}
+
+	/**
+	 * Checks if a string is not blank (not null, not empty, and not whitespace only).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isNotBlank(<jk>null</jk>);       <jc>// false</jc>
+	 * 	isNotBlank(<js>""</js>);         <jc>// false</jc>
+	 * 	isNotBlank(<js>"   "</js>);      <jc>// false</jc>
+	 * 	isNotBlank(<js>"hello"</js>);    <jc>// true</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is not null, not empty, and contains non-whitespace characters.
+	 */
+	public static boolean isNotBlank(String str) {
+		return ! isBlank(str);
 	}
 
 	/**
@@ -1080,7 +1338,239 @@ public class StringUtils {
 	}
 
 	/**
-	 * Same as {@link Utils#join(Collection, char)} but escapes the delimiter if found in the tokens.
+	 * Checks if a character is whitespace.
+	 *
+	 * @param c The character to check.
+	 * @return <jk>true</jk> if the character is whitespace.
+	 */
+	public static boolean isWhitespace(int c) {
+		return Character.isWhitespace(c);
+	}
+
+	/**
+	 * Checks if a string contains only whitespace characters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	isWhitespace(<jk>null</jk>);         <jc>// false</jc>
+	 * 	isWhitespace(<js>""</js>);           <jc>// true</jc>
+	 * 	isWhitespace(<js>"   "</js>);        <jc>// true</jc>
+	 * 	isWhitespace(<js>"\t\n"</js>);       <jc>// true</jc>
+	 * 	isWhitespace(<js>" a "</js>);        <jc>// false</jc>
+	 * </p>
+	 *
+	 * @param str The string to check.
+	 * @return <jk>true</jk> if the string is not null and contains only whitespace characters (or is empty).
+	 */
+	public static boolean isWhitespace(String str) {
+		if (str == null)
+			return false;
+		if (str.isEmpty())
+			return true;
+		for (int i = 0; i < str.length(); i++) {
+			if (! isWhitespace(str.charAt(i)))
+				return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Collection<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Collection<?> tokens, String d) {
+		if (tokens == null)
+			return null;
+		return StringUtils.join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(Collection<?> tokens, String d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (var iter = tokens.iterator(); iter.hasNext();) {
+			sb.append(iter.next());
+			if (iter.hasNext())
+				sb.append(d);
+		}
+		return sb;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(int[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Joins an array of integers with a delimiter.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	join(<jk>new int</jk>[]{1, 2, 3}, <js>","</js>);   <jc>// "1,2,3"</jc>
+	 * 	join(<jk>new int</jk>[]{}, <js>","</js>);          <jc>// ""</jc>
+	 * </p>
+	 *
+	 * @param array The array to join.
+	 * @param delimiter The delimiter string.
+	 * @return The joined string.
+	 */
+	public static String join(int[] array, String delimiter) {
+		if (array == null || array.length == 0)
+			return "";
+		if (delimiter == null)
+			delimiter = "";
+		return Arrays.stream(array).mapToObj(String::valueOf).collect(Collectors.joining(delimiter));
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(List<?> tokens, char d) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (int i = 0, j = tokens.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens.get(i));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(List<?> tokens, String d) {
+		if (tokens == null)
+			return null;
+		return StringUtils.join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(List<?> tokens, String d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (int i = 0, j = tokens.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens.get(i));
+		}
+		return sb;
+	}
+
+	/**
+	 * Joins the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Object[] tokens, char d) {
+		if (tokens == null)
+			return null;
+		if (tokens.length == 1)
+			return Utils.emptyIfNull(Utils.s(tokens[0]));
+		return StringUtils.join(tokens, d, new StringBuilder()).toString();
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string and writes the output to the specified string builder.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param d The delimiter.
+	 * @param sb The string builder to append the response to.
+	 * @return The same string builder passed in as <c>sb</c>.
+	 */
+	public static StringBuilder join(Object[] tokens, char d, StringBuilder sb) {
+		if (tokens == null)
+			return sb;
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(d);
+			sb.append(tokens[i]);
+		}
+		return sb;
+	}
+
+	/**
+	 * Join the specified tokens into a delimited string.
+	 *
+	 * @param tokens The tokens to join.
+	 * @param separator The delimiter.
+	 * @return The delimited string.  If <c>tokens</c> is <jk>null</jk>, returns <jk>null</jk>.
+	 */
+	public static String join(Object[] tokens, String separator) {
+		if (tokens == null)
+			return null;
+		var sb = new StringBuilder();
+		for (var i = 0; i < tokens.length; i++) {
+			if (i > 0)
+				sb.append(separator);
+			sb.append(tokens[i]);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Same as {@link StringUtils#join(Collection, char)} but escapes the delimiter if found in the tokens.
 	 *
 	 * @param tokens The tokens to join.
 	 * @param d The delimiter.
@@ -1100,6 +1590,16 @@ public class StringUtils {
 	}
 
 	/**
+	 * Joins tokens with newlines.
+	 *
+	 * @param tokens The tokens to concatenate.
+	 * @return A string with the specified tokens contatenated with newlines.
+	 */
+	public static String joinnl(Object[] tokens) {
+		return join(tokens, '\n');
+	}
+
+	/**
 	 * Returns the last non-whitespace character in the string.
 	 *
 	 * @param s The string to check.
@@ -1109,10 +1609,193 @@ public class StringUtils {
 	 */
 	public static char lastNonWhitespaceChar(String s) {
 		if (s != null)
-			for (var i = s.length()-1; i >= 0; i--)
+			for (var i = s.length() - 1; i >= 0; i--)
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
 		return 0;
+	}
+
+	/**
+	 * Returns the leftmost characters of a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	left(<jk>null</jk>, 3);          <jc>// null</jc>
+	 * 	left(<js>""</js>, 3);            <jc>// ""</jc>
+	 * 	left(<js>"hello"</js>, 3);       <jc>// "hel"</jc>
+	 * 	left(<js>"hello"</js>, 10);      <jc>// "hello"</jc>
+	 * </p>
+	 *
+	 * @param str The string to get characters from.
+	 * @param len The number of characters to get.
+	 * @return The leftmost characters, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String left(String str, int len) {
+		if (str == null)
+			return null;
+		if (len < 0)
+			return "";
+		if (len >= str.length())
+			return str;
+		return str.substring(0, len);
+	}
+
+	/**
+	 * Returns the middle characters of a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	mid(<jk>null</jk>, 1, 3);          <jc>// null</jc>
+	 * 	mid(<js>""</js>, 1, 3);            <jc>// ""</jc>
+	 * 	mid(<js>"hello"</js>, 1, 3);       <jc>// "ell"</jc>
+	 * 	mid(<js>"hello"</js>, 1, 10);      <jc>// "ello"</jc>
+	 * </p>
+	 *
+	 * @param str The string to get characters from.
+	 * @param pos The starting position (0-based).
+	 * @param len The number of characters to get.
+	 * @return The middle characters, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String mid(String str, int pos, int len) {
+		if (str == null)
+			return null;
+		if (pos < 0 || len < 0)
+			return "";
+		if (pos >= str.length())
+			return "";
+		int end = Math.min(pos + len, str.length());
+		return str.substring(pos, end);
+	}
+
+	/**
+	 * Normalizes all whitespace in a string to single spaces.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	normalizeWhitespace(<js>"hello  \t\n  world"</js>);   <jc>// "hello world"</jc>
+	 * 	normalizeWhitespace(<js>"  hello  world  "</js>);     <jc>// "hello world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to normalize.
+	 * @return The normalized string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String normalizeWhitespace(String str) {
+		if (str == null)
+			return null;
+		return str.replaceAll("\\s+", " ").trim();
+	}
+
+	/**
+	 * Null-safe string not-contains operation.
+	 *
+	 * @param s The string to check.
+	 * @param values The characters to check for.
+	 * @return <jk>true</jk> if the string does not contain any of the specified characters.
+	 */
+	public static boolean notContains(String s, char...values) {
+		return ! contains(s, values);
+	}
+
+	/**
+	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
+	 *
+	 * @param value The string value to check.
+	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
+	 */
+	public static String nullIfEmpty(String value) {
+		return Utils.isEmpty(value) ? null : value;
+	}
+
+	/**
+	 * Returns an obfuscated version of the specified string.
+	 *
+	 * @param s The string to obfuscate.
+	 * @return The obfuscated string with most characters replaced by asterisks.
+	 */
+	public static String obfuscate(String s) {
+		if (s == null || s.length() < 2)
+			return "*";
+		return s.substring(0, 1) + s.substring(1).replaceAll(".", "*");  // NOSONAR
+	}
+
+	/**
+	 * Center pads a string with a specified character.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	padCenter(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
+	 * 	padCenter(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
+	 * 	padCenter(<js>"hi"</js>, 6, <js>' '</js>);          <jc>// "  hi  "</jc>
+	 * 	padCenter(<js>"hi"</js>, 7, <js>' '</js>);          <jc>// "   hi  "</jc>
+	 * 	padCenter(<js>"hello"</js>, 3, <js>' '</js>);       <jc>// "hello"</jc>
+	 * </p>
+	 *
+	 * @param str The string to pad.
+	 * @param size The desired total string length.
+	 * @param padChar The character to pad with.
+	 * @return The center-padded string.
+	 */
+	public static String padCenter(String str, int size, char padChar) {
+		if (str == null)
+			str = "";
+		int pads = size - str.length();
+		if (pads <= 0)
+			return str;
+		int rightPads = pads / 2;
+		int leftPads = pads - rightPads;
+		return String.valueOf(padChar).repeat(leftPads) + str + String.valueOf(padChar).repeat(rightPads);
+	}
+
+	/**
+	 * Left pads a string with a specified character.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	padLeft(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
+	 * 	padLeft(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
+	 * 	padLeft(<js>"hello"</js>, 8, <js>' '</js>);       <jc>// "   hello"</jc>
+	 * 	padLeft(<js>"hello"</js>, 3, <js>' '</js>);       <jc>// "hello"</jc>
+	 * 	padLeft(<js>"123"</js>, 5, <js>'0'</js>);         <jc>// "00123"</jc>
+	 * </p>
+	 *
+	 * @param str The string to pad.
+	 * @param size The desired total string length.
+	 * @param padChar The character to pad with.
+	 * @return The left-padded string.
+	 */
+	public static String padLeft(String str, int size, char padChar) {
+		if (str == null)
+			str = "";
+		int pads = size - str.length();
+		if (pads <= 0)
+			return str;
+		return String.valueOf(padChar).repeat(pads) + str;
+	}
+
+	/**
+	 * Right pads a string with a specified character.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	padRight(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
+	 * 	padRight(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
+	 * 	padRight(<js>"hello"</js>, 8, <js>' '</js>);       <jc>// "hello   "</jc>
+	 * 	padRight(<js>"hello"</js>, 3, <js>' '</js>);       <jc>// "hello"</jc>
+	 * 	padRight(<js>"123"</js>, 5, <js>'0'</js>);         <jc>// "12300"</jc>
+	 * </p>
+	 *
+	 * @param str The string to pad.
+	 * @param size The desired total string length.
+	 * @param padChar The character to pad with.
+	 * @return The right-padded string.
+	 */
+	public static String padRight(String str, int size, char padChar) {
+		if (str == null)
+			str = "";
+		int pads = size - str.length();
+		if (pads <= 0)
+			return str;
+		return str + String.valueOf(padChar).repeat(pads);
 	}
 
 	/**
@@ -1155,7 +1838,7 @@ public class StringUtils {
 		var m = multiplier(s);
 		if (m == 1)
 			return Integer.decode(s);
-		return Integer.decode(s.substring(0, s.length()-1).trim()) * m;  // NOSONAR - NPE not possible here.
+		return Integer.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
 
 	/**
@@ -1231,7 +1914,7 @@ public class StringUtils {
 		var m = multiplier2(s);
 		if (m == 1)
 			return Long.decode(s);
-		return Long.decode(s.substring(0, s.length()-1).trim()) * m;  // NOSONAR - NPE not possible here.
+		return Long.decode(s.substring(0, s.length() - 1).trim()) * m;  // NOSONAR - NPE not possible here.
 	}
 
 	/**
@@ -1278,8 +1961,7 @@ public class StringUtils {
 					type = Long.class;
 				else
 					type = Integer.class;
-			}
-			else if (isFloat(s))
+			} else if (isFloat(s))
 				type = Double.class;
 			else
 				throw new NumberFormatException(s);
@@ -1288,7 +1970,7 @@ public class StringUtils {
 		if (type == Double.class || type == Double.TYPE) {
 			var d = Double.valueOf(s);
 			var f = Float.valueOf(s);
-			if (isAutoDetect && (!isDecimal) && d.toString().equals(f.toString()))
+			if (isAutoDetect && (! isDecimal) && d.toString().equals(f.toString()))
 				return f;
 			return d;
 		}
@@ -1324,7 +2006,7 @@ public class StringUtils {
 			return new BigInteger(s);
 		if (type == AtomicInteger.class)
 			return new AtomicInteger(Integer.decode(s));
-		throw new NumberFormatException("Unsupported Number type: "+type.getName());
+		throw new NumberFormatException("Unsupported Number type: " + type.getName());
 	}
 
 	/**
@@ -1354,10 +2036,120 @@ public class StringUtils {
 		for (var i = 0; i < numchars; i++) {
 			var c = RANDOM.nextInt(36) + 97;
 			if (c > 'z')
-				c -= ('z'-'0'+1);
+				c -= ('z' - '0' + 1);
 			sb.append((char)c);
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Removes all occurrences of a substring from a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	remove(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
+	 * 	remove(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
+	 * 	remove(<js>"hello world"</js>, <js>"o"</js>);     <jc>// "hell wrld"</jc>
+	 * 	remove(<js>"hello world"</js>, <js>"xyz"</js>);   <jc>// "hello world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @param remove The substring to remove.
+	 * @return The string with all occurrences of the substring removed, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String remove(String str, String remove) {
+		if (isEmpty(str) || isEmpty(remove))
+			return str;
+		return str.replace(remove, "");
+	}
+
+	/**
+	 * Removes control characters from a string, replacing them with spaces.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeControlChars(<js>"hello\u0000\u0001world"</js>);   <jc>// "hello  world"</jc>
+	 * 	removeControlChars(<js>"hello\nworld"</js>);             <jc>// "hello\nworld"</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @return The string with control characters replaced by spaces (except whitespace control chars), or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String removeControlChars(String str) {
+		if (str == null)
+			return null;
+		var sb = new StringBuilder();
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (Character.isISOControl(c) && ! Character.isWhitespace(c))
+				sb.append(' ');
+			else
+				sb.append(c);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Removes a suffix from a string if present.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeEnd(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
+	 * 	removeEnd(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
+	 * 	removeEnd(<js>"hello world"</js>, <js>"world"</js>); <jc>// "hello "</jc>
+	 * 	removeEnd(<js>"hello world"</js>, <js>"xyz"</js>);   <jc>// "hello world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @param suffix The suffix to remove.
+	 * @return The string with the suffix removed if present, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String removeEnd(String str, String suffix) {
+		if (isEmpty(str) || isEmpty(suffix))
+			return str;
+		if (str.endsWith(suffix))
+			return str.substring(0, str.length() - suffix.length());
+		return str;
+	}
+
+	/**
+	 * Removes non-printable characters from a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeNonPrintable(<js>"hello\u0000world"</js>);   <jc>// "helloworld"</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @return The string with non-printable characters removed, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String removeNonPrintable(String str) {
+		if (str == null)
+			return null;
+		return str.replaceAll("\\p{C}", "");
+	}
+
+	/**
+	 * Removes a prefix from a string if present.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	removeStart(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
+	 * 	removeStart(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
+	 * 	removeStart(<js>"hello world"</js>, <js>"hello"</js>); <jc>// " world"</jc>
+	 * 	removeStart(<js>"hello world"</js>, <js>"xyz"</js>);   <jc>// "hello world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @param prefix The prefix to remove.
+	 * @return The string with the prefix removed if present, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String removeStart(String str, String prefix) {
+		if (isEmpty(str) || isEmpty(prefix))
+			return str;
+		if (str.startsWith(prefix))
+			return str.substring(prefix.length());
+		return str;
 	}
 
 	/**
@@ -1373,6 +2165,10 @@ public class StringUtils {
 			sb.append(pattern);
 		return sb.toString();
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String validation methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Replaces <js>"\\uXXXX"</js> character sequences with their unicode characters.
@@ -1390,7 +2186,7 @@ public class StringUtils {
 		var sb = new StringBuffer(s.length());
 
 		while (m.find()) {
-			var ch = String.valueOf((char) Integer.parseInt(m.group(1), 16));
+			var ch = String.valueOf((char)Integer.parseInt(m.group(1), 16));
 			m.appendReplacement(sb, Matcher.quoteReplacement(ch));
 		}
 
@@ -1449,7 +2245,7 @@ public class StringUtils {
 					if (depth > 0) {
 						depth--;
 					} else {
-						var key = s.substring(x+1, i);
+						var key = s.substring(x + 1, i);
 						key = (hasInternalVar ? replaceVars(key, m) : key);
 						hasInternalVar = false;
 						// JUNEAU-248: Check if key exists in map by attempting to get it
@@ -1476,6 +2272,586 @@ public class StringUtils {
 			}
 		}
 		return out.toString();
+	}
+
+	/**
+	 * Reverses a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	reverse(<jk>null</jk>);          <jc>// null</jc>
+	 * 	reverse(<js>""</js>);            <jc>// ""</jc>
+	 * 	reverse(<js>"hello"</js>);       <jc>// "olleh"</jc>
+	 * </p>
+	 *
+	 * @param str The string to reverse.
+	 * @return The reversed string, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String reverse(String str) {
+		if (str == null)
+			return null;
+		return new StringBuilder(str).reverse().toString();
+	}
+
+	/**
+	 * Returns the rightmost characters of a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	right(<jk>null</jk>, 3);          <jc>// null</jc>
+	 * 	right(<js>""</js>, 3);            <jc>// ""</jc>
+	 * 	right(<js>"hello"</js>, 3);       <jc>// "llo"</jc>
+	 * 	right(<js>"hello"</js>, 10);      <jc>// "hello"</jc>
+	 * </p>
+	 *
+	 * @param str The string to get characters from.
+	 * @param len The number of characters to get.
+	 * @return The rightmost characters, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String right(String str, int len) {
+		if (str == null)
+			return null;
+		if (len < 0)
+			return "";
+		if (len >= str.length())
+			return str;
+		return str.substring(str.length() - len);
+	}
+
+	/**
+	 * Splits a comma-delimited list into a list of strings.
+	 *
+	 * @param s The string to split.
+	 * @return A list of split strings, or an empty list if the input is <jk>null</jk>.
+	 */
+	public static List<String> split(String s) {
+		return s == null ? Collections.emptyList() : split(s, ',');
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split(String s, char c) {
+		return split(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Same as {@link splita} but consumes the tokens instead of creating an array.
+	 *
+	 * @param s The string to split.
+	 * @param c The character to split on.
+	 * @param consumer The consumer of the tokens.
+	 */
+	public static void split(String s, char c, Consumer<String> consumer) {
+		var escapeChars = getEscapeSet(c);
+
+		if (Utils.isEmpty(s))
+			return;
+		if (s.indexOf(c) == -1) {
+			consumer.accept(s);
+			return;
+		}
+
+		var x1 = 0;
+		var escapeCount = 0;
+
+		for (var i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '\\')
+				escapeCount++;
+			else if (s.charAt(i) == c && escapeCount % 2 == 0) {
+				var s2 = s.substring(x1, i);
+				var s3 = unEscapeChars(s2, escapeChars);
+				consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
+				x1 = i + 1;
+			}
+			if (s.charAt(i) != '\\')
+				escapeCount = 0;
+		}
+		var s2 = s.substring(x1);
+		var s3 = unEscapeChars(s2, escapeChars);
+		consumer.accept(s3.trim());  // NOSONAR - NPE not possible.
+	}
+
+	/**
+	 * Same as {@link splita} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static List<String> split(String s, char c, int limit) {
+
+		var escapeChars = getEscapeSet(c);
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (Utils.isEmpty(s))
+			return Collections.emptyList();
+		if (s.indexOf(c) == -1)
+			return Collections.singletonList(s);
+
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
+		limit--;
+		for (var i = 0; i < sArray.length && limit > 0; i++) {
+			if (sArray[i] == '\\')
+				escapeCount++;
+			else if (sArray[i] == c && escapeCount % 2 == 0) {
+				var s2 = new String(sArray, x1, i - x1);
+				var s3 = unEscapeChars(s2, escapeChars);
+				l.add(s3.trim());
+				limit--;
+				x1 = i + 1;
+			}
+			if (sArray[i] != '\\')
+				escapeCount = 0;
+		}
+		var s2 = new String(sArray, x1, sArray.length - x1);
+		var s3 = unEscapeChars(s2, escapeChars);
+		l.add(s3.trim());
+
+		return l;
+	}
+
+	/**
+	 * Same as {@link splita} but consumes the tokens instead of creating an array.
+	 *
+	 * @param s The string to split.
+	 * @param consumer The consumer of the tokens.
+	 */
+	public static void split(String s, Consumer<String> consumer) {
+		StringUtils.split(s, ',', consumer);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String manipulation methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Splits a comma-delimited list into an array of strings.
+	 *
+	 * @param s The string to split.
+	 * @return An array of split strings.
+	 */
+	public static String[] splita(String s) {
+		return splita(s, ',');
+	}
+
+	/**
+	 * Splits a character-delimited string into a string array.
+	 *
+	 * <p>
+	 * Does not split on escaped-delimiters (e.g. "\,");
+	 * Resulting tokens are trimmed of whitespace.
+	 *
+	 * <p>
+	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] splita(String s, char c) {
+		return splita(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Same as {@link #splita(String, char)} but limits the number of tokens returned.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @param limit The maximum number of tokens to return.
+	 * @return The tokens, or <jk>null</jk> if the string was null.
+	 */
+	public static String[] splita(String s, char c, int limit) {
+		var l = StringUtils.split(s, c, limit);
+		return l == null ? null : l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Same as {@link #splita(String, char)} except splits all strings in the input and returns a single result.
+	 *
+	 * @param s The string to split.  Can be <jk>null</jk>.
+	 * @param c The character to split on.
+	 * @return The tokens, or null if the input array was null
+	 */
+	public static String[] splita(String[] s, char c) {
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		var l = new LinkedList<String>();
+		for (var ss : s) {
+			if (ss == null || ss.indexOf(c) == -1)
+				l.add(ss);
+			else
+				Collections.addAll(l, splita(ss, c));
+		}
+		return l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Splits a list of key-value pairs into an ordered map.
+	 *
+	 * <p>
+	 * Example:
+	 * <p class='bjava'>
+	 * 	String <jv>in</jv> = <js>"foo=1;bar=2"</js>;
+	 * 	Map <jv>map</jv> = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
+	 * </p>
+	 *
+	 * @param s The string to split.
+	 * @param trim Trim strings after parsing.
+	 * @return The parsed map, or null if the string was null.
+	 */
+	public static Map<String,String> splitMap(String s, boolean trim) {
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (Utils.isEmpty(s))
+			return Collections.emptyMap();
+
+		var m = new LinkedHashMap<String,String>();
+
+		// S1: Found start of key, looking for equals.
+		// S2: Found equals, looking for delimiter (or end).
+
+		var state = S1;
+
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var escapeCount = 0;
+		String key = null;
+		for (var i = 0; i < sArray.length + 1; i++) {
+			var c = i == sArray.length ? ',' : sArray[i];
+			if (c == '\\')
+				escapeCount++;
+			if (escapeCount % 2 == 0) {
+				if (state == S1) {
+					if (c == '=') {
+						key = s.substring(x1, i);
+						if (trim)
+							key = trim(key);
+						key = unEscapeChars(key, MAP_ESCAPE_SET);
+						state = S2;
+						x1 = i + 1;
+					} else if (c == ',') {
+						key = s.substring(x1, i);
+						if (trim)
+							key = trim(key);
+						key = unEscapeChars(key, MAP_ESCAPE_SET);
+						m.put(key, "");
+						state = S1;
+						x1 = i + 1;
+					}
+				} else if (state == S2) {
+					if (c == ',') {  // NOSONAR - Intentional.
+						var val = s.substring(x1, i);
+						if (trim)
+							val = trim(val);
+						val = unEscapeChars(val, MAP_ESCAPE_SET);
+						m.put(key, val);
+						key = null;
+						x1 = i + 1;
+						state = S1;
+					}
+				}
+			}
+			if (c != '\\')
+				escapeCount = 0;
+		}
+
+		return m;
+	}
+
+	/**
+	 * Splits the method arguments in the signature of a method.
+	 *
+	 * @param s The arguments to split.
+	 * @return The split arguments, or null if the input string is null.
+	 */
+	public static String[] splitMethodArgs(String s) {
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (Utils.isEmpty(s))
+			return new String[0];
+		if (s.indexOf(',') == -1)
+			return new String[] { s };
+
+		var l = new LinkedList<String>();
+		var sArray = s.toCharArray();
+		var x1 = 0;
+		var paramDepth = 0;
+
+		for (var i = 0; i < sArray.length; i++) {
+			var c = s.charAt(i);
+			if (c == '>')
+				paramDepth++;
+			else if (c == '<')
+				paramDepth--;
+			else if (c == ',' && paramDepth == 0) {
+				var s2 = new String(sArray, x1, i - x1);
+				l.add(s2.trim());
+				x1 = i + 1;
+			}
+		}
+
+		var s2 = new String(sArray, x1, sArray.length - x1);
+		l.add(s2.trim());
+
+		return l.toArray(new String[l.size()]);
+	}
+
+	/**
+	 * Splits a comma-delimited list containing "nesting constructs".
+	 *
+	 * Nesting constructs are simple embedded "{...}" comma-delimted lists.
+	 *
+	 * Example:
+	 * 	"a{b,c},d" -> ["a{b,c}","d"]
+	 *
+	 * Handles escapes and trims whitespace from tokens.
+	 *
+	 * @param s The input string.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static List<String> splitNested(String s) {
+		var escapeChars = getEscapeSet(',');
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+		if (Utils.isEmpty(s))
+			return Collections.emptyList();
+		if (s.indexOf(',') == -1)
+			return Collections.singletonList(trim(s));
+
+		var l = new LinkedList<String>();
+
+		var x1 = 0;
+		var inEscape = false;
+		var depthCount = 0;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (inEscape) {
+				if (c == '\\') {
+					inEscape = false;
+				}
+			} else {
+				if (c == '\\') {
+					inEscape = true;
+				} else if (c == '{') {
+					depthCount++;
+				} else if (c == '}') {
+					depthCount--;
+				} else if (c == ',' && depthCount == 0) {
+					l.add(trim(unEscapeChars(s.substring(x1, i), escapeChars)));
+					x1 = i + 1;
+				}
+			}
+		}
+		l.add(trim(unEscapeChars(s.substring(x1, s.length()), escapeChars)));
+
+		return l;
+	}
+
+	/**
+	 * Splits a nested comma-delimited list.
+	 *
+	 * Nesting constructs are simple embedded "{...}" comma-delimted lists.
+	 *
+	 * Example:
+	 * 	"a{b,c{d,e}}" -> ["b","c{d,e}"]
+	 *
+	 * Handles escapes and trims whitespace from tokens.
+	 *
+	 * @param s The input string.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static List<String> splitNestedInner(String s) {
+		if (s == null)
+			throw ThrowableUtils.illegalArg("String was null.");
+		if (Utils.isEmpty(s))
+			throw ThrowableUtils.illegalArg("String was empty.");
+
+		// S1: Looking for '{'
+		// S2: Found '{', looking for '}'
+
+		var start = -1;
+		var end = -1;
+		var state = S1;
+
+		var depth = 0;
+		var inEscape = false;
+
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (inEscape) {
+				if (c == '\\') {
+					inEscape = false;
+				}
+			} else {
+				if (c == '\\') {
+					inEscape = true;
+				} else if (state == S1) {
+					if (c == '{') {
+						start = i + 1;
+						state = S2;
+					}
+				} else /* state == S2 */ {
+					if (c == '{') {
+						depth++;
+					} else if (depth > 0 && c == '}') {
+						depth--;
+					} else if (c == '}') {
+						end = i;
+						break;
+					}
+				}
+			}
+		}
+
+		if (start == -1)
+			throw ThrowableUtils.illegalArg("Start character '{' not found in string.", s);
+		if (end == -1)
+			throw ThrowableUtils.illegalArg("End character '}' not found in string.", s);
+		return splitNested(s.substring(start, end));
+	}
+
+	/**
+	 * Splits a space-delimited string with optionally quoted arguments.
+	 *
+	 * <p>
+	 * Examples:
+	 * <ul>
+	 * 	<li><js>"foo"</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>" foo "</js> =&gt; <c>["foo"]</c>
+	 * 	<li><js>"foo bar baz"</js> =&gt; <c>["foo","bar","baz"]</c>
+	 * 	<li><js>"foo 'bar baz'"</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo \"bar baz\""</js> =&gt; <c>["foo","bar baz"]</c>
+	 * 	<li><js>"foo 'bar\'baz'"</js> =&gt; <c>["foo","bar'baz"]</c>
+	 * </ul>
+	 *
+	 * @param s The input string.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s) {
+		return splitQuoted(s, false);
+	}
+
+	/**
+	 * Same as {@link StringUtils#splitQuoted(String)} but allows you to optionally keep the quote characters.
+	 *
+	 * @param s The input string.
+	 * @param keepQuotes If <jk>true</jk>, quote characters are kept on the tokens.
+	 * @return
+	 * 	The results, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * 	<br>An empty string results in an empty array.
+	 */
+	public static String[] splitQuoted(String s, boolean keepQuotes) {
+
+		if (s == null)
+			return null;  // NOSONAR - Intentional.
+
+		s = s.trim();
+
+		if (Utils.isEmpty(s))
+			return new String[0];
+
+		if (! containsAny(s, ' ', '\t', '\'', '"'))
+			return new String[] { s };
+
+		// S1: Looking for start of token.
+		// S2: Found ', looking for end '
+		// S3: Found ", looking for end "
+		// S4: Found non-whitespace, looking for end whitespace.
+
+		var state = S1;
+
+		var isInEscape = false;
+		var needsUnescape = false;
+		var mark = 0;
+
+		var l = new ArrayList<String>();
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+
+			if (state == S1) {
+				if (c == '\'') {
+					state = S2;
+					mark = keepQuotes ? i : i + 1;
+				} else if (c == '"') {
+					state = S3;
+					mark = keepQuotes ? i : i + 1;
+				} else if (c != ' ' && c != '\t') {
+					state = S4;
+					mark = i;
+				}
+			} else if (state == S2 || state == S3) {
+				if (c == '\\') {
+					isInEscape = ! isInEscape;
+					needsUnescape = ! keepQuotes;
+				} else if (! isInEscape) {
+					if (c == (state == S2 ? '\'' : '"')) {
+						var s2 = s.substring(mark, keepQuotes ? i + 1 : i);
+						if (needsUnescape)  // NOSONAR - False positive check.
+							s2 = unEscapeChars(s2, QUOTE_ESCAPE_SET);
+						l.add(s2);
+						state = S1;
+						isInEscape = needsUnescape = false;
+					}
+				} else {
+					isInEscape = false;
+				}
+			} else /* state == S4 */ {
+				if (c == ' ' || c == '\t') {
+					l.add(s.substring(mark, i));
+					state = S1;
+				}
+			}
+		}
+		if (state == S4)
+			l.add(s.substring(mark));
+		else if (state == S2 || state == S3)
+			throw new IllegalArgumentException("Unmatched string quotes: " + s);
+		return l.toArray(new String[l.size()]);
 	}
 
 	/**
@@ -1519,7 +2895,7 @@ public class StringUtils {
 	public static String strip(String s) {
 		if (s == null || s.length() <= 1)
 			return s;
-		return s.substring(1, s.length()-1);
+		return s.substring(1, s.length() - 1);
 	}
 
 	/**
@@ -1548,6 +2924,119 @@ public class StringUtils {
 				sb.append(c);
 		}
 
+		return sb.toString();
+	}
+
+	/**
+	 * Returns the substring after the first occurrence of a separator.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	substringAfter(<jk>null</jk>, <js>"."</js>);              <jc>// null</jc>
+	 * 	substringAfter(<js>"hello.world"</js>, <jk>null</jk>);    <jc>// ""</jc>
+	 * 	substringAfter(<js>"hello.world"</js>, <js>"."</js>);     <jc>// "world"</jc>
+	 * 	substringAfter(<js>"hello.world"</js>, <js>"xyz"</js>);   <jc>// ""</jc>
+	 * </p>
+	 *
+	 * @param str The string to get a substring from.
+	 * @param separator The separator string.
+	 * @return The substring after the first occurrence of the separator, or empty string if separator not found.
+	 */
+	public static String substringAfter(String str, String separator) {
+		if (isEmpty(str))
+			return str;
+		if (separator == null)
+			return "";
+		int pos = str.indexOf(separator);
+		if (pos == -1)
+			return "";
+		return str.substring(pos + separator.length());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String joining and splitting methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the substring before the first occurrence of a separator.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	substringBefore(<jk>null</jk>, <js>"."</js>);              <jc>// null</jc>
+	 * 	substringBefore(<js>"hello.world"</js>, <jk>null</jk>);    <jc>// "hello.world"</jc>
+	 * 	substringBefore(<js>"hello.world"</js>, <js>"."</js>);     <jc>// "hello"</jc>
+	 * 	substringBefore(<js>"hello.world"</js>, <js>"xyz"</js>);   <jc>// "hello.world"</jc>
+	 * </p>
+	 *
+	 * @param str The string to get a substring from.
+	 * @param separator The separator string.
+	 * @return The substring before the first occurrence of the separator, or the original string if separator not found.
+	 */
+	public static String substringBefore(String str, String separator) {
+		if (isEmpty(str) || separator == null)
+			return str;
+		int pos = str.indexOf(separator);
+		if (pos == -1)
+			return str;
+		return str.substring(0, pos);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// String cleaning and sanitization methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the substring between two delimiters.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	substringBetween(<jk>null</jk>, <js>"&lt;"</js>, <js>"&gt;"</js>);              <jc>// null</jc>
+	 * 	substringBetween(<js>"&lt;hello&gt;"</js>, <js>"&lt;"</js>, <js>"&gt;"</js>);   <jc>// "hello"</jc>
+	 * 	substringBetween(<js>"&lt;hello&gt;"</js>, <js>"["</js>, <js>"]"</js>);         <jc>// null</jc>
+	 * </p>
+	 *
+	 * @param str The string to get a substring from.
+	 * @param open The opening delimiter.
+	 * @param close The closing delimiter.
+	 * @return The substring between the delimiters, or <jk>null</jk> if delimiters not found.
+	 */
+	public static String substringBetween(String str, String open, String close) {
+		if (str == null || open == null || close == null)
+			return null;
+		int start = str.indexOf(open);
+		if (start == -1)
+			return null;
+		int end = str.indexOf(close, start + open.length());
+		if (end == -1)
+			return null;
+		return str.substring(start + open.length(), end);
+	}
+
+	/**
+	 * Swaps the case of all characters in a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	swapCase(<js>"Hello World"</js>);   <jc>// "hELLO wORLD"</jc>
+	 * 	swapCase(<js>"ABC123xyz"</js>);     <jc>// "abc123XYZ"</jc>
+	 * </p>
+	 *
+	 * @param str The string to process.
+	 * @return The string with case swapped, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String swapCase(String str) {
+		if (str == null)
+			return null;
+		var sb = new StringBuilder(str.length());
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (Character.isUpperCase(c))
+				sb.append(Character.toLowerCase(c));
+			else if (Character.isLowerCase(c))
+				sb.append(Character.toUpperCase(c));
+			else
+				sb.append(c);
+		}
 		return sb.toString();
 	}
 
@@ -1610,7 +3099,7 @@ public class StringUtils {
 	 * @return The hex string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
 	 */
 	public static String toHex(InputStream is) {
-		return safe(()->is == null ? null : toHex(readBytes(is)));
+		return safe(() -> is == null ? null : toHex(readBytes(is)));
 	}
 
 	/**
@@ -1623,10 +3112,10 @@ public class StringUtils {
 		if (num < 0 || num > 255)
 			throw new NumberFormatException("toHex2 can only be used on numbers between 0 and 255");
 		var n = new char[2];
-		var a = num%16;
-		n[1] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
-		a = (num/16)%16;
-		n[0] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		var a = num % 16;
+		n[1] = (char)(a > 9 ? 'A' + a - 10 : '0' + a);
+		a = (num / 16) % 16;
+		n[0] = (char)(a > 9 ? 'A' + a - 10 : '0' + a);
 		return n;
 	}
 
@@ -1641,13 +3130,13 @@ public class StringUtils {
 		if (num < 0)
 			throw new NumberFormatException("toHex4 can only be used on non-negative numbers");
 		var n = new char[4];
-		var a = num%16;
-		n[3] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		var a = num % 16;
+		n[3] = (char)(a > 9 ? 'A' + a - 10 : '0' + a);
 		var base = 16;
 		for (var i = 1; i < 4; i++) {
-			a = (num/base)%16;
+			a = (num / base) % 16;
 			base <<= 4;
-			n[3-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+			n[3 - i] = (char)(a > 9 ? 'A' + a - 10 : '0' + a);
 		}
 		return n;
 	}
@@ -1663,13 +3152,13 @@ public class StringUtils {
 		if (num < 0)
 			throw new NumberFormatException("toHex8 can only be used on non-negative numbers");
 		var n = new char[8];
-		var a = num%16;
-		n[7] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+		var a = num % 16;
+		n[7] = (char)(a > 9 ? 'A' + a - 10 : '0' + a);
 		var base = 16;
 		for (var i = 1; i < 8; i++) {
-			a = (num/base)%16;
+			a = (num / base) % 16;
 			base <<= 4;
-			n[7-i] = (char)(a > 9 ? 'A'+a-10 : '0'+a);
+			n[7 - i] = (char)(a > 9 ? 'A' + a - 10 : '0' + a);
 		}
 		return n;
 	}
@@ -1760,7 +3249,7 @@ public class StringUtils {
 	 * @return The UTF-8 string representation of the input stream contents, or <jk>null</jk> if the stream is <jk>null</jk>.
 	 */
 	public static String toUtf8(InputStream is) {
-		return safe(()->is == null ? null : new String(readBytes(is), IOUtils.UTF8));
+		return safe(() -> is == null ? null : new String(readBytes(is), IOUtils.UTF8));
 	}
 
 	/**
@@ -1783,10 +3272,11 @@ public class StringUtils {
 	 */
 	public static String trimEnd(String s) {
 		if (s != null)
-			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length()-1)))
-				s = s.substring(0, s.length()-1);
+			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length() - 1)))
+				s = s.substring(0, s.length() - 1);
 		return s;
 	}
+
 	/**
 	 * Trims <js>'/'</js> characters from the beginning of the specified string.
 	 *
@@ -1813,7 +3303,7 @@ public class StringUtils {
 		if (s.isEmpty())
 			return s;
 		while (endsWith(s, '/'))
-			s = s.substring(0, s.length()-1);
+			s = s.substring(0, s.length() - 1);
 		while (isNotEmpty(s) && s.charAt(0) == '/')  // NOSONAR - NPE not possible here.
 			s = s.substring(1);
 		return s;
@@ -1828,8 +3318,8 @@ public class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (isNotEmpty(s) && (s.charAt(s.length()-1) == '/' || isWhitespace(s.charAt(s.length()-1))))
-			s = s.substring(0, s.length()-1);
+		while (isNotEmpty(s) && (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
+			s = s.substring(0, s.length() - 1);
 		while (isNotEmpty(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
@@ -1858,8 +3348,29 @@ public class StringUtils {
 		if (s == null)
 			return null;
 		while (endsWith(s, '/'))
-			s = s.substring(0, s.length()-1);
+			s = s.substring(0, s.length() - 1);
 		return s;
+	}
+
+	/**
+	 * Uncapitalizes the first character of a string.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	uncapitalize(<jk>null</jk>);          <jc>// null</jc>
+	 * 	uncapitalize(<js>""</js>);            <jc>// ""</jc>
+	 * 	uncapitalize(<js>"Hello"</js>);       <jc>// "hello"</jc>
+	 * 	uncapitalize(<js>"hello"</js>);       <jc>// "hello"</jc>
+	 * 	uncapitalize(<js>"HELLO"</js>);       <jc>// "hELLO"</jc>
+	 * </p>
+	 *
+	 * @param str The string to uncapitalize.
+	 * @return The string with the first character uncapitalized, or <jk>null</jk> if input is <jk>null</jk>.
+	 */
+	public static String uncapitalize(String str) {
+		if (isEmpty(str))
+			return str;
+		return Character.toLowerCase(str.charAt(0)) + str.substring(1);
 	}
 
 	/**
@@ -1878,13 +3389,13 @@ public class StringUtils {
 				count++;
 		if (count == 0)
 			return s;
-		var sb = new StringBuffer(s.length()-count);
+		var sb = new StringBuffer(s.length() - count);
 		for (var i = 0; i < s.length(); i++) {
 			var c = s.charAt(i);
 
 			if (c == '\\') {
-				if (i+1 != s.length()) {  // NOSONAR - Intentional.
-					var c2 = s.charAt(i+1);
+				if (i + 1 != s.length()) {  // NOSONAR - Intentional.
+					var c2 = s.charAt(i + 1);
 					if (escaped.contains(c2)) {
 						i++;  // NOSONAR - Intentional.
 					} else if (c2 == '\\') {
@@ -1976,7 +3487,7 @@ public class StringUtils {
 		for (var i = 0; i < s.length() && ! needsEncode; i++)
 			needsEncode |= (! unencodedCharsLax.contains(s.charAt(i)));
 		if (needsEncode) {
-			var sb = new StringBuilder(s.length()*2);
+			var sb = new StringBuilder(s.length() * 2);
 			for (var i = 0; i < s.length(); i++) {
 				var c = s.charAt(i);
 				if (unencodedCharsLax.contains(c))
@@ -1987,7 +3498,7 @@ public class StringUtils {
 					sb.append('%').append(toHex2(c));
 				else
 					try {
-						sb.append(URLEncoder.encode(""+c, "UTF-8"));  // Yuck.
+						sb.append(URLEncoder.encode("" + c, "UTF-8"));  // Yuck.
 					} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {
 						// Not possible.
 					}
@@ -2033,8 +3544,8 @@ public class StringUtils {
 					do {
 						caw.write(c);
 						if (c >= 0xD800 && c <= 0xDBFF) {
-							if ((i+1) < s.length()) {  // NOSONAR - Intentional.
-								int d = s.charAt(i+1);
+							if ((i + 1) < s.length()) {  // NOSONAR - Intentional.
+								int d = s.charAt(i + 1);
 								if (d >= 0xDC00 && d <= 0xDFFF) {
 									caw.write(d);
 									i++;  // NOSONAR - Intentional.
@@ -2042,7 +3553,7 @@ public class StringUtils {
 							}
 						}
 						i++;  // NOSONAR - Intentional.
-					} while (i < s.length() && !URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));   // NOSONAR - Intentional.
+					} while (i < s.length() && ! URL_ENCODE_PATHINFO_VALIDCHARS.contains((c = s.charAt(i))));   // NOSONAR - Intentional.
 
 					caw.flush();
 					var s2 = new String(caw.toCharArray());
@@ -2146,13 +3657,19 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static int multiplier(String s) {
-		char c = isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
-		if (c == 'G') return 1024*1024*1024;
-		if (c == 'M') return 1024*1024;
-		if (c == 'K') return 1024;
-		if (c == 'g') return 1000*1000*1000;
-		if (c == 'm') return 1000*1000;
-		if (c == 'k') return 1000;
+		char c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
+		if (c == 'G')
+			return 1024 * 1024 * 1024;
+		if (c == 'M')
+			return 1024 * 1024;
+		if (c == 'K')
+			return 1024;
+		if (c == 'g')
+			return 1000 * 1000 * 1000;
+		if (c == 'm')
+			return 1000 * 1000;
+		if (c == 'k')
+			return 1000;
 		return 1;
 	}
 
@@ -2163,17 +3680,27 @@ public class StringUtils {
 	 * @return The multiplier value (1 if no valid suffix found).
 	 */
 	private static long multiplier2(String s) {
-		char c = isEmpty(s) ? null : s.charAt(s.length()-1);  // NOSONAR - NPE not possible.
-		if (c == 'P') return 1024*1024*1024*1024*1024l;
-		if (c == 'T') return 1024*1024*1024*1024l;
-		if (c == 'G') return 1024*1024*1024l;
-		if (c == 'M') return 1024*1024l;
-		if (c == 'K') return 1024l;
-		if (c == 'p') return 1000*1000*1000*1000*1000l;
-		if (c == 't') return 1000*1000*1000*1000l;
-		if (c == 'g') return 1000*1000*1000l;
-		if (c == 'm') return 1000*1000l;
-		if (c == 'k') return 1000l;
+		char c = isEmpty(s) ? null : s.charAt(s.length() - 1);  // NOSONAR - NPE not possible.
+		if (c == 'P')
+			return 1024 * 1024 * 1024 * 1024 * 1024l;
+		if (c == 'T')
+			return 1024 * 1024 * 1024 * 1024l;
+		if (c == 'G')
+			return 1024 * 1024 * 1024l;
+		if (c == 'M')
+			return 1024 * 1024l;
+		if (c == 'K')
+			return 1024l;
+		if (c == 'p')
+			return 1000 * 1000 * 1000 * 1000 * 1000l;
+		if (c == 't')
+			return 1000 * 1000 * 1000 * 1000l;
+		if (c == 'g')
+			return 1000 * 1000 * 1000l;
+		if (c == 'm')
+			return 1000 * 1000l;
+		if (c == 'k')
+			return 1000l;
 		return 1;
 	}
 
@@ -2191,7 +3718,7 @@ public class StringUtils {
 				if ((c = r.read()) == '*')
 					if ((c = r.read()) == '/')  // NOSONAR - Intentional.
 						return;
-		//  "//" style comments
+			//  "//" style comments
 		} else if (c == '/') {
 			while (c != -1) {
 				c = r.read();
@@ -2211,854 +3738,8 @@ public class StringUtils {
 		return ESCAPE_SETS.computeIfAbsent(c, key -> AsciiSet.create().chars(key, '\\').build());
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// String validation methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Checks if a string is blank (null, empty, or whitespace only).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isBlank(<jk>null</jk>);       <jc>// true</jc>
-	 * 	isBlank(<js>""</js>);         <jc>// true</jc>
-	 * 	isBlank(<js>"   "</js>);      <jc>// true</jc>
-	 * 	isBlank(<js>"hello"</js>);    <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is null, empty, or contains only whitespace characters.
-	 */
-	public static boolean isBlank(String str) {
-		return str == null || str.trim().isEmpty();
-	}
-
-	/**
-	 * Checks if a string is not blank (not null, not empty, and not whitespace only).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isNotBlank(<jk>null</jk>);       <jc>// false</jc>
-	 * 	isNotBlank(<js>""</js>);         <jc>// false</jc>
-	 * 	isNotBlank(<js>"   "</js>);      <jc>// false</jc>
-	 * 	isNotBlank(<js>"hello"</js>);    <jc>// true</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is not null, not empty, and contains non-whitespace characters.
-	 */
-	public static boolean isNotBlank(String str) {
-		return !isBlank(str);
-	}
-
-	/**
-	 * Checks if a string is empty (null or zero length).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isEmpty(<jk>null</jk>);       <jc>// true</jc>
-	 * 	isEmpty(<js>""</js>);         <jc>// true</jc>
-	 * 	isEmpty(<js>"   "</js>);      <jc>// false</jc>
-	 * 	isEmpty(<js>"hello"</js>);    <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is null or has zero length.
-	 */
-	public static boolean isEmpty(String str) {
-		return str == null || str.isEmpty();
-	}
-
-	/**
-	 * Checks if a string has text (not null, not empty, and contains at least one non-whitespace character).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	hasText(<jk>null</jk>);       <jc>// false</jc>
-	 * 	hasText(<js>""</js>);         <jc>// false</jc>
-	 * 	hasText(<js>"   "</js>);      <jc>// false</jc>
-	 * 	hasText(<js>"hello"</js>);    <jc>// true</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is not null, not empty, and contains at least one non-whitespace character.
-	 */
-	public static boolean hasText(String str) {
-		return isNotBlank(str);
-	}
-
-	/**
-	 * Checks if a string contains only alphabetic characters (a-z, A-Z).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isAlpha(<jk>null</jk>);         <jc>// false</jc>
-	 * 	isAlpha(<js>""</js>);           <jc>// false</jc>
-	 * 	isAlpha(<js>"abc"</js>);        <jc>// true</jc>
-	 * 	isAlpha(<js>"abc123"</js>);     <jc>// false</jc>
-	 * 	isAlpha(<js>"abc def"</js>);    <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is not null, not empty, and contains only alphabetic characters.
-	 */
-	public static boolean isAlpha(String str) {
-		if (isEmpty(str))
-			return false;
-		for (int i = 0; i < str.length(); i++) {
-			if (!Character.isLetter(str.charAt(i)))
-				return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Checks if a string contains only alphanumeric characters (a-z, A-Z, 0-9).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isAlphaNumeric(<jk>null</jk>);         <jc>// false</jc>
-	 * 	isAlphaNumeric(<js>""</js>);           <jc>// false</jc>
-	 * 	isAlphaNumeric(<js>"abc"</js>);        <jc>// true</jc>
-	 * 	isAlphaNumeric(<js>"abc123"</js>);     <jc>// true</jc>
-	 * 	isAlphaNumeric(<js>"abc def"</js>);    <jc>// false</jc>
-	 * 	isAlphaNumeric(<js>"abc-123"</js>);    <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is not null, not empty, and contains only alphanumeric characters.
-	 */
-	public static boolean isAlphaNumeric(String str) {
-		if (isEmpty(str))
-			return false;
-		for (int i = 0; i < str.length(); i++) {
-			if (!Character.isLetterOrDigit(str.charAt(i)))
-				return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Checks if a string contains only digit characters (0-9).
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isDigit(<jk>null</jk>);         <jc>// false</jc>
-	 * 	isDigit(<js>""</js>);           <jc>// false</jc>
-	 * 	isDigit(<js>"123"</js>);        <jc>// true</jc>
-	 * 	isDigit(<js>"abc123"</js>);     <jc>// false</jc>
-	 * 	isDigit(<js>"12.3"</js>);       <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is not null, not empty, and contains only digit characters.
-	 */
-	public static boolean isDigit(String str) {
-		if (isEmpty(str))
-			return false;
-		for (int i = 0; i < str.length(); i++) {
-			if (!Character.isDigit(str.charAt(i)))
-				return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Checks if a character is whitespace.
-	 *
-	 * @param c The character to check.
-	 * @return <jk>true</jk> if the character is whitespace.
-	 */
-	public static boolean isWhitespace(int c) {
-		return Character.isWhitespace(c);
-	}
-
-	/**
-	 * Checks if a string contains only whitespace characters.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	isWhitespace(<jk>null</jk>);         <jc>// false</jc>
-	 * 	isWhitespace(<js>""</js>);           <jc>// true</jc>
-	 * 	isWhitespace(<js>"   "</js>);        <jc>// true</jc>
-	 * 	isWhitespace(<js>"\t\n"</js>);       <jc>// true</jc>
-	 * 	isWhitespace(<js>" a "</js>);        <jc>// false</jc>
-	 * </p>
-	 *
-	 * @param str The string to check.
-	 * @return <jk>true</jk> if the string is not null and contains only whitespace characters (or is empty).
-	 */
-	public static boolean isWhitespace(String str) {
-		if (str == null)
-			return false;
-		if (str.isEmpty())
-			return true;
-		for (int i = 0; i < str.length(); i++) {
-			if (!isWhitespace(str.charAt(i)))
-				return false;
-		}
-		return true;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String manipulation methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Capitalizes the first character of a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	capitalize(<jk>null</jk>);          <jc>// null</jc>
-	 * 	capitalize(<js>""</js>);            <jc>// ""</jc>
-	 * 	capitalize(<js>"hello"</js>);       <jc>// "Hello"</jc>
-	 * 	capitalize(<js>"Hello"</js>);       <jc>// "Hello"</jc>
-	 * 	capitalize(<js>"HELLO"</js>);       <jc>// "HELLO"</jc>
-	 * </p>
-	 *
-	 * @param str The string to capitalize.
-	 * @return The string with the first character capitalized, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String capitalize(String str) {
-		if (isEmpty(str))
-			return str;
-		return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-	}
-
-	/**
-	 * Uncapitalizes the first character of a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	uncapitalize(<jk>null</jk>);          <jc>// null</jc>
-	 * 	uncapitalize(<js>""</js>);            <jc>// ""</jc>
-	 * 	uncapitalize(<js>"Hello"</js>);       <jc>// "hello"</jc>
-	 * 	uncapitalize(<js>"hello"</js>);       <jc>// "hello"</jc>
-	 * 	uncapitalize(<js>"HELLO"</js>);       <jc>// "hELLO"</jc>
-	 * </p>
-	 *
-	 * @param str The string to uncapitalize.
-	 * @return The string with the first character uncapitalized, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String uncapitalize(String str) {
-		if (isEmpty(str))
-			return str;
-		return Character.toLowerCase(str.charAt(0)) + str.substring(1);
-	}
-
-	/**
-	 * Reverses a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	reverse(<jk>null</jk>);          <jc>// null</jc>
-	 * 	reverse(<js>""</js>);            <jc>// ""</jc>
-	 * 	reverse(<js>"hello"</js>);       <jc>// "olleh"</jc>
-	 * </p>
-	 *
-	 * @param str The string to reverse.
-	 * @return The reversed string, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String reverse(String str) {
-		if (str == null)
-			return null;
-		return new StringBuilder(str).reverse().toString();
-	}
-
-	/**
-	 * Removes all occurrences of a substring from a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	remove(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
-	 * 	remove(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
-	 * 	remove(<js>"hello world"</js>, <js>"o"</js>);     <jc>// "hell wrld"</jc>
-	 * 	remove(<js>"hello world"</js>, <js>"xyz"</js>);   <jc>// "hello world"</jc>
-	 * </p>
-	 *
-	 * @param str The string to process.
-	 * @param remove The substring to remove.
-	 * @return The string with all occurrences of the substring removed, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String remove(String str, String remove) {
-		if (isEmpty(str) || isEmpty(remove))
-			return str;
-		return str.replace(remove, "");
-	}
-
-	/**
-	 * Removes a prefix from a string if present.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	removeStart(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
-	 * 	removeStart(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
-	 * 	removeStart(<js>"hello world"</js>, <js>"hello"</js>); <jc>// " world"</jc>
-	 * 	removeStart(<js>"hello world"</js>, <js>"xyz"</js>);   <jc>// "hello world"</jc>
-	 * </p>
-	 *
-	 * @param str The string to process.
-	 * @param prefix The prefix to remove.
-	 * @return The string with the prefix removed if present, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String removeStart(String str, String prefix) {
-		if (isEmpty(str) || isEmpty(prefix))
-			return str;
-		if (str.startsWith(prefix))
-			return str.substring(prefix.length());
-		return str;
-	}
-
-	/**
-	 * Removes a suffix from a string if present.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	removeEnd(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
-	 * 	removeEnd(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
-	 * 	removeEnd(<js>"hello world"</js>, <js>"world"</js>); <jc>// "hello "</jc>
-	 * 	removeEnd(<js>"hello world"</js>, <js>"xyz"</js>);   <jc>// "hello world"</jc>
-	 * </p>
-	 *
-	 * @param str The string to process.
-	 * @param suffix The suffix to remove.
-	 * @return The string with the suffix removed if present, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String removeEnd(String str, String suffix) {
-		if (isEmpty(str) || isEmpty(suffix))
-			return str;
-		if (str.endsWith(suffix))
-			return str.substring(0, str.length() - suffix.length());
-		return str;
-	}
-
-	/**
-	 * Returns the substring before the first occurrence of a separator.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	substringBefore(<jk>null</jk>, <js>"."</js>);              <jc>// null</jc>
-	 * 	substringBefore(<js>"hello.world"</js>, <jk>null</jk>);    <jc>// "hello.world"</jc>
-	 * 	substringBefore(<js>"hello.world"</js>, <js>"."</js>);     <jc>// "hello"</jc>
-	 * 	substringBefore(<js>"hello.world"</js>, <js>"xyz"</js>);   <jc>// "hello.world"</jc>
-	 * </p>
-	 *
-	 * @param str The string to get a substring from.
-	 * @param separator The separator string.
-	 * @return The substring before the first occurrence of the separator, or the original string if separator not found.
-	 */
-	public static String substringBefore(String str, String separator) {
-		if (isEmpty(str) || separator == null)
-			return str;
-		int pos = str.indexOf(separator);
-		if (pos == -1)
-			return str;
-		return str.substring(0, pos);
-	}
-
-	/**
-	 * Returns the substring after the first occurrence of a separator.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	substringAfter(<jk>null</jk>, <js>"."</js>);              <jc>// null</jc>
-	 * 	substringAfter(<js>"hello.world"</js>, <jk>null</jk>);    <jc>// ""</jc>
-	 * 	substringAfter(<js>"hello.world"</js>, <js>"."</js>);     <jc>// "world"</jc>
-	 * 	substringAfter(<js>"hello.world"</js>, <js>"xyz"</js>);   <jc>// ""</jc>
-	 * </p>
-	 *
-	 * @param str The string to get a substring from.
-	 * @param separator The separator string.
-	 * @return The substring after the first occurrence of the separator, or empty string if separator not found.
-	 */
-	public static String substringAfter(String str, String separator) {
-		if (isEmpty(str))
-			return str;
-		if (separator == null)
-			return "";
-		int pos = str.indexOf(separator);
-		if (pos == -1)
-			return "";
-		return str.substring(pos + separator.length());
-	}
-
-	/**
-	 * Returns the substring between two delimiters.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	substringBetween(<jk>null</jk>, <js>"&lt;"</js>, <js>"&gt;"</js>);              <jc>// null</jc>
-	 * 	substringBetween(<js>"&lt;hello&gt;"</js>, <js>"&lt;"</js>, <js>"&gt;"</js>);   <jc>// "hello"</jc>
-	 * 	substringBetween(<js>"&lt;hello&gt;"</js>, <js>"["</js>, <js>"]"</js>);         <jc>// null</jc>
-	 * </p>
-	 *
-	 * @param str The string to get a substring from.
-	 * @param open The opening delimiter.
-	 * @param close The closing delimiter.
-	 * @return The substring between the delimiters, or <jk>null</jk> if delimiters not found.
-	 */
-	public static String substringBetween(String str, String open, String close) {
-		if (str == null || open == null || close == null)
-			return null;
-		int start = str.indexOf(open);
-		if (start == -1)
-			return null;
-		int end = str.indexOf(close, start + open.length());
-		if (end == -1)
-			return null;
-		return str.substring(start + open.length(), end);
-	}
-
-	/**
-	 * Returns the leftmost characters of a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	left(<jk>null</jk>, 3);          <jc>// null</jc>
-	 * 	left(<js>""</js>, 3);            <jc>// ""</jc>
-	 * 	left(<js>"hello"</js>, 3);       <jc>// "hel"</jc>
-	 * 	left(<js>"hello"</js>, 10);      <jc>// "hello"</jc>
-	 * </p>
-	 *
-	 * @param str The string to get characters from.
-	 * @param len The number of characters to get.
-	 * @return The leftmost characters, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String left(String str, int len) {
-		if (str == null)
-			return null;
-		if (len < 0)
-			return "";
-		if (len >= str.length())
-			return str;
-		return str.substring(0, len);
-	}
-
-	/**
-	 * Returns the rightmost characters of a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	right(<jk>null</jk>, 3);          <jc>// null</jc>
-	 * 	right(<js>""</js>, 3);            <jc>// ""</jc>
-	 * 	right(<js>"hello"</js>, 3);       <jc>// "llo"</jc>
-	 * 	right(<js>"hello"</js>, 10);      <jc>// "hello"</jc>
-	 * </p>
-	 *
-	 * @param str The string to get characters from.
-	 * @param len The number of characters to get.
-	 * @return The rightmost characters, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String right(String str, int len) {
-		if (str == null)
-			return null;
-		if (len < 0)
-			return "";
-		if (len >= str.length())
-			return str;
-		return str.substring(str.length() - len);
-	}
-
-	/**
-	 * Returns the middle characters of a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	mid(<jk>null</jk>, 1, 3);          <jc>// null</jc>
-	 * 	mid(<js>""</js>, 1, 3);            <jc>// ""</jc>
-	 * 	mid(<js>"hello"</js>, 1, 3);       <jc>// "ell"</jc>
-	 * 	mid(<js>"hello"</js>, 1, 10);      <jc>// "ello"</jc>
-	 * </p>
-	 *
-	 * @param str The string to get characters from.
-	 * @param pos The starting position (0-based).
-	 * @param len The number of characters to get.
-	 * @return The middle characters, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String mid(String str, int pos, int len) {
-		if (str == null)
-			return null;
-		if (pos < 0 || len < 0)
-			return "";
-		if (pos >= str.length())
-			return "";
-		int end = Math.min(pos + len, str.length());
-		return str.substring(pos, end);
-	}
-
-	/**
-	 * Left pads a string with a specified character.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	padLeft(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
-	 * 	padLeft(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
-	 * 	padLeft(<js>"hello"</js>, 8, <js>' '</js>);       <jc>// "   hello"</jc>
-	 * 	padLeft(<js>"hello"</js>, 3, <js>' '</js>);       <jc>// "hello"</jc>
-	 * 	padLeft(<js>"123"</js>, 5, <js>'0'</js>);         <jc>// "00123"</jc>
-	 * </p>
-	 *
-	 * @param str The string to pad.
-	 * @param size The desired total string length.
-	 * @param padChar The character to pad with.
-	 * @return The left-padded string.
-	 */
-	public static String padLeft(String str, int size, char padChar) {
-		if (str == null)
-			str = "";
-		int pads = size - str.length();
-		if (pads <= 0)
-			return str;
-		return String.valueOf(padChar).repeat(pads) + str;
-	}
-
-	/**
-	 * Right pads a string with a specified character.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	padRight(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
-	 * 	padRight(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
-	 * 	padRight(<js>"hello"</js>, 8, <js>' '</js>);       <jc>// "hello   "</jc>
-	 * 	padRight(<js>"hello"</js>, 3, <js>' '</js>);       <jc>// "hello"</jc>
-	 * 	padRight(<js>"123"</js>, 5, <js>'0'</js>);         <jc>// "12300"</jc>
-	 * </p>
-	 *
-	 * @param str The string to pad.
-	 * @param size The desired total string length.
-	 * @param padChar The character to pad with.
-	 * @return The right-padded string.
-	 */
-	public static String padRight(String str, int size, char padChar) {
-		if (str == null)
-			str = "";
-		int pads = size - str.length();
-		if (pads <= 0)
-			return str;
-		return str + String.valueOf(padChar).repeat(pads);
-	}
-
-	/**
-	 * Center pads a string with a specified character.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	padCenter(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
-	 * 	padCenter(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
-	 * 	padCenter(<js>"hi"</js>, 6, <js>' '</js>);          <jc>// "  hi  "</jc>
-	 * 	padCenter(<js>"hi"</js>, 7, <js>' '</js>);          <jc>// "   hi  "</jc>
-	 * 	padCenter(<js>"hello"</js>, 3, <js>' '</js>);       <jc>// "hello"</jc>
-	 * </p>
-	 *
-	 * @param str The string to pad.
-	 * @param size The desired total string length.
-	 * @param padChar The character to pad with.
-	 * @return The center-padded string.
-	 */
-	public static String padCenter(String str, int size, char padChar) {
-		if (str == null)
-			str = "";
-		int pads = size - str.length();
-		if (pads <= 0)
-			return str;
-		int rightPads = pads / 2;
-		int leftPads = pads - rightPads;
-		return String.valueOf(padChar).repeat(leftPads) + str + String.valueOf(padChar).repeat(rightPads);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String joining and splitting methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Joins an array of objects with a delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	join(<jk>new</jk> Object[]{<js>"a"</js>, <js>"b"</js>, <js>"c"</js>}, <js>","</js>);   <jc>// "a,b,c"</jc>
-	 * 	join(<jk>new</jk> Object[]{1, 2, 3}, <js>"-"</js>);                   <jc>// "1-2-3"</jc>
-	 * 	join(<jk>null</jk>, <js>","</js>);                                    <jc>// ""</jc>
-	 * </p>
-	 *
-	 * @param array The array to join.
-	 * @param delimiter The delimiter string.
-	 * @return The joined string.
-	 */
-	public static String join(Object[] array, String delimiter) {
-		if (array == null || array.length == 0)
-			return "";
-		if (delimiter == null)
-			delimiter = "";
-		return Arrays.stream(array)
-			.map(o -> o == null ? "" : o.toString())
-			.collect(Collectors.joining(delimiter));
-	}
-
-	/**
-	 * Joins an array of integers with a delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	join(<jk>new int</jk>[]{1, 2, 3}, <js>","</js>);   <jc>// "1,2,3"</jc>
-	 * 	join(<jk>new int</jk>[]{}, <js>","</js>);          <jc>// ""</jc>
-	 * </p>
-	 *
-	 * @param array The array to join.
-	 * @param delimiter The delimiter string.
-	 * @return The joined string.
-	 */
-	public static String join(int[] array, String delimiter) {
-		if (array == null || array.length == 0)
-			return "";
-		if (delimiter == null)
-			delimiter = "";
-		return Arrays.stream(array)
-			.mapToObj(String::valueOf)
-			.collect(Collectors.joining(delimiter));
-	}
-
-	/**
-	 * Joins a collection with a delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	join(Arrays.<jsm>asList</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>), <js>","</js>);   <jc>// "a,b,c"</jc>
-	 * 	join(Collections.<jsm>emptyList</jsm>(), <js>","</js>);                  <jc>// ""</jc>
-	 * </p>
-	 *
-	 * @param collection The collection to join.
-	 * @param delimiter The delimiter string.
-	 * @return The joined string.
-	 */
-	public static String join(Collection<?> collection, String delimiter) {
-		if (collection == null || collection.isEmpty())
-			return "";
-		if (delimiter == null)
-			delimiter = "";
-		return collection.stream()
-			.map(o -> o == null ? "" : o.toString())
-			.collect(Collectors.joining(delimiter));
-	}
-
-	/**
-	 * Joins an array of objects with a character delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	join(<jk>new</jk> Object[]{<js>"a"</js>, <js>"b"</js>, <js>"c"</js>}, <js>','</js>);   <jc>// "a,b,c"</jc>
-	 * </p>
-	 *
-	 * @param array The array to join.
-	 * @param delimiter The delimiter character.
-	 * @return The joined string.
-	 */
-	public static String join(Object[] array, char delimiter) {
-		return join(array, String.valueOf(delimiter));
-	}
-
-	/**
-	 * Joins an array of integers with a character delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	join(<jk>new int</jk>[]{1, 2, 3}, <js>','</js>);   <jc>// "1,2,3"</jc>
-	 * </p>
-	 *
-	 * @param array The array to join.
-	 * @param delimiter The delimiter character.
-	 * @return The joined string.
-	 */
-	public static String join(int[] array, char delimiter) {
-		return join(array, String.valueOf(delimiter));
-	}
-
-	/**
-	 * Joins a collection with a character delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	join(Arrays.<jsm>asList</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>), <js>','</js>);   <jc>// "a,b,c"</jc>
-	 * </p>
-	 *
-	 * @param collection The collection to join.
-	 * @param delimiter The delimiter character.
-	 * @return The joined string.
-	 */
-	public static String join(Collection<?> collection, char delimiter) {
-		return join(collection, String.valueOf(delimiter));
-	}
-
-	/**
-	 * Splits a string by a character delimiter.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	split(<js>"a,b,c"</js>, <js>','</js>);     <jc>// ["a", "b", "c"]</jc>
-	 * 	split(<jk>null</jk>, <js>','</js>);        <jc>// []</jc>
-	 * 	split(<js>""</js>, <js>','</js>);          <jc>// [""]</jc>
-	 * </p>
-	 *
-	 * @param str The string to split.
-	 * @param delimiter The delimiter character.
-	 * @return An array of strings split by the delimiter.
-	 */
-	public static String[] split(String str, char delimiter) {
-		if (str == null)
-			return new String[0];
-		return str.split(Pattern.quote(String.valueOf(delimiter)));
-	}
-
-	/**
-	 * Splits a string by a character delimiter with a limit.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	split(<js>"a,b,c,d"</js>, <js>','</js>, 2);     <jc>// ["a", "b,c,d"]</jc>
-	 * 	split(<js>"a,b,c"</js>, <js>','</js>, 0);       <jc>// ["a", "b", "c"]</jc>
-	 * </p>
-	 *
-	 * @param str The string to split.
-	 * @param delimiter The delimiter character.
-	 * @param limit The maximum number of splits (0 = no limit).
-	 * @return An array of strings split by the delimiter.
-	 */
-	public static String[] split(String str, char delimiter, int limit) {
-		if (str == null)
-			return new String[0];
-		return str.split(Pattern.quote(String.valueOf(delimiter)), limit);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// String cleaning and sanitization methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Cleans a string by removing control characters and normalizing whitespace.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	clean(<js>"hello\u0000\u0001world"</js>);     <jc>// "hello world"</jc>
-	 * 	clean(<js>"hello  \t\n  world"</js>);         <jc>// "hello world"</jc>
-	 * </p>
-	 *
-	 * @param str The string to clean.
-	 * @return The cleaned string, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String clean(String str) {
-		if (str == null)
-			return null;
-		str = removeControlChars(str);
-		return normalizeWhitespace(str);
-	}
-
-	/**
-	 * Normalizes all whitespace in a string to single spaces.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	normalizeWhitespace(<js>"hello  \t\n  world"</js>);   <jc>// "hello world"</jc>
-	 * 	normalizeWhitespace(<js>"  hello  world  "</js>);     <jc>// "hello world"</jc>
-	 * </p>
-	 *
-	 * @param str The string to normalize.
-	 * @return The normalized string, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String normalizeWhitespace(String str) {
-		if (str == null)
-			return null;
-		return str.replaceAll("\\s+", " ").trim();
-	}
-
-	/**
-	 * Removes control characters from a string, replacing them with spaces.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	removeControlChars(<js>"hello\u0000\u0001world"</js>);   <jc>// "hello  world"</jc>
-	 * 	removeControlChars(<js>"hello\nworld"</js>);             <jc>// "hello\nworld"</jc>
-	 * </p>
-	 *
-	 * @param str The string to process.
-	 * @return The string with control characters replaced by spaces (except whitespace control chars), or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String removeControlChars(String str) {
-		if (str == null)
-			return null;
-		var sb = new StringBuilder();
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if (Character.isISOControl(c) && !Character.isWhitespace(c))
-				sb.append(' ');
-			else
-				sb.append(c);
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * Removes non-printable characters from a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	removeNonPrintable(<js>"hello\u0000world"</js>);   <jc>// "helloworld"</jc>
-	 * </p>
-	 *
-	 * @param str The string to process.
-	 * @return The string with non-printable characters removed, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String removeNonPrintable(String str) {
-		if (str == null)
-			return null;
-		return str.replaceAll("\\p{C}", "");
-	}
-
-	/**
-	 * Swaps the case of all characters in a string.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	swapCase(<js>"Hello World"</js>);   <jc>// "hELLO wORLD"</jc>
-	 * 	swapCase(<js>"ABC123xyz"</js>);     <jc>// "abc123XYZ"</jc>
-	 * </p>
-	 *
-	 * @param str The string to process.
-	 * @return The string with case swapped, or <jk>null</jk> if input is <jk>null</jk>.
-	 */
-	public static String swapCase(String str) {
-		if (str == null)
-			return null;
-		var sb = new StringBuilder(str.length());
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if (Character.isUpperCase(c))
-				sb.append(Character.toLowerCase(c));
-			else if (Character.isLowerCase(c))
-				sb.append(Character.toUpperCase(c));
-			else
-				sb.append(c);
-		}
-		return sb.toString();
-	}
-
 	/**
 	 * Constructor.
 	 */
 	protected StringUtils() {}
-
-	/**
-	 * Null-safe {@link String#contains(CharSequence)} operation.
-	 *
-	 * @param s The string to check.
-	 * @param values The characters to check for.
-	 * @return <jk>true</jk> if the string contains any of the specified characters.
-	 */
-	public static boolean contains(String s, char...values) {
-		if (s == null || values == null || values.length == 0)
-			return false;
-		for (var v : values) {
-			if (s.indexOf(v) >= 0)
-				return true;
-		}
-		return false;
-	}
 }

@@ -17,8 +17,6 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 
 import java.util.*;
 
@@ -104,7 +102,7 @@ public class RestChildren {
 		return new Builder(beanStore);
 	}
 
-	private final Map<String,RestContext> children = synced(map());
+	private final Map<String,RestContext> children = CollectionUtils2.synced(CollectionUtils2.map());
 
 	/**
 	 * Constructor.

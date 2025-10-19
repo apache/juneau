@@ -24,6 +24,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -196,7 +197,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
-		Map<K,V> m1 = value(), m2 = CollectionUtils.map();
+		Map<K,V> m1 = value(), m2 = CollectionUtils2.map();
 		if (m1 != null)
 			for (var k : keys)
 				m2.put(k, m1.get(k));

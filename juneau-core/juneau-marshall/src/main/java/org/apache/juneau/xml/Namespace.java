@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a simple namespace mapping between a simple name and URI.
@@ -93,7 +94,7 @@ public class Namespace {
 		}
 
 		if (o instanceof CharSequence) {
-			String[] ss = splita(o.toString());
+			String[] ss = StringUtils.splita(o.toString());
 			Namespace[] n = new Namespace[ss.length];
 			for (int i = 0; i < ss.length; i++)
 				n[i] = create(ss[i]);

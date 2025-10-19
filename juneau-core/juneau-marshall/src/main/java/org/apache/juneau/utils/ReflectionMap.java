@@ -19,7 +19,7 @@ package org.apache.juneau.utils;
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -157,10 +157,10 @@ public class ReflectionMap<V> {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder<V> copyFrom) {
-			classEntries = copyOf(copyFrom.classEntries);
-			methodEntries = copyOf(copyFrom.methodEntries);
-			fieldEntries = copyOf(copyFrom.fieldEntries);
-			constructorEntries = copyOf(copyFrom.constructorEntries);
+			classEntries = CollectionUtils2.copyOf(copyFrom.classEntries);
+			methodEntries = CollectionUtils2.copyOf(copyFrom.methodEntries);
+			fieldEntries = CollectionUtils2.copyOf(copyFrom.fieldEntries);
+			constructorEntries = CollectionUtils2.copyOf(copyFrom.constructorEntries);
 		}
 
 		/**
@@ -265,7 +265,7 @@ public class ReflectionMap<V> {
 
 		ConstructorEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = splita(name.substring(i + 1, name.length() - 1));
+			this.args = StringUtils.splita(name.substring(i + 1, name.length() - 1));
 			name = name.substring(0, i).trim();
 			this.simpleClassName = simpleClassName(name);
 			this.fullClassName = name;
@@ -331,7 +331,7 @@ public class ReflectionMap<V> {
 
 		MethodEntry(String name, V value) {
 			int i = name.indexOf('(');
-			this.args = i == -1 ? null : Utils.splitMethodArgs(name.substring(i + 1, name.length() - 1));
+			this.args = i == -1 ? null : StringUtils.splitMethodArgs(name.substring(i + 1, name.length() - 1));
 			if (args != null) {
 				for (int j = 0; j < args.length; j++) {
 

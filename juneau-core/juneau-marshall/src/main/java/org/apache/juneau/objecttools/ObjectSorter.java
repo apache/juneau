@@ -17,7 +17,7 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -139,7 +139,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 		}
 
 		// We reverse the list and sort last to first.
-		List<String> columns = listFrom(sort.keySet());
+		List<String> columns = CollectionUtils2.listFrom(sort.keySet());
 		Collections.reverse(columns);
 
 		List<SortEntry> l3 = l;

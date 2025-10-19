@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
@@ -133,7 +134,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get(0)[0][0][0]).isType(A.class))
 			.build(),
-		tester(5, "Map<String,A[][][]>", getType(Map.class,String.class,A[][][].class), CollectionUtils.map("x", new A[][][]{{{new A().init(),null},null},null}))
+		tester(5, "Map<String,A[][][]>", getType(Map.class,String.class,A[][][].class), CollectionUtils2.map("x", new A[][][]{{{new A().init(),null},null},null}))
 			.json("{x:[[[{_type:'A',a:1},null],null],null]}")
 			.jsonT("{x:[[[{t:'A',a:1},null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\t_type: 'A',\n\t\t\t\t\ta: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -157,7 +158,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get("x")[0][0][0]).isType(A.class))
 			.build(),
-		tester(6, "Map<String,List<A[][][]>>", getType(Map.class,String.class,List.class,A[][][].class), CollectionUtils.map("x",list(new A[][][]{{{new A().init(),null},null},null},null)))
+		tester(6, "Map<String,List<A[][][]>>", getType(Map.class,String.class,List.class,A[][][].class), CollectionUtils2.map("x",list(new A[][][]{{{new A().init(),null},null},null},null)))
 			.json("{x:[[[[{_type:'A',a:1},null],null],null],null]}")
 			.jsonT("{x:[[[[{t:'A',a:1},null],null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t_type: 'A',\n\t\t\t\t\t\ta: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -277,7 +278,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get(0)[0][0][0]).isType(A.class))
 			.build(),
-		tester(11, "Map<String,IA[][][]>", getType(Map.class,String.class,IA[][][].class), CollectionUtils.map("x",new IA[][][]{{{new A().init(),null},null},null}))
+		tester(11, "Map<String,IA[][][]>", getType(Map.class,String.class,IA[][][].class), CollectionUtils2.map("x",new IA[][][]{{{new A().init(),null},null},null}))
 			.json("{x:[[[{_type:'A',a:1},null],null],null]}")
 			.jsonT("{x:[[[{t:'A',a:1},null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\t_type: 'A',\n\t\t\t\t\ta: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -301,7 +302,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:_type>A</jp:_type>\n                  <jp:a>1</jp:a>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get("x")[0][0][0]).isType(A.class))
 			.build(),
-		tester(12, "Map<String,List<IA[][][]>>", getType(Map.class,String.class,List.class,IA[][][].class), CollectionUtils.map("x",list(new IA[][][]{{{new A().init(),null},null},null},null)))
+		tester(12, "Map<String,List<IA[][][]>>", getType(Map.class,String.class,List.class,IA[][][].class), CollectionUtils2.map("x",list(new IA[][][]{{{new A().init(),null},null},null},null)))
 			.json("{x:[[[[{_type:'A',a:1},null],null],null],null]}")
 			.jsonT("{x:[[[[{t:'A',a:1},null],null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\t_type: 'A',\n\t\t\t\t\t\ta: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -421,7 +422,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get(0)[0][0][0]).isType(B.class))
 			.build(),
-		tester(17, "Map<String,B[][][]>", getType(Map.class,String.class,B[][][].class), CollectionUtils.map("x",new B[][][]{{{new B().init(),null},null},null}))
+		tester(17, "Map<String,B[][][]>", getType(Map.class,String.class,B[][][].class), CollectionUtils2.map("x",new B[][][]{{{new B().init(),null},null},null}))
 			.json("{x:[[[{z:'B',b:1},null],null],null]}")
 			.jsonT("{x:[[[{z:'B',b:1},null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\tz: 'B',\n\t\t\t\t\tb: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -445,7 +446,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get("x")[0][0][0]).isType(B.class))
 			.build(),
-		tester(18, "Map<String,List<B[][][]>>", getType(Map.class,String.class,List.class,B[][][].class), CollectionUtils.map("x",list(new B[][][]{{{new B().init(),null},null},null},null)))
+		tester(18, "Map<String,List<B[][][]>>", getType(Map.class,String.class,List.class,B[][][].class), CollectionUtils2.map("x",list(new B[][][]{{{new B().init(),null},null},null},null)))
 			.json("{x:[[[[{z:'B',b:1},null],null],null],null]}")
 			.jsonT("{x:[[[[{z:'B',b:1},null],null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\tz: 'B',\n\t\t\t\t\t\tb: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -565,7 +566,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Seq>\n    <rdf:li>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </rdf:li>\n    <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n  </rdf:Seq>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get(0)[0][0][0]).isType(B.class))
 			.build(),
-		tester(23, "Map<String,IB[][][]>", getType(Map.class,String.class,IB[][][].class), CollectionUtils.map("x",new IB[][][]{{{new B().init(),null},null},null}))
+		tester(23, "Map<String,IB[][][]>", getType(Map.class,String.class,IB[][][].class), CollectionUtils2.map("x",new IB[][][]{{{new B().init(),null},null},null}))
 			.json("{x:[[[{z:'B',b:1},null],null],null]}")
 			.jsonT("{x:[[[{z:'B',b:1},null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t{\n\t\t\t\t\tz: 'B',\n\t\t\t\t\tb: 1\n\t\t\t\t},\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")
@@ -589,7 +590,7 @@ class BeanDictionary_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.rdfXmlR("<rdf:RDF>\n  <rdf:Description>\n    <jp:x>\n      <rdf:Seq>\n        <rdf:li>\n          <rdf:Seq>\n            <rdf:li>\n              <rdf:Seq>\n                <rdf:li rdf:parseType='Resource'>\n                  <jp:z>B</jp:z>\n                  <jp:b>1</jp:b>\n                </rdf:li>\n                <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n              </rdf:Seq>\n            </rdf:li>\n            <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n          </rdf:Seq>\n        </rdf:li>\n        <rdf:li rdf:resource='http://www.w3.org/1999/02/22-rdf-syntax-ns#nil'/>\n      </rdf:Seq>\n    </jp:x>\n  </rdf:Description>\n</rdf:RDF>\n")
 			.verify(x -> verify(x.get("x")[0][0][0]).isType(B.class))
 			.build(),
-		tester(24, "Map<String,List<IB[][][]>>", getType(Map.class,String.class,List.class,IB[][][].class), CollectionUtils.map("x",list(new IB[][][]{{{new B().init(),null},null},null},null)))
+		tester(24, "Map<String,List<IB[][][]>>", getType(Map.class,String.class,List.class,IB[][][].class), CollectionUtils2.map("x",list(new IB[][][]{{{new B().init(),null},null},null},null)))
 			.json("{x:[[[[{z:'B',b:1},null],null],null],null]}")
 			.jsonT("{x:[[[[{z:'B',b:1},null],null],null],null]}")
 			.jsonR("{\n\tx: [\n\t\t[\n\t\t\t[\n\t\t\t\t[\n\t\t\t\t\t{\n\t\t\t\t\t\tz: 'B',\n\t\t\t\t\t\tb: 1\n\t\t\t\t\t},\n\t\t\t\t\tnull\n\t\t\t\t],\n\t\t\t\tnull\n\t\t\t],\n\t\t\tnull\n\t\t],\n\t\tnull\n\t]\n}")

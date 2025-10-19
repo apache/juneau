@@ -417,7 +417,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isLines(String...lines) throws AssertionError {
 		Utils.assertArgNotNull("lines", lines);
-		var v = Utils.join(lines, '\n');
+		var v = StringUtils.join(lines, '\n');
 		var s = value();
 		if (Utils.ne(v, s))
 			throw error(MSG_stringDifferedAtPosition, diffPosition(v, s), fix(v), fix(s));
@@ -436,7 +436,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 */
 	public R isMatches(String searchPattern) throws AssertionError {
 		Utils.assertArgNotNull("searchPattern", searchPattern);
-		return isPattern(Utils.getMatchPattern3(searchPattern));
+		return isPattern(StringUtils.getMatchPattern(searchPattern));
 	}
 
 	/**
@@ -568,7 +568,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		Utils.assertArgNotNull("lines", lines);
 
 		// Must work for windows too.
-		var e = Utils.join(lines, '\n').trim().split("[\r\n]+");
+		var e = StringUtils.join(lines, '\n').trim().split("[\r\n]+");
 		var a = value().trim().split("[\r\n]+");
 
 		if (e.length != a.length)

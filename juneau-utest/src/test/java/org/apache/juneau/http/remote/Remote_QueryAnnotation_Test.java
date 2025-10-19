@@ -747,9 +747,9 @@ class Remote_QueryAnnotation_Test extends TestBase {
 	}
 
 	public static class K2a {
-		@Query public Map<String,Object> getA() { return CollectionUtils.mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
+		@Query public Map<String,Object> getA() { return CollectionBuilders.mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build(); }
 		@Query("*") public Map<String,Object> getB() { return map("b1","true","b2","123","b3","null"); }
-		@Query("*") @Schema(allowEmptyValue=true) public Map<String,Object> getC() { return CollectionUtils.mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
+		@Query("*") @Schema(allowEmptyValue=true) public Map<String,Object> getC() { return CollectionBuilders.mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build(); }
 		@Query("*")
 		public Map<String,Object> getD() { return null; }
 	}

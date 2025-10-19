@@ -19,7 +19,7 @@ package org.apache.juneau.html;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -94,7 +94,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		private static final Pattern INDEXED_LINK_PATTERN = Pattern.compile("(?s)(\\S*)\\[(\\d+)\\]\\:(.*)");
 
 		private static <T> List<T> copy(List<T> s) {
-			return s == null || s.isEmpty() ? null : copyOf(s);
+			return s == null || s.isEmpty() ? null : CollectionUtils2.copyOf(s);
 		}
 
 		private static <T> List<T> copy(T[] s) {
@@ -1565,7 +1565,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		@SuppressWarnings("unchecked")
 		public Builder widgets(Class<? extends HtmlWidget>...values) {
-			addAll(widgets(), values);
+			CollectionUtils2.addAll(widgets(), values);
 			return this;
 		}
 
@@ -1663,7 +1663,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		nowrap = builder.nowrap;
 		resolveBodyVars = builder.resolveBodyVars;
 		template = builder.template;
-		widgets = builder.widgets == null ? Collections.emptyList() : copyOf(builder.widgets);
+		widgets = builder.widgets == null ? Collections.emptyList() : CollectionUtils2.copyOf(builder.widgets);
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();

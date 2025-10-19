@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -91,7 +91,7 @@ public class Server extends OpenApiElement {
 
 		this.url = copyFrom.url;
 		this.description = copyFrom.description;
-		this.variables = copyOf(copyFrom.variables, ServerVariable::copy);
+		this.variables = CollectionUtils2.copyOf(copyFrom.variables, ServerVariable::copy);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class Server extends OpenApiElement {
 	 * @return This object
 	 */
 	public Server setVariables(Map<String,ServerVariable> value) {
-		variables = copyOf(value);
+		variables = CollectionUtils2.copyOf(value);
 		return this;
 	}
 

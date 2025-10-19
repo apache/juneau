@@ -17,7 +17,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.examples.rest.TestUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
@@ -42,7 +43,7 @@ import org.junit.*;
 public class ContentComboTestBase extends RestTestcase {
 
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
-	private static Map<String,RestClient> clients = map();
+	private static Map<String,RestClient> clients = CollectionUtils2.map();
 
 	protected RestClient getClient(MediaType mediaType) {
 		String mt = mediaType.toString();

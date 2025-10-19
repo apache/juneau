@@ -535,9 +535,9 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 			if (cf == PIPES)
 				return StringUtils.joine(l, '|');
 			if (cf == SSV)
-				return Utils.join(l, ' ');
+				return StringUtils.join(l, ' ');
 			if (cf == TSV)
-				return Utils.join(l, '\t');
+				return StringUtils.join(l, '\t');
 			return l;
 		} else if (t == OBJECT) {
 			return toMap(partType, getClassMetaForObject(o), o, s);

@@ -177,7 +177,7 @@ public class MediaType implements Comparable<MediaType> {
 		type = (i == -1 ? x : x.substring(0, i));
 		subType = (i == -1 ? "*" : x.substring(i + 1));
 
-		subTypes = Utils.splita(subType, '+');
+		subTypes = StringUtils.splita(subType, '+');
 		subTypesSorted = Arrays.copyOf(subTypes, subTypes.length);
 		Arrays.sort(this.subTypesSorted);
 		hasSubtypeMeta = ArrayUtils.contains("*", this.subTypes);

@@ -553,7 +553,7 @@ class UrlEncodingSerializer_Test extends TestBase {
 		assertEquals("_value=(foo)", s2.serialize("(foo)"));
 		assertEquals("_value=@(foo)", s2.serialize("@(foo)"));
 
-		var m = CollectionUtils.mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
+		var m = CollectionBuilders.mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s2.serialize(m));
 
 		var l = list("foo", "'foo'", "(foo)", "@(foo)");

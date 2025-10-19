@@ -196,7 +196,7 @@ public abstract class ContextSession {
 	 */
 	public void checkForWarnings() {
 		if (debug && ! getWarnings().isEmpty())
-			throw new BeanRuntimeException("Warnings occurred in session: \n" + Utils.join(getWarnings(), "\n"));
+			throw new BeanRuntimeException("Warnings occurred in session: \n" + StringUtils.join(getWarnings(), "\n"));
 	}
 
 	/**

@@ -53,7 +53,7 @@ public class LocalDir {
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
 		this.clazz = Utils.assertArgNotNull("clazz", clazz);
-		this.clazzPath = "/".equals(clazzPath) ? "/" : Utils.nullIfEmpty3(trimTrailingSlashes(clazzPath));
+		this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = HashCode.of(clazz, clazzPath);
 	}

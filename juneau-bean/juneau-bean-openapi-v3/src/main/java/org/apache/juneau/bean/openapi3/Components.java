@@ -17,11 +17,12 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
+import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -105,15 +106,15 @@ public class Components extends OpenApiElement {
 	 */
 	public Components(Components copyFrom) {
 		super(copyFrom);
-		this.schemas = copyOf(copyFrom.schemas);
-		this.responses = copyOf(copyFrom.responses);
-		this.parameters = copyOf(copyFrom.parameters);
-		this.examples = copyOf(copyFrom.examples);
-		this.requestBodies = copyOf(copyFrom.requestBodies);
-		this.headers = copyOf(copyFrom.headers);
-		this.securitySchemes = copyOf(copyFrom.securitySchemes);
-		this.links = copyOf(copyFrom.links);
-		this.callbacks = copyOf(copyFrom.callbacks);
+		this.schemas = CollectionUtils2.copyOf(copyFrom.schemas);
+		this.responses = CollectionUtils2.copyOf(copyFrom.responses);
+		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
+		this.examples = CollectionUtils2.copyOf(copyFrom.examples);
+		this.requestBodies = CollectionUtils2.copyOf(copyFrom.requestBodies);
+		this.headers = CollectionUtils2.copyOf(copyFrom.headers);
+		this.securitySchemes = CollectionUtils2.copyOf(copyFrom.securitySchemes);
+		this.links = CollectionUtils2.copyOf(copyFrom.links);
+		this.callbacks = CollectionUtils2.copyOf(copyFrom.callbacks);
 	}
 
 	/**

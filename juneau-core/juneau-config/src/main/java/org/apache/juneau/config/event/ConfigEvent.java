@@ -197,7 +197,7 @@ public class ConfigEvent {
 		return switch (type) {
 			case REMOVE_SECTION -> "REMOVE_SECTION(" + section + ")";
 			case REMOVE_ENTRY -> "REMOVE_ENTRY(" + section + (section.isEmpty() ? "" : "/") + key + ")";
-			case SET_SECTION -> "SET_SECTION(" + section + ", preLines=" + Utils.join(preLines, '|') + ")";
+			case SET_SECTION -> "SET_SECTION(" + section + ", preLines=" + StringUtils.join(preLines, '|') + ")";
 			case SET_ENTRY -> {
 				var out = new StringBuilder("SET(");
 				out.append(section + (section.isEmpty() ? "" : "/") + key);

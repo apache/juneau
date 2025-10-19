@@ -172,7 +172,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
-		return Arrays.stream(splita(vr.resolve(in))).filter(Utils::isNotEmpty);
+		return Arrays.stream(StringUtils.splita(vr.resolve(in))).filter(Utils::isNotEmpty);
 	}
 
 	/**

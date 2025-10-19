@@ -17,9 +17,11 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.util.*;
+
+import org.apache.juneau.common.utils.*;
 
 /**
  * Arguments passed to {@link ObjectViewer}.
@@ -63,7 +65,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(Collection<String> viewArgs) {
-		this.view = u(listFrom(viewArgs));
+		this.view = u(CollectionUtils2.listFrom(viewArgs));
 	}
 
 	/**
@@ -74,7 +76,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(String viewArgs) {
-		this(alist(splita(viewArgs)));
+		this(alist(StringUtils.splita(viewArgs)));
 	}
 
 	/**

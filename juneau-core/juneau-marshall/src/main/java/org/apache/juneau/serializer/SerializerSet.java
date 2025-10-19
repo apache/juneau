@@ -18,7 +18,7 @@ package org.apache.juneau.serializer;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -176,7 +176,7 @@ public class SerializerSet {
 		 * @return This object.
 		 */
 		public Builder add(Serializer...s) {
-			prependAll(entries, (Object[])s);
+			CollectionUtils2.prependAll(entries, (Object[])s);
 			return this;
 		}
 

@@ -20,8 +20,6 @@ import static java.util.Arrays.*;
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.map;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
@@ -81,7 +79,7 @@ public class ClassMeta<T> implements Type {
 		Setter parentPropertyMethod = null, namePropertyMethod = null;
 		ConstructorInfo noArgConstructor = null, stringConstructor = null;
 		Object primitiveDefault = null;
-		Map<String,Method> publicMethods = map();
+		Map<String,Method> publicMethods = CollectionUtils2.map();
 		ClassMeta<?> keyType = null, valueType = null, elementType = null;
 		String typePropertyName = null, notABeanReason = null, dictionaryName = null;
 		Throwable initException = null;
@@ -277,7 +275,7 @@ public class ClassMeta<T> implements Type {
 			BeanFilter beanFilter = findBeanFilter(bc);
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 
-			addAll(this.swaps, swaps);
+			CollectionUtils2.addAll(this.swaps, swaps);
 
 			if (bc != null)
 				this.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());

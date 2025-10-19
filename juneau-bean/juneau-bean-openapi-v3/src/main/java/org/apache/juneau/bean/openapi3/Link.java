@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.common.utils.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.CollectionBuilders.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -89,7 +89,7 @@ public class Link extends OpenApiElement {
 		this.operationId = copyFrom.operationId;
 		this.requestBody = copyFrom.requestBody;
 		this.server = copyFrom.server == null ? null : copyFrom.server.copy();
-		this.parameters = copyOf(copyFrom.parameters);
+		this.parameters = CollectionUtils2.copyOf(copyFrom.parameters);
 	}
 
 	/**
@@ -278,7 +278,7 @@ public class Link extends OpenApiElement {
 	 * @return This object
 	 */
 	public Link setParameters(Map<String,Object> value) {
-		parameters = copyOf(value);
+		parameters = CollectionUtils2.copyOf(value);
 		return this;
 	}
 
