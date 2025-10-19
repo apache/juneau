@@ -23,8 +23,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.common.utils.*;
-
 /**
  * Utility methods for collections.
  *
@@ -86,7 +84,7 @@ public class CollectionUtils {
 	public static <E> Set<E> addAll(Set<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
-				value = Utils.set(entries);
+				value = set(entries);
 			else
 				Collections.addAll(value, entries);
 		}
@@ -203,20 +201,6 @@ public class CollectionUtils {
 		return m.entrySet().stream().collect(toMap(Map.Entry::getKey, e -> valueMapper.apply(e.getValue()), (a, b) -> b, mapFactory));
 	}
 
-	//	/**
-	//	 * Convenience method for creating an {@link ArrayList}.
-	//	 *
-	//	 * @param <E> The element type.
-	//	 * @param values The values to initialize the list with.
-	//	 * @return A new modifiable list.
-	//	 */
-	//	@SafeVarargs
-	//	public static <E> List<E> list2(E...values) {
-	//		ArrayList<E> l = new ArrayList<>(values.length);
-	//		for (E v : values)
-	//			l.add(v);
-	//		return l;
-	//	}
 
 	/**
 	 * Creates a new set from the specified collection.
@@ -558,7 +542,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> LinkedHashSet<E> setOf(Class<E> elementType, E...values) {
-		return Utils.set(values);
+		return set(values);
 	}
 
 	/**

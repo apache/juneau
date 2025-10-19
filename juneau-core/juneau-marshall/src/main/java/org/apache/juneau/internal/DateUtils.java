@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 
 import java.lang.ref.*;
@@ -187,14 +188,14 @@ public class DateUtils {
 	public static String toValidISO8601DT(String in) {
 
 		// "2001-07-04T15:30:45Z"
-		final int S1 = 1, // Looking for -
-			S2 = 2, // Found -, looking for -
-			S3 = 3, // Found -, looking for T
-			S4 = 4, // Found T, looking for :
-			S5 = 5, // Found :, looking for :
-			S6 = 6; // Found :
+		// S1: Looking for -
+		// S2: Found -, looking for -
+		// S3: Found -, looking for T
+		// S4: Found T, looking for :
+		// S5: Found :, looking for :
+		// S6: Found :
 
-		int state = 1;
+		var state = S1;
 		boolean needsT = false;
 		for (int i = 0; i < in.length(); i++) {
 			char c = in.charAt(i);
@@ -224,14 +225,14 @@ public class DateUtils {
 			in = in.replace(' ', 'T');
 
 		// @formatter:off
-		switch(state) {
-			case S1: return in + "-01-01T00:00:00";
-			case S2: return in + "-01T00:00:00";
-			case S3: return in + "T00:00:00";
-			case S4: return in + ":00:00";
-			case S5: return in + ":00";
-			default: return in;
-		}
+		return switch(state) {
+			case S1 -> in + "-01-01T00:00:00";
+			case S2 -> in + "-01T00:00:00";
+			case S3 -> in + "T00:00:00";
+			case S4 -> in + ":00:00";
+			case S5 -> in + ":00";
+			default -> in;
+		};
 		// @formatter:on
 	}
 }

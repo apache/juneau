@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.rest.springboot;
 
+import static org.apache.juneau.common.utils.Utils.*;
+
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 
@@ -59,12 +60,12 @@ public class SpringBeanStore extends BeanStore {
 			if (o.isPresent())
 				return o;
 			if (appContext.isPresent()) {
-				return Utils.opt(appContext.get().getBeanProvider(c).getIfAvailable());
+				return opt(appContext.get().getBeanProvider(c).getIfAvailable());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Utils.opte();
+		return opte();
 	}
 
 	@Override
@@ -76,13 +77,13 @@ public class SpringBeanStore extends BeanStore {
 			if (appContext.isPresent()) {
 				ApplicationContext ctx = appContext.get();
 				if (name != null)
-					return Utils.opt(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
-				return Utils.opt(appContext.get().getBean(c));
+					return opt(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
+				return opt(appContext.get().getBean(c));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Utils.opte();
+		return opte();
 	}
 
 	@Override /* Overridden from BeanStore */

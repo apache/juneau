@@ -130,7 +130,7 @@ public class RestContext extends Context {
 	public static class Builder extends Context.Builder implements ServletConfig {
 
 		// @formatter:off
-		private static final Set<Class<?>> DELAYED_INJECTION = Utils.set(
+		private static final Set<Class<?>> DELAYED_INJECTION = set(
 			BeanContext.Builder.class,
 			BeanStore.Builder.class,
 			BeanStore.class,
@@ -177,7 +177,7 @@ public class RestContext extends Context {
 			VarResolver.class
 		);
 
-		private static final Set<String> DELAYED_INJECTION_NAMES = Utils.set(
+		private static final Set<String> DELAYED_INJECTION_NAMES = set(
 			"defaultRequestAttributes",
 			"defaultRequestHeaders",
 			"defaultResponseHeaders",
@@ -276,7 +276,7 @@ public class RestContext extends Context {
 
 		Class<? extends RestOperations> operationsClass = RestOperations.class;
 
-		List<Object> children = Utils.list();
+		List<Object> children = list();
 
 		/**
 		 * Constructor.
@@ -985,7 +985,7 @@ public class RestContext extends Context {
 		 * @return The media types.
 		 */
 		public Optional<List<MediaType>> consumes() {
-			return Utils.opt(consumes);
+			return opt(consumes);
 		}
 
 		/**
@@ -1120,7 +1120,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultAccept(String value) {
-			if (Utils.isNotEmpty(value))
+			if (isNotEmpty(value))
 				defaultRequestHeaders(accept(value));
 			return this;
 		}
@@ -1224,7 +1224,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		public Builder defaultContentType(String value) {
-			if (Utils.isNotEmpty(value))
+			if (isNotEmpty(value))
 				defaultRequestHeaders(contentType(value));
 			return this;
 		}
@@ -2520,7 +2520,7 @@ public class RestContext extends Context {
 		 */
 		public Builder path(String value) {
 			value = trimLeadingSlashes(value);
-			if (Utils.isNotEmpty(value))
+			if (isNotEmpty(value))
 				path = value;
 			return this;
 		}
@@ -2581,7 +2581,7 @@ public class RestContext extends Context {
 		 * @return The media types.
 		 */
 		public Optional<List<MediaType>> produces() {
-			return Utils.opt(produces);
+			return opt(produces);
 		}
 
 		/**
@@ -2683,7 +2683,7 @@ public class RestContext extends Context {
 		 */
 		public <T> Optional<T> resourceAs(Class<T> type) {
 			Object r = resource().get();
-			return Utils.opt(type.isInstance(r) ? type.cast(r) : null);
+			return opt(type.isInstance(r) ? type.cast(r) : null);
 		}
 
 		/**
@@ -3914,7 +3914,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(() -> new IllegalArgumentException("VarResolver not found."));
 			Value<String> cfv = Value.empty();
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> Utils.isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
 			String cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
@@ -4898,11 +4898,11 @@ public class RestContext extends Context {
 	public static final Map<Class<?>,RestContext> getGlobalRegistry() { return u(REGISTRY); }
 
 	static ServletException servletException(String msg, Object...args) {
-		return new ServletException(Utils.f(msg, args));
+		return new ServletException(f(msg, args));
 	}
 
 	static ServletException servletException(Throwable t, String msg, Object...args) {
-		return new ServletException(Utils.f(msg, args), t);
+		return new ServletException(f(msg, args), t);
 	}
 
 	private final Supplier<?> resource;
@@ -5098,7 +5098,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> Utils.f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method ''{0}''.", x.getFullName()));
 			}
 		}
 
@@ -5143,7 +5143,7 @@ public class RestContext extends Context {
 				UrlPathMatch uppm = pathMatcher.match(upi2);
 				if (uppm != null && ! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
+					sb.req(new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix()))).servletPath(uppm.getPrefix()));
 				} else {
 					RestSession call = sb.build();
 					call.debug(isDebug(call)).status(SC_NOT_FOUND).finish();
@@ -5158,7 +5158,7 @@ public class RestContext extends Context {
 				RestContext rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(Utils.nullIfEmpty(urlDecode(uppm.getSuffix())))
+					HttpServletRequest childRequest = new OverrideableHttpServletRequest(sb.req()).pathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))
 						.servletPath(sb.req().getServletPath() + uppm.getPrefix());
 					rc.execute(rc.getResource(), childRequest, sb.res());
 				} else {
@@ -5233,28 +5233,6 @@ public class RestContext extends Context {
 	 */
 	public Set<String> getAllowedMethodParams() { return allowedMethodParams; }
 
-	//	/**
-	//	 * If the specified object is annotated with {@link Response}, this returns the response metadata about that object.
-	//	 *
-	//	 * @param o The object to check.
-	//	 * @return The response metadata, or <jk>null</jk> if it wasn't annotated with {@link Response}.
-	//	 */
-	//	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-	//		if (o == null)
-	//			return null;
-	//		Class<?> c = o.getClass();
-	//		ResponseBeanMeta rbm = responseBeanMetas.get(c);
-	//		if (rbm == null) {
-	//			rbm = ResponseBeanMeta.create(c, getAnnotations());
-	//			if (rbm == null)
-	//				rbm = ResponseBeanMeta.NULL;
-	//			responseBeanMetas.put(c, rbm);
-	//		}
-	//		if (rbm == ResponseBeanMeta.NULL)
-	//			return null;
-	//		return rbm;
-	//	}
-	//
 	/**
 	 * Returns the annotations applied to this context.
 	 *
@@ -5618,7 +5596,7 @@ public class RestContext extends Context {
 				throw new InternalServerError(e);
 			}
 		}
-		return Utils.opt(s);
+		return opt(s);
 	}
 
 	/**
@@ -5842,7 +5820,7 @@ public class RestContext extends Context {
 				return v == null ? false : super.contains(v);
 			}
 		};
-		Utils.split(value, x -> s.add(x));
+		split(value, x -> s.add(x));
 		return u(s);
 	}
 
@@ -5914,7 +5892,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> Utils.f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}

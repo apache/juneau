@@ -1779,51 +1779,33 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	private static String getAccept(Builder builder) {
 		if (builder.getAccept() != null)
 			return builder.getAccept();
-		switch (builder.language) {
-			case "RDF/XML":
-				return "text/xml+rdf+abbrev";
-			case "RDF/XML-ABBREV":
-				return "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
-			case "N-TRIPLE":
-				return "text/n-triple";
-			case "N3":
-				return "text/n3";
-			case "N3-PP":
-				return "text/n3-pp";
-			case "N3-PLAIN":
-				return "text/n3-plain";
-			case "N3-TRIPLES":
-				return "text/n3-triples";
-			case "TURTLE":
-				return "text/turtle";
-			default:
-				return "text/xml+rdf";
-		}
+		return switch (builder.language) {
+			case "RDF/XML" -> "text/xml+rdf+abbrev";
+			case "RDF/XML-ABBREV" -> "text/xml+rdf+abbrev,text/xml+rdf;q=0.9";
+			case "N-TRIPLE" -> "text/n-triple";
+			case "N3" -> "text/n3";
+			case "N3-PP" -> "text/n3-pp";
+			case "N3-PLAIN" -> "text/n3-plain";
+			case "N3-TRIPLES" -> "text/n3-triples";
+			case "TURTLE" -> "text/turtle";
+			default -> "text/xml+rdf";
+		};
 	}
 
 	private static String getProduces(Builder builder) {
 		if (builder.getProduces() != null)
 			return builder.getProduces();
-		switch (builder.language) {
-			case "RDF/XML":
-				return "text/xml+rdf+abbrev";
-			case "RDF/XML-ABBREV":
-				return "text/xml+rdf";
-			case "N-TRIPLE":
-				return "text/n-triple";
-			case "N3":
-				return "text/n3";
-			case "N3-PP":
-				return "text/n3-pp";
-			case "N3-PLAIN":
-				return "text/n3-plain";
-			case "N3-TRIPLES":
-				return "text/n3-triples";
-			case "TURTLE":
-				return "text/turtle";
-			default:
-				return "text/xml+rdf";
-		}
+		return switch (builder.language) {
+			case "RDF/XML" -> "text/xml+rdf+abbrev";
+			case "RDF/XML-ABBREV" -> "text/xml+rdf";
+			case "N-TRIPLE" -> "text/n-triple";
+			case "N3" -> "text/n3";
+			case "N3-PP" -> "text/n3-pp";
+			case "N3-PLAIN" -> "text/n3-plain";
+			case "N3-TRIPLES" -> "text/n3-triples";
+			case "TURTLE" -> "text/turtle";
+			default -> "text/xml+rdf";
+		};
 	}
 
 	final boolean addLiteralTypes, addRootProperty, useXmlNamespaces, looseCollections, autoDetectNamespaces, addBeanTypesRdf;

@@ -18,10 +18,9 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
+import static org.apache.juneau.common.utils.Utils.*;
 
 import java.util.*;
-
-import org.apache.juneau.common.utils.*;
 
 /**
  * Represents a parsed URL path-info string.
@@ -54,7 +53,7 @@ public class UrlPath {
 	 */
 	UrlPath(String path) {
 		this.path = path;
-		parts = path == null ? new String[0] : Utils.splita(path.substring(1), '/');
+		parts = path == null ? new String[0] : splita(path.substring(1), '/');
 		for (int i = 0; i < parts.length; i++)
 			parts[i] = urlDecode(parts[i]);
 	}
@@ -69,11 +68,11 @@ public class UrlPath {
 	 */
 	public Optional<String> getFileName() {
 		if (parts.length == 0)
-			return Utils.opte();
+			return opte();
 		String p = parts[parts.length - 1];
 		if (p.indexOf('.') == -1)
-			return Utils.opte();
-		return Utils.opt(p);
+			return opte();
+		return opt(p);
 	}
 
 	/**

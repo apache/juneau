@@ -212,16 +212,12 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	@Override /* Overridden from SerializerSession */
 	public final String serializeToString(Object o) throws SerializeException {
 		byte[] b = serialize(o);
-		switch (getBinaryFormat()) {
-			case SPACED_HEX:
-				return StringUtils.toSpacedHex(b);
-			case HEX:
-				return StringUtils.toHex(b);
-			case BASE64:
-				return StringUtils.base64Encode(b);
-			default:
-				return null;
-		}
+		return switch (getBinaryFormat()) {
+			case SPACED_HEX -> StringUtils.toSpacedHex(b);
+			case HEX -> StringUtils.toHex(b);
+			case BASE64 -> StringUtils.base64Encode(b);
+			default -> null;
+		};
 	}
 
 	@Override /* Overridden from SerializerSession */

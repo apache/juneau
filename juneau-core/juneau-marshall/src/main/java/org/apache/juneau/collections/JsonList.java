@@ -523,7 +523,12 @@ public class JsonList extends LinkedList<Object> {
 	 * Converts this object into the specified class type.
 	 *
 	 * <p>
-	 * TODO - The current implementation is very inefficient.
+	 * This method performs a round-trip serialization and deserialization to convert the list into the target type.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='warn'>The current implementation uses a serialization round-trip which may be inefficient for
+	 * 		frequent conversions of large objects. Consider caching results or using direct object conversion where possible.
+	 * </ul>
 	 *
 	 * @param cm The class type to convert this object to.
 	 * @return A converted object.

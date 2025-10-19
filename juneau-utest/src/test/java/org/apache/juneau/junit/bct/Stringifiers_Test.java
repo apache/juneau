@@ -205,7 +205,56 @@ class Stringifiers_Test extends TestBase {
 	}
 
 	@Nested
-	class F_readerStringifier extends TestBase {
+	class F_charArrayStringifier extends TestBase {
+
+		@Test
+		void f01_stringifyCharArray() {
+			var stringifier = Stringifiers.charArrayStringifier();
+			var input = new char[]{'H', 'e', 'l', 'l', 'o'};
+			var result = stringifier.apply(null, input);
+
+			assertEquals("Hello", result);
+		}
+
+		@Test
+		void f02_stringifyEmptyCharArray() {
+			var stringifier = Stringifiers.charArrayStringifier();
+			var input = new char[0];
+			var result = stringifier.apply(null, input);
+
+			assertEquals("", result);
+		}
+
+		@Test
+		void f03_stringifyCharArrayWithHexChars() {
+			var stringifier = Stringifiers.charArrayStringifier();
+			var input = new char[]{'0', '0', '0', '0'};
+			var result = stringifier.apply(null, input);
+
+			assertEquals("0000", result);
+		}
+
+		@Test
+		void f04_stringifyCharArrayWithSpecialChars() {
+			var stringifier = Stringifiers.charArrayStringifier();
+			var input = new char[]{'A', 'B', 'C', 'D', 'E', 'F'};
+			var result = stringifier.apply(null, input);
+
+			assertEquals("ABCDEF", result);
+		}
+
+		@Test
+		void f05_stringifyCharArrayWithMixedChars() {
+			var stringifier = Stringifiers.charArrayStringifier();
+			var input = new char[]{'a', '1', 'B', '2', 'c', '3'};
+			var result = stringifier.apply(null, input);
+
+			assertEquals("a1B2c3", result);
+		}
+	}
+
+	@Nested
+	class G_readerStringifier extends TestBase {
 
 		@ParameterizedTest
 		@ValueSource(strings = {
@@ -213,7 +262,7 @@ class Stringifiers_Test extends TestBase {
 			"",
 			"Line 1\nLine 2\nLine 3"
 		})
-		void f01_stringifyReader(String input) {
+		void g01_stringifyReader(String input) {
 			var stringifier = Stringifiers.readerStringifier();
 			var reader = new StringReader(input);
 			var result = stringifier.apply(null, reader);

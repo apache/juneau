@@ -861,6 +861,31 @@ const sidebars: SidebarsConfig = {
           id: 'topics/07.01.00.JuneauBctBasics',
           label: '7.1. juneau-bct Basics',
         },
+        {
+          type: 'doc',
+          id: 'topics/07.01.01.Stringifiers',
+          label: '7.1.1. Stringifiers',
+        },
+        {
+          type: 'doc',
+          id: 'topics/07.01.02.Listifiers',
+          label: '7.1.2. Listifiers',
+        },
+        {
+          type: 'doc',
+          id: 'topics/07.01.03.Swappers',
+          label: '7.1.3. Swappers',
+        },
+        {
+          type: 'doc',
+          id: 'topics/07.01.04.PropertyExtractors',
+          label: '7.1.4. Property Extractors',
+        },
+        {
+          type: 'doc',
+          id: 'topics/07.01.05.CustomErrorMessages',
+          label: '7.1.5. Custom Error Messages',
+        },
       ],
     },
     {

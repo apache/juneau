@@ -632,15 +632,6 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public String getContextPath() {
 		return getServletContextHandler().getContextPath();
-		//        for (Handler h : getServer().getHandlers()) {
-		//            if (h instanceof HandlerCollection)
-		//                for (org.eclipse.jetty.ee9.nested.Handler h2 : ((HandlerCollection) h).getChildHandlers())
-		//                    if (h2 instanceof ServletContextHandler)
-		//                        return ((ServletContextHandler) h2).getContextPath();
-		//            if (h instanceof ServletContextHandler)
-		//                return ((ServletContextHandler) h).getContextPath();
-		//        }
-		//        throw new IllegalStateException("Could not locate ServletContextHandler in Jetty server.");
 	}
 
 	/**

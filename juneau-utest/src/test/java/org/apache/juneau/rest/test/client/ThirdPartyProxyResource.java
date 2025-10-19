@@ -985,7 +985,6 @@ public class ThirdPartyProxyResource extends BasicRestServlet {
 
 		assertEquals("foo", a);
 		assertEquals("", b);
-		//assertEquals(null, c);  // This is impossible to represent.
 
 		return "OK";
 	}

@@ -887,4 +887,452 @@ class StringUtils_Test extends TestBase {
 		assertList(Utils.splitNestedInner("a{b,c}"), "b", "c");
 		assertList(Utils.splitNestedInner("a{b{c,d},e{f,g}}"), "b{c,d}", "e{f,g}");
 	}
+
+	//====================================================================================================
+	// toHex2(int)
+	//====================================================================================================
+	@Test void a38_toHex2() {
+		// Test zero
+		assertString("00", toHex2(0));
+
+		// Test small positive numbers
+		assertString("01", toHex2(1));
+		assertString("0F", toHex2(15));
+		assertString("10", toHex2(16));
+		assertString("FF", toHex2(255));
+
+		// Test maximum valid value
+		assertString("FF", toHex2(255));
+
+		// Test values outside valid range - should throw exception
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(256));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(511));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(Integer.MAX_VALUE));
+
+		// Test negative numbers - should throw exception
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(-1));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(-100));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex2 can only be used on numbers between 0 and 255", ()->toHex2(Integer.MIN_VALUE));
+
+		// Test edge cases
+		assertString("0A", toHex2(10));
+		assertString("0B", toHex2(11));
+		assertString("0C", toHex2(12));
+		assertString("0D", toHex2(13));
+		assertString("0E", toHex2(14));
+	}
+
+	//====================================================================================================
+	// toHex4(int)
+	//====================================================================================================
+	@Test void a39_toHex4() {
+		// Test zero
+		assertString("0000", toHex4(0));
+
+		// Test small positive numbers
+		assertString("0001", toHex4(1));
+		assertString("000F", toHex4(15));
+		assertString("0010", toHex4(16));
+		assertString("00FF", toHex4(255));
+
+		// Test larger numbers
+		assertString("0100", toHex4(256));
+		assertString("1000", toHex4(4096));
+		assertString("FFFF", toHex4(65535));
+
+		// Test maximum 16-bit value
+		assertString("FFFF", toHex4(65535));
+
+		// Test larger values (these get truncated to 4 hex characters)
+		assertString("0000", toHex4(65536));
+		assertString("FFFF", toHex4(1048575));
+
+		// Test maximum int value (this gets truncated to 4 hex characters)
+		assertString("FFFF", toHex4(Integer.MAX_VALUE));
+
+		// Test negative numbers - should throw exception
+		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", ()->toHex4(-1));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", ()->toHex4(-100));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex4 can only be used on non-negative numbers", ()->toHex4(Integer.MIN_VALUE));
+
+		// Test edge cases
+		assertString("000A", toHex4(10));
+		assertString("000B", toHex4(11));
+		assertString("000C", toHex4(12));
+		assertString("000D", toHex4(13));
+		assertString("000E", toHex4(14));
+	}
+
+	//====================================================================================================
+	// toHex8(long)
+	//====================================================================================================
+	@Test void a40_toHex8() {
+		// Test zero
+		assertString("00000000", toHex8(0));
+
+		// Test small positive numbers
+		assertString("00000001", toHex8(1));
+		assertString("0000000F", toHex8(15));
+		assertString("00000010", toHex8(16));
+		assertString("000000FF", toHex8(255));
+
+		// Test larger numbers
+		assertString("00000100", toHex8(256));
+		assertString("00001000", toHex8(4096));
+		assertString("00010000", toHex8(65536));
+		assertString("00100000", toHex8(1048576));
+		assertString("01000000", toHex8(16777216));
+		assertString("10000000", toHex8(268435456));
+
+		// Test maximum 32-bit value
+		assertString("FFFFFFFF", toHex8(4294967295L));
+
+		// Test larger values (these get truncated to 8 hex characters)
+		assertString("00000000", toHex8(4294967296L));
+		assertString("FFFFFFFF", toHex8(68719476735L));
+
+		// Test maximum long value (this gets truncated to 8 hex characters)
+		assertString("FFFFFFFF", toHex8(Long.MAX_VALUE));
+
+		// Test negative numbers - should throw exception
+		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", ()->toHex8(-1));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", ()->toHex8(-100));
+		assertThrowsWithMessage(NumberFormatException.class, "toHex8 can only be used on non-negative numbers", ()->toHex8(Long.MIN_VALUE));
+
+		// Test edge cases
+		assertString("0000000A", toHex8(10));
+		assertString("0000000B", toHex8(11));
+		assertString("0000000C", toHex8(12));
+		assertString("0000000D", toHex8(13));
+		assertString("0000000E", toHex8(14));
+	}
+
+	//====================================================================================================
+	// String validation methods
+	//====================================================================================================
+
+	@Test void a41_isBlank() {
+		assertTrue(isBlank(null));
+		assertTrue(isBlank(""));
+		assertTrue(isBlank("   "));
+		assertTrue(isBlank("\t\n"));
+		assertFalse(isBlank("hello"));
+		assertFalse(isBlank(" hello "));
+		assertFalse(isBlank("a"));
+	}
+
+	@Test void a42_isNotBlank() {
+		assertFalse(isNotBlank(null));
+		assertFalse(isNotBlank(""));
+		assertFalse(isNotBlank("   "));
+		assertFalse(isNotBlank("\t\n"));
+		assertTrue(isNotBlank("hello"));
+		assertTrue(isNotBlank(" hello "));
+		assertTrue(isNotBlank("a"));
+	}
+
+	@Test void a43_isEmpty() {
+		assertTrue(StringUtils.isEmpty(null));
+		assertTrue(StringUtils.isEmpty(""));
+		assertFalse(StringUtils.isEmpty("   "));
+		assertFalse(StringUtils.isEmpty("hello"));
+		assertFalse(StringUtils.isEmpty("a"));
+	}
+
+	@Test void a44_hasText() {
+		assertFalse(hasText(null));
+		assertFalse(hasText(""));
+		assertFalse(hasText("   "));
+		assertFalse(hasText("\t\n"));
+		assertTrue(hasText("hello"));
+		assertTrue(hasText(" hello "));
+		assertTrue(hasText("a"));
+	}
+
+	@Test void a45_isAlpha() {
+		assertFalse(isAlpha(null));
+		assertFalse(isAlpha(""));
+		assertTrue(isAlpha("abc"));
+		assertTrue(isAlpha("ABC"));
+		assertTrue(isAlpha("AbCdEf"));
+		assertFalse(isAlpha("abc123"));
+		assertFalse(isAlpha("abc def"));
+		assertFalse(isAlpha("abc-def"));
+		assertFalse(isAlpha("123"));
+	}
+
+	@Test void a46_isAlphaNumeric() {
+		assertFalse(isAlphaNumeric(null));
+		assertFalse(isAlphaNumeric(""));
+		assertTrue(isAlphaNumeric("abc"));
+		assertTrue(isAlphaNumeric("123"));
+		assertTrue(isAlphaNumeric("abc123"));
+		assertTrue(isAlphaNumeric("ABC123"));
+		assertFalse(isAlphaNumeric("abc def"));
+		assertFalse(isAlphaNumeric("abc-123"));
+		assertFalse(isAlphaNumeric("abc_123"));
+	}
+
+	@Test void a47_isDigit() {
+		assertFalse(isDigit(null));
+		assertFalse(isDigit(""));
+		assertTrue(isDigit("123"));
+		assertTrue(isDigit("0"));
+		assertTrue(isDigit("999"));
+		assertFalse(isDigit("abc"));
+		assertFalse(isDigit("abc123"));
+		assertFalse(isDigit("12.3"));
+		assertFalse(isDigit("12-3"));
+	}
+
+	@Test void a48_isWhitespace() {
+		assertFalse(isWhitespace(null));
+		assertTrue(isWhitespace(""));
+		assertTrue(isWhitespace("   "));
+		assertTrue(isWhitespace("\t\n"));
+		assertTrue(isWhitespace("\r\n\t "));
+		assertFalse(isWhitespace(" a "));
+		assertFalse(isWhitespace("hello"));
+	}
+
+	//====================================================================================================
+	// String manipulation methods
+	//====================================================================================================
+
+	@Test void a49_capitalize() {
+		assertNull(capitalize(null));
+		assertEquals("", capitalize(""));
+		assertEquals("Hello", capitalize("hello"));
+		assertEquals("Hello", capitalize("Hello"));
+		assertEquals("HELLO", capitalize("HELLO"));
+		assertEquals("A", capitalize("a"));
+		assertEquals("123", capitalize("123"));
+	}
+
+	@Test void a50_uncapitalize() {
+		assertNull(uncapitalize(null));
+		assertEquals("", uncapitalize(""));
+		assertEquals("hello", uncapitalize("hello"));
+		assertEquals("hello", uncapitalize("Hello"));
+		assertEquals("hELLO", uncapitalize("HELLO"));
+		assertEquals("a", uncapitalize("A"));
+		assertEquals("123", uncapitalize("123"));
+	}
+
+	@Test void a51_reverse() {
+		assertNull(reverse(null));
+		assertEquals("", reverse(""));
+		assertEquals("olleh", reverse("hello"));
+		assertEquals("321", reverse("123"));
+		assertEquals("cba", reverse("abc"));
+	}
+
+	@Test void a52_remove() {
+		assertNull(remove(null, "x"));
+		assertEquals("hello", remove("hello", null));
+		assertEquals("hello", remove("hello", ""));
+		assertEquals("hell wrld", remove("hello world", "o"));
+		assertEquals("hello world", remove("hello world", "xyz"));
+		assertEquals("", remove("xxx", "x"));
+	}
+
+	@Test void a53_removeStart() {
+		assertNull(removeStart(null, "x"));
+		assertEquals("hello", removeStart("hello", null));
+		assertEquals("hello", removeStart("hello", ""));
+		assertEquals(" world", removeStart("hello world", "hello"));
+		assertEquals("hello world", removeStart("hello world", "xyz"));
+		assertEquals("", removeStart("hello", "hello"));
+	}
+
+	@Test void a54_removeEnd() {
+		assertNull(removeEnd(null, "x"));
+		assertEquals("hello", removeEnd("hello", null));
+		assertEquals("hello", removeEnd("hello", ""));
+		assertEquals("hello ", removeEnd("hello world", "world"));
+		assertEquals("hello world", removeEnd("hello world", "xyz"));
+		assertEquals("", removeEnd("hello", "hello"));
+	}
+
+	@Test void a55_substringBefore() {
+		assertNull(substringBefore(null, "."));
+		assertEquals("hello.world", substringBefore("hello.world", null));
+		assertEquals("hello", substringBefore("hello.world", "."));
+		assertEquals("hello.world", substringBefore("hello.world", "xyz"));
+		assertEquals("", substringBefore(".world", "."));
+	}
+
+	@Test void a56_substringAfter() {
+		assertNull(substringAfter(null, "."));
+		assertEquals("", substringAfter("hello.world", null));
+		assertEquals("world", substringAfter("hello.world", "."));
+		assertEquals("", substringAfter("hello.world", "xyz"));
+		assertEquals("world", substringAfter("hello.world", "."));
+	}
+
+	@Test void a57_substringBetween() {
+		assertNull(substringBetween(null, "<", ">"));
+		assertNull(substringBetween("<hello>", null, ">"));
+		assertNull(substringBetween("<hello>", "<", null));
+		assertEquals("hello", substringBetween("<hello>", "<", ">"));
+		assertNull(substringBetween("<hello>", "[", "]"));
+		assertNull(substringBetween("hello", "<", ">"));
+		assertEquals("", substringBetween("<>", "<", ">"));
+	}
+
+	@Test void a58_left() {
+		assertNull(left(null, 3));
+		assertEquals("", left("", 3));
+		assertEquals("hel", left("hello", 3));
+		assertEquals("hello", left("hello", 10));
+		assertEquals("", left("hello", 0));
+		assertEquals("", left("hello", -1));
+	}
+
+	@Test void a59_right() {
+		assertNull(right(null, 3));
+		assertEquals("", right("", 3));
+		assertEquals("llo", right("hello", 3));
+		assertEquals("hello", right("hello", 10));
+		assertEquals("", right("hello", 0));
+		assertEquals("", right("hello", -1));
+	}
+
+	@Test void a60_mid() {
+		assertNull(mid(null, 1, 3));
+		assertEquals("", mid("", 1, 3));
+		assertEquals("ell", mid("hello", 1, 3));
+		assertEquals("ello", mid("hello", 1, 10));
+		assertEquals("", mid("hello", 10, 3));
+		assertEquals("", mid("hello", -1, 3));
+		assertEquals("", mid("hello", 1, -1));
+	}
+
+	@Test void a61_padLeft() {
+		assertEquals("     ", padLeft(null, 5, ' '));
+		assertEquals("     ", padLeft("", 5, ' '));
+		assertEquals("   hello", padLeft("hello", 8, ' '));
+		assertEquals("hello", padLeft("hello", 3, ' '));
+		assertEquals("00123", padLeft("123", 5, '0'));
+	}
+
+	@Test void a62_padRight() {
+		assertEquals("     ", padRight(null, 5, ' '));
+		assertEquals("     ", padRight("", 5, ' '));
+		assertEquals("hello   ", padRight("hello", 8, ' '));
+		assertEquals("hello", padRight("hello", 3, ' '));
+		assertEquals("12300", padRight("123", 5, '0'));
+	}
+
+	@Test void a63_padCenter() {
+		assertEquals("     ", padCenter(null, 5, ' '));
+		assertEquals("     ", padCenter("", 5, ' '));
+		assertEquals("  hi  ", padCenter("hi", 6, ' '));
+		assertEquals("   hi  ", padCenter("hi", 7, ' '));
+		assertEquals("hello", padCenter("hello", 3, ' '));
+		assertEquals(" hello ", padCenter("hello", 7, ' '));
+	}
+
+	//====================================================================================================
+	// String joining and splitting methods
+	//====================================================================================================
+
+	@Test void a64_joinObjectArray() {
+		assertEquals("", StringUtils.join((Object[])null, ","));
+		assertEquals("", StringUtils.join(new Object[]{}, ","));
+		assertEquals("a,b,c", StringUtils.join(new Object[]{"a", "b", "c"}, ","));
+		assertEquals("1-2-3", StringUtils.join(new Object[]{1, 2, 3}, "-"));
+		assertEquals("abc", StringUtils.join(new Object[]{"a", "b", "c"}, ""));
+		assertEquals("a,,c", StringUtils.join(new Object[]{"a", null, "c"}, ","));
+		assertEquals("a;b;c", StringUtils.join(new Object[]{"a", "b", "c"}, ";"));
+	}
+
+	@Test void a65_joinIntArray() {
+		assertEquals("", StringUtils.join((int[])null, ","));
+		assertEquals("", StringUtils.join(new int[]{}, ","));
+		assertEquals("1,2,3", StringUtils.join(new int[]{1, 2, 3}, ","));
+		assertEquals("1-2-3", StringUtils.join(new int[]{1, 2, 3}, "-"));
+		assertEquals("123", StringUtils.join(new int[]{1, 2, 3}, ""));
+	}
+
+	@Test void a66_joinCollection() {
+		assertEquals("", StringUtils.join((Collection<?>)null, ","));
+		assertEquals("", StringUtils.join(Collections.emptyList(), ","));
+		assertEquals("a,b,c", StringUtils.join(Arrays.asList("a", "b", "c"), ","));
+		assertEquals("1-2-3", StringUtils.join(Arrays.asList(1, 2, 3), "-"));
+		assertEquals("a,,c", StringUtils.join(Arrays.asList("a", null, "c"), ","));
+	}
+
+	@Test void a67_joinObjectArrayChar() {
+		assertEquals("a,b,c", StringUtils.join(new Object[]{"a", "b", "c"}, ','));
+		assertEquals("1-2-3", StringUtils.join(new Object[]{1, 2, 3}, '-'));
+	}
+
+	@Test void a68_joinIntArrayChar() {
+		assertEquals("1,2,3", StringUtils.join(new int[]{1, 2, 3}, ','));
+		assertEquals("1-2-3", StringUtils.join(new int[]{1, 2, 3}, '-'));
+	}
+
+	@Test void a69_joinCollectionChar() {
+		assertEquals("a,b,c", StringUtils.join(Arrays.asList("a", "b", "c"), ','));
+		assertEquals("1-2-3", StringUtils.join(Arrays.asList(1, 2, 3), '-'));
+	}
+
+	@Test void a70_split() {
+		assertArrayEquals(new String[]{}, StringUtils.split(null, ','));
+		assertArrayEquals(new String[]{""}, StringUtils.split("", ','));
+		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a,b,c", ','));
+		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a-b-c", '-'));
+		assertArrayEquals(new String[]{"abc"}, StringUtils.split("abc", ','));
+	}
+
+	@Test void a71_splitWithLimit() {
+		assertArrayEquals(new String[]{}, StringUtils.split(null, ',', 2));
+		assertArrayEquals(new String[]{"a", "b,c,d"}, StringUtils.split("a,b,c,d", ',', 2));
+		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a,b,c", ',', 0));
+		assertArrayEquals(new String[]{"a", "b", "c"}, StringUtils.split("a,b,c", ',', 10));
+	}
+
+	//====================================================================================================
+	// String cleaning and sanitization methods
+	//====================================================================================================
+
+	@Test void a72_clean() {
+		assertNull(clean(null));
+		assertEquals("", clean(""));
+		assertEquals("hello world", clean("hello\u0000\u0001world"));
+		assertEquals("hello world", clean("hello  \t\n  world"));
+		assertEquals("test", clean("test"));
+	}
+
+	@Test void a73_normalizeWhitespace() {
+		assertNull(normalizeWhitespace(null));
+		assertEquals("", normalizeWhitespace(""));
+		assertEquals("hello world", normalizeWhitespace("hello  \t\n  world"));
+		assertEquals("hello world", normalizeWhitespace("  hello  world  "));
+		assertEquals("a b c", normalizeWhitespace("a  b  c"));
+	}
+
+	@Test void a74_removeControlChars() {
+		assertNull(removeControlChars(null));
+		assertEquals("", removeControlChars(""));
+		assertEquals("hello  world", removeControlChars("hello\u0000\u0001world"));
+		assertEquals("hello\nworld", removeControlChars("hello\nworld"));
+		assertEquals("test", removeControlChars("test"));
+	}
+
+	@Test void a75_removeNonPrintable() {
+		assertNull(removeNonPrintable(null));
+		assertEquals("", removeNonPrintable(""));
+		assertEquals("helloworld", removeNonPrintable("hello\u0000world"));
+		assertEquals("test", removeNonPrintable("test"));
+	}
+
+	@Test void a76_swapCase() {
+		assertNull(swapCase(null));
+		assertEquals("", swapCase(""));
+		assertEquals("hELLO wORLD", swapCase("Hello World"));
+		assertEquals("abc123XYZ", swapCase("ABC123xyz"));
+		assertEquals("123", swapCase("123"));
+	}
 }

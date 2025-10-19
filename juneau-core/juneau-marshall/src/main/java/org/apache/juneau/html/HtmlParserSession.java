@@ -31,7 +31,6 @@ import javax.xml.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
@@ -286,7 +285,7 @@ public class HtmlParserSession extends XmlParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
+			return (T)opt(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 
@@ -610,7 +609,6 @@ public class HtmlParserSession extends XmlParserSession {
 					}
 					BeanMapEntry e = m.getProperty(key);
 					if (e == null) {
-						//onUnknownProperty(key, m, -1, -1);
 						parseAnything(object(), r, l, false, null);
 					} else {
 						BeanPropertyMeta bpm = e.getMeta();

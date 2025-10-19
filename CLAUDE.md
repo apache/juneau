@@ -142,8 +142,18 @@ The `D_additionalMethods` test class should contain three tests:
 - Do NOT use the in-memory todo list tool for user-requested TODO items
 - Add items directly to the `TODO.md` file using the write or search_replace tools
 - Follow the existing format and structure of the `TODO.md` file
+- **TODO Identifiers**: When adding new TODO items, assign them a unique "TODO-#" identifier (e.g., "TODO-1", "TODO-2", etc.)
+- **TODO References**: When the user asks to "fix TODO-X" or "work on TODO-X", they are referring to the specific identifier in the TODO.md file
+- **TODO Completion**: When TODOs are completed, remove them from the TODO.md list entirely
 
-### 12. Fluent Setter Override Formatting
+### 12. Release Notes Management
+- When the user says "add to release notes" or "add this to the release notes", this refers to the release notes in the `/juneau-docs` directory
+- Do NOT add to the root `RELEASE-NOTES.txt` file
+- For the current release (9.2.0), add entries to `/juneau-docs/9.2.0.md`
+- Follow the existing format and structure of the release notes in juneau-docs
+- Use the same formatting style as other entries in the release notes file
+
+### 13. Fluent Setter Override Formatting
 When adding fluent setter overrides to classes:
 - Include blank lines between each method
 - Each override method should be separated by exactly one blank line

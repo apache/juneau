@@ -28,7 +28,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -732,16 +731,17 @@ public class BeanMeta<T> {
 	 * 	{BeanA.class:[Integer.class]}
 	 * </p>
 	 *
+	 * <h5 class='section'>Known Limitations:</h5>
 	 * <p>
-	 * TODO:  This code doesn't currently properly handle the following situation:
+	 * This code doesn't currently properly handle the following situation with nested generic bounds:
 	 * <p class='bjava'>
 	 * 	<jk>public static class</jk> BeanB&lt;T <jk>extends</jk> Number&gt; <jk>extends</jk> BeanA&lt;>;
 	 * 	<jk>public static class</jk> BeanC <jk>extends</jk> BeanB&lt;Integer>;
 	 * </p>
 	 *
 	 * <p>
-	 * When called on {@code BeanC}, the variable will be detected as a {@code Number}, not an {@code Integer}.
-	 * If anyone can figure out a better way of doing this, please do so!
+	 * When called on {@code BeanC}, the type variable will be resolved as {@code Number}, not {@code Integer}.
+	 * This limitation exists because the intermediate type parameter bound information is lost during type resolution
 	 *
 	 * @param t The type we're recursing.
 	 * @param m Where the results are loaded.
@@ -877,11 +877,6 @@ public class BeanMeta<T> {
 
 	final boolean fluentSetters;
 
-	//	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
-	//		LinkedList<ClassInfo> l = new LinkedList<>();
-	//		forEachClass(ClassInfo.of(c), stopClass, x -> l.add(x));
-	//		return l;
-	//	}
 
 	/**
 	 * Constructor.
@@ -903,7 +898,7 @@ public class BeanMeta<T> {
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
 		this.properties = u(b.properties);
-		this.propertyArray = properties == null ? EMPTY_PROPERTIES : Utils.array(properties.values(), BeanPropertyMeta.class);
+		this.propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
 		this.hiddenProperties = u(b.hiddenProperties);
 		this.getterProps = u(b.getterProps);
 		this.setterProps = u(b.setterProps);
@@ -923,7 +918,7 @@ public class BeanMeta<T> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return (o instanceof BeanMeta) && Utils.eq(this, (BeanMeta<?>)o, (x, y) -> Utils.eq(x.classMeta, y.classMeta));
+		return (o instanceof BeanMeta) && eq(this, (BeanMeta<?>)o, (x, y) -> eq(x.classMeta, y.classMeta));
 	}
 
 	/**

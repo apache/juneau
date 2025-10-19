@@ -27,10 +27,17 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
- * TODO - Work in progress.  CSV serializer.
+ * Serializes POJO models to CSV (Comma Separated Values) format.
+ *
+ * <p>
+ * This serializer converts Java objects (primarily collections of beans) into CSV format, where each bean
+ * becomes a row and bean properties become columns. The first row typically contains column headers derived
+ * from bean property names.
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is thread safe and reusable.
+ * 	<li class='warn'>This serializer is optimized for simple tabular data structures and may have limitations
+ * 		with complex nested objects.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

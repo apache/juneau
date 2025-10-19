@@ -193,29 +193,21 @@ public class XmlParserSession extends ReaderParserSession {
 		if (s == null)
 			return UNKNOWN;
 		char c = s.charAt(0);
-		switch (c) {
-			case 'o':
-				return (s.equals("object") ? OBJECT : UNKNOWN);
-			case 'a':
-				return (s.equals("array") ? ARRAY : UNKNOWN);
-			case 's':
-				return (s.equals("string") ? STRING : UNKNOWN);
-			case 'b':
-				return (s.equals("boolean") ? BOOLEAN : UNKNOWN);
-			case 'n': {
+		return switch (c) {
+			case 'o' -> (s.equals("object") ? OBJECT : UNKNOWN);
+			case 'a' -> (s.equals("array") ? ARRAY : UNKNOWN);
+			case 's' -> (s.equals("string") ? STRING : UNKNOWN);
+			case 'b' -> (s.equals("boolean") ? BOOLEAN : UNKNOWN);
+			case 'n' -> {
 				c = s.charAt(2);
-				switch (c) {
-					case 'm':
-						return (s.equals("number") ? NUMBER : UNKNOWN);
-					case 'l':
-						return (s.equals("null") ? NULL : UNKNOWN);
-					default:
-						return NUMBER;
-				}
+				yield switch (c) {
+					case 'm' -> (s.equals("number") ? NUMBER : UNKNOWN);
+					case 'l' -> (s.equals("null") ? NULL : UNKNOWN);
+					default -> NUMBER;
+				};
 			}
-			default:
-				return UNKNOWN;
-		}
+			default -> UNKNOWN;
+		};
 	}
 
 	private final XmlParser ctx;

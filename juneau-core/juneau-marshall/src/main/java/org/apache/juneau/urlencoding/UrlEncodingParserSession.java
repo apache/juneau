@@ -22,6 +22,8 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
+import static org.apache.juneau.common.StateEnum.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.common.utils.*;
@@ -297,13 +299,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (c == -1)
 			return m;
 
-		final int S1 = 1; // Looking for attrName start.
-		final int S2 = 2; // Found attrName end, looking for =.
-		final int S3 = 3; // Found =, looking for valStart.
-		final int S4 = 4; // Looking for , or }
+		// S1: Looking for attrName start.
+		// S2: Found attrName end, looking for =.
+		// S3: Found =, looking for valStart.
+		// S4: Looking for , or }
+
 		boolean isInEscape = false;
 
-		int state = S1;
+		var state = S1;
 		String currAttr = "";
 		mark();
 		try {
@@ -424,13 +427,14 @@ public class UrlEncodingParserSession extends UonParserSession {
 		if (c == -1)
 			return m;
 
-		final int S1 = 1; // Looking for attrName start.
-		final int S2 = 2; // Found attrName end, looking for =.
-		final int S3 = 3; // Found =, looking for valStart.
-		final int S4 = 4; // Looking for & or end.
+		// S1: Looking for attrName start.
+		// S2: Found attrName end, looking for =.
+		// S3: Found =, looking for valStart.
+		// S4: Looking for & or end.
+
 		boolean isInEscape = false;
 
-		int state = S1;
+		var state = S1;
 		int argIndex = 0;
 		K currAttr = null;
 		while (c != -1) {

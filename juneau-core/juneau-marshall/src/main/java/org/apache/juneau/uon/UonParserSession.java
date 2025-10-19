@@ -17,6 +17,7 @@
 package org.apache.juneau.uon;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -311,7 +312,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
+			return (T)opt(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
 
 		setCurrentClass(sType);
 
@@ -404,7 +405,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = cast(m, pMeta, eType);
 				// Handle case where it's an array, but only a single value was specified.
 				else {
-					ArrayList l = Utils.listOfSize(1);
+					ArrayList l = listOfSize(1);
 					l.add(m.cast(sType.getElementType()));
 					o = toArray(sType, l);
 				}
@@ -461,13 +462,13 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		if (c != '(')
 			throw new ParseException(this, "Expected '(' at beginning of object.");
 
-		final int S1 = 1; // Looking for attrName start.
-		final int S2 = 2; // Found attrName end, looking for =.
-		final int S3 = 3; // Found =, looking for valStart.
-		final int S4 = 4; // Looking for , or }
+		// S1: Looking for attrName start.
+		// S2: Found attrName end, looking for =.
+		// S3: Found =, looking for valStart.
+		// S4: Looking for , or }
 		boolean isInEscape = false;
 
-		int state = S1;
+		var state = S1;
 		String currAttr = "";
 		mark();
 		try {
@@ -592,11 +593,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		}
 
 		if (isInParens) {
-			final int S1 = 1; // Looking for starting of first entry.
-			final int S2 = 2; // Looking for starting of subsequent entries.
-			final int S3 = 3; // Looking for , or ) after first entry.
+			// S1: Looking for starting of first entry.
+			// S2: Looking for starting of subsequent entries.
+			// S3: Looking for , or ) after first entry.
 
-			int state = S1;
+			var state = S1;
 			while (c != -1 && c != AMP) {
 				c = r.read();
 				if (state == S1 || state == S2) {
@@ -626,10 +627,10 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				throw new ParseException(this, "Could not find end of entry in array.");
 
 		} else {
-			final int S1 = 1; // Looking for starting of entry.
-			final int S2 = 2; // Looking for , or & or END after first entry.
+			// S1: Looking for starting of entry.
+			// S2: Looking for , or & or END after first entry.
 
-			int state = S1;
+			var state = S1;
 			while (c != -1 && c != AMP) {
 				c = r.read();
 				if (state == S1) {
@@ -668,13 +669,14 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		if (c != '(')
 			throw new ParseException(this, "Expected '(' at beginning of object.");
 
-		final int S1 = 1; // Looking for attrName start.
-		final int S2 = 2; // Found attrName end, looking for =.
-		final int S3 = 3; // Found =, looking for valStart.
-		final int S4 = 4; // Looking for , or )
+		// S1: Looking for attrName start.
+		// S2: Found attrName end, looking for =.
+		// S3: Found =, looking for valStart.
+		// S4: Looking for , or )
+
 		boolean isInEscape = false;
 
-		int state = S1;
+		var state = S1;
 		K currAttr = null;
 		while (c != -1 && c != AMP) {
 			c = r.read();

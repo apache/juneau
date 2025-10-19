@@ -1415,25 +1415,16 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	private static String getConsumes(Builder builder) {
 		if (builder.getConsumes() != null)
 			return builder.getConsumes();
-		switch (builder.language) {
-			case "RDF/XML":
-			case "RDF/XML-ABBREV":
-				return "text/xml+rdf";
-			case "N-TRIPLE":
-				return "text/n-triple";
-			case "N3":
-				return "text/n3";
-			case "N3-PP":
-				return "text/n3-pp";
-			case "N3-PLAIN":
-				return "text/n3-plain";
-			case "N3-TRIPLES":
-				return "text/n3-triples";
-			case "TURTLE":
-				return "text/turtle";
-			default:
-				return "text/xml+rdf";
-		}
+		return switch (builder.language) {
+			case "RDF/XML", "RDF/XML-ABBREV" -> "text/xml+rdf";
+			case "N-TRIPLE" -> "text/n-triple";
+			case "N3" -> "text/n3";
+			case "N3-PP" -> "text/n3-pp";
+			case "N3-PLAIN" -> "text/n3-plain";
+			case "N3-TRIPLES" -> "text/n3-triples";
+			case "TURTLE" -> "text/turtle";
+			default -> "text/xml+rdf";
+		};
 	}
 
 	final boolean trimWhitespace, looseCollections;

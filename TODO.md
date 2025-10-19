@@ -2,25 +2,17 @@
 
 ## Issues to Fix
 
-- [ ] StringUtils.toHex8 should throw an exception if it's a negative number.
-- [ ] CallLogger.getThrownStats() should call thrownStore.add(Throwable), not thrownStore.getStats(Throwable).
-- [ ] Figure out why CallLogger and ThrownStore objects are not automatically injected into REST classes in spring boot.
+- [ ] TODO-3 Figure out why CallLogger and ThrownStore objects are not automatically injected into REST classes in spring boot.
 
 ## Code Quality Improvements
 
-- [ ] Look for places where Utils can be replaced with static imports.
-- [ ] Fields should be alphabetized.
-- [ ] Investigate if there are any other W3 or RFC specifications that would make good candidates for new bean modules.
-- [ ] Some package-info.java classes are using non-standard license headers.
-- [ ] Look for any old commented-out code.
-- [ ] Remove CsvParser.
-- [ ] DataUtils.toValidISO8601DT should use StateEnum.
-- [ ] Find other places where StateEnum should be used. Search for the regular expression "S1\s*=\s*1".
-- [ ] Tests for Spring Boot testing.
-- [ ] Search for places in code that should be using new try-with-return syntax.
-- [ ] The name parameter on annotations like Query when used on method parameters should be optional if parameter names are persisted in the bytecode.
-- [ ] It appears StringUtils is going to become a commonly-used external class. Let's see if we can enhance it with commonly used string utility methods.
-- [ ] Search for calls to filteredMap() with the following pattern and alphabetize the lines:
+- [ ] TODO-5 Fields should be alphabetized.
+- [ ] TODO-6 Investigate if there are any other W3 or RFC specifications that would make good candidates for new bean modules.
+- [ ] TODO-12 Tests for Spring Boot testing.
+- [ ] TODO-13 Search for places in code that should be using new try-with-return syntax.
+- [ ] TODO-14 The name parameter on annotations like Query when used on method parameters should be optional if parameter names are persisted in the bytecode.
+- [ ] TODO-15 It appears StringUtils is going to become a commonly-used external class. Let's see if we can enhance it with commonly used string utility methods.
+- [ ] TODO-16 Search for calls to filteredMap() with the following pattern and alphabetize the lines:
 		return filteredMap()
 			.append("addBeanTypes", addBeanTypes)
 			.append("keepNullProperties", keepNullProperties)
@@ -34,8 +26,22 @@
 			.append("uriResolution", uriResolution)
 			.append("uriRelativity", uriRelativity)
 			.append("listener", listener);
-- [ ] Search for "TODO" in javadoc comments for update.
-- [ ] Look for places where we concatenate strings across multiple lines and determine if they can use Java multiline strings.
+- [ ] TODO-18 Look for places where we concatenate strings across multiple lines and determine if they can use Java multiline strings.
+- [ ] TODO-27 Determine if there are any other good candidates for Stringifiers and Listifiers.
+
+## Framework Improvements
+
+- [ ] TODO-19 ClassInfo improvements to getMethod (e.g. getMethodExact vs getMethod).
+- [ ] TODO-21 Thrown NotFound causes - javax.servlet.ServletException: Invalid method response: 200
+
+## HTTP Response/Exception Improvements
+
+- [ ] TODO-22 HttpResponse should use list of Headers and have a headers(Header...) method.
+- [ ] TODO-23 HttpResponse should allow you to set code.
+- [ ] TODO-24 HttpException subclasses can set status, but does it use code?
+- [ ] TODO-25 HttpException should use list of Headers and have a headers(Header...) method.
+
+- [ ] TODO-26 @ResponseBody and @ResponseHeaders shouldn't be required on HttpResponse objects.
 
 ## Notes
 

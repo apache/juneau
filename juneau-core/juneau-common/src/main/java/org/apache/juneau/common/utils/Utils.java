@@ -338,23 +338,6 @@ public class Utils {
 	 * Null-safe {@link String#contains(CharSequence)} operation.
 	 *
 	 * @param s The string to check.
-	 * @param values The characters to check for.
-	 * @return <jk>true</jk> if the string contains any of the specified characters.
-	 */
-	public static boolean contains(String s, char...values) {
-		if (s == null || values == null || values.length == 0)
-			return false;
-		for (var v : values) {
-			if (s.indexOf(v) >= 0)
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Null-safe {@link String#contains(CharSequence)} operation.
-	 *
-	 * @param s The string to check.
 	 * @param values The substrings to check for.
 	 * @return <jk>true</jk> if the string contains any of the specified substrings.
 	 */
@@ -1105,7 +1088,7 @@ public class Utils {
 	 * @return <jk>true</jk> if the string does not contain any of the specified characters.
 	 */
 	public static boolean notContains(String s, char...values) {
-		return ! contains(s, values);
+		return ! StringUtils.contains(s, values);
 	}
 
 	/**
@@ -1617,9 +1600,8 @@ public class Utils {
 
 		var m = new LinkedHashMap<String,String>();
 
-		final int
-			S1 = 1,  // Found start of key, looking for equals.
-			S2 = 2;  // Found equals, looking for delimiter (or end).
+		// S1: Found start of key, looking for equals.
+		// S2: Found equals, looking for delimiter (or end).
 
 		var state = S1;
 

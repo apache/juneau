@@ -46,7 +46,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
 
-		final List<String> preLines = synced(Utils.list());
+		final List<String> preLines = synced(list());
 		private final String rawLine;
 
 		final Map<String,ConfigMapEntry> oentries = synced(map());
@@ -195,7 +195,7 @@ public class ConfigMap implements ConfigStoreListener {
 	private final List<ConfigEvent> changes = synced(new ConfigEvents());
 
 	// Registered listeners listening for changes during saves or reloads.
-	private final Set<ConfigEventListener> listeners = synced(Utils.set());
+	private final Set<ConfigEventListener> listeners = synced(set());
 
 	// The parsed entries of this map with all changes applied.
 	final Map<String,ConfigSection> entries = synced(map());
@@ -323,7 +323,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public Set<String> getKeys(String section) {
 		checkSectionName(section);
 		var cs = entries.get(section);
-		var s = imports.isEmpty() && cs != null ? cs.entries.keySet() : Utils.<String>set();
+		Set<String> s = imports.isEmpty() && cs != null ? cs.entries.keySet() : set();
 		if (! imports.isEmpty()) {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getKeys(section)));
 			if (cs != null)
@@ -420,7 +420,7 @@ public class ConfigMap implements ConfigStoreListener {
 	public void onChange(String newContents) {
 		ConfigEvents changes2 = null;
 		try (var x = lock.write()) {
-			if (Utils.ne(contents, newContents)) {
+			if (ne(contents, newContents)) {
 				changes2 = findDiffs(newContents);
 				load(newContents);
 
@@ -718,7 +718,7 @@ public class ConfigMap implements ConfigStoreListener {
 			} else {
 				for (var ne : ns.oentries.values()) {
 					var e = s.oentries.get(ne.key);
-					if (e == null || Utils.ne(e.value, ne.value)) {
+					if (e == null || ne(e.value, ne.value)) {
 						changes2.add(ConfigEvent.setEntry(name, s.name, ne.key, ne.value, ne.modifiers, ne.comment, ne.preLines));
 					}
 				}
@@ -834,7 +834,7 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		List<Import> irl = Utils.listOfSize(imports2.size());
+		List<Import> irl = listOfSize(imports2.size());
 		forEachReverse(listFrom(imports2.values()), x -> irl.add(new Import(x).register(listeners)));
 		this.imports.addAll(irl);
 
@@ -918,7 +918,7 @@ public class ConfigMap implements ConfigStoreListener {
 	}
 
 	private void signal(ConfigEvents changes) {
-		if (Utils.isNotEmpty(changes))
+		if (isNotEmpty(changes))
 			listeners.forEach(x -> x.onConfigChange(changes));
 	}
 

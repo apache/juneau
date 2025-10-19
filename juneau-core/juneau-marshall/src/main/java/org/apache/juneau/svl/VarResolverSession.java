@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -86,13 +87,13 @@ public class VarResolverSession {
 	 * This is a common case, and we can avoid using StringWriters.
 	 */
 	private static boolean isSimpleVar(String s) {
-		int S1 = 1;	   // Not in variable, looking for $
-		int S2 = 2;    // Found $, Looking for {
-		int S3 = 3;    // Found {, Looking for }
-		int S4 = 4;    // Found }
+		// S1: Not in variable, looking for $
+		// S2: Found $, Looking for {
+		// S3: Found {, Looking for }
+		// S4: Found }
 
 		int length = s.length();
-		int state = S1;
+		var state = S1;
 		for (int i = 0; i < length; i++) {
 			char c = s.charAt(i);
 			if (state == S1) {
@@ -304,11 +305,11 @@ public class VarResolverSession {
 	 */
 	public Writer resolveTo(String s, Writer out) throws IOException {
 
-		int S1 = 1;	   // Not in variable, looking for $
-		int S2 = 2;    // Found $, Looking for {
-		int S3 = 3;    // Found {, Looking for }
+		// S1: Not in variable, looking for $
+		// S2: Found $, Looking for {
+		// S3: Found {, Looking for }
 
-		int state = S1;
+		var state = S1;
 		boolean isInEscape = false;
 		boolean hasInternalVar = false;
 		boolean hasInnerEscapes = false;
@@ -397,7 +398,7 @@ public class VarResolverSession {
 							}
 							x = i + 1;
 						}
-						state = 1;
+						state = S1;
 						hasInnerEscapes = false;
 					}
 				}

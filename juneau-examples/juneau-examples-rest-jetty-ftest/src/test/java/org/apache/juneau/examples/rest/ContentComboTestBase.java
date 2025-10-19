@@ -46,17 +46,17 @@ public class ContentComboTestBase extends RestTestcase {
 
 	protected RestClient getClient(MediaType mediaType) {
 		String mt = mediaType.toString();
-		switch (mt) {
-			case "text/csv": return getClient(mt, CsvSerializer.DEFAULT, CsvParser.DEFAULT);
-			case "text/html": return getClient(mt, HtmlSerializer.DEFAULT, HtmlParser.DEFAULT);
-			case "application/json": return getClient(mt, JsonSerializer.DEFAULT, JsonParser.DEFAULT);
-			case "octal/msgpack": return getClient(mt, MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT, x -> x.queryData("plainText","true"));
-			case "text/plain": return getClient(mt, PlainTextSerializer.DEFAULT, PlainTextParser.DEFAULT);
-			case "text/uon": return getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
-			case "application/x-www-form-urlencoded": return getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
-			case "text/xml": return getClient(mt, XmlSerializer.DEFAULT, XmlParser.DEFAULT);
-			default: throw new BasicRuntimeException("Client for mediaType ''{0}'' not found", mt);
-		}
+		return switch (mt) {
+			case "text/csv" -> getClient(mt, CsvSerializer.DEFAULT, CsvParser.DEFAULT);
+			case "text/html" -> getClient(mt, HtmlSerializer.DEFAULT, HtmlParser.DEFAULT);
+			case "application/json" -> getClient(mt, JsonSerializer.DEFAULT, JsonParser.DEFAULT);
+			case "octal/msgpack" -> getClient(mt, MsgPackSerializer.DEFAULT, MsgPackParser.DEFAULT, x -> x.queryData("plainText","true"));
+			case "text/plain" -> getClient(mt, PlainTextSerializer.DEFAULT, PlainTextParser.DEFAULT);
+			case "text/uon" -> getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
+			case "application/x-www-form-urlencoded" -> getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
+			case "text/xml" -> getClient(mt, XmlSerializer.DEFAULT, XmlParser.DEFAULT);
+			default -> throw new BasicRuntimeException("Client for mediaType ''{0}'' not found", mt);
+		};
 	}
 
 	protected RestClient getClient(String label, Serializer serializer, Parser parser, Consumer<RestClient.Builder>...postApply) {

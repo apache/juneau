@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.json;
 
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
 
@@ -211,7 +212,7 @@ public class JsonParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Utils.opt(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T)opt(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
 		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
@@ -359,28 +360,28 @@ public class JsonParserSession extends ReaderParserSession {
 
 	private <T> BeanMap<T> parseIntoBeanMap2(ParserReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
-		int S0 = 0; // Looking for outer {
-		int S1 = 1; // Looking for attrName start.
-		int S3 = 3; // Found attrName end, looking for :.
-		int S4 = 4; // Found :, looking for valStart: { [ " ' LITERAL.
-		int S5 = 5; // Looking for , or }
+		// S1: Looking for outer {
+		// S2: Looking for attrName start.
+		// S3: Found attrName end, looking for :.
+		// S4: Found :, looking for valStart: { [ " ' LITERAL.
+		// S5: Looking for , or }
 
-		int state = S0;
+		var state = S1;
 		String currAttr = "";
 		int c = 0;
 		mark();
 		try {
 			while (c != -1) {
 				c = r.read();
-				if (state == S0) {
+				if (state == S1) {
 					if (c == '{') {
-						state = S1;
+						state = S2;
 					} else if (isCommentOrWhitespace(c)) {
 						skipCommentsAndSpace(r.unread());
 					} else {
 						break;
 					}
-				} else if (state == S1) {
+				} else if (state == S2) {
 					if (c == '}') {
 						return m;
 					} else if (isCommentOrWhitespace(c)) {
@@ -422,7 +423,7 @@ public class JsonParserSession extends ReaderParserSession {
 					}
 				} else if (state == S5) {
 					if (c == ',')
-						state = S1;
+						state = S2;
 					else if (isCommentOrWhitespace(c))
 						skipCommentsAndSpace(r.unread());
 					else if (c == '}') {
@@ -430,9 +431,9 @@ public class JsonParserSession extends ReaderParserSession {
 					}
 				}
 			}
-			if (state == S0)
-				throw new ParseException(this, "Expected '{' at beginning of JSON object.");
 			if (state == S1)
+				throw new ParseException(this, "Expected '{' at beginning of JSON object.");
+			if (state == S2)
 				throw new ParseException(this, "Could not find attribute name on JSON object.");
 			if (state == S3)
 				throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
@@ -449,36 +450,36 @@ public class JsonParserSession extends ReaderParserSession {
 
 	private <E> Collection<E> parseIntoCollection2(ParserReader r, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
-		final int S0 = 0, // Looking for outermost [
-			S1 = 1, // Looking for starting [ or { or " or ' or LITERAL or ]
-			S2 = 2, // Looking for , or ]
-			S3 = 3; // Looking for starting [ or { or " or ' or LITERAL
+		// S1: Looking for outermost [
+		// S2: Looking for starting [ or { or " or ' or LITERAL or ]
+		// S3: Looking for , or ]
+		// S4: Looking for starting [ or { or " or ' or LITERAL
 
 		int argIndex = 0;
 
-		int state = S0;
+		var state = S1;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();
-			if (state == S0) {
+			if (state == S1) {
 				if (c == '[')
-					state = S1;
+					state = S2;
 				else if (isCommentOrWhitespace(c))
 					skipCommentsAndSpace(r.unread());
 				else
 					break;  // Invalid character found.
-			} else if (state == S1) {
+			} else if (state == S2) {
 				if (c == ']') {
 					return l;
 				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else if (c != -1) {
 					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
-					state = S2;
-				}
-			} else if (state == S2) {
-				if (c == ',') {
 					state = S3;
+				}
+			} else if (state == S3) {
+				if (c == ',') {
+					state = S4;
 				} else if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else if (c == ']') {
@@ -486,24 +487,24 @@ public class JsonParserSession extends ReaderParserSession {
 				} else {
 					break;  // Invalid character found.
 				}
-			} else if (state == S3) {
+			} else if (state == S4) {
 				if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else if (c == ']') {
 					break;
 				} else if (c != -1) {
 					l.add((E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), r.unread(), l, pMeta));
-					state = S2;
+					state = S3;
 				}
 			}
 		}
-		if (state == S0)
-			throw new ParseException(this, "Expected '[' at beginning of JSON array.");
 		if (state == S1)
-			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
+			throw new ParseException(this, "Expected '[' at beginning of JSON array.");
 		if (state == S2)
-			throw new ParseException(this, "Expected ',' or ']'.");
+			throw new ParseException(this, "Expected one of the following characters: {,[,',\",LITERAL.");
 		if (state == S3)
+			throw new ParseException(this, "Expected ',' or ']'.");
+		if (state == S4)
 			throw new ParseException(this, "Unexpected trailing comma in array.");
 
 		return null;  // Unreachable.
@@ -514,25 +515,25 @@ public class JsonParserSession extends ReaderParserSession {
 		if (keyType == null)
 			keyType = (ClassMeta<K>)string();
 
-		int S0 = 0; // Looking for outer {
-		int S1 = 1; // Looking for attrName start.
-		int S3 = 3; // Found attrName end, looking for :.
-		int S4 = 4; // Found :, looking for valStart: { [ " ' LITERAL.
-		int S5 = 5; // Looking for , or }
-		int S6 = 6; // Found , looking for attr start.
+		// S1: Looking for outer {
+		// S2: Looking for attrName start.
+		// S3: Found attrName end, looking for :.
+		// S4: Found :, looking for valStart: { [ " ' LITERAL.
+		// S5: Looking for , or }
+		// S6: Found , looking for attr start.
 
 		skipCommentsAndSpace(r);
-		int state = S0;
+		var state = S1;
 		String currAttr = null;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();
-			if (state == S0) {
+			if (state == S1) {
 				if (c == '{')
-					state = S1;
+					state = S2;
 				else
 					break;
-			} else if (state == S1) {
+			} else if (state == S2) {
 				if (c == '}') {
 					return m;
 				} else if (isCommentOrWhitespace(c)) {
@@ -575,9 +576,9 @@ public class JsonParserSession extends ReaderParserSession {
 				}
 			}
 		}
-		if (state == S0)
-			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
 		if (state == S1)
+			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
+		if (state == S2)
 			throw new ParseException(this, "Could not find attribute name on JSON object.");
 		if (state == S3)
 			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");
@@ -809,20 +810,20 @@ public class JsonParserSession extends ReaderParserSession {
 	 */
 	private void skipWrapperAttrStart(ParserReader r, String wrapperAttr) throws IOException, ParseException {
 
-		final int S0 = 0, // Looking for outer '{'
-			S1 = 1, // Looking for attrName start.
-			S3 = 3, // Found attrName end, looking for :.
-			S4 = 4; // Found :, looking for valStart: { [ " ' LITERAL.
+		// S1: Looking for outer '{'
+		// S2: Looking for attrName start.
+		// S3: Found attrName end, looking for :.
+		// S4: Found :, looking for valStart: { [ " ' LITERAL.
 
-		int state = S0;
+		var state = S1;
 		String currAttr = null;
 		int c = 0;
 		while (c != -1) {
 			c = r.read();
-			if (state == S0) {
+			if (state == S1) {
 				if (c == '{')
-					state = S1;
-			} else if (state == S1) {
+					state = S2;
+			} else if (state == S2) {
 				if (isCommentOrWhitespace(c)) {
 					skipCommentsAndSpace(r.unread());
 				} else {
@@ -843,9 +844,9 @@ public class JsonParserSession extends ReaderParserSession {
 				}
 			}
 		}
-		if (state == S0)
-			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
 		if (state == S1)
+			throw new ParseException(this, "Expected '{' at beginning of JSON object.");
+		if (state == S2)
 			throw new ParseException(this, "Could not find attribute name on JSON object.");
 		if (state == S3)
 			throw new ParseException(this, "Could not find ':' following attribute name on JSON object.");

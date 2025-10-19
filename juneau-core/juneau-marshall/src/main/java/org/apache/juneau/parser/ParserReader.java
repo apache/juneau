@@ -378,7 +378,6 @@ public class ParserReader extends Reader implements Positionable {
 
 			// If there's still space at the end of this buffer, fill it.
 			// Make sure there's at least 2 character spaces free for extended unicode characters.
-			//if (false) {
 			if (iEnd + 1 < buff.length) {
 				int x = read(buff, iCurrent, buff.length - iEnd);
 				if (x == -1) {

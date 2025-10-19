@@ -99,7 +99,7 @@ public class CallLogger {
 
 		Logger logger;
 		ThrownStore thrownStore;
-		List<CallLoggerRule> normalRules = Utils.list(), debugRules = Utils.list();
+		List<CallLoggerRule> normalRules = list(), debugRules = list();
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
 		CallLoggingDetail requestDetail, responseDetail;
@@ -545,16 +545,16 @@ public class CallLogger {
 		if (! isEnabled(rule, req))
 			return;
 
-		Level level = Utils.firstNonNull(rule.getLevel(), this.level);
+		Level level = firstNonNull(rule.getLevel(), this.level);
 
 		if (level == Level.OFF)
 			return;
 
-		Throwable e = Utils.castOrNull(req.getAttribute("Exception"), Throwable.class);
-		Long execTime = Utils.castOrNull(req.getAttribute("ExecTime"), Long.class);
+		Throwable e = castOrNull(req.getAttribute("Exception"), Throwable.class);
+		Long execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
 
-		CallLoggingDetail reqd = Utils.firstNonNull(rule.getRequestDetail(), requestDetail);
-		CallLoggingDetail resd = Utils.firstNonNull(rule.getResponseDetail(), responseDetail);
+		CallLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
+		CallLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
 
 		String method = req.getMethod();
 		int status = res.getStatus();
@@ -670,19 +670,19 @@ public class CallLogger {
 	private static byte[] getRequestContent(HttpServletRequest req) {
 		if (req instanceof CachingHttpServletRequest)
 			return ((CachingHttpServletRequest)req).getContent();
-		return Utils.castOrNull(req.getAttribute("RequestContent"), byte[].class);
+		return castOrNull(req.getAttribute("RequestContent"), byte[].class);
 	}
 
 	private static byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
 		if (res instanceof CachingHttpServletResponse)
 			return ((CachingHttpServletResponse)res).getContent();
-		return Utils.castOrNull(req.getAttribute("ResponseContent"), byte[].class);
+		return castOrNull(req.getAttribute("ResponseContent"), byte[].class);
 	}
 
 	private ThrownStats getThrownStats(Throwable e) {
 		if (e == null || thrownStore == null)
 			return null;
-		return thrownStore.getStats(e).orElse(null);
+		return thrownStore.add(e);
 	}
 
 	/**
@@ -743,7 +743,7 @@ public class CallLogger {
 	 * @see RestOp#debug()
 	 */
 	protected boolean isDebug(HttpServletRequest req) {
-		return Utils.firstNonNull(Utils.castOrNull(req.getAttribute("Debug"), Boolean.class), false);
+		return firstNonNull(castOrNull(req.getAttribute("Debug"), Boolean.class), false);
 	}
 
 	/**
@@ -761,8 +761,8 @@ public class CallLogger {
 	 * @return <jk>true</jk> if logging is enabled for this request.
 	 */
 	protected boolean isEnabled(CallLoggerRule rule, HttpServletRequest req) {
-		Enablement enabled = Utils.firstNonNull(rule.getEnabled(), this.enabled);
-		Predicate<HttpServletRequest> enabledTest = Utils.firstNonNull(rule.getEnabledTest(), this.enabledTest);
+		Enablement enabled = firstNonNull(rule.getEnabled(), this.enabled);
+		Predicate<HttpServletRequest> enabledTest = firstNonNull(rule.getEnabledTest(), this.enabledTest);
 		return enabled.isEnabled(enabledTest.test(req));
 	}
 

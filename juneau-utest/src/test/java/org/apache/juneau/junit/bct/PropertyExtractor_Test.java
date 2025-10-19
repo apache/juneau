@@ -179,12 +179,12 @@ class PropertyExtractor_Test extends TestBase {
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
 					if (o instanceof Number) {
-						switch (key) {
-							case "doubled": return ((Number) o).doubleValue() * 2;
-							case "string": return o.toString();
-							case "type": return o.getClass().getSimpleName();
-							default: return "UNKNOWN_PROP:" + key;
-						}
+						return switch (key) {
+							case "doubled" -> ((Number) o).doubleValue() * 2;
+							case "string" -> o.toString();
+							case "type" -> o.getClass().getSimpleName();
+							default -> "UNKNOWN_PROP:" + key;
+						};
 					}
 					return "NOT_A_NUMBER";
 				}
@@ -270,12 +270,12 @@ class PropertyExtractor_Test extends TestBase {
 				public Object extract(BeanConverter converter, Object o, String key) {
 					if (o instanceof Map) {
 						Map<?, ?> map = (Map<?, ?>) o;
-						switch (key) {
-							case "keys": return new ArrayList<>(map.keySet());
-							case "values": return new ArrayList<>(map.values());
-							case "entries": return map.entrySet().size();
-							default: return map.get(key);
-						}
+						return switch (key) {
+							case "keys" -> new ArrayList<>(map.keySet());
+							case "values" -> new ArrayList<>(map.values());
+							case "entries" -> map.entrySet().size();
+							default -> map.get(key);
+						};
 					}
 					return "NOT_A_MAP";
 				}

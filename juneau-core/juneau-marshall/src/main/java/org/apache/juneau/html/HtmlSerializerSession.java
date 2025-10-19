@@ -29,7 +29,6 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
@@ -609,7 +608,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (! isDc)
 					out.cTag();
 				if (link != null)
-					out.oTag(i + 2, "a").attrUri("href", link.replace("{#}", Utils.s(o))).cTag();
+					out.oTag(i + 2, "a").attrUri("href", link.replace("{#}", s(o))).cTag();
 				ContentResult cr = serializeAnything(out, o, eType.getElementType(), name, null, 1, false, true);
 				if (link != null)
 					out.eTag("a");
@@ -673,7 +672,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.attr("style", style);
 		out.cTag();
 		if (link != null)
-			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", Utils.s(value))).cTag();
+			out.oTag(i + 3, "a").attrUri("href", link.replace("{#}", s(value))).cTag();
 		ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
 		if (link != null)
 			out.eTag("a");
@@ -880,7 +879,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 			HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(pMeta);
 
-			HtmlRender render = Utils.firstNonNull(bpHtml.getRender(), cHtml.getRender());
+			HtmlRender render = firstNonNull(bpHtml.getRender(), cHtml.getRender());
 
 			if (render != null) {
 				Object o2 = render.getContent(this, o);

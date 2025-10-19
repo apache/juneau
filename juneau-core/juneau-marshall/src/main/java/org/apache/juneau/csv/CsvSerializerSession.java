@@ -25,7 +25,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.common.utils.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -243,7 +242,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 			}
 
 			// TODO - Doesn't support DynaBeans.
-			if (Utils.isNotEmpty(l)) {
+			if (isNotEmpty(l)) {
 				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
 				if (entryType.isBean()) {
 					BeanMeta<?> bm = entryType.getBeanMeta();

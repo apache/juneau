@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.util;
 
+import static org.apache.juneau.common.StateEnum.*;
 import static org.apache.juneau.common.utils.StringUtils.*;
 import static org.apache.juneau.common.utils.ThrowableUtils.*;
 import static org.apache.juneau.common.utils.Utils.*;
@@ -264,22 +265,22 @@ public class RestUtils {
 			if (m == null)
 				m = map();
 
-			if (qs == null || ((qs instanceof CharSequence) && Utils.isEmpty(Utils.s(qs))))
+			if (qs == null || ((qs instanceof CharSequence) && Utils.isEmpty(s(qs))))
 				return m;
 
 			try (ParserPipe p = new ParserPipe(qs)) {
 
-				final int S1 = 1; // Looking for attrName start.
-				final int S2 = 2; // Found attrName start, looking for = or & or end.
-				final int S3 = 3; // Found =, looking for valStart or &.
-				final int S4 = 4; // Found valStart, looking for & or end.
+				// S1: Looking for attrName start.
+				// S2: Found attrName start, looking for = or & or end.
+				// S3: Found =, looking for valStart or &.
+				// S4: Found valStart, looking for & or end.
 
 				try (UonReader r = new UonReader(p, true)) {
 					int c = r.peekSkipWs();
 					if (c == '?')
 						r.read();
 
-					int state = S1;
+					var state = S1;
 					String currAttr = null;
 					while (c != -1) {
 						c = r.read();

@@ -455,9 +455,13 @@ public class TimeMatcherFactory extends MatcherFactory {
 	}
 
 	/**
-	 * TODO
+	 * Returns the timestamp formats to use for parsing timestamps in time matching operations.
 	 *
-	 * @return TODO
+	 * <p>
+	 * This method converts the format strings returned by {@link #getTimestampFormatStrings()} into
+	 * {@link SimpleDateFormat} objects for actual date parsing.
+	 *
+	 * @return An array of {@link SimpleDateFormat} objects representing the supported timestamp formats.
 	 */
 	protected SimpleDateFormat[] getTimestampFormats() {
 		String[] s = getTimestampFormatStrings();
@@ -468,9 +472,13 @@ public class TimeMatcherFactory extends MatcherFactory {
 	}
 
 	/**
-	 * TODO
+	 * Returns the timestamp format strings used for parsing timestamps in time matching operations.
 	 *
-	 * @return TODO
+	 * <p>
+	 * This method defines the default set of timestamp formats that are recognized by the time matcher.
+	 * Formats are tried in order until a match is found. Override this method to provide custom timestamp formats.
+	 *
+	 * @return An array of timestamp format strings compatible with {@link SimpleDateFormat}.
 	 */
 	protected String[] getTimestampFormatStrings() {
 		// @formatter:off

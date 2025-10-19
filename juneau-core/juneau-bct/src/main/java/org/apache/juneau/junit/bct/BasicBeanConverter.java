@@ -386,6 +386,7 @@ public class BasicBeanConverter implements BeanConverter {
 		 *    <li><b>Map Entries:</b> Map.Entry → <js>"key=value"</js> format</li>
 		 *    <li><b>Dates:</b> Date, Calendar → ISO-8601 format</li>
 		 *    <li><b>Files/Streams:</b> File, InputStream, Reader → content extraction</li>
+		 *    <li><b>Arrays:</b> byte[], char[] → hex strings and direct string conversion</li>
 		 *    <li><b>Reflection:</b> Class, Method, Constructor → readable signatures</li>
 		 *    <li><b>Enums:</b> All enum types → name() format</li>
 		 *    <li><b>Iterables:</b> Iterable, Iterator, Enumeration, Stream → list conversion</li>
@@ -425,6 +426,7 @@ public class BasicBeanConverter implements BeanConverter {
 			addStringifier(Date.class, Stringifiers.dateStringifier());
 			addStringifier(InputStream.class, Stringifiers.inputStreamStringifier());
 			addStringifier(byte[].class, Stringifiers.byteArrayStringifier());
+			addStringifier(char[].class, Stringifiers.charArrayStringifier());
 			addStringifier(Reader.class, Stringifiers.readerStringifier());
 			addStringifier(File.class, Stringifiers.fileStringifier());
 			addStringifier(Enum.class, Stringifiers.enumStringifier());
